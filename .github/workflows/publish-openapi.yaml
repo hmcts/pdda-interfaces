@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "master"
+      - "openapiFailure"
 
 jobs:
   publish-openapi:
