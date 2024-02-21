@@ -1,2 +1,2 @@
-# pdda-shared-infrastructure
-The Product Shared Infrastructure repo for the PDDA application
+# pdda-interfaces
+The Product Application repo for the PDDA application
