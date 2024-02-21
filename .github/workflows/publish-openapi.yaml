@@ -2,8 +2,7 @@ name: Publish OpenAPI specs
 on:
   push:
     branches:
-      - "master"
-      - "openapiFailure"
+     #- "master"
 
 jobs:
   publish-openapi:
