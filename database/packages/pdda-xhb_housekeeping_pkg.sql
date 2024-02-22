@@ -65,22 +65,6 @@ LANGUAGE PLPGSQL
 -- REVOKE ALL ON FUNCTION xhb_housekeeping_pkg.get_next_hk_run_id () FROM PUBLIC;
 
 
-CREATE OR REPLACE FUNCTION xhb_housekeeping_pkg.get_next_hk3_run_id () RETURNS PUBLIC.XHB_HK3_RESULTS.HK3_RUN_ID%TYPE AS $body$
-DECLARE
-
-     v_hk3_run_id PUBLIC.XHB_HK3_RESULTS.HK3_RUN_ID%TYPE;
-
-BEGIN
-	SELECT nextval('hk3_run_id_seq') INTO STRICT v_hk3_run_id;
-	RETURN v_hk3_run_id;
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON FUNCTION xhb_housekeeping_pkg.get_next_hk3_run_id () FROM PUBLIC;
-
-
 CREATE OR REPLACE FUNCTION xhb_housekeeping_pkg.get_next_hk_cpp_run_id () RETURNS PUBLIC.XHB_HK_CPP_RESULTS.HK_CPP_RUN_ID%TYPE AS $body$
 DECLARE
 
@@ -114,18 +98,6 @@ $body$
 LANGUAGE PLPGSQL
 ;
 -- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.log_case_deletion_error (p_hk_run_id PUBLIC.XHB_HK_ERROR_LOG.HK_RUN_ID%TYPE, p_court_id PUBLIC.XHB_HK_ERROR_LOG.COURT_ID%TYPE, p_case_id PUBLIC.XHB_HK_ERROR_LOG.CASE_ID%TYPE, p_case_type PUBLIC.XHB_HK_ERROR_LOG.CASE_TYPE%TYPE, p_case_no PUBLIC.XHB_HK_ERROR_LOG.CASE_NO%TYPE, p_error_message PUBLIC.XHB_HK_ERROR_LOG.ERROR_MESSAGE%TYPE) FROM PUBLIC;
-
-
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.log_judge_hk_error (p_hk3_run_id PUBLIC.XHB_HK3_ERROR_LOG.HK3_RUN_ID%TYPE, p_error_message PUBLIC.XHB_HK_ERROR_LOG.ERROR_MESSAGE%TYPE) AS $body$
-BEGIN
-	INSERT INTO PUBLIC.XHB_HK3_ERROR_LOG(hk3_run_id, error_message)
-	VALUES (p_hk3_run_id, p_error_message);
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.log_judge_hk_error (p_hk3_run_id PUBLIC.XHB_HK3_ERROR_LOG.HK3_RUN_ID%TYPE, p_error_message PUBLIC.XHB_HK_ERROR_LOG.ERROR_MESSAGE%TYPE) FROM PUBLIC; 
 
 
 CREATE OR REPLACE FUNCTION xhb_housekeeping_pkg.execute_deletion (p_sql text, p_param1 bigint, p_param2 bigint DEFAULT NULL) RETURNS integer AS $body$
@@ -219,69 +191,6 @@ $body$
 LANGUAGE PLPGSQL
 ;
 -- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.update_log () FROM PUBLIC;
-
-
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.insert_hk3_log (p_age bigint DEFAULT 2500, p_judge_limit bigint DEFAULT 0) AS $body$
-BEGIN
-    PERFORM set_config('l_hk3_run_results.l_hk3_run_id', xhb_housekeeping_pkg.get_next_hk3_run_id()::text, false);
-	PERFORM set_config('l_hk3_run_results.ref_judge_status', NULL, false);
-	PERFORM set_config('l_hk3_run_results.ref_judge_error_message', NULL, false);
-	PERFORM set_config('l_hk3_run_results.ref_judges_deleted', '0', false);
-	PERFORM set_config('l_hk3_run_results.ref_judges_error', '0', false);
-
-	INSERT INTO PUBLIC.XHB_HK3_RESULTS(hk3_run_id
-    ,run_type
-    ,run_start_date
-    ,judge_usage_deleted
-	,judge_usage_error
-    ,crtrm_usage_recs_deleted
-	,crtrm_usage_recs_error
-    ,ref_judges_deleted
-    ,ref_judges_error
-    ,judge_usage_limit
-    ,crtrm_usage_limit
-    ,ref_judge_limit)
-    VALUES (current_setting('l_hk3_run_results.l_hk3_run_id')::bigint
-    ,'J'
-    ,clock_timestamp()
-    ,0
-    ,0
-    ,0
-    ,0
-    ,0
-    ,0
-	,p_age
-    ,p_age
-    ,p_judge_limit);
-
-    --COMMIT;
-
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.insert_hk3_log (p_age bigint DEFAULT 2500, p_judge_limit bigint DEFAULT 0) FROM PUBLIC;
-
-
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.update_hk3_log () AS $body$
-BEGIN
-
-	UPDATE PUBLIC.XHB_HK3_RESULTS SET
-    ref_judge_status        = coalesce(current_setting('l_hk3_run_results.ref_judge_status')::varchar(1), ref_judge_status),
-    ref_judge_error_message = coalesce(current_setting('l_hk3_run_results.ref_judge_error_message')::varchar(2000), ref_judge_error_message),
-    ref_judges_deleted		  = coalesce(current_setting('l_hk3_run_results.ref_judges_deleted')::integer, ref_judges_deleted),
-    ref_judges_error	  = coalesce(current_setting('l_hk3_run_results.ref_judges_error')::integer, ref_judges_error)
-    WHERE  hk3_run_id = current_setting('l_hk3_run_results.l_hk3_run_id')::bigint;
-
-    --COMMIT;
-
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.update_hk3_log () FROM PUBLIC;
 
 
 CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.insert_hk_cpp_log () AS $body$
@@ -1225,58 +1134,6 @@ LANGUAGE PLPGSQL
 -- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.write_error_log_file (p_hk_run_id bigint) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.write_hk3_error_log_file (p_hk3_run_id bigint) AS $body$
-DECLARE
-
-    l_file utl_file.file_type;
-	
-	l_row_count	integer := 0;
-
-    c_xhb_hk3_error_log CURSOR(b_hk3_run_id bigint) FOR
-      SELECT *
-      FROM   PUBLIC.XHB_HK3_ERROR_LOG
-      WHERE  hk3_run_id = b_hk3_run_id;
-
-BEGIN
-
-    PERFORM set_config('xhb_housekeeping_pkg.l_error_point', 'WRITE ERROR LOG FILE ', false);
-
-    FOR l_errors IN c_xhb_hk3_error_log(p_hk3_run_id)  LOOP
-
-		IF l_row_count = 0 THEN
-			l_file := utl_file.fopen('HK_LOGS','HK_JUDGE_'||LPAD(''||p_hk3_run_id||'',10,'0')||'_ERROR.log','a');
-			PERFORM utl_file.put_line(l_file,'ERROR_MESSAGE',TRUE);
-		END IF;
-		
-		l_row_count := l_row_count + 1;
-
-		PERFORM utl_file.put_line(l_file, l_errors.error_message, TRUE);
-
-    END LOOP;
-
-    -- close file
-    IF utl_file.is_open(l_file) THEN
-      PERFORM utl_file.fclose(l_file);
-    END IF;
-
-  EXCEPTION
-    -- any exceptions for file handling will go here
-    WHEN OTHERS THEN
-		RAISE NOTICE 'write_hk3_error_log_file exception = %', SQLERRM;
-		
-		-- close file
-		IF utl_file.is_open(l_file) THEN
-			PERFORM utl_file.fclose(l_file);
-		END IF;
-
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.write_hk3_error_log_file (p_hk3_run_id bigint) FROM PUBLIC;
-
-
 CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.write_hk_cpp_error_log_file (p_hk_cpp_run_id bigint) AS $body$
 DECLARE
 
@@ -1531,100 +1388,6 @@ $body$
 LANGUAGE PLPGSQL
 ;
 -- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.write_metrics_log_file (p_hk_run_id bigint) FROM PUBLIC;
-
-
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.write_hk3_metrics_log_file (p_hk3_run_id bigint) AS $body$
-DECLARE
-
-	l_file utl_file.file_type;
-
-	c_xhb_hk3_results CURSOR(b_hk3_run_id bigint) FOR
-	SELECT *
-	FROM   PUBLIC.XHB_HK3_RESULTS
-	WHERE  hk3_run_id = b_hk3_run_id;
-
-	l_rec_results record;
-
-	l_status_desc varchar(100);
-	l_run_type    varchar(100);
-	
-BEGIN
-
-		l_file := utl_file.fopen('HK_LOGS','HK_JUDGE_'||LPAD(''||p_hk3_run_id||'',10,'0')||'_METRICS.log','a');
-
-		OPEN  c_xhb_hk3_results(p_hk3_run_id);
-		FETCH c_xhb_hk3_results INTO l_rec_results;
-		IF NOT FOUND THEN
-			-- No results found
-			PERFORM utl_file.put_line(l_file,'No record of Judge HK run '||p_hk3_run_id||' can be found',TRUE);
-		ELSE
-			-- Header
-			PERFORM utl_file.put_line(l_file,'Log file produced on '||TO_CHAR(clock_timestamp(),'DD-MON-YYYY HH24:MI:SS'),TRUE);
-			PERFORM utl_file.new_line(l_file,1);
-			PERFORM utl_file.put_line(l_file,'Judge Housekeeping Run Id. '||p_hk3_run_id,TRUE);
-			PERFORM utl_file.put_line(l_file,'Started On   : '||TO_CHAR(l_rec_results.run_start_date,'DD-MON-YYYY HH24:MI:SS'),TRUE);
-			PERFORM utl_file.put_line(l_file,'Completed On : '||TO_CHAR(l_rec_results.run_end_date  ,'DD-MON-YYYY HH24:MI:SS'),TRUE);
-			PERFORM utl_file.new_line(l_file,1);
-
-			-- Ref Judge Statistics
-			PERFORM utl_file.put_line(l_file,'Ref Judge Statistics',TRUE);
-			IF l_rec_results.ref_judge_status = 'S' THEN
-			l_status_desc := ' - Success';
-			ELSIF l_rec_results.ref_judge_status = 'F' THEN
-			l_status_desc := ' - Failure - see error message below';
-			ELSIF l_rec_results.ref_judge_status = 'E' THEN
-			l_status_desc := ' - Some records not deleted - see count below';
-			ELSE
-			l_status_desc := ' - Unknown status';
-			END IF;
-
-			PERFORM utl_file.put_line(l_file,'Run Status : '||l_rec_results.ref_judge_status||l_status_desc,TRUE);
-			IF l_rec_results.ref_judge_status = 'F' THEN
-			PERFORM utl_file.put_line(l_file,l_rec_results.ref_judge_error_message,TRUE);
-			END IF;
-
-			PERFORM utl_file.put_line(l_file,'Records Deleted : '||l_rec_results.ref_judges_deleted,TRUE);
-			PERFORM utl_file.put_line(l_file,'Records Error   : '||l_rec_results.ref_judges_error,TRUE);
-			PERFORM utl_file.new_line(l_file,1);
-			IF l_rec_results.ref_judge_limit > 0 THEN
-				PERFORM utl_file.put_line(l_file,'Ref Judge Limit : '||l_rec_results.ref_judge_limit,TRUE);
-			ELSE
-				PERFORM utl_file.put_line(l_file,'No limit on records deleted',TRUE);
-			END IF;
-			PERFORM utl_file.new_line(l_file,1);
-
-			-- End of Report
-			PERFORM utl_file.new_line(l_file,1);
-			PERFORM utl_file.put_line(l_file,'End of Report',TRUE);
-
-		END IF;
-
-		CLOSE c_xhb_hk3_results;
-
-		PERFORM utl_file.fclose(l_file);
-
-	EXCEPTION
-		-- any exceptions for file handling will go here
-		WHEN OTHERS THEN
-		
-			RAISE NOTICE 'write_hk3_metrics_log_file exception = %', SQLERRM;
-		
-			-- close cursor
-			IF EXISTS(SELECT * FROM pg_cursors WHERE name = 'c_xhb_hk3_results') THEN
-				CLOSE c_xhb_hk3_results;
-			END IF;
-
-			-- close file
-			IF utl_file.is_open(l_file) THEN
-				PERFORM utl_file.fclose(l_file);
-			END IF;
-
-	END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.write_hk3_metrics_log_file (p_hk3_run_id bigint) FROM PUBLIC;
 
 
 CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.write_hk_cpp_metrics_log_file (p_hk_cpp_run_id bigint ,p_MS_days bigint ,p_MF_days bigint) AS $body$
@@ -2125,34 +1888,6 @@ $body$
 LANGUAGE PLPGSQL
 ;
 -- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.delete_obsolete_judges (p_judge_limit bigint DEFAULT 0) FROM PUBLIC;
-
-
-CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.process_judges (p_age bigint DEFAULT 2500, p_judge_limit bigint DEFAULT 0) AS $body$
-BEGIN
-
-	CALL xhb_housekeeping_pkg.insert_hk3_log(p_age => p_age, p_judge_limit => p_judge_limit);
-
-	-- Run the judge updates
-	CALL xhb_housekeeping_pkg.delete_obsolete_judges( p_judge_limit => p_judge_limit );
-
-	-- write errors to external file
-    CALL xhb_housekeeping_pkg.write_hk3_error_log_file(current_setting('l_hk3_run_results.l_hk3_run_id')::bigint);
-
-    -- Update log record with metrics
-	UPDATE PUBLIC.XHB_HK3_RESULTS SET run_end_date = clock_timestamp() WHERE hk3_run_id = current_setting('l_hk3_run_results.l_hk3_run_id')::bigint;
-	--COMMIT;
-	
-    CALL xhb_housekeeping_pkg.update_hk3_log();
-
-    -- write metrics to external file
-    CALL xhb_housekeeping_pkg.write_hk3_metrics_log_file(current_setting('l_hk3_run_results.l_hk3_run_id')::bigint);
-
-END;
-
-$body$
-LANGUAGE PLPGSQL
-;
--- REVOKE ALL ON PROCEDURE xhb_housekeeping_pkg.process_judges (p_age bigint DEFAULT 2500, p_judge_limit bigint DEFAULT 0) FROM PUBLIC;
 
 
 CREATE OR REPLACE PROCEDURE xhb_housekeeping_pkg.set_case_to_historic (p_case_id PUBLIC.XHB_CASE.CASE_ID%TYPE) AS $body$
