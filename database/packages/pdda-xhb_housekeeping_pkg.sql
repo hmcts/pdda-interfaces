@@ -1834,9 +1834,6 @@ DECLARE
 
 BEGIN
 
-    PERFORM set_config('l_hk3_run_results.ref_judge_status', 'I', false);
-    CALL xhb_housekeeping_pkg.update_hk3_log();
-
 	FOR rec IN c_get_ref_judges LOOP
 
 		IF p_judge_limit > 0 THEN
@@ -1859,30 +1856,9 @@ BEGIN
 				--ROLLBACK;
 				RAISE NOTICE 'delete_obsolete_judges exception #1 = %', SQLERRM;
 				v_total_error := v_total_error + 1;
-				CALL xhb_housekeeping_pkg.log_judge_hk_error(p_hk3_run_id   => current_setting('l_hk3_run_results.l_hk3_run_id')::bigint,
-                                  p_error_message => SUBSTR('delete_obsolete_judges ' || SQLERRM, 1, 500));
 		END;
 
 	END LOOP;
-
-    IF v_total_error > 0 THEN
-		PERFORM set_config('l_hk3_run_results.ref_judge_status', 'E', false);
-    ELSE
-		PERFORM set_config('l_hk3_run_results.ref_judge_status', 'S', false);
-    END IF;
-    PERFORM set_config('l_hk3_run_results.ref_judges_deleted', v_total_deleted::text, false);
-	PERFORM set_config('l_hk3_run_results.ref_judges_error', v_total_error::text, false);
-    CALL xhb_housekeeping_pkg.update_hk3_log();
-
-  EXCEPTION
-	WHEN OTHERS THEN
-		RAISE NOTICE 'delete_obsolete_judges exception #2 = %', SQLERRM;
-		PERFORM set_config('l_hk3_run_results.ref_judge_status', 'F', false);
-		PERFORM set_config('l_hk3_run_results.ref_judge_error_message', SUBSTR('delete_obsolete_judges ' || SQLERRM, 1, 2000), false);
-		PERFORM set_config('l_hk3_run_results.ref_judges_deleted', v_total_deleted::text, false);
-		PERFORM set_config('l_hk3_run_results.ref_judges_error', v_total_error::text, false);
-		CALL xhb_housekeeping_pkg.update_hk3_log();
-END;
 
 $body$
 LANGUAGE PLPGSQL
