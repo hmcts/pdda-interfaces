@@ -1012,31 +1012,6 @@ CREATE TABLE xhb_hk_results (
 ALTER TABLE xhb_hk_results ADD CONSTRAINT xhb_hk_results_pk PRIMARY KEY (hk_run_id);
 
 
-DROP TABLE IF EXISTS xhb_hk3_results CASCADE;
-CREATE TABLE xhb_hk3_results (
-	hk3_run_id bigint NOT NULL,
-	run_type varchar(1) NOT NULL,
-	run_start_date timestamp,
-	run_end_date timestamp,
-	judge_usage_status varchar(1),
-	judge_usage_error_message varchar(2000),
-	judge_usage_deleted integer,
-	judge_usage_error integer,
-	crtrm_usage_status varchar(1),
-	crtrm_usage_error_message varchar(2000),
-	crtrm_usage_recs_deleted integer,
-	crtrm_usage_recs_error integer,
-	ref_judge_status varchar(1),
-	ref_judge_error_message varchar(2000),
-	ref_judges_deleted integer,
-	ref_judges_error integer,
-	judge_usage_limit integer,
-	crtrm_usage_limit integer,
-	ref_judge_limit integer
-) ;
-ALTER TABLE xhb_hk3_results ADD CONSTRAINT xhb_hk3_results_pk PRIMARY KEY (hk3_run_id);
-
-
 DROP TABLE IF EXISTS xhb_hk_cpp_results CASCADE;
 CREATE TABLE xhb_hk_cpp_results (
 	hk_cpp_run_id bigint NOT NULL,
@@ -1064,20 +1039,14 @@ ALTER TABLE xhb_hk_cpp_results ADD CONSTRAINT xhb_hk_cpp_results_pk PRIMARY KEY 
 
 DROP TABLE IF EXISTS xhb_hk_error_log CASCADE;
 CREATE TABLE xhb_hk_error_log (
-	hk_run_id bigint,
+	hk_run_id bigint NOT NULL,
 	case_no integer,
 	case_type varchar(1),
 	court_id integer,
 	case_id integer,
 	error_message varchar(500)
 ) ;
-
-
-DROP TABLE IF EXISTS xhb_hk3_error_log CASCADE;
-CREATE TABLE xhb_hk3_error_log (
-	hk3_run_id bigint NOT NULL,
-	error_message varchar(500)
-) ;
+ALTER TABLE xhb_hk_error_log ADD CONSTRAINT xhb_hk_error_log_pk PRIMARY KEY (hk_run_id);
 
 
 DROP TABLE IF EXISTS xhb_hk_cpp_error_log CASCADE;
@@ -1085,6 +1054,8 @@ CREATE TABLE xhb_hk_cpp_error_log (
 	hk_cpp_run_id bigint NOT NULL,
 	error_message varchar(500)
 ) ;
+ALTER TABLE xhb_hk_cpp_error_log ADD CONSTRAINT xhb_hk_cpp_error_log_pk PRIMARY KEY (hk_cpp_run_id);
+
 
 
 DROP TABLE IF EXISTS xhb_pdda_message CASCADE;
