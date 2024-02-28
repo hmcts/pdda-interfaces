@@ -10,4 +10,4 @@ java:
       secrets:
         name: pdda-POSTGRES-USER
   environment:
-    POSTGRES_USER: {{ Values.keyVaults.secrets.pdda-POSTGRES-USER}}
+    POSTGRES_USER: {{ .Values.keyVaults.secrets.pdda-POSTGRES-USER }}
