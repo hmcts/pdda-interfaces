@@ -56,7 +56,7 @@
 			<property name="javax.persistence.jdbc.user"
 				value="pgadmin" />
 			<property name="javax.persistence.jdbc.password"
-				value="javapassword" />
+				value="UY2mJFyNoRLwHeB(uePz" />
 			<property name="hibernate.connection.pool_size" value="20" />
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.PostgreSQLDialect" />
