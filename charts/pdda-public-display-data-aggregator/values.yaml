@@ -2,8 +2,10 @@ java:
   applicationPort: 5432
   image: 'sdshmctspublic.azurecr.io/pdda/public-display-data-aggregator:latest'
   ingressHost: pdda-public-display-data-aggregator.{{ .Values.global.environment }}.platform.hmcts.net
+  environment:
+    SECRETS_PATH: "/mnt/secrets/pdda"
   keyVaults:
-    pdda:
+    "pdda":
       excludeEnvironmentSuffix: false
       resourceGroup: pdda-{{ .Values.global.environment }}
       usePodIdentity: true
