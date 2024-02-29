@@ -1,0 +1,8 @@
+server:
+  port: 5432
+
+spring:
+  application:
+    name: pdda-public-display-data-aggregator
+  config:
+    import: "optional:configtree:/mnt/secrets/pdda/"
