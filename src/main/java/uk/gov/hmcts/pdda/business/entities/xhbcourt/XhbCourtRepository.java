@@ -34,7 +34,7 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
      * @return List
      */
     public List<XhbCourtDao> findByCrestCourtIdValue(String crestCourtId) {
-        LOG.debug("findByCrestCourtIdValue()");
+        LOG.debug("findByCrestCourtIdValue({})", crestCourtId);
         Query query = getEntityManager().createNamedQuery("XHB_COURT.findByCrestCourtIdValue");
         query.setParameter("crestCourtId", crestCourtId);
         return query.getResultList();
@@ -46,6 +46,7 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
      * @return List
      */
     public List<XhbCourtDao> findNonObsoleteByCrestCourtIdValue(String crestCourtId) {
+        LOG.debug("findNonObsoleteByCrestCourtIdValue({})", crestCourtId);
         Query query =
             getEntityManager().createNamedQuery("XHB_COURT.findNonObsoleteByCrestCourtIdValue");
         query.setParameter("crestCourtId", crestCourtId);
@@ -58,6 +59,7 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
      * @return List
      */
     public List<XhbCourtDao> findByShortNameValue(String shortName) {
+        LOG.debug("findByShortNameValue({})", shortName);
         Query query = getEntityManager().createNamedQuery("XHB_COURT.findByShortNameValue");
         query.setParameter("shortName", shortName);
         return query.getResultList();
@@ -69,6 +71,7 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
      * @return List
      */
     public List<XhbCourtDao> findNonObsoleteByShortNameValue(String shortName) {
+        LOG.debug("findNonObsoleteByShortNameValue({})", shortName);
         Query query =
             getEntityManager().createNamedQuery("XHB_COURT.findNonObsoleteByShortNameValue");
         query.setParameter("shortName", shortName);

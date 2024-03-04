@@ -39,6 +39,8 @@ public class JmsServicesImpl implements JmsServices {
      * Logger.
      */
     private static final Logger LOG = LoggerFactory.getLogger(JmsServicesImpl.class);
+    
+    private static final String SEND_LOG_MESSAGE = "send({})";
 
     /**
      * Singleton instance.
@@ -69,13 +71,13 @@ public class JmsServicesImpl implements JmsServices {
             ConnectionFactory connectionFactory =
                 getConnectionFactory("org.apache.activemq.ActiveMQXAConnectionFactory");
             try (Connection connection = connectionFactory.createConnection()) {
-                LOG.debug("send({})", connection);
+                LOG.debug(SEND_LOG_MESSAGE, connection);
                 connection.start();
                 send(connection, factories);
             }
 
         } catch (JMSException jmse) {
-            LOG.debug("send({})", jmse.getMessage());
+            LOG.debug(SEND_LOG_MESSAGE, jmse.getMessage());
             throw new JmsServicesException(jmse);
         }
     }
@@ -91,7 +93,7 @@ public class JmsServicesImpl implements JmsServices {
         // Note that we are taking part in the XA User Transaction so
         // this should not be marked as transacted.
         try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-            LOG.debug("send({},{})", "Session: ", session);
+            LOG.debug(SEND_LOG_MESSAGE, session);
             send(session, factories);
         }
     }
@@ -105,7 +107,7 @@ public class JmsServicesImpl implements JmsServices {
      */
     static void send(Session session, MessageFactory... factories) throws JMSException {
         for (MessageFactory factory : factories) {
-            LOG.debug("send({},{})", "MessageFactory: ", factory);
+            LOG.debug(SEND_LOG_MESSAGE, factory);
             send(session, factory);
         }
     }
@@ -121,7 +123,7 @@ public class JmsServicesImpl implements JmsServices {
         Message message = factory.create(session);
         Destination destination = getDestination(factory.getDestination());
         try (MessageProducer producer = session.createProducer(destination)) {
-            LOG.debug("send({},{}) ", "Message: ", message);
+            LOG.debug(SEND_LOG_MESSAGE, message);
             producer.send(message);
         }
     }
