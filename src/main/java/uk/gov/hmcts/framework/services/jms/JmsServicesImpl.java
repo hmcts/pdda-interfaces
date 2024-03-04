@@ -69,11 +69,13 @@ public class JmsServicesImpl implements JmsServices {
             ConnectionFactory connectionFactory =
                 getConnectionFactory("org.apache.activemq.ActiveMQXAConnectionFactory");
             try (Connection connection = connectionFactory.createConnection()) {
+                LOG.debug("send({})", connection);
                 connection.start();
                 send(connection, factories);
             }
 
         } catch (JMSException jmse) {
+            LOG.debug("send({})", jmse.getMessage());
             throw new JmsServicesException(jmse);
         }
     }
@@ -89,6 +91,7 @@ public class JmsServicesImpl implements JmsServices {
         // Note that we are taking part in the XA User Transaction so
         // this should not be marked as transacted.
         try (Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+            LOG.debug("send({},{})", "Session: ", session);
             send(session, factories);
         }
     }
@@ -102,6 +105,7 @@ public class JmsServicesImpl implements JmsServices {
      */
     static void send(Session session, MessageFactory... factories) throws JMSException {
         for (MessageFactory factory : factories) {
+            LOG.debug("send({},{})", "MessageFactory: ", factory);
             send(session, factory);
         }
     }
@@ -117,6 +121,7 @@ public class JmsServicesImpl implements JmsServices {
         Message message = factory.create(session);
         Destination destination = getDestination(factory.getDestination());
         try (MessageProducer producer = session.createProducer(destination)) {
+            LOG.debug("send({},{}) ", "Message: ", message);
             producer.send(message);
         }
     }

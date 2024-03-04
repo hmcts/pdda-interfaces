@@ -119,6 +119,7 @@ public final class ConfigServicesImpl implements ConfigServices {
     public Properties getProperties(String componentName) {
         String errMsg;
         String file = "/config/components/" + componentName + ".properties";
+        LOG.debug("getProperties({})", file);
         try (
             InputStream is = ConfigServices.class.getResourceAsStream(file)) {
             if (is == null) {

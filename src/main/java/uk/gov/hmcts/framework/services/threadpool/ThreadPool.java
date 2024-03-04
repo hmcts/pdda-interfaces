@@ -126,6 +126,7 @@ public final class ThreadPool {
                         LOG.debug("Waiting for workers");
                         wait(timeout);
                     } catch (InterruptedException ex) {
+                        LOG.debug("getWorker() {}", ex.getMessage());
                         Thread.currentThread().interrupt();
                         throw new WorkerUnavailableException(ex);
                     }

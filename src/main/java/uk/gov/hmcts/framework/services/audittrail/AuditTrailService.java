@@ -1,5 +1,7 @@
 package uk.gov.hmcts.framework.services.audittrail;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.exception.CsConfigurationException;
 import uk.gov.hmcts.framework.services.CsServices;
 
@@ -25,6 +27,9 @@ import java.util.Properties;
  */
 
 public final class AuditTrailService {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(AuditTrailService.class);
+    
     private static final String AUDIT_PROVIDER_JMS = "JMS";
     private static final String AUDIT_PROVIDER_FILE = "FILE";
 
@@ -86,6 +91,7 @@ public final class AuditTrailService {
                 auditTrailEventFactory =
                     (AuditTrailEventFactory) Class.forName(FACTORY_CLASS).newInstance();
             } catch (Exception ex) {
+                LOG.debug("getAuditTrailEvent({})", ex.getMessage());
                 CsConfigurationException exception = new CsConfigurationException(ex);
                 CsServices.getDefaultErrorHandler().handleError(exception, CsServices.class);
                 throw exception;

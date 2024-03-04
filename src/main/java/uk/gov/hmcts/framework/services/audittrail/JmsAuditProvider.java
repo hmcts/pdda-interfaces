@@ -47,6 +47,7 @@ public class JmsAuditProvider implements AuditProvider {
             CsServices.getJmsServices().send(auditTrailMessageFactory);
             LOG.debug("finished Sending message to xhibit/jms/AuditTrailQueue");
         } catch (Exception ex) {
+            LOG.debug("sendMessage({})", ex.getMessage());
             CsConfigurationException exception = new CsConfigurationException(ex);
             CsServices.getDefaultErrorHandler().handleError(exception, CsServices.class);
             throw exception;

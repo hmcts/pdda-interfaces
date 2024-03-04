@@ -110,6 +110,7 @@ public final class PrintServicesImpl implements PrintServices {
      */
     private static String formatDocument(Document document, String xslName, Locale locale) {
         try {
+            LOG.debug("formatDocument({},{},{})", document, xslName, locale);
             return CsServices.getXslServices().transform(document, xslName, locale, null);
         } catch (CsUnrecoverableException e) {
             CsServices.getDefaultErrorHandler().handleError(e, PrintServicesImpl.class);
@@ -124,6 +125,7 @@ public final class PrintServicesImpl implements PrintServices {
      */
     private static Document getXmlDocument(CsValueObject data)  {
         try {
+            LOG.debug("getXmlDocument({})", data);
             return CsServices.getXmlServices().createDocFromValue(data);
         } catch (CsXmlServicesException e) {
             CsServices.getDefaultErrorHandler().handleError(e, PrintServicesImpl.class);
