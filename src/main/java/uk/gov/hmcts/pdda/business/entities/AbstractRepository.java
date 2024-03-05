@@ -37,6 +37,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * @return dao
      */
     public Optional<T> findById(Integer id) {
+        LOG.debug("findById({})", id);
         T dao = getEntityManager().find(getDaoClass(), id);
         return dao != null ? (Optional<T>) Optional.of(dao) : Optional.empty();
     }
@@ -47,12 +48,14 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * @return dao
      */
     public Optional<T> findById(Long id) {
+        LOG.debug("findById({})", id);
         T dao = getEntityManager().find(getDaoClass(), id);
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
     
     @SuppressWarnings("unchecked")
     private List<T> findAll(String sql) {
+        LOG.debug("findAll({})", sql);
         Query query = getEntityManager().createQuery(sql);
         return query.getResultList();
     }
@@ -63,6 +66,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * @return List
      */
     public List<T> findAll() {
+        LOG.debug("findAll()");
         return findAll("from " + getDaoClass().getName());
     }
 
@@ -73,7 +77,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     public void save(T dao) {
         try (EntityManager localEntityManager = createEntityManager()) {
             try {
-                LOG.debug("Save()");
+                LOG.debug("save({})", dao);
                 localEntityManager.getTransaction().begin();
                 localEntityManager.persist(dao);
                 localEntityManager.getTransaction().commit();
@@ -94,7 +98,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     public Optional<T> update(T dao) {
         try (EntityManager localEntityManager = createEntityManager()) {
             try {
-                LOG.debug("Update()");
+                LOG.debug("update({})", dao);
                 T updatedDao = dao;
                 localEntityManager.getTransaction().begin();
                 updatedDao = localEntityManager.merge(updatedDao);
@@ -118,7 +122,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     public void delete(Optional<T> xds) {
         try (EntityManager localEntityManager = createEntityManager()) {
             try {
-                LOG.debug("delete()");
+                LOG.debug("delete({})", xds);
                 if (xds.isPresent()) {
                     localEntityManager.getTransaction().begin();
                     localEntityManager.remove(xds.stream().findFirst().orElse(null));

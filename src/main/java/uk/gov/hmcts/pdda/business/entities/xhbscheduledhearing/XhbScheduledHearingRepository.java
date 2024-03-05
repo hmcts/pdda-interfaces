@@ -41,7 +41,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
     @SuppressWarnings("unchecked")
     public List<XhbScheduledHearingDao> findActiveCasesInRoom(Integer listId, Integer courtRoomId,
         Integer scheduledHearingId) {
-        LOG.debug("findActiveCasesInRoom()");
+        LOG.debug("findActiveCasesInRoom({},{},{})", listId, courtRoomId, scheduledHearingId);
         Query query =
             getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findActiveCasesInRoom");
         query.setParameter(COURT_ROOM_ID, courtRoomId);
@@ -58,6 +58,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
      */
     @SuppressWarnings("unchecked")
     public List<XhbScheduledHearingDao> findBySittingId(Integer sittingId) {
+        LOG.debug("findBySittingId({})", sittingId);
         Query query = getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingId");
         query.setParameter(SITTING_ID, sittingId);
         return query.getResultList();

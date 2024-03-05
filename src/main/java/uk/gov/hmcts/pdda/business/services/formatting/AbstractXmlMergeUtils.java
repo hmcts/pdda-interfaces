@@ -18,11 +18,11 @@ public abstract class AbstractXmlMergeUtils extends AbstractXmlUtils {
     /**
      * Class constants.
      */
+    protected static final Logger LOG = LoggerFactory.getLogger(AbstractXmlMergeUtils.class);
     private static final String[] WARNEDLISTROOTNODES = {"WarnedList/CourtLists/CourtList"};
     private static final String IWP = "IWP";
     private static final String INVALID_FIRST_DOC = "Primary document does not contain any root nodes";
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractXmlMergeUtils.class);
-
+    
     private final String[] rootNodes;
     private final XPathExpression[] rootNodeExpression;
 
@@ -41,6 +41,7 @@ public abstract class AbstractXmlMergeUtils extends AbstractXmlUtils {
     }
 
     public Document merge(final Document... documents) throws IOException, XPathExpressionException {
+        LOG.debug("merge({})", (Object[]) documents);
         MergeDocumentUtils.validateDocuments(documents);
 
         // Use the first document as the base for the merge
@@ -70,6 +71,7 @@ public abstract class AbstractXmlMergeUtils extends AbstractXmlUtils {
 
     private void mergeDocument(Document baseDocument, List<Node> nodesToMerge, Document... documents)
         throws IOException, XPathExpressionException {
+        LOG.debug("mergeDocument({},{},{})", baseDocument, nodesToMerge, documents);
         String[] listRootNodes = MergeListUtils.getListRootNodes(this.getClass());
 
         // replace the blank courtlists with the new court list
@@ -98,6 +100,7 @@ public abstract class AbstractXmlMergeUtils extends AbstractXmlUtils {
 
     private void mergeWarnedList(Document baseDocument, List<Node> nodes, List<Node> nodesToMerge,
         Document... documents) throws XPathExpressionException {
+        LOG.debug("mergeWarnedList({},{},{},{})", baseDocument, nodes, nodesToMerge, documents);
         List<Node> parentNodes = MergeNodeUtils.getParentNodes(nodes);
         this.listRootNodeExpression = new XPathExpression[WARNEDLISTROOTNODES.length];
         for (int nodeNo = 0; nodeNo < WARNEDLISTROOTNODES.length; nodeNo++) {
