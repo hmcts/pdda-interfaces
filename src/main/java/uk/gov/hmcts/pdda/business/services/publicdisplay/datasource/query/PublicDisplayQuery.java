@@ -38,8 +38,8 @@ import java.util.Optional;
  * 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyFields", "PMD.GodClass", "PMD.ExcessiveImports",
-    "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyFields", "PMD.GodClass",
+    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected static final String EMPTY_STRING = "";
@@ -55,13 +55,19 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected PublicDisplayQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
-        XhbCaseReferenceRepository xhbCaseReferenceRepository, XhbHearingListRepository xhbHearingListRepository,
-        XhbSittingRepository xhbSittingRepository, XhbScheduledHearingRepository xhbScheduledHearingRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+        XhbCaseReferenceRepository xhbCaseReferenceRepository,
+        XhbHearingListRepository xhbHearingListRepository,
+        XhbSittingRepository xhbSittingRepository,
+        XhbScheduledHearingRepository xhbScheduledHearingRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRoomRepository xhbCourtRoomRepository,
         XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository,
-        XhbHearingRepository xhbHearingRepository, XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
-        XhbDefendantRepository xhbDefendantRepository, XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
-        XhbRefHearingTypeRepository xhbRefHearingTypeRepository, XhbRefJudgeRepository xhbRefJudgeRepository) {
+        XhbHearingRepository xhbHearingRepository,
+        XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
+        XhbDefendantRepository xhbDefendantRepository,
+        XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
+        XhbRefHearingTypeRepository xhbRefHearingTypeRepository,
+        XhbRefJudgeRepository xhbRefJudgeRepository) {
         super(entityManager, xhbCourtLogEntryRepository, null);
         this.xhbCaseRepository = xhbCaseRepository;
         this.xhbCaseReferenceRepository = xhbCaseReferenceRepository;
@@ -91,6 +97,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected void populateData(PublicDisplayValue result, Integer courtSiteId, Integer courtRoomId,
         Integer movedFromCourtRoomId, LocalDateTime notBeforeTime) {
+        log.debug("populateData({},{},{},{},{})", result, courtSiteId, courtRoomId,
+            movedFromCourtRoomId, notBeforeTime);
         // Set not before time
         result.setNotBeforeTime(notBeforeTime);
 
@@ -123,7 +131,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         result.setMovedFromCourtRoomName("");
         result.setMovedFromCourtSiteShortName("");
         if (movedFromCourtRoomId != null) {
-            Optional<XhbCourtRoomDao> movedCourtRoom = getXhbCourtRoomRepository().findById(movedFromCourtRoomId);
+            Optional<XhbCourtRoomDao> movedCourtRoom =
+                getXhbCourtRoomRepository().findById(movedFromCourtRoomId);
             if (movedCourtRoom.isPresent()) {
                 result.setMovedFromCourtRoomId(movedCourtRoom.get().getCourtRoomId());
                 result.setMovedFromCourtRoomName(movedCourtRoom.get().getDisplayName());
@@ -152,7 +161,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         return getXhbScheduledHearingRepository().findBySittingId(sittingId);
     }
 
-    protected List<XhbSchedHearingDefendantDao> getSchedHearingDefendantDaos(Integer scheduledHearingId) {
+    protected List<XhbSchedHearingDefendantDao> getSchedHearingDefendantDaos(
+        Integer scheduledHearingId) {
         return getXhbSchedHearingDefendantRepository().findByScheduledHearingId(scheduledHearingId);
     }
 
@@ -162,9 +172,11 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         Optional<XhbRefJudgeDao> xhbRefJudgeDao =
             getXhbRefJudgeRepository().findScheduledAttendeeJudge(scheduledHearingId);
         if (xhbRefJudgeDao.isPresent()) {
-            log.debug("Found Judge {} in scheduledHearingAttendees", xhbRefJudgeDao.get().getRefJudgeId());
+            log.debug("Found Judge {} in scheduledHearingAttendees",
+                xhbRefJudgeDao.get().getRefJudgeId());
         } else {
-            xhbRefJudgeDao = getXhbRefJudgeRepository().findScheduledSittingJudge(scheduledHearingId);
+            xhbRefJudgeDao =
+                getXhbRefJudgeRepository().findScheduledSittingJudge(scheduledHearingId);
             if (xhbRefJudgeDao.isPresent()) {
                 log.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
             } else {
@@ -177,7 +189,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected boolean isSelectedCourtRoom(int[] courtRoomIds, Integer sittingCourtRoomId,
         Integer movedFromCourtRoomId) {
         for (Integer courtRoomId : courtRoomIds) {
-            if (courtRoomId.equals(sittingCourtRoomId) || courtRoomId.equals(movedFromCourtRoomId)) {
+            if (courtRoomId.equals(sittingCourtRoomId)
+                || courtRoomId.equals(movedFromCourtRoomId)) {
                 return true;
             }
         }
@@ -186,7 +199,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected boolean isReportingRestricted(Integer caseId) {
         boolean result = false;
-        List<XhbCaseReferenceDao> caseReferenceDaos = getXhbCaseReferenceRepository().findByCaseId(caseId);
+        List<XhbCaseReferenceDao> caseReferenceDaos =
+            getXhbCaseReferenceRepository().findByCaseId(caseId);
         Integer trueInt = Integer.valueOf(1);
         if (!caseReferenceDaos.isEmpty()) {
             for (XhbCaseReferenceDao caseReferenceDao : caseReferenceDaos) {

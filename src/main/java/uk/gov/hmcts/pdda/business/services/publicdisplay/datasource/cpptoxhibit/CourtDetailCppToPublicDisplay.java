@@ -39,6 +39,7 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
      */
     @Override
     public Collection<?> getCppData(final EntityManager entityManager) {
+        LOG.debug("getCppData({})", entityManager);
         List<CourtDetailValue> cppData = new ArrayList<>();
 
         // Retrieve XML Document of CPP data from the latest XHB_CPP_FORMATTING row for the

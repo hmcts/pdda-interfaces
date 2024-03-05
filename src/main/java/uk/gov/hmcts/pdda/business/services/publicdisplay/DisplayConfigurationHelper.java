@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -46,6 +48,8 @@ import java.util.Optional;
 
 public class DisplayConfigurationHelper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationHelper.class);
+    
     protected DisplayConfigurationHelper() {
         // Protected constructor
     }
@@ -59,7 +63,7 @@ public class DisplayConfigurationHelper {
 
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
         XhbDisplayRepository xhbDisplayRepository, XhbCourtRepository xhbCourtRepository) {
-
+        LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository, xhbCourtRepository);
         Optional<XhbDisplayDao> display = xhbDisplayRepository.findById(displayId);
         if (!display.isPresent()) {
             throw new DisplayNotFoundException(displayId);

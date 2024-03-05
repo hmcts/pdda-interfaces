@@ -107,6 +107,7 @@ public class PddaHelper extends XhibitPddaHelper {
     private void retrieveFromBais(SftpConfig config, BaisValidation validation) {
         // Get the file list and then disconnect the session
         try {
+            LOG.debug("retrieveFromBais({},{})", config, validation);
             Map<String, String> files = getBaisFileList(config, validation);
             if (!files.isEmpty()) {
 
@@ -269,6 +270,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
     public void checkForCpMessages(String userDisplayName) throws IOException {
         // Find Messages
+        LOG.debug("checkForCpMessages({})", userDisplayName);
         List<XhbPddaMessageDao> messages = getPddaMessageHelper().findUnrespondedCpMessages();
         List<XhbCppStagingInboundDao> cppMessages = getCppStagingInboundHelper().findUnrespondedCppMessages();
 
@@ -301,7 +303,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
     public Map<String, InputStream> respondToPddaMessage(List<XhbPddaMessageDao> messages) throws IOException {
         Map<String, InputStream> files = new ConcurrentHashMap<>();
-
+        LOG.debug("respondToPddaMessage({})", messages);
         for (XhbPddaMessageDao message : messages) {
             // Set Filename
             String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, "")) + "_Response_"
@@ -326,6 +328,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
     public Map<String, InputStream> respondToCppStagingInbound(List<XhbCppStagingInboundDao> cppMessages)
         throws IOException {
+        LOG.debug("respondToCppStagingInbound({})", cppMessages);
         Map<String, InputStream> files = new ConcurrentHashMap<>();
 
         for (XhbCppStagingInboundDao cppMessage : cppMessages) {
@@ -530,6 +533,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         @Override
         public Integer getCourtId(String filename, PublicDisplayEvent event) {
+            LOG.debug("getCourtId({},{})", filename, event);
             Integer courtId = null;
             String crestCourtId = getCrestCourtId(filename);
             if (!EMPTY_STRING.equals(crestCourtId)) {
