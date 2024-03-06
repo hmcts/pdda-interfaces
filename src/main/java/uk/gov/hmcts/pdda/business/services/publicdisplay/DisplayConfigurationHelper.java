@@ -49,7 +49,7 @@ import java.util.Optional;
 public class DisplayConfigurationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationHelper.class);
-    
+
     protected DisplayConfigurationHelper() {
         // Protected constructor
     }
@@ -63,7 +63,8 @@ public class DisplayConfigurationHelper {
 
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
         XhbDisplayRepository xhbDisplayRepository, XhbCourtRepository xhbCourtRepository) {
-        LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository, xhbCourtRepository);
+        LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository,
+            xhbCourtRepository);
         Optional<XhbDisplayDao> display = xhbDisplayRepository.findById(displayId);
         if (!display.isPresent()) {
             throw new DisplayNotFoundException(displayId);
@@ -74,6 +75,7 @@ public class DisplayConfigurationHelper {
 
     private static XhbCourtRoomDao[] getDisplayCourtRooms(final XhbDisplayDao display,
         XhbCourtRepository xhbCourtRepository) {
+        LOG.debug("getDisplayCourtRooms({},{})", display, xhbCourtRepository);
         boolean isMultiSite = false;
 
         ArrayList<XhbCourtRoomDao> rooms = (ArrayList<XhbCourtRoomDao>) display.getXhbCourtRooms();
@@ -90,6 +92,7 @@ public class DisplayConfigurationHelper {
     }
 
     private static XhbCourtRoomDao[] getMultiSiteCourtRoomData(final Collection<?> values) {
+        LOG.debug("getMultiSiteCourtRoomData({})", values);
         XhbCourtRoomDao[] returnValues = new XhbCourtRoomDao[values.size()];
         int recNo = 0;
 
@@ -107,6 +110,7 @@ public class DisplayConfigurationHelper {
 
     private static boolean isCourtMultiSite(final Integer courtId,
         XhbCourtRepository xhbCourtRepository) {
+        LOG.debug("isCourtMultiSite({},{})", courtId, xhbCourtRepository);
         Optional<XhbCourtDao> dao = xhbCourtRepository.findById(courtId);
         return dao.isPresent() && dao.get().getXhbCourtSites().size() > 1;
     }
@@ -130,6 +134,8 @@ public class DisplayConfigurationHelper {
         final PublicDisplayNotifier notifier, XhbDisplayRepository xhbDisplayRepository,
         XhbRotationSetsRepository xhbRotationSetsRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository) {
+        LOG.debug("updateDisplayConfiguration({},{},{},{},{})", displayConfiguration, notifier,
+            xhbDisplayRepository, xhbRotationSetsRepository, xhbCourtRoomRepository);
 
         // Lookup the display local reference
         Integer displayId = displayConfiguration.getDisplayId();
@@ -164,7 +170,8 @@ public class DisplayConfigurationHelper {
      */
     private static void setCourtRooms(final DisplayConfiguration displayConfiguration,
         final XhbDisplayDao displayLocal, XhbCourtRoomRepository xhbCourtRoomRepository) {
-
+        LOG.debug("setCourtRooms({},{},{})", displayConfiguration, displayLocal,
+            xhbCourtRoomRepository);
         /**
          * if the courts have been changed: Delete the current ones and create with ones passed in.
          * Note: we are not doing optimistic lock checking because this cross reference table will
@@ -198,6 +205,8 @@ public class DisplayConfigurationHelper {
      */
     private static void setRotationSet(final DisplayConfiguration displayConfiguration,
         final XhbDisplayDao displayLocal, XhbRotationSetsRepository xhbRotationSetsRepository) {
+        LOG.debug("setRotationSet({},{},{})", displayConfiguration, displayLocal,
+            xhbRotationSetsRepository);
         Integer rotationSetId = displayConfiguration.getRotationSetId();
         Optional<XhbRotationSetsDao> rotationSetLocal =
             xhbRotationSetsRepository.findById(Long.valueOf(rotationSetId));
@@ -215,6 +224,7 @@ public class DisplayConfigurationHelper {
      */
     private static void sendNotification(final Integer displayId, final XhbDisplayDao displayLocal,
         PublicDisplayNotifier notifier) {
+        LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
         // find court Id
         Integer courtId = displayLocal.getXhbDisplayLocation().getXhbCourtSite().getCourtId();
         CourtConfigurationChange ccc =

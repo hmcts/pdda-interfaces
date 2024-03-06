@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.publicnotice;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DefinitivePublicNoticeStatusValue;
@@ -28,6 +30,7 @@ import java.util.Optional;
  */
 public final class PublicNoticeMaintainer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PublicNoticeMaintainer.class);
     private static final String PN_ACTIVE = "1";
     private static final String PN_INACTIVE = "0";
     private static final String INVALID_PN_FOR_COURTROOM = "publicnotice.invalid_pn_for_courtroom";
@@ -40,6 +43,7 @@ public final class PublicNoticeMaintainer {
     }
 
     public static void updateIsActive(DisplayablePublicNoticeValue value) {
+        LOG.debug("updateIsActive({})", value);
         Optional<XhbConfiguredPublicNoticeDao> basicValue = PddaEntityHelper.xcpnFindByPrimaryKey(value.getId());
         if (basicValue.isPresent()) {
             XhbConfiguredPublicNoticeDao updatedBasicValue = updateIsActive(value, basicValue.get());
@@ -58,6 +62,7 @@ public final class PublicNoticeMaintainer {
 
     public static void updateActiveStatus(Integer courtRoomId, DefinitivePublicNoticeStatusValue value,
         boolean checkOptimisticLock) {
+        LOG.debug("updateActiveStatus({},{},{})", courtRoomId, value, checkOptimisticLock);
         // DisplayablePublicNoticeValue value)
         List<XhbConfiguredPublicNoticeDao> basicValues =
             PddaEntityHelper.xcpnFindByDefinitivePnCourtRoomValue(courtRoomId, value.getDefinitivePublicNoticeId());
