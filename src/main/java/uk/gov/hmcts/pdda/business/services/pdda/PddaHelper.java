@@ -93,7 +93,7 @@ public class PddaHelper extends XhibitPddaHelper {
      */
     public void retrieveFromBaisXhibit() {
         methodName = "retrieveFromBiasXhibit()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getSftpConfigs();
         if (config.errorMsg != null) {
@@ -354,6 +354,7 @@ public class PddaHelper extends XhibitPddaHelper {
     }
 
     public boolean sendMessageRepsonses(Map<String, InputStream> responses) {
+        LOG.debug("sendMessageRepsonses({})", responses);
         // Sending responses off to bais
         SftpConfig sftpConfig = getSftpConfigs();
         if (!responses.isEmpty()) {
