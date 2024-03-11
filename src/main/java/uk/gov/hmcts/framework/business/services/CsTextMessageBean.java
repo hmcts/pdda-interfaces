@@ -29,7 +29,6 @@ public abstract class CsTextMessageBean extends CsMessageBean {
                     message.getJMSType());
             }
         } catch (Exception e) {
-            log.debug("Message is not an instance of TextMessage. onMessage({})", e.getMessage());
             getMessageDrivenContext().setRollbackOnly();
             throw new CsMessageBeanException(e);
         }

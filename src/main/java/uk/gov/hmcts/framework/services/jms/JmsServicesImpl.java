@@ -77,7 +77,6 @@ public class JmsServicesImpl implements JmsServices {
             }
 
         } catch (JMSException jmse) {
-            LOG.debug(SEND_LOG_MESSAGE, jmse.getMessage());
             throw new JmsServicesException(jmse);
         }
     }

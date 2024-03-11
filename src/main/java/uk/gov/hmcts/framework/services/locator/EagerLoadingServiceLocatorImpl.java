@@ -32,7 +32,6 @@ public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
             LookupHelper lookupHelper = new LookupHelper(getEnv());
             jndiCache = (HashMap<Object, Object>) SubjectManager.getInstance().runAs(lookupHelper);
         } catch (PrivilegedActionException ex) {
-            LOG.debug("EagerLoadingServiceLocatorImpl() {}", ex.getMessage());
             throw handleException(ex);
         }
     }
