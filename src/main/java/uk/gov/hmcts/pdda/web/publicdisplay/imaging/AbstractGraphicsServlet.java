@@ -152,7 +152,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
      */
     BufferedImage writeTextOnImage(final Image image, final String text, final int xposition,
         final int yposition, final int size, int width, Color fontColor) {
-        LOG.debug("writeTextOnImage({},{},{},{},{},{},{})", image, text, xposition, yposition, size,
+        LOG.debug("writeTextOnImage({},{},{},{},{})", xposition, yposition, size,
             width, fontColor);
         int widthToUse = (width == AUTOMATIC_WIDTH) ? image.getWidth(null) : width;
         int height = image.getHeight(null);
