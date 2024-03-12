@@ -33,7 +33,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
      */
     @SuppressWarnings("unchecked")
     public List<XhbPddaMessageDao> findByCpDocumentName(String cpDocumentName) {
-        LOG.debug("findByCpDocumentName()");
+        LOG.debug("findByCpDocumentName({})", cpDocumentName);
         Query query = getEntityManager().createNamedQuery("XHB_PDDA_MESSAGE.findByCpDocumentName");
         query.setParameter(CP_DOCUMENT_NAME, Parameter.getPostgresInParameter(cpDocumentName));
         return query.getResultList();
@@ -46,6 +46,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
      */
     @SuppressWarnings("unchecked")
     public List<XhbPddaMessageDao> findByLighthouse() {
+        LOG.debug("findByLighthouse()");
         return getEntityManager().createNamedQuery("XHB_PDDA_MESSAGE.findByLighthouse")
             .getResultList();
     }
@@ -57,6 +58,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
      */
     @SuppressWarnings("unchecked")
     public List<XhbPddaMessageDao> findUnrespondedCpMessages() {
+        LOG.debug("findUnrespondedCpMessages()");
         return getEntityManager().createNamedQuery("XHB_PDDA_MESSAGE.findUnrespondedCPMessages")
             .getResultList();
     }

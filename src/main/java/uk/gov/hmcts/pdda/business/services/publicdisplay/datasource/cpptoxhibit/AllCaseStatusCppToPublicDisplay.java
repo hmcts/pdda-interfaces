@@ -57,6 +57,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
     }
 
     private List<AllCaseStatusValue> getCaseStatusCourtRoomData(Document doc) {
+        LOG.debug("getCaseStatusCourtRoomData({})", doc);
         List<AllCaseStatusValue> cppData = new ArrayList<>();
         XhbCourtRoomDao courtRoomValue;
         XhbCourtSiteDao courtSiteValue;
@@ -106,6 +107,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
     }
 
     private List<AllCaseStatusValue> getCaseStatusCourtSiteData(Document doc) {
+        LOG.debug("getCaseStatusCourtSiteData({})", doc);
         List<AllCaseStatusValue> cppData = new ArrayList<>();
         XhbCourtSiteDao courtSiteValue;
         try {
@@ -140,6 +142,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
 
     private List<AllCaseStatusValue> getDefendantData(NodeList nodeList, int rowNo, XhbCourtRoomDao courtRoomValue,
         XhbCourtSiteDao courtSiteValue) throws XPathExpressionException {
+        LOG.debug("getDefendantData({},{},{},{})", nodeList, rowNo, courtRoomValue, courtSiteValue);
         List<AllCaseStatusValue> cppData = new ArrayList<>();
         AllCaseStatusValue allCaseStatusValue;
         NodeList defendantNodes = getDefendantNodeList(nodeList.item(rowNo));

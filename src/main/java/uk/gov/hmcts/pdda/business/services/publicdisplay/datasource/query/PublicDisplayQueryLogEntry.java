@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
@@ -17,6 +19,8 @@ import java.util.Optional;
 
 public class PublicDisplayQueryLogEntry {
 
+    private static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQueryLogEntry.class);
+    
     private final Integer shortAdjourn = Integer.valueOf(30_100);
     private final Integer longAdjourn = Integer.valueOf(30_200);
     private final Integer caseClosed = Integer.valueOf(30_300);
@@ -51,6 +55,7 @@ public class PublicDisplayQueryLogEntry {
     }
 
     protected void populateEventData(PublicDisplayValue result, Integer caseId) {
+        LOG.debug("populateEventData({},{})", result, caseId);
         List<XhbCourtLogEntryDao> courtLogEntryDaos = getXhbCourtLogEntryRepository().findByCaseId(caseId);
         if (!courtLogEntryDaos.isEmpty()) {
             XhbCourtLogEntryDao courtLogEntryDao = getLogEntry(courtLogEntryDaos);

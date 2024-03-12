@@ -125,6 +125,7 @@ public class DisplayDocumentReferenceManager {
      *        registered.
      */
     public void addDisplayDocumentReferences(DisplayRotationSetData displayRotationSetData) {
+        LOG.debug("addDisplayDocumentReferences({})", displayRotationSetData);
         RotationSetDisplayDocument[] rsDds =
             displayRotationSetData.getRotationSetDisplayDocuments();
         for (int i = rsDds.length - 1; i >= 0; i--) {
@@ -143,6 +144,7 @@ public class DisplayDocumentReferenceManager {
      *        deregistered.
      */
     public void removeDisplayDocumentReferences(DisplayRotationSetData displayRotationSetData) {
+        LOG.debug("removeDisplayDocumentReferences({})", displayRotationSetData);
         RotationSetDisplayDocument[] rsDds =
             displayRotationSetData.getRotationSetDisplayDocuments();
         for (int i = rsDds.length - 1; i >= 0; i--) {
@@ -163,6 +165,7 @@ public class DisplayDocumentReferenceManager {
         // Accumulate dead Display Documents in this set.
         // We are doing this so we dont change the displayDocumentURICounts
         // map while iterating over it (fail-fast iterators.).
+        LOG.debug("fillInRenderChanges({})", renderChanges);
         HashSet deadDisplayDocumentUris = new HashSet();
 
         // Iterate over all the display documents finding those that now

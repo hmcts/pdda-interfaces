@@ -14,7 +14,8 @@ import java.util.List;
 
 
 @Repository
-public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> implements Serializable {
+public class XhbCppListRepository extends AbstractRepository<XhbCppListDao>
+    implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbCppListRepository.class);
@@ -30,6 +31,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> impl
 
     /**
      * findByCourtCodeAndListTypeAndListDate.
+     * 
      * @param courtCode Integer
      * @param listType String
      * @param listStartDate LocalDateTime
@@ -38,7 +40,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> impl
     @SuppressWarnings("unchecked")
     public List<XhbCppListDao> findByCourtCodeAndListTypeAndListDate(final Integer courtCode,
         final String listType, final LocalDateTime listStartDate) {
-        LOG.debug("findByCourtCodeAndListTypeAndListDate()");
+        LOG.debug("findByCourtCodeAndListTypeAndListDate({},{},{})", courtCode, listType, listStartDate);
         Query query = getEntityManager()
             .createNamedQuery("XHB_CPP_LIST.findByCourtCodeAndListTypeAndListDate");
         query.setParameter("courtCode", courtCode);
@@ -49,6 +51,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> impl
 
     /**
      * findByCourtCodeAndListTypeAndListStartDateAndListEndDate.
+     * 
      * @param courtCode Integer
      * @param listType String
      * @param listStartDate LocalDateTime
@@ -59,7 +62,8 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> impl
     public List<XhbCppListDao> findByCourtCodeAndListTypeAndListStartDateAndListEndDate(
         final Integer courtCode, final String listType, final LocalDateTime listStartDate,
         final LocalDateTime listEndDate) {
-        LOG.debug("findByCourtCodeAndListTypeAndListStartDateAndListEndDate()");
+        LOG.debug("findByCourtCodeAndListTypeAndListStartDateAndListEndDate({},{},{},{})",
+            courtCode, listType, listStartDate, listEndDate);
         Query query = getEntityManager().createNamedQuery(
             "XHB_CPP_LIST.findByCourtCodeAndListTypeAndListStartDateAndListEndDate");
         query.setParameter("courtCode", courtCode);
@@ -71,11 +75,13 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao> impl
 
     /**
      * findByClobId.
+     * 
      * @param listClobId Long
      * @return XhbCppListDao
      */
     @SuppressWarnings("unchecked")
     public XhbCppListDao findByClobId(final Long listClobId) {
+        LOG.debug("findByClobId({})", listClobId);
         Query query = getEntityManager().createNamedQuery("XHB_CPP_LIST.findByClobId");
         query.setParameter("listClobId", listClobId);
         List<XhbCppListDao> results = query.getResultList();

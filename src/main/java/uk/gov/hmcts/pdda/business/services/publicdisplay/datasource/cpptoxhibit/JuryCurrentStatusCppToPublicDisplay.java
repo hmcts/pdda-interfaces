@@ -35,6 +35,7 @@ public class JuryCurrentStatusCppToPublicDisplay extends CourtListCppToPublicDis
 
     @Override
     public Collection getCppData(final EntityManager entityManager) {
+        LOG.debug("getCppData({})", entityManager);
         Collection<JuryStatusDailyListValue> cppData = new ArrayList<>();
 
         // Check the court is CPP enabled and then retrieve data

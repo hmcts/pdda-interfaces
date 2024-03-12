@@ -156,6 +156,7 @@ public class DisplayLocationDataHelper {
     private static DisplayBasicValueSortAdapter[] getDisplayAdapters(final ResourceBundle rb,
         final XhbRotationSetsDao rotationSetLocal,
         final XhbDisplayRepository xhbDisplayRepository) {
+        LOG.debug("getDisplayAdapters({},{},{})", rb, rotationSetLocal, xhbDisplayRepository);
         // Wrap the XhbDisplays in the sort adapter. getting the display text
         // from the resource bundle.
         XhbDisplayDao[] displays = xhbDisplayRepository

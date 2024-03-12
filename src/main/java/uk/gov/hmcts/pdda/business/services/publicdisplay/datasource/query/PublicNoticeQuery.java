@@ -63,6 +63,7 @@ public class PublicNoticeQuery {
      * @return Public display data
      */
     public PublicNoticeValue[] execute(Integer courtRoomId) {
+        log.debug("execute({})", courtRoomId);
         List<PublicNoticeValue> results = new ArrayList<>();
         List<XhbConfiguredPublicNoticeDao> cpnDaos =
             getXhbConfiguredPublicNoticeRepository().findActiveCourtRoomNotices(courtRoomId);

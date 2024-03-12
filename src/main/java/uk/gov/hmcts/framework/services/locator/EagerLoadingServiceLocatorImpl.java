@@ -1,5 +1,7 @@
 package uk.gov.hmcts.framework.services.locator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 import uk.gov.hmcts.framework.security.SubjectManager;
 
@@ -15,6 +17,8 @@ import java.util.Map;
  */
 public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
 
+    private static final Logger LOG = LoggerFactory.getLogger(EagerLoadingServiceLocatorImpl.class);
+    
     private Map<Object, Object> jndiCache;
 
     /**
@@ -24,7 +28,7 @@ public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
     protected EagerLoadingServiceLocatorImpl() {
         super();
         try {
-
+            LOG.debug("Entered into EagerLoadingServiceLocatorImpl()");
             LookupHelper lookupHelper = new LookupHelper(getEnv());
             jndiCache = (HashMap<Object, Object>) SubjectManager.getInstance().runAs(lookupHelper);
         } catch (PrivilegedActionException ex) {
