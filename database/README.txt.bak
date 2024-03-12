@@ -1,4 +1,0 @@
-Initial set of files used in PDDA PoC work.
-The migration involves using Postgres instead of Oracle but some tables will need to exist on both databases.
-
-The XHIBIT database and the XHIBITD tablespace were both created using the pgAdmin tool, so will need to be scripted.
