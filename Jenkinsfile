@@ -7,7 +7,8 @@ def product = "pdda"
 def component = "public-display-data-aggregator"
 
 withPipeline(type, product, component) {
-
+    enableDbMigration(product)
+    loadVaultSecrets(secrets)
 }
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
