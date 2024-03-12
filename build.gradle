@@ -229,8 +229,10 @@ configurations {
 
  flyway {
   url = System.getenv('FLYWAY_URL')
+  println "FLYWAY url=${url}"
   user = System.getenv('FLYWAY_USER')
   password = System.getenv('FLYWAY_PASSWORD')
+  println "FLYWAY schemas=${schemas}"
   baselineOnMigrate = true
   baselineVersion = '000'
   schemas = ['pdda']
