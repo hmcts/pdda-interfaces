@@ -240,6 +240,6 @@ configurations {
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   baselineOnMigrate = true
   if (project.hasProperty("dburl")) {
-    url = "jdbc:postgresql://pdda-infrastructure-demo.postgres.database.azure.com/pdda"
+    url = "jdbc:postgresql://${dburl}"
   }
 }
