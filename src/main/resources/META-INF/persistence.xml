@@ -54,9 +54,9 @@
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:postgresql://pdda-infrastructure-stg.postgres.database.azure.com/pdda" />
 			<property name="javax.persistence.jdbc.user"
-				value="${POSTGRES_USER}" />
+				value="pgadmin" />
 			<property name="javax.persistence.jdbc.password"
-				value="${POSTGRES_PASS}" />
+				value="qiYvUk9qMMkszDvQnAWp" />
 			<property name="hibernate.connection.pool_size" value="20" />
 			<property name="hibernate.dialect"
 				value="org.hibernate.dialect.PostgreSQLDialect" />
