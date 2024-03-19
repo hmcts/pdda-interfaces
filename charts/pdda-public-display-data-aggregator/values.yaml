@@ -10,5 +10,5 @@ java:
       resourceGroup: pdda-{{ .Values.global.environment }}
       usePodIdentity: true
       secrets:
-        name: pdda-POSTGRES-USER
-        alias: POSTGRES_USER
+        - name: pdda-POSTGRES-USER
+          alias: POSTGRES_USER
