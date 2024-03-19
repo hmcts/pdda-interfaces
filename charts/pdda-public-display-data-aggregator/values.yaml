@@ -12,3 +12,5 @@ java:
       secrets:
         - name: pdda-POSTGRES-USER
           alias: POSTGRES_USER
+        - name: pdda-POSTGRES-PASS
+          alias: POSTGRES_PASS
