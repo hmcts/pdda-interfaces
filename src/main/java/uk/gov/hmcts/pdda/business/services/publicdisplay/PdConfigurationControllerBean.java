@@ -240,8 +240,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
      * @param courtId the court to be completely re-rendered.
      */
     public void initialiseCourt(final Integer courtId) {
-        final String methodName = "initialiseCourt(" + courtId + METHOD_SUFFIX;
-        LOG.debug(ENTERED, methodName);
+        LOG.debug("initialiseCourt({})", courtId);
 
         CourtConfigurationChange ccc = new CourtConfigurationChange(courtId.intValue(), true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);

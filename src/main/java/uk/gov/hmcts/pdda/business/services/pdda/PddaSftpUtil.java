@@ -34,6 +34,7 @@ public final class PddaSftpUtil {
 
     public static void validateFolder(ChannelSftp sftpChannel, String folder) throws JSchException {
         try {
+            LOG.debug("validateFolder({},{})", sftpChannel, folder);
             sftpChannel.stat(folder);
             if (!folder.endsWith(SLASH_WINDOWS) && !folder.endsWith(SLASH_LINUX)) {
                 throw new JSchException("Invalid Folder (Missing end slash): " + folder);
@@ -45,6 +46,7 @@ public final class PddaSftpUtil {
 
     public static void transferFiles(ChannelSftp sftpChannel, String remoteFolder, Map<String, InputStream> files)
         throws SftpException {
+        LOG.debug("transferFiles({},{},{})", sftpChannel, remoteFolder, files);
         for (Map.Entry<String, InputStream> entry : files.entrySet()) {
             String filename = entry.getKey();
             try (InputStream file = entry.getValue()) {

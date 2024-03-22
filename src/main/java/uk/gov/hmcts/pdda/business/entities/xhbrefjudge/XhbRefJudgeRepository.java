@@ -32,7 +32,7 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
      * @return XhbRefJudgeDao
      */
     public Optional<XhbRefJudgeDao> findScheduledAttendeeJudge(Integer scheduledHearingId) {
-        LOG.debug("findScheduledAttendeeJudge()");
+        LOG.debug("findScheduledAttendeeJudge({})", scheduledHearingId);
         Query query =
             getEntityManager().createNamedQuery("XHB_REF_JUDGE.findScheduledAttendeeJudge");
         query.setParameter("scheduledHearingId", scheduledHearingId);
@@ -48,6 +48,7 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
      * @return XhbRefJudgeDao
      */
     public Optional<XhbRefJudgeDao> findScheduledSittingJudge(Integer scheduledHearingId) {
+        LOG.debug("findScheduledSittingJudge({})", scheduledHearingId);
         Query query =
             getEntityManager().createNamedQuery("XHB_REF_JUDGE.findScheduledSittingJudge");
         query.setParameter("scheduledHearingId", scheduledHearingId);

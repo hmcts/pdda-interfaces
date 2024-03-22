@@ -44,6 +44,7 @@ public class AllCourtStatusCppToPublicDisplay extends AbstractCppToPublicDisplay
      */
     @Override
     public Collection<?> getCppData(final EntityManager entityManager) {
+        LOG.debug("getCppData({})", entityManager);
         List<AllCourtStatusValue> cppData = new ArrayList<>();
 
         // Check the court is CPP enabled and then retrieve data

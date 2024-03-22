@@ -85,6 +85,7 @@ public class VipDisplayDocumentQuery {
     }
 
     private List<VipDisplayConfigurationDisplayDocument> getDisplays(XhbDisplayLocationDao dlDao) {
+        LOG.debug("getDisplays({})", dlDao);
         List<VipDisplayConfigurationDisplayDocument> results = new ArrayList<>();
         List<XhbDisplayDao> daos = getXhbDisplayRepository().findByDisplayLocationId(dlDao.getDisplayLocationId());
         if (!daos.isEmpty()) {

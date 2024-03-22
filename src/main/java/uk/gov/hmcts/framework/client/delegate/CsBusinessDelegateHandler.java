@@ -47,6 +47,7 @@ public class CsBusinessDelegateHandler extends XhibitHandler {
 
         try {
             // Get the EJB remote object
+            LOG.debug("CsBusinessDelegateHandler({}), getting remote object for", delegateInfo.getClass());
             remote = getRemote(delegateInfo);
         } catch (Exception ex) {
             // This is an unexpected exception
@@ -123,6 +124,7 @@ public class CsBusinessDelegateHandler extends XhibitHandler {
         } else {
             // If we reach here it is a business exception
             if (ex.getTargetException() instanceof CsBusinessException) {
+                LOG.debug("Exception is instance of CsBusinessException. {}", ex.getMessage());
                 throw (CsBusinessException) ex.getTargetException();
             } else {
                 LOG.error(

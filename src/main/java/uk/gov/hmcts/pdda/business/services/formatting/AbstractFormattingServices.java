@@ -27,12 +27,14 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
     }
 
     protected Long createBlob(byte[] blobData) {
+        LOG.debug("createBlob({})", blobData);
         XhbBlobDao dao = FormattingServiceUtils.createXhbBlobDao(blobData);
         Optional<XhbBlobDao> savedDao = getXhbBlobRepository().update(dao);
         return savedDao.isPresent() ? savedDao.get().getBlobId() : null;
     }
 
     protected Optional<XhbFormattingDao> getXhbFormattingDao(FormattingValue formattingValue) {
+        LOG.debug("getXhbFormattingDao({})", formattingValue);
         Optional<XhbFormattingDao> bvCpp = getXhbFormattingRepository().findById(formattingValue.getFormattingId());
         if (bvCpp.isPresent()) {
             Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
@@ -77,21 +79,25 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
     }
 
     protected String getClobData(Long clobId) {
+        LOG.debug("getClobData({})", clobId);
         Optional<XhbClobDao> dao = getClob(clobId);
         return dao.isPresent() ? dao.get().getClobData() : null;
     }
 
     protected Long createCppListClob(final XhbCppListDao cppList) {
+        LOG.debug("createCppListClob({})", cppList);
         Optional<XhbClobDao> listClobDao = getXhbClobRepository().update(cppList.getListClob());
         return listClobDao.isPresent() ? listClobDao.get().getClobId() : null;
     }
 
     protected Long createCppMergeClob(final XhbCppListDao cppList) {
+        LOG.debug("createCppMergeClob({})", cppList);
         Optional<XhbClobDao> mergedClobDao = getXhbClobRepository().update(cppList.getMergedClob());
         return mergedClobDao.isPresent() ? mergedClobDao.get().getClobId() : null;
     }
 
     protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal, final String clobData) {
+        LOG.debug("updatePostMerge({},{})", formattingMergeVal, clobData);
         // Create new XhbClob record and return the ClobId
         XhbClobDao clobVal = new XhbClobDao();
         clobVal.setClobData(clobData);
@@ -124,6 +130,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      * @param errorMessage Error Message
      */
     public void updateCppFormatting(Integer cppFormattingId, String formatStatus, String errorMessage) {
+        LOG.debug("updateCppFormatting({},{},{})", cppFormattingId, formatStatus, errorMessage);
         Optional<XhbCppFormattingDao> cppFormattingDao = getXhbCppFormattingRepository().findById(cppFormattingId);
         if (cppFormattingDao.isPresent()) {
             XhbCppFormattingDao cppFormatting = cppFormattingDao.get();
@@ -146,6 +153,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
             cppList.setMergedClobId(mergedClobId);
         }
         cppList.setLastUpdatedBy("XHIBIT");
+        LOG.debug("updateCppList({})", cppList);
         Optional<XhbCppListDao> result = getXhbCppListRepository().update(cppList);
         return result.isPresent() ? result.get() : null;
     }

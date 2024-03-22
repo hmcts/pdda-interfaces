@@ -34,7 +34,7 @@ public class XhbConfiguredPublicNoticeRepository
     @SuppressWarnings("unchecked")
     public List<XhbConfiguredPublicNoticeDao> findByDefinitivePnCourtRoomValue(Integer courtRoomId,
         Integer publicNoticeId) {
-        LOG.debug("findByDefinitivePnCourtRoomValue()");
+        LOG.debug("findByDefinitivePnCourtRoomValue({},{})", courtRoomId, publicNoticeId);
         Query query = getEntityManager()
             .createNamedQuery("XHB_CONFIGURED_PUBLIC.findByDefinitivePnCourtRoomValue");
         query.setParameter("courtRoomId", courtRoomId);
@@ -48,6 +48,7 @@ public class XhbConfiguredPublicNoticeRepository
      */
     @SuppressWarnings("unchecked")
     public List<XhbConfiguredPublicNoticeDao> findActiveCourtRoomNotices(Integer courtRoomId) {
+        LOG.debug("findActiveCourtRoomNotices({})", courtRoomId);
         Query query = getEntityManager()
             .createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findActiveCourtRoomNotices");
         query.setParameter("courtRoomId", courtRoomId);

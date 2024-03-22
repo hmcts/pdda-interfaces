@@ -176,6 +176,7 @@ public class PublicNoticeWorkFlow {
      * @param courtLogSubscriptionValue parameter for sendNotification
      */
     private static void sendNotification(CourtLogSubscriptionValue courtLogSubscriptionValue) {
+        LOG.debug("sendNotification({})", courtLogSubscriptionValue);
         PublicNoticeChangeNotifier.sendNotificationtoPublicDisplays(courtLogSubscriptionValue);
     }
 
@@ -185,6 +186,7 @@ public class PublicNoticeWorkFlow {
      * @param xhbCourtRoomId parameter for sendNotification
      */
     private static void sendNotification(int xhbCourtRoomId, boolean reportingRestrictionsChanged) {
+        LOG.debug("sendNotification({},{})", xhbCourtRoomId, reportingRestrictionsChanged);
         PublicNoticeChangeNotifier.sendNotificationtoPublicDisplays(xhbCourtRoomId, reportingRestrictionsChanged);
     }
 
@@ -196,7 +198,9 @@ public class PublicNoticeWorkFlow {
 
     private static DisplayablePublicNoticeValue[] constructDisplayablePublicNoticeValuesForCourtRoom(
         Integer courtRoomId, Optional<XhbCourtRoomDao> courtRoom) {
+        LOG.debug("constructDisplayablePublicNoticeValuesForCourtRoom({},{})", courtRoomId, courtRoom);
         if (!courtRoom.isPresent()) {
+            LOG.debug("CourtRoom Not Present");
             throw new PublicNoticeCourtRoomUnknownException(courtRoomId);
         }
 

@@ -127,6 +127,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      */
     protected void populateData(PublicDisplayValue value, Element caseNode)
         throws XPathExpressionException {
+        LOG.debug("populateData({},{})", value, caseNode);
         String movedFromCourtRoomName = getXPath().evaluate(XPATH_MOVEDFROMCOURTROOM, caseNode);
         if (!EMPTY_STRING.equals(movedFromCourtRoomName)) {
             value.setMovedFromCourtRoomName(movedFromCourtRoomName);
@@ -151,6 +152,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return the cppClob as a document for manipulation.
      */
     public Document getCppClobAsDocument(final EntityManager entityManager) {
+        LOG.debug("getCppClobAsDocument({})", entityManager);
         String methodName = "getCppClobAsDocument - ";
         Document cppXml = null;
         if (cppClob == null) {
@@ -232,6 +234,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return the cppClob
      */
     public XhbClobDao getCppClob(final EntityManager entityManager) {
+        LOG.debug("getCppClob({})", entityManager);
         Optional<XhbClobDao> xhbClobDao = Optional.empty();
         if (cppClob == null) {
             // retrieve from the database
@@ -256,6 +259,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return XhbCourtRoomDAO
      */
     protected XhbCourtRoomDao getCourtRoomObjectById(int courtRoomId) {
+        LOG.debug("getCourtRoomObjectById({})", courtRoomId);
         XhbCourtRoomDao roomValue = null;
         for (XhbCourtRoomDao room : xhbCourtStructure.getAllCourtRooms()) {
             if (room.getCourtRoomId().equals(courtRoomId)) {
@@ -274,6 +278,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return XhbCourtRoomDAO
      */
     protected XhbCourtRoomDao getCourtRoomObjectByName(String courtRoomName) {
+        LOG.debug("getCourtRoomObjectByName({})", courtRoomName);
         XhbCourtRoomDao roomValue = null;
         if (null != courtRoomName && !EMPTY_STRING.equals(courtRoomName)) {
             for (XhbCourtRoomDao room : xhbCourtStructure.getAllCourtRooms()) {
@@ -294,6 +299,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return XhbCourtSiteDAO
      */
     protected XhbCourtSiteDao getCourtSiteObjectById(int courtSiteId) {
+        LOG.debug("getCourtSiteObjectById({})", courtSiteId);
         XhbCourtSiteDao siteValue = null;
         for (XhbCourtSiteDao site : xhbCourtStructure.getCourtSites()) {
             if (site.getCourtSiteId().equals(courtSiteId)) {

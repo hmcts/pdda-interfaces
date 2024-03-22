@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,6 +19,7 @@ import javax.xml.xpath.XPathFactory;
 
 public final class CourtUtils {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CourtUtils.class);
     private static final String COURTSITENAME = "courtsitename";
     private static final String YES = "Y";
     
@@ -57,6 +60,7 @@ public final class CourtUtils {
      * @throws XPathExpressionException Exception
      */
     public static List<Node> getCourtSites(Document document) throws XPathExpressionException {
+        LOG.debug("getCourtSites({})", document);
         List<Node> results = new ArrayList<>();
         String[] rootNodes = {"currentcourtstatus/court/courtsites/courtsite/courtsitename"};
         XPathExpression[] rootNodeExpression = new XPathExpression[rootNodes.length];

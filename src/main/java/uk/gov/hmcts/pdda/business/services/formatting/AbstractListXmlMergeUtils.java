@@ -38,6 +38,7 @@ public abstract class AbstractListXmlMergeUtils extends AbstractXmlMergeUtils {
     }
 
     public Date getListStartDateFromDocument(final Document document) {
+        LOG.debug("getListStartDateFromDocument({})", document);
         Date result = null;
         if (document != null) {
             NodeList listHeaderNodes = document.getElementsByTagName(Tag.LIST_HEADER.value);
@@ -53,6 +54,7 @@ public abstract class AbstractListXmlMergeUtils extends AbstractXmlMergeUtils {
     }
 
     public Date getListEndDateFromDocument(final Document document) {
+        LOG.debug("getListEndDateFromDocument({})", document);
         Date result = null;
         if (document != null) {
             NodeList listHeaderNodes = document.getElementsByTagName(Tag.LIST_HEADER.value);
@@ -68,6 +70,7 @@ public abstract class AbstractListXmlMergeUtils extends AbstractXmlMergeUtils {
     }
 
     public String getCourtHouseCodeFromDocument(final Document document) {
+        LOG.debug("getCourtHouseCodeFromDocument({})", document);
         String result = null;
         if (document != null) {
             NodeList listHeaderNodes = document.getElementsByTagName(Tag.CROWN_COURT.value);

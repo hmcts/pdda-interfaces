@@ -63,6 +63,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
      */
     @Override
     public void retrieve(final EntityManager entityManager) {
+        LOG.debug("retrieve({})", entityManager);
         super.retrieve(entityManager);
         setCourtRoomNumber(getUri().getCourtRoomIds()[0], entityManager);
     }
@@ -73,6 +74,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
      * @param courtRoomId int
      */
     private void setCourtRoomNumber(final int courtRoomId, final EntityManager entityManager) {
+        LOG.debug("setCourtRoomNumber({},{})", courtRoomId, entityManager);
         Optional<XhbCourtRoomDao> courtRoom =
             getXhbCourtRoomRepository(entityManager).findById(courtRoomId);
         if (!courtRoom.isPresent()) {
@@ -91,6 +93,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
 
     private Optional<XhbCourtSiteDao> getCourtSite(Optional<XhbCourtRoomDao> courtRoom,
         final EntityManager entityManager) {
+        LOG.debug("getCourtSite({},{})", courtRoom, entityManager);
         Optional<XhbCourtSiteDao> courtSite = Optional.empty();
         if (courtRoom.isPresent()) {
             if (courtRoom.get().getXhbCourtSite() != null) {

@@ -63,6 +63,7 @@ public class DisplaySelectorServlet extends HttpServlet {
 
     private void doRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
+            log.debug("doRequest({},{})", request, response);
             String courtIdStr = request.getParameter("courtId");
             if (courtIdStr == null) {
                 XhbCourtDao[] allCourts = getPdSetupControllerBean().getAllCourts();

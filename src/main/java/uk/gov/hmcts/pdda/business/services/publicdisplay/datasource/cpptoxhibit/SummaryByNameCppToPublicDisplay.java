@@ -34,6 +34,7 @@ public class SummaryByNameCppToPublicDisplay extends AbstractCppToPublicDisplay 
 
     @Override
     public Collection<?> getCppData(final EntityManager entityManager) {
+        LOG.debug("getCppData({})", entityManager);
         List<SummaryByNameValue> cppData = new ArrayList<>();
 
         // Check the court is CPP enabled and then retrieve data

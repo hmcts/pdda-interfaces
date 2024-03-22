@@ -34,7 +34,7 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
      */
     @SuppressWarnings("unchecked")
     public List<XhbFormattingDao> findByFormatStatus(String formatStatus) {
-        LOG.debug("In XhbFormattingRepository.findByFormatStatus");
+        LOG.debug("findByFormatStatus({})", formatStatus);
         Query query = getEntityManager().createNamedQuery("XHB_FORMATTING.findByFormatStatus");
         query.setParameter("formatStatus", formatStatus);
         return query.getResultList();
@@ -48,6 +48,7 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
     @SuppressWarnings("unchecked")
     public List<XhbFormattingDao> findByDocumentAndClob(Integer courtId, String documentType,
         String language, String courtSiteName) {
+        LOG.debug("findByDocumentAndClob({},{},{},{})", courtId, documentType, language, courtSiteName);
         Query query = getEntityManager().createNamedQuery("XHB_FORMATTING.findByDocumentAndClob");
         query.setParameter("courtId", courtId);
         query.setParameter("docType", documentType);

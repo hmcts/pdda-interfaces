@@ -67,7 +67,8 @@ public final class RulesEngine {
      */
     public DocumentsForEvent getDisplayDocumentTypesForEvent(PublicDisplayEvent publicDisplayEvent) {
         DocumentsForEvent docForEvent = new DocumentsForEvent();
-
+        LOG.debug("getDisplayDocumentTypesForEvent({})", publicDisplayEvent);
+        
         // for event type look up documents
         ConditionalDocument[] conditionalDocuments =
             ruleConfig.getConditionalDocumentsForEvent(publicDisplayEvent.getEventType());

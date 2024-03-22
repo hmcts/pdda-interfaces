@@ -146,8 +146,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
      * @param courtId Court Id
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {
-        String methodName = "refreshPublicDisplaysForCourt()";
-        LOG.debug(methodName + "(courtId=" + courtId + ") called");
+        LOG.debug("refreshPublicDisplaysForCourt({})", courtId);
         CourtConfigurationChange ccc = new CourtConfigurationChange(courtId.intValue(), true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         getPublicDisplayNotifier().sendMessage(ccEvent);

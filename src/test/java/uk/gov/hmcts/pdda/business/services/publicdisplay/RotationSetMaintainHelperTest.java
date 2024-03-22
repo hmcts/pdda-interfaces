@@ -214,13 +214,25 @@ class RotationSetMaintainHelperTest {
         result.setRotationSetDao(DummyPublicDisplayUtil.getXhbRotationSetsDao());
 
         RotationSetDdComplexValue[] rotationSetDdComplexValuesArray =
-            {getDummyRotationSetDdComplexValue(), getDummyRotationSetDdComplexValue()};
+            getDummyRotationSetDdComplexValues();
         result.setRotationSetDdComplexValues(rotationSetDdComplexValuesArray);
         return result;
     }
 
-    private RotationSetDdComplexValue getDummyRotationSetDdComplexValue() {
-        return new RotationSetDdComplexValue(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
-            DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+    private RotationSetDdComplexValue[] getDummyRotationSetDdComplexValues() {
+        RotationSetDdComplexValue rotationSetDdComplexValue =
+            new RotationSetDdComplexValue(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
+                DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+
+        // Adding a null id value to increase coverage
+        RotationSetDdComplexValue rotationSetDdComplexValueNullKey =
+            new RotationSetDdComplexValue(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
+                DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+        XhbRotationSetDdDao rotationSetDdBasicValue =
+            rotationSetDdComplexValueNullKey.getRotationSetDdDao();
+        rotationSetDdBasicValue.setRotationSetDdId(null);
+
+        return new RotationSetDdComplexValue[] {rotationSetDdComplexValue,
+            rotationSetDdComplexValue, rotationSetDdComplexValueNullKey};
     }
 }

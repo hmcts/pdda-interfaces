@@ -32,7 +32,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
      */
     @SuppressWarnings("unchecked")
     public List<XhbCourtRoomDao> findByCourtSiteId(Integer courtSiteId) {
-        LOG.debug("findByCourtSiteId()");
+        LOG.debug("findByCourtSiteId({})", courtSiteId);
         Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtSiteId");
         query.setParameter("courtSiteId", courtSiteId);
         return query.getResultList();
@@ -45,6 +45,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
      */
     @SuppressWarnings("unchecked")
     public List<XhbCourtRoomDao> findVipMultiSite(Integer courtId) {
+        LOG.debug("findVipMultiSite({})", courtId);
         Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findVIPMultiSite");
         query.setParameter("courtId", courtId);
         return query.getResultList();
@@ -57,6 +58,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
      */
     @SuppressWarnings("unchecked")
     public List<XhbCourtRoomDao> findVipMNoSite(Integer courtId) {
+        LOG.debug("findVipMNoSite({})", courtId);
         Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findVIPMNoSite");
         query.setParameter("courtId", courtId);
         return query.getResultList();

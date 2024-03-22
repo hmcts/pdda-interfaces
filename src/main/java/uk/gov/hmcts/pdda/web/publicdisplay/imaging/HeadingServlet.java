@@ -55,6 +55,7 @@ public class HeadingServlet extends AbstractGraphicsServlet {
     public void doImage(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
         try {
+            LOG.debug("doImage({},{})", req, res);
             final int width = parseInt(req, "width");
             final int height = parseInt(req, "height");
             final int xposition = parseInt(req, "x");

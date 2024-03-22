@@ -66,8 +66,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
      * @param event Public display event
      */
     public void sendMessage(PublicDisplayEvent event) {
-        methodName = "sendMessage()";
-        LOG.debug(methodName);
+        LOG.debug("sendMessage({})", event);
         getPublicDisplayNotifier().sendMessage(event);
     }
 

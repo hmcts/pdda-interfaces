@@ -70,6 +70,7 @@ public final class PublicNoticeChangeNotifier {
     }
 
     private static void sendNotificationToNewPublicDisplays(int xhbCourtRoomId, boolean reportingRestrictionsChanged) {
+        LOG.debug("sendNotificationToNewPublicDisplays({},{})", xhbCourtRoomId, reportingRestrictionsChanged);
         Optional<XhbCourtRoomDao> courtRoom = PddaEntityHelper.xcrtFindByPrimaryKey(xhbCourtRoomId);
         if (courtRoom.isPresent()) {
             CourtRoomIdentifier courtRoomId = new CourtRoomIdentifier(courtRoom.get().getXhbCourtSite().getCourtId(),

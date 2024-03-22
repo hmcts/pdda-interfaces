@@ -98,6 +98,7 @@ public class VipDisplayCourtRoomQuery {
 
     private List<VipDisplayConfigurationCourtRoom> getDisplays(XhbDisplayLocationDao dlDao,
         Optional<XhbCourtSiteDao> ocsDao) {
+        LOG.debug("getDisplays({},{})", dlDao, ocsDao);
         List<VipDisplayConfigurationCourtRoom> results = new ArrayList<>();
         // Loop the displays
         List<XhbDisplayDao> daos = getXhbDisplayRepository().findByDisplayLocationId(dlDao.getDisplayLocationId());
@@ -116,6 +117,7 @@ public class VipDisplayCourtRoomQuery {
 
     private List<VipDisplayConfigurationCourtRoom> getCourtRooms(List<XhbDisplayCourtRoomDao> dcrDaos,
         Optional<XhbCourtSiteDao> ocsDao) {
+        LOG.debug("getCourtRooms({},{})", dcrDaos, ocsDao);
         List<VipDisplayConfigurationCourtRoom> results = new ArrayList<>();
         for (XhbDisplayCourtRoomDao dcrDao : dcrDaos) {
             Optional<XhbCourtRoomDao> ocrDao = getXhbCourtRoomRepository().findById(dcrDao.getCourtRoomId());

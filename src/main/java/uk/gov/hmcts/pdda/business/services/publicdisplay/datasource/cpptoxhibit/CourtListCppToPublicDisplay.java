@@ -36,6 +36,7 @@ public class CourtListCppToPublicDisplay extends AbstractCppToPublicDisplay {
 
     @Override
     public Collection<?> getCppData(final EntityManager entityManager) {
+        LOG.debug("getCppData({})", entityManager);
         Collection<CourtListValue> cppData = new ArrayList<>();
 
         LOG.info("CourtListCppToPublicDisplay.getCppData()");

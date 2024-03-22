@@ -89,6 +89,7 @@ public abstract class CsMessageBeanNotifier {
      */
     protected final void sendMessage(Serializable message) {
         if (message == null) {
+            log.debug("sendMessage({}) Message is null", message);
             throw new IllegalArgumentException("message cannot be null");
         }
 

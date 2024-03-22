@@ -244,6 +244,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
         Document xml;
 
         try {
+            LOG.debug("createDocFromString({})", xmlContent);
             xml = DocumentUtils.createInputDocument(xmlContent);
         } catch (ParserConfigurationException | FactoryConfigurationError | IOException | SAXException exception) {
             LOG.debug(FACTORY_CONFIG_ERROR + exception);
@@ -274,6 +275,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
         }
 
         try {
+            LOG.debug("getXpathValueFromXmlString({},{})", xmlString, xpath);
             // First turn the string XML into a DOM
             Document eventDocument = DocumentUtils.createInputDocument(xmlString);
 

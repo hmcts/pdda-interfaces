@@ -95,6 +95,7 @@ public class TransformServices extends TemplateServices {
 
         Writer writerResult = new StringWriter();
         try {
+            LOG.debug("transformNow({},{},{},{})", source, systemId, locale, parameterMap);
             transformer.transform(source, new StreamResult(writerResult));
         } catch (TransformerException te) {
             Message userMessage =
@@ -149,6 +150,7 @@ public class TransformServices extends TemplateServices {
      */
     private Transformer getTransformer(String systemId, URIResolver resolver, Map<?, ?> paramaterMap) {
         try {
+            LOG.debug("getTransformer({},{},{})", systemId, resolver, paramaterMap);
             return getTemplates(systemId, resolver, paramaterMap).newTransformer();
         } catch (TransformerException te) {
             Message userMessage = new Message("xslservices.transformererror", new Object[] {systemId, resolver});

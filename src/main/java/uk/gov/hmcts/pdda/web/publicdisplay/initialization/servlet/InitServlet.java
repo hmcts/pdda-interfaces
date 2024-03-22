@@ -67,7 +67,7 @@ public class InitServlet extends HttpServlet {
      */
     @Override
     public void init(ServletConfig config) throws ServletException {
-
+        log.debug("init({})", config);
         super.init(config);
 
         // Get an instance of the initialization service

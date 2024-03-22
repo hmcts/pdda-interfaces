@@ -65,13 +65,15 @@ public class RotationSetMaintainHelper {
         final XhbCourtRepository xhbCourtRepository,
         final XhbRotationSetsRepository xhbRotationSetsRepository,
         final XhbRotationSetDdRepository xhbRotationSetDdRepository) {
+        LOG.debug("createRotationSets({},{},{},{})", newRotationSet, xhbCourtRepository,
+            xhbRotationSetsRepository, xhbRotationSetDdRepository);
         // Get the court id and lookup the court local reference
         final Integer courtId = newRotationSet.getCourtId();
 
         Optional<XhbCourtDao> courtLocal = xhbCourtRepository.findById(courtId);
         if (!courtLocal.isPresent()) {
-            throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(
-                courtId);
+            LOG.debug("Court is Not Present {}", courtLocal);
+            throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
         }
 
         // Create the rotation set local reference
@@ -93,6 +95,7 @@ public class RotationSetMaintainHelper {
      */
     public static void setDisplayDocumentsForRotationSet(RotationSetComplexValue rotationSet,
         PublicDisplayNotifier notifier, final EntityManager entityManager) {
+        LOG.debug("setDisplayDocumentsForRotationSet({},{},{})", rotationSet, notifier, entityManager);
         setDisplayDocumentsForRotationSet(rotationSet, notifier,
             new XhbRotationSetsRepository(entityManager),
             new XhbRotationSetDdRepository(entityManager));
@@ -101,7 +104,8 @@ public class RotationSetMaintainHelper {
     public static void setDisplayDocumentsForRotationSet(RotationSetComplexValue rotationSet,
         PublicDisplayNotifier notifier, final XhbRotationSetsRepository xhbRotationSetsRepository,
         final XhbRotationSetDdRepository xhbRotationSetDdRepository) {
-       
+        LOG.debug("setDisplayDocumentsForRotationSet({},{},{},{})", rotationSet, notifier,
+            xhbRotationSetsRepository, xhbRotationSetDdRepository);
 
         final Integer rotationSetId = rotationSet.getRotationSetId();
         Optional<XhbRotationSetsDao> rotationSetLocal =
@@ -132,6 +136,7 @@ public class RotationSetMaintainHelper {
         // If a change has occurred that should require re-rendering
         // then send a message.
         if (hasNotifyChanges) {
+            LOG.debug("Sending Notification");
             sendNotification(rotationSet, notifier);
         }
     }
@@ -145,12 +150,14 @@ public class RotationSetMaintainHelper {
      */
     public static void deleteRotationSet(RotationSetComplexValue rotationSet,
         final EntityManager entityManager) {
+        LOG.debug("deleteRotationSet({},{})",rotationSet, entityManager);
         deleteRotationSet(rotationSet, new XhbRotationSetsRepository(entityManager),
             new XhbRotationSetDdRepository(entityManager));
     }
 
     public static void deleteRotationSet(RotationSetComplexValue rotationSet,
         final XhbRotationSetsRepository xrsRepo, XhbRotationSetDdRepository xrsddRepo) {
+        LOG.debug("deleteRotationSet({},{},{})", rotationSet, xrsRepo, xrsddRepo);
         // Check optimistic locking.
         // Get the rotation set from the DB
         Optional<XhbRotationSetsDao> rotationSetLocal =
@@ -196,6 +203,7 @@ public class RotationSetMaintainHelper {
      */
     private static boolean addRotationSetDds(RotationSetComplexValue rotationSet,
         final XhbRotationSetDdRepository repo) {
+        LOG.debug("addRotationSetDds({},{})", rotationSet, repo);
         boolean hasAdded = false;
 
         RotationSetDdComplexValue[] rotationSetDdComplexValues =
@@ -207,6 +215,7 @@ public class RotationSetMaintainHelper {
             if (rotationSetDdBasicValue.getPrimaryKey() != null) {
                 continue;
             }
+            LOG.debug("Saving BasicValue {}", rotationSetDdBasicValue);
             // Create the record
             repo.save(rotationSetDdBasicValue);
 
@@ -224,8 +233,7 @@ public class RotationSetMaintainHelper {
 
         // get the local references of existing rotation set DD's
         List<XhbRotationSetDdDao> tmp = rotationSetLocal.getXhbRotationSetDds();
-        XhbRotationSetDdDao[] rotationSetDdLocals =
-            tmp.toArray(new XhbRotationSetDdDao[0]);
+        XhbRotationSetDdDao[] rotationSetDdLocals = tmp.toArray(new XhbRotationSetDdDao[0]);
 
         // Now iterate through the locals.
         // If for each local a corresponding value basic value can be found
@@ -256,6 +264,7 @@ public class RotationSetMaintainHelper {
      */
     private static void sendNotification(RotationSetComplexValue rotationSet,
         PublicDisplayNotifier notifier) {
+        LOG.debug("sendNotification({},{})", rotationSet, notifier);
         CourtConfigurationChange ccc = new CourtRotationSetConfigurationChange(
             rotationSet.getRotationSetsDao().getCourtId().intValue(),
             rotationSet.getRotationSetsDao().getPrimaryKey().intValue());

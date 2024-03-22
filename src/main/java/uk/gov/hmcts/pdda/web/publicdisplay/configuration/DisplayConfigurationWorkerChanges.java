@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.PdConfigurationControllerBean;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.data.ejb.PdDataControllerBean;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class DisplayConfigurationWorkerChanges {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationWorkerChanges.class);
+    
     // The court ID of the instance.
     protected Integer courtId;
 
@@ -72,6 +76,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      * @return The RenderChanges caused by the court configuration changed.
      */
     public RenderChanges getRenderChanges(CourtConfigurationChange change) {
+        LOG.debug("getRenderChanges({})", change);
         if (!change.getCourtId().equals(courtId)) {
             throw new PublicDisplayRuntimeException(
                 "Problem getting render changes fopr a configuration change: "
@@ -204,6 +209,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     private RenderChanges processRenderingChanges(ConfigurationTuple configurationChange,
         boolean forceRecreate) {
+        LOG.debug("processRenderingChanges({},{})", configurationChange, forceRecreate);
         // Sort the changes.
         configurationChange.sort();
 

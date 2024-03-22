@@ -131,6 +131,7 @@ public class PublicDisplayActivationHelper {
      */
     private static void sendCaseActivateEvent(PublicDisplayNotifier notifier, Integer courtId,
         Integer courtRoomId, boolean activate) {
+        LOG.debug("sendCaseActivateEvent({},{},{},{})", notifier, courtId, courtRoomId, activate);
         CourtRoomIdentifier courtRoomIdentifier = new CourtRoomIdentifier(courtId, courtRoomId);
         ActivateCaseEvent ace =
             new ActivateCaseEvent(courtRoomIdentifier, new CaseChangeInformation(activate));

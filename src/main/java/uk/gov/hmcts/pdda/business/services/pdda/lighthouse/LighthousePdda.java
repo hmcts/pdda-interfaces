@@ -205,6 +205,7 @@ public class LighthousePdda {
         }
 
         private XhbPddaMessageDao fetchLatestXhbPddaMessageDao() {
+            LOG.debug("fetchLatestXhbPddaMessageDao()");
             Optional<XhbPddaMessageDao> opt = xhbPddaMessageRepository.findById(dao.getPrimaryKey());
             return opt.isPresent() ? opt.get() : dao;
         }
@@ -269,6 +270,7 @@ public class LighthousePdda {
          * of the XHB_PDDA_MESSAGE record to invalid.
          */
         private void updatePddaMessageForError() {
+            LOG.debug("updatePddaMessageForError()");
             XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao();
             latest.setCpDocumentStatus(MESSAGE_STATUS_INVALID);
             xhbPddaMessageRepository.save(latest);
