@@ -12,12 +12,9 @@ spring:
     runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
   datasource:
      driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
-     url: jdbc:postgresql://localhost:5432/pdda
-#    username: ${DB_USER_NAME}
-     username: postgres
-#    password: ${DB_PASSWORD}
-     password: password
+     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
+     username: ${DB_USER_NAME}
+     password: ${DB_PASSWORD}
      type: com.zaxxer.hikari.HikariDataSource
   jpa:
     database: postgresql
