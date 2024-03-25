@@ -3,7 +3,6 @@ package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Topic;
 import jakarta.persistence.EntityManagerFactory;
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

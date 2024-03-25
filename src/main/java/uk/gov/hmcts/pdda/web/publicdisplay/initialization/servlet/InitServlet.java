@@ -1,15 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
 
-
-import org.apache.activemq.command.ActiveMQTopic;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.gov.hmcts.pdda.web.publicdisplay.messaging.jms.MessagingMode;
-
-import java.util.Locale;
-
 import jakarta.annotation.Resource;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Topic;
@@ -19,6 +10,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.activemq.command.ActiveMQTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.jms.MessagingMode;
+
+import java.util.Locale;
 
 /**
  * InitServlet.
@@ -61,7 +58,7 @@ public class InitServlet extends HttpServlet {
 
     private Topic topic;
     
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
     
     public InitServlet(EntityManagerFactory entityManagerFactory) {
         super();
