@@ -10,6 +10,8 @@ spring:
     # When true, the app will run DB migration on startup.
     # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
     runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
+  flyway:
+    baseline-on-migrate: true
   datasource:
      driver-class-name: org.postgresql.Driver
      url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}${DB_OPTIONS:}
