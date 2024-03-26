@@ -229,11 +229,14 @@ configurations {
 
  flyway {
   url = System.getenv('FLYWAY_URL')
+  println "FLYWAY url=${url}"
   user = System.getenv('FLYWAY_USER')
+  println "FLYWAY user=${user}"
   password = System.getenv('FLYWAY_PASSWORD')
+  schemas = ['pdda']
+  println "FLYWAY schemas=${schemas}"
   baselineOnMigrate = true
   baselineVersion = '000'
-  schemas = ['pdda']
   locations = ["database", "database/data", "database/packages"]
 }
 
@@ -241,5 +244,6 @@ task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   baselineOnMigrate = true
   if (project.hasProperty("dburl")) {
     url = "jdbc:postgresql://pdda-infrastructure-demo.postgres.database.azure.com/pdda"
+    println "jdbc url=${url}"
   }
 }
