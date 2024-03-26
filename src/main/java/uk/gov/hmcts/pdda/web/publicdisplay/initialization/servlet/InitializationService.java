@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Topic;
+import jakarta.persistence.EntityManagerFactory;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +87,8 @@ public final class InitializationService {
 
     private Topic topic;
 
+    private EntityManagerFactory entityManagerFactory;
+    
     /**
      * DOn't instantiate me.
      */
@@ -316,4 +319,11 @@ public final class InitializationService {
         this.defaultLocale = defaultLocale;
     }
 
+    public EntityManagerFactory getEntityManagerFactory() {
+        return entityManagerFactory;
+    }
+
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 }

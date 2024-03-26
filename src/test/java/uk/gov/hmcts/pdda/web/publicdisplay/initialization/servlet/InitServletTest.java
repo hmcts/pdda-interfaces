@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Topic;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,9 +67,12 @@ class InitServletTest {
 
     @Mock
     private Topic mockTopic;
+    
+    @Mock
+    private EntityManagerFactory mockEntityManagerFactory;
 
     @InjectMocks
-    private final InitServlet classUnderTest = new InitServlet();
+    private final InitServlet classUnderTest = new InitServlet(mockEntityManagerFactory);
 
     @BeforeAll
     public static void setUp() throws Exception {

@@ -1,10 +1,10 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
 
-
 import jakarta.annotation.Resource;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Topic;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -57,6 +57,13 @@ public class InitServlet extends HttpServlet {
     private ConnectionFactory connectionFactory;
 
     private Topic topic;
+    
+    private final EntityManagerFactory entityManagerFactory;
+    
+    public InitServlet(EntityManagerFactory entityManagerFactory) {
+        super();
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     /**
      * Override the init method to initialize services.
@@ -73,6 +80,9 @@ public class InitServlet extends HttpServlet {
         // Get an instance of the initialization service
         InitializationService service = InitializationService.getInstance();
 
+        // Setup the entityManagerFactory
+        service.setEntityManagerFactory(this.entityManagerFactory);
+        
         // Setup the default locale
         service.setDefaultLocale(getDefaultLocale());
 
