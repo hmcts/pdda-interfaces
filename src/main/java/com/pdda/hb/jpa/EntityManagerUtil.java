@@ -3,12 +3,9 @@ package com.pdda.hb.jpa;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.FlushModeType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 public class EntityManagerUtil {
-    private static final Logger LOG = LoggerFactory.getLogger(EntityManagerUtil.class);
     private static final EntityManagerFactory ENTITYMANAGERFACTORY;
 
     static {
@@ -16,7 +13,6 @@ public class EntityManagerUtil {
             ENTITYMANAGERFACTORY = InitializationService.getInstance().getEntityManagerFactory();
 
         } catch (RuntimeException ex) {
-            LOG.error("Initial SessionFactory creation failed.{}", ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
     }
