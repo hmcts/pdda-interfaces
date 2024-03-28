@@ -2,13 +2,17 @@ java:
   applicationPort: 5432
   image: 'sdshmctspublic.azurecr.io/pdda/public-display-data-aggregator:latest'
   ingressHost: pdda-public-display-data-aggregator.{{ .Values.global.environment }}.platform.hmcts.net
-#  environment:
-#    SECRETS_PATH: "/mnt/secrets/pdda"
-#  keyVaults:
-#    "pdda":
-#      excludeEnvironmentSuffix: false
-#      resourceGroup: pdda-{{ .Values.global.environment }}
-#      usePodIdentity: true
-#      secrets:
-#        name: pdda-POSTGRES-USER
-#        alias: POSTGRES_USER
+  environment:
+    SECRETS_PATH: "/mnt/secrets/pdda"
+  keyVaults:
+    "pdda":
+      excludeEnvironmentSuffix: false
+      resourceGroup: pdda-{{ .Values.global.environment }}
+      usePodIdentity: true
+      secrets:
+        - name: pdda-POSTGRES-USER
+          alias: POSTGRES_USER
+        - name: pdda-POSTGRES-PASS
+          alias: POSTGRES_PASS
+        - name: pdda-POSTGRES-HOST
+          alias: POSTGRES-HOST
