@@ -1,7 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
 import jakarta.persistence.EntityManager;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;

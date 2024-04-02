@@ -1,8 +1,10 @@
 package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
 import jakarta.persistence.EntityManager;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -55,7 +57,11 @@ public class LighthousePdda {
 
         // Get all properties
         if (config == null) {
-            config = new PropertiesConfiguration(PROPERTIES_FILENAME);
+            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
+                new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
+                .configure(new Parameters().properties()
+                    .setFileName(PROPERTIES_FILENAME));
+            config = builder.getConfiguration();
         }
 
         LOG.debug("{} :: METHOD EXIT:: getConfiguration", System.currentTimeMillis());
