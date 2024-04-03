@@ -4,7 +4,7 @@
 
 def type = "java"
 def product = "pdda"
-def component = "public-display-data-aggregator"
+def component = "pdda"
 
 withPipeline(type, product, component) {
     enableDbMigration(product)
