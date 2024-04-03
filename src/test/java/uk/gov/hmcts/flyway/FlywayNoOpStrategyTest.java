@@ -13,8 +13,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 @ExtendWith(EasyMockExtension.class)
 class FlywayNoOpStrategyTest {
+    
+    private static final String TRUE = "Result is not True";
 
     @Mock
     private Flyway mockFlyway;
@@ -47,5 +52,30 @@ class FlywayNoOpStrategyTest {
         Assertions.assertThrows(PendingMigrationScriptException.class, () -> {
             classUnderTest.migrate(mockFlyway);
         });
+    }
+
+    @Test
+    void testMigrateNotAvailable() {
+        // Setup
+        MigrationInfo[] migrationInfo = {mockMigrationInfoImpl};
+        // Expects
+        EasyMock.expect(mockFlyway.info()).andReturn(mockMigrationInfoService);
+        EasyMock.expect(mockMigrationInfoService.all()).andReturn(migrationInfo);
+        EasyMock.expect(mockMigrationInfoImpl.getState()).andReturn(MigrationState.FAILED);
+        EasyMock.expect(mockMigrationInfoImpl.getScript()).andReturn("");
+        // Replay
+        EasyMock.replay(mockFlyway);
+        EasyMock.replay(mockMigrationInfoService);
+        EasyMock.replay(mockMigrationInfoImpl);
+
+        // Run
+        boolean result = false;
+        try {
+            classUnderTest.migrate(mockFlyway);
+            result = true;
+        } catch (Exception exception) {
+            fail(exception.getMessage());
+        }
+        assertTrue(result, TRUE);
     }
 }
