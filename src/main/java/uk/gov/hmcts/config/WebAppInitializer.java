@@ -14,8 +14,12 @@ public class WebAppInitializer implements ServletContextInitializer {
     public static final String SERVLET_NAME = "InitServlet";
 
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
+    public WebAppInitializer(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
+    
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         try (AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext()) {
