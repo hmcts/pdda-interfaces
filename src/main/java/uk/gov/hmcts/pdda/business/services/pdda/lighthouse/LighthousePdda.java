@@ -25,8 +25,7 @@ import java.util.concurrent.Executors;
  * This class is the main class for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
  * updating XHB_PDDA_MESSAGE.
  * 
- * <p>
- * When running it will delegate as needed to: - initially setup a database connection pool to be
+ * <p>When running it will delegate as needed to: - initially setup a database connection pool to be
  * used throughout its lifetime - check for the existence of (unprocessed) records in the database -
  * threads, up to a defined maximum allowed, will be spawned to deal with each record - for each
  * record it will add an entry to XHB_CPP_STAGING_INBOUND - once processed it will then update the
