@@ -3,13 +3,9 @@ java:
   image: 'sdshmctspublic.azurecr.io/pdda/public-display-data-aggregator:latest'
   ingressHost: pdda-public-display-data-aggregator.{{ .Values.global.environment }}.platform.hmcts.net
   environment:
-    RUN_DB_MIGRATION_ON_STARTUP: false
-#    SECRETS_PATH: "/mnt/secrets/pdda"
+    RUN_DB_MIGRATION_ON_STARTUP: true
   keyVaults:
     "pdda":
-#      excludeEnvironmentSuffix: false
-#      resourceGroup: pdda-{{ .Values.global.environment }}
-#      usePodIdentity: true
       secrets:
         - name: public-display-data-aggregator-POSTGRES-USER
           alias: DB_USER_NAME
