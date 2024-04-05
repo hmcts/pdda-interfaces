@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
+import jakarta.persistence.EntityManagerFactory;
+import org.easymock.Mock;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,9 @@ class InitializationServiceTest {
     private static final String TRUE = "Result is not True";
     private static final Locale LOCALE = Locale.UK;
 
+    @Mock
+    private EntityManagerFactory mockEntityManagerFactory;
+    
     @InjectMocks
     private final InitializationService classUnderTest = InitializationService.getInstance();
 
@@ -49,6 +54,12 @@ class InitializationServiceTest {
     void testSetDefaultLocale() {
         classUnderTest.setDefaultLocale(LOCALE);
         assertEquals(LOCALE, classUnderTest.getDefaultLocale(), EQUALS);
+    }
+    
+    @Test
+    void testSetEntityManagerFactory() {
+        classUnderTest.setEntityManagerFactory(mockEntityManagerFactory);
+        assertEquals(mockEntityManagerFactory, classUnderTest.getEntityManagerFactory(), EQUALS);
     }
 
     @Test
