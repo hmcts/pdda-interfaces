@@ -2,8 +2,6 @@ java:
   applicationPort: 5432
   image: 'sdshmctspublic.azurecr.io/pdda/public-display-data-aggregator:latest'
   ingressHost: pdda-public-display-data-aggregator.{{ .Values.global.environment }}.platform.hmcts.net
-  environment:
-    RUN_DB_MIGRATION_ON_STARTUP: true
   keyVaults:
     "pdda":
       secrets:
@@ -17,3 +15,5 @@ java:
           alias: DB_HOST
         - name: public-display-data-aggregator-POSTGRES-PORT
           alias: DB_PORT
+  environment:
+    RUN_DB_MIGRATION_ON_STARTUP: true
