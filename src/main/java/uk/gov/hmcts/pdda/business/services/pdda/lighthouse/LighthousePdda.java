@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.builder.fluent.PropertiesBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,8 @@ import java.util.concurrent.Executors;
  * This class is the main class for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
  * updating XHB_PDDA_MESSAGE.
  * 
- * <p>When running it will delegate as needed to: - initially setup a database connection pool to be
+ * <p>
+ * When running it will delegate as needed to: - initially setup a database connection pool to be
  * used throughout its lifetime - check for the existence of (unprocessed) records in the database -
  * threads, up to a defined maximum allowed, will be spawned to deal with each record - for each
  * record it will add an entry to XHB_CPP_STAGING_INBOUND - once processed it will then update the
@@ -64,14 +64,13 @@ public class LighthousePdda {
         LOG.debug("{} :: METHOD EXIT:: getConfiguration", System.currentTimeMillis());
         return config;
     }
-    
-    protected PropertiesBuilderParameters getConfigBuilderParams() {
-        return new Parameters().properties().setFileName(PROPERTIES_FILENAME);
+
+    protected FileBasedConfigurationBuilder<PropertiesConfiguration> getBuilder() {
+        return new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class);
     }
 
     protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
-        return new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-            .configure(getConfigBuilderParams());
+        return getBuilder().configure(new Parameters().properties().setFileName(PROPERTIES_FILENAME));
     }
 
     /**

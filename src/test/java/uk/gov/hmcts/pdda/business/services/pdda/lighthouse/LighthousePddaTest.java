@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 import jakarta.persistence.EntityManager;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -54,7 +55,7 @@ class LighthousePddaTest {
     private static final String MESSAGE_STATUS_INVALID = "INV";
     private static final String UNDERSCORE = "_";
     private static final Integer PART_NO = 3;
-    
+
     @Mock
     private FileBasedConfigurationBuilder<PropertiesConfiguration> mockFileBasedConfigurationBuilder;
 
@@ -88,6 +89,8 @@ class LighthousePddaTest {
         LighthousePdda localClassUnderTest = new LighthousePdda(mockEntityManager) {
             @Override
             protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
+                FileBasedConfigurationBuilder<PropertiesConfiguration> builder = getBuilder();
+                assertNotNull(builder, NOTNULL);
                 return mockFileBasedConfigurationBuilder;
             }
         };
@@ -114,6 +117,7 @@ class LighthousePddaTest {
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
+        // new Parameters().properties().setFileName("");
         // Add Captured Values
         Capture<XhbPddaMessageDao> savedValue = EasyMock.newCapture();
 
