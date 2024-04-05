@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.PropertiesBuilderParameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,20 +53,25 @@ public class LighthousePdda {
     /**
      * Do all setup tasks.
      */
-    private PropertiesConfiguration getConfiguration() throws ConfigurationException {
+    protected PropertiesConfiguration getConfiguration() throws ConfigurationException {
         LOG.debug("{} :: METHOD ENTRY:: getConfiguration", System.currentTimeMillis());
 
         // Get all properties
         if (config == null) {
-            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-                .configure(new Parameters().properties()
-                    .setFileName(PROPERTIES_FILENAME));
-            config = builder.getConfiguration();
+            config = getConfigBuilder().getConfiguration();
         }
 
         LOG.debug("{} :: METHOD EXIT:: getConfiguration", System.currentTimeMillis());
         return config;
+    }
+    
+    protected PropertiesBuilderParameters getConfigBuilderParams() {
+        return new Parameters().properties().setFileName(PROPERTIES_FILENAME);
+    }
+
+    protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
+        return new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
+            .configure(getConfigBuilderParams());
     }
 
     /**
@@ -97,7 +103,7 @@ public class LighthousePdda {
         }
         LOG.debug("{} :: METHOD EXIT:: processFiles", System.currentTimeMillis());
     }
-    
+
     private Runnable getRunnable(XhbPddaMessageDao dao) {
         return new RunPddaJob(getXhbPddaMessageRepository(), getXhbCppStagingInboundRepository(), dao);
     }
@@ -105,7 +111,7 @@ public class LighthousePdda {
     private void doNothing() {
         // do nothing
     }
-    
+
     /**
      * Set the General properties.
      * 
@@ -296,7 +302,7 @@ public class LighthousePdda {
                 return null;
             } else {
                 return docType.name();
-            } 
+            }
         }
     }
 

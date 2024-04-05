@@ -2,6 +2,8 @@ package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
 import jakarta.persistence.EntityManager;
 import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
@@ -24,6 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -51,6 +54,9 @@ class LighthousePddaTest {
     private static final String MESSAGE_STATUS_INVALID = "INV";
     private static final String UNDERSCORE = "_";
     private static final Integer PART_NO = 3;
+    
+    @Mock
+    private FileBasedConfigurationBuilder<PropertiesConfiguration> mockFileBasedConfigurationBuilder;
 
     @Mock
     private PropertiesConfiguration mockPropertiesConfiguration;
@@ -75,6 +81,24 @@ class LighthousePddaTest {
     @AfterAll
     public static void tearDown() throws Exception {
         // Do nothing
+    }
+
+    @Test
+    void testGetConfiguration() {
+        LighthousePdda localClassUnderTest = new LighthousePdda(mockEntityManager) {
+            @Override
+            protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
+                return mockFileBasedConfigurationBuilder;
+            }
+        };
+        boolean result = false;
+        try {
+            localClassUnderTest.getConfiguration();
+            result = true;
+        } catch (ConfigurationException exception) {
+            fail(exception.getMessage());
+        }
+        assertTrue(result, TRUE);
     }
 
     @Test
@@ -114,8 +138,7 @@ class LighthousePddaTest {
                     .andThrow(getRuntimeException());
             } else {
                 // Success
-                XhbCppStagingInboundDao stagingInboundDao =
-                    DummyPdNotifierUtil.getXhbCppStagingInboundDao();
+                XhbCppStagingInboundDao stagingInboundDao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
                 stagingInboundDao.setDocumentName(xhbPddaMessageDao.getCpDocumentName());
                 EasyMock.expect(mockXhbCppStagingInboundRepository.update(EasyMock.isA(XhbCppStagingInboundDao.class)))
                     .andReturn(Optional.of(stagingInboundDao));
@@ -149,7 +172,7 @@ class LighthousePddaTest {
         }
         return result;
     }
-    
+
     private RuntimeException getRuntimeException() {
         return new RuntimeException();
     }
