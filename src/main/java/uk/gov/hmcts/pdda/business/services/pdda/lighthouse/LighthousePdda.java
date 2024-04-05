@@ -52,20 +52,24 @@ public class LighthousePdda {
     /**
      * Do all setup tasks.
      */
-    private PropertiesConfiguration getConfiguration() throws ConfigurationException {
+    protected PropertiesConfiguration getConfiguration() throws ConfigurationException {
         LOG.debug("{} :: METHOD ENTRY:: getConfiguration", System.currentTimeMillis());
 
         // Get all properties
         if (config == null) {
-            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
-                .configure(new Parameters().properties()
-                    .setFileName(PROPERTIES_FILENAME));
-            config = builder.getConfiguration();
+            config = getConfigBuilder().getConfiguration();
         }
 
         LOG.debug("{} :: METHOD EXIT:: getConfiguration", System.currentTimeMillis());
         return config;
+    }
+
+    protected FileBasedConfigurationBuilder<PropertiesConfiguration> getBuilder() {
+        return new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class);
+    }
+
+    protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
+        return getBuilder().configure(new Parameters().properties().setFileName(PROPERTIES_FILENAME));
     }
 
     /**
@@ -97,7 +101,7 @@ public class LighthousePdda {
         }
         LOG.debug("{} :: METHOD EXIT:: processFiles", System.currentTimeMillis());
     }
-    
+
     private Runnable getRunnable(XhbPddaMessageDao dao) {
         return new RunPddaJob(getXhbPddaMessageRepository(), getXhbCppStagingInboundRepository(), dao);
     }
@@ -105,7 +109,7 @@ public class LighthousePdda {
     private void doNothing() {
         // do nothing
     }
-    
+
     /**
      * Set the General properties.
      * 
@@ -296,7 +300,7 @@ public class LighthousePdda {
                 return null;
             } else {
                 return docType.name();
-            } 
+            }
         }
     }
 

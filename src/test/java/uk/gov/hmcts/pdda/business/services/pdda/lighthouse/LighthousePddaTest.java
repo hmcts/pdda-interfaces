@@ -2,6 +2,8 @@ package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
 import jakarta.persistence.EntityManager;
 import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
@@ -24,6 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -53,6 +56,9 @@ class LighthousePddaTest {
     private static final Integer PART_NO = 3;
 
     @Mock
+    private FileBasedConfigurationBuilder<PropertiesConfiguration> mockFileBasedConfigurationBuilder;
+
+    @Mock
     private PropertiesConfiguration mockPropertiesConfiguration;
 
     @Mock
@@ -78,6 +84,26 @@ class LighthousePddaTest {
     }
 
     @Test
+    void testGetConfiguration() {
+        LighthousePdda localClassUnderTest = new LighthousePdda(mockEntityManager) {
+            @Override
+            protected FileBasedConfigurationBuilder<PropertiesConfiguration> getConfigBuilder() {
+                FileBasedConfigurationBuilder<PropertiesConfiguration> builder = getBuilder();
+                assertNotNull(builder, NOTNULL);
+                return mockFileBasedConfigurationBuilder;
+            }
+        };
+        boolean result = false;
+        try {
+            localClassUnderTest.getConfiguration();
+            result = true;
+        } catch (ConfigurationException exception) {
+            fail(exception.getMessage());
+        }
+        assertTrue(result, TRUE);
+    }
+
+    @Test
     void testProcessFilesSuccess() {
         boolean result = testProcessFiles(MESSAGE_STATUS_PROCESSED);
         assertTrue(result, TRUE);
@@ -90,6 +116,7 @@ class LighthousePddaTest {
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
+        // new Parameters().properties().setFileName("");
         // Add Captured Values
         Capture<XhbPddaMessageDao> savedValue = EasyMock.newCapture();
 
@@ -114,8 +141,7 @@ class LighthousePddaTest {
                     .andThrow(getRuntimeException());
             } else {
                 // Success
-                XhbCppStagingInboundDao stagingInboundDao =
-                    DummyPdNotifierUtil.getXhbCppStagingInboundDao();
+                XhbCppStagingInboundDao stagingInboundDao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
                 stagingInboundDao.setDocumentName(xhbPddaMessageDao.getCpDocumentName());
                 EasyMock.expect(mockXhbCppStagingInboundRepository.update(EasyMock.isA(XhbCppStagingInboundDao.class)))
                     .andReturn(Optional.of(stagingInboundDao));
@@ -149,7 +175,7 @@ class LighthousePddaTest {
         }
         return result;
     }
-    
+
     private RuntimeException getRuntimeException() {
         return new RuntimeException();
     }
