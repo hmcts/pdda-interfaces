@@ -38,7 +38,7 @@ public class WebAppInitializer implements ServletContextInitializer {
             
             ServletRegistration.Dynamic schedulerInitServlet =
                 servletContext.addServlet(SCHEDULER_INIT_SERVLET_NAME, new SchedulerInitServlet(csicb));
-            schedulerInitServlet.setLoadOnStartup(1);
+            schedulerInitServlet.setLoadOnStartup(2);
         }
     }
 
