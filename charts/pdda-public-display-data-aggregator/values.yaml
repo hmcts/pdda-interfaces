@@ -16,4 +16,4 @@ java:
         - name: public-display-data-aggregator-POSTGRES-PORT
           alias: DB_PORT
   environment:
-    RUN_DB_MIGRATION_ON_STARTUP: true
+    RUN_DB_MIGRATION_ON_STARTUP: false
