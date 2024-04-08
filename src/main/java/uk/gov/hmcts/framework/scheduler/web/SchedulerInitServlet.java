@@ -1,7 +1,5 @@
 package uk.gov.hmcts.framework.scheduler.web;
 
-import jakarta.annotation.Resource;
-import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -13,7 +11,6 @@ import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInbou
 
 import java.io.InputStream;
 import java.util.Properties;
-import javax.sql.DataSource;
 
 /**
  * <p>
@@ -72,12 +69,12 @@ public class SchedulerInitServlet extends HttpServlet implements ServletContextL
      */
     public static final String SCHEDULER_CONTEXT_KEY = "SchedulerInitServlet.scheduler";
 
-    @Resource(name = "jdbc/PDDA_postgreXADS")
-    private DataSource dataSource;
-
-    @jakarta.ejb.EJB
-    @Inject
-    private CppStagingInboundControllerBean csicb;
+    private final CppStagingInboundControllerBean csicb;
+    
+    public SchedulerInitServlet(CppStagingInboundControllerBean csicb) {
+        super();
+        this.csicb = csicb;
+    }
     
     /**
      * Called by the servlet container to indicate to a servlet that the servlet is being placed
