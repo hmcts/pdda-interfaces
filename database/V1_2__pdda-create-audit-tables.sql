@@ -17,7 +17,7 @@ CREATE TABLE aud_address (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_address ADD CONSTRAINT aud_address_pk PRIMARY KEY (address_id, last_update_date);
 
 
@@ -31,7 +31,7 @@ CREATE TABLE aud_blob (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_blob ADD CONSTRAINT aud_blob_pk PRIMARY KEY (blob_id, last_update_date);
 
 
@@ -135,7 +135,7 @@ CREATE TABLE aud_case (
 	dar_retention_policy_id integer,
 	crp_last_update_date timestamp,
 	civil_unrest varchar(1)
-) ;
+);
 ALTER TABLE aud_case ADD CONSTRAINT aud_case_pk PRIMARY KEY (case_id, last_update_date);
 
 
@@ -162,7 +162,7 @@ CREATE TABLE aud_case_diary_fixture (
 	insert_event varchar(1),
 	court_site_id integer,
 	date_vacated timestamp
-) ;
+);
 ALTER TABLE aud_case_diary_fixture ADD CONSTRAINT aud_case_diary_fixture_pk PRIMARY KEY (case_diary_fixture_id, last_update_date);
 
 
@@ -181,7 +181,7 @@ CREATE TABLE aud_case_listing_entry (
 	insert_event varchar(1),
 	obs_ind varchar(1),
 	court_id integer NOT NULL
-) ;
+);
 ALTER TABLE aud_case_listing_entry ADD CONSTRAINT aud_case_listing_entry_pk PRIMARY KEY (case_listing_entry_id, last_update_date);
 
 
@@ -216,7 +216,7 @@ CREATE TABLE aud_case_on_list (
 	parent_case_on_list_id integer,
 	nha_firm_list varchar(1),
 	vacation_pre_defined_rson_id integer
-) ;
+);
 ALTER TABLE aud_case_on_list ADD CONSTRAINT aud_case_on_list_pk PRIMARY KEY (case_on_list_id, last_update_date);
 
 
@@ -230,7 +230,7 @@ CREATE TABLE aud_cc_info (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_cc_info ADD CONSTRAINT aud_cc_info_pk PRIMARY KEY (cc_info_id, last_update_date);
 
 
@@ -245,7 +245,7 @@ CREATE TABLE aud_clob (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_clob ADD CONSTRAINT aud_clob_pk PRIMARY KEY (clob_id, last_update_date);
 
 
@@ -287,7 +287,7 @@ CREATE TABLE aud_court (
 	county_loc_code varchar(5),
 	tier varchar(1),
 	cpp_court varchar(1)
-) ;
+);
 ALTER TABLE aud_court ADD CONSTRAINT aud_court_pk PRIMARY KEY (court_id, last_update_date);
 
 
@@ -309,7 +309,7 @@ CREATE TABLE aud_court_room (
 	insert_event varchar(1) NOT NULL,
 	security_ind varchar(1),
 	video_ind varchar(1)
-) ;
+);
 ALTER TABLE aud_court_room ADD CONSTRAINT aud_court_room_pk PRIMARY KEY (court_room_id, last_update_date);
 
 
@@ -325,7 +325,7 @@ CREATE TABLE aud_court_satellite (
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL,
 	obs_ind varchar(1) DEFAULT 'N'
-) ;
+);
 ALTER TABLE aud_court_satellite ADD CONSTRAINT aud_court_satellite_pk PRIMARY KEY (court_satellite_id, last_update_date);
 
 
@@ -351,7 +351,7 @@ CREATE TABLE aud_court_site (
 	floater_text varchar(100),
 	list_name varchar(39),
 	tier varchar(1)
-) ;
+);
 ALTER TABLE aud_court_site ADD CONSTRAINT aud_court_site_pk PRIMARY KEY (court_site_id, last_update_date);
 
 
@@ -373,7 +373,7 @@ CREATE TABLE aud_cpp_formatting (
 	creation_date timestamp NOT NULL,
 	created_by varchar(30) NOT NULL,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_cpp_formatting ADD CONSTRAINT aud_cpp_formatting_pk PRIMARY KEY (cpp_formatting_id, last_update_date);
 
 
@@ -392,7 +392,7 @@ CREATE TABLE aud_cpp_formatting_merge (
 	last_updated_by varchar(30) NOT NULL,
 	created_by varchar(30) NOT NULL,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_cpp_formatting_merge ADD CONSTRAINT aud_cpp_formatting_merge_pk PRIMARY KEY (cpp_formatting_merge_id, last_update_date);
 
 
@@ -416,7 +416,7 @@ CREATE TABLE aud_cpp_list (
 	created_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_cpp_list ADD CONSTRAINT aud_cpp_list_pk PRIMARY KEY (cpp_list_id, last_update_date);
 
 
@@ -440,7 +440,7 @@ CREATE TABLE aud_cpp_staging_inbound (
 	created_by varchar(30) NOT NULL,
 	version integer DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_cpp_staging_inbound ADD CONSTRAINT aud_cpp_staging_inbound_pk PRIMARY KEY (cpp_staging_inbound_id, last_update_date);
 
 
@@ -468,7 +468,7 @@ CREATE TABLE aud_formatting (
 	country varchar(2),
 	major_schema_version smallint,
 	minor_schema_version smallint
-) ;
+);
 ALTER TABLE aud_formatting ADD CONSTRAINT aud_formatting_pk PRIMARY KEY (formatting_id, last_update_date);
 
 
@@ -490,7 +490,7 @@ CREATE TABLE aud_hearing (
 	hearing_end_date timestamp,
 	linked_hearing_id integer,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_hearing ADD CONSTRAINT aud_hearing_pk PRIMARY KEY (hearing_id, last_update_date);
 
 
@@ -514,7 +514,7 @@ CREATE TABLE aud_hearing_list (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_hearing_list ADD CONSTRAINT aud_hearing_list_pk PRIMARY KEY (list_id, last_update_date);
 
 
@@ -539,7 +539,7 @@ CREATE TABLE aud_list (
 	last_update_date timestamp NOT NULL,
 	version bigint NOT NULL DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_list ADD CONSTRAINT aud_list_pk PRIMARY KEY (list_id, last_update_date);
 
 
@@ -563,7 +563,7 @@ CREATE TABLE aud_ref_court (
 	address_id integer,
 	court_id integer,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_court ADD CONSTRAINT aud_ref_court_pk PRIMARY KEY (ref_court_id, last_update_date);
 
 
@@ -586,7 +586,7 @@ CREATE TABLE aud_ref_court_reporter (
 	version integer NOT NULL,
 	court_id integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_court_reporter ADD CONSTRAINT aud_ref_court_reporter_pk PRIMARY KEY (ref_court_reporter_id, last_update_date);
 
 
@@ -608,7 +608,7 @@ CREATE TABLE aud_ref_court_reporter_firm (
 	version integer NOT NULL,
 	crest_court_reporter_firm_id integer,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_court_reporter_firm ADD CONSTRAINT aud_ref_court_reporter_firm_pk PRIMARY KEY (ref_court_reporter_firm_id, last_update_date);
 
 
@@ -627,7 +627,7 @@ CREATE TABLE aud_ref_cracked_effective (
 	version integer NOT NULL DEFAULT 1,
 	insert_event varchar(1),
 	trial_code_type varchar(1)
-) ;
+);
 COMMENT ON COLUMN aud_ref_cracked_effective.code IS E'The entry code for the cracked / ineffective entry.  Cannot be null';
 COMMENT ON COLUMN aud_ref_cracked_effective.created_by IS E'Standard field. Which user created this row.';
 COMMENT ON COLUMN aud_ref_cracked_effective.creation_date IS E'Standard field. The date this row was created.';
@@ -658,7 +658,7 @@ CREATE TABLE aud_ref_hearing_type (
 	court_id integer NOT NULL,
 	obs_ind varchar(1),
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_hearing_type ADD CONSTRAINT aud_ref_hearing_type_pk PRIMARY KEY (ref_hearing_type_id, last_update_date);
 
 
@@ -688,7 +688,7 @@ CREATE TABLE aud_ref_judge (
 	version integer NOT NULL,
 	court_id integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_judge ADD CONSTRAINT aud_ref_judge_pk PRIMARY KEY (ref_judge_id, last_update_date);
 
 
@@ -708,7 +708,7 @@ CREATE TABLE aud_ref_justice (
 	version integer NOT NULL,
 	obs_ind varchar(1),
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_justice ADD CONSTRAINT aud_ref_justice_pk PRIMARY KEY (ref_justice_id, last_update_date);
 
 
@@ -730,7 +730,7 @@ CREATE TABLE aud_ref_legal_representative (
 	court_id integer NOT NULL,
 	obs_ind varchar(1),
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_legal_representative ADD CONSTRAINT aud_ref_legal_representative_pk PRIMARY KEY (ref_legal_rep_id, last_update_date);
 
 
@@ -747,7 +747,7 @@ CREATE TABLE aud_ref_listing_data (
 	insert_event varchar(1),
 	obs_ind varchar(1),
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE aud_ref_listing_data ADD CONSTRAINT aud_ref_listing_data_pk PRIMARY KEY (ref_listing_data_id, last_update_date);
 
 
@@ -763,7 +763,7 @@ CREATE TABLE aud_ref_monitoring_category (
 	last_update_date timestamp NOT NULL,
 	version bigint DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_ref_monitoring_category ADD CONSTRAINT aud_ref_monitoring_category_pk PRIMARY KEY (ref_monitoring_category_id, last_update_date);
 
 
@@ -786,7 +786,7 @@ CREATE TABLE aud_ref_solicitor_firm (
 	address_id integer,
 	insert_event varchar(1) NOT NULL,
 	la_code varchar(6)
-) ;
+);
 ALTER TABLE aud_ref_solicitor_firm ADD CONSTRAINT aud_ref_solicitor_firm_pk PRIMARY KEY (ref_solicitor_firm_id, last_update_date);
 
 
@@ -807,7 +807,7 @@ CREATE TABLE aud_ref_system_code (
 	court_id integer NOT NULL,
 	obs_ind varchar(1),
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_ref_system_code ADD CONSTRAINT aud_ref_system_code_pk PRIMARY KEY (ref_system_code_id, last_update_date);
 
 
@@ -828,7 +828,7 @@ CREATE TABLE aud_sched_hearing_attendee (
 	last_update_date timestamp NOT NULL,
 	ref_justice_id integer,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_sched_hearing_attendee ADD CONSTRAINT aud_sched_hearing_attendee_pk PRIMARY KEY (sh_attendee_id, last_update_date);
 
 
@@ -844,7 +844,7 @@ CREATE TABLE aud_sched_hearing_defendant (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_sched_hearing_defendant ADD CONSTRAINT aud_sched_hearing_defendant_pk PRIMARY KEY (sched_hear_def_id, last_update_date);
 
 
@@ -874,7 +874,7 @@ CREATE TABLE aud_scheduled_hearing (
 	insert_event varchar(1) NOT NULL DEFAULT 'X',
 	add_hearing_used varchar(1),
 	ref_cracked_effective_id integer
-) ;
+);
 ALTER TABLE aud_scheduled_hearing ADD CONSTRAINT aud_scheduled_hearing_pk PRIMARY KEY (scheduled_hearing_id, last_update_date);
 
 
@@ -891,7 +891,7 @@ CREATE TABLE aud_sh_judge (
 	last_update_date timestamp NOT NULL,
 	sh_attendee_id integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_sh_judge ADD CONSTRAINT aud_sh_judge_pk PRIMARY KEY (sh_judge_id, last_update_date);
 
 
@@ -907,7 +907,7 @@ CREATE TABLE aud_sh_justice (
 	last_update_date timestamp NOT NULL,
 	hearing_id integer,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_sh_justice ADD CONSTRAINT aud_sh_justice_pk PRIMARY KEY (sh_justice_id, last_update_date);
 
 
@@ -933,7 +933,7 @@ CREATE TABLE aud_sh_leg_rep (
 	insert_event varchar(1) NOT NULL DEFAULT 'X',
 	sub_inst varchar(1),
 	substituted_ref_legal_rep_id integer
-) ;
+);
 ALTER TABLE aud_sh_leg_rep ADD CONSTRAINT aud_sh_leg_rep_pk PRIMARY KEY (sh_leg_rep_id, last_update_date);
 
 
@@ -949,7 +949,7 @@ CREATE TABLE aud_sh_staff (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_sh_staff ADD CONSTRAINT aud_sh_staff_pk PRIMARY KEY (sh_staff_id, last_update_date);
 
 
@@ -980,7 +980,7 @@ CREATE TABLE aud_sitting (
 	justicename2 varchar(35),
 	justicename1 varchar(35),
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_sitting ADD CONSTRAINT aud_sitting_pk PRIMARY KEY (sitting_id, last_update_date);
 
 
@@ -1010,7 +1010,7 @@ CREATE TABLE aud_sitting_on_list (
 	insert_event varchar(1),
 	court_room_id integer NOT NULL,
 	court_site_id integer NOT NULL
-) ;
+);
 ALTER TABLE aud_sitting_on_list ADD CONSTRAINT aud_sitting_on_list_pk PRIMARY KEY (sitting_on_list_id, last_update_date);
 
 
@@ -1037,7 +1037,7 @@ CREATE TABLE aud_pdda_message (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_pdda_message ADD CONSTRAINT aud_pdda_message_pk PRIMARY KEY (pdda_message_id, last_update_date);
 
 
@@ -1054,7 +1054,7 @@ CREATE TABLE aud_ref_pdda_message_type (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1,
 	insert_event varchar(1)
-) ;
+);
 ALTER TABLE aud_ref_pdda_message_type ADD CONSTRAINT aud_ref_pdda_message_type_pk PRIMARY KEY (pdda_message_type_id, last_update_date);
 
 
@@ -1070,7 +1070,7 @@ CREATE TABLE aud_case_reference (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_case_reference ADD CONSTRAINT aud_case_reference_pk PRIMARY KEY (case_reference_id, last_update_date);
 
 
@@ -1086,7 +1086,7 @@ CREATE TABLE aud_configured_public_notice (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_configured_public_notice ADD CONSTRAINT aud_configured_public_notice_pk PRIMARY KEY (configured_public_notice_id, last_update_date);
 
 
@@ -1107,7 +1107,7 @@ CREATE TABLE aud_court_log_entry (
 	defendant_on_offence_id integer,
 	scheduled_hearing_id integer,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_court_log_entry ADD CONSTRAINT aud_court_log_entry_pk PRIMARY KEY (entry_id, last_update_date);
 
 
@@ -1134,7 +1134,7 @@ CREATE TABLE aud_court_log_event_desc (
 	public_notice smallint NOT NULL,
 	short_description varchar(255) NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_court_log_event_desc ADD CONSTRAINT aud_court_log_event_desc_pk PRIMARY KEY (event_desc_id, last_update_date);
 
 
@@ -1152,7 +1152,7 @@ CREATE TABLE aud_cr_live_display (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_cr_live_display ADD CONSTRAINT aud_cr_live_display_pk PRIMARY KEY (cr_live_display_id, last_update_date);
 
 
@@ -1183,7 +1183,7 @@ CREATE TABLE aud_defendant (
 	ethnic_appearance_code varchar(10),
 	ethnicity_self_defined varchar(10),
 	current_prison_status varchar(1) NOT NULL DEFAULT 'N'
-) ;
+);
 ALTER TABLE aud_defendant ADD CONSTRAINT aud_defendant_pk PRIMARY KEY (defendant_id, last_update_date);
 
 
@@ -1247,7 +1247,7 @@ CREATE TABLE aud_defendant_on_case (
 	coa_status varchar(1),
 	ctl_applies char(1),
 	dar_retention_policy_id integer
-) ;
+);
 ALTER TABLE aud_defendant_on_case ADD CONSTRAINT aud_defendant_on_case_pk PRIMARY KEY (defendant_on_case_id, last_update_date);
 
 
@@ -1263,7 +1263,7 @@ CREATE TABLE aud_definitive_public_notice (
 	version integer NOT NULL,
 	priority integer,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_definitive_public_notice ADD CONSTRAINT aud_definitive_public_notice_pk PRIMARY KEY (definitive_pn_id, last_update_date);
 
 
@@ -1283,7 +1283,7 @@ CREATE TABLE aud_display (
 	version integer NOT NULL,
 	show_unassigned_yn char(1) NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_display ADD CONSTRAINT aud_display_pk PRIMARY KEY (display_id, last_update_date);
 
 
@@ -1299,7 +1299,7 @@ CREATE TABLE aud_display_court_room (
 	last_update_date timestamp NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X',
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE aud_display_court_room ADD CONSTRAINT aud_display_court_room_pk PRIMARY KEY (display_id, court_room_id, last_update_date);
 
 
@@ -1318,7 +1318,7 @@ CREATE TABLE aud_display_document (
 	insert_event varchar(1) NOT NULL DEFAULT 'X',
 	country varchar(2),
 	language varchar(2)
-) ;
+);
 ALTER TABLE aud_display_document ADD CONSTRAINT aud_display_document_pk PRIMARY KEY (display_document_id, last_update_date);
 
 
@@ -1334,7 +1334,7 @@ CREATE TABLE aud_display_location (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_display_location ADD CONSTRAINT aud_display_location_pk PRIMARY KEY (display_location_id, last_update_date);
 
 
@@ -1349,7 +1349,7 @@ CREATE TABLE aud_display_type (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_display_type ADD CONSTRAINT aud_display_type_pk PRIMARY KEY (display_type_id, last_update_date);
 
 
@@ -1366,7 +1366,7 @@ CREATE TABLE aud_public_notice (
 	version integer NOT NULL,
 	definitive_pn_id integer NOT NULL,
 	insert_event varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE aud_public_notice ADD CONSTRAINT aud_public_notice_pk PRIMARY KEY (public_notice_id, last_update_date);
 
 
@@ -1384,7 +1384,7 @@ CREATE TABLE aud_rotation_set_dd (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_rotation_set_dd ADD CONSTRAINT aud_rotation_set_dd_pk PRIMARY KEY (rotation_set_dd_id, last_update_date);
 
 
@@ -1401,7 +1401,7 @@ CREATE TABLE aud_rotation_sets (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_rotation_sets ADD CONSTRAINT aud_rotation_sets_pk PRIMARY KEY (rotation_set_id, last_update_date);
 
 
@@ -1420,7 +1420,7 @@ CREATE TABLE aud_pdda_dl_notifier (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_pdda_dl_notifier ADD CONSTRAINT aud_pdda_dl_notifier_pk PRIMARY KEY (pdda_dl_notifier_id, last_update_date);
 
 
@@ -1437,7 +1437,7 @@ CREATE TABLE aud_display_store (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_display_store ADD CONSTRAINT aud_display_store_pk PRIMARY KEY (display_store_id, last_update_date);
 
 
@@ -1457,5 +1457,5 @@ CREATE TABLE aud_xml_document (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	insert_event varchar(1) NOT NULL DEFAULT 'X'
-) ;
+);
 ALTER TABLE aud_xml_document ADD CONSTRAINT aud_xml_document_pk PRIMARY KEY (xml_document_id, last_update_date);
