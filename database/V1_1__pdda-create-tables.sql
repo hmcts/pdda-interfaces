@@ -16,7 +16,7 @@ CREATE TABLE xhb_address (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_address ADD CONSTRAINT xhb_address_pk PRIMARY KEY (address_id);
 
 
@@ -119,7 +119,7 @@ CREATE TABLE xhb_case (
 	dar_retention_policy_id integer,
 	crp_last_update_date timestamp,
 	civil_unrest varchar(1)
-) ;
+);
 ALTER TABLE xhb_case ADD CONSTRAINT xhb_case_pk PRIMARY KEY (case_id);
 
 
@@ -146,7 +146,7 @@ CREATE TABLE xhb_case_diary_fixture (
 	court_site_id integer,
 	fxl_run_date timestamp,
 	date_vacated timestamp
-) ;
+);
 ALTER TABLE xhb_case_diary_fixture ADD CONSTRAINT xhb_case_diary_fixture_pk PRIMARY KEY (case_diary_fixture_id);
 
 
@@ -164,7 +164,7 @@ CREATE TABLE xhb_case_listing_entry (
 	version integer NOT NULL DEFAULT 1,
 	obs_ind varchar(1),
 	court_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_case_listing_entry ADD CONSTRAINT xhb_case_listing_entry_pk PRIMARY KEY (case_listing_entry_id);
 
 
@@ -198,7 +198,7 @@ CREATE TABLE xhb_case_on_list (
 	parent_case_on_list_id integer,
 	nha_firm_list varchar(1),
 	vacation_pre_defined_rson_id integer
-) ;
+);
 ALTER TABLE xhb_case_on_list ADD CONSTRAINT xhb_case_on_list_pk PRIMARY KEY (case_on_list_id);
 ALTER TABLE xhb_case_on_list ADD CONSTRAINT is_court_room_list_entry_chk CHECK (is_court_room_list_entry IN ('Y','N'));
 
@@ -212,7 +212,7 @@ CREATE TABLE xhb_cc_info (
 	created_by varchar(30) NOT NULL,
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL
-) ;
+);
 ALTER TABLE xhb_cc_info ADD CONSTRAINT xhb_cc_info_pk PRIMARY KEY (cc_info_id);
 
 
@@ -221,7 +221,7 @@ CREATE TABLE xhb_config_prop (
 	config_prop_id integer NOT NULL,
 	property_name varchar(128) NOT NULL,
 	property_value varchar(300) NOT NULL
-) ;
+);
 ALTER TABLE xhb_config_prop ADD CONSTRAINT xhb_config_prop_pk PRIMARY KEY (config_prop_id);
 
 
@@ -261,7 +261,7 @@ CREATE TABLE xhb_court (
 	county_loc_code varchar(5),
 	tier varchar(1),
 	cpp_court varchar(1)
-) ;
+);
 ALTER TABLE xhb_court ADD CONSTRAINT xhb_court_pk PRIMARY KEY (court_id);
 
 
@@ -281,7 +281,7 @@ CREATE TABLE xhb_court_room (
 	display_name varchar(100),
 	security_ind varchar(1),
 	video_ind varchar(1)
-) ;
+);
 ALTER TABLE xhb_court_room ADD CONSTRAINT xhb_court_room_pk PRIMARY KEY (court_room_id);
 
 
@@ -296,7 +296,7 @@ CREATE TABLE xhb_court_satellite (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	obs_ind varchar(1) DEFAULT 'N'
-) ;
+);
 ALTER TABLE xhb_court_satellite ADD CONSTRAINT xhb_court_satellite_pk PRIMARY KEY (court_satellite_id);
 
 
@@ -320,7 +320,7 @@ CREATE TABLE xhb_court_site (
 	floater_text varchar(100),
 	list_name varchar(39),
 	tier varchar(1)
-) ;
+);
 ALTER TABLE xhb_court_site ADD CONSTRAINT xhb_court_site_pk PRIMARY KEY (court_site_id);
 ALTER TABLE xhb_court_site ADD UNIQUE (court_id,short_name);
 
@@ -341,7 +341,7 @@ CREATE TABLE xhb_cpp_formatting (
 	last_updated_by varchar(30) NOT NULL,
 	creation_date timestamp NOT NULL,
 	created_by varchar(30) NOT NULL
-) ;
+);
 ALTER TABLE xhb_cpp_formatting ADD CONSTRAINT xhb_cpp_formatting_pk PRIMARY KEY (cpp_formatting_id);
 
 
@@ -359,7 +359,7 @@ CREATE TABLE xhb_cpp_formatting_merge (
 	last_update_date timestamp NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	created_by varchar(30) NOT NULL
-) ;
+);
 ALTER TABLE xhb_cpp_formatting_merge ADD CONSTRAINT xhb_cpp_formatting_merge_pk PRIMARY KEY (cpp_formatting_merge_id);
 
 
@@ -381,7 +381,7 @@ CREATE TABLE xhb_cpp_list (
 	last_update_date timestamp NOT NULL,
 	created_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_cpp_list ADD CONSTRAINT xhb_cpp_list_pk PRIMARY KEY (cpp_list_id);
 
 
@@ -403,7 +403,7 @@ CREATE TABLE xhb_cpp_staging_inbound (
 	last_updated_by varchar(30) NOT NULL,
 	created_by varchar(30) NOT NULL,
 	version integer DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_cpp_staging_inbound ADD CONSTRAINT xhb_cpp_staging_inbound_pk PRIMARY KEY (cpp_staging_inbound_id);
 
 
@@ -423,7 +423,7 @@ CREATE TABLE xhb_hearing (
 	hearing_start_date timestamp,
 	hearing_end_date timestamp,
 	linked_hearing_id integer
-) ;
+);
 ALTER TABLE xhb_hearing ADD CONSTRAINT xhb_hearing_pk PRIMARY KEY (hearing_id);
 ALTER TABLE xhb_hearing ADD CONSTRAINT hearing_last_calc_duration_chk CHECK (last_calculated_duration BETWEEN 0 AND 59999940000);
 
@@ -446,7 +446,7 @@ CREATE TABLE xhb_hearing_list (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_hearing_list ADD CONSTRAINT xhb_hearing_list_pk PRIMARY KEY (list_id);
 
 
@@ -469,7 +469,7 @@ CREATE TABLE xhb_list (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version bigint NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_pk PRIMARY KEY (list_id);
 ALTER TABLE xhb_list ADD CONSTRAINT draft_or_final_chk CHECK (draft_or_final IN ('D','F'));
 ALTER TABLE xhb_list ADD CONSTRAINT publish_status_chk CHECK (publish_status IN ('SUCCESS','FAILURE','DELETED'));
@@ -493,7 +493,7 @@ CREATE TABLE xhb_ref_court (
 	version integer NOT NULL,
 	address_id integer,
 	court_id integer
-) ;
+);
 ALTER TABLE xhb_ref_court ADD CONSTRAINT xhb_ref_court_pk PRIMARY KEY (ref_court_id);
 
 
@@ -514,7 +514,7 @@ CREATE TABLE xhb_ref_court_reporter (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	court_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT xhb_ref_court_reporter_pk PRIMARY KEY (ref_court_reporter_id);
 
 
@@ -534,7 +534,7 @@ CREATE TABLE xhb_ref_court_reporter_firm (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	crest_court_reporter_firm_id integer
-) ;
+);
 ALTER TABLE xhb_ref_court_reporter_firm ADD CONSTRAINT xhb_ref_court_reporter_firm_pk PRIMARY KEY (ref_court_reporter_firm_id);
 
 
@@ -551,7 +551,7 @@ CREATE TABLE xhb_ref_cracked_effective (
 	created_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1,
 	trial_code_type varchar(1)
-) ;
+);
 COMMENT ON COLUMN xhb_ref_cracked_effective.code IS E'The entry code for the cracked / ineffective entry.  Cannot be null';
 COMMENT ON COLUMN xhb_ref_cracked_effective.created_by IS E'Standard field. Which user created this row.';
 COMMENT ON COLUMN xhb_ref_cracked_effective.creation_date IS E'Standard field. The date this row was created.';
@@ -580,7 +580,7 @@ CREATE TABLE xhb_ref_hearing_type (
 	version integer NOT NULL,
 	court_id integer NOT NULL,
 	obs_ind varchar(1)
-) ;
+);
 ALTER TABLE xhb_ref_hearing_type ADD CONSTRAINT xhb_ref_hearing_type_pk PRIMARY KEY (ref_hearing_type_id);
 
 
@@ -608,7 +608,7 @@ CREATE TABLE xhb_ref_judge (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	court_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_ref_judge ADD CONSTRAINT xhb_ref_judge_pk PRIMARY KEY (ref_judge_id);
 
 
@@ -627,7 +627,7 @@ CREATE TABLE xhb_ref_justice (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	obs_ind varchar(1)
-) ;
+);
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT xhb_ref_justice_pk PRIMARY KEY (ref_justice_id);
 
 
@@ -647,7 +647,7 @@ CREATE TABLE xhb_ref_legal_representative (
 	version integer NOT NULL,
 	court_id integer NOT NULL,
 	obs_ind varchar(1)
-) ;
+);
 ALTER TABLE xhb_ref_legal_representative ADD CONSTRAINT xhb_ref_legal_representative_pk PRIMARY KEY (ref_legal_rep_id);
 
 
@@ -662,7 +662,7 @@ CREATE TABLE xhb_ref_listing_data (
 	last_update_date timestamp NOT NULL,
 	obs_ind varchar(1),
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_ref_listing_data ADD CONSTRAINT xhb_ref_listing_data_pk PRIMARY KEY (ref_listing_data_id);
 
 
@@ -676,7 +676,7 @@ CREATE TABLE xhb_ref_monitoring_category (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version bigint DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_ref_monitoring_category ADD CONSTRAINT xhb_ref_monitoring_category_pk PRIMARY KEY (ref_monitoring_category_id);
 
 
@@ -697,7 +697,7 @@ CREATE TABLE xhb_ref_solicitor_firm (
 	version integer NOT NULL,
 	address_id integer,
 	la_code varchar(6)
-) ;
+);
 ALTER TABLE xhb_ref_solicitor_firm ADD CONSTRAINT xhb_ref_solicitor_firm_pk PRIMARY KEY (ref_solicitor_firm_id);
 
 
@@ -716,7 +716,7 @@ CREATE TABLE xhb_ref_system_code (
 	version integer NOT NULL,
 	court_id integer NOT NULL,
 	obs_ind varchar(1)
-) ;
+);
 ALTER TABLE xhb_ref_system_code ADD CONSTRAINT xhb_ref_system_code_pk PRIMARY KEY (ref_system_code_id);
 
 
@@ -735,7 +735,7 @@ CREATE TABLE xhb_sched_hearing_attendee (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	ref_justice_id integer
-) ;
+);
 ALTER TABLE xhb_sched_hearing_attendee ADD CONSTRAINT xhb_sched_hearing_attendee_pk PRIMARY KEY (sh_attendee_id);
 
 
@@ -749,7 +749,7 @@ CREATE TABLE xhb_sched_hearing_defendant (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_sched_hearing_defendant ADD CONSTRAINT xhb_sched_hearing_defendant_pk PRIMARY KEY (sched_hear_def_id);
 
 
@@ -777,7 +777,7 @@ CREATE TABLE xhb_scheduled_hearing (
 	moved_from_court_room_id integer,
 	add_hearing_used varchar(1),
 	ref_cracked_effective_id integer
-) ;
+);
 ALTER TABLE xhb_scheduled_hearing ADD CONSTRAINT xhb_scheduled_hearing_pk PRIMARY KEY (scheduled_hearing_id);
 
 
@@ -792,7 +792,7 @@ CREATE TABLE xhb_sh_judge (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	sh_attendee_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_sh_judge ADD CONSTRAINT xhb_sh_judge_pk PRIMARY KEY (sh_judge_id);
 
 
@@ -806,7 +806,7 @@ CREATE TABLE xhb_sh_justice (
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL,
 	hearing_id integer
-) ;
+);
 ALTER TABLE xhb_sh_justice ADD CONSTRAINT xhb_sh_justice_pk PRIMARY KEY (sh_justice_id);
 
 
@@ -830,7 +830,7 @@ CREATE TABLE xhb_sh_leg_rep (
 	scheduled_hearing_id integer,
 	sub_inst varchar(1),
 	substituted_ref_legal_rep_id integer
-) ;
+);
 ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT xhb_sh_leg_rep_pk PRIMARY KEY (sh_leg_rep_id);
 
 
@@ -844,7 +844,7 @@ CREATE TABLE xhb_sh_staff (
 	created_by varchar(30) NOT NULL,
 	creation_date timestamp NOT NULL,
 	last_update_date timestamp NOT NULL
-) ;
+);
 ALTER TABLE xhb_sh_staff ADD CONSTRAINT xhb_sh_staff_pk PRIMARY KEY (sh_staff_id);
 
 
@@ -873,7 +873,7 @@ CREATE TABLE xhb_sitting (
 	justicename3 varchar(35),
 	justicename2 varchar(35),
 	justicename1 varchar(35)
-) ;
+);
 ALTER TABLE xhb_sitting ADD CONSTRAINT xhb_sitting_pk PRIMARY KEY (sitting_id);
 
 
@@ -901,7 +901,7 @@ CREATE TABLE xhb_sitting_on_list (
 	version integer NOT NULL DEFAULT 1,
 	court_room_id integer NOT NULL,
 	court_site_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_sitting_on_list ADD CONSTRAINT xhb_sitting_on_list_pk PRIMARY KEY (sitting_on_list_id);
 
 
@@ -911,7 +911,7 @@ CREATE TABLE xhb_sys_audit (
 	table_to_audit varchar(255) NOT NULL,
 	audit_table varchar(255) NOT NULL,
 	auditable varchar(1) NOT NULL
-) ;
+);
 ALTER TABLE xhb_sys_audit ADD CONSTRAINT xhb_sys_audit_pk PRIMARY KEY (sys_audit_id);
 
 
@@ -919,7 +919,7 @@ DROP TABLE IF EXISTS xhb_sys_user_information CASCADE;
 CREATE TABLE xhb_sys_user_information (
 	mercator_user_name varchar(255) NOT NULL,
 	connection_pool_user_name varchar(255) NOT NULL
-) ;
+);
 ALTER TABLE xhb_sys_user_information ADD CONSTRAINT xhb_sys_user_information_pk PRIMARY KEY (mercator_user_name,connection_pool_user_name);
 
 
@@ -932,7 +932,7 @@ CREATE TABLE xhb_clob (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_clob ADD CONSTRAINT xhb_clob_pk PRIMARY KEY (clob_id);
 ALTER TABLE xhb_clob ADD CONSTRAINT clob_pk_range_chk CHECK (clob_id BETWEEN -2147483648 AND 2147483647);
 
@@ -957,7 +957,7 @@ CREATE TABLE xhb_formatting (
 	country varchar(2),
 	major_schema_version smallint,
 	minor_schema_version smallint
-) ;
+);
 ALTER TABLE xhb_formatting ADD CONSTRAINT xhb_formatting_pk PRIMARY KEY (formatting_id);
 
 
@@ -970,7 +970,7 @@ CREATE TABLE xhb_blob (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_blob ADD CONSTRAINT xhb_blob_pk PRIMARY KEY (blob_id);
 ALTER TABLE xhb_blob ADD CONSTRAINT blob_pk_range_chk CHECK (blob_id BETWEEN -2147483648 AND 2147483647);
 
@@ -981,7 +981,7 @@ CREATE TABLE mtbl_case_history (
 	case_type varchar(1) NOT NULL,
 	court_id integer NOT NULL,
 	last_update_date timestamp
-) ;
+);
 ALTER TABLE mtbl_case_history ADD CONSTRAINT mtbl_case_history_pk PRIMARY KEY (court_id,case_type,case_no);
 
 
@@ -1008,7 +1008,7 @@ CREATE TABLE xhb_hk_results (
 	warned_list bigint,
 	firm_list bigint,
 	daily_list bigint
-) ;
+);
 ALTER TABLE xhb_hk_results ADD CONSTRAINT xhb_hk_results_pk PRIMARY KEY (hk_run_id);
 
 
@@ -1033,7 +1033,7 @@ CREATE TABLE xhb_hk_cpp_results (
 	staging_error_message varchar(2000),
 	staging_error integer,
 	staging_deleted integer
-) ;
+);
 ALTER TABLE xhb_hk_cpp_results ADD CONSTRAINT xhb_hk_cpp_results_pk PRIMARY KEY (hk_cpp_run_id);
 
 
@@ -1045,7 +1045,7 @@ CREATE TABLE xhb_hk_error_log (
 	court_id integer,
 	case_id integer,
 	error_message varchar(500)
-) ;
+);
 ALTER TABLE xhb_hk_error_log ADD CONSTRAINT xhb_hk_error_log_pk PRIMARY KEY (hk_run_id);
 
 
@@ -1053,7 +1053,7 @@ DROP TABLE IF EXISTS xhb_hk_cpp_error_log CASCADE;
 CREATE TABLE xhb_hk_cpp_error_log (
 	hk_cpp_run_id bigint NOT NULL,
 	error_message varchar(500)
-) ;
+);
 ALTER TABLE xhb_hk_cpp_error_log ADD CONSTRAINT xhb_hk_cpp_error_log_pk PRIMARY KEY (hk_cpp_run_id);
 
 
@@ -1079,7 +1079,7 @@ CREATE TABLE xhb_pdda_message (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_pdda_message ADD CONSTRAINT xhb_pdda_message_pk PRIMARY KEY (pdda_message_id);
 
 
@@ -1094,7 +1094,7 @@ CREATE TABLE xhb_ref_pdda_message_type (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_ref_pdda_message_type ADD CONSTRAINT xhb_ref_pdda_message_type_pk PRIMARY KEY (pdda_message_type_id);
 
 
@@ -1108,7 +1108,7 @@ CREATE TABLE xhb_case_reference (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_case_reference ADD CONSTRAINT xhb_case_reference_pk PRIMARY KEY (case_reference_id);
 
 
@@ -1123,7 +1123,7 @@ CREATE TABLE xhb_configured_public_notice (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_configured_public_notice ADD CONSTRAINT xhb_configured_public_notice_pk PRIMARY KEY (configured_public_notice_id);
 
 
@@ -1142,7 +1142,7 @@ CREATE TABLE xhb_court_log_entry (
 	defendant_on_case_id integer,
 	defendant_on_offence_id integer,
 	scheduled_hearing_id integer
-) ;
+);
 ALTER TABLE xhb_court_log_entry ADD CONSTRAINT xhb_court_log_entry_pk PRIMARY KEY (entry_id);
 
 
@@ -1167,7 +1167,7 @@ CREATE TABLE xhb_court_log_event_desc (
 	last_update_date timestamp NOT NULL,
 	public_notice smallint NOT NULL,
 	short_description varchar(255) NOT NULL
-) ;
+);
 ALTER TABLE xhb_court_log_event_desc ADD CONSTRAINT xhb_court_log_event_desc_pk PRIMARY KEY (event_desc_id);
 
 
@@ -1183,7 +1183,7 @@ CREATE TABLE xhb_cr_live_display (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_cr_live_display ADD CONSTRAINT xhb_cr_live_display_pk PRIMARY KEY (cr_live_display_id);
 
 
@@ -1212,7 +1212,7 @@ CREATE TABLE xhb_defendant (
 	ethnic_appearance_code varchar(10),
 	ethnicity_self_defined varchar(10),
 	current_prison_status varchar(1) DEFAULT 'N'
-) ;
+);
 ALTER TABLE xhb_defendant ADD CONSTRAINT xhb_defendant_pk PRIMARY KEY (defendant_id);
 
 
@@ -1274,7 +1274,7 @@ CREATE TABLE xhb_defendant_on_case (
 	coa_status varchar(1),
 	ctl_applies char(1),
 	dar_retention_policy_id integer
-) ;
+);
 ALTER TABLE xhb_defendant_on_case ADD CONSTRAINT xhb_defendant_on_case_pk PRIMARY KEY (defendant_on_case_id);
 
 
@@ -1288,7 +1288,7 @@ CREATE TABLE xhb_definitive_public_notice (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	priority integer DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_definitive_public_notice ADD CONSTRAINT xhb_definitive_public_notice_pk PRIMARY KEY (definitive_pn_id);
 
 
@@ -1306,7 +1306,7 @@ CREATE TABLE xhb_display (
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL,
 	show_unassigned_yn char(1) NOT NULL
-) ;
+);
 ALTER TABLE xhb_display ADD CONSTRAINT xhb_display_pk PRIMARY KEY (display_id);
 ALTER TABLE xhb_display ADD CONSTRAINT display_lower_under_chk CHECK (COALESCE(RTRIM(description_code, '0123465789abcdefghijklmnopqrstuvwxyz_'),'') = '');
 
@@ -1320,7 +1320,7 @@ CREATE TABLE xhb_display_court_room (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_display_court_room ADD CONSTRAINT xhb_display_court_room_pk PRIMARY KEY (display_id,court_room_id);
 
 
@@ -1337,7 +1337,7 @@ CREATE TABLE xhb_display_document (
 	version integer NOT NULL,
 	country varchar(2),
 	language varchar(2)
-) ;
+);
 ALTER TABLE xhb_display_document ADD CONSTRAINT xhb_display_document_pk PRIMARY KEY (display_document_id);
 
 
@@ -1351,7 +1351,7 @@ CREATE TABLE xhb_display_location (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_display_location ADD CONSTRAINT xhb_display_location_pk PRIMARY KEY (display_location_id);
 ALTER TABLE xhb_display_location ADD CONSTRAINT display_loc_lower_under_chk CHECK (COALESCE(RTRIM(description_code, '0123465789abcdefghijklmnopqrstuvwxyz_'),'') = '');
 
@@ -1365,7 +1365,7 @@ CREATE TABLE xhb_display_type (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_display_type ADD CONSTRAINT xhb_display_type_pk PRIMARY KEY (display_type_id);
 
 
@@ -1380,7 +1380,7 @@ CREATE TABLE xhb_public_notice (
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL,
 	definitive_pn_id integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_public_notice ADD CONSTRAINT xhb_public_notice_pk PRIMARY KEY (public_notice_id);
 
 
@@ -1396,7 +1396,7 @@ CREATE TABLE xhb_rotation_set_dd (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_rotation_set_dd ADD CONSTRAINT xhb_rotation_set_dd_pk PRIMARY KEY (rotation_set_dd_id);
 
 
@@ -1411,7 +1411,7 @@ CREATE TABLE xhb_rotation_sets (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_rotation_sets ADD CONSTRAINT xhb_rotation_sets_pk PRIMARY KEY (rotation_set_id);
 
 
@@ -1428,7 +1428,7 @@ CREATE TABLE xhb_pdda_dl_notifier (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_pdda_dl_notifier ADD CONSTRAINT xhb_pdda_dl_notifier_pk PRIMARY KEY (pdda_dl_notifier_id);
 
 
@@ -1443,7 +1443,7 @@ CREATE TABLE xhb_display_store (
 	created_by varchar(30) NOT NULL,
 	last_updated_by varchar(30) NOT NULL,
 	version integer NOT NULL DEFAULT 1
-) ;
+);
 ALTER TABLE xhb_display_store ADD CONSTRAINT xhb_display_store_pk PRIMARY KEY (display_store_id);
 
 DROP TABLE IF EXISTS xhb_xml_document CASCADE;
@@ -1461,5 +1461,5 @@ CREATE TABLE xhb_xml_document (
 	last_updated_by varchar(30) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	version integer NOT NULL
-) ;
+);
 ALTER TABLE xhb_xml_document ADD CONSTRAINT xhb_xml_document_pk PRIMARY KEY (xml_document_id);
