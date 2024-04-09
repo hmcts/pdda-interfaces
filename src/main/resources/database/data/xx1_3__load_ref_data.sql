@@ -1,10 +1,6 @@
 \COPY xhb_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
-\COPY xhb_config_prop (config_prop_id, property_name, property_value) FROM 'XHB_CONFIG_PROP_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
 \COPY xhb_court (court_id, court_type, circuit, court_name, crest_court_id, court_prefix, short_name, last_update_date, creation_date, created_by, last_updated_by, version, address_id, crest_ip_address, in_service_flag, obs_ind, probation_office_name, internet_court_name, display_name, court_code, country, language, police_force_code, fl_rep_sort, court_start_time, wl_rep_sort, wl_rep_period, wl_rep_time, wl_free_text, is_pilot, dx_ref, county_loc_code, tier, cpp_court) FROM 'XHB_COURT_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_court_room (court_room_id, court_room_name, description, crest_court_room_no, court_site_id, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind, display_name, security_ind, video_ind) FROM 'XHB_COURT_ROOM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
 \COPY xhb_court_satellite (court_satellite_id, court_site_id, internet_satellite_name, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'XHB_COURT_SATELLITE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
