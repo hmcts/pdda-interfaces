@@ -1,8 +1,5 @@
 \COPY xhb_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
-4
-\COPY xhb_court_satellite (court_satellite_id, court_site_id, internet_satellite_name, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'XHB_COURT_SATELLITE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
 6
 \COPY xhb_ref_court_reporter (ref_court_reporter_id, first_name, middle_name, surname, crest_court_reporter_id, initials, report_method, obs_ind, ref_court_reporter_firm_id, last_update_date, creation_date, created_by, last_updated_by, version, court_id) FROM 'XHB_REF_COURT_REPORTER_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
