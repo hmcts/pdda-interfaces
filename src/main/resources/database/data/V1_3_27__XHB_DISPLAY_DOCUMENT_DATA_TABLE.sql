@@ -1,0 +1,15 @@
+insert into xhb_display_document (DISPLAY_DOCUMENT_ID,DESCRIPTION_CODE,DEFAULT_PAGE_DELAY,MULTIPLE_COURT_YN,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,VERSION,COUNTRY,LANGUAGE) values (
+9,'CourtDetail',10,'N','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+10,'CourtList',10,'N','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+11,'DailyList',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+12,'AllCourtStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+13,'SummaryByName',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+14,'JuryCurrentStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+15,'AllCaseStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','cy'),(
+8,'AllCaseStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+1,'CourtDetail',10,'N','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+2,'CourtList',10,'N','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+3,'DailyList',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+4,'AllCourtStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+5,'SummaryByName',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en'),(
+6,'JuryCurrentStatus',10,'Y','XHIBIT','01-APR-09 15:26:06','XHIBIT','01-APR-09 15:26:06',1,'GB','en');
