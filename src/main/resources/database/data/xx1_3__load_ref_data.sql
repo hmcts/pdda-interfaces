@@ -1,11 +1,9 @@
 \COPY xhb_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
+4
 \COPY xhb_court_satellite (court_satellite_id, court_site_id, internet_satellite_name, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'XHB_COURT_SATELLITE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
-\COPY xhb_court_site (court_site_id, court_site_name, court_site_code, court_id, address_id, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind, display_name, crest_court_id, short_name, site_group, floater_text, list_name, tier) FROM 'XHB_COURT_SITE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_ref_court (ref_court_id, court_full_name, court_short_name, name_prefix, court_type, crest_code, obs_ind, is_psd, dx_ref, last_update_date, creation_date, created_by, last_updated_by, version, address_id, court_id) FROM 'XHB_REF_COURT_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
+6
 \COPY xhb_ref_court_reporter (ref_court_reporter_id, first_name, middle_name, surname, crest_court_reporter_id, initials, report_method, obs_ind, ref_court_reporter_firm_id, last_update_date, creation_date, created_by, last_updated_by, version, court_id) FROM 'XHB_REF_COURT_REPORTER_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
 \COPY xhb_ref_court_reporter_firm (ref_court_reporter_firm_id, obs_ind, display_first, dx_ref, vat_no, firm_name, address_id, court_id, last_updated_by, created_by, creation_date, last_update_date, version, crest_court_reporter_firm_id) FROM 'XHB_REF_COURT_REPORTER_FIRM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
