@@ -1,21 +1,5 @@
 \COPY xhb_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
-\COPY xhb_court_log_event_desc (event_desc_id, flagged_event, editable, send_to_mercator, update_linked_cases, publish_to_subscribers, clear_public_displays, e_inform, public_display, linked_case_text, event_description, version, last_updated_by, event_type, created_by, creation_date, last_update_date, public_notice, short_description) FROM 'XHB_COURT_LOG_EVENT_DESC_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_cr_live_display (cr_live_display_id, court_room_id, scheduled_hearing_id, time_status_set, status, created_by, creation_date, last_updated_by, last_update_date, version) FROM 'XHB_CR_LIVE_DISPLAY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_definitive_public_notice (definitive_pn_id, definitive_pn_desc, last_update_date, creation_date, created_by, last_updated_by, version, priority) FROM 'XHB_DEFINITIVE_PUBLIC_NOTICE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_display (display_id, display_type_id, display_location_id, rotation_set_id, description_code, locale, created_by, creation_date, last_updated_by, last_update_date, version, show_unassigned_yn) FROM 'XHB_DISPLAY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_display_court_room (display_id, court_room_id, created_by, creation_date, last_updated_by, last_update_date, version) FROM 'XHB_DISPLAY_COURT_ROOM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_display_document (display_document_id, description_code, default_page_delay, multiple_court_yn, created_by, creation_date, last_updated_by, last_update_date, version, country, language) FROM 'XHB_DISPLAY_DOCUMENT_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_display_location (display_location_id, description_code, court_site_id, created_by, creation_date, last_updated_by, last_update_date, version) FROM 'XHB_DISPLAY_LOCATION_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_display_type (display_type_id, description_code, created_by, creation_date, last_updated_by, last_update_date, version) FROM 'XHB_DISPLAY_TYPE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
 \COPY xhb_public_notice (public_notice_id, public_notice_desc, court_id, last_update_date, creation_date, created_by, last_updated_by, version, definitive_pn_id) FROM 'XHB_PUBLIC_NOTICE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
 \COPY xhb_rotation_set_dd (rotation_set_dd_id, rotation_set_id, display_document_id, page_delay, ordering, created_by, creation_date, last_updated_by, last_update_date, version) FROM 'XHB_ROTATION_SET_DD_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
