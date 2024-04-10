@@ -1,10 +1,5 @@
 \COPY xhb_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
-6
-\COPY xhb_ref_court_reporter (ref_court_reporter_id, first_name, middle_name, surname, crest_court_reporter_id, initials, report_method, obs_ind, ref_court_reporter_firm_id, last_update_date, creation_date, created_by, last_updated_by, version, court_id) FROM 'XHB_REF_COURT_REPORTER_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
-\COPY xhb_ref_court_reporter_firm (ref_court_reporter_firm_id, obs_ind, display_first, dx_ref, vat_no, firm_name, address_id, court_id, last_updated_by, created_by, creation_date, last_update_date, version, crest_court_reporter_firm_id) FROM 'XHB_REF_COURT_REPORTER_FIRM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
-
 \COPY xhb_ref_hearing_type (ref_hearing_type_id, hearing_type_code, hearing_type_desc, category, seq_no, list_sequence, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_HEARING_TYPE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
 
 \COPY xhb_ref_judge (ref_judge_id, judge_type, crest_judge_id, title, first_name, middle_name, surname, full_list_title1, full_list_title2, full_list_title3, stats_code, initials, honours, jud_vers, obs_ind, source_table, last_update_date, creation_date, created_by, last_updated_by, version, court_id) FROM 'XHB_REF_JUDGE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER;
