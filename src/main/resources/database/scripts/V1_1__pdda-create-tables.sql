@@ -1,19 +1,5 @@
 SET client_encoding TO 'UTF8';
 
-DROP TABLE IF EXISTS testing_changes CASCADE;
-CREATE TABLE testing_changes (
-	testing_changes_id integer NOT NULL,
-	reporting_restrictions smallint NOT NULL DEFAULT 0,
-	case_id integer,
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL
-);
-ALTER TABLE testing_changes ADD CONSTRAINT testing_changes_pk PRIMARY KEY (testing_changes_id);
-
-
 DROP TABLE IF EXISTS xhb_address CASCADE;
 CREATE TABLE xhb_address (
 	address_id integer NOT NULL,
