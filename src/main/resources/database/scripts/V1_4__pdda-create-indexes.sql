@@ -166,7 +166,6 @@ CREATE INDEX aud_court_log_entry_i3 ON aud_court_log_entry (case_id);
 CREATE INDEX aud_cr_live_disp_i1 ON aud_cr_live_display (scheduled_hearing_id);
 CREATE INDEX aud_defendant_i1 ON aud_defendant (defendant_id);
 CREATE INDEX aud_defendant_on_case_i1 ON aud_defendant_on_case (case_id);
-CREATE INDEX aud_defendant_on_case_pk ON aud_defendant_on_case (defendant_on_case_id);
 CREATE INDEX xhb_pdda_dl_notifier_id ON xhb_pdda_dl_notifier (pdda_dl_notifier_id);
 CREATE INDEX xhb_pdda_dl_notifier_idx1 ON xhb_pdda_dl_notifier (court_id, last_run_date);
 CREATE INDEX aud_case_i1 ON aud_case (case_id);

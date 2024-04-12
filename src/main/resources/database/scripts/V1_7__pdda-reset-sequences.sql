@@ -43,7 +43,6 @@ SELECT setval('xhb_sh_staff_seq', COALESCE(MAX(sh_staff_id)+1, 1), FALSE) FROM x
 SELECT setval('xhb_sitting_on_list_seq', COALESCE(MAX(sitting_on_list_id)+1, 1), FALSE) FROM xhb_sitting_on_list;
 SELECT setval('xhb_sitting_seq', COALESCE(MAX(sitting_id)+1, 1), FALSE) FROM xhb_sitting;
 SELECT setval('xhb_sys_audit_seq', COALESCE(MAX(sys_audit_id)+1, 1), FALSE) FROM xhb_sys_audit;
-SELECT setval('hk3_run_id_seq', COALESCE(MAX(hk3_run_id)+1, 1), FALSE) FROM xhb_hk3_results;
 SELECT setval('hk_cpp_run_id_seq', COALESCE(MAX(hk_cpp_run_id)+1, 1), FALSE) FROM xhb_hk_cpp_results;
 SELECT setval('hk_run_id_seq', COALESCE(MAX(hk_run_id)+1, 1), FALSE) FROM xhb_hk_results;
 SELECT setval('xhb_pdda_message_seq', COALESCE(MAX(pdda_message_id)+1, 1), FALSE) FROM xhb_pdda_message;
