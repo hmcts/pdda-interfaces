@@ -39,12 +39,6 @@ class CsServicesTest {
     }
 
     @Test
-    void testGetJmsServices() {
-        JmsServices result = CsServices.getJmsServices();
-        assertNotNull(result, NOTNULL);
-    }
-
-    @Test
     void testGetDefaultErrorHandler() {
         ErrorHandler result = CsServices.getDefaultErrorHandler();
         assertNotNull(result, NOTNULL);

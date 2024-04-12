@@ -2,12 +2,6 @@ package uk.gov.hmcts.framework.services.locator;
 
 import jakarta.ejb.EJBHome;
 import jakarta.ejb.EJBLocalHome;
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.Destination;
-import jakarta.jms.Queue;
-import jakarta.jms.QueueConnectionFactory;
-import jakarta.jms.Topic;
-import jakarta.jms.TopicConnectionFactory;
 import jakarta.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,72 +149,6 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
     @Override
     public EJBLocalHome getLocalHome(Class<?> homeClass) {
         return (EJBLocalHome) lookup(getHomeJndiName(homeClass));
-    }
-
-    /**
-     * Gets the queue connection factory.
-     * 
-     * @param qcfBindingName String
-     * @return QueueConnectionFactory
-     */
-    @Override
-    public QueueConnectionFactory getQueueConnectionFactory(String qcfBindingName) {
-        return (QueueConnectionFactory) lookup(qcfBindingName);
-    }
-
-    /**
-     * Gets the queue.
-     * 
-     * @param queueBindingName String
-     * @return Queue
-     */
-    @Override
-    public Queue getQueue(String queueBindingName) {
-        return (Queue) lookup(queueBindingName);
-    }
-
-    /**
-     * Gets the topic connection factory.
-     * 
-     * @param tcfBindingName String
-     * @return TopicConnectionFactory
-     */
-    @Override
-    public TopicConnectionFactory getTopicConnectionFactory(String tcfBindingName) {
-        return (TopicConnectionFactory) lookup(tcfBindingName);
-    }
-
-    /**
-     * Gets the topic.
-     * 
-     * @param topicBindingName String
-     * @return Topic
-     */
-    @Override
-    public Topic getTopic(String topicBindingName) {
-        return (Topic) lookup(topicBindingName);
-    }
-
-    /**
-     * Gets the connection factory.
-     * 
-     * @param cfBindingName String
-     * @return ConnectionFactory
-     */
-    @Override
-    public ConnectionFactory getConnectionFactory(String cfBindingName) {
-        return (ConnectionFactory) lookup(cfBindingName);
-    }
-
-    /**
-     * Gets the destination.
-     * 
-     * @param bindingName String
-     * @return Destination
-     */
-    @Override
-    public Destination getDestination(String bindingName) {
-        return (Destination) lookup(bindingName);
     }
 
     /**

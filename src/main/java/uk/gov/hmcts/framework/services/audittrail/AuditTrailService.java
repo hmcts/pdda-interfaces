@@ -30,7 +30,6 @@ public final class AuditTrailService {
     
     private static final Logger LOG = LoggerFactory.getLogger(AuditTrailService.class);
     
-    private static final String AUDIT_PROVIDER_JMS = "JMS";
     private static final String AUDIT_PROVIDER_FILE = "FILE";
 
     private static final String PROPERTY_AUDIT_PROVIDER = "auditProvider";
@@ -103,19 +102,16 @@ public final class AuditTrailService {
     /**
      * Gets the auditProvider based on the property in the ResourceBundle.
      * <p/>
-     * Currently there are 2 types of AuditProvider:
+     * Currently there are 1 type of AuditProvider:
      * <UL>
      * <li>FileAuditProvider - Log messages directly to file (only used for development)</li>
-     * <li>JMSAuditProvider - Send messages to a queue for asynchronous processing</li>
      * </UL>
      * 
      * @return AuditProvider
      */
     private AuditProvider getAuditProvider() {
         if (auditProvider == null) {
-            if (AUDIT_PROVIDER_JMS.equals(auditProviderString)) {
-                auditProvider = new JmsAuditProvider();
-            } else if (AUDIT_PROVIDER_FILE.equals(auditProviderString)) {
+            if (AUDIT_PROVIDER_FILE.equals(auditProviderString)) {
                 auditProvider = new FileAuditProvider();
             } else {
                 // By Default, use FileAuditProvider

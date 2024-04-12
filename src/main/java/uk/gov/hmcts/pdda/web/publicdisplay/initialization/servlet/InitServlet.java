@@ -1,19 +1,14 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
 
-import jakarta.annotation.Resource;
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.Topic;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.activemq.command.ActiveMQTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.web.publicdisplay.messaging.jms.MessagingMode;
 
 import java.util.Locale;
 
@@ -32,31 +27,11 @@ public class InitServlet extends HttpServlet {
     /** Retry period. */
     private static final String RETRY_PERIOD = "retry.period";
 
-    /** Number of workers per subscription. */
-    private static final String NUM_SUBSCRIPTION_WORKERS = "num.subscription.workers";
-
-    /** Messaging mode. */
-    private static final String MESSAGING_MODE = "messaging.mode";
-
     /** Number of workers for initialization. */
     private static final String NUM_INITIALIZATION_WORKERS = "num.initialization.workers";
 
     /** Delay after each initialization. */
     private static final String INITIALIZATION_DELAY = "initialization.delay";
-
-    /** P2P messaging mode constant. */
-    private static final String P2P = "P2P";
-
-    /** Pub/Sub messaging mode constant. */
-    private static final String PUB_SUB = "PubSub";
-
-    /** JMS Topic. */
-    private static final String TOPIC = "PDDATopic";
-
-    @Resource
-    private ConnectionFactory connectionFactory;
-
-    private Topic topic;
     
     private final EntityManagerFactory entityManagerFactory;
     
@@ -89,27 +64,11 @@ public class InitServlet extends HttpServlet {
         // Set the retry interval for initialization
         setRetryPeriod(service);
 
-        // Set the number of workers per subscription
-        setNumSubscriptionWorkers(service);
-
         // Set the delay after each initialization
         setInitializationDelay(service);
 
         // Set the number of workers for initialization
         setNumInitializationWorkers(service);
-
-        // Set the messaging mode
-        setMessagingMode(service);
-
-        service.setConnectionFactory(connectionFactory);
-
-        // For Spring Boot JMS
-        if (topic == null) {
-            log.debug("Setting topic: " + TOPIC);
-            topic = new ActiveMQTopic(TOPIC);
-        }
-
-        service.setTopic(topic);
 
         // Start initialization
         service.initialize();
@@ -138,23 +97,6 @@ public class InitServlet extends HttpServlet {
     }
 
     /**
-     * Sets the messaging mode.
-     * 
-     * @param service InitializationService
-     */
-    private void setMessagingMode(InitializationService service) {
-        String msgMode = this.getInitParameter(MESSAGING_MODE);
-        if (msgMode != null) {
-            if (P2P.equals(msgMode)) {
-                service.setMessagingMode(MessagingMode.P2P);
-            } else if (PUB_SUB.equals(msgMode)) {
-                service.setMessagingMode(MessagingMode.PUB_SUB);
-            }
-            log.debug("Messaging mode: " + msgMode);
-        }
-    }
-
-    /**
      * Sets the number of initialization workers.
      * 
      * @param service InitializationService
@@ -177,19 +119,6 @@ public class InitServlet extends HttpServlet {
         if (initializationDelay != null) {
             service.setInitializationDelay(Long.parseLong(initializationDelay));
             log.debug("Initialization delay: " + initializationDelay);
-        }
-    }
-
-    /**
-     * Sets the number of subscription workers.
-     * 
-     * @param service InitializationService
-     */
-    private void setNumSubscriptionWorkers(InitializationService service) {
-        String numSubscriptionWorkers = getInitParameter(NUM_SUBSCRIPTION_WORKERS);
-        if (numSubscriptionWorkers != null) {
-            service.setNumSubscriptionWorkers(Integer.parseInt(numSubscriptionWorkers));
-            log.debug("Subscription workers: " + numSubscriptionWorkers);
         }
     }
 

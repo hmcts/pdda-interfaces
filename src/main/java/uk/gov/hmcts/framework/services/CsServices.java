@@ -3,7 +3,6 @@ package uk.gov.hmcts.framework.services;
 import uk.gov.hmcts.framework.services.audittrail.AuditTrailService;
 import uk.gov.hmcts.framework.services.config.ConfigServicesImpl;
 import uk.gov.hmcts.framework.services.errorhandling.DefaultErrorHandler;
-import uk.gov.hmcts.framework.services.jms.JmsServicesImpl;
 import uk.gov.hmcts.framework.services.locator.ServiceLocatorImpl;
 import uk.gov.hmcts.framework.services.xml.XmlServicesImpl;
 
@@ -53,16 +52,6 @@ public final class CsServices {
      */
     public static ConfigServices getConfigServices() {
         return ConfigServicesImpl.getInstance();
-    }
-
-    /**
-     * Gets the JMS service.
-     * 
-     * @return JMSServices
-     * @throws CSResourceUnavailableException Exception
-     */
-    public static JmsServices getJmsServices() {
-        return JmsServicesImpl.getInstance();
     }
 
     /**

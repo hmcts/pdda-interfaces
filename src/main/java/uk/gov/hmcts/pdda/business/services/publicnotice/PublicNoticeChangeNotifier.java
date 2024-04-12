@@ -77,7 +77,6 @@ public final class PublicNoticeChangeNotifier {
                 courtRoom.get().getCourtRoomId());
             PublicDisplayNotifier publicDisplayNotifier = new PublicDisplayNotifier();
             publicDisplayNotifier.sendMessage(new PublicNoticeEvent(courtRoomId, reportingRestrictionsChanged));
-            publicDisplayNotifier.close();
         }
     }
 

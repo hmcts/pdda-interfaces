@@ -1,7 +1,5 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.Topic;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -18,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
-import uk.gov.hmcts.pdda.web.publicdisplay.messaging.jms.MessagingMode;
 
 import java.util.Locale;
 
@@ -61,12 +58,6 @@ class InitServletTest {
 
     @Mock
     private ServletConfig config;
-
-    @Mock
-    private ConnectionFactory mockConnectionFactory;
-
-    @Mock
-    private Topic mockTopic;
     
     @Mock
     private EntityManagerFactory mockEntityManagerFactory;
@@ -88,10 +79,8 @@ class InitServletTest {
     void testInit() {
 
         final String retryPeriod = "1000";
-        final String subscriptionWorkers = "10";
         final String initializationDelay = "5000";
         final String initilizationWorkers = "20";
-        final String messagingMode = "P2P";
 
         InitializationService mockInitializationService = Mockito.mock(InitializationService.class);
         Mockito.mockStatic(InitializationService.class);
@@ -99,16 +88,10 @@ class InitServletTest {
         mockInitializationService.setDefaultLocale(dummyLocale);
         Mockito.when(config.getInitParameter("retry.period")).thenReturn(retryPeriod);
         mockInitializationService.setRetryPeriod(Long.parseLong(retryPeriod));
-        Mockito.when(config.getInitParameter("num.subscription.workers")).thenReturn(subscriptionWorkers);
-        mockInitializationService.setNumSubscriptionWorkers(Integer.parseInt(subscriptionWorkers));
         Mockito.when(config.getInitParameter("initialization.delay")).thenReturn(initializationDelay);
         mockInitializationService.setInitializationDelay(Long.parseLong(initializationDelay));
         Mockito.when(config.getInitParameter("num.initialization.workers")).thenReturn(initilizationWorkers);
         mockInitializationService.setNumInitializationWorkers(Integer.parseInt(initilizationWorkers));
-        Mockito.when(config.getInitParameter("messaging.mode")).thenReturn(messagingMode);
-        mockInitializationService.setMessagingMode(MessagingMode.P2P);
-        mockInitializationService.setConnectionFactory(mockConnectionFactory);
-        mockInitializationService.setTopic(mockTopic);
         mockInitializationService.initialize();
 
         boolean result = false;
