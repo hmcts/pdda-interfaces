@@ -6,7 +6,9 @@ Username: postgres
 Password: postgres
 
 Use \cd to navigate to the directory with the scripts e.g.
-\cd /Users/chrisvincent/git/pdda2/pdda_v2/database
+\cd /Users/chrisvincent/git/pdda2/pdda_v2/src/main/resources/database/scripts
+
+SET schema 'pdda';
 
 Can use \! pwd to indicate the working directory
 
