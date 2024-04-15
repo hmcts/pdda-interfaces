@@ -254,3 +254,8 @@ tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrate
     println "Flyway jbdc property 'url' (derived from System property 'FLYWAY_URL'?) is: ${url}"
     println "jdbc:postgresql://${dburl}"
 }
+
+// set flyway cleanDisabled to true above and uncomment if we require a fresh migration from scratch across all DBs
+migratePostgresDatabase.dependsOn cleanPostgresDatabase
+processResources.dependsOn updateOpenSpecificationsWithVersion
+assemble.dependsOn openapiJar
