@@ -46,8 +46,8 @@ DECLARE
 	c1 CURSOR FOR
 		SELECT row_number() OVER () AS row_num, row_id, event_type
 		FROM (SELECT xcle.entry_id AS row_id, xcled.event_type
-				FROM   PUBLIC.xhb_court_log_entry xcle,
-					   PUBLIC.xhb_court_log_event_desc xcled
+				FROM   xhb_court_log_entry xcle,
+					   xhb_court_log_event_desc xcled
 				WHERE  xcle.EVENT_DESC_ID = xcled.EVENT_DESC_ID
 				AND    xcled.EVENT_TYPE(SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME)
 				AND    xcle.scheduled_hearing_id = p_scheduled_hearing_id_in
@@ -85,7 +85,7 @@ LANGUAGE PLPGSQL
 -- REVOKE ALL ON FUNCTION xhb_public_display_pkg.get_log_entry_rowid (p_scheduled_hearing_id_in bigint, p_defendant_on_case_id_in bigint) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_summary_by_name ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_summary_by_name ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -110,18 +110,18 @@ BEGIN
 			  WHEN DEFENDANT.PUBLIC_DISPLAY_HIDE = 'Y' THEN 'Y'
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM
-			PUBLIC.xhb_hearing_list hearing_list,
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_court_room court_room,
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
-			PUBLIC.xhb_defendant defendant,
-			PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant,
-			PUBLIC.xhb_defendant_on_case defendant_on_case
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (DEFENDANT_ON_CASE.CASE_ID = CASE_REFERENCE.CASE_ID),
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase,
+			xhb_hearing_list hearing_list,
+			xhb_sitting sitting, 
+			xhb_court_room court_room,
+			xhb_court_site court_site, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
+			xhb_defendant defendant,
+			xhb_sched_hearing_defendant sched_hearing_defendant,
+			xhb_defendant_on_case defendant_on_case
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (DEFENDANT_ON_CASE.CASE_ID = CASE_REFERENCE.CASE_ID),
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase,
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -145,11 +145,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_summary_by_name ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_summary_by_name ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the summary by name data
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_summary_by_name_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_summary_by_name_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -175,18 +175,18 @@ BEGIN
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE),
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_defendant defendant, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
-			PUBLIC.xhb_defendant_on_case defendant_on_case
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (DEFENDANT_ON_CASE.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_sched_hearing_defendant sched_hearing_defendant, 
+			xhb_hearing_list hearing_list, 
+			xhb_defendant defendant, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
+			xhb_defendant_on_case defendant_on_case
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (DEFENDANT_ON_CASE.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
 		AND SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID 
@@ -208,11 +208,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_summary_by_name_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_summary_by_name_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the jury current status and daily list WITHOUT unassigned cases
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -251,21 +251,21 @@ BEGIN
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE),
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_hearing hearing, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_ref_hearing_type ref_hearing_type, 
+			xhb_hearing_list hearing_list, 
+			xhb_hearing hearing, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+				LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+				LEFT OUTER JOIN xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
 		AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -289,11 +289,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the jury current status and daily list WITH unassigned cases
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -332,21 +332,21 @@ BEGIN
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE),
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_hearing hearing, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_ref_hearing_type ref_hearing_type, 
+			xhb_hearing_list hearing_list, 
+			xhb_hearing hearing, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+				LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+				LEFT OUTER JOIN xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
 		AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -395,21 +395,21 @@ BEGIN
 			  WHEN DEFENDANT.PUBLIC_DISPLAY_HIDE = 'Y' THEN 'Y'
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM 
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_hearing hearing, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_ref_hearing_type ref_hearing_type, 
+			xhb_hearing_list hearing_list, 
+			xhb_hearing hearing, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+				LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+				LEFT OUTER JOIN xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
 		AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -432,11 +432,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_jury_status_daily_list_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the court list
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_court_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_court_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -469,21 +469,21 @@ BEGIN
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM 
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE), 
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_hearing hearing, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_ref_hearing_type ref_hearing_type, 
+			xhb_hearing_list hearing_list, 
+			xhb_hearing hearing, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+				LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+				LEFT OUTER JOIN xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID)
+				LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+				LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID), 
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SITTING.IS_FLOATING = '0' 
 		AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
@@ -509,11 +509,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_court_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_court_list ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the all court status
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_court_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_court_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT cs.court_site_name
@@ -533,10 +533,10 @@ BEGIN
 			  ,v.reporting_restrictions
 			  ,v.hide_in_public_display
 		FROM 
-			PUBLIC.xhb_court_site cs, 
-			PUBLIC.xhb_court_room cr, 
+			xhb_court_site cs, 
+			xhb_court_room cr, 
 			UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE)
-				LEFT OUTER JOIN PUBLIC.xhb_cr_live_display crls ON (TMP_COURT_ROOM.COLUMN_VALUE = crls.court_room_id)
+				LEFT OUTER JOIN xhb_cr_live_display crls ON (TMP_COURT_ROOM.COLUMN_VALUE = crls.court_room_id)
 				LEFT OUTER JOIN (
 					SELECT 
 						d.defendant_id AS defendant_id,
@@ -553,15 +553,15 @@ BEGIN
 							when d.public_display_hide = 'Y' then 'Y'
 							else null end) hide_in_public_display
 					FROM 
-						PUBLIC.xhb_sitting s, 
-						PUBLIC.xhb_hearing_list hl, 
-						PUBLIC.xhb_hearing h, 
-						PUBLIC.xhb_scheduled_hearing sh
-							LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant shd ON (sh.scheduled_hearing_id = shd.scheduled_hearing_id)
-							LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case doc ON (shd.defendant_on_case_id = doc.defendant_on_case_id)
-							LEFT OUTER JOIN PUBLIC.xhb_defendant d ON (doc.defendant_id = d.defendant_id),
-						(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') c
-							LEFT OUTER JOIN PUBLIC.xhb_case_reference cr ON (c.case_id = cr.case_id)
+						xhb_sitting s, 
+						xhb_hearing_list hl, 
+						xhb_hearing h, 
+						xhb_scheduled_hearing sh
+							LEFT OUTER JOIN xhb_sched_hearing_defendant shd ON (sh.scheduled_hearing_id = shd.scheduled_hearing_id)
+							LEFT OUTER JOIN xhb_defendant_on_case doc ON (shd.defendant_on_case_id = doc.defendant_on_case_id)
+							LEFT OUTER JOIN xhb_defendant d ON (doc.defendant_id = d.defendant_id),
+						(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') c
+							LEFT OUTER JOIN xhb_case_reference cr ON (c.case_id = cr.case_id)
 					WHERE hl.court_id = COURT_ID_IN 
 					AND hl.start_date = START_DATE_IN 
 					AND hl.list_id = s.list_id 
@@ -581,12 +581,12 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_court_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_court_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 -- TEST FROM HERE!!!!!!!!!!!!!!!!!!!
 
 -- This stored procedure is used to get the COURT DETAIL
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_court_detail ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_court_detail ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT
@@ -613,20 +613,20 @@ BEGIN
 			  WHEN DEFENDANT.PUBLIC_DISPLAY_HIDE = 'Y' THEN 'Y'
 			  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 		FROM 
-			PUBLIC.xhb_sitting sitting, 
-			PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-			PUBLIC.xhb_hearing_list hearing_list, 
-			PUBLIC.xhb_hearing hearing, 
-			PUBLIC.xhb_court_site court_site, 
-			PUBLIC.xhb_court_room court_room, 
-			PUBLIC.xhb_scheduled_hearing scheduled_hearing
-				LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_cr_live_display cr_live_display ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = CR_LIVE_DISPLAY.SCHEDULED_HEARING_ID)
-				LEFT OUTER JOIN PUBLIC.xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID), 
-			(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-				LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+			xhb_sitting sitting, 
+			xhb_ref_hearing_type ref_hearing_type, 
+			xhb_hearing_list hearing_list, 
+			xhb_hearing hearing, 
+			xhb_court_site court_site, 
+			xhb_court_room court_room, 
+			xhb_scheduled_hearing scheduled_hearing
+				LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+				LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+				LEFT OUTER JOIN xhb_cr_live_display cr_live_display ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = CR_LIVE_DISPLAY.SCHEDULED_HEARING_ID)
+				LEFT OUTER JOIN xhb_ref_judge ref_judge ON (Xhb_Custom_Pkg.GET_REF_JUDGE_ID(SCHEDULED_HEARING.SCHEDULED_HEARING_ID) = REF_JUDGE.REF_JUDGE_ID), 
+			(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+				LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 		WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 		AND SITTING.COURT_ROOM_ID = COURT_ROOM.COURT_ROOM_ID 
 		AND COURT_ROOM.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
@@ -644,11 +644,11 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_court_detail ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_court_detail ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE) FROM PUBLIC;
 
 
 -- This stored procedure is used to get the public notices for a court room
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_public_notices ( RESULTS_OUT INOUT REFCURSOR, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_public_notices ( RESULTS_OUT INOUT REFCURSOR, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT 
@@ -656,9 +656,9 @@ BEGIN
 			CONFIGURED_PUBLIC_NOTICE.IS_ACTIVE AS IS_ACTIVE,
 			DEFINITIVE_PUBLIC_NOTICE.PRIORITY AS PRIORITY
 		FROM 
-			PUBLIC.XHB_PUBLIC_NOTICE PUBLIC_NOTICE,
-			PUBLIC.XHB_CONFIGURED_PUBLIC_NOTICE CONFIGURED_PUBLIC_NOTICE,
-			PUBLIC.XHB_DEFINITIVE_PUBLIC_NOTICE DEFINITIVE_PUBLIC_NOTICE
+			XHB_PUBLIC_NOTICE PUBLIC_NOTICE,
+			XHB_CONFIGURED_PUBLIC_NOTICE CONFIGURED_PUBLIC_NOTICE,
+			XHB_DEFINITIVE_PUBLIC_NOTICE DEFINITIVE_PUBLIC_NOTICE
 		WHERE PUBLIC_NOTICE.PUBLIC_NOTICE_ID = CONFIGURED_PUBLIC_NOTICE.PUBLIC_NOTICE_ID
 		AND DEFINITIVE_PUBLIC_NOTICE.DEFINITIVE_PN_ID = PUBLIC_NOTICE.DEFINITIVE_PN_ID
 		AND CONFIGURED_PUBLIC_NOTICE.IS_ACTIVE = '1'
@@ -669,16 +669,16 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_public_notices ( RESULTS_OUT INOUT REFCURSOR, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_public_notices ( RESULTS_OUT INOUT REFCURSOR, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE) FROM PUBLIC;
 
 
 -- This stored procedure is to get all active cases in a court room except for the
 -- one passed in. Used to identify active cases to turn off
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_active_cases_in_room ( RESULTS_OUT INOUT REFCURSOR, LIST_ID_IN PUBLIC.xhb_hearing_list.LIST_ID%TYPE, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE, SCHEDULED_HEARING_ID_IN PUBLIC.xhb_scheduled_hearing.SCHEDULED_HEARING_ID%TYPE) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_active_cases_in_room ( RESULTS_OUT INOUT REFCURSOR, LIST_ID_IN xhb_hearing_list.LIST_ID%TYPE, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE, SCHEDULED_HEARING_ID_IN xhb_scheduled_hearing.SCHEDULED_HEARING_ID%TYPE) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT  SH.SCHEDULED_HEARING_ID AS SCHEDULED_HEARING_ID
-		FROM    PUBLIC.xhb_scheduled_hearing SH, PUBLIC.xhb_sitting S
+		FROM    xhb_scheduled_hearing SH, xhb_sitting S
 		WHERE   SH.IS_CASE_ACTIVE='Y'
 		AND S.SITTING_ID = SH.SITTING_ID
 		AND S.LIST_ID = LIST_ID_IN
@@ -689,10 +689,10 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_active_cases_in_room ( RESULTS_OUT INOUT REFCURSOR, LIST_ID_IN PUBLIC.xhb_hearing_list.LIST_ID%TYPE, COURT_ROOM_ID_IN PUBLIC.xhb_court_room.COURT_ROOM_ID%TYPE, SCHEDULED_HEARING_ID_IN PUBLIC.xhb_scheduled_hearing.SCHEDULED_HEARING_ID%TYPE) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_active_cases_in_room ( RESULTS_OUT INOUT REFCURSOR, LIST_ID_IN xhb_hearing_list.LIST_ID%TYPE, COURT_ROOM_ID_IN xhb_court_room.COURT_ROOM_ID%TYPE, SCHEDULED_HEARING_ID_IN xhb_scheduled_hearing.SCHEDULED_HEARING_ID%TYPE) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_case_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_case_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT main_query.*,
@@ -735,20 +735,20 @@ BEGIN
 					ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 			FROM 
 				UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE), 
-				PUBLIC.xhb_sitting sitting, 
-				PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-				PUBLIC.xhb_hearing_list hearing_list, 
-				PUBLIC.xhb_hearing hearing, 
-				PUBLIC.xhb_court_site court_site, 
-				PUBLIC.xhb_court_room court_room, 
-				PUBLIC.xhb_scheduled_hearing scheduled_hearing
-					LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
-				(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-					LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+				xhb_sitting sitting, 
+				xhb_ref_hearing_type ref_hearing_type, 
+				xhb_hearing_list hearing_list, 
+				xhb_hearing hearing, 
+				xhb_court_site court_site, 
+				xhb_court_room court_room, 
+				xhb_scheduled_hearing scheduled_hearing
+					LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+					LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+					LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+					LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+					LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
+				(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+					LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 			WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 			AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
 			AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -761,8 +761,8 @@ BEGIN
 			AND SITTING.COURT_ROOM_ID = TMP_COURT_ROOM.COLUMN_VALUE 
 			AND SITTING.COURT_ROOM_ID = COURT_ROOM.COURT_ROOM_ID    --MOVED SITE
 			AND SITTING.IS_FLOATING = '0') main_query 
-				LEFT OUTER JOIN PUBLIC.xhb_court_log_entry court_log_entry ON (xhb_public_display_pkg.get_log_entry_rowid(main_query.scheduled_hearing_id, main_query.defendant_on_case_id) = COURT_LOG_ENTRY.entry_id)
-				LEFT OUTER JOIN PUBLIC.xhb_court_log_event_desc court_log_event_desc ON (COURT_LOG_ENTRY.EVENT_DESC_ID = COURT_LOG_EVENT_DESC.EVENT_DESC_ID) 
+				LEFT OUTER JOIN xhb_court_log_entry court_log_entry ON (xhb_public_display_pkg.get_log_entry_rowid(main_query.scheduled_hearing_id, main_query.defendant_on_case_id) = COURT_LOG_ENTRY.entry_id)
+				LEFT OUTER JOIN xhb_court_log_event_desc court_log_event_desc ON (COURT_LOG_ENTRY.EVENT_DESC_ID = COURT_LOG_EVENT_DESC.EVENT_DESC_ID) 
 		ORDER BY COURT_SITE_CODE,
 			IS_FLOATING,
 			CREST_COURT_ROOM_NO,
@@ -775,10 +775,10 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_case_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_case_status ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_case_status_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_all_case_status_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 		SELECT main_query.*,
@@ -821,20 +821,20 @@ BEGIN
 				  ELSE NULL END) HIDE_IN_PUBLIC_DISPLAY
 			FROM 
 				UNNEST(xhb_public_display_pkg.convert_string(COURT_ROOM_IDS_IN)) tmp_court_room(COLUMN_VALUE), 
-				PUBLIC.xhb_sitting sitting, 
-				PUBLIC.xhb_ref_hearing_type ref_hearing_type, 
-				PUBLIC.xhb_hearing_list hearing_list, 
-				PUBLIC.xhb_hearing hearing, 
-				PUBLIC.xhb_court_site court_site, 
-				PUBLIC.xhb_court_room court_room, 
-				PUBLIC.xhb_scheduled_hearing scheduled_hearing 
-					LEFT OUTER JOIN PUBLIC.xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
-					LEFT OUTER JOIN PUBLIC.xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
-				(SELECT * FROM PUBLIC.xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
-					LEFT OUTER JOIN PUBLIC.xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
+				xhb_sitting sitting, 
+				xhb_ref_hearing_type ref_hearing_type, 
+				xhb_hearing_list hearing_list, 
+				xhb_hearing hearing, 
+				xhb_court_site court_site, 
+				xhb_court_room court_room, 
+				xhb_scheduled_hearing scheduled_hearing 
+					LEFT OUTER JOIN xhb_sched_hearing_defendant sched_hearing_defendant ON (SCHEDULED_HEARING.SCHEDULED_HEARING_ID = SCHED_HEARING_DEFENDANT.SCHEDULED_HEARING_ID)
+					LEFT OUTER JOIN xhb_defendant_on_case defendant_on_case ON (SCHED_HEARING_DEFENDANT.DEFENDANT_ON_CASE_ID = DEFENDANT_ON_CASE.DEFENDANT_ON_CASE_ID)
+					LEFT OUTER JOIN xhb_defendant defendant ON (DEFENDANT_ON_CASE.DEFENDANT_ID = DEFENDANT.DEFENDANT_ID)
+					LEFT OUTER JOIN xhb_court_room moved_from_court_room ON (SCHEDULED_HEARING.MOVED_FROM_COURT_ROOM_ID = MOVED_FROM_COURT_ROOM.COURT_ROOM_ID)
+					LEFT OUTER JOIN xhb_court_site moved_from_court_site ON (MOVED_FROM_COURT_ROOM.COURT_SITE_ID = MOVED_FROM_COURT_SITE.COURT_SITE_ID),
+				(SELECT * FROM xhb_case WHERE coalesce(PUBLIC_DISPLAY_HIDE,'N') <> 'Y') xhbcase
+					LEFT OUTER JOIN xhb_case_reference case_reference ON (xhbcase.CASE_ID = CASE_REFERENCE.CASE_ID)
 			WHERE HEARING_LIST.LIST_ID = SITTING.LIST_ID 
 			AND SITTING.COURT_SITE_ID = COURT_SITE.COURT_SITE_ID 
 			AND SCHEDULED_HEARING.SITTING_ID = SITTING.SITTING_ID 
@@ -846,8 +846,8 @@ BEGIN
 			AND HEARING_LIST.START_DATE = START_DATE_IN 
 			AND SITTING.COURT_ROOM_ID = TMP_COURT_ROOM.COLUMN_VALUE 
 			AND SITTING.COURT_ROOM_ID = COURT_ROOM.COURT_ROOM_ID) main_query
-				LEFT OUTER JOIN PUBLIC.xhb_court_log_entry court_log_entry ON (xhb_public_display_pkg.get_log_entry_rowid(main_query.scheduled_hearing_id, main_query.defendant_on_case_id) = COURT_LOG_ENTRY.entry_id)
-				LEFT OUTER JOIN PUBLIC.xhb_court_log_event_desc court_log_event_desc ON (COURT_LOG_ENTRY.EVENT_DESC_ID = COURT_LOG_EVENT_DESC.EVENT_DESC_ID) 
+				LEFT OUTER JOIN xhb_court_log_entry court_log_entry ON (xhb_public_display_pkg.get_log_entry_rowid(main_query.scheduled_hearing_id, main_query.defendant_on_case_id) = COURT_LOG_ENTRY.entry_id)
+				LEFT OUTER JOIN xhb_court_log_event_desc court_log_event_desc ON (COURT_LOG_ENTRY.EVENT_DESC_ID = COURT_LOG_EVENT_DESC.EVENT_DESC_ID) 
 		ORDER BY COURT_SITE_CODE,
 			IS_FLOATING,
 			CREST_COURT_ROOM_NO,
@@ -860,10 +860,10 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_case_status_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN PUBLIC.xhb_hearing_list.court_id%TYPE, START_DATE_IN PUBLIC.xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_all_case_status_u ( RESULTS_OUT INOUT REFCURSOR, COURT_ID_IN xhb_hearing_list.court_id%TYPE, START_DATE_IN xhb_hearing_list.start_date%TYPE, COURT_ROOM_IDS_IN text) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_vip_display_docs_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN PUBLIC.xhb_court_site.court_site_id%TYPE) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_vip_display_docs_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN xhb_court_site.court_site_id%TYPE) AS $body$
 BEGIN
 	OPEN RESULTS_OUT FOR
 	SELECT
@@ -872,10 +872,10 @@ BEGIN
 		xdd.LANGUAGE,
 		xdd.country
 	FROM
-		PUBLIC.XHB_DISPLAY_LOCATION xdl,
-		PUBLIC.XHB_DISPLAY xd,
-		PUBLIC.XHB_ROTATION_SET_DD xrsdd,
-		PUBLIC.XHB_DISPLAY_DOCUMENT xdd
+		XHB_DISPLAY_LOCATION xdl,
+		XHB_DISPLAY xd,
+		XHB_ROTATION_SET_DD xrsdd,
+		XHB_DISPLAY_DOCUMENT xdd
 	WHERE xdl.court_site_id = COURT_SITE_ID_IN
 	AND xdl.description_code = 'v_i_p'
 	AND xd.display_location_id = xdl.display_location_id
@@ -888,10 +888,10 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_vip_display_docs_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN PUBLIC.xhb_court_site.court_site_id%TYPE) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_vip_display_docs_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN xhb_court_site.court_site_id%TYPE) FROM PUBLIC;
 
 
-CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_vip_court_rooms_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN PUBLIC.xhb_court_site.court_site_id%TYPE) AS $body$
+CREATE OR REPLACE PROCEDURE xhb_public_display_pkg.get_vip_court_rooms_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN xhb_court_site.court_site_id%TYPE) AS $body$
 BEGIN
     OPEN RESULTS_OUT FOR
         SELECT
@@ -900,11 +900,11 @@ BEGIN
             xcr.display_name,
             xd.show_unassigned_yn
         FROM
-            PUBLIC.XHB_DISPLAY_LOCATION xdl,
-            PUBLIC.XHB_DISPLAY xd,
-            PUBLIC.XHB_DISPLAY_COURT_ROOM xdcr,
-            PUBLIC.xhb_court_room xcr,
-            PUBLIC.xhb_court_site xcs
+            XHB_DISPLAY_LOCATION xdl,
+            XHB_DISPLAY xd,
+            XHB_DISPLAY_COURT_ROOM xdcr,
+            xhb_court_room xcr,
+            xhb_court_site xcs
         WHERE xdl.court_site_id = COURT_SITE_ID_IN
         AND xdl.description_code = 'v_i_p'
         AND xd.display_location_id = xdl.display_location_id
@@ -920,5 +920,5 @@ END;
 $body$
 LANGUAGE PLPGSQL
 ;
--- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_vip_court_rooms_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN PUBLIC.xhb_court_site.court_site_id%TYPE) FROM PUBLIC;
+-- REVOKE ALL ON PROCEDURE xhb_public_display_pkg.get_vip_court_rooms_for_site ( RESULTS_OUT INOUT REFCURSOR, COURT_SITE_ID_IN xhb_court_site.court_site_id%TYPE) FROM PUBLIC;
 -- End of Oracle package 'xhb_public_display_pkg' declaration
