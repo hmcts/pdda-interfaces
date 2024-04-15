@@ -230,13 +230,25 @@ configurations {
   baselineVersion = '000'
   schemas = ['pdda']
   locations = ["database", "database/data", "database/packages"]
+  // change to false to allow flyway clean to be run
+  cleanDisabled = false
+}
+
+// this can be run to clean the DB down allowing from a fresh migration from scratch
+tasks.register('cleanPostgresDatabase', org.flywaydb.gradle.task.FlywayCleanTask) {
+    if (project.hasProperty("dburl")) {
+    url = "jdbc:postgresql://${dburl}"
+    }
 }
 
 tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrateTask) {
-  baselineOnMigrate = true
-  if (project.hasProperty("dburl")) {
+    baselineOnMigrate = true
+    if (project.hasProperty("dburl")) {
     url = "jdbc:postgresql://${dburl}"
-  }
-  println "Flyway jbdc property 'url' (derived from System property 'FLYWAY_URL'?) is: ${url}"
-  println "jdbc:postgresql://${dburl}"
+    }
 }
+
+// set flyway cleanDisabled to true above and uncomment if we require a fresh migration from scratch across all DBs
+migratePostgresDatabase.dependsOn cleanPostgresDatabase
+// processResources.dependsOn updateOpenSpecificationsWithVersion
+// assemble.dependsOn openapiJar
