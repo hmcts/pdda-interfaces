@@ -4,15 +4,18 @@
 \cd data
 \i 'load_ref_data.sql'
 \cd ..
+\cd scripts
 \i 'V1_4__pdda-create-indexes.sql'
 \i 'V1_5__pdda-create-fk-constraints.sql'
 \i 'V1_6__pdda-create-sequences.sql'
 \i 'V1_7__pdda-reset-sequences.sql'
 \i 'V1_8__pdda-create-triggers.sql'
-\cd packages
-\i 'pdda-xhb_custom_pkg.sql'
-\i 'pdda-xhb_public_display_pkg.sql'
 \cd ..
+\cd packages
+\i 'V1_9__pdda-xhb_custom_pkg.sql'
+\i 'V1_10__pdda-xhb_public_display_pkg.sql'
+\cd ..
+\cd scripts
 
 -- Housekeeping package including installation of ORAFCE extention.  Comment out as necessary
 -- COMMENT OUT FOR MACBOOK UNLESS CAN GET ORAFCE INSTALLED ON MACOS
