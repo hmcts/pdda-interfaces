@@ -11,11 +11,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.services.threadpool.ThreadPool;
 import uk.gov.hmcts.framework.services.threadpool.ThreadPoolInactiveException;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,18 +38,21 @@ class EventWorkManagerTest {
 
     @Mock
     private ThreadPool mockThreadPool;
+    
+    @Mock
+    private Logger mockLogger;
 
     @InjectMocks
     private final EventWorkManager classUnderTest = new EventWorkManager(mockEventStore, mockThreadPool);
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Do nothing
+        Mockito.mockStatic(LoggerFactory.class);
     }
 
     @AfterEach
     public void tearDown() throws Exception {
-        // Do nothing
+        Mockito.clearAllCaches();
     }
 
     @Test
@@ -105,6 +111,7 @@ class EventWorkManagerTest {
 
     @Test
     void testWorkerUnavailableException() {
+        Mockito.when(LoggerFactory.getLogger(PublicDisplayRuntimeException.class)).thenReturn(mockLogger);
         Assertions.assertThrows(WorkerUnavailableException.class, () -> {
             try {
                 throw new InterruptedException();

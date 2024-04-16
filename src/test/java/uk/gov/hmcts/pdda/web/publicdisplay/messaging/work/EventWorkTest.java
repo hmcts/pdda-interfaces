@@ -10,6 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.slf4j.Logger;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
@@ -24,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -47,6 +50,9 @@ class EventWorkTest {
 
     @Mock
     private ProcessingInstance mockProcessingInstance;
+    
+    @Mock
+    private Logger mockLogger;
 
     @InjectMocks
     private final EventWork classUnderTest = new EventWork(getDummyPublicDisplayEvent());
@@ -55,6 +61,7 @@ class EventWorkTest {
     public void setUp() throws Exception {
         Mockito.mockStatic(WorkFlowContext.class);
         Mockito.mockStatic(WorkFlowManager.class);
+        ReflectionTestUtils.setField(classUnderTest, "log", mockLogger);
     }
 
     @AfterEach
