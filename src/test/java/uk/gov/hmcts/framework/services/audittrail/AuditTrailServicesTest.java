@@ -1,8 +1,5 @@
 package uk.gov.hmcts.framework.services.audittrail;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
@@ -12,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -57,7 +57,7 @@ class AuditTrailServicesTest {
         EasyMock.expect(mockAuditTrailEvent.getCourtHouseId()).andReturn("courtHouseId");
         EasyMock.expect(mockAuditTrailEvent.getEvtType()).andReturn("eventType");
         EasyMock.expect(mockAuditTrailEvent.isSuccess()).andReturn(true);
-        EasyMock.expect(mockAuditTrailEvent.getCaseId()).andReturn(Integer.valueOf(345678));
+        EasyMock.expect(mockAuditTrailEvent.getCaseId()).andReturn(Integer.valueOf(345_678));
         EasyMock.expect(mockAuditTrailEvent.getEventSpecificData()).andReturn("evtSpecificData");
         EasyMock.replay(mockAuditTrailEvent);
         // Run
