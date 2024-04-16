@@ -250,5 +250,3 @@ tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrate
 
 // set flyway cleanDisabled to true above and uncomment if we require a fresh migration from scratch across all DBs
 migratePostgresDatabase.dependsOn cleanPostgresDatabase
-// processResources.dependsOn updateOpenSpecificationsWithVersion
-// assemble.dependsOn openapiJar
