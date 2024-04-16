@@ -119,14 +119,14 @@ public class LighthousePdda {
         genProps = new GeneralProperties(config.getInt("gen.numThreads"));
     }
 
-    private XhbPddaMessageRepository getXhbPddaMessageRepository() {
+    protected XhbPddaMessageRepository getXhbPddaMessageRepository() {
         if (xhbPddaMessageRepository == null) {
             xhbPddaMessageRepository = new XhbPddaMessageRepository(entityManager);
         }
         return xhbPddaMessageRepository;
     }
 
-    private XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
+    protected XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
         if (xhbCppStagingInboundRepository == null) {
             xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(entityManager);
         }
