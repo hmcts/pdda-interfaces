@@ -149,9 +149,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.1.9'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.9'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.20'
-    implementation 'org.springframework.boot:spring-boot-starter-activemq:3.1.9'
-    implementation 'org.apache.activemq:activemq-broker:5.18.3'
-    implementation 'org.apache.activemq:activemq-kahadb-store:5.18.3'
     implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
     implementation 'org.javassist:javassist:3.21.0-GA'
@@ -175,7 +172,6 @@ dependencies {
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'jakarta.el:jakarta.el-api:5.0.1'
-    implementation 'org.apache.activemq:activemq-spring:5.18.3'
     implementation 'org.apache.tomee:openejb-core:9.1.2', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
@@ -191,7 +187,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.14'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-    implementation 'jakarta.jms:jakarta.jms-api:3.1.0'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.19'
     implementation 'com.squareup.okio:okio:3.7.0'
     implementation 'org.flywaydb:flyway-core:10.9.1'

@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
-import jakarta.annotation.PreDestroy;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,13 +145,5 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
             return new VipCourtRoomsQuery(getEntityManager(), multiSite);
         }
         return vipCourtRoomsQuery;
-    }
-
-    @PreDestroy
-    protected void shutdown() {
-        LOG.debug("shutdown()");
-        if (publicDisplayNotifier != null) {
-            publicDisplayNotifier.close();
-        }
     }
 }

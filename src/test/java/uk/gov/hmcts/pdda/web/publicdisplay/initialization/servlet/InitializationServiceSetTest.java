@@ -1,21 +1,16 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.Topic;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
-import uk.gov.hmcts.pdda.web.publicdisplay.messaging.jms.MessagingMode;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -29,12 +24,6 @@ class InitializationServiceSetTest {
     private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
     private static final Long RETRY = Long.valueOf(1);
 
-    @Mock
-    private ConnectionFactory mockConnectionFactory;
-
-    @Mock
-    private Topic mockTopic;
-
     @InjectMocks
     private final InitializationService classUnderTest = InitializationService.getInstance();
 
@@ -46,18 +35,6 @@ class InitializationServiceSetTest {
     @AfterAll
     public static void tearDown() throws Exception {
         Mockito.clearAllCaches();
-    }
-
-    @Test
-    void testSetNumSubscriptionWorkers() {
-        boolean result = false;
-        try {
-            classUnderTest.setNumSubscriptionWorkers(NO_OF_WORKERS);
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        assertTrue(result, TRUE);
     }
 
     @Test
@@ -94,29 +71,5 @@ class InitializationServiceSetTest {
             fail(exception);
         }
         assertTrue(result, TRUE);
-    }
-
-    @Test
-    void testSetMessagingMode() {
-        boolean result = false;
-        try {
-            classUnderTest.setMessagingMode(MessagingMode.P2P);
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        assertTrue(result, TRUE);
-    }
-
-    @Test
-    void testSetConnectionFactory() {
-        classUnderTest.setConnectionFactory(mockConnectionFactory);
-        assertEquals(mockConnectionFactory, classUnderTest.getConnectionFactory(), EQUALS);
-    }
-
-    @Test
-    void testSetTopic() {
-        classUnderTest.setTopic(mockTopic);
-        assertEquals(mockTopic, classUnderTest.getTopic(), EQUALS);
     }
 }

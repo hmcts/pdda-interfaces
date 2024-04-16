@@ -2,12 +2,6 @@ package uk.gov.hmcts.framework.services;
 
 import jakarta.ejb.EJBHome;
 import jakarta.ejb.EJBLocalHome;
-import jakarta.jms.ConnectionFactory;
-import jakarta.jms.Destination;
-import jakarta.jms.Queue;
-import jakarta.jms.QueueConnectionFactory;
-import jakarta.jms.Topic;
-import jakarta.jms.TopicConnectionFactory;
 import jakarta.transaction.UserTransaction;
 
 import javax.naming.InitialContext;
@@ -83,64 +77,6 @@ public interface ServiceLocator {
      * @throws a CSResourceUnavailableException if the ejb cannot be located
      */
     EJBHome getRemoteHome(Class<?> homeClass);
-
-    /**
-     * Uses the initial context to look up for the QueueConnectionFactory specified.
-     * QueueConnectionFactory is used to create a QueueConnection, e.g. JMSQueueAppender, which is
-     * necessary in order to obtain a QueueSession or to create a message, a QueueSender, or a
-     * QueueReciever.
-     * 
-     * @param bindingName the String to perform the lookup with
-     * @return queueConnectionFactory the QueueConnectionFactory
-     * @throws CSResourceUnavailableException Exception
-     */
-    QueueConnectionFactory getQueueConnectionFactory(String bindingName);
-
-    /**
-     * Uses the initial context to look up for the Queue specified. Queue is used to create a
-     * QueueSender when a QueueConnection is already established.
-     * 
-     * @param bindingName the String to perform the lookup with
-     * @return queue the Queue
-     * @throws CSResourceUnavailableException Exception
-     */
-    Queue getQueue(String bindingName);
-
-    /**
-     * Uses the initial context to look up for the TopicConnectionFactory specified.
-     * 
-     * @param bindingName the String to perform the lookup with
-     * @return topicConnectionFactory the TopicConnectionFactory
-     * @throws CSResourceUnavailableException Exception
-     */
-    TopicConnectionFactory getTopicConnectionFactory(String bindingName);
-
-    /**
-     * Uses the initial context to look up for the Topoc specified.
-     * 
-     * @param bindingName the String to perform the lookup with
-     * @return topic the Topic
-     * @throws CSResourceUnavailableException Exception
-     */
-    Topic getTopic(String bindingName);
-
-    /**
-     * Uses the initial context to look up for the TopicConnectionFactory specified.
-     * 
-     * @param cfBindingName the String to perform the lookup with
-     * @return topicConnectionFactory the TopicConnectionFactory
-     * @throws CSResourceUnavailableException Exception
-     */
-    ConnectionFactory getConnectionFactory(String cfBindingName);
-
-    /**
-     * Uses the initial context to look up for the Topoc specified.
-     * 
-     * @param bindingName the String to perform the lookup with
-     * @return topic the Topic
-     * @throws CSResourceUnavailableException Exception
-     */
-    Destination getDestination(String bindingName);
 
     /**
      * Gets a user transaction.

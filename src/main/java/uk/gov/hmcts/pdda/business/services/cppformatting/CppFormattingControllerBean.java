@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.cppformatting;
 
-import jakarta.annotation.PreDestroy;
 import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -157,14 +156,5 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
             publicDisplayNotifier = new PublicDisplayNotifier();
         }
         return publicDisplayNotifier;
-    }
-
-    @PreDestroy
-    protected void shutdown() {
-        String methodName = "shutdown() - ";
-        LOG.debug(methodName + ENTERED);
-        if (publicDisplayNotifier != null) {
-            publicDisplayNotifier.close();
-        }
     }
 }
