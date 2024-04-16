@@ -27,18 +27,13 @@ import java.util.Properties;
  */
 
 public final class AuditTrailService {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(AuditTrailService.class);
-    
-    private static final String AUDIT_PROVIDER_FILE = "FILE";
 
-    private static final String PROPERTY_AUDIT_PROVIDER = "auditProvider";
+    private static final Logger LOG = LoggerFactory.getLogger(AuditTrailService.class);
+
     private static final String PROPERTY_MESSAGE_FORMAT = "messageFormatString";
-    private static final String FACTORY_CLASS =
-        "uk.gov.hmcts.pdda.business.audittrail.AuditTrailEventFactoryImpl";
+    private static final String FACTORY_CLASS = "uk.gov.hmcts.pdda.business.audittrail.AuditTrailEventFactoryImpl";
 
     private final String messageFormatString;
-    private final String auditProviderString;
 
     private AuditProvider auditProvider;
     private AuditTrailEventFactory auditTrailEventFactory;
@@ -46,13 +41,11 @@ public final class AuditTrailService {
     private static AuditTrailService instance = new AuditTrailService();
 
     /**
-     * Private constructor for this singleton class. Gets and sets properties from the Resource
-     * Bundle.
+     * Private constructor for this singleton class. Gets and sets properties from the Resource Bundle.
      *
      */
     private AuditTrailService() {
         Properties prop = CsServices.getConfigServices().getProperties("audittrail");
-        auditProviderString = prop.getProperty(PROPERTY_AUDIT_PROVIDER);
         messageFormatString = prop.getProperty(PROPERTY_MESSAGE_FORMAT);
     }
 
@@ -87,8 +80,7 @@ public final class AuditTrailService {
         if (auditTrailEventFactory == null) {
             try {
                 // Class is in another package to avoid circular reference so load at runtime
-                auditTrailEventFactory =
-                    (AuditTrailEventFactory) Class.forName(FACTORY_CLASS).newInstance();
+                auditTrailEventFactory = (AuditTrailEventFactory) Class.forName(FACTORY_CLASS).newInstance();
             } catch (Exception ex) {
                 LOG.debug("getAuditTrailEvent({})", ex.getMessage());
                 CsConfigurationException exception = new CsConfigurationException(ex);
@@ -111,12 +103,8 @@ public final class AuditTrailService {
      */
     private AuditProvider getAuditProvider() {
         if (auditProvider == null) {
-            if (AUDIT_PROVIDER_FILE.equals(auditProviderString)) {
-                auditProvider = new FileAuditProvider();
-            } else {
-                // By Default, use FileAuditProvider
-                auditProvider = new FileAuditProvider();
-            }
+            // By Default, use FileAuditProvider
+            auditProvider = new FileAuditProvider();
         }
         return auditProvider;
     }
