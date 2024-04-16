@@ -1,10 +1,5 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.messaging.work;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.slf4j.Logger;
 import org.springframework.test.util.ReflectionTestUtils;
-
 import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
@@ -27,6 +21,12 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.ProcessingInstance;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowManager;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl.DefaultWorkFlowManager;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
