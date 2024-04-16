@@ -1,61 +1,47 @@
 package uk.gov.hmcts.pdda.common.publicdisplay.jms;
 
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
+import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class PublicDisplayNotifierTest {
-    /** This will need modifying now that PDDA no longer uses ActiveMQ, 
-     * remove the PMD.TestClassWithoutTestCases once this has been done. **/
-
-    /*@Mock
-    private TopicConnection mockTopicConnection;
-
+    
     @Mock
-    private TopicSession mockTopicSession;
-
-    @Mock
-    private ActiveMQObjectMessage mockActiveMqObjectMessage;
-
-    @Mock
-    private Topic mockTopic;
-
-    @Mock
-    private TopicPublisher mockTopicPublisher;
-
-    @Mock
-    private InitializationService mockInitializationService;
-
+    private EventStore mockEventStore;
+    
     @InjectMocks
     private final PublicDisplayNotifier classUnderTest = new PublicDisplayNotifier();
 
     @BeforeEach
     public void setup() throws Exception {
-        Mockito.mockStatic(InitializationService.class);
+        ReflectionTestUtils.setField(classUnderTest, "eventStore", mockEventStore);
     }
 
     @AfterEach
     public void teardown() throws Exception {
-        Mockito.clearAllCaches();
+        // Do Nothing
     }
 
     @Test
-    void testSendMessage() throws JMSException {
+    void testSendMessage() {
         // Setup
         PublicDisplayEvent publicDisplayEvent = getDummyPublicDisplayEvent();
-        // Expects
-        Mockito.when(mockTopicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE))
-            .thenReturn(mockTopicSession);
-        Mockito.when(mockTopicSession.createObjectMessage(Mockito.isA(Serializable.class)))
-            .thenReturn(mockActiveMqObjectMessage);
-        Mockito.when(mockActiveMqObjectMessage.getObject()).thenReturn(publicDisplayEvent);
-        Mockito.when(InitializationService.getInstance()).thenReturn(mockInitializationService);
-        Mockito.when(InitializationService.getInstance().getTopic()).thenReturn(mockTopic);
-        Mockito.when(mockTopicSession.createPublisher(mockTopic)).thenReturn(mockTopicPublisher);
         // Run
         classUnderTest.sendMessage(publicDisplayEvent);
         assertNotNull(publicDisplayEvent, "Result is Null");
@@ -71,5 +57,5 @@ class PublicDisplayNotifierTest {
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         return new MoveCaseEvent(from, to, null);
-    }*/
+    }
 }
