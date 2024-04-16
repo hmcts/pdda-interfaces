@@ -116,7 +116,7 @@ class EventWorkManagerTest {
             try {
                 throw new InterruptedException();
             } catch (InterruptedException e) {
-                throw new WorkerUnavailableException(new InterruptedException());
+                throw new WorkerUnavailableException(e);
             }
         });
     }
