@@ -2,11 +2,9 @@
 \i V1_3_102_XHB_DISP_MGR_COURT_SITE_DATA_TABLE.sql
 \i V1_3_103_XHB_DISP_MGR_CDU_DATA_TABLE.sql
 \i V1_3_104__XHB_DISP_MGR_LOCAL_PROXY_DATA_TABLE.sql
-\i V1_3_105__XHB_DISP_MGR_MAPPING_DATA_TABLE.sql
-\i V1_3_101__xhb_disp_mgr_property (property_id, property_name, property_value, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_DISP_MGR_PROPERTY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
-\
-\i V1_3_101__xhb_disp_mgr_url (url_id, description, url, court_site_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_DISP_MGR_URL_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
+\i V1_3_105__XHB_DISP_MGR_URL_DATA_TABLE.sql
+\i V1_3_106__XHB_DISP_MGR_MAPPING_DATA_TABLE.sql
+\i V1_3_107__XHB_DISP_MGR_PROPERTY_DATA_TABLE.sql
 
 \i V1_3_101__xhb_disp_mgr_user_details (user_id, user_name, user_role, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_DISP_MGR_USER_DETAILS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
