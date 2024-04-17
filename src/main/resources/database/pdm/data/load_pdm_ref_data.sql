@@ -1,11 +1,8 @@
 \i V1_3_101__XHB_DISP_MGR_SCHEDULE_DATA_TABLE.sql
 \i V1_3_102_XHB_DISP_MGR_COURT_SITE_DATA_TABLE.sql
 \i V1_3_103_XHB_DISP_MGR_CDU_DATA_TABLE.sql
-
-\i V1_3_103__xhb_disp_mgr_local_proxy (local_proxy_id, ip_address, hostname, rag_status, rag_status_date, court_site_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_DISP_MGR_LOCAL_PROXY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
-\i V1_3_101__xhb_disp_mgr_mapping (url_id, cdu_id, creation_date, created_by) FROM 'XHB_DISP_MGR_MAPPING_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
+\i V1_3_104__XHB_DISP_MGR_LOCAL_PROXY_DATA_TABLE.sql
+\i V1_3_105__XHB_DISP_MGR_MAPPING_DATA_TABLE.sql
 \i V1_3_101__xhb_disp_mgr_property (property_id, property_name, property_value, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_DISP_MGR_PROPERTY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \
