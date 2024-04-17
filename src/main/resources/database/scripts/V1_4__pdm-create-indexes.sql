@@ -26,5 +26,3 @@ CREATE INDEX dm_qz_t_nft_st_misfire_idx ON xhb_dm_qz_triggers (sched_name, misfi
 CREATE INDEX dm_qz_t_n_g_state_idx ON xhb_dm_qz_triggers (sched_name, trigger_group, trigger_state);
 CREATE INDEX dm_qz_t_n_state_idx ON xhb_dm_qz_triggers (sched_name, trigger_name, trigger_group, trigger_state);
 CREATE INDEX dm_qz_t_state_idx ON xhb_dm_qz_triggers (sched_name, trigger_state);
--- This isn't in PDDA? left this in for now
-CREATE INDEX aud_address_idx ON aud_address (address_id, version);

@@ -1,6 +1,5 @@
 \i 'V1_1__pdm-create-tables.sql'
 \i 'V1_2__pdm-create-audit-tables.sql'
-\i 'xhb_court_site_welsh.sql'
 \cd ..
 \cd data
 \i 'load_pdm_ref_data.sql'

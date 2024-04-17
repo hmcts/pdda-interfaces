@@ -1,5 +1,6 @@
 SET client_encoding TO 'UTF8';
 
+DROP TABLE IF EXISTS aud_disp_mgr_url CASCADE;
 CREATE TABLE aud_disp_mgr_url (
 	url_id integer NOT NULL,
 	description varchar(500) NOT NULL,
@@ -14,7 +15,7 @@ CREATE TABLE aud_disp_mgr_url (
 ) ;
 ALTER TABLE aud_disp_mgr_url ADD CONSTRAINT aud_disp_mgr_url_pk PRIMARY KEY (url_id, last_update_date);
 
-
+DROP TABLE IF EXISTS aud_disp_mgr_property CASCADE;
 CREATE TABLE aud_disp_mgr_property (
 	property_id integer NOT NULL,
 	property_name varchar(200) NOT NULL,
@@ -28,8 +29,7 @@ CREATE TABLE aud_disp_mgr_property (
 ) ;
 ALTER TABLE aud_disp_mgr_property ADD CONSTRAINT aud_disp_mgr_property_pk PRIMARY KEY (property_id, last_update_date);
 
-
-
+DROP TABLE IF EXISTS aud_disp_mgr_court_site CASCADE;
 CREATE TABLE aud_disp_mgr_court_site (
 	court_site_id integer NOT NULL,
 	title varchar(255) NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE aud_disp_mgr_court_site (
 ) ;
 ALTER TABLE aud_disp_mgr_court_site ADD CONSTRAINT aud_disp_mgr_court_site_pk PRIMARY KEY (court_site_id, last_update_date);
 
-
+DROP TABLE IF EXISTS aud_disp_mgr_user_details CASCADE;
 CREATE TABLE aud_disp_mgr_user_details (
 	user_id integer NOT NULL,
 	user_name varchar(30) NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE aud_disp_mgr_user_details (
 ) ;
 ALTER TABLE aud_disp_mgr_user_details ADD CONSTRAINT aud_disp_mgr_user_details_pk PRIMARY KEY (user_id, last_update_date);
 
-
+DROP TABLE IF EXISTS aud_disp_mgr_log CASCADE;
 CREATE TABLE aud_disp_mgr_log (
 	log_id integer NOT NULL,
 	court_site_id integer NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE aud_disp_mgr_log (
 ) ;
 ALTER TABLE aud_disp_mgr_log ADD CONSTRAINT aud_disp_mgr_log_pk PRIMARY KEY (log_id, last_update_date);
 
-
+DROP TABLE IF EXISTS aud_disp_mgr_mapping CASCADE;
 CREATE TABLE aud_disp_mgr_mapping (
 	url_id integer NOT NULL,
 	cdu_id integer NOT NULL,
@@ -86,8 +86,7 @@ CREATE TABLE aud_disp_mgr_mapping (
 ) ;
 ALTER TABLE aud_disp_mgr_mapping ADD CONSTRAINT aud_disp_mgr_mapping_pk PRIMARY KEY (url_id, cdu_id);
 
-
-
+DROP TABLE IF EXISTS aud_disp_mgr_cdu CASCADE;
 CREATE TABLE aud_disp_mgr_cdu (
 	cdu_id integer NOT NULL,
 	cdu_number varchar(50) NOT NULL,
@@ -112,7 +111,7 @@ CREATE TABLE aud_disp_mgr_cdu (
 ) ;
 ALTER TABLE aud_disp_mgr_cdu ADD CONSTRAINT aud_disp_mgr_cdu_pk PRIMARY KEY (cdu_id, last_update_date);
 
-
+DROP TABLE IF EXISTS aud_disp_mgr_schedule CASCADE;
 CREATE TABLE aud_disp_mgr_schedule (
 	schedule_id integer NOT NULL,
 	schedule_type varchar(30) NOT NULL,
@@ -127,8 +126,7 @@ CREATE TABLE aud_disp_mgr_schedule (
 ) ;
 ALTER TABLE aud_disp_mgr_schedule ADD CONSTRAINT aud_disp_mgr_schedule_pk PRIMARY KEY (schedule_id, last_update_date);
 
-
-
+DROP TABLE IF EXISTS aud_disp_mgr_local_proxy CASCADE;
 CREATE TABLE aud_disp_mgr_local_proxy (
 	local_proxy_id integer NOT NULL,
 	ip_address varchar(100) NOT NULL,

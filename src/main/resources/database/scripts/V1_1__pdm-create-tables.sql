@@ -1,6 +1,6 @@
 SET client_encoding TO 'UTF8';
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_simple_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_simple_triggers (
 	sched_name varchar(120) NOT NULL,
 	trigger_name varchar(200) NOT NULL,
@@ -11,14 +11,14 @@ CREATE TABLE xhb_dm_qz_simple_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_simple_triggers ADD CONSTRAINT xhb_dm_qz_simple_triggers_pk PRIMARY KEY (sched_name,trigger_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_paused_trigger_grps CASCADE;
 CREATE TABLE xhb_dm_qz_paused_trigger_grps (
 	sched_name varchar(120) NOT NULL,
 	trigger_group varchar(200) NOT NULL
 ) ;
 ALTER TABLE xhb_dm_qz_paused_trigger_grps ADD CONSTRAINT xhb_dm_qz_paused_trigger_grps_pk PRIMARY KEY (sched_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_calendars CASCADE;
 CREATE TABLE xhb_dm_qz_calendars (
 	sched_name varchar(120) NOT NULL,
 	calendar_name varchar(200) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE xhb_dm_qz_calendars (
 ) ;
 ALTER TABLE xhb_dm_qz_calendars ADD CONSTRAINT xhb_dm_qz_calendars_pk PRIMARY KEY (sched_name,calendar_name);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_local_proxy CASCADE;
 CREATE TABLE xhb_disp_mgr_local_proxy (
 	local_proxy_id integer NOT NULL,
 	ip_address varchar(100) NOT NULL,
@@ -45,7 +45,7 @@ ALTER TABLE xhb_disp_mgr_local_proxy ADD CONSTRAINT xhb_disp_mgr_local_proxy_pk 
 ALTER TABLE xhb_disp_mgr_local_proxy ADD UNIQUE (ip_address);
 ALTER TABLE xhb_disp_mgr_local_proxy ADD CONSTRAINT dm_local_proxy_rag_status_chk CHECK (rag_status IN ('R','A','G') OR rag_status IS NULL);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_schedule CASCADE;
 CREATE TABLE xhb_disp_mgr_schedule (
 	schedule_id integer NOT NULL,
 	schedule_type varchar(30) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE xhb_disp_mgr_schedule (
 ) ;
 ALTER TABLE xhb_disp_mgr_schedule ADD CONSTRAINT xhb_disp_mgr_schedule_pk PRIMARY KEY (schedule_id);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_log CASCADE;
 CREATE TABLE xhb_disp_mgr_log (
 	log_id integer NOT NULL,
 	court_site_id integer NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE xhb_disp_mgr_log (
 ) ;
 ALTER TABLE xhb_disp_mgr_log ADD CONSTRAINT xhb_disp_mgr_log_pk PRIMARY KEY (log_id);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_cron_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_cron_triggers (
 	sched_name varchar(120) NOT NULL,
 	trigger_name varchar(200) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE xhb_dm_qz_cron_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_cron_triggers ADD CONSTRAINT xhb_dm_qz_cron_triggers_pk PRIMARY KEY (sched_name,trigger_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_fired_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_fired_triggers (
 	sched_name varchar(120) NOT NULL,
 	entry_id varchar(95) NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE xhb_dm_qz_fired_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_fired_triggers ADD CONSTRAINT xhb_dm_qz_fired_triggers_pk PRIMARY KEY (sched_name,entry_id);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_court_site CASCADE;
 CREATE TABLE xhb_disp_mgr_court_site (
 	court_site_id integer NOT NULL,
 	title varchar(255) NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE xhb_disp_mgr_court_site (
 ALTER TABLE xhb_disp_mgr_court_site ADD CONSTRAINT xhb_disp_mgr_court_site_pk PRIMARY KEY (court_site_id);
 ALTER TABLE xhb_disp_mgr_court_site ADD CONSTRAINT dm_court_site_rag_status_chk CHECK (rag_status IN ('R','A','G') OR rag_status IS NULL);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_cdu CASCADE;
 CREATE TABLE xhb_disp_mgr_cdu (
 	cdu_id integer NOT NULL,
 	cdu_number varchar(50) NOT NULL,
@@ -149,7 +149,7 @@ ALTER TABLE xhb_disp_mgr_cdu ADD CONSTRAINT dm_cdu_offline_ind_chk CHECK (offlin
 ALTER TABLE xhb_disp_mgr_cdu ADD CONSTRAINT dm_cdu_rag_status_chk CHECK (rag_status IN ('R','A','G') OR rag_status IS NULL);
 ALTER TABLE xhb_disp_mgr_cdu ADD CONSTRAINT dm_cdu_weighting_chk CHECK (weighting IN (1, 2) AND weighting IS NOT NULL);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_mapping CASCADE;
 CREATE TABLE xhb_disp_mgr_mapping (
 	url_id integer NOT NULL,
 	cdu_id integer NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE xhb_disp_mgr_mapping (
 ) ;
 ALTER TABLE xhb_disp_mgr_mapping ADD CONSTRAINT xhb_disp_mgr_mapping_pk PRIMARY KEY (url_id,cdu_id);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_blob_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_blob_triggers (
 	sched_name varchar(120) NOT NULL,
 	trigger_name varchar(200) NOT NULL,
@@ -167,7 +167,7 @@ CREATE TABLE xhb_dm_qz_blob_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_blob_triggers ADD CONSTRAINT xhb_dm_qz_blob_triggers_pk PRIMARY KEY (sched_name,trigger_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_job_details CASCADE;
 CREATE TABLE xhb_dm_qz_job_details (
 	sched_name varchar(120) NOT NULL,
 	job_name varchar(200) NOT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE xhb_dm_qz_job_details (
 ) ;
 ALTER TABLE xhb_dm_qz_job_details ADD CONSTRAINT xhb_dm_qz_job_details_pk PRIMARY KEY (sched_name,job_name,job_group);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_simprop_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_simprop_triggers (
 	sched_name varchar(120) NOT NULL,
 	trigger_name varchar(200) NOT NULL,
@@ -201,7 +201,7 @@ CREATE TABLE xhb_dm_qz_simprop_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_simprop_triggers ADD CONSTRAINT xhb_dm_qz_simprop_triggers_pk PRIMARY KEY (sched_name,trigger_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_property CASCADE;
 CREATE TABLE xhb_disp_mgr_property (
 	property_id integer NOT NULL,
 	property_name varchar(200) NOT NULL,
@@ -215,7 +215,7 @@ CREATE TABLE xhb_disp_mgr_property (
 ALTER TABLE xhb_disp_mgr_property ADD UNIQUE (property_name);
 ALTER TABLE xhb_disp_mgr_property ADD CONSTRAINT xhb_disp_mgr_property_pk PRIMARY KEY (property_id);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_scheduler_state CASCADE;
 CREATE TABLE xhb_dm_qz_scheduler_state (
 	sched_name varchar(120) NOT NULL,
 	instance_name varchar(200) NOT NULL,
@@ -224,7 +224,7 @@ CREATE TABLE xhb_dm_qz_scheduler_state (
 ) ;
 ALTER TABLE xhb_dm_qz_scheduler_state ADD CONSTRAINT xhb_dm_qz_scheduler_state_pk PRIMARY KEY (sched_name,instance_name);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_service_audit CASCADE;
 CREATE TABLE xhb_disp_mgr_service_audit (
 	service_audit_id integer NOT NULL,
 	from_endpoint varchar(30),
@@ -243,14 +243,14 @@ CREATE TABLE xhb_disp_mgr_service_audit (
 ) ;
 ALTER TABLE xhb_disp_mgr_service_audit ADD CONSTRAINT xhb_disp_mgr_service_audit_pk PRIMARY KEY (service_audit_id);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_locks CASCADE;
 CREATE TABLE xhb_dm_qz_locks (
 	sched_name varchar(120) NOT NULL,
 	lock_name varchar(40) NOT NULL
 ) ;
 ALTER TABLE xhb_dm_qz_locks ADD CONSTRAINT xhb_dm_qz_locks_pk PRIMARY KEY (sched_name,lock_name);
 
-
+DROP TABLE IF EXISTS xhb_dm_qz_triggers CASCADE;
 CREATE TABLE xhb_dm_qz_triggers (
 	sched_name varchar(120) NOT NULL,
 	trigger_name varchar(200) NOT NULL,
@@ -271,7 +271,7 @@ CREATE TABLE xhb_dm_qz_triggers (
 ) ;
 ALTER TABLE xhb_dm_qz_triggers ADD CONSTRAINT xhb_dm_qz_triggers_pk PRIMARY KEY (sched_name,trigger_name,trigger_group);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_user_details CASCADE;
 CREATE TABLE xhb_disp_mgr_user_details (
 	user_id integer NOT NULL,
 	user_name varchar(30) NOT NULL,
@@ -285,7 +285,7 @@ CREATE TABLE xhb_disp_mgr_user_details (
 ALTER TABLE xhb_disp_mgr_user_details ADD CONSTRAINT xhb_disp_mgr_user_details_pk PRIMARY KEY (user_id);
 ALTER TABLE xhb_disp_mgr_user_details ADD UNIQUE (user_name);
 
-
+DROP TABLE IF EXISTS xhb_disp_mgr_url CASCADE;
 CREATE TABLE xhb_disp_mgr_url (
 	url_id integer NOT NULL,
 	description varchar(500) NOT NULL,
@@ -299,6 +299,7 @@ CREATE TABLE xhb_disp_mgr_url (
 ) ;
 ALTER TABLE xhb_disp_mgr_url ADD CONSTRAINT xhb_disp_mgr_url_pk PRIMARY KEY (url_id);
 
+DROP TABLE IF EXISTS xhb_court_site_welsh CASCADE;
 CREATE TABLE xhb_court_site_welsh (
 	court_site_welsh_id integer NOT NULL,
 	court_site_name varchar(255),
