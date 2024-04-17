@@ -1,4 +1,3 @@
-\copy xhb_clob (clob_id, clob_data, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_clob.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_formatting (formatting_id, date_in, format_status, court_id, distribution_type,mime_type,document_type,xml_document_clob_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_formatting.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_xml_document (xml_document_id, xml_document_clob_id, court_id, document_type, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_xml_document.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_cpp_list (cpp_list_id, list_clob_id, court_code, list_type, time_loaded, list_start_date, list_end_date, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_cpp_list.csv'  DELIMITER ',' CSV HEADER
@@ -18,3 +17,4 @@
 
 
 \i XHB_CASE_DATA_TABLE.sql
+\i XHB_CLOB_DATA_TABLE.sql
