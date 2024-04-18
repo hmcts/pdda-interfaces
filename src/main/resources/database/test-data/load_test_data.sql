@@ -1,4 +1,3 @@
-\copy xhb_hearing (hearing_id, case_id, ref_hearing_type_id, court_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_hearing.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_hearing_list (list_id, list_type, start_date, end_date, status, court_id, crest_list_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_hearing_list.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_sitting (sitting_id, list_id, court_site_id, court_room_id, is_floating, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_sitting.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_scheduled_hearing (scheduled_hearing_id, sitting_id, hearing_id, is_case_active, moved_from_court_room_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_scheduled_hearing.csv'  DELIMITER ',' CSV HEADER
@@ -18,3 +17,4 @@
 \i XHB_CPP_STAGING_INBOUND_DATA_TABLE.sql
 \i XHB_CPP_FORMATTING_DATA_TABLE.sql
 \i XHB_REF_HEARING_TYPE_DATA_TABLE.sql
+\i XHB_HEARING_DATA_TABLE.sql
