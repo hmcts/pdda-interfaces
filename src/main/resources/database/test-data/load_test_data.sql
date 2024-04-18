@@ -1,4 +1,3 @@
-\copy xhb_cpp_list (cpp_list_id, list_clob_id, court_code, list_type, time_loaded, list_start_date, list_end_date, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_cpp_list.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_cpp_staging_inbound (cpp_staging_inbound_id, validation_status, document_name, document_type, time_loaded, court_code, clob_id, validation_error_message, acknowledgment_status, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'xhb_cpp_staging_inbound.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_cpp_formatting (cpp_formatting_id, staging_table_id, date_in, format_status, document_type, court_id, xml_document_clob_id, error_message, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_cpp_formatting.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_ref_hearing_type (ref_hearing_type_id, court_id, hearing_type_code, hearing_type_desc, category, seq_no, list_sequence, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_ref_hearing_type.csv'  DELIMITER ',' CSV HEADER
@@ -18,3 +17,4 @@
 \i XHB_CLOB_DATA_TABLE.sql
 \i XHB_FORMATTING_DATA_TABLE.sql
 \i XHB_XML_DOCUMENT_DATA_TABLE.sql
+\i XHB_CPP_LIST_DATA_TABLE.sql
