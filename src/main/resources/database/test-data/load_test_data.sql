@@ -1,4 +1,3 @@
-\copy xhb_defendant (defendant_id, first_name, middle_name, surname, public_display_hide, court_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_defendant.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_defendant_on_case (defendant_on_case_id, defendant_id, case_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_defendant_on_case.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_sched_hearing_defendant (sched_hear_def_id, scheduled_hearing_id, defendant_on_case_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_sched_hearing_defendant.csv'  DELIMITER ',' CSV HEADER
 \copy xhb_court_log_entry (entry_id, case_id, event_desc_id, defendant_on_case_id, scheduled_hearing_id, log_entry_xml, date_time, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'xhb_court_log_entry.csv'  DELIMITER ',' CSV HEADER
@@ -18,3 +17,4 @@
 \i XHB_HEARING_LIST_DATA_TABLE.sql
 \i XHB_SITTING_DATA_TABLE.sql
 \i XHB_SCHEDULED_HEARING_DATA_TABLE.sql
+\i XHB_DEFENDANT_DATA_TABLE.sql
