@@ -25,3 +25,9 @@ CALL xhb_housekeeping_pkg.initiate_run(p_run_type=>'C', p_success_log=>TRUE);
 CALL xhb_housekeeping_pkg.find_all_hk_cases_for_deletion();
 CALL xhb_housekeeping_pkg.process_cpp();
 CALL xhb_housekeeping_pkg.process_judges();
+
+To Insert the test data navigate to the directory:
+/Users/chrisvincent/git/pdda2/pdda_v2/src/main/resources/database/test-data
+
+Then Run:
+\i 'load_test_data.sql'
