@@ -5,5 +5,5 @@ FROM hmctspublic.azurecr.io/base/java:17-distroless
 COPY lib/applicationinsights.json /opt/app/
 COPY build/libs/PDDA-1.0.war /opt/app/
 
-EXPOSE 4550
+EXPOSE 5432
 CMD [ "PDDA-1.0.war" ]

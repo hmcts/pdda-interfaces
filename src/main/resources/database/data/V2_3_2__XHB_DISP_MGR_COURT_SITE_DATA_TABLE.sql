@@ -1,0 +1,12 @@
+insert into xhb_disp_mgr_court_site (COURT_SITE_ID,TITLE,PAGE_URL,SCHEDULE_ID,XHIBIT_COURT_SITE_ID,LAST_UPDATE_DATE,CREATION_DATE,CREATED_BY,LAST_UPDATED_BY,VERSION,RAG_STATUS,RAG_STATUS_DATE,NOTIFICATION) values (
+1,'COURT SITE 1','http://xhibitdisplay/PublicDisplay/FileServlet?',1,1,'26-MAY-22 09:37:31','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+2,'COURT SITE 2','http://xhibitdisplay/PublicDisplay/FileServlet?',1,2,'26-MAY-22 09:37:31','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+3,'COURT SITE 3','http://xhibitdisplay/PublicDisplay/FileServlet?',1,1606,'26-MAY-22 09:37:32','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+4,'COURT SITE 4','http://xhibitdisplay/PublicDisplay/FileServlet?',1,1607,'26-MAY-22 09:37:31','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+5,'COURT SITE 5','http://xhibitdisplay/PublicDisplay/FileServlet?',1,1608,'26-MAY-22 09:37:31','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+6,'COURT SITE 6','http://xhibitdisplay/PublicDisplay/FileServlet?',1,1609,'26-MAY-22 09:37:32','26-MAY-22 08:52:50','XHIBIT','XHIBIT',2,'R',null,''),(
+7,'COURT SITE 7','http://xhibitdisplay/PublicDisplay/FileServlet?',1,584,'26-MAY-22 09:37:31','26-MAY-22 08:52:51','XHIBIT','XHIBIT',2,'R',null,''),(
+8,'COURT SITE 8','http://xhibitdisplay/PublicDisplay/FileServlet?',1,517,'26-MAY-22 09:37:31','26-MAY-22 08:52:51','XHIBIT','XHIBIT',2,'R',null,''),(
+9,'COURT SITE 9','http://xhibitdisplay/PublicDisplay/FileServlet?',1,518,'26-MAY-22 09:37:31','26-MAY-22 08:52:51','XHIBIT','XHIBIT',2,'R',null,''),(
+10,'COURT SITE 10','http://xhibitdisplay/PublicDisplay/FileServlet?',1,103,'26-MAY-22 09:37:31','26-MAY-22 08:52:51','XHIBIT','XHIBIT',2,'R',null,''),(
+11,'COURT SITE 11','http://xhibitdisplay/PublicDisplay/FileServlet?',1,249,'26-MAY-22 09:37:32','26-MAY-22 08:52:51','XHIBIT','XHIBIT',2,'R',null,'');
