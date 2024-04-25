@@ -7363,6 +7363,9 @@ $BODY$
  LANGUAGE 'plpgsql' SECURITY DEFINER;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_display_court_room_bir_tr() FROM PUBLIC;
 
+CREATE TRIGGER xhb_display_court_room_bir_tr
+	BEFORE DELETE ON xhb_display_court_room FOR EACH ROW
+	EXECUTE PROCEDURE trigger_fct_xhb_display_court_room_bir_tr();
 
 DROP TRIGGER IF EXISTS xhb_display_court_room_bur_tr ON xhb_display_court_room CASCADE;
 CREATE OR REPLACE FUNCTION trigger_fct_xhb_display_court_room_bur_tr() RETURNS trigger AS $BODY$
@@ -7442,9 +7445,9 @@ $BODY$
  LANGUAGE 'plpgsql' SECURITY DEFINER;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_display_court_room_bur_tr() FROM PUBLIC;
 
-CREATE TRIGGER xhb_display_court_room_bir_tr
+CREATE TRIGGER xhb_display_court_room_bur_tr
 	BEFORE INSERT ON xhb_display_court_room FOR EACH ROW
-	EXECUTE PROCEDURE trigger_fct_xhb_display_court_room_bir_tr();
+	EXECUTE PROCEDURE trigger_fct_xhb_display_court_room_bur_tr();
 
 DROP TRIGGER IF EXISTS xhb_display_document_bir_tr ON xhb_display_document CASCADE;
 CREATE OR REPLACE FUNCTION trigger_fct_xhb_display_document_bir_tr() RETURNS trigger AS $BODY$
