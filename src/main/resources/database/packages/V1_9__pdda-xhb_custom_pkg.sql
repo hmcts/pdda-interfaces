@@ -20,7 +20,7 @@ BEGIN
 
     SELECT connection_pool_user_name
     INTO STRICT   l_conn_user
-    FROM   xhb_sys_user_information;
+    FROM   pdda.xhb_sys_user_information;
 
     IF (l_conn_user IS NULL) THEN
 		RAISE EXCEPTION 'no_data' USING ERRCODE = '50008';
@@ -61,7 +61,7 @@ DECLARE
 
 	c_audit CURSOR FOR
 	SELECT auditable
-	FROM   xhb_sys_audit
+	FROM   pdda.xhb_sys_audit
 	WHERE  table_to_audit = table_name;
 
 	l_audit varchar(1);
@@ -105,11 +105,11 @@ BEGIN
 
     SELECT ref_judge_id
     INTO STRICT   l_ref_judge_id
-    FROM   XHB_SCHED_HEARING_ATTENDEE
+    FROM   pdda.XHB_SCHED_HEARING_ATTENDEE
     WHERE  attendee_type = 'J'
     AND    scheduled_hearing_id = arg0
     AND    sh_attendee_id = (SELECT MAX(sh_attendee_id)
-                             FROM   XHB_SCHED_HEARING_ATTENDEE
+                             FROM   pdda.XHB_SCHED_HEARING_ATTENDEE
                              WHERE  attendee_type = 'J'
                              AND scheduled_hearing_id = arg0 );
 
@@ -120,8 +120,8 @@ EXCEPTION
 		BEGIN
 			SELECT ref_judge_id
 			INTO STRICT   l_ref_judge_id1
-			FROM   XHB_SITTING, XHB_SCHEDULED_HEARING
-			WHERE  XHB_SITTING.sitting_id = XHB_SCHEDULED_HEARING.sitting_id
+			FROM   pdda.XHB_SITTING xs, pdda.XHB_SCHEDULED_HEARING xsh
+			WHERE  xs.sitting_id = xsh.sitting_id
 			AND    scheduled_hearing_id = arg0;
 
 			RETURN l_ref_judge_id1;
