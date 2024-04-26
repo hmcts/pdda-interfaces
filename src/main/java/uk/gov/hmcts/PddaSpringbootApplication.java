@@ -20,7 +20,9 @@ public class PddaSpringbootApplication extends SpringBootServletInitializer {
     private static final String TRUE = "true";
     
     public static void main(String[] args) {
-        main(TRUE.equalsIgnoreCase(System.getenv("STAGING")), args);
+        String stagingString = System.getenv("STAGING");
+        log.info("STAGING = {}", stagingString);
+        main(TRUE.equalsIgnoreCase(stagingString), args);
     }
     
     public static void main(boolean isStaging, String... args) {
