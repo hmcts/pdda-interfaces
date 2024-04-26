@@ -61,7 +61,7 @@ DECLARE
 
 	c_audit CURSOR FOR
 	SELECT auditable
-	FROM   xhb_sys_audit
+	FROM   pdda.xhb_sys_audit
 	WHERE  table_to_audit = table_name;
 
 	l_audit varchar(1);
