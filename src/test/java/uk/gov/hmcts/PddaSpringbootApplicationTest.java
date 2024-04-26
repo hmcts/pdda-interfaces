@@ -39,9 +39,27 @@ class PddaSpringbootApplicationTest {
     @Mock
     private ConfigurableApplicationContext mockContext;
 
-    // Test added ONLY to cover main() method which does not get covered by application tests.
+
     @Test
-    void testApplication() {
+    void testApplicationNoArgs() {
+        boolean result = testApplication(null);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    @Test
+    void testApplicationStaging() {
+        boolean result = testApplication(true);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    @Test
+    void testApplicationNonStaging() {
+        boolean result = testApplication(false);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    // Test added ONLY to cover main() method which does not get covered by application tests.
+    boolean testApplication(Boolean isStaging) {
         // Setup
         try (MockedStatic<SpringApplication> mockSpringApplication = Mockito.mockStatic(SpringApplication.class)) {
             mockSpringApplication
@@ -49,10 +67,16 @@ class PddaSpringbootApplicationTest {
                     .run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, new String[] {}))
                 .thenReturn(mockContext);
             // Run
-            boolean result = true;
-            PddaSpringbootApplication.main(new String[] {});
-            // Checks
-            assertTrue(result, NOT_TRUE);
+            try {
+                if (isStaging == null) {
+                    PddaSpringbootApplication.main(new String[] {});
+                } else {
+                    PddaSpringbootApplication.main(isStaging, new String[] {});
+                }
+                return true;
+            } catch (Exception exception) {
+                return false;
+            }
         }
     }
 }

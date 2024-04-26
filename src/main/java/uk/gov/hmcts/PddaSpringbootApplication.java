@@ -20,10 +20,14 @@ public class PddaSpringbootApplication extends SpringBootServletInitializer {
     private static final String TRUE = "true";
     
     public static void main(String[] args) {
+        main(TRUE.equalsIgnoreCase(System.getenv("STAGING")), args);
+    }
+    
+    public static void main(boolean isStaging, String... args) {
         log.debug("Starting PDDA Springboot application...");
         final var instance =
             SpringApplication.run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, args);
-        if (TRUE.equalsIgnoreCase(System.getenv("STAGING"))) {
+        if (isStaging) {
             log.info("STAGING found, closing instance");
             instance.close();
         }
