@@ -20,8 +20,12 @@ public class PddaSpringbootApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         log.debug("Starting PDDA Springboot application...");
-        SpringApplication
-            .run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, args);
+        final var instance =
+            SpringApplication.run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, args);
+        if (System.getenv("STAGING") != null) {
+            log.info("STAGING found, closing instance");
+            instance.close();
+        }
     }
 
 }
