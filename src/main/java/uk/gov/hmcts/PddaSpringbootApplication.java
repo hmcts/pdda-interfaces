@@ -17,11 +17,20 @@ import uk.gov.hmcts.config.WebAppInitializer;
 public class PddaSpringbootApplication extends SpringBootServletInitializer {
     /** Logger. */
     private static Logger log = LoggerFactory.getLogger(PddaSpringbootApplication.class);
-
+    private static final String TRUE = "true";
+    
     public static void main(String[] args) {
+        main(TRUE.equalsIgnoreCase(System.getenv("STAGING")), args);
+    }
+    
+    public static void main(boolean isStaging, String... args) {
         log.debug("Starting PDDA Springboot application...");
-        SpringApplication
-            .run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, args);
+        final var instance =
+            SpringApplication.run(new Class[] {PddaSpringbootApplication.class, WebAppInitializer.class}, args);
+        if (isStaging) {
+            log.info("STAGING found, closing instance");
+            instance.close();
+        }
     }
 
 }
