@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,6 +65,15 @@ public class Schedulable {
      * @see FIXED_RATE_DEFAULT
      */
     public static final String FIXED_RATE = "fixedrate";
+    
+    /**
+     * Property that needs setting for determining whether the task is to run once a day or
+     * not.
+     * 
+     * @see java.util.Timer
+     * @see ONCE_A_DAY_DEFAULT
+     */
+    public static final String ONCE_A_DAY = "onceaday";
 
     /**
      * Default value for the fixed rate property.
@@ -70,8 +81,17 @@ public class Schedulable {
      * @see FIXED_RATE
      */
     public static final String FIXED_RATE_DEFAULT = "false";
+    
+    /**
+     * Default value for the once a day property.
+     * 
+     * @see ONCE_A_DAY
+     */
+    public static final String ONCE_A_DAY_DEFAULT = "false";
 
     private boolean fixedRate;
+    
+    private boolean onceADay;
 
     /**
      * Property that needs setting for determining the delay in ms before initial execution of the
@@ -87,6 +107,36 @@ public class Schedulable {
      * @see DELAY
      */
     public static final String DELAY_DEFAULT = "0";
+    
+    /**
+     * Property that needs setting for determining the hour before initial execution of the
+     * task.
+     * 
+     * @see HOUR_DEFAULT
+     */
+    public static final String HOUR = "hour";
+    
+    /**
+     * Default value for the hour property.
+     * 
+     * @see HOUR
+     */
+    public static final String HOUR_DEFAULT = "0";
+    
+    /**
+     * Property that needs setting for determining the minute before initial execution of the
+     * task.
+     * 
+     * @see MINUTE_DEFAULT
+     */
+    public static final String MINUTE = "minute";
+    
+    /**
+     * Default value for the minute property.
+     * 
+     * @see MINUTE
+     */
+    public static final String MINUTE_DEFAULT = "0";
 
     private long timerDelay;
 
@@ -106,6 +156,10 @@ public class Schedulable {
     public static final String PERIOD_DEFAULT = "0";
 
     private long timerPeriod;
+    
+    private int timerHour;
+    
+    private int timerMinute;
 
     /**
      * Property that specifies which strategy class to use in execution of the task.
@@ -114,6 +168,10 @@ public class Schedulable {
      * @see TASK_STRATEGY_DEFAULT
      */
     public static final String TASK_STRATEGY = "strategy";
+    
+    public static final String FAILURE_PARSING_STRING = "Failure parsing ";
+    
+    public static final String PROPERTY_STRING = " Property.";
 
     /**
      * Default value for the strategy class.
@@ -233,12 +291,14 @@ public class Schedulable {
         // No exception to be caught here as anything other than a
         // case insensitive 'true' is interpreted as false.
         fixedRate = Boolean.parseBoolean(props.getProperty(FIXED_RATE, FIXED_RATE_DEFAULT));
+        
+        onceADay = Boolean.parseBoolean(props.getProperty(ONCE_A_DAY, ONCE_A_DAY_DEFAULT));
 
         try {
             timerDelay = Long.parseLong(props.getProperty(DELAY, DELAY_DEFAULT));
         } catch (NumberFormatException nfe) {
             valid = false;
-            log.error("Failure parsing " + name + "." + DELAY + " Property.", nfe);
+            log.error(FAILURE_PARSING_STRING + name + "." + DELAY + PROPERTY_STRING, nfe);
             timerDelay = Long.parseLong(DELAY_DEFAULT);
         }
 
@@ -246,8 +306,24 @@ public class Schedulable {
             timerPeriod = Long.parseLong(props.getProperty(PERIOD, PERIOD_DEFAULT));
         } catch (NumberFormatException nfe) {
             valid = false;
-            log.error("Failure parsing " + name + "." + PERIOD + " Property.", nfe);
+            log.error(FAILURE_PARSING_STRING + name + "." + PERIOD + PROPERTY_STRING, nfe);
             timerDelay = Long.parseLong(PERIOD_DEFAULT);
+        }
+        
+        try {
+            timerHour = Integer.parseInt(props.getProperty(HOUR, HOUR_DEFAULT));
+        } catch (NumberFormatException nfe) {
+            valid = false;
+            log.error(FAILURE_PARSING_STRING + name + "." + HOUR + PROPERTY_STRING, nfe);
+            timerHour = Integer.parseInt(HOUR_DEFAULT);
+        }
+        
+        try {
+            timerMinute = Integer.parseInt(props.getProperty(MINUTE, MINUTE_DEFAULT));
+        } catch (NumberFormatException nfe) {
+            valid = false;
+            log.error(FAILURE_PARSING_STRING + name + "." + MINUTE + PROPERTY_STRING, nfe);
+            timerMinute = Integer.parseInt(MINUTE_DEFAULT);
         }
     }
 
@@ -310,6 +386,30 @@ public class Schedulable {
     
             if (fixedRate) {
                 timer.scheduleAtFixedRate(internalTimerTask, timerDelay, timerPeriod);
+            } else if (onceADay) {
+                Calendar calendar = Calendar.getInstance();
+
+                // Set time of execution
+                calendar.set(Calendar.HOUR, timerHour);
+                calendar.set(Calendar.MINUTE, timerMinute);
+                calendar.set(Calendar.AM_PM, Calendar.AM);
+
+                Long currentTime = new Date().getTime();
+
+                if (calendar.getTime().getTime() < currentTime) {
+                    calendar.add(Calendar.DATE, 1);
+                }
+
+                final long startScheduler = calendar.getTime().getTime() - currentTime;
+
+                // Setting stop scheduler
+                calendar.set(Calendar.HOUR, 12);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.AM_PM, Calendar.AM);
+
+                long stopScheduler = calendar.getTime().getTime() - currentTime;
+
+                timer.scheduleAtFixedRate(internalTimerTask,  startScheduler, stopScheduler);
             } else if (timerPeriod == ZERO) {
                 timer.schedule(internalTimerTask, timerDelay);
             } else {
