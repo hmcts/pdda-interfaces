@@ -179,7 +179,6 @@ public final class DummyPublicDisplayUtil {
         result.setVersion(version);
         rotationSetDdId = result.getPrimaryKey();
         assertNotNull(rotationSetDdId, NOTNULL);
-        result.setXhbRotationSets(result.getXhbRotationSets());
         result.setXhbDisplayDocument(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);

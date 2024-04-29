@@ -13,7 +13,6 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
-import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.io.Serializable;
 
@@ -44,10 +43,6 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
 
     @Column(name = "ORDERING")
     private Integer ordering;
-
-    // Non-columns
-    @jakarta.persistence.Transient
-    private XhbRotationSetsDao xhbRotationSets;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISPLAY_DOCUMENT_ID", nullable = false)
@@ -116,14 +111,6 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
 
     public final void setRotationSetId(Integer rotationSetId) {
         this.rotationSetId = rotationSetId;
-    }
-
-    public XhbRotationSetsDao getXhbRotationSets() {
-        return xhbRotationSets;
-    }
-
-    public final void setXhbRotationSets(XhbRotationSetsDao xhbRotationSets) {
-        this.xhbRotationSets = xhbRotationSets;
     }
 
     public XhbDisplayDocumentDao getXhbDisplayDocument() {

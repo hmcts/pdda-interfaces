@@ -99,7 +99,6 @@ class XhbRotationSetDdRepositoryTest extends AbstractRepositoryTest<XhbRotationS
         result.setVersion(version);
         rotationSetDdId = result.getPrimaryKey();
         assertNotNull(rotationSetDdId, NOTNULL);
-        result.setXhbRotationSets(result.getXhbRotationSets());
         result.setXhbDisplayDocument(getDummyDisplayDocumentDao(result.getDisplayDocumentId()));
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);
