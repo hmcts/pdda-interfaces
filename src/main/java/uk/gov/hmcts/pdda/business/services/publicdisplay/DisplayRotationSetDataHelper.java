@@ -18,6 +18,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeReposito
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentType;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentTypeUtils;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.rotationset.DisplayRotationSetData;
@@ -79,6 +80,8 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * 
      * @param court The entity bean representing the court.
      * @param xhbDisplayrepository xhbDisplayrepository.
+     * @param xhbRotationSetsRepository xhbRotationSetsRepository.
+     * @param xhbRotationSetDdRepository xhbRotationSetDdRepository.
      * @param xhbDisplayDocumentRepository xhbDisplayDocumentRepository.
      * @param xhbDisplayTypeRepository xhbDisplayTypeRepository.
      * @param xhbDisplayLocationRepository xhbDisplayLocationRepository.
@@ -86,11 +89,11 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * @return The full set of public display configuration data for the court.
      */
     public DisplayRotationSetData[] getDataForCourt(XhbCourtDao court, XhbDisplayRepository xhbDisplayrepository,
-        XhbRotationSetDdRepository xhbRotationSetDdRepository,
+        XhbRotationSetsRepository xhbRotationSetsRepository, XhbRotationSetDdRepository xhbRotationSetDdRepository,
         XhbDisplayDocumentRepository xhbDisplayDocumentRepository, XhbDisplayTypeRepository xhbDisplayTypeRepository,
         XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
         // Get all court-associated rotation sets.
-        List<XhbRotationSetsDao> rotationSetsForCourt = court.getXhbRotationSets();
+        List<XhbRotationSetsDao> rotationSetsForCourt = xhbRotationSetsRepository.findByCourtId(court.getCourtId());
         List<DisplayRotationSetData> displayRotationSetDataList = new ArrayList<>();
         if (rotationSetsForCourt != null) {
 

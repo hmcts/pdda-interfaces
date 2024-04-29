@@ -114,8 +114,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         }
 
         return getDisplayRotationSetDataHelper().getDataForCourt(court.get(), getXhbDisplayRepository(),
-            getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
-            getXhbDisplayLocationRepository(), getXhbCourtSiteRepository());
+            getXhbRotationSetsRepository(), getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
+            getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(), getXhbCourtSiteRepository());
     }
 
     /**

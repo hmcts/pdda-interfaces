@@ -170,20 +170,21 @@ class PdConfigurationControllerBeanGetTest {
     @Test
     void testGetCourtConfiguration() {
         // Setup
-        String courtName = "Test Court Name";
-
-        Optional<XhbCourtDao> court = Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
-        court.get().setXhbRotationSets(new ArrayList<>());
-        court.get().getXhbRotationSets().add(DummyPublicDisplayUtil.getXhbRotationSetsDao());
-        court.get().getXhbRotationSets().add(DummyPublicDisplayUtil.getXhbRotationSetsDao());
+        List<XhbRotationSetsDao> xhbRotationSets = new ArrayList<>();
+        xhbRotationSets.add(DummyPublicDisplayUtil.getXhbRotationSetsDao());
+        xhbRotationSets.add(DummyPublicDisplayUtil.getXhbRotationSetsDao());
 
         XhbDisplayDao xhbDisplayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
         xhbDisplayDao.setDisplayId(DISPLAY_ID);
 
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(xhbDisplayDao);
+        String courtName = "Test Court Name";
+        Optional<XhbCourtDao> court = Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.isA(Integer.class)))
+            .thenReturn(xhbRotationSets);
         Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
         Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
