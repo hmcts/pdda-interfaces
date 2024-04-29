@@ -162,7 +162,6 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         result.setVersion(version);
         rotationSetsId = result.getPrimaryKey();
         assertNotNull(rotationSetsId, NOTNULL);
-        result.setXhbRotationSetDds(result.getXhbRotationSetDds());
 
         return new XhbRotationSetsDao(result);
     }

@@ -18,6 +18,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.util.StringUtilities;
@@ -53,6 +54,9 @@ class DisplayLocationDataHelperTest {
 
     @Mock
     private XhbRotationSetsRepository mockXhbRotationSetsRepository;
+
+    @Mock
+    private XhbRotationSetDdRepository mockXhbRotationSetDdRepository;
 
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
@@ -111,13 +115,14 @@ class DisplayLocationDataHelperTest {
             .thenReturn(xhbRotationSetsDaoList);
         Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDaoList);
-        Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class)))
-            .thenReturn("TranslatedText");
+        Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class))).thenReturn("TranslatedText");
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(new ArrayList<>());
         // Run
         boolean result = false;
         try {
             DisplayLocationDataHelper.getRotationSetsDetailForCourt(COURT_ID, mockResourceBundle,
-                mockXhbRotationSetsRepository, mockXhbDisplayRepository);
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -132,14 +137,13 @@ class DisplayLocationDataHelperTest {
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         List<XhbRotationSetDdDao> xhbRotationSetDdDaoList = new ArrayList<>();
         xhbRotationSetDdDaoList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
-        xhbRotationSetsDao.setXhbRotationSetDds(xhbRotationSetDdDaoList);
         xhbRotationSetsDaoList.add(xhbRotationSetsDao);
-        
+
         List<XhbDisplayDao> xhbDisplayDaoList = new ArrayList<>();
         XhbDisplayDao xhbDisplayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
 
         xhbDisplayDaoList.add(xhbDisplayDao);
-        
+
         // Expects
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetsDaoList);
@@ -147,11 +151,13 @@ class DisplayLocationDataHelperTest {
             .thenReturn(xhbDisplayDaoList);
         Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class)))
             .thenThrow(new MissingResourceException(null, null, null));
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(new ArrayList<>());
         // Run
         boolean result = true;
 
         DisplayLocationDataHelper.getRotationSetsDetailForCourt(COURT_ID, mockResourceBundle,
-            mockXhbRotationSetsRepository, mockXhbDisplayRepository);
+            mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository);
 
         assertTrue(result, NOT_TRUE);
     }
@@ -159,22 +165,18 @@ class DisplayLocationDataHelperTest {
     @Test
     void testGetDisplaysForCourtWrapper() {
         Integer courtId = Integer.valueOf(81);
-        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class)))
-            .thenReturn(mockQuery);
-        CourtSitePdComplexValue[] results =
-            DisplayLocationDataHelper.getDisplaysForCourt(courtId, mockEntityManager);
+        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
+        CourtSitePdComplexValue[] results = DisplayLocationDataHelper.getDisplaysForCourt(courtId, mockEntityManager);
         assertNotNull(results, NULL);
     }
 
     @Test
     void testGetRotationSetsDetailForCourtWrapper() {
         Integer courtId = Integer.valueOf(81);
-        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class)))
-            .thenReturn(mockQuery);
+        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
         boolean result = false;
         try {
-            DisplayLocationDataHelper.getRotationSetsDetailForCourt(courtId, Locale.UK,
-                mockEntityManager);
+            DisplayLocationDataHelper.getRotationSetsDetailForCourt(courtId, Locale.UK, mockEntityManager);
             result = true;
         } catch (Exception exception) {
             fail(exception);

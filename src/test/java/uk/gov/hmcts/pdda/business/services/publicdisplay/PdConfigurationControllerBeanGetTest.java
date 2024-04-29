@@ -123,8 +123,8 @@ class PdConfigurationControllerBeanGetTest {
 
     @InjectMocks
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(mockEntityManager,
-        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbDisplayRepository, mockPublicDisplayNotifier,
-        mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository,
+        mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -215,7 +215,6 @@ class PdConfigurationControllerBeanGetTest {
 
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
-        xhbRotationSetsDao.setXhbRotationSetDds(xrsddList);
         xhbRotationSetsDao.setCourtId(COURT_ID);
 
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
@@ -227,6 +226,8 @@ class PdConfigurationControllerBeanGetTest {
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
         Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xrsddList);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedRotationSet(COURT_ID, ROTATION_SET_ID);
@@ -369,7 +370,6 @@ class PdConfigurationControllerBeanGetTest {
         xrsddList.add(xhbRotationSetDdDao2);
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
-        xhbRotationSetsDao.setXhbRotationSetDds(xrsddList);
         xhbRotationSetsDao.setCourtId(COURT_ID);
 
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
@@ -378,6 +378,9 @@ class PdConfigurationControllerBeanGetTest {
         DisplayConfiguration displayConfiguration = new DisplayConfiguration(displayDao.get(), xrs.get(), roomArray);
         displayConfiguration.setCourtRoomDaosWithCourtRoomChanged(displayConfiguration.getCourtRoomDaos());
         displayConfiguration.setRotationSetDao(displayConfiguration.getRotationSetDao());
+        // Expects
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xrsddList);
 
         try {
             Mockito.when(DisplayConfigurationHelper.getDisplayConfiguration(DISPLAY_ID, mockEntityManager))

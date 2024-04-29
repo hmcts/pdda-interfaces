@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayCourtRoomQuery;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayDocumentQuery;
@@ -26,6 +27,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
     private XhbCourtSiteRepository xhbCourtSiteRepository;
     private XhbDisplayRepository xhbDisplayRepository;
     private XhbRotationSetsRepository xhbRotationSetsRepository;
+    private XhbRotationSetDdRepository xhbRotationSetDdRepository;
     private XhbDisplayDocumentRepository xhbDisplayDocumentRepository;
     private DisplayRotationSetDataHelper displayRotationSetDataHelper;
     private VipDisplayDocumentQuery vipDisplayDocumentQuery;
@@ -43,11 +45,13 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
     protected AbstractPdConfigReposControllerBean(EntityManager entityManager, XhbClobRepository xhbClobRepository,
         XhbCourtRepository xhbCourtRepository, XhbConfigPropRepository xhbConfigPropRepository,
         XhbCppFormattingRepository xhbCppFormattingRepository, XhbRotationSetsRepository xhbRotationSetsRepository,
+        XhbRotationSetDdRepository xhbRotationSetDdRepository,
         XhbDisplayRepository xhbDisplayRepository, PublicDisplayNotifier publicDisplayNotifier,
         VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, xhbClobRepository, xhbCourtRepository, xhbConfigPropRepository,
             xhbCppFormattingRepository);
         this.xhbRotationSetsRepository = xhbRotationSetsRepository;
+        this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.publicDisplayNotifier = publicDisplayNotifier;
         this.vipDisplayDocumentQuery = vipDisplayDocumentQuery;
@@ -76,6 +80,18 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
             xhbRotationSetsRepository = new XhbRotationSetsRepository(getEntityManager());
         }
         return xhbRotationSetsRepository;
+    }
+
+    /**
+     * Returns the xhbRotationSetDdRepository object, initialising if currently null.
+     * 
+     * @return XhbRotationSetDdRepository
+     */
+    protected XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
+        if (xhbRotationSetDdRepository == null) {
+            xhbRotationSetDdRepository = new XhbRotationSetDdRepository(getEntityManager());
+        }
+        return xhbRotationSetDdRepository;
     }
 
     /**

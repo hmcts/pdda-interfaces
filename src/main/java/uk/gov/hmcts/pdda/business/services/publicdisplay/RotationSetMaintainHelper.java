@@ -122,8 +122,7 @@ public class RotationSetMaintainHelper {
         boolean hasNotifyChanges = rotationSetLocal.get().setData(rotationSet.getRotationSetsDao());
 
         // Updates or deletes rotation set dds
-        boolean rotationSetDDsUpdated =
-            updateOrDeleteRotationSetDds(rotationSetLocal.get(), rotationSet, xhbRotationSetDdRepository);
+        boolean rotationSetDDsUpdated = updateOrDeleteRotationSetDds(rotationSet, xhbRotationSetDdRepository);
 
         // Add new rotation set dds
         boolean rotationSetDDsAdded = addRotationSetDds(rotationSet, xhbRotationSetDdRepository);
@@ -219,12 +218,12 @@ public class RotationSetMaintainHelper {
         return hasAdded;
     }
 
-    private static boolean updateOrDeleteRotationSetDds(XhbRotationSetsDao rotationSetLocal,
-        RotationSetComplexValue rotationSet, final XhbRotationSetDdRepository repo) {
+    private static boolean updateOrDeleteRotationSetDds(RotationSetComplexValue rotationSet,
+        final XhbRotationSetDdRepository repo) {
         boolean hasUpdatedOrDeleted = false;
 
         // get the local references of existing rotation set DD's
-        List<XhbRotationSetDdDao> tmp = rotationSetLocal.getXhbRotationSetDds();
+        List<XhbRotationSetDdDao> tmp = repo.findByRotationSetId(rotationSet.getRotationSetId());
         XhbRotationSetDdDao[] rotationSetDdLocals = tmp.toArray(new XhbRotationSetDdDao[0]);
 
         // Now iterate through the locals.

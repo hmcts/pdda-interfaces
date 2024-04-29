@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayCourtRoomQuery;
@@ -38,11 +39,12 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
     protected AbstractPdConfigDisplaysControllerBean(EntityManager entityManager, XhbClobRepository xhbClobRepository,
         XhbCourtRepository xhbCourtRepository, XhbConfigPropRepository xhbConfigPropRepository,
         XhbCppFormattingRepository xhbCppFormattingRepository, XhbRotationSetsRepository xhbRotationSetsRepository,
-        XhbDisplayRepository xhbDisplayRepository, PublicDisplayNotifier publicDisplayNotifier,
-        VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
+        XhbRotationSetDdRepository xhbRotationSetDdRepository, XhbDisplayRepository xhbDisplayRepository,
+        PublicDisplayNotifier publicDisplayNotifier, VipDisplayDocumentQuery vipDisplayDocumentQuery,
+        VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, xhbClobRepository, xhbCourtRepository, xhbConfigPropRepository, xhbCppFormattingRepository,
-            xhbRotationSetsRepository, xhbDisplayRepository, publicDisplayNotifier, vipDisplayDocumentQuery,
-            vipDisplayCourtRoomQuery);
+            xhbRotationSetsRepository, xhbRotationSetDdRepository, xhbDisplayRepository, publicDisplayNotifier,
+            vipDisplayDocumentQuery, vipDisplayCourtRoomQuery);
     }
 
     /**

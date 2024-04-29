@@ -93,11 +93,12 @@ class RotationSetMaintainHelperTest {
         XhbRotationSetsDao xhbRotationSetDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         List<XhbRotationSetDdDao> xhbRotationSetDds = new ArrayList<>();
         xhbRotationSetDds.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
-        xhbRotationSetDao.setXhbRotationSetDds(xhbRotationSetDds);
         RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
         // Expects
         Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbRotationSetDao));
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xhbRotationSetDds);
         // Run
         boolean result = false;
         try {

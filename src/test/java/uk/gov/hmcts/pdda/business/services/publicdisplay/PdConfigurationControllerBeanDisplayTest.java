@@ -104,8 +104,8 @@ class PdConfigurationControllerBeanDisplayTest {
 
     @InjectMocks
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(mockEntityManager,
-        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbDisplayRepository, mockPublicDisplayNotifier,
-        mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository,
+        mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -135,7 +135,7 @@ class PdConfigurationControllerBeanDisplayTest {
         }
         assertTrue(result, TRUE);
     }
-    
+
 
     @Test
     void testGetDisplayDocuments() {
@@ -152,7 +152,7 @@ class PdConfigurationControllerBeanDisplayTest {
         // Check results
         assertArrayEquals(dummyList.toArray(), displayDocsArray, EQUALS);
     }
-    
+
     @Test
     void testGetUpdatedDisplay() {
         // Setup
@@ -183,7 +183,6 @@ class PdConfigurationControllerBeanDisplayTest {
         xrsddList.add(xhbRotationSetDdDao2);
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
-        xhbRotationSetsDao.setXhbRotationSetDds(xrsddList);
         xhbRotationSetsDao.setCourtId(COURT_ID);
 
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
@@ -195,6 +194,8 @@ class PdConfigurationControllerBeanDisplayTest {
         Mockito.when(mockXhbDisplayRepository.findById(DISPLAY_ID)).thenReturn(xd);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xrsddList);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedDisplay(COURT_ID, DISPLAY_ID);

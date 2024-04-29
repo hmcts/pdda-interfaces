@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.util.StringUtilities;
@@ -48,8 +49,7 @@ import java.util.ResourceBundle;
 public class DisplayLocationDataHelper {
     private static final String PRE_DISPLAY = "pd.displaydescription.";
 
-    private static final String PUBLICDISPLAYCONFIGURATION =
-        "XHIBITPublicDisplayConfigurationResources";
+    private static final String PUBLICDISPLAYCONFIGURATION = "XHIBITPublicDisplayConfigurationResources";
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayLocationDataHelper.class);
 
@@ -95,29 +95,28 @@ public class DisplayLocationDataHelper {
         LOG.debug("getDisplaysForCourt exitted");
         return results.toArray(new CourtSitePdComplexValue[0]);
     }
-    
+
     private static CourtSitePdComplexValue getCourtSitePdComplexValue() {
         return new CourtSitePdComplexValue();
     }
 
     /**
-     * The Rotation sets, pages within each set and the screens the rotation sets are assigned to
-     * are returned.
+     * The Rotation sets, pages within each set and the screens the rotation sets are assigned to are
+     * returned.
      */
-    public static RotationSetComplexValue[] getRotationSetsDetailForCourt(final Integer courtId,
-        final Locale locale, final EntityManager entityManager) {
-        ResourceBundle rb =
-            ConfigServicesImpl.getInstance().getBundle(PUBLICDISPLAYCONFIGURATION, locale);
-        XhbRotationSetsRepository xhbRotationSetsRepository =
-            new XhbRotationSetsRepository(entityManager);
+    public static RotationSetComplexValue[] getRotationSetsDetailForCourt(final Integer courtId, final Locale locale,
+        final EntityManager entityManager) {
+        ResourceBundle rb = ConfigServicesImpl.getInstance().getBundle(PUBLICDISPLAYCONFIGURATION, locale);
+        XhbRotationSetsRepository xhbRotationSetsRepository = new XhbRotationSetsRepository(entityManager);
+        XhbRotationSetDdRepository xhbRotationSetDdRepository = new XhbRotationSetDdRepository(entityManager);
         XhbDisplayRepository xhbDisplayRepository = new XhbDisplayRepository(entityManager);
-        return getRotationSetsDetailForCourt(courtId, rb, xhbRotationSetsRepository,
+        return getRotationSetsDetailForCourt(courtId, rb, xhbRotationSetsRepository, xhbRotationSetDdRepository,
             xhbDisplayRepository);
     }
 
     public static RotationSetComplexValue[] getRotationSetsDetailForCourt(final Integer courtId,
         final ResourceBundle rb, final XhbRotationSetsRepository xhbRotationSetsRepository,
-        final XhbDisplayRepository xhbDisplayRepository) {
+        final XhbRotationSetDdRepository xhbRotationSetDdRepository, final XhbDisplayRepository xhbDisplayRepository) {
 
         LOG.debug("getRotationSetsDetailForCourt called for courtId {}", courtId);
         List<RotationSetComplexValue> results = new ArrayList<>();
@@ -138,7 +137,7 @@ public class DisplayLocationDataHelper {
             complex.setDisplayDaos(getDisplayAdapters(rb, rotationSetLocal, xhbDisplayRepository));
 
             // Add the rotation set dds for this rotation set
-            addRotationSetDd(complex, rotationSetLocal);
+            addRotationSetDd(complex, xhbRotationSetDdRepository);
 
             // Add the rotation set to the list
             results.add(complex);
@@ -148,19 +147,18 @@ public class DisplayLocationDataHelper {
         // Return the list of rotation sets
         return results.toArray(new RotationSetComplexValue[0]);
     }
-    
+
     private static RotationSetComplexValue getRotationSetComplexValue() {
         return new RotationSetComplexValue();
     }
 
     private static DisplayBasicValueSortAdapter[] getDisplayAdapters(final ResourceBundle rb,
-        final XhbRotationSetsDao rotationSetLocal,
-        final XhbDisplayRepository xhbDisplayRepository) {
+        final XhbRotationSetsDao rotationSetLocal, final XhbDisplayRepository xhbDisplayRepository) {
         LOG.debug("getDisplayAdapters({},{},{})", rb, rotationSetLocal, xhbDisplayRepository);
         // Wrap the XhbDisplays in the sort adapter. getting the display text
         // from the resource bundle.
-        XhbDisplayDao[] displays = xhbDisplayRepository
-            .findByRotationSetId(rotationSetLocal.getRotationSetId()).toArray(new XhbDisplayDao[0]);
+        XhbDisplayDao[] displays =
+            xhbDisplayRepository.findByRotationSetId(rotationSetLocal.getRotationSetId()).toArray(new XhbDisplayDao[0]);
 
         List<DisplayBasicValueSortAdapter> displayAdapterArray = new ArrayList<>();
         for (XhbDisplayDao display : displays) {
@@ -175,8 +173,7 @@ public class DisplayLocationDataHelper {
             }
             displayAdapterArray.add(new DisplayBasicValueSortAdapter(display, displayText));
         }
-        return displayAdapterArray
-            .toArray(new DisplayBasicValueSortAdapter[0]);
+        return displayAdapterArray.toArray(new DisplayBasicValueSortAdapter[0]);
     }
 
     /**
@@ -191,8 +188,7 @@ public class DisplayLocationDataHelper {
         DisplayLocationComplexValue displayLocationComplex;
 
         // get the locations
-        Iterator<XhbDisplayLocationDao> iterLocation =
-            siteLocal.getXhbDisplayLocations().iterator();
+        Iterator<XhbDisplayLocationDao> iterLocation = siteLocal.getXhbDisplayLocations().iterator();
 
         while (iterLocation.hasNext()) {
             // for every location, find the displays and
@@ -202,18 +198,17 @@ public class DisplayLocationDataHelper {
             XhbDisplayLocationDao locationLocal = iterLocation.next();
 
             displayLocationComplex.setDisplayLocationDao(locationLocal);
-            displayLocationComplex
-                .setDisplayDaos(getXhbDisplayDaoArray(locationLocal));
+            displayLocationComplex.setDisplayDaos(getXhbDisplayDaoArray(locationLocal));
 
             sitePdComplex.addDisplayLocationComplexValue(displayLocationComplex);
         }
         LOG.debug("addDisplayLocation exitted");
     }
-    
+
     private static DisplayLocationComplexValue getDisplayLocationComplexValue() {
         return new DisplayLocationComplexValue();
     }
-    
+
     private static XhbDisplayDao[] getXhbDisplayDaoArray(XhbDisplayLocationDao locationLocal) {
         return locationLocal.getXhbDisplays().toArray(new XhbDisplayDao[0]);
     }
@@ -222,30 +217,28 @@ public class DisplayLocationDataHelper {
      * Adds rotation set dd to the rotation set.
      * 
      * @param complex RotationSetComplexValue
-     * @param rotationSetLocal XhbRotationSetsDao
+     * @param xhbRotationSetDdRepository xhbRotationSetDdRepository.
      */
     private static void addRotationSetDd(final RotationSetComplexValue complex,
-        final XhbRotationSetsDao rotationSetLocal) {
+        XhbRotationSetDdRepository xhbRotationSetDdRepository) {
         LOG.debug("addRotationSetDd called");
         RotationSetDdComplexValue ddComplex;
 
         // Get the rotation set dds for the current rotation set
-        Iterator<XhbRotationSetDdDao> rotationSetDdIter =
-            rotationSetLocal.getXhbRotationSetDds().iterator();
+        List<XhbRotationSetDdDao> xhbRotationSetDds =
+            xhbRotationSetDdRepository.findByRotationSetId(complex.getRotationSetId());
 
-        while (rotationSetDdIter.hasNext()) {
+        for (XhbRotationSetDdDao rotationSetDdLocal : xhbRotationSetDds) {
             // for every rotation set DD, get the display document and
             // create a complex VO
-            XhbRotationSetDdDao rotationSetDdLocal = rotationSetDdIter.next();
-            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal,
-                rotationSetDdLocal.getXhbDisplayDocument());
+            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, rotationSetDdLocal.getXhbDisplayDocument());
             complex.addRotationSetDdComplexValue(ddComplex);
         }
         LOG.debug("addRotationSetDd exitted");
     }
-    
+
     private static RotationSetDdComplexValue getRotationSetDdComplexValue(XhbRotationSetDdDao rotationSetDdDao,
         XhbDisplayDocumentDao displayDocumentDao) {
-        return new RotationSetDdComplexValue(rotationSetDdDao,displayDocumentDao);
+        return new RotationSetDdComplexValue(rotationSetDdDao, displayDocumentDao);
     }
 }
