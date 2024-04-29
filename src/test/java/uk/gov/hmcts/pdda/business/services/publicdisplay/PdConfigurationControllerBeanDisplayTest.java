@@ -173,10 +173,7 @@ class PdConfigurationControllerBeanDisplayTest {
         xhbDisplayDocumentDao.setDescriptionCode(DAILYLIST);
 
         XhbRotationSetDdDao xhbRotationSetDdDao1 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao1.setXhbDisplayDocument(xhbDisplayDocumentDao);
-
         XhbRotationSetDdDao xhbRotationSetDdDao2 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao2.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(xhbRotationSetDdDao1);
@@ -196,6 +193,8 @@ class PdConfigurationControllerBeanDisplayTest {
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedDisplay(COURT_ID, DISPLAY_ID);

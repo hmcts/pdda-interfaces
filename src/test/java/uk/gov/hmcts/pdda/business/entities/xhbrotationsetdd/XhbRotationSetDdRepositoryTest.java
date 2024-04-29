@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -99,36 +98,8 @@ class XhbRotationSetDdRepositoryTest extends AbstractRepositoryTest<XhbRotationS
         result.setVersion(version);
         rotationSetDdId = result.getPrimaryKey();
         assertNotNull(rotationSetDdId, NOTNULL);
-        result.setXhbDisplayDocument(getDummyDisplayDocumentDao(result.getDisplayDocumentId()));
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);
-    }
-
-    private XhbDisplayDocumentDao getDummyDisplayDocumentDao(final Integer displayDocumentId) {
-        Integer defaultPageDelay = 10;
-        String descriptionCode = "descriptionCode";
-        String multipleCourtYn = "multipleCourtYn";
-        String country = "country";
-        String language = "language";
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
-
-        XhbDisplayDocumentDao xdd = new XhbDisplayDocumentDao();
-        xdd.setDisplayDocumentId(displayDocumentId);
-        xdd.setDescriptionCode(descriptionCode);
-        xdd.setDefaultPageDelay(defaultPageDelay);
-        xdd.setMultipleCourtYn(multipleCourtYn);
-        xdd.setCountry(country);
-        xdd.setLanguage(language);
-        xdd.setLastUpdateDate(lastUpdateDate);
-        xdd.setCreationDate(creationDate);
-        xdd.setLastUpdatedBy(lastUpdatedBy);
-        xdd.setCreatedBy(createdBy);
-        xdd.setVersion(version);
-        return new XhbDisplayDocumentDao(xdd);
     }
 
 }

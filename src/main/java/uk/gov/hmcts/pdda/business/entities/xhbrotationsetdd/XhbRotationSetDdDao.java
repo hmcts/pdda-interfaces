@@ -3,16 +3,12 @@ package uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 
 import java.io.Serializable;
 
@@ -34,8 +30,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
     @Column(name = "ROTATION_SET_ID")
     private Integer rotationSetId;
 
-    // Not populated and the XhbDisplayDocumentDAO member variable is available instead
-    @jakarta.persistence.Transient
+    @Column(name = "DISPLAY_DOCUMENT_ID")
     private Integer displayDocumentId;
 
     @Column(name = "PAGE_DELAY")
@@ -43,10 +38,6 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
 
     @Column(name = "ORDERING")
     private Integer ordering;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISPLAY_DOCUMENT_ID", nullable = false)
-    private XhbDisplayDocumentDao xhbDisplayDocument;
 
     public XhbRotationSetDdDao() {
         super();
@@ -79,9 +70,6 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
     }
 
     public Integer getDisplayDocumentId() {
-        if (getXhbDisplayDocument() != null) {
-            return getXhbDisplayDocument().getDisplayDocumentId();
-        }
         return displayDocumentId;
     }
 
@@ -111,14 +99,6 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
 
     public final void setRotationSetId(Integer rotationSetId) {
         this.rotationSetId = rotationSetId;
-    }
-
-    public XhbDisplayDocumentDao getXhbDisplayDocument() {
-        return xhbDisplayDocument;
-    }
-
-    public final void setXhbDisplayDocument(XhbDisplayDocumentDao xhbDisplayDocument) {
-        this.xhbDisplayDocument = xhbDisplayDocument;
     }
 
 }

@@ -172,10 +172,7 @@ class PdConfigurationControllerBeanRotationTest {
         xhbDisplayDocumentDao.setDescriptionCode(DAILYLIST);
 
         XhbRotationSetDdDao xhbRotationSetDdDao1 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao1.setXhbDisplayDocument(xhbDisplayDocumentDao);
-
         XhbRotationSetDdDao xhbRotationSetDdDao2 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao2.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(xhbRotationSetDdDao1);
@@ -195,6 +192,8 @@ class PdConfigurationControllerBeanRotationTest {
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(dummyList);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
 
         // Run method
         XhbRotationSetsDao[] rotationSetsArray = classUnderTest.getRotationSetsForCourt(COURT_ID);
@@ -303,11 +302,9 @@ class PdConfigurationControllerBeanRotationTest {
 
         XhbRotationSetDdDao xhbRotationSetDdDao1 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
         xhbRotationSetDdDao1.setRotationSetDdId(rotationSetDdId1);
-        xhbRotationSetDdDao1.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         XhbRotationSetDdDao xhbRotationSetDdDao2 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
         xhbRotationSetDdDao2.setRotationSetDdId(rotationSetDdId2);
-        xhbRotationSetDdDao2.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(xhbRotationSetDdDao1);
@@ -322,6 +319,8 @@ class PdConfigurationControllerBeanRotationTest {
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
         Mockito.atMostOnce();
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
 
         // Run method
         try {
@@ -348,10 +347,7 @@ class PdConfigurationControllerBeanRotationTest {
         xhbDisplayDocumentDao.setDescriptionCode(DAILYLIST);
 
         XhbRotationSetDdDao xhbRotationSetDdDao1 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao1.setXhbDisplayDocument(xhbDisplayDocumentDao);
-
         XhbRotationSetDdDao xhbRotationSetDdDao2 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao2.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(xhbRotationSetDdDao1);
@@ -381,6 +377,8 @@ class PdConfigurationControllerBeanRotationTest {
             .thenReturn(Optional.of(xhbRotationSetsDao));
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
 
         // Run Method
         classUnderTest.createRotationSets(rsComplex);
@@ -409,10 +407,7 @@ class PdConfigurationControllerBeanRotationTest {
         xhbDisplayDocumentDao.setDescriptionCode(DAILYLIST);
 
         XhbRotationSetDdDao xhbRotationSetDdDao1 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao1.setXhbDisplayDocument(xhbDisplayDocumentDao);
-
         XhbRotationSetDdDao xhbRotationSetDdDao2 = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        xhbRotationSetDdDao2.setXhbDisplayDocument(xhbDisplayDocumentDao);
 
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(xhbRotationSetDdDao1);
@@ -435,6 +430,8 @@ class PdConfigurationControllerBeanRotationTest {
             Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class))).thenReturn(rotationSetsDao);
             Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
                 .thenReturn(xrsddList);
+            Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+                .thenReturn(Optional.of(xhbDisplayDocumentDao));
 
             mockXhbRotationSetDdRepository.delete(Optional.of(rsddComplex.getRotationSetDdDao()));
             mockXhbRotationSetsRepository.delete(rotationSetsDao);

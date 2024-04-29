@@ -18,6 +18,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -25,6 +27,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsReposi
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,6 +56,9 @@ class DisplayRotationSetDataHelperTest {
 
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
+
+    @Mock
+    private XhbDisplayDocumentRepository mockXhbDisplayDocumentRepository;
 
     @InjectMocks
     private final DisplayRotationSetDataHelper classUnderTest = new DisplayRotationSetDataHelper();
@@ -89,14 +95,17 @@ class DisplayRotationSetDataHelperTest {
         xhbRotationSetDdDaoList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
         XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
+        XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         // Expects
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetDdDaoList);
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
         // Run
         boolean result = false;
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
-                mockXhbRotationSetDdRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -111,11 +120,15 @@ class DisplayRotationSetDataHelperTest {
         XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         xhbDisplays.add(DummyPublicDisplayUtil.getXhbDisplayDao());
+        XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
+        // Expects
+        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbDisplayDocumentDao));
         // Run
         boolean result = false;
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
-                mockXhbRotationSetDdRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);

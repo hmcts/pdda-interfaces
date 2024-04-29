@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
@@ -26,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -109,14 +111,16 @@ public class DisplayLocationDataHelper {
         ResourceBundle rb = ConfigServicesImpl.getInstance().getBundle(PUBLICDISPLAYCONFIGURATION, locale);
         XhbRotationSetsRepository xhbRotationSetsRepository = new XhbRotationSetsRepository(entityManager);
         XhbRotationSetDdRepository xhbRotationSetDdRepository = new XhbRotationSetDdRepository(entityManager);
+        XhbDisplayDocumentRepository xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(entityManager);
         XhbDisplayRepository xhbDisplayRepository = new XhbDisplayRepository(entityManager);
         return getRotationSetsDetailForCourt(courtId, rb, xhbRotationSetsRepository, xhbRotationSetDdRepository,
-            xhbDisplayRepository);
+            xhbDisplayRepository, xhbDisplayDocumentRepository);
     }
 
     public static RotationSetComplexValue[] getRotationSetsDetailForCourt(final Integer courtId,
         final ResourceBundle rb, final XhbRotationSetsRepository xhbRotationSetsRepository,
-        final XhbRotationSetDdRepository xhbRotationSetDdRepository, final XhbDisplayRepository xhbDisplayRepository) {
+        final XhbRotationSetDdRepository xhbRotationSetDdRepository, final XhbDisplayRepository xhbDisplayRepository,
+        XhbDisplayDocumentRepository xhbDisplayDocumentRepository) {
 
         LOG.debug("getRotationSetsDetailForCourt called for courtId {}", courtId);
         List<RotationSetComplexValue> results = new ArrayList<>();
@@ -137,7 +141,7 @@ public class DisplayLocationDataHelper {
             complex.setDisplayDaos(getDisplayAdapters(rb, rotationSetLocal, xhbDisplayRepository));
 
             // Add the rotation set dds for this rotation set
-            addRotationSetDd(complex, xhbRotationSetDdRepository);
+            addRotationSetDd(complex, xhbRotationSetDdRepository, xhbDisplayDocumentRepository);
 
             // Add the rotation set to the list
             results.add(complex);
@@ -220,7 +224,8 @@ public class DisplayLocationDataHelper {
      * @param xhbRotationSetDdRepository xhbRotationSetDdRepository.
      */
     private static void addRotationSetDd(final RotationSetComplexValue complex,
-        XhbRotationSetDdRepository xhbRotationSetDdRepository) {
+        XhbRotationSetDdRepository xhbRotationSetDdRepository,
+        XhbDisplayDocumentRepository xhbDisplayDocumentRepository) {
         LOG.debug("addRotationSetDd called");
         RotationSetDdComplexValue ddComplex;
 
@@ -231,7 +236,11 @@ public class DisplayLocationDataHelper {
         for (XhbRotationSetDdDao rotationSetDdLocal : xhbRotationSetDds) {
             // for every rotation set DD, get the display document and
             // create a complex VO
-            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, rotationSetDdLocal.getXhbDisplayDocument());
+            Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
+                xhbDisplayDocumentRepository.findById(rotationSetDdLocal.getDisplayDocumentId());
+            XhbDisplayDocumentDao xhbDisplayDocumentDao =
+                xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
+            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);
             complex.addRotationSetDdComplexValue(ddComplex);
         }
         LOG.debug("addRotationSetDd exitted");

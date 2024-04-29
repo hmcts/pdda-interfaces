@@ -109,7 +109,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         }
 
         return getDisplayRotationSetDataHelper().getDataForCourt(court.get(), getXhbDisplayRepository(),
-            getXhbRotationSetDdRepository());
+            getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
     }
 
     /**
@@ -136,7 +136,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository().findByRotationSetId(rotationSetId);
 
             returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(),
-                rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository());
+                rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
         } else {
             returnArray = new DisplayRotationSetData[0];
         }
@@ -168,8 +168,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             Optional<XhbRotationSetsDao> rotationSet =
                 getXhbRotationSetsRepository().findById(Long.valueOf(display.get().getRotationSetId()));
             if (rotationSet.isPresent()) {
-                displayRotationSetData = getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(),
-                    display.get(), rotationSet.get(), getXhbRotationSetDdRepository());
+                displayRotationSetData =
+                    getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(), display.get(),
+                        rotationSet.get(), getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
             }
             if (displayRotationSetData != null) {
                 returnArray = new DisplayRotationSetData[] {displayRotationSetData};
@@ -201,14 +202,17 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         RotationSetComplexValue returnValue = new RotationSetComplexValue();
         returnValue.setRotationSetDao(rotationSetLocal.get());
 
-        List<XhbRotationSetDdDao> rotationSetDdCol =
-            getXhbRotationSetDdRepository().findByRotationSetId(rotationSetId);
+        List<XhbRotationSetDdDao> rotationSetDdCol = getXhbRotationSetDdRepository().findByRotationSetId(rotationSetId);
         List<RotationSetDdComplexValue> results = new ArrayList<>();
         RotationSetDdComplexValue ddComplex;
         Iterator<XhbRotationSetDdDao> rotationSetDdIter = rotationSetDdCol.iterator();
         while (rotationSetDdIter.hasNext()) {
             XhbRotationSetDdDao rotationSetDdLocal = rotationSetDdIter.next();
-            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, rotationSetDdLocal.getXhbDisplayDocument());
+            Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
+                getXhbDisplayDocumentRepository().findById(rotationSetDdLocal.getDisplayDocumentId());
+            XhbDisplayDocumentDao xhbDisplayDocumentDao =
+                xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
+            ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);
             results.add(ddComplex);
         }
         returnValue.setRotationSetDdComplexValues(results.toArray(new RotationSetDdComplexValue[0]));
