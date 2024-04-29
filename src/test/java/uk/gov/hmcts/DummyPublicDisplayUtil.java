@@ -105,8 +105,6 @@ public final class DummyPublicDisplayUtil {
         displayId = result.getPrimaryKey();
         assertNotNull(displayId, NOTNULL);
         result.setDisplayTypeId(result.getDisplayTypeId());
-
-        result.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
         result.setDisplayLocationId(result.getDisplayLocationId());
         return result;
     }

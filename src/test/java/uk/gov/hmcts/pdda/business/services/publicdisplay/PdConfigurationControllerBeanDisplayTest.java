@@ -22,6 +22,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
@@ -86,6 +87,9 @@ class PdConfigurationControllerBeanDisplayTest {
     private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
 
     @Mock
+    private XhbDisplayLocationRepository mockXhbDisplayLocationRepository;
+
+    @Mock
     private ActiveCasesInRoomQuery mockActiveCasesInRoomQuery;
 
     @Mock
@@ -110,7 +114,8 @@ class PdConfigurationControllerBeanDisplayTest {
     private final PdConfigurationControllerBean classUnderTest =
         new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
             mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockPublicDisplayNotifier,
+            mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -169,7 +174,6 @@ class PdConfigurationControllerBeanDisplayTest {
         xhbDisplayDao.setDisplayId(DISPLAY_ID);
         xhbDisplayDao.setRotationSetId(ROTATION_SET_ID);
         xhbDisplayDao.setShowUnassignedYn(YES);
-        xhbDisplayDao.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
         xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
@@ -200,6 +204,10 @@ class PdConfigurationControllerBeanDisplayTest {
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
         Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
+        Mockito.when(mockXhbDisplayLocationRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
+        Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedDisplay(COURT_ID, DISPLAY_ID);

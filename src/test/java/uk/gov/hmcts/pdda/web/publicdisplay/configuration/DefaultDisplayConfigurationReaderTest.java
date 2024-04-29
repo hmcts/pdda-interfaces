@@ -417,7 +417,6 @@ class DefaultDisplayConfigurationReaderTest {
         XhbDisplayDao returnObject = DummyPublicDisplayUtil.getXhbDisplayDao();
         returnObject.setShowUnassignedYn(YES);
         if (setObjects) {
-            returnObject.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
             List<XhbCourtRoomDao> roomList = new ArrayList<>();
             roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
             roomList.add(DummyCourtUtil.getXhbCourtRoomDao());

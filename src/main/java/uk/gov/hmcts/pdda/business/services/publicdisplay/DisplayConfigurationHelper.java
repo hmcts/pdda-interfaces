@@ -8,8 +8,11 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.exceptions.CourtRoomNotFoundException;
@@ -119,7 +122,8 @@ public class DisplayConfigurationHelper {
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
         final PublicDisplayNotifier notifier, final EntityManager entityManager) {
         updateDisplayConfiguration(displayConfiguration, notifier, new XhbDisplayRepository(entityManager),
-            new XhbRotationSetsRepository(entityManager), new XhbCourtRoomRepository(entityManager));
+            new XhbRotationSetsRepository(entityManager), new XhbCourtRoomRepository(entityManager),
+            new XhbDisplayLocationRepository(entityManager), new XhbCourtSiteRepository(entityManager));
     }
 
     /**
@@ -131,7 +135,8 @@ public class DisplayConfigurationHelper {
      */
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
         final PublicDisplayNotifier notifier, XhbDisplayRepository xhbDisplayRepository,
-        XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtRoomRepository xhbCourtRoomRepository) {
+        XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("updateDisplayConfiguration({},{},{},{},{})", displayConfiguration, notifier, xhbDisplayRepository,
             xhbRotationSetsRepository, xhbCourtRoomRepository);
 
@@ -141,6 +146,11 @@ public class DisplayConfigurationHelper {
         if (!displayLocal.isPresent()) {
             throw new DisplayNotFoundException(displayId);
         }
+        Optional<XhbDisplayLocationDao> xhbDisplayLocation =
+            xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
+        Optional<XhbCourtSiteDao> xhbCourtSiteDao =
+            xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
+        Integer courtId = xhbCourtSiteDao.get().getCourtId();
 
         // if the rotation set has been updated write back to DB
         if (displayConfiguration.isRotationSetChanged()) {
@@ -155,7 +165,7 @@ public class DisplayConfigurationHelper {
 
         // if RS or courtrooms have changed send JMS message for displayId
         if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
-            sendNotification(displayId, displayLocal.get(), notifier);
+            sendNotification(displayId, displayLocal.get(), courtId, notifier);
         }
     }
 
@@ -212,13 +222,12 @@ public class DisplayConfigurationHelper {
      * Sends a JMS notification.
      * 
      * @param displayId Dipslay Id
+     * @param courtId court Id.
      * @param displayLocal Display local reference
      */
     private static void sendNotification(final Integer displayId, final XhbDisplayDao displayLocal,
-        PublicDisplayNotifier notifier) {
+        final Integer courtId, PublicDisplayNotifier notifier) {
         LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
-        // find court Id
-        Integer courtId = displayLocal.getXhbDisplayLocation().getXhbCourtSite().getCourtId();
         CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue());
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);

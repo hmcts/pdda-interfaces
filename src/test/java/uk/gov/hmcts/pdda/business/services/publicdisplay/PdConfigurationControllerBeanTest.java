@@ -24,6 +24,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
@@ -116,6 +117,9 @@ class PdConfigurationControllerBeanTest {
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
 
     @Mock
+    private XhbDisplayLocationRepository mockXhbDisplayLocationRepository;
+
+    @Mock
     private VipDisplayDocumentQuery mockVipDisplayDocumentQuery;
 
     @Mock
@@ -134,7 +138,8 @@ class PdConfigurationControllerBeanTest {
     private final PdConfigurationControllerBean classUnderTest =
         new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
             mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockPublicDisplayNotifier,
+            mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -202,7 +207,6 @@ class PdConfigurationControllerBeanTest {
         xhbDisplayDao.setDisplayId(DISPLAY_ID);
         xhbDisplayDao.setRotationSetId(ROTATION_SET_ID);
         xhbDisplayDao.setShowUnassignedYn(YES);
-        xhbDisplayDao.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());

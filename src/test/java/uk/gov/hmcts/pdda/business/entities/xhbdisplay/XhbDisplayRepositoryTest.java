@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -135,23 +134,7 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
         displayId = result.getPrimaryKey();
         assertNotNull(displayId, NOTNULL);
         result.setDisplayTypeId(result.getDisplayTypeId());
-
-        result.setXhbDisplayLocation(getDummyXhbDisplayLocationDao());
         result.setDisplayLocationId(result.getDisplayLocationId());
         return new XhbDisplayDao(result);
-    }
-
-    private XhbDisplayLocationDao getDummyXhbDisplayLocationDao() {
-        Integer displayLocationId = getDummyId();
-        String descriptionCode = "descriptionCode";
-        Integer courtSiteId = Integer.valueOf(-1);
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
-        XhbDisplayLocationDao result = new XhbDisplayLocationDao(displayLocationId, descriptionCode, courtSiteId,
-            lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
-        return new XhbDisplayLocationDao(result);
     }
 }

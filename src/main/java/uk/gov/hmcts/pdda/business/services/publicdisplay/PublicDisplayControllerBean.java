@@ -1,13 +1,16 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
+
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
@@ -34,11 +37,13 @@ public class PublicDisplayControllerBean extends AbstractPdConfigDisplaysControl
         XhbCourtRepository xhbCourtRepository, XhbConfigPropRepository xhbConfigPropRepository,
         XhbCppFormattingRepository xhbCppFormattingRepository, XhbRotationSetsRepository xhbRotationSetsRepository,
         XhbRotationSetDdRepository xhbRotationSetDdRepository, XhbDisplayTypeRepository xhbDisplayTypeRepository,
-        XhbDisplayRepository xhbDisplayRepository, PublicDisplayNotifier publicDisplayNotifier,
+        XhbDisplayRepository xhbDisplayRepository, XhbDisplayLocationRepository xhbDisplayLocationRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository, PublicDisplayNotifier publicDisplayNotifier,
         VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, xhbClobRepository, xhbCourtRepository, xhbConfigPropRepository, xhbCppFormattingRepository,
             xhbRotationSetsRepository, xhbRotationSetDdRepository, xhbDisplayTypeRepository, xhbDisplayRepository,
-            publicDisplayNotifier, vipDisplayDocumentQuery, vipDisplayCourtRoomQuery);
+            xhbDisplayLocationRepository, xhbCourtSiteRepository, publicDisplayNotifier, vipDisplayDocumentQuery,
+            vipDisplayCourtRoomQuery);
     }
 
     /**
