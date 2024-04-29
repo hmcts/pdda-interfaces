@@ -134,7 +134,6 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
         result.setShowUnassignedYn(showUnassignedYN);
         displayId = result.getPrimaryKey();
         assertNotNull(displayId, NOTNULL);
-        result.setXhbRotationSet(result.getXhbRotationSet());
         result.setDisplayTypeId(result.getDisplayTypeId());
 
         result.setXhbDisplayLocation(getDummyXhbDisplayLocationDao());

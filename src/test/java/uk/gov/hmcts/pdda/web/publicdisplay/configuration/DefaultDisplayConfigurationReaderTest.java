@@ -226,17 +226,12 @@ class DefaultDisplayConfigurationReaderTest {
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
 
-        XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
-        Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
-
-        Optional<XhbDisplayDao> displayDao = Optional.of(getDummyDisplayDao(true));
-        displayDao.get().setXhbRotationSet(xrs.get());
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
             DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
+        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         RenderChanges renderChanges = new RenderChanges();
         renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
         renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
@@ -245,6 +240,8 @@ class DefaultDisplayConfigurationReaderTest {
         assertNotNull(renderChanges.toString(), NOTNULL);
 
         int[] courtsForPublicDisplay = {80};
+        Optional<XhbRotationSetsDao> xrs = Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao());
+        Optional<XhbDisplayDao> displayDao = Optional.of(getDummyDisplayDao(true));
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbDisplayRepository.findById(Mockito.isA(Integer.class))).thenReturn(displayDao);

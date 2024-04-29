@@ -79,10 +79,13 @@ class DisplayConfigurationHelperTest {
         XhbDisplayDao displayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
         EasyMock.expect(mockXhbDisplayRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(displayDao));
+        EasyMock.expect(mockXhbRotationSetsRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao()));
         EasyMock.replay(mockXhbDisplayRepository);
+        EasyMock.replay(mockXhbRotationSetsRepository);
         // Run
-        DisplayConfiguration result = classUnderTest.getDisplayConfiguration(0,
-            mockXhbDisplayRepository, mockXhbCourtRepository);
+        DisplayConfiguration result = classUnderTest.getDisplayConfiguration(0, mockXhbDisplayRepository,
+            mockXhbCourtRepository, mockXhbRotationSetsRepository);
         // Checks
         EasyMock.verify(mockXhbDisplayRepository);
         assertNotNull(result, NULL);
@@ -116,13 +119,16 @@ class DisplayConfigurationHelperTest {
             .andReturn(Optional.of(xhbDisplayDao));
         EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbCourtDao));
+        EasyMock.expect(mockXhbRotationSetsRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao()));
 
         EasyMock.replay(mockXhbDisplayRepository);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockXhbRotationSetsRepository);
 
         // Run
-        DisplayConfiguration result = classUnderTest.getDisplayConfiguration(0,
-            mockXhbDisplayRepository, mockXhbCourtRepository);
+        DisplayConfiguration result = classUnderTest.getDisplayConfiguration(0, mockXhbDisplayRepository,
+            mockXhbCourtRepository, mockXhbRotationSetsRepository);
 
         // Checks
         EasyMock.verify(mockXhbDisplayRepository);
@@ -145,8 +151,7 @@ class DisplayConfigurationHelperTest {
         EasyMock.expect(mockXhbDisplayRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbDisplayDao));
         // Going down the isCourtRoomsChanged() route
-        EasyMock.expect(mockXhbDisplayRepository.update(xhbDisplayDao))
-            .andReturn(Optional.of(xhbDisplayDao));
+        EasyMock.expect(mockXhbDisplayRepository.update(xhbDisplayDao)).andReturn(Optional.of(xhbDisplayDao));
         EasyMock.expect(xhbCourtRoomRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
         // Going down the isRotationSetChanged() route
@@ -158,7 +163,7 @@ class DisplayConfigurationHelperTest {
         EasyMock.replay(xhbCourtRoomRepository);
 
         final boolean result = true;
-        
+
         // Run
         classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
             mockXhbDisplayRepository, mockXhbRotationSetsRepository, xhbCourtRoomRepository);
@@ -169,7 +174,7 @@ class DisplayConfigurationHelperTest {
         EasyMock.verify(xhbCourtRoomRepository);
         assertTrue(result, NOT_TRUE);
     }
-    
+
     @Test
     void testUpdateDisplayConfigurationRotationSetRoute() {
         // Setup
@@ -189,7 +194,7 @@ class DisplayConfigurationHelperTest {
 
         EasyMock.replay(mockXhbDisplayRepository);
         EasyMock.replay(mockXhbRotationSetsRepository);
-        
+
         final boolean result = true;
 
         // Run
@@ -207,21 +212,19 @@ class DisplayConfigurationHelperTest {
         Assertions.assertThrows(DisplayNotFoundException.class, () -> {
             // Setup
             XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
-            XhbCourtRoomDao[] roomArray =
-                {DummyCourtUtil.getXhbCourtRoomDao(), DummyCourtUtil.getXhbCourtRoomDao()};
+            XhbCourtRoomDao[] roomArray = {DummyCourtUtil.getXhbCourtRoomDao(), DummyCourtUtil.getXhbCourtRoomDao()};
             XhbDisplayDao xhbDisplayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
 
             DisplayConfiguration displayConfiguration =
                 new DisplayConfiguration(xhbDisplayDao, xhbRotationSetsDao, roomArray);
 
-            EasyMock.expect(mockXhbDisplayRepository.findById(EasyMock.isA(Integer.class)))
-                .andReturn(Optional.empty());
+            EasyMock.expect(mockXhbDisplayRepository.findById(EasyMock.isA(Integer.class))).andReturn(Optional.empty());
 
             EasyMock.replay(mockXhbDisplayRepository);
 
             // Run
-            classUnderTest.updateDisplayConfiguration(displayConfiguration,
-                mockPublicDisplayNotifier, mockEntityManager);
+            classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
+                mockEntityManager);
         });
     }
 
@@ -248,9 +251,8 @@ class DisplayConfigurationHelperTest {
             EasyMock.replay(mockXhbRotationSetsRepository);
 
             // Run
-            classUnderTest.updateDisplayConfiguration(displayConfiguration,
-                mockPublicDisplayNotifier, mockXhbDisplayRepository, mockXhbRotationSetsRepository,
-                xhbCourtRoomRepository);
+            classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
+                mockXhbDisplayRepository, mockXhbRotationSetsRepository, xhbCourtRoomRepository);
         });
     }
 
@@ -269,18 +271,15 @@ class DisplayConfigurationHelperTest {
             EasyMock.expect(mockXhbDisplayRepository.findById(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(xhbDisplayDao));
             // Going down the isCourtRoomsChanged() route
-            EasyMock.expect(mockXhbDisplayRepository.update(xhbDisplayDao))
-                .andReturn(Optional.of(xhbDisplayDao));
-            EasyMock.expect(xhbCourtRoomRepository.findById(EasyMock.isA(Integer.class)))
-                .andReturn(Optional.empty());
+            EasyMock.expect(mockXhbDisplayRepository.update(xhbDisplayDao)).andReturn(Optional.of(xhbDisplayDao));
+            EasyMock.expect(xhbCourtRoomRepository.findById(EasyMock.isA(Integer.class))).andReturn(Optional.empty());
             // Going down the isRotationSetChanged() route
             EasyMock.replay(mockXhbDisplayRepository);
             EasyMock.replay(xhbCourtRoomRepository);
 
             // Run
-            classUnderTest.updateDisplayConfiguration(displayConfiguration,
-                mockPublicDisplayNotifier, mockXhbDisplayRepository, mockXhbRotationSetsRepository,
-                xhbCourtRoomRepository);
+            classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
+                mockXhbDisplayRepository, mockXhbRotationSetsRepository, xhbCourtRoomRepository);
         });
     }
 }

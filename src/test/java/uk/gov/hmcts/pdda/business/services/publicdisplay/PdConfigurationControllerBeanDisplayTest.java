@@ -188,7 +188,6 @@ class PdConfigurationControllerBeanDisplayTest {
 
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
-        xd.get().setXhbRotationSet(xrs.get());
         String courtName = "Test Court Name";
         Optional<XhbCourtDao> court = Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 

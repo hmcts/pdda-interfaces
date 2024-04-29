@@ -104,7 +104,6 @@ public final class DummyPublicDisplayUtil {
         result.setShowUnassignedYn(showUnassignedYN);
         displayId = result.getPrimaryKey();
         assertNotNull(displayId, NOTNULL);
-        result.setXhbRotationSet(result.getXhbRotationSet());
         result.setDisplayTypeId(result.getDisplayTypeId());
 
         result.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());

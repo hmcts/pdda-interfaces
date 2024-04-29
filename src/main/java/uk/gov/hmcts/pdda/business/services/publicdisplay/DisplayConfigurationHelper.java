@@ -58,18 +58,20 @@ public class DisplayConfigurationHelper {
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
         final EntityManager entityManager) {
         return getDisplayConfiguration(displayId, new XhbDisplayRepository(entityManager),
-            new XhbCourtRepository(entityManager));
+            new XhbCourtRepository(entityManager), new XhbRotationSetsRepository(entityManager));
     }
 
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
-        XhbDisplayRepository xhbDisplayRepository, XhbCourtRepository xhbCourtRepository) {
-        LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository,
-            xhbCourtRepository);
+        XhbDisplayRepository xhbDisplayRepository, XhbCourtRepository xhbCourtRepository,
+        XhbRotationSetsRepository xhbRotationSetsRepository) {
+        LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository, xhbCourtRepository);
         Optional<XhbDisplayDao> display = xhbDisplayRepository.findById(displayId);
         if (!display.isPresent()) {
             throw new DisplayNotFoundException(displayId);
         }
-        return new DisplayConfiguration(display.get(), display.get().getXhbRotationSet(),
+        Optional<XhbRotationSetsDao> xhbRotationSet =
+            xhbRotationSetsRepository.findById(display.get().getRotationSetId());
+        return new DisplayConfiguration(display.get(), xhbRotationSet.get(),
             getDisplayCourtRooms(display.get(), xhbCourtRepository));
     }
 
@@ -100,16 +102,14 @@ public class DisplayConfigurationHelper {
         while (iter.hasNext()) {
             XhbCourtRoomDao courtRoom = (XhbCourtRoomDao) iter.next();
             XhbCourtSiteDao thisSite = courtRoom.getXhbCourtSite();
-            courtRoom.setMultiSiteDisplayName(
-                thisSite.getShortName() + "-" + courtRoom.getDisplayName());
+            courtRoom.setMultiSiteDisplayName(thisSite.getShortName() + "-" + courtRoom.getDisplayName());
             returnValues[recNo] = courtRoom;
             recNo++;
         }
         return returnValues;
     }
 
-    private static boolean isCourtMultiSite(final Integer courtId,
-        XhbCourtRepository xhbCourtRepository) {
+    private static boolean isCourtMultiSite(final Integer courtId, XhbCourtRepository xhbCourtRepository) {
         LOG.debug("isCourtMultiSite({},{})", courtId, xhbCourtRepository);
         Optional<XhbCourtDao> dao = xhbCourtRepository.findById(courtId);
         return dao.isPresent() && dao.get().getXhbCourtSites().size() > 1;
@@ -118,9 +118,8 @@ public class DisplayConfigurationHelper {
     // This one is called dynamically
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
         final PublicDisplayNotifier notifier, final EntityManager entityManager) {
-        updateDisplayConfiguration(displayConfiguration, notifier,
-            new XhbDisplayRepository(entityManager), new XhbRotationSetsRepository(entityManager),
-            new XhbCourtRoomRepository(entityManager));
+        updateDisplayConfiguration(displayConfiguration, notifier, new XhbDisplayRepository(entityManager),
+            new XhbRotationSetsRepository(entityManager), new XhbCourtRoomRepository(entityManager));
     }
 
     /**
@@ -132,10 +131,9 @@ public class DisplayConfigurationHelper {
      */
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
         final PublicDisplayNotifier notifier, XhbDisplayRepository xhbDisplayRepository,
-        XhbRotationSetsRepository xhbRotationSetsRepository,
-        XhbCourtRoomRepository xhbCourtRoomRepository) {
-        LOG.debug("updateDisplayConfiguration({},{},{},{},{})", displayConfiguration, notifier,
-            xhbDisplayRepository, xhbRotationSetsRepository, xhbCourtRoomRepository);
+        XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtRoomRepository xhbCourtRoomRepository) {
+        LOG.debug("updateDisplayConfiguration({},{},{},{},{})", displayConfiguration, notifier, xhbDisplayRepository,
+            xhbRotationSetsRepository, xhbCourtRoomRepository);
 
         // Lookup the display local reference
         Integer displayId = displayConfiguration.getDisplayId();
@@ -156,8 +154,7 @@ public class DisplayConfigurationHelper {
         }
 
         // if RS or courtrooms have changed send JMS message for displayId
-        if (displayConfiguration.isCourtRoomsChanged()
-            || displayConfiguration.isRotationSetChanged()) {
+        if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
             sendNotification(displayId, displayLocal.get(), notifier);
         }
     }
@@ -168,19 +165,17 @@ public class DisplayConfigurationHelper {
      * @param displayConfiguration Display configuration
      * @param displayLocal Display local reference
      */
-    private static void setCourtRooms(final DisplayConfiguration displayConfiguration,
-        final XhbDisplayDao displayLocal, XhbCourtRoomRepository xhbCourtRoomRepository) {
-        LOG.debug("setCourtRooms({},{},{})", displayConfiguration, displayLocal,
-            xhbCourtRoomRepository);
+    private static void setCourtRooms(final DisplayConfiguration displayConfiguration, final XhbDisplayDao displayLocal,
+        XhbCourtRoomRepository xhbCourtRoomRepository) {
+        LOG.debug("setCourtRooms({},{},{})", displayConfiguration, displayLocal, xhbCourtRoomRepository);
         /**
-         * if the courts have been changed: Delete the current ones and create with ones passed in.
-         * Note: we are not doing optimistic lock checking because this cross reference table will
-         * not have a version added
+         * if the courts have been changed: Delete the current ones and create with ones passed in. Note: we
+         * are not doing optimistic lock checking because this cross reference table will not have a version
+         * added
          */
         XhbCourtRoomDao[] courtRoomBasicValues = displayConfiguration.getCourtRoomDaos();
 
-        ArrayList<XhbCourtRoomDao> courtRoomLocals =
-            (ArrayList<XhbCourtRoomDao>) displayLocal.getXhbCourtRooms();
+        ArrayList<XhbCourtRoomDao> courtRoomLocals = (ArrayList<XhbCourtRoomDao>) displayLocal.getXhbCourtRooms();
 
         // delete existing collection
         courtRoomLocals.clear();
@@ -205,15 +200,12 @@ public class DisplayConfigurationHelper {
      */
     private static void setRotationSet(final DisplayConfiguration displayConfiguration,
         final XhbDisplayDao displayLocal, XhbRotationSetsRepository xhbRotationSetsRepository) {
-        LOG.debug("setRotationSet({},{},{})", displayConfiguration, displayLocal,
-            xhbRotationSetsRepository);
+        LOG.debug("setRotationSet({},{},{})", displayConfiguration, displayLocal, xhbRotationSetsRepository);
         Integer rotationSetId = displayConfiguration.getRotationSetId();
-        Optional<XhbRotationSetsDao> rotationSetLocal =
-            xhbRotationSetsRepository.findById(Long.valueOf(rotationSetId));
+        Optional<XhbRotationSetsDao> rotationSetLocal = xhbRotationSetsRepository.findById(Long.valueOf(rotationSetId));
         if (!rotationSetLocal.isPresent()) {
             throw new RotationSetNotFoundCheckedException(rotationSetId);
         }
-        displayLocal.setXhbRotationSet(rotationSetLocal.get());
     }
 
     /**
@@ -227,8 +219,7 @@ public class DisplayConfigurationHelper {
         LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
         // find court Id
         Integer courtId = displayLocal.getXhbDisplayLocation().getXhbCourtSite().getCourtId();
-        CourtConfigurationChange ccc =
-            new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue());
+        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue());
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }

@@ -15,7 +15,6 @@ import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
-import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,9 +54,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     @Column(name = "SHOW_UNASSIGNED_YN")
     private String showUnassignedYn;
-
-    @jakarta.persistence.Transient
-    private XhbRotationSetsDao xhbRotationSet;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DISPLAY_LOCATION_ID", insertable = false, updatable = false)
@@ -146,14 +142,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     public final void setShowUnassignedYn(String showUnassignedYn) {
         this.showUnassignedYn = showUnassignedYn;
-    }
-
-    public XhbRotationSetsDao getXhbRotationSet() {
-        return xhbRotationSet;
-    }
-
-    public final void setXhbRotationSet(XhbRotationSetsDao xhbRotationSet) {
-        this.xhbRotationSet = xhbRotationSet;
     }
 
     public XhbDisplayLocationDao getXhbDisplayLocation() {
