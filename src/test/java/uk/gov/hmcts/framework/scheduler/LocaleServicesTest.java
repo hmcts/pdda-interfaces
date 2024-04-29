@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingController
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingControllerBean;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ class LocaleServicesTest {
     @Test
     void testInitFormattingControllerBean() {
 
-        Properties testProperties = createTestProperties(FormattingControllerBean.class.getName());
+        Properties testProperties = createTestProperties(FormattingControllerBean.class.getName(), Schedulable.ONCE_A_DAY_DEFAULT);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
 
         classUnderTest.init(testProperties, testSchedulable);
@@ -95,7 +96,8 @@ class LocaleServicesTest {
     @Test
     void testInitCppInitialProcessingControllerBean() {
 
-        Properties testProperties = createTestProperties(CppInitialProcessingControllerBean.class.getName());
+        Properties testProperties =
+            createTestProperties(CppInitialProcessingControllerBean.class.getName(), Schedulable.ONCE_A_DAY_DEFAULT);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
 
         classUnderTest.init(testProperties, testSchedulable);
@@ -123,7 +125,8 @@ class LocaleServicesTest {
     @Test
     void testInitCppFormattingControllerBean() {
 
-        Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName());
+        Properties testProperties =
+            createTestProperties(CppFormattingControllerBean.class.getName(), Schedulable.ONCE_A_DAY_DEFAULT);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
 
         classUnderTest.init(testProperties, testSchedulable);
@@ -147,7 +150,13 @@ class LocaleServicesTest {
 
     @Test
     void testSchedulable() {
-        Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName());
+        Properties testProperties =
+            createTestProperties(CppFormattingControllerBean.class.getName(), "true");
+        Calendar timeNow = Calendar.getInstance();
+        String hour = Integer.valueOf(timeNow.get(Calendar.HOUR_OF_DAY)).toString();
+        String minute = Integer.valueOf(timeNow.get(Calendar.MINUTE)).toString();
+        testProperties.setProperty(Schedulable.HOUR, hour);
+        testProperties.setProperty(Schedulable.MINUTE, minute);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
         testSchedulable.start();
         testSchedulable.stop();
@@ -160,11 +169,12 @@ class LocaleServicesTest {
      * @param remoteHomeClass Value to use for the remoteHome property
      * @return Properties object
      */
-    private Properties createTestProperties(String remoteHomeClass) {
+    private Properties createTestProperties(String remoteHomeClass, String onceADay) {
         Properties testProperties = new Properties();
         testProperties.setProperty(Schedulable.FIXED_RATE, Schedulable.FIXED_RATE_DEFAULT);
         testProperties.setProperty(Schedulable.DELAY, Schedulable.DELAY_DEFAULT);
         testProperties.setProperty(Schedulable.PERIOD, Schedulable.PERIOD_DEFAULT);
+        testProperties.setProperty(Schedulable.ONCE_A_DAY, onceADay);
         testProperties.setProperty(Schedulable.TASK_STRATEGY, RemoteSessionTaskStrategy.class.getName());
         testProperties.setProperty(RemoteSessionTaskStrategy.REMOTE_HOME_CLASS, remoteHomeClass);
         return testProperties;
