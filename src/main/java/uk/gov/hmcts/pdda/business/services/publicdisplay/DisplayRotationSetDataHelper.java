@@ -67,11 +67,10 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     /**
      * Utility method that gets all the public display configuration data for a court.
      * 
-     * @param courtId The ID for the court.
      * @param court The entity bean representing the court.
      * @return The full set of public display configuration data for the court.
      */
-    public DisplayRotationSetData[] getDataForCourt(int courtId, XhbCourtDao court) {
+    public DisplayRotationSetData[] getDataForCourt(XhbCourtDao court) {
         // Get all court-associated rotation sets.
         List<XhbRotationSetsDao> rotationSetsForCourt = court.getXhbRotationSets();
         List<DisplayRotationSetData> displayRotationSetDataList = new ArrayList<>();
@@ -81,9 +80,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             Iterator<XhbRotationSetsDao> rotationSetIterator = rotationSetsForCourt.iterator();
             while (rotationSetIterator.hasNext()) {
                 XhbRotationSetsDao xrs = rotationSetIterator.next();
-                // Set the court object
-                xrs.setCourt(court);
-                addArrayToList(getDataForDisplayRotationSets(courtId, xrs),
+                addArrayToList(getDataForDisplayRotationSets(court, xrs),
                     displayRotationSetDataList);
             }
         }
@@ -99,11 +96,11 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * Utility method that gets the all the Display Rotation Set information for a given Rotation
      * Set.
      * 
-     * @param courtId The court to which the rotation set belongs.
+     * @param court The court to which the rotation set belongs.
      * @param rotationSet The rotation set to retrieve the data for.
      * @return An array of type <code>DisplayRotationSetData</code>.
      */
-    public DisplayRotationSetData[] getDataForDisplayRotationSets(int courtId,
+    public DisplayRotationSetData[] getDataForDisplayRotationSets(XhbCourtDao court,
         XhbRotationSetsDao rotationSet) {
         int numberOfDisplays = rotationSet.getXhbDisplays().size();
 
@@ -117,7 +114,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             rotationSet.getXhbDisplays().iterator();
         for (int i = 0; rotationSetDisplayIterator.hasNext(); i++) {
             XhbDisplayDao display = rotationSetDisplayIterator.next();
-            returnArray[i] = getDisplayRotationSetData(courtId, display, rotationSet);
+            returnArray[i] = getDisplayRotationSetData(court, display, rotationSet);
         }
         return returnArray;
     }
@@ -126,20 +123,20 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * Utility method that gets the Display Rotation Set information for a given Rotation Set and
      * Display.
      * 
-     * @param courtId The court to which the rotation set belongs.
+     * @param court The court to which the rotation set belongs.
      * @param display the display entity from which to retrieve the data.
      * @param rotationSet The rotation set entity to retrieve the data for.
      * @return An instance of DisplayRotationSetData.
      */
-    public DisplayRotationSetData getDisplayRotationSetData(int courtId, XhbDisplayDao display,
+    public DisplayRotationSetData getDisplayRotationSetData(XhbCourtDao court, XhbDisplayDao display,
         XhbRotationSetsDao rotationSet) {
         // Construct the URI representing the Display.
-        DisplayUri displayUri = getDisplayUri(display, rotationSet.getCourt().getShortName());
+        DisplayUri displayUri = getDisplayUri(display, court.getShortName());
         int[] courtRoomIds = getCourtRoomIds(display.getXhbCourtRooms(), display);
 
         // Get the RotationSetDisplayDocument[] that will
         // represent the rotation set for the given display.
-        RotationSetDisplayDocument[] rotationSetDDs = getDisplayRotationSetElements(courtId,
+        RotationSetDisplayDocument[] rotationSetDDs = getDisplayRotationSetElements(court.getCourtId(),
             rotationSet.getXhbRotationSetDds(), courtRoomIds);
 
         // Construct the return object.

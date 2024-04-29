@@ -106,7 +106,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             throw new CourtNotFoundException(courtId);
         }
 
-        return getDisplayRotationSetDataHelper().getDataForCourt(courtId, court.get());
+        return getDisplayRotationSetDataHelper().getDataForCourt(court.get());
     }
 
     /**
@@ -130,9 +130,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             if (!court.isPresent()) {
                 throw new CourtNotFoundException(courtId);
             }
-            rotationSet.get().setCourt(new XhbCourtDao(court.get()));
 
-            returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(courtId, rotationSet.get());
+            returnArray =
+                getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(), rotationSet.get());
         } else {
             returnArray = new DisplayRotationSetData[0];
         }
@@ -164,8 +164,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             Optional<XhbRotationSetsDao> rotationSet =
                 getXhbRotationSetsRepository().findById(Long.valueOf(display.get().getRotationSetId()));
             if (rotationSet.isPresent()) {
-                rotationSet.get().setCourt(new XhbCourtDao(court.get()));
-                displayRotationSetData = getDisplayRotationSetDataHelper().getDisplayRotationSetData(courtId,
+                displayRotationSetData = getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(),
                     display.get(), rotationSet.get());
             }
             if (displayRotationSetData != null) {
@@ -341,11 +340,11 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         return new VipDisplayConfiguration(displayDocArray, courtRoomArray,
             vipDisplayCourtRoomQuery.isShowUnassignedCases());
     }
-    
+
     protected XhbCourtRoomDao[] getXhbCourtRoomDaoArray(List<XhbCourtRoomDao> array) {
         return array.toArray(new XhbCourtRoomDao[0]);
     }
-    
+
     protected RotationSetDdComplexValue getRotationSetDdComplexValue(XhbRotationSetDdDao rotationSetDdDao,
         XhbDisplayDocumentDao displayDocumentDao) {
         return new RotationSetDdComplexValue(rotationSetDdDao, displayDocumentDao);

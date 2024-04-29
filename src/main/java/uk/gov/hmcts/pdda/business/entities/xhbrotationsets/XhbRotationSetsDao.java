@@ -11,7 +11,6 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 
@@ -42,9 +41,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
 
     @Column(name = "DEFAULT_YN")
     private String defaultYn;
-
-    @jakarta.persistence.Transient
-    private XhbCourtDao court;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ROTATION_SET_ID")
@@ -178,14 +174,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
 
     public final void setDefaultYn(String defaultYn) {
         this.defaultYn = defaultYn;
-    }
-
-    public XhbCourtDao getCourt() {
-        return court;
-    }
-
-    public final void setCourt(XhbCourtDao court) {
-        this.court = court;
     }
 
     public List<XhbRotationSetDdDao> getXhbRotationSetDds() {

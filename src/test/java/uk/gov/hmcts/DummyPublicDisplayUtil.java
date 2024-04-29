@@ -213,7 +213,6 @@ public final class DummyPublicDisplayUtil {
         result.setLastUpdatedBy(lastUpdatedBy);
         result.setCreatedBy(createdBy);
         result.setVersion(version);
-        result.setCourt(DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-453), "Court1"));
         result.setXhbDisplays(new ArrayList<>());
         return result;
     }
