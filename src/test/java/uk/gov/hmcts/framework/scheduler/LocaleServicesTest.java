@@ -68,7 +68,8 @@ class LocaleServicesTest {
     @Test
     void testInitFormattingControllerBean() {
 
-        Properties testProperties = createTestProperties(FormattingControllerBean.class.getName(), Schedulable.ONCE_A_DAY_DEFAULT);
+        Properties testProperties =
+            createTestProperties(FormattingControllerBean.class.getName(), Schedulable.ONCE_A_DAY_DEFAULT);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
 
         classUnderTest.init(testProperties, testSchedulable);
@@ -150,8 +151,7 @@ class LocaleServicesTest {
 
     @Test
     void testSchedulable() {
-        Properties testProperties =
-            createTestProperties(CppFormattingControllerBean.class.getName(), "true");
+        Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), "true");
         Calendar timeNow = Calendar.getInstance();
         String hour = Integer.valueOf(timeNow.get(Calendar.HOUR_OF_DAY)).toString();
         String minute = Integer.valueOf(timeNow.get(Calendar.MINUTE)).toString();

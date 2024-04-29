@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,6 +42,7 @@ import java.util.TimerTask;
  * @see java.util.Timer
  * @see TaskStrategy
  */
+@SuppressWarnings("PMD.AvoidCalendarDateCreation")
 public class Schedulable {
     private static final String CLASS_DEFINED_IN = "Class defined in ";
     private static final Long ZERO = 0L;
@@ -381,14 +381,14 @@ public class Schedulable {
                     startTime.add(Calendar.DATE, 1);
                 }
 
-                final long startScheduler = startTime.getTime().getTime() - currentTime.getTime().getTime();
+                final long startScheduler = startTime.getTimeInMillis() - currentTime.getTimeInMillis();
 
                 // Setting stop scheduler
                 Calendar endTime = Calendar.getInstance();
                 endTime.set(Calendar.HOUR_OF_DAY, 23);
                 endTime.set(Calendar.MINUTE, 59);
                 
-                final long stopScheduler = endTime.getTime().getTime() - currentTime.getTime().getTime();
+                final long stopScheduler = endTime.getTimeInMillis() - currentTime.getTimeInMillis();
 
                 timer.scheduleAtFixedRate(internalTimerTask, startScheduler, stopScheduler);
             } else if (timerPeriod == ZERO) {
