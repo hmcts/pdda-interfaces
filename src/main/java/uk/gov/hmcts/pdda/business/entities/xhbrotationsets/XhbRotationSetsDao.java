@@ -1,23 +1,15 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrotationsets;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
-import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("PMD.LinguisticNaming")
 @Entity(name = "XHB_ROTATION_SETS")
@@ -42,17 +34,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
 
     @Column(name = "DEFAULT_YN")
     private String defaultYn;
-
-    @jakarta.persistence.Transient
-    private XhbCourtDao court;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ROTATION_SET_ID")
-    private List<XhbRotationSetDdDao> xhbRotationSetDds = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ROTATION_SET_ID")
-    private List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
 
     public XhbRotationSetsDao() {
         // Default constructor
@@ -178,30 +159,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
 
     public final void setDefaultYn(String defaultYn) {
         this.defaultYn = defaultYn;
-    }
-
-    public XhbCourtDao getCourt() {
-        return court;
-    }
-
-    public final void setCourt(XhbCourtDao court) {
-        this.court = court;
-    }
-
-    public List<XhbRotationSetDdDao> getXhbRotationSetDds() {
-        return xhbRotationSetDds;
-    }
-
-    public final void setXhbRotationSetDds(List<XhbRotationSetDdDao> xhbRotationSetDds) {
-        this.xhbRotationSetDds = xhbRotationSetDds;
-    }
-
-    public List<XhbDisplayDao> getXhbDisplays() {
-        return xhbDisplays;
-    }
-
-    public final void setXhbDisplays(List<XhbDisplayDao> xhbDisplays) {
-        this.xhbDisplays = xhbDisplays;
     }
 
 }

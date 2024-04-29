@@ -2,21 +2,16 @@ package uk.gov.hmcts.pdda.business.entities.xhbdisplay;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeDao;
-import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,17 +52,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
     @Column(name = "SHOW_UNASSIGNED_YN")
     private String showUnassignedYn;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISPLAY_TYPE_ID", insertable = false, updatable = false)
-    private XhbDisplayTypeDao xhbDisplayType;
-
-    @jakarta.persistence.Transient
-    private XhbRotationSetsDao xhbRotationSet;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISPLAY_LOCATION_ID", insertable = false, updatable = false)
-    private XhbDisplayLocationDao xhbDisplayLocation;
-
     @ManyToMany
     @JoinTable(name = "XHB_DISPLAY_COURT_ROOM", joinColumns = @JoinColumn(name = "DISPLAY_ID"),
         inverseJoinColumns = @JoinColumn(name = "COURT_ROOM_ID"))
@@ -106,9 +90,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
     }
 
     public Integer getDisplayTypeId() {
-        if (getXhbDisplayType() != null) {
-            return getXhbDisplayType().getDisplayTypeId();
-        }
         return displayTypeId;
     }
 
@@ -117,9 +98,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
     }
 
     public Integer getDisplayLocationId() {
-        if (getXhbDisplayLocation() != null) {
-            return getXhbDisplayLocation().getDisplayLocationId();
-        }
         return displayLocationId;
     }
 
@@ -157,30 +135,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     public final void setShowUnassignedYn(String showUnassignedYn) {
         this.showUnassignedYn = showUnassignedYn;
-    }
-
-    public XhbDisplayTypeDao getXhbDisplayType() {
-        return xhbDisplayType;
-    }
-
-    public final void setXhbDisplayType(XhbDisplayTypeDao xhbDisplayType) {
-        this.xhbDisplayType = xhbDisplayType;
-    }
-
-    public XhbRotationSetsDao getXhbRotationSet() {
-        return xhbRotationSet;
-    }
-
-    public final void setXhbRotationSet(XhbRotationSetsDao xhbRotationSet) {
-        this.xhbRotationSet = xhbRotationSet;
-    }
-
-    public XhbDisplayLocationDao getXhbDisplayLocation() {
-        return xhbDisplayLocation;
-    }
-
-    public final void setXhbDisplayLocation(XhbDisplayLocationDao xhbDisplayLocation) {
-        this.xhbDisplayLocation = xhbDisplayLocation;
     }
 
     public List<XhbCourtRoomDao> getXhbCourtRooms() {

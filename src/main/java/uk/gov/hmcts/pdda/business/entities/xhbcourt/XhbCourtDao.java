@@ -1,12 +1,10 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourt;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
-import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.vos.services.court.CourtStructureValue;
 
 import java.io.Serializable;
@@ -130,10 +127,6 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
 
     @Column(name = "OBS_IND")
     private String obsInd;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "COURT_ID")
-    private List<XhbRotationSetsDao> xhbRotationSets = new ArrayList<>();
 
     @jakarta.persistence.Transient
     @OneToMany(mappedBy = "xhbCourtDAO")
@@ -417,15 +410,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
     public final void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
-
-    public List<XhbRotationSetsDao> getXhbRotationSets() {
-        return xhbRotationSets;
-    }
-
-    public final void setXhbRotationSets(List<XhbRotationSetsDao> xhbRotationSets) {
-        this.xhbRotationSets = xhbRotationSets;
-    }
-
+    
     public List<XhbCourtSiteDao> getXhbCourtSites() {
         return xhbCourtSites;
     }
