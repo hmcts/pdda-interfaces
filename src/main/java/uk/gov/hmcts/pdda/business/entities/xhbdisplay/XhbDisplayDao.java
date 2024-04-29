@@ -15,7 +15,6 @@ import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.io.Serializable;
@@ -56,10 +55,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     @Column(name = "SHOW_UNASSIGNED_YN")
     private String showUnassignedYn;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "DISPLAY_TYPE_ID", insertable = false, updatable = false)
-    private XhbDisplayTypeDao xhbDisplayType;
 
     @jakarta.persistence.Transient
     private XhbRotationSetsDao xhbRotationSet;
@@ -106,9 +101,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
     }
 
     public Integer getDisplayTypeId() {
-        if (getXhbDisplayType() != null) {
-            return getXhbDisplayType().getDisplayTypeId();
-        }
         return displayTypeId;
     }
 
@@ -117,9 +109,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
     }
 
     public Integer getDisplayLocationId() {
-        if (getXhbDisplayLocation() != null) {
-            return getXhbDisplayLocation().getDisplayLocationId();
-        }
         return displayLocationId;
     }
 
@@ -157,14 +146,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     public final void setShowUnassignedYn(String showUnassignedYn) {
         this.showUnassignedYn = showUnassignedYn;
-    }
-
-    public XhbDisplayTypeDao getXhbDisplayType() {
-        return xhbDisplayType;
-    }
-
-    public final void setXhbDisplayType(XhbDisplayTypeDao xhbDisplayType) {
-        this.xhbDisplayType = xhbDisplayType;
     }
 
     public XhbRotationSetsDao getXhbRotationSet() {

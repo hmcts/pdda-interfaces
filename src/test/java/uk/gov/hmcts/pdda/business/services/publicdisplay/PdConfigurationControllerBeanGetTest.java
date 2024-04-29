@@ -24,6 +24,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -58,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
 class PdConfigurationControllerBeanGetTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -101,6 +102,9 @@ class PdConfigurationControllerBeanGetTest {
     private XhbDisplayDocumentRepository mockXhbDisplayDocumentRepository;
 
     @Mock
+    private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
+
+    @Mock
     private ActiveCasesInRoomQuery mockActiveCasesInRoomQuery;
 
     @Mock
@@ -122,9 +126,10 @@ class PdConfigurationControllerBeanGetTest {
     private VipCourtRoomsQuery mockVipQuery;
 
     @InjectMocks
-    private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(mockEntityManager,
-        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository,
-        mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+    private final PdConfigurationControllerBean classUnderTest =
+        new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
+            mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
+            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -175,6 +180,8 @@ class PdConfigurationControllerBeanGetTest {
 
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
         Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
+        Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getCourtConfiguration(COURT_ID);
@@ -197,7 +204,6 @@ class PdConfigurationControllerBeanGetTest {
         xhbDisplayDao.setShowUnassignedYn(YES);
         xhbDisplayDao.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
         xhbDisplayDao.setXhbCourtRooms(roomList);
-        xhbDisplayDao.setXhbDisplayType(DummyPublicDisplayUtil.getXhbDisplayTypeDao());
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
@@ -227,6 +233,8 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
+        Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedRotationSet(COURT_ID, ROTATION_SET_ID);
@@ -352,7 +360,6 @@ class PdConfigurationControllerBeanGetTest {
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         xhbDisplayDao.setXhbCourtRooms(roomList);
-        xhbDisplayDao.setXhbDisplayType(DummyPublicDisplayUtil.getXhbDisplayTypeDao());
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);

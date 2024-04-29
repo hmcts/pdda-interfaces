@@ -24,6 +24,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -68,7 +69,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.GodClass"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.GodClass", "PMD.TooManyFields"})
 class PdConfigurationControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -106,6 +107,9 @@ class PdConfigurationControllerBeanTest {
     private XhbDisplayDocumentRepository mockXhbDisplayDocumentRepository;
 
     @Mock
+    private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
+
+    @Mock
     private ActiveCasesInRoomQuery mockActiveCasesInRoomQuery;
 
     @Mock
@@ -127,9 +131,10 @@ class PdConfigurationControllerBeanTest {
     private VipCourtRoomsQuery mockVipQuery;
 
     @InjectMocks
-    private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(mockEntityManager,
-        mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository,
-        mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+    private final PdConfigurationControllerBean classUnderTest =
+        new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
+            mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
+            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -202,7 +207,6 @@ class PdConfigurationControllerBeanTest {
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         xhbDisplayDao.setXhbCourtRooms(roomList);
-        xhbDisplayDao.setXhbDisplayType(DummyPublicDisplayUtil.getXhbDisplayTypeDao());
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);

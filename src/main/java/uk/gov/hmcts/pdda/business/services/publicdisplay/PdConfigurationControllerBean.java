@@ -16,6 +16,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -64,11 +65,12 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
 
     public PdConfigurationControllerBean(EntityManager entityManager, XhbCourtRepository xhbCourtRepository,
         XhbRotationSetsRepository xhbRotationSetsRepository, XhbRotationSetDdRepository xhbRotationSetDdRepository,
-        XhbDisplayRepository xhbDisplayRepository, PublicDisplayNotifier publicDisplayNotifier,
-        VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
+        XhbDisplayTypeRepository xhbDisplayTypeRepository, XhbDisplayRepository xhbDisplayRepository,
+        PublicDisplayNotifier publicDisplayNotifier, VipDisplayDocumentQuery vipDisplayDocumentQuery,
+        VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, null, xhbCourtRepository, null, null, xhbRotationSetsRepository,
-            xhbRotationSetDdRepository, xhbDisplayRepository, publicDisplayNotifier, vipDisplayDocumentQuery,
-            vipDisplayCourtRoomQuery);
+            xhbRotationSetDdRepository, xhbDisplayTypeRepository, xhbDisplayRepository, publicDisplayNotifier,
+            vipDisplayDocumentQuery, vipDisplayCourtRoomQuery);
     }
 
     public PdConfigurationControllerBean() {
@@ -109,7 +111,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         }
 
         return getDisplayRotationSetDataHelper().getDataForCourt(court.get(), getXhbDisplayRepository(),
-            getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
+            getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository());
     }
 
     /**
@@ -136,7 +138,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository().findByRotationSetId(rotationSetId);
 
             returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(),
-                rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
+                rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
+                getXhbDisplayTypeRepository());
         } else {
             returnArray = new DisplayRotationSetData[0];
         }
@@ -168,9 +171,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             Optional<XhbRotationSetsDao> rotationSet =
                 getXhbRotationSetsRepository().findById(Long.valueOf(display.get().getRotationSetId()));
             if (rotationSet.isPresent()) {
-                displayRotationSetData =
-                    getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(), display.get(),
-                        rotationSet.get(), getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository());
+                displayRotationSetData = getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(),
+                    display.get(), rotationSet.get(), getXhbRotationSetDdRepository(),
+                    getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository());
             }
             if (displayRotationSetData != null) {
                 returnArray = new DisplayRotationSetData[] {displayRotationSetData};

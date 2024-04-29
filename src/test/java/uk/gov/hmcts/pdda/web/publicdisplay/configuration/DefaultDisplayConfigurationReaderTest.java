@@ -425,7 +425,6 @@ class DefaultDisplayConfigurationReaderTest {
             roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
             roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
             returnObject.setXhbCourtRooms(roomList);
-            returnObject.setXhbDisplayType(DummyPublicDisplayUtil.getXhbDisplayTypeDao());
         }
         return returnObject;
     }

@@ -20,6 +20,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -56,6 +57,9 @@ class DisplayRotationSetDataHelperTest {
 
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
+
+    @Mock
+    private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
 
     @Mock
     private XhbDisplayDocumentRepository mockXhbDisplayDocumentRepository;
@@ -105,7 +109,7 @@ class DisplayRotationSetDataHelperTest {
         boolean result = false;
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
-                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository, mockXhbDisplayTypeRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -124,11 +128,13 @@ class DisplayRotationSetDataHelperTest {
         // Expects
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
+        Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
         // Run
         boolean result = false;
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
-                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository, mockXhbDisplayTypeRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
