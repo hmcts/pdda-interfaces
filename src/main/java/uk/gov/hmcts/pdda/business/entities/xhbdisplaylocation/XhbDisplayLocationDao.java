@@ -2,16 +2,12 @@ package uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 
 import java.io.Serializable;
@@ -44,10 +40,6 @@ public class XhbDisplayLocationDao extends AbstractVersionedDao implements Seria
 
     @jakarta.persistence.Transient
     private List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "COURT_SITE_ID", insertable = false, updatable = false)
-    private XhbCourtSiteDao xhbCourtSite;
 
     public XhbDisplayLocationDao() {
         super();
@@ -100,9 +92,6 @@ public class XhbDisplayLocationDao extends AbstractVersionedDao implements Seria
     }
 
     public Integer getCourtSiteId() {
-        if (getXhbCourtSite() != null) {
-            return getXhbCourtSite().getCourtSiteId();
-        }
         return courtSiteId;
     }
 
@@ -116,14 +105,6 @@ public class XhbDisplayLocationDao extends AbstractVersionedDao implements Seria
 
     public void setXhbDisplays(List<XhbDisplayDao> xhbDisplays) {
         this.xhbDisplays = xhbDisplays;
-    }
-
-    public XhbCourtSiteDao getXhbCourtSite() {
-        return xhbCourtSite;
-    }
-
-    public void setXhbCourtSite(XhbCourtSiteDao xhbCourtSite) {
-        this.xhbCourtSite = xhbCourtSite;
     }
 
 }

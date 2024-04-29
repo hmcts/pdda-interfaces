@@ -11,7 +11,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -73,7 +72,6 @@ public final class DummyPublicDisplayUtil {
             lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         displayLocationId = result.getPrimaryKey();
         assertNotNull(displayLocationId, NOTNULL);
-        result.setXhbCourtSite(DummyCourtUtil.getXhbCourtSiteDao());
         return result;
     }
 
@@ -105,12 +103,7 @@ public final class DummyPublicDisplayUtil {
         result.setShowUnassignedYn(showUnassignedYN);
         displayId = result.getPrimaryKey();
         assertNotNull(displayId, NOTNULL);
-        result.setXhbRotationSet(result.getXhbRotationSet());
-
-        result.setXhbDisplayType(getXhbDisplayTypeDao());
         result.setDisplayTypeId(result.getDisplayTypeId());
-
-        result.setXhbDisplayLocation(DummyPublicDisplayUtil.getXhbDisplayLocationDao());
         result.setDisplayLocationId(result.getDisplayLocationId());
         return result;
     }
@@ -180,8 +173,6 @@ public final class DummyPublicDisplayUtil {
         result.setVersion(version);
         rotationSetDdId = result.getPrimaryKey();
         assertNotNull(rotationSetDdId, NOTNULL);
-        result.setXhbRotationSets(result.getXhbRotationSets());
-        result.setXhbDisplayDocument(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);
     }
@@ -213,8 +204,6 @@ public final class DummyPublicDisplayUtil {
         result.setLastUpdatedBy(lastUpdatedBy);
         result.setCreatedBy(createdBy);
         result.setVersion(version);
-        result.setCourt(DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-453), "Court1"));
-        result.setXhbDisplays(new ArrayList<>());
         return result;
     }
 }
