@@ -72,7 +72,6 @@ public final class DummyPublicDisplayUtil {
             lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         displayLocationId = result.getPrimaryKey();
         assertNotNull(displayLocationId, NOTNULL);
-        result.setXhbCourtSite(DummyCourtUtil.getXhbCourtSiteDao());
         return result;
     }
 
