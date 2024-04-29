@@ -169,9 +169,6 @@ class DefaultDisplayConfigurationReaderTest {
 
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(COURT_ID, TESTCOURT1);
         xhbCourtDao.setXhbRotationSets(xrsList);
-        Optional<XhbCourtDao> courtDao = Optional.of(xhbCourtDao);
-        courtDao.get().getXhbRotationSets().get(0).setXhbDisplays(xdList);
-        courtDao.get().getXhbRotationSets().get(1).setXhbDisplays(xdList);
 
         DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
             new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
@@ -185,12 +182,14 @@ class DefaultDisplayConfigurationReaderTest {
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
+        Optional<XhbCourtDao> courtDao = Optional.of(xhbCourtDao);
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(courtDao);
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(new int[] {80});
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
 
         classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
             mockDisplayStoreControllerBean, mockWorker);
@@ -288,10 +287,8 @@ class DefaultDisplayConfigurationReaderTest {
 
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         xhbRotationSetsDao.setXhbRotationSetDds(xrsddList);
-        Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(getDummyDisplayDao(true));
-        xrs.get().setXhbDisplays(xdList);
         DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
             new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
@@ -305,6 +302,7 @@ class DefaultDisplayConfigurationReaderTest {
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
         int[] courtsForPublicDisplay = {80};
+        Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
@@ -313,6 +311,8 @@ class DefaultDisplayConfigurationReaderTest {
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
+
 
         classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
             mockDisplayStoreControllerBean, mockWorker);

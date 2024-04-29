@@ -172,10 +172,9 @@ class PdConfigurationControllerBeanGetTest {
 
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(xhbDisplayDao);
-        court.get().getXhbRotationSets().get(0).setXhbDisplays(xdList);
-        court.get().getXhbRotationSets().get(1).setXhbDisplays(xdList);
 
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getCourtConfiguration(COURT_ID);
@@ -222,12 +221,12 @@ class PdConfigurationControllerBeanGetTest {
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(xhbDisplayDao);
-        xrs.get().setXhbDisplays(xdList);
         String courtName = "Test Court Name";
         Optional<XhbCourtDao> court = Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedRotationSet(COURT_ID, ROTATION_SET_ID);

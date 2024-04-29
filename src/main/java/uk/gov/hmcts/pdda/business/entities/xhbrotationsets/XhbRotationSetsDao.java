@@ -11,7 +11,6 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 
 import java.io.Serializable;
@@ -45,10 +44,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ROTATION_SET_ID")
     private List<XhbRotationSetDdDao> xhbRotationSetDds = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ROTATION_SET_ID")
-    private List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
 
     public XhbRotationSetsDao() {
         // Default constructor
@@ -182,14 +177,6 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
 
     public final void setXhbRotationSetDds(List<XhbRotationSetDdDao> xhbRotationSetDds) {
         this.xhbRotationSetDds = xhbRotationSetDds;
-    }
-
-    public List<XhbDisplayDao> getXhbDisplays() {
-        return xhbDisplays;
-    }
-
-    public final void setXhbDisplays(List<XhbDisplayDao> xhbDisplays) {
-        this.xhbDisplays = xhbDisplays;
     }
 
 }

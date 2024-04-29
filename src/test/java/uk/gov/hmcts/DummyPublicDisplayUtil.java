@@ -11,7 +11,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -213,7 +212,6 @@ public final class DummyPublicDisplayUtil {
         result.setLastUpdatedBy(lastUpdatedBy);
         result.setCreatedBy(createdBy);
         result.setVersion(version);
-        result.setXhbDisplays(new ArrayList<>());
         return result;
     }
 }

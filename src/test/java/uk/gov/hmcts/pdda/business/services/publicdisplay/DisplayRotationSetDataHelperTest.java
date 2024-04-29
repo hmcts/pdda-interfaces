@@ -15,6 +15,7 @@ import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
@@ -79,10 +80,11 @@ class DisplayRotationSetDataHelperTest {
         xhbCourtSiteDaoList.add(DummyCourtUtil.getXhbCourtSiteDao());
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         // Run
         boolean result = false;
         try {
-            classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao);
+            classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -94,13 +96,13 @@ class DisplayRotationSetDataHelperTest {
     void testGetDataForDisplayRotationSetsWithDisplays() {
         // Setup
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
-        xhbRotationSetsDao.setXhbDisplays(new ArrayList<>());
-        xhbRotationSetsDao.getXhbDisplays().add(DummyPublicDisplayUtil.getXhbDisplayDao());
         XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
+        xhbDisplays.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         // Run
         boolean result = false;
         try {
-            classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao);
+            classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays);
             result = true;
         } catch (Exception exception) {
             fail(exception);

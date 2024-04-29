@@ -106,7 +106,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             throw new CourtNotFoundException(courtId);
         }
 
-        return getDisplayRotationSetDataHelper().getDataForCourt(court.get());
+        return getDisplayRotationSetDataHelper().getDataForCourt(court.get(), getXhbDisplayRepository());
     }
 
     /**
@@ -130,9 +130,10 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             if (!court.isPresent()) {
                 throw new CourtNotFoundException(courtId);
             }
+            List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository().findByRotationSetId(rotationSetId);
 
-            returnArray =
-                getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(), rotationSet.get());
+            returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(),
+                rotationSet.get(), xhbDisplays);
         } else {
             returnArray = new DisplayRotationSetData[0];
         }

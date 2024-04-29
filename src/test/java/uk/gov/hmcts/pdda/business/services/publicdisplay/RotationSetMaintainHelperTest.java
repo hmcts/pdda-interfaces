@@ -16,6 +16,7 @@ import uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException;
 import uk.gov.hmcts.framework.exception.CsBusinessException;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
@@ -54,6 +55,9 @@ class RotationSetMaintainHelperTest {
     private XhbRotationSetDdRepository mockXhbRotationSetDdRepository;
 
     @Mock
+    private XhbDisplayRepository mockXhbDisplayRepository;
+
+    @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
@@ -69,9 +73,7 @@ class RotationSetMaintainHelperTest {
         // Expects
         Mockito.when(mockXhbCourtRepository.findById(rotationSetComplexValue.getCourtId()))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(-453, "Test1")));
-        Mockito
-            .when(
-                mockXhbRotationSetsRepository.update(rotationSetComplexValue.getRotationSetsDao()))
+        Mockito.when(mockXhbRotationSetsRepository.update(rotationSetComplexValue.getRotationSetsDao()))
             .thenReturn(Optional.of(rotationSetComplexValue.getRotationSetsDao()));
         // Run
         boolean result = false;
@@ -99,9 +101,8 @@ class RotationSetMaintainHelperTest {
         // Run
         boolean result = false;
         try {
-            classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue,
-                mockPublicDisplayNotifier, mockXhbRotationSetsRepository,
-                mockXhbRotationSetDdRepository);
+            classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue, mockPublicDisplayNotifier,
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository);
             result = true;
         } catch (PublicDisplayCheckedException exception) {
             fail(exception);
@@ -120,9 +121,8 @@ class RotationSetMaintainHelperTest {
             Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
             // Run
-            classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue,
-                mockPublicDisplayNotifier, mockXhbRotationSetsRepository,
-                mockXhbRotationSetDdRepository);
+            classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue, mockPublicDisplayNotifier,
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository);
         });
     }
 
@@ -137,7 +137,7 @@ class RotationSetMaintainHelperTest {
         boolean result = false;
         try {
             classUnderTest.deleteRotationSet(rotationSetComplexValue, mockXhbRotationSetsRepository,
-                mockXhbRotationSetDdRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayRepository);
             result = true;
         } catch (PublicDisplayCheckedException exception) {
             fail(exception);
@@ -157,7 +157,7 @@ class RotationSetMaintainHelperTest {
                 .thenReturn(Optional.of(xhbRotationSetDao));
             // Run
             classUnderTest.deleteRotationSet(rotationSetComplexValue, mockXhbRotationSetsRepository,
-                mockXhbRotationSetDdRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayRepository);
         });
     }
 
@@ -168,14 +168,15 @@ class RotationSetMaintainHelperTest {
             XhbRotationSetsDao xhbRotationSetDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
             List<XhbDisplayDao> xhbDisplayDaos = new ArrayList<>();
             xhbDisplayDaos.add(DummyPublicDisplayUtil.getXhbDisplayDao());
-            xhbRotationSetDao.setXhbDisplays(xhbDisplayDaos);
             RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
             // Expects
             Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
+            Mockito.when(mockXhbDisplayRepository.findByRotationSetId(rotationSetComplexValue.getRotationSetId()))
+                .thenReturn(xhbDisplayDaos);
             // Run
             classUnderTest.deleteRotationSet(rotationSetComplexValue, mockXhbRotationSetsRepository,
-                mockXhbRotationSetDdRepository);
+                mockXhbRotationSetDdRepository, mockXhbDisplayRepository);
         });
     }
 
@@ -188,8 +189,7 @@ class RotationSetMaintainHelperTest {
             throw new PublicDisplayCheckedException(TEST, new Object[] {}, TEST);
         });
         Assertions.assertThrows(PublicDisplayCheckedException.class, () -> {
-            throw new PublicDisplayCheckedException(TEST, new Object[] {}, TEST,
-                new CsBusinessException());
+            throw new PublicDisplayCheckedException(TEST, new Object[] {}, TEST, new CsBusinessException());
         });
     }
 
@@ -200,8 +200,8 @@ class RotationSetMaintainHelperTest {
         });
 
         Assertions.assertThrows(RotationSetNotFoundCheckedException.class, () -> {
-            classUnderTest.setDisplayDocumentsForRotationSet(mockRotationSetComplexValue,
-                mockPublicDisplayNotifier, mockEntityManager);
+            classUnderTest.setDisplayDocumentsForRotationSet(mockRotationSetComplexValue, mockPublicDisplayNotifier,
+                mockEntityManager);
         });
 
         boolean result = true;
@@ -213,26 +213,22 @@ class RotationSetMaintainHelperTest {
         RotationSetComplexValue result = new RotationSetComplexValue();
         result.setRotationSetDao(DummyPublicDisplayUtil.getXhbRotationSetsDao());
 
-        RotationSetDdComplexValue[] rotationSetDdComplexValuesArray =
-            getDummyRotationSetDdComplexValues();
+        RotationSetDdComplexValue[] rotationSetDdComplexValuesArray = getDummyRotationSetDdComplexValues();
         result.setRotationSetDdComplexValues(rotationSetDdComplexValuesArray);
         return result;
     }
 
     private RotationSetDdComplexValue[] getDummyRotationSetDdComplexValues() {
-        RotationSetDdComplexValue rotationSetDdComplexValue =
-            new RotationSetDdComplexValue(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
-                DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+        RotationSetDdComplexValue rotationSetDdComplexValue = new RotationSetDdComplexValue(
+            DummyPublicDisplayUtil.getXhbRotationSetDdDao(), DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
 
         // Adding a null id value to increase coverage
-        RotationSetDdComplexValue rotationSetDdComplexValueNullKey =
-            new RotationSetDdComplexValue(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
-                DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
-        XhbRotationSetDdDao rotationSetDdBasicValue =
-            rotationSetDdComplexValueNullKey.getRotationSetDdDao();
+        RotationSetDdComplexValue rotationSetDdComplexValueNullKey = new RotationSetDdComplexValue(
+            DummyPublicDisplayUtil.getXhbRotationSetDdDao(), DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+        XhbRotationSetDdDao rotationSetDdBasicValue = rotationSetDdComplexValueNullKey.getRotationSetDdDao();
         rotationSetDdBasicValue.setRotationSetDdId(null);
 
-        return new RotationSetDdComplexValue[] {rotationSetDdComplexValue,
-            rotationSetDdComplexValue, rotationSetDdComplexValueNullKey};
+        return new RotationSetDdComplexValue[] {rotationSetDdComplexValue, rotationSetDdComplexValue,
+            rotationSetDdComplexValueNullKey};
     }
 }
