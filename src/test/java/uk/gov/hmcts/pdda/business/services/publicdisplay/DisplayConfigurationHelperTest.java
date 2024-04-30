@@ -121,7 +121,6 @@ class DisplayConfigurationHelperTest {
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
 
         XhbDisplayDao xhbDisplayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         List<XhbCourtSiteDao> xhbCourtSites = new ArrayList<>();
         xhbCourtSites.add(DummyCourtUtil.getXhbCourtSiteDao());

@@ -212,7 +212,6 @@ class PdConfigurationControllerBeanGetTest {
         xhbDisplayDao.setDisplayId(DISPLAY_ID);
         xhbDisplayDao.setRotationSetId(ROTATION_SET_ID);
         xhbDisplayDao.setShowUnassignedYn(YES);
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
@@ -372,7 +371,6 @@ class PdConfigurationControllerBeanGetTest {
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);

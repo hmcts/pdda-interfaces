@@ -16,7 +16,6 @@ import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
@@ -166,7 +165,7 @@ class DefaultDisplayConfigurationReaderTest {
         dummyCourtList.add(court2);
         dummyCourtList.add(court3);
         List<XhbDisplayDao> xdList = new ArrayList<>();
-        xdList.add(getDummyDisplayDao(true));
+        xdList.add(getDummyDisplayDao());
 
         
         DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
@@ -232,7 +231,7 @@ class DefaultDisplayConfigurationReaderTest {
 
         int[] courtsForPublicDisplay = {80};
         Optional<XhbRotationSetsDao> xrs = Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao());
-        Optional<XhbDisplayDao> displayDao = Optional.of(getDummyDisplayDao(true));
+        Optional<XhbDisplayDao> displayDao = Optional.of(getDummyDisplayDao());
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(COURT_ID, TESTCOURT1);
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
@@ -274,7 +273,7 @@ class DefaultDisplayConfigurationReaderTest {
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
 
         List<XhbDisplayDao> xdList = new ArrayList<>();
-        xdList.add(getDummyDisplayDao(true));
+        xdList.add(getDummyDisplayDao());
         DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
             new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
@@ -396,15 +395,9 @@ class DefaultDisplayConfigurationReaderTest {
         assertNotNull(result, NOTNULL);
     }
 
-    private XhbDisplayDao getDummyDisplayDao(final boolean setObjects) {
+    private XhbDisplayDao getDummyDisplayDao() {
         XhbDisplayDao returnObject = DummyPublicDisplayUtil.getXhbDisplayDao();
         returnObject.setShowUnassignedYn(YES);
-        if (setObjects) {
-            List<XhbCourtRoomDao> roomList = new ArrayList<>();
-            roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-            roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-            returnObject.setXhbCourtRooms(roomList);
-        }
         return returnObject;
     }
 }

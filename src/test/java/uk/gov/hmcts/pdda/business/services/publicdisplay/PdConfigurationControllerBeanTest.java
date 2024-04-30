@@ -210,7 +210,6 @@ class PdConfigurationControllerBeanTest {
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
