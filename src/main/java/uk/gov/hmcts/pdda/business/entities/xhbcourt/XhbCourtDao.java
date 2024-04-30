@@ -6,16 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.LinguisticNaming","PMD.GodClass"})
 @Entity(name = "XHB_COURT")
@@ -124,10 +120,6 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
 
     @Column(name = "OBS_IND")
     private String obsInd;
-
-    @jakarta.persistence.Transient
-    @OneToMany(mappedBy = "xhbCourtDAO")
-    private List<XhbCourtSiteDao> xhbCourtSites = new ArrayList<>();
 
     public XhbCourtDao() {
         super();
@@ -407,15 +399,5 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
     public final void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
-    
-    public List<XhbCourtSiteDao> getXhbCourtSites() {
-        return xhbCourtSites;
-    }
-
-    public final void setXhbCourtSites(List<XhbCourtSiteDao> xhbCourtSites) {
-        this.xhbCourtSites = xhbCourtSites;
-    }
-
-
 
 }

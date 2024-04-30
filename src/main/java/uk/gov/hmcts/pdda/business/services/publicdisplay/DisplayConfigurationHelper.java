@@ -27,6 +27,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.DisplayConfigura
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -61,12 +62,13 @@ public class DisplayConfigurationHelper {
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
         final EntityManager entityManager) {
         return getDisplayConfiguration(displayId, new XhbDisplayRepository(entityManager),
-            new XhbCourtRepository(entityManager), new XhbRotationSetsRepository(entityManager));
+            new XhbCourtRepository(entityManager), new XhbRotationSetsRepository(entityManager),
+            new XhbCourtSiteRepository(entityManager));
     }
 
     public static DisplayConfiguration getDisplayConfiguration(final Integer displayId,
         XhbDisplayRepository xhbDisplayRepository, XhbCourtRepository xhbCourtRepository,
-        XhbRotationSetsRepository xhbRotationSetsRepository) {
+        XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository, xhbCourtRepository);
         Optional<XhbDisplayDao> display = xhbDisplayRepository.findById(displayId);
         if (!display.isPresent()) {
@@ -75,11 +77,11 @@ public class DisplayConfigurationHelper {
         Optional<XhbRotationSetsDao> xhbRotationSet =
             xhbRotationSetsRepository.findById(display.get().getRotationSetId());
         return new DisplayConfiguration(display.get(), xhbRotationSet.get(),
-            getDisplayCourtRooms(display.get(), xhbCourtRepository));
+            getDisplayCourtRooms(display.get(), xhbCourtRepository, xhbCourtSiteRepository));
     }
 
     private static XhbCourtRoomDao[] getDisplayCourtRooms(final XhbDisplayDao display,
-        XhbCourtRepository xhbCourtRepository) {
+        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("getDisplayCourtRooms({},{})", display, xhbCourtRepository);
         boolean isMultiSite = false;
 
@@ -87,7 +89,7 @@ public class DisplayConfigurationHelper {
 
         if (!rooms.isEmpty()) {
             Integer courtId = rooms.iterator().next().getXhbCourtSite().getCourtId();
-            isMultiSite = isCourtMultiSite(courtId, xhbCourtRepository);
+            isMultiSite = isCourtMultiSite(courtId, xhbCourtRepository, xhbCourtSiteRepository);
         }
         if (isMultiSite) {
             return getMultiSiteCourtRoomData(display.getXhbCourtRooms());
@@ -112,10 +114,16 @@ public class DisplayConfigurationHelper {
         return returnValues;
     }
 
-    private static boolean isCourtMultiSite(final Integer courtId, XhbCourtRepository xhbCourtRepository) {
+    private static boolean isCourtMultiSite(final Integer courtId, XhbCourtRepository xhbCourtRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("isCourtMultiSite({},{})", courtId, xhbCourtRepository);
         Optional<XhbCourtDao> dao = xhbCourtRepository.findById(courtId);
-        return dao.isPresent() && dao.get().getXhbCourtSites().size() > 1;
+        boolean result = false;
+        if (dao.isPresent()) {
+            List<XhbCourtSiteDao> xhbCourtSites = xhbCourtSiteRepository.findByCourtId(courtId);
+            result = xhbCourtSites.size() > 1;
+        }
+        return result;
     }
 
     // This one is called dynamically
