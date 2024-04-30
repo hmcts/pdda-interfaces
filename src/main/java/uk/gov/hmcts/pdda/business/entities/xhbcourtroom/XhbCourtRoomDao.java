@@ -22,6 +22,10 @@ import java.util.Collection;
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteId",
     query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId ")
 
+@NamedQuery(name = "XHB_COURT_ROOM.findByDisplayId", query = "SELECT o FROM XHB_COURT_ROOM o "
+    + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
+    + "XHB_DISPLAY_COURT_ROOM dcr WHERE dcr.displayId = :displayId)")
+
 @NamedQuery(name = "XHB_COURT_ROOM.findVIPMultiSite", query = "SELECT o FROM XHB_COURT_ROOM o "
     + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
     + "XHB_DISPLAY_LOCATION dl, XHB_COURT_SITE cs, " + "XHB_DISPLAY d, XHB_DISPLAY_COURT_ROOM dcr "
