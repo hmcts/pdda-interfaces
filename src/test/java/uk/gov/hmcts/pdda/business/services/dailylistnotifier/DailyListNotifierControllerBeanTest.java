@@ -9,14 +9,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.DummyCourtUtil;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaDlNotifierHelper;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.PdConfigurationControllerBean;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -39,9 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DailyListNotifierControllerBeanTest {
 
-    private static final String EQUALS = "Results are not Equal";
-    private static final String FALSE = "Result is not False";
     private static final String TRUE = "Result is not True";
+    private static final String NOT_NULL = "Result is Not Null";
+
 
     @Mock
     private EntityManager mockEntityManager;
@@ -75,5 +71,28 @@ class DailyListNotifierControllerBeanTest {
         }
         // Check results
         assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testRefreshPublicDisplaysForCourt() {
+        // Setup
+        int courtId = 80;
+        
+        // Run method
+        boolean result;
+        try {
+            classUnderTest.refreshPublicDisplaysForCourt(courtId);
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testDefaultConstructor() {
+        DailyListNotifierControllerBean testConstructor = new DailyListNotifierControllerBean(mockEntityManager);
+        assertNotNull(testConstructor, NOT_NULL);
     }
 }
