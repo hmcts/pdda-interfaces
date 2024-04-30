@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtListValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
@@ -29,9 +30,10 @@ public class CourtListCppToPublicDisplay extends AbstractCppToPublicDisplay {
 
     // Use only in unit test
     public CourtListCppToPublicDisplay(Date date, int courtId, int[] courtRoomIds,
-        XhbCourtRepository xhbCourtRepository, XhbClobRepository xhbClobRepository,
-        CppFormattingHelper cppFormattingHelper) {
-        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbClobRepository, cppFormattingHelper);
+        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
+        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbCourtSiteRepository, xhbClobRepository,
+            cppFormattingHelper);
     }
 
     @Override

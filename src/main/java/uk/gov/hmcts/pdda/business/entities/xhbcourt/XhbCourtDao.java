@@ -11,9 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
-import uk.gov.hmcts.pdda.business.vos.services.court.CourtStructureValue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +34,6 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
     private static final long serialVersionUID = 6619741714677299473L;
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtDao.class);
-    private static final Integer ONE = 1;
 
     @Id
     @GeneratedValue(generator = "xhb_court_seq", strategy = GenerationType.SEQUENCE)
@@ -419,54 +416,6 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         this.xhbCourtSites = xhbCourtSites;
     }
 
-    /**
-     * Returns a CourtStructureValue object representing the XhbCourtDAO object and it's children.
-     * 
-     * @return CourtStructureValue
-     */
-    public CourtStructureValue getCourtStructure() {
-        CourtStructureValue courtStructureValue = new CourtStructureValue();
 
-        courtStructureValue.setCourt(this);
-
-        List<XhbCourtSiteDao> courtSitesList = new ArrayList<>();
-        for (XhbCourtSiteDao courtSite : getXhbCourtSites()) {
-            if ("Y".equals(courtSite.getObsInd())) {
-                LOG.debug("Ignored Obsolete CourtSite");
-            } else {
-                courtSitesList.add(courtSite);
-
-                List<XhbCourtRoomDao> courtRoomList = getCourtRoomList(courtSite);
-
-                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(),
-                    courtRoomList.toArray(getXhbCourtRoomDaoArray()));
-            }
-        }
-
-        courtStructureValue.setCourtSites(courtSitesList.toArray(new XhbCourtSiteDao[0]));
-
-        return courtStructureValue;
-    }
-
-    private XhbCourtRoomDao[] getXhbCourtRoomDaoArray() {
-        return new XhbCourtRoomDao[0];
-    }
-
-    private List<XhbCourtRoomDao> getCourtRoomList(XhbCourtSiteDao courtSite) {
-        List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
-        for (XhbCourtRoomDao courtRoom : courtSite.getXhbCourtRooms()) {
-            if ("Y".equals(courtRoom.getObsInd())) {
-                LOG.debug("Ignored Obsolete CourtRoom");
-            } else {
-                if (getXhbCourtSites().size() > ONE) {
-                    courtRoom.setMultiSiteDisplayName(
-                        courtSite.getShortName() + "-" + courtRoom.getDisplayName());
-                }
-
-                courtRoomList.add(courtRoom);
-            }
-        }
-        return courtRoomList;
-    }
 
 }

@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
@@ -44,7 +45,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractCppToPublicDisplay.class);
     private static final String YES = "Y";
-    
+
     protected static final String XPATH_COURTSITENAME = "courtsitename";
     protected static final String XPATH_CASE = "cases/caseDetails";
     protected static final String XPATH_CPPURN = "cppurn";
@@ -79,26 +80,26 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     protected XhbClobDao cppClob;
     protected XhbCppFormattingDao cppFormattBV;
 
-    protected AbstractCppToPublicDisplay(final Date date, final int courtId,
-        final int... courtRoomIds) {
+    protected AbstractCppToPublicDisplay(final Date date, final int courtId, final int... courtRoomIds) {
         super();
         this.date = date;
         this.courtId = courtId;
-        this.courtRoomIds = courtRoomIds != null ? courtRoomIds.clone() :  null;
+        this.courtRoomIds = courtRoomIds != null ? courtRoomIds.clone() : null;
     }
 
     // Use only in unit test
-    protected AbstractCppToPublicDisplay(final Date date, final int courtId,
-        final int[] courtRoomIds, XhbCourtRepository xhbCourtRepository,
+    protected AbstractCppToPublicDisplay(final Date date, final int courtId, final int[] courtRoomIds,
+        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
-        super(xhbCourtRepository,xhbClobRepository,cppFormattingHelper);
+        super(xhbCourtRepository, xhbCourtSiteRepository, xhbClobRepository, cppFormattingHelper);
         this.date = date;
         this.courtId = courtId;
-        this.courtRoomIds = courtRoomIds != null ? courtRoomIds.clone() :  null;
+        this.courtRoomIds = courtRoomIds != null ? courtRoomIds.clone() : null;
     }
 
     /**
      * isCourtCppEnabled.
+     * 
      * @param entityManager EntityManager
      * @return boolean representing if the court id defined as being CPP ready
      */
@@ -125,8 +126,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception
      */
-    protected void populateData(PublicDisplayValue value, Element caseNode)
-        throws XPathExpressionException {
+    protected void populateData(PublicDisplayValue value, Element caseNode) throws XPathExpressionException {
         LOG.debug("populateData({},{})", value, caseNode);
         String movedFromCourtRoomName = getXPath().evaluate(XPATH_MOVEDFROMCOURTROOM, caseNode);
         if (!EMPTY_STRING.equals(movedFromCourtRoomName)) {
@@ -141,7 +141,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         String notBeforeTime = getXPath().evaluate(XPATH_NOTBEFORETIME, caseNode);
         if (!EMPTY_STRING.equals(notBeforeTime)) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
-            String dateString = dateFormat.format(this.date); 
+            String dateString = dateFormat.format(this.date);
             // Combine the time with the date to complete the timestamp otherwise uses 1970
             value.setNotBeforeTime(convertStringToTimestamp(dateString + " " + notBeforeTime));
         }
@@ -149,6 +149,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCppClobAsDocument.
+     * 
      * @return the cppClob as a document for manipulation.
      */
     public Document getCppClobAsDocument(final EntityManager entityManager) {
@@ -163,8 +164,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         try {
             docBuilder = MergeDocumentUtils.getDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            LOG.error(methodName + "ParserConfigurationException - Unable to retrieve CPP XML - "
-                + e.getMessage());
+            LOG.error(methodName + "ParserConfigurationException - Unable to retrieve CPP XML - " + e.getMessage());
         }
 
         try {
@@ -179,14 +179,14 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
         return cppXml;
     }
-    
+
     /**
      * getCppData.
+     * 
      * @return Collection of the relevant display objects.
      * @throws XPathExpressionException Exception
      */
-    public abstract Collection getCppData(EntityManager entityManager)
-        throws XPathExpressionException;
+    public abstract Collection getCppData(EntityManager entityManager) throws XPathExpressionException;
 
     /**
      * getDate.
@@ -199,6 +199,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtId.
+     * 
      * @return the courtId
      */
     public int getCourtId() {
@@ -207,6 +208,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtRoomIds.
+     * 
      * @return the courtRoomIds
      */
     public int[] getCourtRoomIds() {
@@ -215,6 +217,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtName.
+     * 
      * @return the courtName
      */
     public String getCourtName() {
@@ -223,6 +226,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * setCourtName.
+     * 
      * @param courtName the courtName to set
      */
     public void setCourtName(String courtName) {
@@ -231,6 +235,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCppClob.
+     * 
      * @return the cppClob
      */
     public XhbClobDao getCppClob(final EntityManager entityManager) {
@@ -238,11 +243,9 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         Optional<XhbClobDao> xhbClobDao = Optional.empty();
         if (cppClob == null) {
             // retrieve from the database
-            cppFormattBV =
-                getCppFormattingHelper().getLatestPublicDisplayDocument(courtId, entityManager);
+            cppFormattBV = getCppFormattingHelper().getLatestPublicDisplayDocument(courtId, entityManager);
             if (null != cppFormattBV && null != cppFormattBV.getXmlDocumentClobId()) {
-                xhbClobDao = getXhbClobRepository(entityManager)
-                    .findById(cppFormattBV.getXmlDocumentClobId());
+                xhbClobDao = getXhbClobRepository(entityManager).findById(cppFormattBV.getXmlDocumentClobId());
             }
         }
         if (xhbClobDao.isPresent()) {
@@ -310,11 +313,12 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         return siteValue;
     }
 
-    protected NodeList getCourtSiteNodeList(XhbCourtRoomDao courtRoomValue,
-        XhbCourtSiteDao courtSiteValue, Document doc) throws XPathExpressionException {
-        return (NodeList) getXPath().evaluate("//courtsite[courtsitename='"
-            + courtSiteValue.getCourtSiteName() + "']/courtrooms/courtroom[courtroomname='"
-            + courtRoomValue.getCourtRoomName() + "']", doc, XPathConstants.NODESET);
+    protected NodeList getCourtSiteNodeList(XhbCourtRoomDao courtRoomValue, XhbCourtSiteDao courtSiteValue,
+        Document doc) throws XPathExpressionException {
+        return (NodeList) getXPath().evaluate(
+            "//courtsite[courtsitename='" + courtSiteValue.getCourtSiteName()
+                + "']/courtrooms/courtroom[courtroomname='" + courtRoomValue.getCourtRoomName() + "']",
+            doc, XPathConstants.NODESET);
     }
 
     protected NodeList getCasesNodeList(Node node) throws XPathExpressionException {
@@ -322,8 +326,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     }
 
     protected NodeList getFloatingCaseNodeList(Node node) throws XPathExpressionException {
-        return (NodeList) getXPath().evaluate(XPATH_FLOATINGCASEDETAILS, node,
-            XPathConstants.NODESET);
+        return (NodeList) getXPath().evaluate(XPATH_FLOATINGCASEDETAILS, node, XPathConstants.NODESET);
     }
 
     protected NodeList getDefendantNodeList(Node node) throws XPathExpressionException {
@@ -358,8 +361,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @param room XhbCourtRoomDao
      * @param site XhbCourtSiteDao
      */
-    protected void populateCourtSiteRoomData(PublicDisplayValue value, XhbCourtRoomDao room,
-        XhbCourtSiteDao site) {
+    protected void populateCourtSiteRoomData(PublicDisplayValue value, XhbCourtRoomDao room, XhbCourtSiteDao site) {
         // Court room data
         if (null == room) {
             value.setCourtRoomName(EMPTY_STRING);
@@ -391,8 +393,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return true if the reporting is restricted else false.
      * @throws XPathExpressionException Exception
      */
-    protected boolean getDefendantReportRestriction(Element defNode)
-        throws XPathExpressionException {
+    protected boolean getDefendantReportRestriction(Element defNode) throws XPathExpressionException {
         String methodName = "getDefendantReportRestriction(defNode=>" + defNode + ") ";
         boolean reportingRestricted = false;
         String nodeValue = getXPath().evaluate(XPATH_DEF_RESTRICTIONS, defNode);

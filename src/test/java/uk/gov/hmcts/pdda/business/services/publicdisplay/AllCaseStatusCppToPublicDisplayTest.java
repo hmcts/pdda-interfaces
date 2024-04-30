@@ -15,6 +15,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
@@ -48,6 +50,9 @@ class AllCaseStatusCppToPublicDisplayTest {
     private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
+    private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+
+    @Mock
     private XhbCppFormattingRepository mockXhbCppFormattingRepository;
 
     @Mock
@@ -57,8 +62,9 @@ class AllCaseStatusCppToPublicDisplayTest {
     private CppFormattingHelper mockCppFormattingHelper;
 
     @TestSubject
-    private final AllCaseStatusCppToPublicDisplay classUnderTest = new AllCaseStatusCppToPublicDisplay(LIST_DATE,
-        COURT_ID, ROOM_ARRAY, mockXhbCourtRepository, mockXhbClobRepository, mockCppFormattingHelper);
+    private final AllCaseStatusCppToPublicDisplay classUnderTest =
+        new AllCaseStatusCppToPublicDisplay(LIST_DATE, COURT_ID, ROOM_ARRAY, mockXhbCourtRepository,
+            mockXhbCourtSiteRepository, mockXhbClobRepository, mockCppFormattingHelper);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -89,11 +95,13 @@ class AllCaseStatusCppToPublicDisplayTest {
         List<XhbCppFormattingDao> xcfList = new ArrayList<>();
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
+        List<XhbCourtSiteDao> courtSiteDaos = new ArrayList<>();
+        courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
         XhbClobDao clobDao = DummyFormattingUtil.getXhbClobDao(xcfList.get(0).getXmlDocumentClobId(),
             AllCourtStatusCppToPublicDisplayTest.CPP_XML);
 
         EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class))).andReturn(Optional.of(courtDao));
-
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtId(EasyMock.isA(Integer.class))).andReturn(courtSiteDaos);
         EasyMock.expect(mockXhbCppFormattingRepository.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
             EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xcfList.get(0));
 
@@ -103,6 +111,7 @@ class AllCaseStatusCppToPublicDisplayTest {
             EasyMock.isA(EntityManager.class))).andReturn(xhbCppFormattingDao);
 
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockXhbCourtSiteRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockCppFormattingHelper);

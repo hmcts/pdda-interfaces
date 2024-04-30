@@ -9,11 +9,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.vos.services.court.CourtStructureValue;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -28,26 +31,29 @@ import javax.xml.xpath.XPathFactory;
 public class AbstractCppToPublicDisplayRepos {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCppToPublicDisplayRepos.class);
-    
+    private static final Integer ONE = 1;
     private static final String DATE_MASK = "dd/MM/yy HH:mm";
     protected static final String EMPTY_STRING = "";
-    
+
     private XhbCourtRepository xhbCourtRepository;
+    private XhbCourtSiteRepository xhbCourtSiteRepository;
     private CppFormattingHelper cppFormattingHelper;
     private XhbClobRepository xhbClobRepository;
     protected CourtStructureValue xhbCourtStructure;
-    
+
     protected XPath xp;
-    
+
     protected AbstractCppToPublicDisplayRepos() {
         super();
     }
-    
+
     // Use only in unit test
     protected AbstractCppToPublicDisplayRepos(XhbCourtRepository xhbCourtRepository,
-        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
+        XhbCourtSiteRepository xhbCourtSiteRepository, XhbClobRepository xhbClobRepository,
+        CppFormattingHelper cppFormattingHelper) {
         this();
         this.xhbCourtRepository = xhbCourtRepository;
+        this.xhbCourtSiteRepository = xhbCourtSiteRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.cppFormattingHelper = cppFormattingHelper;
     }
@@ -60,8 +66,7 @@ public class AbstractCppToPublicDisplayRepos {
      */
     protected LocalDateTime convertStringToTimestamp(String dateTime) {
         LocalDateTime timestamp = null;
-        String methodName =
-            "convertStringToTimestamp(dateTime=>" + dateTime + ", mask=>" + DATE_MASK + ") ";
+        String methodName = "convertStringToTimestamp(dateTime=>" + dateTime + ", mask=>" + DATE_MASK + ") ";
         try {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_MASK);
             timestamp = LocalDateTime.parse(dateTime, dateFormat);
@@ -70,7 +75,7 @@ public class AbstractCppToPublicDisplayRepos {
         }
         return timestamp;
     }
-    
+
     /**
      * Returns the XPath object reference.
      * 
@@ -82,39 +87,79 @@ public class AbstractCppToPublicDisplayRepos {
         }
         return xp;
     }
-    
+
 
     /**
      * getXhbCourtStructure.
+     * 
      * @return the xhbCourtStructure
      */
     public CourtStructureValue getXhbCourtStructure() {
         return xhbCourtStructure;
     }
-    
+
     /**
      * Get a court structure object to use with retrieving the CPP data from the XML.
      */
     protected void retrieveCourtStructure(XhbCourtDao court) {
-        xhbCourtStructure = court.getCourtStructure();
+        CourtStructureValue courtStructureValue = new CourtStructureValue();
+
+        courtStructureValue.setCourt(court);
+
+        XhbCourtRoomDao[] courtRoomArray = new XhbCourtRoomDao[0];
+        List<XhbCourtSiteDao> courtSitesList = new ArrayList<>();
+        List<XhbCourtSiteDao> allCourtSitesForCourt = xhbCourtSiteRepository.findByCourtId(court.getCourtId());
+        for (XhbCourtSiteDao courtSite : allCourtSitesForCourt) {
+            if ("Y".equals(courtSite.getObsInd())) {
+                LOG.debug("Ignored Obsolete CourtSite");
+            } else {
+                courtSitesList.add(courtSite);
+
+                List<XhbCourtRoomDao> courtRoomList = getCourtRoomList(courtSite, allCourtSitesForCourt);
+
+                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(),
+                    courtRoomList.toArray(courtRoomArray));
+            }
+        }
+
+        courtStructureValue.setCourtSites(courtSitesList.toArray(new XhbCourtSiteDao[0]));
+
+        xhbCourtStructure = courtStructureValue;
+    }
+
+    private List<XhbCourtRoomDao> getCourtRoomList(XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
+        List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
+        for (XhbCourtRoomDao courtRoom : courtSite.getXhbCourtRooms()) {
+            if ("Y".equals(courtRoom.getObsInd())) {
+                LOG.debug("Ignored Obsolete CourtRoom");
+            } else {
+                if (xhbCourtSites.size() > ONE) {
+                    courtRoom.setMultiSiteDisplayName(courtSite.getShortName() + "-" + courtRoom.getDisplayName());
+                }
+
+                courtRoomList.add(courtRoom);
+            }
+        }
+        return courtRoomList;
     }
 
     /**
      * setXhbCourtStructure.
+     * 
      * @param xhbCourtStructure the xhbCourtStructure to set
      */
     public void setXhbCourtStructure(CourtStructureValue xhbCourtStructure) {
         this.xhbCourtStructure = xhbCourtStructure;
     }
-    
+
     protected XhbCourtRoomDao getXhbCourtRoomDao(XhbCourtRoomDao room) {
         return new XhbCourtRoomDao(room);
     }
-    
+
     protected XhbCourtSiteDao getXhbCourtSiteDao(XhbCourtSiteDao site) {
         return new XhbCourtSiteDao(site);
     }
-    
+
     protected XhbCourtRepository getXhbCourtRepository(EntityManager entityManager) {
         if (xhbCourtRepository == null) {
             return new XhbCourtRepository(entityManager);
