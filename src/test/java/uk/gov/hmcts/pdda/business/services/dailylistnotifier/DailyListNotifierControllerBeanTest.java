@@ -52,6 +52,25 @@ class DailyListNotifierControllerBeanTest {
     private final DailyListNotifierControllerBean classUnderTest = new DailyListNotifierControllerBean(
         mockEntityManager, mockPdConfigurationControllerBean, mockPddaDlNotifierHelper);
 
+    @Test
+    void testDoTask() {
+        // Setup
+        int[] courtIds = {1,2};
+        
+        // Expects
+        Mockito.when(mockPdConfigurationControllerBean.getCourtsForPublicDisplay()).thenReturn(courtIds);
+
+        // Run method
+        boolean result;
+        try {
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertTrue(result, TRUE); 
+    }
 
     @Test
     void testCallDailyListNotifierHelper() {
@@ -91,8 +110,14 @@ class DailyListNotifierControllerBeanTest {
     }
     
     @Test
-    void testDefaultConstructor() {
+    void testDefaultConstructorEntityManager() {
         DailyListNotifierControllerBean testConstructor = new DailyListNotifierControllerBean(mockEntityManager);
+        assertNotNull(testConstructor, NOT_NULL);
+    }
+    
+    @Test
+    void testDefaultConstructor() {
+        DailyListNotifierControllerBean testConstructor = new DailyListNotifierControllerBean();
         assertNotNull(testConstructor, NOT_NULL);
     }
 }
