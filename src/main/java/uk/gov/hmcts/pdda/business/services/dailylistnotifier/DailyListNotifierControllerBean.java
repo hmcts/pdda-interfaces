@@ -28,7 +28,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     private static final String METHOD_END = ") - ";
     private static final String ENTERED = " : entered";
-    
+
     private PublicDisplayNotifier publicDisplayNotifier;
     private PddaDlNotifierHelper pddaDlNotifierHelper;
     private PdConfigurationControllerBean pdConfigurationController;
@@ -37,14 +37,21 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
         super(entityManager);
     }
 
+    // Junit constructor
+    public DailyListNotifierControllerBean(EntityManager entityManager,
+        PdConfigurationControllerBean pdConfigurationController, PddaDlNotifierHelper pddaDlNotifierHelper) {
+        super(entityManager, null, null, null, null);
+        this.pdConfigurationController = pdConfigurationController;
+        this.pddaDlNotifierHelper = pddaDlNotifierHelper;
+    }
+
     public DailyListNotifierControllerBean() {
         super();
     }
 
     /**
-     * Implementation of RemoteTask so that this process is called by the timer process.
-     * This scheduled job replaces the need for DailyListNotifier due to the removal of
-     * ActiveMQ.
+     * Implementation of RemoteTask so that this process is called by the timer process. This scheduled
+     * job replaces the need for DailyListNotifier due to the removal of ActiveMQ.
      * 
      */
     @Override
@@ -93,7 +100,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
         }
         return publicDisplayNotifier;
     }
-    
+
     /**
      * Returns a reference to the pddaDlNotifierHelper object.
      * 
@@ -105,7 +112,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
         }
         return pddaDlNotifierHelper;
     }
-    
+
     /**
      * Returns a reference to the pdConfigurationController object.
      * 
