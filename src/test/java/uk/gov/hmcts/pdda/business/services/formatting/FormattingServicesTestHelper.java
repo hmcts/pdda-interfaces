@@ -28,7 +28,6 @@ class FormattingServicesTestHelper {
     protected XhbCppListDao getXhbCppListDao(XhbClobDao xhbClobDao) {
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         return xhbCppListDao;
     }

@@ -201,16 +201,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private XhbCppListDao getLatestCppList(Integer courtId, String listType, LocalDateTime listStartDate) {
         List<XhbCppListDao> cppList =
             getXhbCppListRepository().findByCourtCodeAndListTypeAndListDate(courtId, listType, listStartDate);
-        XhbCppListDao result = cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
-        if (result != null && result.getListClobId() != null) {
-            // Populate the listClob on the XhbCppListDAO
-            Optional<XhbClobDao> listClob = getFormattingServices().getClob(result.getListClobId());
-            if (listClob.isPresent()) {
-                result.setListClob(listClob.get());
-            }
-        }
-
-        return result;
+        return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 
     private FormattingServices getFormattingServices() {

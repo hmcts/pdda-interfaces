@@ -211,7 +211,6 @@ class FormattingControllerBeanTest {
 
         EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(EasyMock.isA(Integer.class),
             EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
-        EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class))).andReturn(Optional.of(xhbClobDao));
         mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class), EasyMock.isA(EntityManager.class));
 
         EasyMock.replay(mockXhbCppListRepository);
@@ -269,7 +268,6 @@ class FormattingControllerBeanTest {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         result = new XhbCppListDao(result);
-        result.setListClob(listClob);
         return result;
     }
 

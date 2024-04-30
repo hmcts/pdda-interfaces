@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 
@@ -55,37 +54,17 @@ class AbstractFormattingServicesTest {
         new AbstractFormattingServices(mockEntityManager);
 
     @Test
-    void testCreateCppListClob() {
+    void testCreateClob() {
         // Setup
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(0L, "");
-        XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
 
-        EasyMock.expect(mockXhbClobRepository.update(xhbCppListDao.getListClob()))
+        EasyMock.expect(mockXhbClobRepository.update(xhbClobDao))
             .andReturn(Optional.of(xhbClobDao));
 
         EasyMock.replay(mockXhbClobRepository);
 
         // Run
-        Long result = classUnderTest.createCppListClob(xhbCppListDao);
-
-        // Checks
-        EasyMock.verify(mockXhbClobRepository);
-        assertNotNull(result, NOT_NULL);
-    }
-
-    @Test
-    void testCreateCppMergeClob() {
-        // Setup
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(0L, "");
-        XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
-
-        EasyMock.expect(mockXhbClobRepository.update(xhbCppListDao.getMergedClob()))
-            .andReturn(Optional.of(xhbClobDao));
-
-        EasyMock.replay(mockXhbClobRepository);
-
-        // Run
-        Long result = classUnderTest.createCppMergeClob(xhbCppListDao);
+        Long result = classUnderTest.createClob(xhbClobDao);
 
         // Checks
         EasyMock.verify(mockXhbClobRepository);

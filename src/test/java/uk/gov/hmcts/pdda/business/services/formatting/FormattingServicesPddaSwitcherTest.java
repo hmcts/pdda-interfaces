@@ -132,7 +132,6 @@ class FormattingServicesPddaSwitcherTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
