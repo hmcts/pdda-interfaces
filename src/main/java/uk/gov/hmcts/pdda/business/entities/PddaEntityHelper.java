@@ -1,12 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -17,30 +18,21 @@ import java.util.Optional;
 
 public class PddaEntityHelper {
 
-    private static final String DATABASENAME = "PDDA"; 
-
-    private static final EntityManagerFactory ENTITYMANAGERFACTORY;
-
-    static {
-        try {
-            ENTITYMANAGERFACTORY = Persistence.createEntityManagerFactory(DATABASENAME);
-
-        } catch (RuntimeException ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
     protected PddaEntityHelper() {
         // Protected constructor
     }
 
     public static EntityManager getEntityManager() {
-        return ENTITYMANAGERFACTORY.createEntityManager();
+        return EntityManagerUtil.getEntityManager();
 
     }
 
     // ---- Get repositories --- //
 
+    private static XhbCourtSiteRepository getXCstrmRepo() {
+        return new XhbCourtSiteRepository(getEntityManager());
+    }
+    
     private static XhbCourtRoomRepository getXCrtrmRepo() {
         return new XhbCourtRoomRepository(getEntityManager());
     }
@@ -78,6 +70,11 @@ public class PddaEntityHelper {
             definitivePublicNublicNoticeId);
     }
 
+    // XHB_COURT_SITE
+    public static Optional<XhbCourtSiteDao> xcstFindByPrimaryKey(Integer courtSiteId) {
+        return getXCstrmRepo().findById(courtSiteId);
+    }
+    
     // XHB_COURT_ROOM
     public static Optional<XhbCourtRoomDao> xcrtFindByPrimaryKey(Integer courtRoomId) {
         return getXCrtrmRepo().findById(courtRoomId);

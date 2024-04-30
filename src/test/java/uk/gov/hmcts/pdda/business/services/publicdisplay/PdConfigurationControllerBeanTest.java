@@ -274,13 +274,11 @@ class PdConfigurationControllerBeanTest {
         site1.setCourtSiteCode("A");
         XhbCourtRoomDao redRoom = DummyCourtUtil.getXhbCourtRoomDao();
         redRoom.setCourtSiteId(site1.getCourtSiteId());
-        redRoom.setXhbCourtSite(site1);
         redRoom.setCourtRoomId(100);
         redRoom.setCourtRoomName("Red Room");
         redRoom.setDisplayName(redRoom.getCourtRoomName());
         XhbCourtRoomDao pinkRoom = DummyCourtUtil.getXhbCourtRoomDao();
         pinkRoom.setCourtSiteId(site1.getCourtSiteId());
-        pinkRoom.setXhbCourtSite(site1);
         pinkRoom.setCourtRoomId(101);
         pinkRoom.setCourtRoomName("Pink Room");
         pinkRoom.setDisplayName(pinkRoom.getCourtRoomName());
@@ -296,7 +294,6 @@ class PdConfigurationControllerBeanTest {
         site2.setCourtSiteCode("B");
         XhbCourtRoomDao brownRoom = DummyCourtUtil.getXhbCourtRoomDao();
         brownRoom.setCourtSiteId(site2.getCourtSiteId());
-        brownRoom.setXhbCourtSite(site2);
         brownRoom.setCourtRoomId(200);
         brownRoom.setCourtRoomName("Brown Room");
         brownRoom.setDisplayName(brownRoom.getCourtRoomName());

@@ -114,7 +114,6 @@ public final class DummyCourtUtil {
         courtRoomId = result.getPrimaryKey();
         assertNotNull(courtRoomId, NOTNULL);
         result.setXhbCrLiveDisplays(result.getXhbCrLiveDisplays());
-        result.setXhbCourtSite(result.getXhbCourtSite());
         result.setXhbConfiguredPublicNotices(result.getXhbConfiguredPublicNotices());
         return new XhbCourtRoomDao(result);
     }
