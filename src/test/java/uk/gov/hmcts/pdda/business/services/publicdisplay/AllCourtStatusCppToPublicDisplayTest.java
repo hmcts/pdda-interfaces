@@ -52,7 +52,7 @@ class AllCourtStatusCppToPublicDisplayTest {
             + "<lastname>Franecki</lastname></defendant><defendant><firstname>Kyla</firstname><middlename>Gayle"
             + "</middlename><lastname>Macejkovic</lastname></defendant></defendants><notbeforetime>15:00"
             + "</notbeforetime><timestatusset>15:00</timestatusset><hearingprogress>0</hearingprogress>"
-            + "</caseDetails></cases><courtroomname>Court 4</courtroomname></courtroom><courtroom><cases>"
+            + "</caseDetails></cases><courtroomname>Court Room 2</courtroomname></courtroom><courtroom><cases>"
             + "<caseDetails><cppurn>92GD2803820</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype>"
             + "<activecase>0</activecase><hearingtype>First Hearing</hearingtype><defendants><defendant>"
             + "<firstname>Mckenna</firstname><middlename>Janessa</middlename><lastname>Ratke</lastname>"
@@ -141,7 +141,14 @@ class AllCourtStatusCppToPublicDisplayTest {
         courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
         courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
         List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
-        courtRoomDaos.add(DummyCourtUtil.getXhbCourtRoomDao());
+        XhbCourtRoomDao room1 = DummyCourtUtil.getXhbCourtRoomDao();
+        room1.setCourtRoomId(ROOM_ARRAY[0]);
+        room1.setCourtRoomName("Court Room " + ROOM_ARRAY[0]);
+        courtRoomDaos.add(room1);
+        XhbCourtRoomDao room2 = DummyCourtUtil.getXhbCourtRoomDao();
+        room2.setCourtRoomId(ROOM_ARRAY[1]);
+        room2.setCourtRoomName("Court Room " + ROOM_ARRAY[1]);
+        courtRoomDaos.add(room2);
 
         EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME)));
