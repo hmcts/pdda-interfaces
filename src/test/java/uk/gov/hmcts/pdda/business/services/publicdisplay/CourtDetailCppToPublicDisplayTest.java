@@ -98,7 +98,14 @@ class CourtDetailCppToPublicDisplayTest {
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
         List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
-        courtRoomDaos.add(DummyCourtUtil.getXhbCourtRoomDao());
+        XhbCourtRoomDao room1 = DummyCourtUtil.getXhbCourtRoomDao();
+        room1.setCourtRoomId(ROOM_ARRAY[0]);
+        room1.setCourtRoomName("Court Room " + ROOM_ARRAY[0]);
+        courtRoomDaos.add(room1);
+        XhbCourtRoomDao room2 = DummyCourtUtil.getXhbCourtRoomDao();
+        room2.setCourtRoomId(ROOM_ARRAY[1]);
+        room2.setCourtRoomName("Court Room " + ROOM_ARRAY[1]);
+        courtRoomDaos.add(room2);
         List<XhbCourtSiteDao> courtSiteDaos = new ArrayList<>();
         courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
 
