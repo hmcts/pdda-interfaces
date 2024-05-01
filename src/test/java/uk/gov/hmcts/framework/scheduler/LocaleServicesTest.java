@@ -49,6 +49,7 @@ class LocaleServicesTest {
     private static final String NULL = "Result is Null";
     private static final String TRUE = "true";
     private static final String FALSE = "false";
+    private static final String BAD_DATA_STRING = "abcdefg";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -187,6 +188,19 @@ class LocaleServicesTest {
     @Test
     void testSchedulable() {
         Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
+        Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties);
+        testSchedulable.start();
+        testSchedulable.stop();
+        assertNotNull(testSchedulable, NULL);
+    }
+    
+    @Test
+    void testSchedulableBadData() {
+        Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
+        testProperties.setProperty(Schedulable.DELAY, BAD_DATA_STRING);
+        testProperties.setProperty(Schedulable.PERIOD, BAD_DATA_STRING);
+        testProperties.setProperty(Schedulable.HOUR, BAD_DATA_STRING);
+        testProperties.setProperty(Schedulable.MINUTE, BAD_DATA_STRING);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties);
         testSchedulable.start();
         testSchedulable.stop();
