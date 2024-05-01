@@ -12,8 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
@@ -52,6 +53,9 @@ class JuryCurrentStatusCppToPublicDisplayTest {
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
+
+    @Mock
     private XhbCppFormattingRepository mockXhbCppFormattingRepository;
 
     @Mock
@@ -63,7 +67,7 @@ class JuryCurrentStatusCppToPublicDisplayTest {
     @TestSubject
     private final JuryCurrentStatusCppToPublicDisplay classUnderTest =
         new JuryCurrentStatusCppToPublicDisplay(LIST_DATE, COURT_ID, ROOM_ARRAY, mockXhbCourtRepository,
-            mockXhbCourtSiteRepository, mockXhbClobRepository, mockCppFormattingHelper);
+            mockXhbCourtSiteRepository, mockXhbCourtRoomRepository, mockXhbClobRepository, mockCppFormattingHelper);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -90,15 +94,20 @@ class JuryCurrentStatusCppToPublicDisplayTest {
     @Test
     void testGetCppData() {
         // Setup
-        XhbCourtDao courtDao = DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME);
         ArrayList<XhbCppFormattingDao> xcfList = new ArrayList<>();
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
+        List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
+        courtRoomDaos.add(DummyCourtUtil.getXhbCourtRoomDao());
         List<XhbCourtSiteDao> courtSiteDaos = new ArrayList<>();
         courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
 
-        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class))).andReturn(Optional.of(courtDao));
+        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME)));
         EasyMock.expect(mockXhbCourtSiteRepository.findByCourtId(EasyMock.isA(Integer.class))).andReturn(courtSiteDaos);
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteId(EasyMock.isA(Integer.class)))
+            .andReturn(courtRoomDaos);
+        EasyMock.expectLastCall().anyTimes();
         EasyMock.expect(mockXhbCppFormattingRepository.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
             EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xcfList.get(0));
 
@@ -111,6 +120,7 @@ class JuryCurrentStatusCppToPublicDisplayTest {
 
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtSiteRepository);
+        EasyMock.replay(mockXhbCourtRoomRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockCppFormattingHelper);

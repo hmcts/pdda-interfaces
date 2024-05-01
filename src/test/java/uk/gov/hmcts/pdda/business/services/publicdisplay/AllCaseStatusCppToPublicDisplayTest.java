@@ -13,8 +13,9 @@ import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
@@ -32,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 
 @ExtendWith(EasyMockExtension.class)
 class AllCaseStatusCppToPublicDisplayTest {
@@ -53,6 +55,9 @@ class AllCaseStatusCppToPublicDisplayTest {
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
+
+    @Mock
     private XhbCppFormattingRepository mockXhbCppFormattingRepository;
 
     @Mock
@@ -64,7 +69,7 @@ class AllCaseStatusCppToPublicDisplayTest {
     @TestSubject
     private final AllCaseStatusCppToPublicDisplay classUnderTest =
         new AllCaseStatusCppToPublicDisplay(LIST_DATE, COURT_ID, ROOM_ARRAY, mockXhbCourtRepository,
-            mockXhbCourtSiteRepository, mockXhbClobRepository, mockCppFormattingHelper);
+            mockXhbCourtSiteRepository, mockXhbCourtRoomRepository, mockXhbClobRepository, mockCppFormattingHelper);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -91,17 +96,22 @@ class AllCaseStatusCppToPublicDisplayTest {
     @Test
     void testGetCppData() {
         // Setup
-        XhbCourtDao courtDao = DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME);
         List<XhbCppFormattingDao> xcfList = new ArrayList<>();
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
         List<XhbCourtSiteDao> courtSiteDaos = new ArrayList<>();
         courtSiteDaos.add(DummyCourtUtil.getXhbCourtSiteDao());
+        List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
+        courtRoomDaos.add(DummyCourtUtil.getXhbCourtRoomDao());
         XhbClobDao clobDao = DummyFormattingUtil.getXhbClobDao(xcfList.get(0).getXmlDocumentClobId(),
             AllCourtStatusCppToPublicDisplayTest.CPP_XML);
 
-        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class))).andReturn(Optional.of(courtDao));
+        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME)));
         EasyMock.expect(mockXhbCourtSiteRepository.findByCourtId(EasyMock.isA(Integer.class))).andReturn(courtSiteDaos);
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteId(EasyMock.isA(Integer.class)))
+            .andReturn(courtRoomDaos);
+        EasyMock.expectLastCall().anyTimes();
         EasyMock.expect(mockXhbCppFormattingRepository.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
             EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xcfList.get(0));
 
@@ -112,6 +122,7 @@ class AllCaseStatusCppToPublicDisplayTest {
 
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtSiteRepository);
+        EasyMock.replay(mockXhbCourtRoomRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockCppFormattingHelper);

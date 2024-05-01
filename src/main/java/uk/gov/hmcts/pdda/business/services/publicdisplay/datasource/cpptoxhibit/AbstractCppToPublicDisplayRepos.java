@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
@@ -37,6 +38,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     private XhbCourtRepository xhbCourtRepository;
     private XhbCourtSiteRepository xhbCourtSiteRepository;
+    private XhbCourtRoomRepository xhbCourtRoomRepository;
     private CppFormattingHelper cppFormattingHelper;
     private XhbClobRepository xhbClobRepository;
     protected CourtStructureValue xhbCourtStructure;
@@ -49,11 +51,12 @@ public class AbstractCppToPublicDisplayRepos {
 
     // Use only in unit test
     protected AbstractCppToPublicDisplayRepos(XhbCourtRepository xhbCourtRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, XhbClobRepository xhbClobRepository,
-        CppFormattingHelper cppFormattingHelper) {
+        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
         this();
         this.xhbCourtRepository = xhbCourtRepository;
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
+        this.xhbCourtRoomRepository = xhbCourtRoomRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.cppFormattingHelper = cppFormattingHelper;
     }
@@ -117,8 +120,7 @@ public class AbstractCppToPublicDisplayRepos {
 
                 List<XhbCourtRoomDao> courtRoomList = getCourtRoomList(courtSite, allCourtSitesForCourt);
 
-                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(),
-                    courtRoomList.toArray(courtRoomArray));
+                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(), courtRoomList.toArray(courtRoomArray));
             }
         }
 
@@ -129,7 +131,8 @@ public class AbstractCppToPublicDisplayRepos {
 
     private List<XhbCourtRoomDao> getCourtRoomList(XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
         List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
-        for (XhbCourtRoomDao courtRoom : courtSite.getXhbCourtRooms()) {
+        List<XhbCourtRoomDao> allCourtRooms = xhbCourtRoomRepository.findByCourtSiteId(courtSite.getCourtSiteId());
+        for (XhbCourtRoomDao courtRoom : allCourtRooms) {
             if ("Y".equals(courtRoom.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtRoom");
             } else {

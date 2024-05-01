@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
@@ -90,8 +91,10 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     // Use only in unit test
     protected AbstractCppToPublicDisplay(final Date date, final int courtId, final int[] courtRoomIds,
         XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
-        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
-        super(xhbCourtRepository, xhbCourtSiteRepository, xhbClobRepository, cppFormattingHelper);
+        XhbCourtRoomRepository xhbCourtRoomRepository, XhbClobRepository xhbClobRepository,
+        CppFormattingHelper cppFormattingHelper) {
+        super(xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository, xhbClobRepository,
+            cppFormattingHelper);
         this.date = date;
         this.courtId = courtId;
         this.courtRoomIds = courtRoomIds != null ? courtRoomIds.clone() : null;

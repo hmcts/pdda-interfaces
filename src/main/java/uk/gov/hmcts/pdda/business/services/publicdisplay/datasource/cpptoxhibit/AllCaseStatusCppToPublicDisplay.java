@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
@@ -33,9 +34,10 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
     // Use only in unit test
     public AllCaseStatusCppToPublicDisplay(Date date, int courtId, int[] courtRoomIds,
         XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
-        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
-        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbCourtSiteRepository, xhbClobRepository,
-            cppFormattingHelper);
+        XhbCourtRoomRepository xhbCourtRoomRepository, XhbClobRepository xhbClobRepository,
+        CppFormattingHelper cppFormattingHelper) {
+        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
+            xhbClobRepository, cppFormattingHelper);
     }
 
     @Override
