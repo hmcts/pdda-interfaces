@@ -23,6 +23,8 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayUri;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -136,7 +138,9 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         String methodName = "getAllCourts() - ";
         LOG.debug(methodName + ENTERED);
 
-        return getXhbCourtRepository().findAll().toArray(new XhbCourtDao[0]);
+        List<XhbCourtDao> courts = getXhbCourtRepository().findAll();
+        courts.sort(Comparator.comparing(XhbCourtDao::getCourtName));
+        return courts.toArray(new XhbCourtDao[0]);
     }
 
     /**

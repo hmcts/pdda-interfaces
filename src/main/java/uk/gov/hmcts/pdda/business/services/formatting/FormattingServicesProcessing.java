@@ -200,7 +200,6 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             if (!IP.equals(cppList.getStatus())) {
                 // Clear the previous merge attempts and set in progress
                 cppList.setMergedClobId(null);
-                cppList.setMergedClob(null);
                 cppList.setErrorMessage(null);
                 cppList.setStatus("IP");
                 cppList = updateCppList(cppList);

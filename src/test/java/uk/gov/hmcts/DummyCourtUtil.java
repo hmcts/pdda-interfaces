@@ -42,7 +42,7 @@ public final class DummyCourtUtil {
 
     public static XhbCourtSiteDao getXhbCourtSiteDao() {
         Integer courtSiteId = Integer.valueOf(-1);
-        String courtSiteName = "courtSiteName";
+        String courtSiteName = "SWANSEA";
         String courtSiteCode = "courtSiteCode";
         Integer courtId = Integer.valueOf(-1);
         Integer addressId = Integer.valueOf(-1);
@@ -114,7 +114,6 @@ public final class DummyCourtUtil {
         courtRoomId = result.getPrimaryKey();
         assertNotNull(courtRoomId, NOTNULL);
         result.setXhbCrLiveDisplays(result.getXhbCrLiveDisplays());
-        result.setXhbCourtSite(result.getXhbCourtSite());
         result.setXhbConfiguredPublicNotices(result.getXhbConfiguredPublicNotices());
         return new XhbCourtRoomDao(result);
     }

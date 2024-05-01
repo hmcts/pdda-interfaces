@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
@@ -38,12 +39,13 @@ public class PublicDisplayControllerBean extends AbstractPdConfigDisplaysControl
         XhbCppFormattingRepository xhbCppFormattingRepository, XhbRotationSetsRepository xhbRotationSetsRepository,
         XhbRotationSetDdRepository xhbRotationSetDdRepository, XhbDisplayTypeRepository xhbDisplayTypeRepository,
         XhbDisplayRepository xhbDisplayRepository, XhbDisplayLocationRepository xhbDisplayLocationRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, PublicDisplayNotifier publicDisplayNotifier,
-        VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
+        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+        PublicDisplayNotifier publicDisplayNotifier, VipDisplayDocumentQuery vipDisplayDocumentQuery,
+        VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, xhbClobRepository, xhbCourtRepository, xhbConfigPropRepository, xhbCppFormattingRepository,
             xhbRotationSetsRepository, xhbRotationSetDdRepository, xhbDisplayTypeRepository, xhbDisplayRepository,
-            xhbDisplayLocationRepository, xhbCourtSiteRepository, publicDisplayNotifier, vipDisplayDocumentQuery,
-            vipDisplayCourtRoomQuery);
+            xhbDisplayLocationRepository, xhbCourtSiteRepository, xhbCourtRoomRepository, publicDisplayNotifier,
+            vipDisplayDocumentQuery, vipDisplayCourtRoomQuery);
     }
 
     /**

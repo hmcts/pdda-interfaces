@@ -8,7 +8,9 @@ import org.w3c.dom.NodeList;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtDetailValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.JudgeName;
@@ -29,9 +31,11 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
 
     // Use only in unit test
     public CourtDetailCppToPublicDisplay(Date date, int courtId, int[] courtRoomIds,
-        XhbCourtRepository xhbCourtRepository, XhbClobRepository xhbClobRepository,
+        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRoomRepository xhbCourtRoomRepository, XhbClobRepository xhbClobRepository,
         CppFormattingHelper cppFormattingHelper) {
-        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbClobRepository, cppFormattingHelper);
+        super(date, courtId, courtRoomIds, xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
+            xhbClobRepository, cppFormattingHelper);
     }
 
     /**
@@ -52,13 +56,13 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
                 courtDetailValue = getCourtDetail(roomId, doc);
                 if (courtDetailValue != null) {
                     cppData.add(courtDetailValue);
-                }  
+                }
             }
         }
         return cppData;
     }
-                
-    private CourtDetailValue getCourtDetail(int roomId, Document doc) { 
+
+    private CourtDetailValue getCourtDetail(int roomId, Document doc) {
         CourtDetailValue courtDetailValue;
         // Loop through all the Court Room Ids supplied and create a new
         // CourtDetailValue for each
@@ -91,18 +95,18 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
 
                         // Populate the rest of the data
                         populateData(courtDetailValue, (Element) caseNode);
-                        
+
                         return courtDetailValue;
                     } else {
 
-                        LOG.debug("CourtDetailCppToPublicDisplay.getCppData() - "
-                            + "no active case data for court room: {}", courtRoomValue.getCourtRoomName());
+                        LOG.debug(
+                            "CourtDetailCppToPublicDisplay.getCppData() - " + "no active case data for court room: {}",
+                            courtRoomValue.getCourtRoomName());
                     }
                 }
             }
         } catch (XPathExpressionException e) {
-            LOG.error(
-                "CourtDetailCppToPublicDisplay.getCppData() - XPathExpressionException  - " + e.toString());
+            LOG.error("CourtDetailCppToPublicDisplay.getCppData() - XPathExpressionException  - " + e.toString());
         } catch (Exception e) {
             LOG.error("CourtDetailCppToPublicDisplay.getCppData() - Exception  - " + e.toString());
         }

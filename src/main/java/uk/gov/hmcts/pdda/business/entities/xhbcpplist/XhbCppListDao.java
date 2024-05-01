@@ -5,12 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractDao;
-import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -82,16 +79,6 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
 
     @Column(name = "VERSION")
     private Integer version;
-
-    @jakarta.persistence.Transient
-    @ManyToOne
-    @JoinColumn(name = "LIST_CLOB_ID")
-    private XhbClobDao listClob;
-
-    @jakarta.persistence.Transient
-    @ManyToOne
-    @JoinColumn(name = "MERGED_CLOB_ID")
-    private XhbClobDao mergedClob;
 
     public XhbCppListDao() {
         super();
@@ -250,21 +237,4 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
     public final void setVersion(final Integer version) {
         this.version = version;
     }
-
-    public XhbClobDao getListClob() {
-        return listClob;
-    }
-
-    public final void setListClob(XhbClobDao listClob) {
-        this.listClob = listClob;
-    }
-
-    public XhbClobDao getMergedClob() {
-        return mergedClob;
-    }
-
-    public final void setMergedClob(XhbClobDao mergedClob) {
-        this.mergedClob = mergedClob;
-    }
-
 }
