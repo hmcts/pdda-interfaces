@@ -111,14 +111,22 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
         // Check there isn't already a record written for today
         if (dao.getPddaDlNotifierId() == null) {
 
-            // Set the status as RUNNING
-            DlNotifierStatusEnum runnningEnum = DlNotifierStatusEnum.RUNNING;
-            setStatus(dao, runnningEnum.getStatus(), null);
-
             // Set the status as SUCCESS
             DlNotifierStatusEnum successEnum = DlNotifierStatusEnum.SUCCESS;
             String status = successEnum.getStatus();
-            setStatus(dao, status, null);
+            String errorMessage = null;
+            
+            try {
+                setStatus(dao, status, null);
+            } catch (Exception ex) {
+                DlNotifierStatusEnum failureEnum = DlNotifierStatusEnum.FAILURE;
+                status = failureEnum.getStatus();
+                errorMessage = ex.getMessage();
+            } finally {
+                // Refetch the record ready for updating
+                dao = findByCourtAndLastRunDate(courtId, lastRunDate);
+                setStatus(dao, status, errorMessage);
+            }
         }
     }
 
