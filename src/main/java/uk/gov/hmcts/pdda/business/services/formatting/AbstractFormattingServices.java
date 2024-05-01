@@ -84,16 +84,10 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         return dao.isPresent() ? dao.get().getClobData() : null;
     }
 
-    protected Long createCppListClob(final XhbCppListDao cppList) {
-        LOG.debug("createCppListClob({})", cppList);
-        Optional<XhbClobDao> listClobDao = getXhbClobRepository().update(cppList.getListClob());
-        return listClobDao.isPresent() ? listClobDao.get().getClobId() : null;
-    }
-
-    protected Long createCppMergeClob(final XhbCppListDao cppList) {
-        LOG.debug("createCppMergeClob({})", cppList);
-        Optional<XhbClobDao> mergedClobDao = getXhbClobRepository().update(cppList.getMergedClob());
-        return mergedClobDao.isPresent() ? mergedClobDao.get().getClobId() : null;
+    protected Long createClob(final XhbClobDao clobDao) {
+        LOG.debug("createCppListClob({})", clobDao);
+        Optional<XhbClobDao> result = getXhbClobRepository().update(clobDao);
+        return result.isPresent() ? result.get().getClobId() : null;
     }
 
     protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal, final String clobData) {
@@ -141,17 +135,6 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
     }
 
     protected XhbCppListDao updateCppList(final XhbCppListDao cppList) {
-
-        if (cppList.getListClob() != null && cppList.getListClob().getClobData() != null
-            && cppList.getListClobId() == null) {
-            Long listClobId = createCppListClob(cppList);
-            cppList.setListClobId(listClobId);
-        }
-        if (cppList.getMergedClob() != null && cppList.getMergedClob().getClobData() != null
-            && cppList.getMergedClobId() == null) {
-            Long mergedClobId = createCppMergeClob(cppList);
-            cppList.setMergedClobId(mergedClobId);
-        }
         cppList.setLastUpdatedBy("XHIBIT");
         LOG.debug("updateCppList({})", cppList);
         Optional<XhbCppListDao> result = getXhbCppListRepository().update(cppList);

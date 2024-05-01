@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
@@ -49,6 +50,9 @@ class DisplayRotationSetDataHelperTest {
 
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+    
+    @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
     @Mock
     private XhbRotationSetsRepository mockXhbRotationSetsRepository;
@@ -118,7 +122,7 @@ class DisplayRotationSetDataHelperTest {
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
                 mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository, mockXhbDisplayTypeRepository,
-                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -148,7 +152,7 @@ class DisplayRotationSetDataHelperTest {
         try {
             classUnderTest.getDataForDisplayRotationSets(court, xhbRotationSetsDao, xhbDisplays,
                 mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository, mockXhbDisplayTypeRepository,
-                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);

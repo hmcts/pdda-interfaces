@@ -133,8 +133,8 @@ class PdConfigurationControllerBeanGetTest {
     private final PdConfigurationControllerBean classUnderTest =
         new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
             mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockPublicDisplayNotifier,
-            mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository,
+            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -212,7 +212,6 @@ class PdConfigurationControllerBeanGetTest {
         xhbDisplayDao.setDisplayId(DISPLAY_ID);
         xhbDisplayDao.setRotationSetId(ROTATION_SET_ID);
         xhbDisplayDao.setShowUnassignedYn(YES);
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
@@ -248,6 +247,7 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
         Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        Mockito.when(mockXhbCourtRoomRepository.findByDisplayId(Mockito.isA(Integer.class))).thenReturn(roomList);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getUpdatedRotationSet(COURT_ID, ROTATION_SET_ID);
@@ -371,7 +371,6 @@ class PdConfigurationControllerBeanGetTest {
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);

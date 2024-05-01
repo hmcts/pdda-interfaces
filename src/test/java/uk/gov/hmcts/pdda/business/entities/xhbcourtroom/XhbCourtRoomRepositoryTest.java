@@ -24,6 +24,11 @@ import static org.mockito.ArgumentMatchers.isA;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbCourtRoomDao> {
 
+    private static final String BY_COURTSITE_ID = "ByCourtSiteId";
+    private static final String BY_DISPLAY_ID = "ByDisplay";
+    private static final String BY_VIPMULTISITE_ID = "ByVipMultiSite";
+    private static final String BY_VIPNOSITE_ID = "ByVipNoSite";
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -45,85 +50,71 @@ class XhbCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbCourtRoomDao>
 
     @Test
     void testFindByCourtSiteIdSuccess() {
-        boolean result = testFindByCourtSiteId(getDummyDao());
+        boolean result = testFindBy(getDummyDao(), BY_COURTSITE_ID);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindByCourtSiteIdFailure() {
-        boolean result = testFindByCourtSiteId(null);
+        boolean result = testFindBy(null, BY_COURTSITE_ID);
         assertTrue(result, NOT_TRUE);
-    }
-
-    private boolean testFindByCourtSiteId(XhbCourtRoomDao dao) {
-        List<XhbCourtRoomDao> list = new ArrayList<>();
-        if (dao != null) {
-            list.add(dao);
-        }
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbCourtRoomDao> result =
-            (List<XhbCourtRoomDao>) getClassUnderTest().findByCourtSiteId(getDummyDao().getCourtSiteId());
-        assertNotNull(result, NOTNULL);
-        if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
-        } else {
-            assertSame(0, result.size(), SAME);
-        }
-        return true;
     }
 
     @Test
     void testFindVipMultiSiteSuccess() {
-        boolean result = testFindVipMultiSite(getDummyDao());
+        boolean result = testFindBy(getDummyDao(), BY_VIPMULTISITE_ID);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindVipMultiSiteFailure() {
-        boolean result = testFindVipMultiSite(null);
+        boolean result = testFindBy(null, BY_VIPMULTISITE_ID);
         assertTrue(result, NOT_TRUE);
-    }
-
-    private boolean testFindVipMultiSite(XhbCourtRoomDao dao) {
-        final Integer courtId = getDummyId();
-        List<XhbCourtRoomDao> list = new ArrayList<>();
-        if (dao != null) {
-            list.add(dao);
-        }
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbCourtRoomDao> result = (List<XhbCourtRoomDao>) getClassUnderTest().findVipMultiSite(courtId);
-        assertNotNull(result, NOTNULL);
-        if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
-        } else {
-            assertSame(0, result.size(), SAME);
-        }
-        return true;
     }
 
     @Test
     void testFindVipMNoSiteSuccess() {
-        boolean result = testFindVipMNoSite(getDummyDao());
+        boolean result = testFindBy(getDummyDao(), BY_VIPNOSITE_ID);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindVipMNoSiteFailure() {
-        boolean result = testFindVipMNoSite(null);
+        boolean result = testFindBy(null, BY_VIPNOSITE_ID);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testFindVipMNoSite(XhbCourtRoomDao dao) {
-        final Integer courtId = getDummyId();
+    @Test
+    void testFindByDisplayIdSuccess() {
+        boolean result = testFindBy(getDummyDao(), BY_DISPLAY_ID);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    @Test
+    void testFindByDisplayIdFailure() {
+        boolean result = testFindBy(null, BY_DISPLAY_ID);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    private boolean testFindBy(XhbCourtRoomDao dao, String queryBy) {
         List<XhbCourtRoomDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbCourtRoomDao> result = (List<XhbCourtRoomDao>) getClassUnderTest().findVipMNoSite(courtId);
+        List<XhbCourtRoomDao> result = new ArrayList<>();
+        if (BY_COURTSITE_ID.equals(queryBy)) {
+            result = getClassUnderTest().findByCourtSiteId(getDummyDao().getCourtSiteId());
+        } else if (BY_DISPLAY_ID.equals(queryBy)) {
+            result = getClassUnderTest().findByDisplayId(getDummyDao().getCourtSiteId());
+        } else if (BY_VIPMULTISITE_ID.equals(queryBy)) {
+            final Integer courtId = getDummyId();
+            result = getClassUnderTest().findVipMultiSite(courtId);
+        } else if (BY_VIPNOSITE_ID.equals(queryBy)) {
+            final Integer courtId = getDummyId();
+            result = getClassUnderTest().findVipMNoSite(courtId);
+        }
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);

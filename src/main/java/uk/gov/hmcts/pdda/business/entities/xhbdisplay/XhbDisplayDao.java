@@ -5,17 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity(name = "XHB_DISPLAY")
@@ -51,11 +45,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     @Column(name = "SHOW_UNASSIGNED_YN")
     private String showUnassignedYn;
-
-    @ManyToMany
-    @JoinTable(name = "XHB_DISPLAY_COURT_ROOM", joinColumns = @JoinColumn(name = "DISPLAY_ID"),
-        inverseJoinColumns = @JoinColumn(name = "COURT_ROOM_ID"))
-    private List<XhbCourtRoomDao> xhbCourtRooms = new ArrayList<>();
 
     public XhbDisplayDao() {
         super();
@@ -135,14 +124,6 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
 
     public final void setShowUnassignedYn(String showUnassignedYn) {
         this.showUnassignedYn = showUnassignedYn;
-    }
-
-    public List<XhbCourtRoomDao> getXhbCourtRooms() {
-        return xhbCourtRooms;
-    }
-
-    public final void setXhbCourtRooms(List<XhbCourtRoomDao> xhbCourtRooms) {
-        this.xhbCourtRooms = xhbCourtRooms;
     }
 
 }

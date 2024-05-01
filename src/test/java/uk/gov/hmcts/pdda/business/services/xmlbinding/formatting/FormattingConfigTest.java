@@ -154,7 +154,6 @@ class FormattingConfigTest {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         result = new XhbCppListDao(result);
-        result.setListClob(listClob);
         return result;
     }
 

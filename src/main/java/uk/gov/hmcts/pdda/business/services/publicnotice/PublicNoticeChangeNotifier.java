@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
@@ -73,10 +74,14 @@ public final class PublicNoticeChangeNotifier {
         LOG.debug("sendNotificationToNewPublicDisplays({},{})", xhbCourtRoomId, reportingRestrictionsChanged);
         Optional<XhbCourtRoomDao> courtRoom = PddaEntityHelper.xcrtFindByPrimaryKey(xhbCourtRoomId);
         if (courtRoom.isPresent()) {
-            CourtRoomIdentifier courtRoomId = new CourtRoomIdentifier(courtRoom.get().getXhbCourtSite().getCourtId(),
-                courtRoom.get().getCourtRoomId());
-            PublicDisplayNotifier publicDisplayNotifier = new PublicDisplayNotifier();
-            publicDisplayNotifier.sendMessage(new PublicNoticeEvent(courtRoomId, reportingRestrictionsChanged));
+            Optional<XhbCourtSiteDao> courtSite =
+                PddaEntityHelper.xcstFindByPrimaryKey(courtRoom.get().getCourtSiteId());
+            if (courtSite.isPresent()) {
+                CourtRoomIdentifier courtRoomId =
+                    new CourtRoomIdentifier(courtSite.get().getCourtId(), courtRoom.get().getCourtRoomId());
+                PublicDisplayNotifier publicDisplayNotifier = new PublicDisplayNotifier();
+                publicDisplayNotifier.sendMessage(new PublicNoticeEvent(courtRoomId, reportingRestrictionsChanged));
+            }
         }
     }
 

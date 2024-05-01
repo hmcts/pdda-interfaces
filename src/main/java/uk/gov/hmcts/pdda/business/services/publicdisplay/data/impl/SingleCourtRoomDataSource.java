@@ -47,8 +47,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
 
     // Junit constructor
     public SingleCourtRoomDataSource(DisplayDocumentUri uri, PublicDisplayQuery query,
-        XhbCourtRepository xhbCourtRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository) {
         super(uri, query, xhbCourtRepository);
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
@@ -75,15 +74,13 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
      */
     private void setCourtRoomNumber(final int courtRoomId, final EntityManager entityManager) {
         LOG.debug("setCourtRoomNumber({},{})", courtRoomId, entityManager);
-        Optional<XhbCourtRoomDao> courtRoom =
-            getXhbCourtRoomRepository(entityManager).findById(courtRoomId);
+        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository(entityManager).findById(courtRoomId);
         if (!courtRoom.isPresent()) {
             throw new CourtRoomNotFoundException(courtRoomId);
         }
         Optional<XhbCourtSiteDao> courtSite = getCourtSite(courtRoom, entityManager);
         if (!courtSite.isPresent()) {
-            LOG.error("CourtroomId {} has invalid courtSiteId {}", courtRoomId,
-                courtRoom.get().getCourtSiteId());
+            LOG.error("CourtroomId {} has invalid courtSiteId {}", courtRoomId, courtRoom.get().getCourtSiteId());
             throw new CourtRoomNotFoundException(courtRoomId);
         }
 
@@ -96,12 +93,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
         LOG.debug("getCourtSite({},{})", courtRoom, entityManager);
         Optional<XhbCourtSiteDao> courtSite = Optional.empty();
         if (courtRoom.isPresent()) {
-            if (courtRoom.get().getXhbCourtSite() != null) {
-                courtSite = Optional.of(courtRoom.get().getXhbCourtSite());
-            } else {
-                courtSite = getXhbCourtSiteRepository(entityManager)
-                    .findById(courtRoom.get().getCourtSiteId());
-            }
+            courtSite = getXhbCourtSiteRepository(entityManager).findById(courtRoom.get().getCourtSiteId());
         }
         return courtSite;
     }

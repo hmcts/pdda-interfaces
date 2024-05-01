@@ -293,7 +293,6 @@ class FormattingServicesTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(),
             DOCTYPE_DAILY_LIST_LETTER, HTML, xhbCppListDao);
@@ -313,7 +312,6 @@ class FormattingServicesTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_FIRM_LIST, XML, xhbCppListDao);
@@ -330,7 +328,6 @@ class FormattingServicesTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_WARN_LIST, XML, xhbCppListDao);
@@ -346,7 +343,6 @@ class FormattingServicesTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), CPP_LIST);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
@@ -372,7 +368,6 @@ class FormattingServicesTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), INTERNET_WEBPAGE);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListClob(xhbClobDao);
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
         XhbFormattingDao xhbFormattingDao = DummyFormattingUtil.getXhbFormattingDao();
         xhbFormattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());

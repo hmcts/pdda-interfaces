@@ -138,8 +138,8 @@ class PdConfigurationControllerBeanTest {
     private final PdConfigurationControllerBean classUnderTest =
         new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
             mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockPublicDisplayNotifier,
-            mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository,
+            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -210,7 +210,6 @@ class PdConfigurationControllerBeanTest {
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-        xhbDisplayDao.setXhbCourtRooms(roomList);
 
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
@@ -275,13 +274,11 @@ class PdConfigurationControllerBeanTest {
         site1.setCourtSiteCode("A");
         XhbCourtRoomDao redRoom = DummyCourtUtil.getXhbCourtRoomDao();
         redRoom.setCourtSiteId(site1.getCourtSiteId());
-        redRoom.setXhbCourtSite(site1);
         redRoom.setCourtRoomId(100);
         redRoom.setCourtRoomName("Red Room");
         redRoom.setDisplayName(redRoom.getCourtRoomName());
         XhbCourtRoomDao pinkRoom = DummyCourtUtil.getXhbCourtRoomDao();
         pinkRoom.setCourtSiteId(site1.getCourtSiteId());
-        pinkRoom.setXhbCourtSite(site1);
         pinkRoom.setCourtRoomId(101);
         pinkRoom.setCourtRoomName("Pink Room");
         pinkRoom.setDisplayName(pinkRoom.getCourtRoomName());
@@ -297,7 +294,6 @@ class PdConfigurationControllerBeanTest {
         site2.setCourtSiteCode("B");
         XhbCourtRoomDao brownRoom = DummyCourtUtil.getXhbCourtRoomDao();
         brownRoom.setCourtSiteId(site2.getCourtSiteId());
-        brownRoom.setXhbCourtSite(site2);
         brownRoom.setCourtRoomId(200);
         brownRoom.setCourtRoomName("Brown Room");
         brownRoom.setDisplayName(brownRoom.getCourtRoomName());

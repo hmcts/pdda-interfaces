@@ -5,12 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 
@@ -81,11 +78,6 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
 
     @jakarta.persistence.Transient
     private List<XhbCourtRoomDao> xhbCourtRooms = new ArrayList<>();
-
-    @jakarta.persistence.Transient
-    @ManyToOne
-    @JoinColumn(name = "COURT_ID")
-    private XhbCourtDao xhbCourt;
 
     public XhbCourtSiteDao() {
         super();
@@ -236,15 +228,4 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
     public final void setXhbCourtRooms(List<XhbCourtRoomDao> xhbCourtRooms) {
         this.xhbCourtRooms = xhbCourtRooms;
     }
-
-    public XhbCourtDao getXhbCourt() {
-        return xhbCourt;
-    }
-
-    public final void setXhbCourt(XhbCourtDao xhbCourt) {
-        this.xhbCourt = xhbCourt;
-    }
-
-
-
 }
