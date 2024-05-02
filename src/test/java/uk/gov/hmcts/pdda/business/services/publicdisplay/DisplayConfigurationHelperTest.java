@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings({"static-access","TooManyMethods"})
+@SuppressWarnings({"static-access", "PMD.TooManyMethods"})
 @ExtendWith(EasyMockExtension.class)
 class DisplayConfigurationHelperTest {
 
@@ -346,7 +346,8 @@ class DisplayConfigurationHelperTest {
         EasyMock.expect(mockXhbDisplayLocationRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.empty());
         EasyMock.replay(mockXhbDisplayLocationRepository);
-        result = classUnderTest.getCourtIdFromDisplay(Optional.of(DummyPublicDisplayUtil.getXhbDisplayDao()), mockXhbDisplayLocationRepository, null);
+        result = classUnderTest.getCourtIdFromDisplay(Optional.of(DummyPublicDisplayUtil.getXhbDisplayDao()),
+            mockXhbDisplayLocationRepository, null);
         assertNull(result, NULL);
     }
 
