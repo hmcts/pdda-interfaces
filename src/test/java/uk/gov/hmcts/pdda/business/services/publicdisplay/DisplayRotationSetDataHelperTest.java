@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
@@ -27,20 +28,24 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.types.rotationset.DisplayRotationSetData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD.ExcessiveImports")
 class DisplayRotationSetDataHelperTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String NOTNULL = "Result is Null";
 
     @Mock
     private ResourceBundle mockResourceBundle;
@@ -50,7 +55,7 @@ class DisplayRotationSetDataHelperTest {
 
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
-    
+
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
@@ -138,6 +143,8 @@ class DisplayRotationSetDataHelperTest {
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         xhbDisplays.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
+        List<XhbCourtRoomDao> rooms = new ArrayList<>();
+        rooms.add(DummyCourtUtil.getXhbCourtRoomDao());
         // Expects
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
@@ -147,6 +154,7 @@ class DisplayRotationSetDataHelperTest {
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
         Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        Mockito.when(mockXhbCourtRoomRepository.findByDisplayId(Mockito.isA(Integer.class))).thenReturn(rooms);
         // Run
         boolean result = false;
         try {
@@ -158,5 +166,17 @@ class DisplayRotationSetDataHelperTest {
             fail(exception);
         }
         assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testGetDataForCourt() {
+        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        // Run
+        DisplayRotationSetData[] result =
+            classUnderTest.getDataForCourt(court, mockXhbDisplayRepository, mockXhbRotationSetsRepository,
+                mockXhbRotationSetDdRepository, mockXhbDisplayDocumentRepository, mockXhbDisplayTypeRepository,
+                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository);
+        
+        assertNotNull(result, NOTNULL);
     }
 }
