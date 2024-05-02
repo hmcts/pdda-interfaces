@@ -337,8 +337,10 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         // Get the type of the display document.
         DisplayDocumentType type = DisplayDocumentTypeUtils.getDisplayDocumentType(descriptionCode, language, country);
 
-        LOG.debug("getRotationSetDDsForDisplayDocument:: document type :{}", type);
-        LOG.debug("getRotationSetDDsForDisplayDocument:: court room ids:{}", getCourtRoomIdString(courtRoomIds));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getRotationSetDDsForDisplayDocument:: document type :{}", type);
+            LOG.debug("getRotationSetDDsForDisplayDocument:: court room ids:{}", getCourtRoomIdString(courtRoomIds));
+        }
 
         List<RotationSetDisplayDocument> results = new ArrayList<>();
 
@@ -355,7 +357,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             if (loopLength == 0) {
                 LOG.error("Found display document with no court rooms", new Exception());
             }
-            
+
             // If we are dealing with a non multiple courts document, then
             // we do not do unassigned cases for now.
             if (loopLength > 0 && courtRoomIds[loopLength - 1] == DisplayDocumentUri.UNASSIGNED) {
