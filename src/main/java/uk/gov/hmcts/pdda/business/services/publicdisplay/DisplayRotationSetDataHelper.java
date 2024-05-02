@@ -57,7 +57,8 @@ import java.util.Optional;
 public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DisplayRotationSetDataHelper.class);
-
+    private static final String YES = "Y";
+    
     // Default constructor
     DisplayRotationSetDataHelper() {
         super();
@@ -246,7 +247,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         courtRooms.toArray(courtRoomArray);
         Arrays.sort(courtRoomArray, CourtRoomComparator.getInstance());
         int[] courtRoomIds;
-        if ("Y".equals(display.getShowUnassignedYn())) { // Add the unassigned courtroom.
+        if (YES.equals(display.getShowUnassignedYn())) { // Add the unassigned courtroom.
             courtRoomIds = new int[courtRoomArray.length + 1];
             // Get the court room IDs.
             for (int i = courtRoomArray.length - 1; i >= 0; i--) {
@@ -328,7 +329,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
 
         String language = displayDocument != null ? displayDocument.getLanguage() : null;
         String country = displayDocument != null ? displayDocument.getCountry() : null;
-        String descriptionCode = displayDocument.getDescriptionCode();
+        String descriptionCode = displayDocument != null ? displayDocument.getDescriptionCode() : null;
         Locale documentLocale = createLocale(language, country);
 
         // Get the type of the display document.
@@ -341,7 +342,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
 
         // Check whether we are dealing with a document that copes with
         // multiple courts.
-        if ("Y".equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
+        if (YES.equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
             results.add(new RotationSetDisplayDocument(
                 new DisplayDocumentUri(documentLocale, courtId, type, courtRoomIds), pageDelay));
         } else {
