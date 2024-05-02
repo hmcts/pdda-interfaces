@@ -347,13 +347,15 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         if (YES.equalsIgnoreCase(multipleCourtYn)) {
             results.add(new RotationSetDisplayDocument(
                 new DisplayDocumentUri(documentLocale, courtId, type, courtRoomIds), pageDelay));
-        } else if (courtRoomIds.length == 0) {
-            LOG.error("Found display document with no court rooms", new Exception());
         } else {
             // or one that needs to be split into multiple documents dealing each
             // with one court.
             int loopLength = courtRoomIds.length;
 
+            if (loopLength == 0) {
+                LOG.error("Found display document with no court rooms", new Exception());
+            }
+            
             // If we are dealing with a non multiple courts document, then
             // we do not do unassigned cases for now.
             if (loopLength > 0 && courtRoomIds[loopLength - 1] == DisplayDocumentUri.UNASSIGNED) {
