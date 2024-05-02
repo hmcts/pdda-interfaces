@@ -162,31 +162,32 @@ public class DisplayConfigurationHelper {
         if (!displayLocal.isPresent()) {
             throw new DisplayNotFoundException(displayConfiguration.getDisplayId());
         }
-        Integer courtId = null;
+
         Optional<XhbDisplayLocationDao> xhbDisplayLocation =
             xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
         if (xhbDisplayLocation.isPresent()) {
             Optional<XhbCourtSiteDao> xhbCourtSiteDao =
                 xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
             if (xhbCourtSiteDao.isPresent()) {
-                courtId = xhbCourtSiteDao.get().getCourtId();
+                Integer courtId = xhbCourtSiteDao.get().getCourtId();
+
+
+                // if the rotation set has been updated write back to DB
+                if (displayConfiguration.isRotationSetChanged()) {
+                    setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
+                }
+
+                // if the court rooms have been updated write back to DB
+                if (displayConfiguration.isCourtRoomsChanged()) {
+                    xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
+                    setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
+                }
+
+                // if RS or courtrooms have changed send JMS message for displayId
+                if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
+                    sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
+                }
             }
-        }
-
-        // if the rotation set has been updated write back to DB
-        if (displayConfiguration.isRotationSetChanged()) {
-            setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
-        }
-
-        // if the court rooms have been updated write back to DB
-        if (displayConfiguration.isCourtRoomsChanged()) {
-            xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
-            setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
-        }
-
-        // if RS or courtrooms have changed send JMS message for displayId
-        if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
-            sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
         }
     }
 
