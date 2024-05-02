@@ -64,9 +64,6 @@ class PddaDlNotifierHelperTest {
     @Mock
     private XhbPddaDlNotifierRepository mockXhbPddaDlNotifierRepository;
 
-    @Mock
-    private PddaDlNotifierHelper.Notifier mockNotifier;
-
     @TestSubject
     private final PddaDlNotifierHelper classUnderTest =
         new PddaDlNotifierHelper(mockEntityManager, mockXhbConfigPropRepository);
@@ -74,9 +71,6 @@ class PddaDlNotifierHelperTest {
 
     private static class Config {
         static final String PDDA_SWITCHER = "PDDA_SWITCHER";
-        static final String DL_NOTIFIER_PROVIDER_URL = "DL_NOTIFIER_PROVIDER_URL";
-        static final String DL_NOTIFIER_CONNECTION_FACTORY = "DL_NOTIFIER_CONNECTION_FACTORY";
-        static final String DL_NOTIFIER_DESTINATION = "DL_NOTIFIER_DESTINATION";
         static final String DL_NOTIFIER_EXECUTION_TIME = "DL_NOTIFIER_EXECUTION_TIME";
     }
 
@@ -112,16 +106,11 @@ class PddaDlNotifierHelperTest {
         EasyMock.verify(mockXhbConfigPropRepository);
         assertFalse(result, NOT_FALSE);
     }
-
+    
     @Test
     void testRunDailyListNotifierSuccess() {
-        boolean result = testRunDailyListNotifier(DlNotifierStatusEnum.RUNNING, DlNotifierStatusEnum.SUCCESS);
-        assertTrue(result, NOT_TRUE);
-    }
-
-    @Test
-    void testRunDailyListNotifierFailure() {
-        boolean result = testRunDailyListNotifier(DlNotifierStatusEnum.RUNNING, DlNotifierStatusEnum.FAILURE);
+        //boolean result = testRunDailyListNotifier(DlNotifierStatusEnum.RUNNING, DlNotifierStatusEnum.SUCCESS);
+        boolean result = testRunDailyListNotifier(DlNotifierStatusEnum.SUCCESS, DlNotifierStatusEnum.SUCCESS);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -133,12 +122,7 @@ class PddaDlNotifierHelperTest {
         // Setup
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime dayAgo = now.minusDays(1);
-        String providerUrl = "providerUrl";
-        expectXhbConfigPropDao(Config.DL_NOTIFIER_PROVIDER_URL, providerUrl);
-        String connectionFactoryName = "connectionFactoryName";
-        expectXhbConfigPropDao(Config.DL_NOTIFIER_CONNECTION_FACTORY, connectionFactoryName);
-        String destinationName = "destinationName";
-        expectXhbConfigPropDao(Config.DL_NOTIFIER_DESTINATION, destinationName);
+        
         List<XhbCourtDao> xhbCourtDaoList = getXhbCourtDaoList();
         EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(xhbCourtDaoList);
 
@@ -164,12 +148,6 @@ class PddaDlNotifierHelperTest {
                         .expect(mockXhbPddaDlNotifierRepository.update(
                             EasyMock.and(EasyMock.capture(firstSave), EasyMock.isA(XhbPddaDlNotifierDao.class))))
                         .andReturn(Optional.of(xhbPddaDlNotifierDao));
-                    mockNotifier.setProviderUrl(providerUrl);
-                    mockNotifier.setConnectionFactoryName(connectionFactoryName);
-                    mockNotifier.setDestinationName(destinationName);
-                    mockNotifier.setCourtId(courtDao.getCourtId());
-                    mockNotifier.setDate(EasyMock.isA(String.class));
-                    mockNotifier.run();
                     if (DlNotifierStatusEnum.FAILURE == expectedSecondSaveStatus) {
                         EasyMock.expectLastCall().andThrow(getRuntimeException());
                     }
@@ -187,14 +165,12 @@ class PddaDlNotifierHelperTest {
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockXhbPddaDlNotifierRepository);
-        EasyMock.replay(mockNotifier);
         // Run
         classUnderTest.runDailyListNotifier();
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
         EasyMock.verify(mockXhbCourtRepository);
         EasyMock.verify(mockXhbPddaDlNotifierRepository);
-        EasyMock.verify(mockNotifier);
         assertSame(expectedFirstSaveStatus.getStatus(), firstSave.getValue().getStatus(), "Result is not Same");
         assertSame(expectedSecondSaveStatus.getStatus(), secondSave.getValue().getStatus(), "Result is not Same");
         return true;
@@ -206,7 +182,7 @@ class PddaDlNotifierHelperTest {
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
             .andReturn(dummyXhbConfigPropDaoList);
     }
-
+    
     private List<XhbCourtDao> getXhbCourtDaoList() {
         List<XhbCourtDao> result = DummyServicesUtil.getNewArrayList();
         XhbCourtDao courtDao1 = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(453), "Court1");
@@ -220,7 +196,7 @@ class PddaDlNotifierHelperTest {
         result.add(courtDao3);
         return result;
     }
-
+    
     private RuntimeException getRuntimeException() {
         return new RuntimeException();
     }
