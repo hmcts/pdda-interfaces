@@ -58,7 +58,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DisplayRotationSetDataHelper.class);
     private static final String YES = "Y";
-    
+
     // Default constructor
     DisplayRotationSetDataHelper() {
         super();
@@ -296,11 +296,13 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         for (XhbRotationSetDdDao rotationSetDd : rotationSetDdArray) {
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
                 xhbDisplayDocumentRepository.findById(rotationSetDd.getDisplayDocumentId());
-            XhbDisplayDocumentDao xhbDisplayDocumentDao =
-                xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
-            // Add the one or many RotationSetDisplayDocuments
-            result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay().intValue(),
-                xhbDisplayDocumentDao, courtRoomIds));
+            if (xhbDisplayDocument.isPresent()) {
+                // Add the one or many RotationSetDisplayDocuments
+                result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay().intValue(),
+                    xhbDisplayDocument.get().getLanguage(), xhbDisplayDocument.get().getCountry(),
+                    xhbDisplayDocument.get().getDescriptionCode(), xhbDisplayDocument.get().getMultipleCourtYn(),
+                    courtRoomIds));
+            }
         }
 
         // Turn the List into the appropriate array type.
@@ -319,17 +321,17 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * @param courtId The ID of the court to which the <code>RotationSetDisplayDocument</code>s belong.
      * @param pageDelay The time for which a page of the DisplayDocument is to appear on the public
      *        display.
-     * @param displayDocument The Entity Bean representing the Display Document.
+     * @param language The the Display Document language.
+     * @param country The the Display Document country.
+     * @param descriptionCode The the Display Document descriptionCode.
+     * @param multipleCourtYn Multiple Court Y/N
      * @param courtRoomIds The court rooms for which the Rotation Set Display Documents will be
      *        generated.
      * @return list of RotationSetDisplayDocument
      */
     private List<RotationSetDisplayDocument> getRotationSetDdsForDisplayDocument(int courtId, int pageDelay,
-        XhbDisplayDocumentDao displayDocument, int... courtRoomIds) {
+        String language, String country, String descriptionCode, String multipleCourtYn, int... courtRoomIds) {
 
-        String language = displayDocument != null ? displayDocument.getLanguage() : null;
-        String country = displayDocument != null ? displayDocument.getCountry() : null;
-        String descriptionCode = displayDocument != null ? displayDocument.getDescriptionCode() : null;
         Locale documentLocale = createLocale(language, country);
 
         // Get the type of the display document.
@@ -342,20 +344,18 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
 
         // Check whether we are dealing with a document that copes with
         // multiple courts.
-        if (YES.equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
+        if (YES.equalsIgnoreCase(multipleCourtYn)) {
             results.add(new RotationSetDisplayDocument(
                 new DisplayDocumentUri(documentLocale, courtId, type, courtRoomIds), pageDelay));
+        } else if (courtRoomIds.length == 0) {
+            LOG.error("Found display document with no court rooms", new Exception());
         } else {
             // or one that needs to be split into multiple documents dealing each
             // with one court.
             int loopLength = courtRoomIds.length;
 
-            if (loopLength == 0) {
-                LOG.error("Found display document with no court rooms", new Exception());
-            }
             // If we are dealing with a non multiple courts document, then
-            // we
-            // do not do unassigned cases for now.
+            // we do not do unassigned cases for now.
             if (loopLength > 0 && courtRoomIds[loopLength - 1] == DisplayDocumentUri.UNASSIGNED) {
                 loopLength--;
             }
