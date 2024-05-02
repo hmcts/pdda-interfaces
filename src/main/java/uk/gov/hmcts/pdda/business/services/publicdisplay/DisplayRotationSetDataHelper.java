@@ -57,6 +57,7 @@ import java.util.Optional;
 public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DisplayRotationSetDataHelper.class);
+    private static final String YES = "Y";
 
     // Default constructor
     DisplayRotationSetDataHelper() {
@@ -177,13 +178,14 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
 
         Optional<XhbDisplayLocationDao> xhbDisplayLocation =
             xhbDisplayLocationRepository.findById(display.getDisplayLocationId());
-        Optional<XhbCourtSiteDao> xhbCourtSiteDao =
-            xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
+        XhbDisplayLocationDao xhbDisplayLocationDao = xhbDisplayLocation.isPresent() ? xhbDisplayLocation.get() : null;
+        Integer courtSiteId = xhbDisplayLocationDao != null ? xhbDisplayLocationDao.getCourtSiteId() : null;
+        Optional<XhbCourtSiteDao> xhbCourtSiteDao = xhbCourtSiteRepository.findById(courtSiteId);
+        XhbCourtSiteDao xhbCourtSite = xhbCourtSiteDao.isPresent() ? xhbCourtSiteDao.get() : null;
         List<XhbCourtRoomDao> xhbCourtRooms = xhbCourtRoomRepository.findByDisplayId(display.getDisplayId());
 
         // Construct the URI representing the Display.
-        DisplayUri displayUri =
-            getDisplayUri(display, court.getShortName(), xhbDisplayLocation.get(), xhbCourtSiteDao.get());
+        DisplayUri displayUri = getDisplayUri(display, court.getShortName(), xhbDisplayLocationDao, xhbCourtSite);
         int[] courtRoomIds = getCourtRoomIds(xhbCourtRooms, display);
 
         List<XhbRotationSetDdDao> xhbRotationSetDds =
@@ -193,10 +195,12 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         RotationSetDisplayDocument[] rotationSetDDs = getDisplayRotationSetElements(court.getCourtId(),
             xhbDisplayDocumentRepository, xhbRotationSetDds, courtRoomIds);
         Optional<XhbDisplayTypeDao> displayTypeDao = xhbDisplayTypeRepository.findById(display.getDisplayTypeId());
+        XhbDisplayTypeDao xhbDisplayType = displayTypeDao.isPresent() ? displayTypeDao.get() : null;
+        String xhbDisplayTypeDesc = xhbDisplayType != null ? xhbDisplayType.getDescriptionCode() : null;
 
         // Construct the return object.
         return new DisplayRotationSetData(displayUri, rotationSetDDs, display.getDisplayId().intValue(),
-            rotationSet.getRotationSetId(), displayTypeDao.get().getDescriptionCode());
+            rotationSet.getRotationSetId(), xhbDisplayTypeDesc);
     }
 
     /**
@@ -243,7 +247,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         courtRooms.toArray(courtRoomArray);
         Arrays.sort(courtRoomArray, CourtRoomComparator.getInstance());
         int[] courtRoomIds;
-        if ("Y".equals(display.getShowUnassignedYn())) { // Add the unassigned courtroom.
+        if (YES.equals(display.getShowUnassignedYn())) { // Add the unassigned courtroom.
             courtRoomIds = new int[courtRoomArray.length + 1];
             // Get the court room IDs.
             for (int i = courtRoomArray.length - 1; i >= 0; i--) {
@@ -292,11 +296,13 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         for (XhbRotationSetDdDao rotationSetDd : rotationSetDdArray) {
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
                 xhbDisplayDocumentRepository.findById(rotationSetDd.getDisplayDocumentId());
-            XhbDisplayDocumentDao xhbDisplayDocumentDao =
-                xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
-            // Add the one or many RotationSetDisplayDocuments
-            result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay().intValue(),
-                xhbDisplayDocumentDao, courtRoomIds));
+            if (xhbDisplayDocument.isPresent()) {
+                // Add the one or many RotationSetDisplayDocuments
+                result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay().intValue(),
+                    xhbDisplayDocument.get().getLanguage(), xhbDisplayDocument.get().getCountry(),
+                    xhbDisplayDocument.get().getDescriptionCode(), xhbDisplayDocument.get().getMultipleCourtYn(),
+                    courtRoomIds));
+            }
         }
 
         // Turn the List into the appropriate array type.
@@ -315,19 +321,21 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * @param courtId The ID of the court to which the <code>RotationSetDisplayDocument</code>s belong.
      * @param pageDelay The time for which a page of the DisplayDocument is to appear on the public
      *        display.
-     * @param displayDocument The Entity Bean representing the Display Document.
+     * @param language The the Display Document language.
+     * @param country The the Display Document country.
+     * @param descriptionCode The the Display Document descriptionCode.
+     * @param multipleCourtYn Multiple Court Y/N
      * @param courtRoomIds The court rooms for which the Rotation Set Display Documents will be
      *        generated.
      * @return list of RotationSetDisplayDocument
      */
     private List<RotationSetDisplayDocument> getRotationSetDdsForDisplayDocument(int courtId, int pageDelay,
-        XhbDisplayDocumentDao displayDocument, int... courtRoomIds) {
+        String language, String country, String descriptionCode, String multipleCourtYn, int... courtRoomIds) {
 
-        Locale documentLocale = createLocale(displayDocument.getLanguage(), displayDocument.getCountry());
+        Locale documentLocale = createLocale(language, country);
 
         // Get the type of the display document.
-        DisplayDocumentType type = DisplayDocumentTypeUtils.getDisplayDocumentType(displayDocument.getDescriptionCode(),
-            displayDocument.getLanguage(), displayDocument.getCountry());
+        DisplayDocumentType type = DisplayDocumentTypeUtils.getDisplayDocumentType(descriptionCode, language, country);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("getRotationSetDDsForDisplayDocument:: document type :{}", type);
@@ -338,7 +346,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
 
         // Check whether we are dealing with a document that copes with
         // multiple courts.
-        if ("Y".equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
+        if (YES.equalsIgnoreCase(multipleCourtYn)) {
             results.add(new RotationSetDisplayDocument(
                 new DisplayDocumentUri(documentLocale, courtId, type, courtRoomIds), pageDelay));
         } else {
@@ -349,9 +357,9 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             if (loopLength == 0) {
                 LOG.error("Found display document with no court rooms", new Exception());
             }
+
             // If we are dealing with a non multiple courts document, then
-            // we
-            // do not do unassigned cases for now.
+            // we do not do unassigned cases for now.
             if (loopLength > 0 && courtRoomIds[loopLength - 1] == DisplayDocumentUri.UNASSIGNED) {
                 loopLength--;
             }

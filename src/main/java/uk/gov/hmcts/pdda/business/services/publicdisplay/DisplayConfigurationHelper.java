@@ -76,7 +76,8 @@ public class DisplayConfigurationHelper {
         }
         Optional<XhbRotationSetsDao> xhbRotationSet =
             xhbRotationSetsRepository.findById(display.get().getRotationSetId());
-        return new DisplayConfiguration(display.get(), xhbRotationSet.get(),
+        XhbRotationSetsDao xhbRotationSetDao = xhbRotationSet.isPresent() ? xhbRotationSet.get() : null;
+        return new DisplayConfiguration(display.get(), xhbRotationSetDao,
             getDisplayCourtRooms(display.get(), xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository));
     }
 
@@ -157,32 +158,46 @@ public class DisplayConfigurationHelper {
             xhbRotationSetsRepository, xhbCourtRoomRepository);
 
         // Lookup the display local reference
-        Integer displayId = displayConfiguration.getDisplayId();
-        Optional<XhbDisplayDao> displayLocal = xhbDisplayRepository.findById(displayId);
+        Optional<XhbDisplayDao> displayLocal = xhbDisplayRepository.findById(displayConfiguration.getDisplayId());
         if (!displayLocal.isPresent()) {
-            throw new DisplayNotFoundException(displayId);
-        }
-        Optional<XhbDisplayLocationDao> xhbDisplayLocation =
-            xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
-        Optional<XhbCourtSiteDao> xhbCourtSiteDao =
-            xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
-        Integer courtId = xhbCourtSiteDao.get().getCourtId();
-
-        // if the rotation set has been updated write back to DB
-        if (displayConfiguration.isRotationSetChanged()) {
-            setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
+            throw new DisplayNotFoundException(displayConfiguration.getDisplayId());
         }
 
-        // if the court rooms have been updated write back to DB
-        if (displayConfiguration.isCourtRoomsChanged()) {
-            xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
-            setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
-        }
+        Integer courtId = getCourtIdFromDisplay(displayLocal, xhbDisplayLocationRepository, xhbCourtSiteRepository);
+        if (courtId != null) {
 
-        // if RS or courtrooms have changed send JMS message for displayId
-        if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
-            sendNotification(displayId, displayLocal.get(), courtId, notifier);
+            // if the rotation set has been updated write back to DB
+            if (displayConfiguration.isRotationSetChanged()) {
+                setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
+            }
+
+            // if the court rooms have been updated write back to DB
+            if (displayConfiguration.isCourtRoomsChanged()) {
+                xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
+                setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
+            }
+
+            // if RS or courtrooms have changed send JMS message for displayId
+            if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
+                sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
+            }
         }
+    }
+
+    protected static Integer getCourtIdFromDisplay(Optional<XhbDisplayDao> displayLocal,
+        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
+        if (displayLocal.isPresent()) {
+            Optional<XhbDisplayLocationDao> xhbDisplayLocation =
+                xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
+            if (xhbDisplayLocation.isPresent()) {
+                Optional<XhbCourtSiteDao> xhbCourtSiteDao =
+                    xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
+                if (xhbCourtSiteDao.isPresent()) {
+                    return xhbCourtSiteDao.get().getCourtId();
+                }
+            }
+        }
+        return null;
     }
 
     /**
