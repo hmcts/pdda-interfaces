@@ -189,16 +189,26 @@ public class Schedulable {
      * @see TaskStrategy.init
      */
     protected Schedulable(String name, Properties props) {
+        this(name, props, null);
+    }
+
+    /**
+     * This constructor that reads the basic scheduling properties before passing the properties to the
+     * TaskStrategy implementation for initialisation. This variation includes the EntityManager which
+     * can be used to construct the TaskStrategy
+     * 
+     * @see TaskStrategy.init
+     */
+    protected Schedulable(String name, Properties props, EntityManager em) {
         init(name, props);
 
         String strategyClassname = props.getProperty(TASK_STRATEGY, TASK_STRATEGY_DEFAULT);
         try {
             Class<?> strategyClass = Class.forName(strategyClassname);
-            Constructor<?> strategyConstructor = strategyClass.getConstructor();
 
             // Check that it is an instance of TaskStrategy.
             if (TaskStrategy.class.isAssignableFrom(strategyClass)) {
-                taskStrategy = (TaskStrategy) strategyConstructor.newInstance();
+                taskStrategy = getTaskStragedy(strategyClass, em);
                 taskStrategy.init(props, this);
             } else {
                 valid = false;
@@ -224,46 +234,15 @@ public class Schedulable {
         }
     }
 
-    /**
-     * This constructor that reads the basic scheduling properties before passing the properties to the
-     * TaskStrategy implementation for initialisation. This variation includes the EntityManager which
-     * can be used to construct the TaskStrategy
-     * 
-     * @see TaskStrategy.init
-     */
-    protected Schedulable(String name, Properties props, EntityManager em) {
-        init(name, props);
-
-        String strategyClassname = props.getProperty(TASK_STRATEGY, TASK_STRATEGY_DEFAULT);
-        try {
-            Class<?> strategyClass = Class.forName(strategyClassname);
-            Constructor<?> strategyConstructor = strategyClass.getConstructor(EntityManager.class);
-
-            // Check that it is an instance of TaskStrategy.
-            if (TaskStrategy.class.isAssignableFrom(strategyClass)) {
-                taskStrategy = (TaskStrategy) strategyConstructor.newInstance(em);
-                taskStrategy.init(props, this);
-            } else {
-                valid = false;
-                log.error("class defined in " + name + "." + TASK_STRATEGY + " is not an instance of TaskStrategy.");
-            }
-        } catch (ClassNotFoundException cnfe) {
-            valid = false;
-            log.error(CLASS_DEFINED_IN + name + "." + TASK_STRATEGY + " property does not exist.", cnfe);
-        } catch (InstantiationException ie) {
-            log.error(CLASS_DEFINED_IN + name + "." + TASK_STRATEGY + " property could not be instantiated.", ie);
-        } catch (IllegalAccessException iae) {
-            log.error(CLASS_DEFINED_IN + name + "." + TASK_STRATEGY + " property could not be accessed.", iae);
-        } catch (NoSuchMethodException e) {
-            log.error(CLASS_DEFINED_IN + name + "." + TASK_STRATEGY + " does not have a constructor with no params.",
-                e);
-        } catch (SecurityException e) {
-            log.error(
-                "Incorrect security access to constructor of Class defined in " + name + "." + TASK_STRATEGY + ".", e);
-        } catch (IllegalArgumentException e) {
-            log.error("Incorrect argument into constructor of Class defined in " + name + "." + TASK_STRATEGY + ".", e);
-        } catch (InvocationTargetException e) {
-            log.error("Unable to invoke constructor of Class defined in " + name + "." + TASK_STRATEGY + ".", e);
+    private TaskStrategy getTaskStragedy(Class<?> strategyClass, EntityManager em)
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Constructor<?> strategyConstructor;
+        if (em != null) {
+            strategyConstructor = strategyClass.getConstructor(EntityManager.class);
+            return (TaskStrategy) strategyConstructor.newInstance(em);
+        } else {
+            strategyConstructor = strategyClass.getConstructor();
+            return (TaskStrategy) strategyConstructor.newInstance();
         }
     }
 
@@ -387,7 +366,7 @@ public class Schedulable {
                 Calendar endTime = Calendar.getInstance();
                 endTime.set(Calendar.HOUR_OF_DAY, 23);
                 endTime.set(Calendar.MINUTE, 59);
-                
+
                 final long stopScheduler = endTime.getTimeInMillis() - currentTime.getTimeInMillis();
 
                 timer.scheduleAtFixedRate(internalTimerTask, startScheduler, stopScheduler);
