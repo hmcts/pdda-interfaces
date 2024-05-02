@@ -146,8 +146,7 @@ public class DisplayConfigurationHelper {
     /**
      * Updates the display configuration with changes.
      * 
-     * <p>
-     * Note: sends a DisplayConfigurationChanged JMS configuration message
+     * <p>Note: sends a DisplayConfigurationChanged JMS configuration message
      * 
      * @param displayConfiguration The updated display configuration to be stored
      */
