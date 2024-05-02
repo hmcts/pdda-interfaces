@@ -208,7 +208,7 @@ public class Schedulable {
 
             // Check that it is an instance of TaskStrategy.
             if (TaskStrategy.class.isAssignableFrom(strategyClass)) {
-                taskStrategy = getTaskStragedy(strategyClass, em);
+                taskStrategy = getTaskStrategy(strategyClass, em);
                 taskStrategy.init(props, this);
             } else {
                 valid = false;
@@ -234,7 +234,7 @@ public class Schedulable {
         }
     }
 
-    private TaskStrategy getTaskStragedy(Class<?> strategyClass, EntityManager em)
+    private TaskStrategy getTaskStrategy(Class<?> strategyClass, EntityManager em)
         throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Constructor<?> strategyConstructor;
         if (em != null) {
