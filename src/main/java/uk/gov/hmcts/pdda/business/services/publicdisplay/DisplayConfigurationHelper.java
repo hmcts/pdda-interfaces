@@ -146,7 +146,8 @@ public class DisplayConfigurationHelper {
     /**
      * Updates the display configuration with changes.
      * 
-     * <p>Note: sends a DisplayConfigurationChanged JMS configuration message
+     * <p>
+     * Note: sends a DisplayConfigurationChanged JMS configuration message
      * 
      * @param displayConfiguration The updated display configuration to be stored
      */
@@ -163,32 +164,41 @@ public class DisplayConfigurationHelper {
             throw new DisplayNotFoundException(displayConfiguration.getDisplayId());
         }
 
-        Optional<XhbDisplayLocationDao> xhbDisplayLocation =
-            xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
-        if (xhbDisplayLocation.isPresent()) {
-            Optional<XhbCourtSiteDao> xhbCourtSiteDao =
-                xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
-            if (xhbCourtSiteDao.isPresent()) {
-                Integer courtId = xhbCourtSiteDao.get().getCourtId();
+        Integer courtId = getCourtIdFromDisplay(displayLocal, xhbDisplayLocationRepository, xhbCourtSiteRepository);
+        if (courtId != null) {
 
+            // if the rotation set has been updated write back to DB
+            if (displayConfiguration.isRotationSetChanged()) {
+                setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
+            }
 
-                // if the rotation set has been updated write back to DB
-                if (displayConfiguration.isRotationSetChanged()) {
-                    setRotationSet(displayConfiguration, displayLocal.get(), xhbRotationSetsRepository);
-                }
+            // if the court rooms have been updated write back to DB
+            if (displayConfiguration.isCourtRoomsChanged()) {
+                xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
+                setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
+            }
 
-                // if the court rooms have been updated write back to DB
-                if (displayConfiguration.isCourtRoomsChanged()) {
-                    xhbDisplayRepository.update(displayConfiguration.getDisplayDao());
-                    setCourtRooms(displayConfiguration, displayLocal.get(), xhbCourtRoomRepository);
-                }
+            // if RS or courtrooms have changed send JMS message for displayId
+            if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
+                sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
+            }
+        }
+    }
 
-                // if RS or courtrooms have changed send JMS message for displayId
-                if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
-                    sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
+    protected static Integer getCourtIdFromDisplay(Optional<XhbDisplayDao> displayLocal,
+        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
+        if (displayLocal.isPresent()) {
+            Optional<XhbDisplayLocationDao> xhbDisplayLocation =
+                xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
+            if (xhbDisplayLocation.isPresent()) {
+                Optional<XhbCourtSiteDao> xhbCourtSiteDao =
+                    xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
+                if (xhbCourtSiteDao.isPresent()) {
+                    return xhbCourtSiteDao.get().getCourtId();
                 }
             }
         }
+        return null;
     }
 
     /**
