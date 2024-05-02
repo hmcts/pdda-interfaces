@@ -154,7 +154,7 @@ class LocaleServicesTest {
         boolean result = testExecuteTask(rt);
         assertTrue(result, RESULT_TRUE);
     }
-    
+
     /**
      * Tests RemoteSessionTaskStrategy.init to ensure that the controllerBean is setup as a
      * DailyListNotifierControllerBean
@@ -162,8 +162,7 @@ class LocaleServicesTest {
     @Test
     void testInitDailyListNotifierControllerBean() {
 
-        Properties testProperties =
-            createTestProperties(DailyListNotifierControllerBean.class.getName(), TRUE);
+        Properties testProperties = createTestProperties(DailyListNotifierControllerBean.class.getName(), TRUE);
         Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
 
         classUnderTest.init(testProperties, testSchedulable);
@@ -173,7 +172,7 @@ class LocaleServicesTest {
         assertEquals(DailyListNotifierControllerBean.class.getName(), classUnderTest.getControllerBeanClassName(),
             "Results are not Equal");
     }
-    
+
     /**
      * Tests RemoteSessionTaskStrategy.executeTask to ensure that doTask on the
      * DailyListNotifierControllerBean is invoked.
@@ -184,7 +183,7 @@ class LocaleServicesTest {
         boolean result = testExecuteTask(rt);
         assertTrue(result, RESULT_TRUE);
     }
-    
+
     @Test
     void testSchedulable() {
         Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
@@ -193,7 +192,7 @@ class LocaleServicesTest {
         testSchedulable.stop();
         assertNotNull(testSchedulable, NULL);
     }
-    
+
     @Test
     void testSchedulableBadData() {
         Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
@@ -220,7 +219,7 @@ class LocaleServicesTest {
         testSchedulable.stop();
         assertNotNull(testSchedulable, NULL);
     }
-    
+
     @Test
     void testSchedulableOneHourAgo() {
         Properties testProperties = createTestProperties(DailyListNotifierControllerBean.class.getName(), TRUE);
@@ -234,7 +233,7 @@ class LocaleServicesTest {
         testSchedulable.stop();
         assertNotNull(testSchedulable, NULL);
     }
-    
+
     @Test
     void testSchedulableFixedRate() {
         Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
@@ -246,7 +245,7 @@ class LocaleServicesTest {
         testSchedulable.stop();
         assertNotNull(testSchedulable, NULL);
     }
-    
+
     @Test
     void testSchedulableNonFixedRate() {
         Properties testProperties = createTestProperties(CppFormattingControllerBean.class.getName(), FALSE);
@@ -258,6 +257,35 @@ class LocaleServicesTest {
         assertNotNull(testSchedulable, NULL);
     }
 
+    @Test
+    void testSchedulableNoSuchMethodException() {
+        Properties testProperties = createTestProperties(this.getClass().getName(), FALSE);
+        Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
+        testSchedulable.start();
+        testSchedulable.stop();
+        assertNotNull(testSchedulable, NULL);
+        assertFalse(testSchedulable.isValid(), FALSE);
+    }
+
+    @Test
+    void testSchedulableClassNotFoundException() {
+        Properties testProperties = createTestProperties("", FALSE);
+        Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
+        testSchedulable.start();
+        testSchedulable.stop();
+        assertNotNull(testSchedulable, NULL);
+        assertFalse(testSchedulable.isValid(), FALSE);
+    }
+
+    @Test
+    void testSchedulableNoRemoteClass() {
+        Properties testProperties = createTestProperties(null, FALSE);
+        Schedulable testSchedulable = new Schedulable(TESTSCHEDULENAME, testProperties, mockEntityManager);
+        testSchedulable.start();
+        testSchedulable.stop();
+        assertNotNull(testSchedulable, NULL);
+        assertFalse(testSchedulable.isValid(), FALSE);
+    }
 
     /**
      * Creates a Properties object for the purposes of testing.
@@ -274,7 +302,9 @@ class LocaleServicesTest {
         testProperties.setProperty(Schedulable.HOUR, Schedulable.HOUR_DEFAULT);
         testProperties.setProperty(Schedulable.MINUTE, Schedulable.MINUTE_DEFAULT);
         testProperties.setProperty(Schedulable.TASK_STRATEGY, RemoteSessionTaskStrategy.class.getName());
-        testProperties.setProperty(RemoteSessionTaskStrategy.REMOTE_HOME_CLASS, remoteHomeClass);
+        if (remoteHomeClass != null) {
+            testProperties.setProperty(RemoteSessionTaskStrategy.REMOTE_HOME_CLASS, remoteHomeClass);
+        }
         return testProperties;
     }
 
