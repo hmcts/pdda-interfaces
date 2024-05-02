@@ -326,25 +326,22 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private List<RotationSetDisplayDocument> getRotationSetDdsForDisplayDocument(int courtId, int pageDelay,
         XhbDisplayDocumentDao displayDocument, int... courtRoomIds) {
 
-        Locale documentLocale =
-            displayDocument != null ? createLocale(displayDocument.getLanguage(), displayDocument.getCountry()) : null;
+        String language = displayDocument != null ? displayDocument.getLanguage() : null;
+        String country = displayDocument != null ? displayDocument.getCountry() : null;
+        String descriptionCode = displayDocument.getDescriptionCode();
+        Locale documentLocale = createLocale(language, country);
 
         // Get the type of the display document.
-        DisplayDocumentType type = displayDocument != null
-            ? DisplayDocumentTypeUtils.getDisplayDocumentType(displayDocument.getDescriptionCode(),
-                displayDocument.getLanguage(), displayDocument.getCountry())
-            : null;
+        DisplayDocumentType type = DisplayDocumentTypeUtils.getDisplayDocumentType(descriptionCode, language, country);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getRotationSetDDsForDisplayDocument:: document type :{}", type);
-            LOG.debug("getRotationSetDDsForDisplayDocument:: court room ids:{}", getCourtRoomIdString(courtRoomIds));
-        }
+        LOG.debug("getRotationSetDDsForDisplayDocument:: document type :{}", type);
+        LOG.debug("getRotationSetDDsForDisplayDocument:: court room ids:{}", getCourtRoomIdString(courtRoomIds));
 
         List<RotationSetDisplayDocument> results = new ArrayList<>();
 
         // Check whether we are dealing with a document that copes with
         // multiple courts.
-        if (displayDocument != null && "Y".equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
+        if ("Y".equalsIgnoreCase(displayDocument.getMultipleCourtYn())) {
             results.add(new RotationSetDisplayDocument(
                 new DisplayDocumentUri(documentLocale, courtId, type, courtRoomIds), pageDelay));
         } else {
