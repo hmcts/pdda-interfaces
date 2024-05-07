@@ -1,12 +1,20 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
-import org.easymock.TestSubject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -29,9 +37,21 @@ class CourtelHelperTest {
 
     private static final String NOT_TRUE = "Result is not True";
     private static final String NOT_FALSE = "Result is not False";
-    
-    @TestSubject
-    private final CourtelHelper classUnderTest = new CourtelHelper();
+
+    private XhbClobRepository mockXhbClobRepository;
+
+    private CourtelHelper classUnderTest;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
+        classUnderTest = new CourtelHelper(mockXhbClobRepository);
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        // No teardown required
+    }
     
     @Test
     void testIsCourtelSendableDocumentValid() {
@@ -39,9 +59,28 @@ class CourtelHelperTest {
             assertTrue(classUnderTest.isCourtelSendableDocument(type), NOT_TRUE);
         }
     }
-    
+
     @Test
     void testIsCourtelSendableDocumentInvalid() {
         assertFalse(classUnderTest.isCourtelSendableDocument("INVALID"), NOT_FALSE);
     }
+
+    @Test
+    void testWriteToCourtel() {
+        // Setup
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(0L, "");
+        // Expects
+        EasyMock.expect(mockXhbClobRepository.findById(xhbClobDao.getClobId())).andReturn(Optional.of(xhbClobDao));
+        EasyMock.replay(mockXhbClobRepository);
+        // Run
+        boolean result = false;
+        try {
+            classUnderTest.writeToCourtel(xhbClobDao.getClobId());
+            result = true;
+        } catch (Exception exception) {
+            fail(exception.getMessage());
+        }
+        assertTrue(result, NOT_TRUE);
+    }
+
 }
