@@ -35,8 +35,7 @@ class CourtelHelperTest {
     
     @Test
     void testIsCourtelSendableDocumentValid() {
-        String[] validDocumentTypes = {"DL", "DLP", "FL", "WL"};
-        for (String type : validDocumentTypes) {
+        for (String type : CourtelHelper.VALID_LISTS) {
             assertTrue(classUnderTest.isCourtelSendableDocument(type), NOT_TRUE);
         }
     }

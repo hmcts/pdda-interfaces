@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>
@@ -22,8 +21,9 @@ import java.util.List;
  */
 public class CourtelHelper {
     
+    protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
+    
     public boolean isCourtelSendableDocument(String documentType) {
-        List<String> validList = Arrays.asList("DL", "DLP", "FL", "WL");
-        return validList.contains(documentType);
+        return Arrays.asList(VALID_LISTS).contains(documentType);
     }
 }
