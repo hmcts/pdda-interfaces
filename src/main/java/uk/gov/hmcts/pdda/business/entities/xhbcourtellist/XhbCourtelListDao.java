@@ -93,7 +93,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return courtelListId;
     }
 
-    private void setCourtelListId(Integer courtelListId) {
+    public final void setCourtelListId(Integer courtelListId) {
         this.courtelListId = courtelListId;
     }
 
