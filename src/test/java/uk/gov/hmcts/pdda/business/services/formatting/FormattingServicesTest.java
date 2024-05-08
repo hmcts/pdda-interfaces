@@ -31,6 +31,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -264,6 +265,9 @@ class FormattingServicesTest {
 
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock 
+    private CourtelHelper mockCourtelHelper;
 
     @InjectMocks
     private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
@@ -299,6 +303,7 @@ class FormattingServicesTest {
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
         expectCreateSource(formattingValue.getDocumentType());
         expectTransformer();
+        
         // Run
         boolean result =
             testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST_LETTER), formattingValue);
