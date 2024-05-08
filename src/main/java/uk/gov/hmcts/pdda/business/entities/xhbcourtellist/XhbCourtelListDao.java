@@ -52,26 +52,6 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         super();
     }
 
-    public XhbCourtelListDao(Integer courtelListId, Integer xmlDocumentId, Long xmlDocumentClobId, Long blobId,
-        String sentToCourtel, Integer numSendAttempts, LocalDateTime lastAttemptDatetime, String messageText,
-        LocalDateTime lastUpdateDate, LocalDateTime creationDate, String lastUpdatedBy, String createdBy,
-        Integer version) {
-        this();
-        setCourtelListId(courtelListId);
-        setXmlDocumentId(xmlDocumentId);
-        setXmlDocumentClobId(xmlDocumentClobId);
-        setBlobId(blobId);
-        setSentToCourtel(sentToCourtel);
-        setNumSendAttempts(numSendAttempts);
-        setLastAttemptDatetime(lastAttemptDatetime);
-        setMessageText(messageText);
-        setLastUpdateDate(lastUpdateDate);
-        setCreationDate(creationDate);
-        setLastUpdatedBy(lastUpdatedBy);
-        setCreatedBy(createdBy);
-        setVersion(version);
-    }
-
     public XhbCourtelListDao(XhbCourtelListDao otherData) {
         this();
         setCourtelListId(otherData.getCourtelListId());
