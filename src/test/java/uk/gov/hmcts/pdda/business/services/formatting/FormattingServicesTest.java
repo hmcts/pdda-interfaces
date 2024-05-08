@@ -303,6 +303,7 @@ class FormattingServicesTest {
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
         expectCreateSource(formattingValue.getDocumentType());
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(true);
         
         // Run
         boolean result =
@@ -321,6 +322,8 @@ class FormattingServicesTest {
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_FIRM_LIST, XML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(true);
+        
         // Run
         boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_FIRM_LIST), formattingValue);
         assertTrue(result, TRUE);
@@ -337,6 +340,7 @@ class FormattingServicesTest {
         FormattingValue formattingValue =
             DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_WARN_LIST, XML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(true);
         // Run
         boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_WARN_LIST), formattingValue);
         assertTrue(result, TRUE);
@@ -362,6 +366,7 @@ class FormattingServicesTest {
         Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
             .thenReturn(Optional.of(existingList.get(0)));
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(true);
         // Run
         boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST), formattingValue);
         assertTrue(result, TRUE);
@@ -402,6 +407,8 @@ class FormattingServicesTest {
             .thenReturn(formattingDaoLatestClobList);
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class))).thenReturn(Optional.of(xhbClobDao));
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(false);
+        
         // Run
         boolean result =
             testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_INTERNET_WEBPAGE), DummyFormattingUtil
