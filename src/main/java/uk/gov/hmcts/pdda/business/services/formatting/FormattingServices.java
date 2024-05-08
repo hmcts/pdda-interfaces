@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.IOException;
@@ -44,7 +45,9 @@ import javax.xml.xpath.XPathExpressionException;
 public class FormattingServices extends FormattingServicesProcessing {
     // Logging
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServices.class);
-
+    private CourtelHelper courtelHelper;
+    
+    
     // Date Format for java date
     private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
@@ -88,6 +91,10 @@ public class FormattingServices extends FormattingServicesProcessing {
         } catch (TransformerException | ParserConfigurationException | TransformerFactoryConfigurationError
             | SAXException | IOException e) {
             throw new FormattingException(TRANSFORMATION_ERROR, e);
+        }
+        
+        if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
+            courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId());
         }
     }
 
