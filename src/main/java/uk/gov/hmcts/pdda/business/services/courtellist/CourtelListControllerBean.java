@@ -47,5 +47,15 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void callCourtelListHelper() {
         String methodName = "callCourtelListHelper(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
+        processMessages();
+    }
+    
+    /**
+     * Processes messages from Courtel.
+     * 
+     */
+    public void processMessages() {
+        String methodName = "processMessages(" + METHOD_END;
+        LOG.debug(methodName + ENTERED);
     }
 }
