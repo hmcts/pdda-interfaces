@@ -4,7 +4,7 @@ insert into xhb_config_prop (CONFIG_PROP_ID,PROPERTY_NAME,PROPERTY_VALUE) values
 3,'CPPX_SchemaPD','CPPX_PublicDisplay-v1-0.xsd'),(
 4,'CPPX_SchemaDL','DailyList-v1-0.xsd'),(
 5,'STAGING_DOCS_TO_PROCESS','1'),(
-6,'scheduledtasks.pdda','transformtask,cppstagingtask,cppformattingtask,pddabaistask,dlnotifiertask,courtellisttask'),(
+6,'scheduledtasks.pdda','transformtask,cppstagingtask,cppformattingtask,pddabaistask,dlnotifiertask'),(
 7,'DL_NOTIFIER_PROVIDER_URL','t3://midcluster:7071'),(
 8,'DL_NOTIFIER_CONNECTION_FACTORY','CSJMSConnectionFactory'),(
 9,'DL_NOTIFIER_DESTINATION','PublicDisplay'),(
