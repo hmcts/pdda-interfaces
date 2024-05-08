@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
@@ -13,6 +14,9 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings("PMD.ExcessiveParameterList")
 @Entity(name = "XHB_COURTEL_LIST")
+@NamedQuery(name = "XHB_COURTEL_LIST.findByXmlDocumentId",
+    query = "SELECT o from XHB_COURTEL_LIST o WHERE o.xmlDocumentId = :xmlDocumentId "
+        + "ORDER BY o.xmlDocumentId DESC")
 public class XhbCourtelListDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
