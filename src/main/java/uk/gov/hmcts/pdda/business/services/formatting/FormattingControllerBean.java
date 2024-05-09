@@ -111,23 +111,15 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
         if (formattingDocument != null) {
             final Integer formattingDocumentId = formattingDocument.getFormattingId();
+            boolean successful = false;
             try {
                 processFormattingDocument(formattingDocument);
                 // indicate that formatting was successful...
-                updateFormattingDocumentStatus(formattingDocumentId, true);
+                successful = true;
             } catch (final RuntimeException e) {
-                // indicate that formatting failed...
-                updateFormattingDocumentStatus(formattingDocumentId, false);
-                // if it's a merge issue then we need to update the cppformatting row as well
-                String errorMessage = e.getCause().getMessage();
-                if (errorMessage.contains("Error Merging: ")) {
-                    int startIndex = errorMessage.indexOf("Error Merging: ") + 15;
-                    int endIndex = errorMessage.indexOf(':', startIndex) - 1;
-                    Integer cppFormattingId = Integer.valueOf(errorMessage.substring(startIndex, endIndex));
-                    updateCppFormatting(cppFormattingId, errorMessage);
-                }
-                throw e;
+                LOG.error("{}{}", methodName, e.getMessage());
             }
+            updateFormattingDocumentStatus(formattingDocumentId, successful);
         } else {
             LOG.debug("processFormattingDocument() - No documents to process");
         }
