@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 
@@ -39,5 +40,19 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
         query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
         query.setParameter("timeDelay", timeDelay);
         return query.getResultList();
+    }
+
+    /**
+     * findByXmlDocumentClobId.
+     * 
+     * @return XhbXmlDocumentDao
+     */
+    public Optional<XhbXmlDocumentDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
+        LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
+        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
+        query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+        @SuppressWarnings("unchecked")
+        List<XhbXmlDocumentDao> resultList = query.getResultList();
+        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
     }
 }

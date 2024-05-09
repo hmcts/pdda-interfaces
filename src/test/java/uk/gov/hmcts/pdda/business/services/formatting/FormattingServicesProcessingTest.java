@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.OutputStream;
@@ -44,12 +45,15 @@ class FormattingServicesProcessingTest {
 
     @Mock
     private Reader mockReader;
+    
+    @Mock
+    private CourtelHelper mockCourtelHelper;
 
     @Mock
     private OutputStream mockOutputStream;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
+    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper);
 
     @Test
     void testGetFormattingValue() {

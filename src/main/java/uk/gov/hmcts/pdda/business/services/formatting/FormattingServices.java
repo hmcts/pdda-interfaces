@@ -45,7 +45,7 @@ import javax.xml.xpath.XPathExpressionException;
 public class FormattingServices extends FormattingServicesProcessing {
     // Logging
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServices.class);
-    private CourtelHelper courtelHelper;
+    private final CourtelHelper courtelHelper;
     
     
     // Date Format for java date
@@ -53,8 +53,9 @@ public class FormattingServices extends FormattingServicesProcessing {
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
 
-    public FormattingServices(EntityManager entityManager) {
+    public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper) {
         super(entityManager);
+        this.courtelHelper = courtelHelper;
     }
     
     /**

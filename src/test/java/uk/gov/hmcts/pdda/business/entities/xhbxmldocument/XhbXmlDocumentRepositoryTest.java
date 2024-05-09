@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -23,6 +24,9 @@ import static org.mockito.ArgumentMatchers.isA;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocumentDao> {
+
+    private static final String QUERY_CLOBID = "clobId";
+    private static final String QUERY_XMLDOCUMENTCLOBID = "xmlDocumentClobId";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -44,31 +48,46 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
     }
 
     @Test
-    void testFindListByClobIdSuccess() {
-        boolean result = testFindListByClobId(getDummyDao());
+    void testFindListByClobId() {
+        boolean result = testFindListBy(QUERY_CLOBID, getDummyDao());
+        assertTrue(result, NOT_TRUE);
+        result = testFindListBy(QUERY_CLOBID, null);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
-    void testFindListByClobIdFailure() {
-        boolean result = testFindListByClobId(null);
+    void testFindListByXmlDocumentClobId() {
+        boolean result = testFindListBy(QUERY_XMLDOCUMENTCLOBID, getDummyDao());
+        assertTrue(result, NOT_TRUE);
+        result = testFindListBy(QUERY_XMLDOCUMENTCLOBID, null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testFindListByClobId(XhbXmlDocumentDao dao) {
+    private boolean testFindListBy(String query, XhbXmlDocumentDao dao) {
         List<XhbXmlDocumentDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbXmlDocumentDao> result = (List<XhbXmlDocumentDao>) getClassUnderTest()
-            .findListByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
-        assertNotNull(result, "Result is Null");
+        Optional<XhbXmlDocumentDao> result = Optional.empty();
+        if (QUERY_CLOBID.equals(query)) {
+            List<XhbXmlDocumentDao> resultList = (List<XhbXmlDocumentDao>) getClassUnderTest()
+                .findListByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
+            assertNotNull(resultList, NOTNULL);
+            result = resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+        } else if (QUERY_XMLDOCUMENTCLOBID.equals(query)) {
+            Mockito
+                .when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyDao().getXmlDocumentClobId()))
+                .thenReturn(dao);
+            result = (Optional<XhbXmlDocumentDao>) getClassUnderTest()
+                .findByXmlDocumentClobId(getDummyDao().getXmlDocumentClobId());
+        }
+        assertNotNull(result, NOTNULL);
         if (dao != null) {
-            assertSame(dao, result.get(0), "Result is not Same");
+            assertSame(dao, result.get(), SAME);
         } else {
-            assertSame(0, result.size(), "Result is not Same");
+            assertSame(Optional.empty(), result, SAME);
         }
         return true;
     }

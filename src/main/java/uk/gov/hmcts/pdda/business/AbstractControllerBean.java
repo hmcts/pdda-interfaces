@@ -7,9 +7,11 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
 public class AbstractControllerBean {
 
@@ -22,6 +24,8 @@ public class AbstractControllerBean {
     private XhbCppFormattingRepository xhbCppFormattingRepository;
     private XhbCppListRepository xhbCppListRepository;
     private XhbFormattingRepository xhbFormattingRepository;
+    private XhbCourtelListRepository xhbCourtelListRepository;
+    private XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
     // For unit tests.
     protected AbstractControllerBean(EntityManager entityManager, XhbClobRepository xhbClobRepository,
@@ -58,6 +62,20 @@ public class AbstractControllerBean {
         return xhbClobRepository;
     }
 
+    protected XhbCourtelListRepository getXhbCourtelListRepository() {
+        if (xhbCourtelListRepository == null) {
+            xhbCourtelListRepository = new XhbCourtelListRepository(getEntityManager());
+        }
+        return xhbCourtelListRepository;
+    }
+
+    protected XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
+        if (xhbXmlDocumentRepository == null) {
+            xhbXmlDocumentRepository = new XhbXmlDocumentRepository(getEntityManager());
+        }
+        return xhbXmlDocumentRepository;
+    }
+
     protected XhbCourtRepository getXhbCourtRepository() {
         if (xhbCourtRepository == null) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
@@ -71,14 +89,14 @@ public class AbstractControllerBean {
         }
         return xhbConfigPropRepository;
     }
-    
+
     protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
         if (xhbCppFormattingRepository == null) {
             xhbCppFormattingRepository = new XhbCppFormattingRepository(getEntityManager());
         }
         return xhbCppFormattingRepository;
     }
-    
+
     /**
      * Retrieves a reference to the xhbCppListRepository.
      * 
@@ -90,7 +108,7 @@ public class AbstractControllerBean {
         }
         return xhbCppListRepository;
     }
-    
+
     /**
      * Retrieves a reference to the xhbFormattingRepository.
      * 
