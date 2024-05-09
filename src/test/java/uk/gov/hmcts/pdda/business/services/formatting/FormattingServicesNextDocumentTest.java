@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.xml.sax.ContentHandler;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -29,6 +30,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
 
@@ -102,12 +104,28 @@ class FormattingServicesNextDocumentTest {
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
+    @Mock
+    private CourtelHelper mockCourtelHelper;
+
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
+    private FormattingServices classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Do nothing
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
+        ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
+        ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
+        ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository", mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository", mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
+            mockXhbCppFormattingMergeRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository", mockXhbXmlDocumentRepository);
     }
 
     @AfterEach

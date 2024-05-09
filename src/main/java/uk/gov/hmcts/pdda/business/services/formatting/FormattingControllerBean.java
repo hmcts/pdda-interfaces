@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private static final String METHOD_SUFFIX = ") - ";
 
     private FormattingServices formattingServices;
+    private CourtelHelper courtelHelper;
 
     public FormattingControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -206,8 +208,16 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private FormattingServices getFormattingServices() {
         if (formattingServices == null) {
-            formattingServices = new FormattingServices(getEntityManager());
+            formattingServices = new FormattingServices(getEntityManager(), getCourtelHelper());
         }
         return formattingServices;
+    }
+
+    private CourtelHelper getCourtelHelper() {
+        if (courtelHelper == null) {
+            courtelHelper =
+                new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
+        }
+        return courtelHelper;
     }
 }
