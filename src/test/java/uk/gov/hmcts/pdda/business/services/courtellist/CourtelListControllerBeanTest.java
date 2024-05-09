@@ -56,20 +56,6 @@ class CourtelListControllerBeanTest {
         // Check results
         assertTrue(result, TRUE); 
     }
-
-    @Test
-    void testCallCourtelListHelper() {
-        // Run method
-        boolean result;
-        try {
-            classUnderTest.callCourtelListHelper();
-            result = true;
-        } catch (Exception exception) {
-            result = false;
-        }
-        // Check results
-        assertTrue(result, TRUE);
-    }
     
     @Test
     void testDefaultConstructorEntityManager() {

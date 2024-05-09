@@ -37,16 +37,6 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
      */
     @Override
     public void doTask() {
-        callCourtelListHelper();
-    }
-
-    /**
-     * Implementation of RemoteTask so that this process is called by the timer process.
-     * 
-     */
-    public void callCourtelListHelper() {
-        String methodName = "callCourtelListHelper(" + METHOD_END;
-        LOG.debug(methodName + ENTERED);
         processMessages();
     }
     
