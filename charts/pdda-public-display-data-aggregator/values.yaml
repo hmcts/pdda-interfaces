@@ -15,6 +15,8 @@ java:
           alias: DB_HOST
         - name: public-display-data-aggregator-POSTGRES-PORT
           alias: DB_PORT
+        - name: public-display-data-aggregator-POSTGRES-SCHEMA
+          alias: DB_SCHEMA
         - name: app-insights-connection-string
           alias: app-insights-connection-string
   environment:
