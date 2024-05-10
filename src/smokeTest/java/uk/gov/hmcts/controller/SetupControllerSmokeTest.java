@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class SampleSmokeTest {
+class SetupController {
     protected static final String CONTENT_TYPE_VALUE = "application/json";
 
     @Value("${TEST_URL:http://localhost:8080/DisplaySelectorServlet?}")
@@ -34,6 +34,6 @@ class SampleSmokeTest {
             .extract().response();
 
         Assertions.assertEquals(200, response.statusCode());
-        Assertions.assertTrue(response.asString().startsWith("{"status":"UP""));
+        Assertions.assertTrue(response.asString().startsWith("{\"status\":\"UP\""));
     } 
 }
