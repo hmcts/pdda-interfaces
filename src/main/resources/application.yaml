@@ -28,5 +28,5 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        default_schema: ${spring.datasource.schema}
+        default_schema: pdda
         dialect: org.hibernate.dialect.PostgreSQLDialect
