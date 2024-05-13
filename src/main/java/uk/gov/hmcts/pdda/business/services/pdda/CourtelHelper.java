@@ -87,4 +87,9 @@ public class CourtelHelper {
         }
         return null;
     }
+    
+    public XhbCourtelListDao getCourtelList() {
+        // Get the courtel list
+        return null;
+    }
 }
