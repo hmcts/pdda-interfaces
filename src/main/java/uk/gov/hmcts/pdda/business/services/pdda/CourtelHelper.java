@@ -88,8 +88,17 @@ public class CourtelHelper {
         return null;
     }
     
-    public XhbCourtelListDao getCourtelList() {
+    public XhbCourtelListDao[] getCourtelList() {
         // Get the courtel list
+        return new XhbCourtelListDao[0];
+    }
+    
+    public XhbCourtelListDao processCourtelList() {
+        //TODO PDDA-362
         return null;
+    }
+    
+    public void sendCourtelList() {
+        //TODO PDDA-363
     }
 }
