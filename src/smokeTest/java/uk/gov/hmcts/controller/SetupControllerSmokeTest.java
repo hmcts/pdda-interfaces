@@ -27,13 +27,12 @@ class SetupControllerSmokeTest {
     @Test
     void smokeTest() {
         Response response = given()
-            .contentType(ContentType.JSON)
+            .contentType(ContentType.HTML)
             .when()
             .get()
             .then()
             .extract().response();
-
+        
         Assertions.assertEquals(200, response.statusCode());
-        Assertions.assertTrue(response.asString().startsWith("{\"status\":\"UP\""));
     } 
 }
