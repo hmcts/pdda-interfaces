@@ -1,0 +1,7 @@
+test-url: ${TEST_URL:http://localhost:8080}
+
+spring:
+  application:
+    name: pdda-public-display-data-aggregator
+  config:
+    import: "optional:configtree:/mnt/secrets/pdda/"
