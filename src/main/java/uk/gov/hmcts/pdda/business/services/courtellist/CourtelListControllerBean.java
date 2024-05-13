@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
 @Stateless
 @Service
@@ -22,13 +24,17 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
 
     private static final String METHOD_END = ") - ";
     private static final String ENTERED = " : entered";
-
-    public CourtelListControllerBean(EntityManager entityManager) {
+    
+    private final CourtelHelper courtelHelper;
+    
+    public CourtelListControllerBean(EntityManager entityManager, CourtelHelper courtelHelper) {
         super(entityManager);
+        this.courtelHelper = courtelHelper;
     }
 
-    public CourtelListControllerBean() {
+    public CourtelListControllerBean(CourtelHelper courtelHelper) {
         super();
+        this.courtelHelper = courtelHelper;
     }
 
     /**
@@ -47,6 +53,13 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void processMessages() {
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
-        //TODO Call to CourtelHelper.getCourtelList();
+        XhbCourtelListDao[] xhbCourtelListArray = courtelHelper.getCourtelList();
+        
+        if (xhbCourtelListArray.length > 0) {
+            for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelListArray) {
+                //TODO Process and send CourtelList
+                LOG.debug("List to process: " + xhbCourtelListDao);
+            }
+        }
     }
 }
