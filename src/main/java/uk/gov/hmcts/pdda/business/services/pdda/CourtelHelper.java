@@ -89,8 +89,9 @@ public class CourtelHelper {
     }
     
     public XhbCourtelListDao[] getCourtelList() {
-        // Get the courtel list
-        return new XhbCourtelListDao[0];
+        // TODO Example code in here before PDDA-359 is done
+        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        return new XhbCourtelListDao[] {xhbCourtelListDao};
     }
     
     public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
