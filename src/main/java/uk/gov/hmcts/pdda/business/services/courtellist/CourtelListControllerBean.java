@@ -13,6 +13,8 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
+import java.util.List;
+
 @Stateless
 @Service
 @Transactional
@@ -51,9 +53,9 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void processMessages() {
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
-        XhbCourtelListDao[] xhbCourtelList = getCourtelHelper().getCourtelList();
+        List<XhbCourtelListDao> xhbCourtelList = getCourtelHelper().getCourtelList();
 
-        if (xhbCourtelList.length > 0) {
+        if (!xhbCourtelList.isEmpty()) {
             for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelList) {
                 XhbCourtelListDao updatedXhbCourtelListDao =
                     courtelHelper.processCourtelList(xhbCourtelListDao);
