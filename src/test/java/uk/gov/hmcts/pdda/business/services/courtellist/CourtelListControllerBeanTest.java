@@ -35,13 +35,12 @@ class CourtelListControllerBeanTest {
     private static final String TRUE = "Result is not True";
     private static final String NOT_NULL = "Result is Not Null";
 
-
     @Mock
     private EntityManager mockEntityManager;
 
     @InjectMocks
-    private final CourtelListControllerBean classUnderTest = new CourtelListControllerBean(
-        mockEntityManager);
+    private final CourtelListControllerBean classUnderTest =
+        new CourtelListControllerBean(mockEntityManager);
 
     @Test
     void testDoTask() {
@@ -54,18 +53,20 @@ class CourtelListControllerBeanTest {
             result = false;
         }
         // Check results
-        assertTrue(result, TRUE); 
+        assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testDefaultConstructorEntityManager() {
-        CourtelListControllerBean testConstructor = new CourtelListControllerBean(mockEntityManager);
+        CourtelListControllerBean testConstructor =
+            new CourtelListControllerBean(mockEntityManager);
         assertNotNull(testConstructor, NOT_NULL);
     }
-    
+
     @Test
     void testDefaultConstructor() {
-        CourtelListControllerBean testConstructor = new CourtelListControllerBean();
+        CourtelListControllerBean testConstructor =
+            new CourtelListControllerBean();
         assertNotNull(testConstructor, NOT_NULL);
     }
 }

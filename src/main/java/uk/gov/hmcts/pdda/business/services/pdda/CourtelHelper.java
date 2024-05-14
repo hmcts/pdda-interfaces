@@ -9,7 +9,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -86,5 +88,22 @@ public class CourtelHelper {
             }
         }
         return null;
+    }
+    
+    public List<XhbCourtelListDao> getCourtelList() {
+        // TODO Example code in here before PDDA-359 is done
+        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        List<XhbCourtelListDao> xhbCourtelListDaos = new ArrayList<>();
+        xhbCourtelListDaos.add(xhbCourtelListDao);
+        return xhbCourtelListDaos;
+    }
+    
+    public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
+        //TODO PDDA-362
+        return null;
+    }
+    
+    public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
+        //TODO PDDA-363
     }
 }

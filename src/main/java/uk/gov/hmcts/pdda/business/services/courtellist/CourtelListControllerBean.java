@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
+
+import java.util.List;
 
 @Stateless
 @Service
@@ -22,6 +26,8 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
 
     private static final String METHOD_END = ") - ";
     private static final String ENTERED = " : entered";
+
+    private CourtelHelper courtelHelper;
 
     public CourtelListControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -39,7 +45,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void doTask() {
         processMessages();
     }
-    
+
     /**
      * Processes messages from Courtel.
      * 
@@ -47,5 +53,22 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void processMessages() {
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
+        List<XhbCourtelListDao> xhbCourtelList = getCourtelHelper().getCourtelList();
+
+        if (!xhbCourtelList.isEmpty()) {
+            for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelList) {
+                XhbCourtelListDao updatedXhbCourtelListDao =
+                    getCourtelHelper().processCourtelList(xhbCourtelListDao);
+                getCourtelHelper().sendCourtelList(updatedXhbCourtelListDao);
+            }
+        }
+    }
+
+    private CourtelHelper getCourtelHelper() {
+        if (courtelHelper == null) {
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
+                getXhbXmlDocumentRepository());
+        }
+        return courtelHelper;
     }
 }
