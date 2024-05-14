@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,8 +15,9 @@ import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SetupControllerSmokeTest {
-    protected static final String CONTENT_TYPE_VALUE = "application/json";
-
+    
+    private static final Logger LOG = LoggerFactory.getLogger(SetupControllerSmokeTest.class);
+    
     @Value("${TEST_URL:http://localhost:8080/DisplaySelectorServlet?}")
     private String testUrl;
 
@@ -33,6 +36,7 @@ class SetupControllerSmokeTest {
             .then()
             .extract().response();
         
+        LOG.info("Smoketest.status={}",response.statusCode());
         Assertions.assertEquals(200, response.statusCode());
     } 
 }
