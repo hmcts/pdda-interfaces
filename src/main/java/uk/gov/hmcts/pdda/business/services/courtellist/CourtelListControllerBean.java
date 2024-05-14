@@ -24,9 +24,9 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
 
     private static final String METHOD_END = ") - ";
     private static final String ENTERED = " : entered";
-    
+
     private final CourtelHelper courtelHelper;
-    
+
     public CourtelListControllerBean(EntityManager entityManager, CourtelHelper courtelHelper) {
         super(entityManager);
         this.courtelHelper = courtelHelper;
@@ -45,7 +45,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void doTask() {
         processMessages();
     }
-    
+
     /**
      * Processes messages from Courtel.
      * 
@@ -54,11 +54,12 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
         XhbCourtelListDao[] xhbCourtelListArray = courtelHelper.getCourtelList();
-        
+
         if (xhbCourtelListArray.length > 0) {
             for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelListArray) {
-                //TODO Process and send CourtelList
-                LOG.debug("List to process: " + xhbCourtelListDao);
+                XhbCourtelListDao updatedXhbCourtelListDao =
+                    courtelHelper.processCourtelList(xhbCourtelListDao);
+                courtelHelper.sendCourtelList(updatedXhbCourtelListDao);
             }
         }
     }

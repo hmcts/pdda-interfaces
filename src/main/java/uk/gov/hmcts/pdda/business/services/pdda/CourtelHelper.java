@@ -93,12 +93,12 @@ public class CourtelHelper {
         return new XhbCourtelListDao[0];
     }
     
-    public XhbCourtelListDao processCourtelList() {
+    public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         //TODO PDDA-362
         return null;
     }
     
-    public void sendCourtelList() {
+    public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         //TODO PDDA-363
     }
 }
