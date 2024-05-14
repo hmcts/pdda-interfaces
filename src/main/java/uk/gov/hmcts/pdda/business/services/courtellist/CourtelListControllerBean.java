@@ -53,10 +53,10 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void processMessages() {
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
-        XhbCourtelListDao[] xhbCourtelListArray = courtelHelper.getCourtelList();
+        XhbCourtelListDao[] xhbCourtelList = courtelHelper.getCourtelList();
 
-        if (xhbCourtelListArray.length > 0) {
-            for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelListArray) {
+        if (xhbCourtelList.length > 0) {
+            for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelList) {
                 XhbCourtelListDao updatedXhbCourtelListDao =
                     courtelHelper.processCourtelList(xhbCourtelListDao);
                 courtelHelper.sendCourtelList(updatedXhbCourtelListDao);
