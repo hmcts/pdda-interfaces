@@ -8,10 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
-import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,22 +38,9 @@ class CourtelListControllerBeanTest {
     @Mock
     private EntityManager mockEntityManager;
 
-    @Mock
-    private XhbClobRepository mockXhbClobRepository;
-
-    @Mock
-    private XhbCourtelListRepository mockXhbCourtelListRepository;
-
-    @Mock
-    private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
-
-    @Mock
-    private final CourtelHelper mockCourtelHelper = new CourtelHelper(mockXhbClobRepository,
-        mockXhbCourtelListRepository, mockXhbXmlDocumentRepository);
-
     @InjectMocks
     private final CourtelListControllerBean classUnderTest =
-        new CourtelListControllerBean(mockEntityManager, mockCourtelHelper);
+        new CourtelListControllerBean(mockEntityManager);
 
     @Test
     void testDoTask() {
@@ -76,14 +59,14 @@ class CourtelListControllerBeanTest {
     @Test
     void testDefaultConstructorEntityManager() {
         CourtelListControllerBean testConstructor =
-            new CourtelListControllerBean(mockEntityManager, mockCourtelHelper);
+            new CourtelListControllerBean(mockEntityManager);
         assertNotNull(testConstructor, NOT_NULL);
     }
 
     @Test
     void testDefaultConstructor() {
         CourtelListControllerBean testConstructor =
-            new CourtelListControllerBean(mockCourtelHelper);
+            new CourtelListControllerBean();
         assertNotNull(testConstructor, NOT_NULL);
     }
 }

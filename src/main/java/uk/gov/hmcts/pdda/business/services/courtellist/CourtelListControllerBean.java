@@ -25,16 +25,14 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     private static final String METHOD_END = ") - ";
     private static final String ENTERED = " : entered";
 
-    private final CourtelHelper courtelHelper;
+    private CourtelHelper courtelHelper;
 
-    public CourtelListControllerBean(EntityManager entityManager, CourtelHelper courtelHelper) {
+    public CourtelListControllerBean(EntityManager entityManager) {
         super(entityManager);
-        this.courtelHelper = courtelHelper;
     }
 
-    public CourtelListControllerBean(CourtelHelper courtelHelper) {
+    public CourtelListControllerBean() {
         super();
-        this.courtelHelper = courtelHelper;
     }
 
     /**
@@ -53,7 +51,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     public void processMessages() {
         String methodName = "processMessages(" + METHOD_END;
         LOG.debug(methodName + ENTERED);
-        XhbCourtelListDao[] xhbCourtelList = courtelHelper.getCourtelList();
+        XhbCourtelListDao[] xhbCourtelList = getCourtelHelper().getCourtelList();
 
         if (xhbCourtelList.length > 0) {
             for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelList) {
@@ -62,5 +60,13 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
                 courtelHelper.sendCourtelList(updatedXhbCourtelListDao);
             }
         }
+    }
+
+    private CourtelHelper getCourtelHelper() {
+        if (courtelHelper == null) {
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
+                getXhbXmlDocumentRepository());
+        }
+        return courtelHelper;
     }
 }
