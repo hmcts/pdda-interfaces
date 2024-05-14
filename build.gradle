@@ -31,22 +31,6 @@ java {
   }
 }
 
-sourceSets {
-
-    smokeTest {
-        java {
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-            srcDir file('src/smokeTest/java')
-        }
-        resources.srcDir file('src/smokeTest/resources')
-    }
-}
-
-processSmokeTestResources {
-  duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked" << "-Werror"
@@ -119,7 +103,7 @@ checkstyle {
 
 pmd {
   toolVersion = "6.55.0"
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.smokeTest]
+  sourceSets = [sourceSets.main, sourceSets.test]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
   ruleSets = []
@@ -236,16 +220,8 @@ bootJar {
 
 // Needed to stop eclipse showing errors on org.w3c.dom / org.xml.sax imports
 configurations {
-   smokeTestImplementation.extendsFrom testImplementation
-   smokeTestRuntimeOnly.extendsFrom runtimeOnly
    all*.exclude group: 'xml-apis', module: 'xml-apis'
  }
-
- task smoke(type: Test) {
-  description = "Runs Smoke Tests"
-  testClassesDirs = sourceSets.smokeTest.output.classesDirs
-  classpath = sourceSets.smokeTest.runtimeClasspath
-}
 
  flyway {
   url = System.getenv('FLYWAY_URL')
