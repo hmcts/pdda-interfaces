@@ -241,7 +241,7 @@ configurations {
    all*.exclude group: 'xml-apis', module: 'xml-apis'
  }
 
- task smoke(type: Test) {
+ tasks.register('smoke', Test) {
   description = "Runs Smoke Tests"
   testClassesDirs = sourceSets.smokeTest.output.classesDirs
   classpath = sourceSets.smokeTest.runtimeClasspath
