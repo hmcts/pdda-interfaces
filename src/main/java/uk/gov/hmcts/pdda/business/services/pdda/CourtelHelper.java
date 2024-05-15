@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
@@ -42,7 +43,8 @@ public class CourtelHelper {
     private final XhbCourtelListRepository xhbCourtelListRepository;
     private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
-    public CourtelHelper(XhbClobRepository xhbClobRepository, XhbCourtelListRepository xhbCourtelListRepository,
+    public CourtelHelper(XhbClobRepository xhbClobRepository,
+        XhbCourtelListRepository xhbCourtelListRepository,
         XhbXmlDocumentRepository xhbXmlDocumentRepository) {
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
@@ -79,7 +81,8 @@ public class CourtelHelper {
         if (xmlDocumentList.isPresent()) {
             Integer xmlDocumentId = xmlDocumentList.get().getXmlDocumentId();
             LOG.debug("Fetched XmlDocumentId {}", xmlDocumentId);
-            Optional<XhbCourtelListDao> xhbCourtelListDao = xhbCourtelListRepository.findByXmlDocumentId(xmlDocumentId);
+            Optional<XhbCourtelListDao> xhbCourtelListDao =
+                xhbCourtelListRepository.findByXmlDocumentId(xmlDocumentId);
             if (xhbCourtelListDao.isPresent()) {
                 LOG.debug("XhbCourtelList (id={}) already exists for XmlDocumentId {}",
                     xhbCourtelListDao.get().getCourtelListId(), xmlDocumentId);
@@ -89,7 +92,7 @@ public class CourtelHelper {
         }
         return null;
     }
-    
+
     public List<XhbCourtelListDao> getCourtelList() {
         // TODO Example code in here before PDDA-359 is done
         XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
@@ -97,13 +100,18 @@ public class CourtelHelper {
         xhbCourtelListDaos.add(xhbCourtelListDao);
         return xhbCourtelListDaos;
     }
-    
+
     public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        //TODO PDDA-362
+        Optional<XhbClobDao> xhbClobDao =
+            xhbClobRepository.findById(xhbCourtelListDao.getXmlDocumentClobId());
+        if (xhbClobDao.isPresent()) {
+            XhbBlobDao xhbBlobDao = new XhbBlobDao();
+            xhbBlobDao.setBlobData(xhbClobDao.get().getClobData().getBytes());
+        }
         return null;
     }
-    
+
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        //TODO PDDA-363
+        // TODO PDDA-363
     }
 }

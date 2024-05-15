@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
@@ -53,8 +54,8 @@ public class FormattingServices extends FormattingServicesProcessing {
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
 
-    public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper) {
-        super(entityManager);
+    public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper, BlobHelper blobHelper) {
+        super(entityManager, blobHelper);
         this.courtelHelper = courtelHelper;
     }
     

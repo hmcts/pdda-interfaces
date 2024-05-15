@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 
 import java.util.Optional;
 
@@ -48,10 +49,13 @@ class AbstractFormattingServicesTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private BlobHelper mockBlobHelper;
 
     @TestSubject
     private final AbstractFormattingServices classUnderTest =
-        new AbstractFormattingServices(mockEntityManager);
+        new AbstractFormattingServices(mockEntityManager, mockBlobHelper);
 
     @Test
     void testCreateClob() {

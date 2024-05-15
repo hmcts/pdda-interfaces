@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
@@ -30,6 +31,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public class FormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     @SuppressWarnings("unused")
@@ -42,6 +44,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private FormattingServices formattingServices;
     private CourtelHelper courtelHelper;
+    private BlobHelper blobHelper;
 
     public FormattingControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -200,7 +203,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private FormattingServices getFormattingServices() {
         if (formattingServices == null) {
-            formattingServices = new FormattingServices(getEntityManager(), getCourtelHelper());
+            formattingServices = new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
         }
         return formattingServices;
     }
@@ -211,5 +214,12 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
                 new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
         }
         return courtelHelper;
+    }
+    
+    private BlobHelper getBlobHelper() {
+        if (blobHelper == null) {
+            blobHelper = new BlobHelper(getXhbBlobRepository());
+        }
+        return blobHelper;
     }
 }

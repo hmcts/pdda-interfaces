@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CourtUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
@@ -55,8 +56,8 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
     private AbstractXmlMergeUtils xmlUtils;
     private TranslationBundles translationBundles;
 
-    protected FormattingServicesProcessing(EntityManager entityManager) {
-        super(entityManager);
+    protected FormattingServicesProcessing(EntityManager entityManager, BlobHelper blobHelper) {
+        super(entityManager, blobHelper);
     }
 
     protected void processIwpDocument(final FormattingValue formattingValue, final String translationXml)
