@@ -30,6 +30,12 @@ spring:
       hibernate:
         default_schema: pdda
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway.enabled: true
+  flyway.user: ${DB_USER_NAME:postgres}
+  flyway.password: ${DB_PASSWORD:password}
+  flyway.url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:pdda}${DB_OPTIONS:}
+  flyway.schemas: pdda
+  flyway.locations: classpath:database,classpath:database/data,classpath:database/packages
 management:
   endpoint:
     health:
