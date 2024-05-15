@@ -66,8 +66,8 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
-            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository());
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbBlobRepository(),
+                getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
         }
         return courtelHelper;
     }

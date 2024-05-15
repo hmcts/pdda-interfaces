@@ -2,7 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
@@ -40,13 +40,17 @@ public class CourtelHelper {
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
 
     private final XhbClobRepository xhbClobRepository;
+    private final XhbBlobRepository xhbBlobRepository;
     private final XhbCourtelListRepository xhbCourtelListRepository;
     private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
-    public CourtelHelper(XhbClobRepository xhbClobRepository,
+    private BlobHelper blobHelper;
+
+    public CourtelHelper(XhbClobRepository xhbClobRepository, XhbBlobRepository xhbBlobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
         XhbXmlDocumentRepository xhbXmlDocumentRepository) {
         this.xhbClobRepository = xhbClobRepository;
+        this.xhbBlobRepository = xhbBlobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
     }
@@ -105,13 +109,20 @@ public class CourtelHelper {
         Optional<XhbClobDao> xhbClobDao =
             xhbClobRepository.findById(xhbCourtelListDao.getXmlDocumentClobId());
         if (xhbClobDao.isPresent()) {
-            XhbBlobDao xhbBlobDao = new XhbBlobDao();
-            xhbBlobDao.setBlobData(xhbClobDao.get().getClobData().getBytes());
+            Long blobId = getBlobHelper().createBlob(xhbClobDao.get().getClobData().getBytes());
+            xhbCourtelListDao.setBlobId(blobId);
         }
         return null;
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         // TODO PDDA-363
+    }
+
+    private BlobHelper getBlobHelper() {
+        if (blobHelper == null) {
+            blobHelper = new BlobHelper(xhbBlobRepository);
+        }
+        return blobHelper;
     }
 }

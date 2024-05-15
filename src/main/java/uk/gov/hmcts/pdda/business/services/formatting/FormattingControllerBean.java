@@ -77,11 +77,13 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      * @param xml String
      * @return an array containg the formated document data
      */
-    public byte[] formatDocument(final FormattingValue formattingValue, LocalDateTime listStartDate, String xml) {
+    public byte[] formatDocument(final FormattingValue formattingValue, LocalDateTime listStartDate,
+        String xml) {
         final String methodName = "formatDocument(" + formattingValue.getDistributionType() + ","
             + formattingValue.getMimeType() + "," + formattingValue.getDocumentType() + ","
-            + formattingValue.getMajorVersion() + "," + formattingValue.getLocale().getLanguage() + ","
-            + formattingValue.getLocale().getCountry() + "," + xml + "," + formattingValue.getCourtId() + METHOD_SUFFIX;
+            + formattingValue.getMajorVersion() + "," + formattingValue.getLocale().getLanguage()
+            + "," + formattingValue.getLocale().getCountry() + "," + xml + ","
+            + formattingValue.getCourtId() + METHOD_SUFFIX;
         LOG.debug(methodName + ENTERED);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
@@ -89,13 +91,16 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
         String listType = formattingValue.getDocumentType().substring(0, 1);
 
         // Get the latest list (the query is ordered so take the first one returned in the list)
-        XhbCppListDao cppList = getLatestCppList(formattingValue.getCourtId(), listType, listStartDate);
+        XhbCppListDao cppList =
+            getLatestCppList(formattingValue.getCourtId(), listType, listStartDate);
 
-        getFormattingServices()
-            .processDocument(new FormattingValue(formattingValue.getDistributionType(), formattingValue.getMimeType(),
-                formattingValue.getDocumentType(), formattingValue.getMajorVersion(), formattingValue.getMajorVersion(),
+        getFormattingServices().processDocument(
+            new FormattingValue(formattingValue.getDistributionType(),
+                formattingValue.getMimeType(), formattingValue.getDocumentType(),
+                formattingValue.getMajorVersion(), formattingValue.getMajorVersion(),
                 formattingValue.getLocale().getLanguage(), formattingValue.getLocale().getCountry(),
-                new StringReader(xml), out, formattingValue.getCourtId(), cppList), getEntityManager());
+                new StringReader(xml), out, formattingValue.getCourtId(), cppList),
+            getEntityManager());
 
         return out.toByteArray();
     }
@@ -104,8 +109,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      * Only remotely accessible method, this method processes the next available document if one is
      * available. If no document is available, then method will return.
      * 
-     * @throws RuntimeException if any <code>RuntimeException</code> is thrown during processing of the
-     *         document, after first having the status of the document set to failed.
+     * @throws RuntimeException if any <code>RuntimeException</code> is thrown during processing of
+     *         the document, after first having the status of the document set to failed.
      */
     public void processFormattingDocument() {
         final String methodName = "processFormattingDocument() - ";
@@ -140,20 +145,23 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      * @param formattingDocument XhbFormattingDao
      */
     public void processFormattingDocument(final XhbFormattingDao formattingDocument) {
-        final String methodName = "processFormattingDocument(" + formattingDocument.getFormattingId() + METHOD_SUFFIX;
+        final String methodName =
+            "processFormattingDocument(" + formattingDocument.getFormattingId() + METHOD_SUFFIX;
         LOG.debug(methodName + ENTERED);
 
         // Get the clob data
-        Optional<XhbClobDao> clobDao = getFormattingServices().getClob(formattingDocument.getXmlDocumentClobId());
+        Optional<XhbClobDao> clobDao =
+            getFormattingServices().getClob(formattingDocument.getXmlDocumentClobId());
         if (clobDao.isPresent()) {
             processDocument(formattingDocument, clobDao.get().getClobData());
         }
     }
 
     private void processDocument(final XhbFormattingDao formattingDocument, String clobData) {
-        try (Reader reader = new StringReader(clobData); OutputStream outputStream = new ByteArrayOutputStream();) {
-            final FormattingValue value =
-                getFormattingServices().getFormattingValue(formattingDocument, reader, outputStream);
+        try (Reader reader = new StringReader(clobData);
+            OutputStream outputStream = new ByteArrayOutputStream();) {
+            final FormattingValue value = getFormattingServices()
+                .getFormattingValue(formattingDocument, reader, outputStream);
             getFormattingServices().processDocument(value, getEntityManager());
         } catch (IOException ex) {
             LOG.debug("IO Error reading clob " + ex.getMessage());
@@ -161,8 +169,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     }
 
     /**
-     * Update the status of the formatting entity identified by the passed in formatting id primary key
-     * to indicate success or failure of formatting of the document.
+     * Update the status of the formatting entity identified by the passed in formatting id primary
+     * key to indicate success or failure of formatting of the document.
      * 
      * <p>Only accessible via the EJB local interface.
      * 
@@ -171,7 +179,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      *        successfully formatted.
      */
     public void updateFormattingDocumentStatus(final Integer formattingId, final boolean success) {
-        final String methodName = "updateCppFormatting(" + formattingId + "," + success + METHOD_SUFFIX;
+        final String methodName =
+            "updateCppFormatting(" + formattingId + "," + success + METHOD_SUFFIX;
         LOG.debug(methodName + ENTERED);
 
         // validation of input parameters is performed in the called method...
@@ -179,8 +188,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     }
 
     /**
-     * Update the status of the formatting entity identified by the passed in formatting id primary key
-     * to indicate success or failure of formatting of the document.
+     * Update the status of the formatting entity identified by the passed in formatting id primary
+     * key to indicate success or failure of formatting of the document.
      * 
      * <p>Only accessible via the EJB local interface.
      * 
@@ -188,34 +197,37 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      * @param errorMessage String
      */
     public void updateCppFormatting(final Integer cppFormattingId, final String errorMessage) {
-        final String methodName = "updateCppFormatting(" + cppFormattingId + "," + errorMessage + ") - ";
+        final String methodName =
+            "updateCppFormatting(" + cppFormattingId + "," + errorMessage + ") - ";
         LOG.debug(methodName + ENTERED);
 
         // validation of input parameters is performed in the called method...
         getFormattingServices().updateCppFormatting(cppFormattingId, "MF", errorMessage);
     }
 
-    private XhbCppListDao getLatestCppList(Integer courtId, String listType, LocalDateTime listStartDate) {
-        List<XhbCppListDao> cppList =
-            getXhbCppListRepository().findByCourtCodeAndListTypeAndListDate(courtId, listType, listStartDate);
+    private XhbCppListDao getLatestCppList(Integer courtId, String listType,
+        LocalDateTime listStartDate) {
+        List<XhbCppListDao> cppList = getXhbCppListRepository()
+            .findByCourtCodeAndListTypeAndListDate(courtId, listType, listStartDate);
         return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 
     private FormattingServices getFormattingServices() {
         if (formattingServices == null) {
-            formattingServices = new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
+            formattingServices =
+                new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
         }
         return formattingServices;
     }
 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
-            courtelHelper =
-                new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbBlobRepository(),
+                getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
         }
         return courtelHelper;
     }
-    
+
     private BlobHelper getBlobHelper() {
         if (blobHelper == null) {
             blobHelper = new BlobHelper(getXhbBlobRepository());
