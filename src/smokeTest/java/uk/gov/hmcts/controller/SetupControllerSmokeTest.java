@@ -18,7 +18,7 @@ class SetupControllerSmokeTest {
     
     private static final Logger LOG = LoggerFactory.getLogger(SetupControllerSmokeTest.class);
     
-    @Value("${TEST_URL:http://localhost:8080/DisplaySelectorServlet?}")
+    @Value("${TEST_URL:http://localhost:8080/DisplaySelectorServlet}")
     private String testUrl;
 
     @BeforeEach
