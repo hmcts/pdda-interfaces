@@ -29,6 +29,7 @@ class SetupControllerSmokeTest {
 
     @Test
     void smokeTest() {
+        LOG.info("testUrl={}", testUrl);
         Response response = given()
             .contentType(ContentType.JSON)
             .when()
