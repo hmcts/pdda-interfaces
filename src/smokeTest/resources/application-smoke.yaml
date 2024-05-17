@@ -1,4 +1,4 @@
-test-url: ${TEST_URL:http://localhost:8080/DisplaySelectorServlet}
+test-url: ${TEST_URL:http://localhost:8080}
 
 spring:
   application:
