@@ -1,3 +1,4 @@
+CREATE UNIQUE INDEX IF NOT EXISTS xhb_config_prop_idx ON xhb_config_prop (property_name);
 insert into xhb_config_prop
 (config_prop_id, property_name, property_value)
 values
