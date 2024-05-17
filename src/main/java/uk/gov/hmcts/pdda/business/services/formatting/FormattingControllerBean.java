@@ -207,8 +207,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
-            courtelHelper =
-                new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(), getXhbXmlDocumentRepository());
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
+                getXhbXmlDocumentRepository(), getXhbConfigPropRepository());
         }
         return courtelHelper;
     }
