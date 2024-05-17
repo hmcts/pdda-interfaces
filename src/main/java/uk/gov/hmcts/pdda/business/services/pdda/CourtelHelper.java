@@ -112,6 +112,7 @@ public class CourtelHelper {
             Long blobId = getBlobHelper().createBlob(xhbClobDao.get().getClobData().getBytes());
             xhbCourtelListDao.setBlobId(blobId);
             xhbCourtelListRepository.save(xhbCourtelListDao);
+            return xhbCourtelListDao;
         }
         return null;
     }
