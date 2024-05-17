@@ -6,7 +6,7 @@ def type = "java"
 def product = "pdda"
 def component = "public-display-data-aggregator"
 def secrets = [
-  'opal-${env}': [
+  'pdda': [
     secret('public-display-data-aggregator-POSTGRES-USER', 'DB_USER_NAME'),
     secret('public-display-data-aggregator-POSTGRES-PASS', 'DB_PASSWORD'),
     secret('public-display-data-aggregator-POSTGRES-DATABASE', 'DB_NAME'),
