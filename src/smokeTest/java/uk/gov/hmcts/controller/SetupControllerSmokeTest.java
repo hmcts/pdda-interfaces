@@ -18,7 +18,7 @@ class SetupControllerSmokeTest {
     
     private static final Logger LOG = LoggerFactory.getLogger(SetupControllerSmokeTest.class);
     
-    @Value("${TEST_URL:http://localhost:8080/DisplaySelectorServlet}")
+    @Value("${TEST_URL:http://localhost:8080}")
     private String testUrl;
 
     @BeforeEach
@@ -30,7 +30,7 @@ class SetupControllerSmokeTest {
     @Test
     void smokeTest() {
         Response response = given()
-            .contentType(ContentType.HTML)
+            .contentType(ContentType.JSON)
             .when()
             .get()
             .then()
