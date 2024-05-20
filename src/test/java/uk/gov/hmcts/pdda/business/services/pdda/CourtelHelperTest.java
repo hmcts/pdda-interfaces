@@ -61,8 +61,9 @@ class CourtelHelperTest {
         mockXhbBlobRepository = EasyMock.mock(XhbBlobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
-        classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbBlobRepository,
-            mockXhbCourtelListRepository, mockXhbXmlDocumentRepository);
+        BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
+        classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
+            mockXhbXmlDocumentRepository, mockBlobHelper);
     }
 
     @Test
@@ -169,7 +170,7 @@ class CourtelHelperTest {
         // Checks
         assertNotNull(result, NULL);
     }
-    
+
     @Test
     void testProcessCourtelListNull() {
         // Setup

@@ -2,7 +2,6 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
@@ -40,19 +39,18 @@ public class CourtelHelper {
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
 
     private final XhbClobRepository xhbClobRepository;
-    private final XhbBlobRepository xhbBlobRepository;
     private final XhbCourtelListRepository xhbCourtelListRepository;
     private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
-    private BlobHelper blobHelper;
+    private final BlobHelper blobHelper;
 
-    public CourtelHelper(XhbClobRepository xhbClobRepository, XhbBlobRepository xhbBlobRepository,
+    public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper) {
         this.xhbClobRepository = xhbClobRepository;
-        this.xhbBlobRepository = xhbBlobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
+        this.blobHelper = blobHelper;
     }
 
     public boolean isCourtelSendableDocument(String documentType) {
@@ -109,7 +107,7 @@ public class CourtelHelper {
         Optional<XhbClobDao> xhbClobDao =
             xhbClobRepository.findById(xhbCourtelListDao.getXmlDocumentClobId());
         if (xhbClobDao.isPresent()) {
-            Long blobId = getBlobHelper().createBlob(xhbClobDao.get().getClobData().getBytes());
+            Long blobId = blobHelper.createBlob(xhbClobDao.get().getClobData().getBytes());
             xhbCourtelListDao.setBlobId(blobId);
             xhbCourtelListRepository.save(xhbCourtelListDao);
             return xhbCourtelListDao;
@@ -119,12 +117,5 @@ public class CourtelHelper {
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         // TODO PDDA-363
-    }
-
-    private BlobHelper getBlobHelper() {
-        if (blobHelper == null) {
-            blobHelper = new BlobHelper(xhbBlobRepository);
-        }
-        return blobHelper;
     }
 }
