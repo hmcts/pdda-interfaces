@@ -47,8 +47,7 @@ class CourtelHelperTest {
     private XhbClobRepository mockXhbClobRepository;
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
-    private XhbConfigPropRepository mockXhbConfigPropRepository;
-
+  
     private CourtelHelper classUnderTest;
 
     @BeforeEach
@@ -56,7 +55,7 @@ class CourtelHelperTest {
         mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
-        mockXhbConfigPropRepository = EasyMock.mock(XhbConfigPropRepository.class);
+        XhbConfigPropRepository mockXhbConfigPropRepository = EasyMock.mock(XhbConfigPropRepository.class);
         classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
             mockXhbXmlDocumentRepository, mockXhbConfigPropRepository);
     }
