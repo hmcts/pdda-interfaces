@@ -2,12 +2,13 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -19,6 +20,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentReposito
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -43,8 +46,11 @@ class CourtelHelperTest {
 
     private static final String NOT_TRUE = "Result is not True";
     private static final String NOT_FALSE = "Result is not False";
+    private static final String NULL = "Result is Null";
+    private static final String NOT_NULL = "Result is Not Null";
 
     private XhbClobRepository mockXhbClobRepository;
+    private XhbBlobRepository mockXhbBlobRepository;
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
   
@@ -53,16 +59,13 @@ class CourtelHelperTest {
     @BeforeEach
     public void setUp() throws Exception {
         mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
+        mockXhbBlobRepository = EasyMock.mock(XhbBlobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
+        BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
         XhbConfigPropRepository mockXhbConfigPropRepository = EasyMock.mock(XhbConfigPropRepository.class);
         classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
-            mockXhbXmlDocumentRepository, mockXhbConfigPropRepository);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        // No teardown required
+            mockXhbXmlDocumentRepository, mockBlobHelper, mockXhbConfigPropRepository);
     }
 
     @Test
@@ -81,27 +84,39 @@ class CourtelHelperTest {
     void testWriteToCourtel() {
         // Setup
         Long clobId = Long.valueOf(-99);
-        Optional<XhbClobDao> xhbClobDao = Optional.of(DummyFormattingUtil.getXhbClobDao(clobId, ""));
-        Optional<XhbXmlDocumentDao> xhbXmlDocument = Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
-        Optional<XhbCourtelListDao> xhbCourtelList = Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
+        Optional<XhbClobDao> xhbClobDao =
+            Optional.of(DummyFormattingUtil.getXhbClobDao(clobId, ""));
+        Optional<XhbXmlDocumentDao> xhbXmlDocument =
+            Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
+        Optional<XhbCourtelListDao> xhbCourtelList =
+            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
 
         // Expect - 1st run (No clob)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class))).andReturn(Optional.empty());
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(Optional.empty());
         // Expect - 2nd run (No XmlDocument)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class))).andReturn(xhbClobDao);
-        EasyMock.expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(xhbClobDao);
+        EasyMock
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
             .andReturn(Optional.empty());
         // Expect - 3rd run (With CourtelList)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class))).andReturn(xhbClobDao);
-        EasyMock.expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(xhbClobDao);
+        EasyMock
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
             .andReturn(xhbXmlDocument);
-        EasyMock.expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelList);
         // Expect - 4th run (No CourtelList - FINAL SUCCESSFUL VERSION)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class))).andReturn(xhbClobDao);
-        EasyMock.expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(xhbClobDao);
+        EasyMock
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
             .andReturn(xhbXmlDocument);
-        EasyMock.expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
             .andReturn(Optional.empty());
         mockXhbCourtelListRepository.save(EasyMock.isA(XhbCourtelListDao.class));
         // Replays
@@ -133,6 +148,46 @@ class CourtelHelperTest {
         }
         assertTrue(result, NOT_TRUE);
         return true;
+    }
+
+    @Test
+    void testProcessCourtelList() {
+        // Setup
+        Long clobId = Long.valueOf(-99);
+        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        xhbCourtelListDao.setXmlDocumentClobId(clobId);
+        Optional<XhbClobDao> xhbClobDao =
+            Optional.of(DummyFormattingUtil.getXhbClobDao(clobId, ""));
+        Optional<XhbBlobDao> xhbBlobDao = Optional.of(new XhbBlobDao());
+
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(xhbClobDao);
+        EasyMock.expect(mockXhbBlobRepository.update(EasyMock.isA(XhbBlobDao.class)))
+            .andReturn(xhbBlobDao);
+
+        EasyMock.replay(mockXhbClobRepository);
+        EasyMock.replay(mockXhbBlobRepository);
+        // Run
+        XhbCourtelListDao result = classUnderTest.processCourtelList(xhbCourtelListDao);
+        // Checks
+        assertNotNull(result, NULL);
+    }
+
+    @Test
+    void testProcessCourtelListNull() {
+        // Setup
+        Long clobId = Long.valueOf(-99);
+        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        xhbCourtelListDao.setXmlDocumentClobId(clobId);
+
+        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+            .andReturn(Optional.empty());
+
+        EasyMock.replay(mockXhbClobRepository);
+        // Run
+        XhbCourtelListDao result = classUnderTest.processCourtelList(xhbCourtelListDao);
+        // Checks
+        assertNull(result, NOT_NULL);
     }
 
 }

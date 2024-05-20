@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     private static final String ENTERED = " : entered";
 
     private CourtelHelper courtelHelper;
+    private BlobHelper blobHelper;
 
     public CourtelListControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -67,8 +69,15 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository(), getXhbConfigPropRepository());
+                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository());
         }
         return courtelHelper;
+    }
+
+    private BlobHelper getBlobHelper() {
+        if (blobHelper == null) {
+            blobHelper = new BlobHelper(getXhbBlobRepository());
+        }
+        return blobHelper;
     }
 }

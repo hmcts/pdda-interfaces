@@ -72,7 +72,7 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         if (cppStagingInboundControllerBean == null) {
             cppStagingInboundControllerBean = new CppStagingInboundControllerBean(
                 getEntityManager(), getXhbConfigPropRepository(), getCppStagingInboundHelper(),
-                getXhbCourtRepository(), getXhbClobRepository(), getValidationService());
+                getXhbCourtRepository(), getXhbClobRepository(), getXhbBlobRepository(), getValidationService());
         }
         return cppStagingInboundControllerBean;
     }

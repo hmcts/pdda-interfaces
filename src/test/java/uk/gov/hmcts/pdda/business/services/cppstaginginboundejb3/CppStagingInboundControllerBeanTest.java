@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -74,6 +75,9 @@ class CppStagingInboundControllerBeanTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private XhbBlobRepository mockXhbBlobRepository;
 
     @Mock
     private ValidationResult mockValidationResult;
@@ -84,7 +88,7 @@ class CppStagingInboundControllerBeanTest {
     @TestSubject
     private CppStagingInboundControllerBean classUnderTest =
         new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
-            mockXhbCourtRepository, mockXhbClobRepository, mockValidationService);
+            mockXhbCourtRepository, mockXhbClobRepository, mockXhbBlobRepository, mockValidationService);
 
     @BeforeEach
     public void setUp() throws Exception {

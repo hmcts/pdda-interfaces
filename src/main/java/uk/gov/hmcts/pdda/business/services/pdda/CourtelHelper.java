@@ -49,14 +49,16 @@ public class CourtelHelper {
     private final XhbConfigPropRepository xhbConfigPropRepository;
     private ConfigPropMaintainer configPropMaintainer;
 
-    public CourtelHelper(
-        XhbClobRepository xhbClobRepository,
+    private final BlobHelper blobHelper;
+
+    public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper,
         XhbConfigPropRepository xhbConfigPropRepository) {
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
+        this.blobHelper = blobHelper;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
@@ -90,7 +92,8 @@ public class CourtelHelper {
         if (xmlDocumentList.isPresent()) {
             Integer xmlDocumentId = xmlDocumentList.get().getXmlDocumentId();
             LOG.debug("Fetched XmlDocumentId {}", xmlDocumentId);
-            Optional<XhbCourtelListDao> xhbCourtelListDao = xhbCourtelListRepository.findByXmlDocumentId(xmlDocumentId);
+            Optional<XhbCourtelListDao> xhbCourtelListDao =
+                xhbCourtelListRepository.findByXmlDocumentId(xmlDocumentId);
             if (xhbCourtelListDao.isPresent()) {
                 LOG.debug("XhbCourtelList (id={}) already exists for XmlDocumentId {}",
                     xhbCourtelListDao.get().getCourtelListId(), xmlDocumentId);
@@ -100,7 +103,7 @@ public class CourtelHelper {
         }
         return null;
     }
-    
+
     public List<XhbCourtelListDao> getCourtelList() {
         return xhbCourtelListRepository.findCourtelList(
             getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
@@ -123,14 +126,21 @@ public class CourtelHelper {
     private Integer getIntervalValue(Integer messageLookupDelay) {
         return messageLookupDelay / SECONDS_IN_A_DAY;
     }
-    
+
     public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        //TODO PDDA-362
+        Optional<XhbClobDao> xhbClobDao =
+            xhbClobRepository.findById(xhbCourtelListDao.getXmlDocumentClobId());
+        if (xhbClobDao.isPresent()) {
+            Long blobId = blobHelper.createBlob(xhbClobDao.get().getClobData().getBytes());
+            xhbCourtelListDao.setBlobId(blobId);
+            xhbCourtelListRepository.save(xhbCourtelListDao);
+            return xhbCourtelListDao;
+        }
         return null;
     }
-    
+
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        //TODO PDDA-363
+        // TODO PDDA-363
     }
     
     protected ConfigPropMaintainer getConfigPropMaintainer() {
