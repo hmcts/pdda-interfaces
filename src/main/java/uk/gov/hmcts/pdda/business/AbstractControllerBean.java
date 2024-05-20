@@ -4,6 +4,7 @@ import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
@@ -19,6 +20,7 @@ public class AbstractControllerBean {
 
     private EntityManager entityManager;
     private XhbClobRepository xhbClobRepository;
+    private XhbBlobRepository xhbBlobRepository;
     private XhbCourtRepository xhbCourtRepository;
     private XhbConfigPropRepository xhbConfigPropRepository;
     private XhbCppFormattingRepository xhbCppFormattingRepository;
@@ -28,11 +30,13 @@ public class AbstractControllerBean {
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
     // For unit tests.
-    protected AbstractControllerBean(EntityManager entityManager, XhbClobRepository xhbClobRepository,
+    protected AbstractControllerBean(EntityManager entityManager,
+        XhbClobRepository xhbClobRepository, XhbBlobRepository xhbBlobRepository,
         XhbCourtRepository xhbCourtRepository, XhbConfigPropRepository xhbConfigPropRepository,
         XhbCppFormattingRepository xhbCppFormattingRepository) {
         this(entityManager);
         this.xhbClobRepository = xhbClobRepository;
+        this.xhbBlobRepository = xhbBlobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
@@ -60,6 +64,13 @@ public class AbstractControllerBean {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
+    }
+    
+    protected XhbBlobRepository getXhbBlobRepository() {
+        if (xhbBlobRepository == null) {
+            xhbBlobRepository = new XhbBlobRepository(getEntityManager());
+        }
+        return xhbBlobRepository;
     }
 
     protected XhbCourtelListRepository getXhbCourtelListRepository() {

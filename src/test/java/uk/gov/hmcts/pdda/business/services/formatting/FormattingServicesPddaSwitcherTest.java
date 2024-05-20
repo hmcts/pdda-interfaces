@@ -28,6 +28,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
@@ -105,13 +106,16 @@ class FormattingServicesPddaSwitcherTest {
 
     @Mock
     private CourtelHelper mockCourtelHelper;
+    
+    @Mock
+    private BlobHelper mockBlobHelper;
 
     @InjectMocks
     private FormattingServices classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
-        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper);
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
         ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
         ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);

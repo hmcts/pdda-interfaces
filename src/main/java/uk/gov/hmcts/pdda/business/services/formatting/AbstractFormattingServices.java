@@ -3,12 +3,12 @@ package uk.gov.hmcts.pdda.business.services.formatting;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformattingmerge.XhbCppFormattingMergeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.util.List;
@@ -22,15 +22,16 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormattingServices.class);
 
-    public AbstractFormattingServices(EntityManager entityManager) {
+    private final BlobHelper blobHelper;
+    
+    public AbstractFormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
         super(entityManager);
+        this.blobHelper = blobHelper;
     }
 
     protected Long createBlob(byte[] blobData) {
         LOG.debug("createBlob({})", blobData);
-        XhbBlobDao dao = FormattingServiceUtils.createXhbBlobDao(blobData);
-        Optional<XhbBlobDao> savedDao = getXhbBlobRepository().update(dao);
-        return savedDao.isPresent() ? savedDao.get().getBlobId() : null;
+        return blobHelper.createBlob(blobData);
     }
 
     protected Optional<XhbFormattingDao> getXhbFormattingDao(FormattingValue formattingValue) {
