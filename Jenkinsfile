@@ -21,6 +21,9 @@ withPipeline(type, product, component) {
   loadVaultSecrets(secrets)
 
   afterAlways('smokeTest:stg') {
+    // Vars for Kubernetes
+    env.TEST_URL = "https://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net"
+
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'smoke-test-report/**/*'
   }
 }
