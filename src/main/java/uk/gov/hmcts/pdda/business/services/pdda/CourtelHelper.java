@@ -43,14 +43,16 @@ public class CourtelHelper {
     private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
 
     private final BlobHelper blobHelper;
+    private final CathHelper cathHelper;
 
     public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper, CathHelper cathHelper) {
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.blobHelper = blobHelper;
+        this.cathHelper = cathHelper;
     }
 
     public boolean isCourtelSendableDocument(String documentType) {
@@ -116,6 +118,6 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        // TODO PDDA-363
+        cathHelper.send(xhbCourtelListDao);
     }
 }

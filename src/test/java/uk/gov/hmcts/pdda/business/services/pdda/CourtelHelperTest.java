@@ -62,8 +62,9 @@ class CourtelHelperTest {
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
         BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
+        CathHelper mockCathHelper = EasyMock.mock(CathHelper.class);
         classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
-            mockXhbXmlDocumentRepository, mockBlobHelper);
+            mockXhbXmlDocumentRepository, mockBlobHelper, mockCathHelper);
     }
 
     @Test

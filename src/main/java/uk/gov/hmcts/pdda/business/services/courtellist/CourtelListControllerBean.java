@@ -12,6 +12,7 @@ import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CathHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
 
     private CourtelHelper courtelHelper;
     private BlobHelper blobHelper;
+    private CathHelper cathHelper;
 
     public CourtelListControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -69,7 +71,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository(), getBlobHelper());
+                getXhbXmlDocumentRepository(), getBlobHelper(), getCathHelper());
         }
         return courtelHelper;
     }
@@ -79,5 +81,12 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
             blobHelper = new BlobHelper(getXhbBlobRepository());
         }
         return blobHelper;
+    }
+    
+    private CathHelper getCathHelper() {
+        if (cathHelper == null) {
+            cathHelper = new CathHelper();
+        }
+        return cathHelper;
     }
 }

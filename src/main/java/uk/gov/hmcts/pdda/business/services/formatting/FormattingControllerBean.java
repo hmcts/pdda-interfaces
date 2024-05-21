@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CathHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
@@ -45,6 +46,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private FormattingServices formattingServices;
     private CourtelHelper courtelHelper;
     private BlobHelper blobHelper;
+    private CathHelper cathHelper;
 
     public FormattingControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -223,7 +225,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository(), getBlobHelper());
+                getXhbXmlDocumentRepository(), getBlobHelper(), getCathHelper());
         }
         return courtelHelper;
     }
@@ -233,5 +235,12 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
             blobHelper = new BlobHelper(getXhbBlobRepository());
         }
         return blobHelper;
+    }
+    
+    private CathHelper getCathHelper() {
+        if (cathHelper == null) {
+            cathHelper = new CathHelper();
+        }
+        return cathHelper;
     }
 }
