@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -52,7 +53,7 @@ class CourtelHelperTest {
     private XhbBlobRepository mockXhbBlobRepository;
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
-
+  
     private CourtelHelper classUnderTest;
 
     @BeforeEach
@@ -62,8 +63,9 @@ class CourtelHelperTest {
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
         BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
+        XhbConfigPropRepository mockXhbConfigPropRepository = EasyMock.mock(XhbConfigPropRepository.class);
         classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
-            mockXhbXmlDocumentRepository, mockBlobHelper);
+            mockXhbXmlDocumentRepository, mockBlobHelper, mockXhbConfigPropRepository);
     }
 
     @Test
