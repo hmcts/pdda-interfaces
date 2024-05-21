@@ -95,6 +95,30 @@ class CourtelListControllerBeanTest {
         // Check results
         assertFalse(result, FALSE);
     }
+    
+    @Test
+    void testDoTaskBadConfigProp() {
+        // Run method
+        boolean result;
+        try {
+            // Setup
+            XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+            xhbConfigPropDao.setPropertyValue("abcdefgh");
+            List<XhbConfigPropDao> configPropDaos = new ArrayList<>();
+            configPropDaos.add(xhbConfigPropDao);
+            
+            Mockito.when(mockXhbConfigPropRepository.findByPropertyName(Mockito.isA(String.class)))
+                .thenReturn(configPropDaos);
+
+            // Run
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertFalse(result, FALSE);
+    }
 
     @Test
     void testDefaultConstructorEntityManager() {

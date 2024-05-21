@@ -114,13 +114,17 @@ public class CourtelHelper {
     private Integer getConfigPropValue(String value) {
         try {
             String propertyValue = getConfigPropMaintainer().getPropertyValue(value);
-            Integer maxRetry = Integer.parseInt(propertyValue);
-            LOG.error(value + " = " + propertyValue);
-            return maxRetry;
+            if (propertyValue != null) {
+                Integer maxRetry = Integer.parseInt(propertyValue);
+                LOG.error("{} = {}", value, propertyValue);
+                return maxRetry;
+            } else {
+                LOG.error("{} is null", value);
+            }
         } catch (Exception ex) {
-            LOG.error(value + " contains non-numeric data");
-            return null;
+            LOG.error("{} contains non-numeric data", value);
         }
+        return null;
     }
 
     private Integer getIntervalValue(Integer messageLookupDelay) {
