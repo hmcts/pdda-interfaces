@@ -20,6 +20,9 @@ withPipeline(type, product, component) {
   enableDbMigration(product)
   loadVaultSecrets(secrets)
 
+  // Vars for Kubernetes
+  env.TEST_URL = "https://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net"
+
   afterAlways('smokeTest:stg') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'smoke-test-report/**/*'
   }
