@@ -1,7 +1,11 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 
 /**
  * <p>
@@ -23,10 +27,27 @@ import org.slf4j.LoggerFactory;
 public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
-    private static final String ENTERED = " : entered";
-    
-    public void send(String xhbCourtelListJson) {
-        LOG.debug("send()" + ENTERED);
+
+    public XhbCourtelListJson convertDaoToJsonObject(XhbCourtelListDao xhbCourtelListDao,
+        BlobHelper blobHelper) {
+        XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
+        xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
+        return xhbCourtelListJson;
+    }
+
+    public String generateJsonString(XhbCourtelListJson xhbCourtelListJson) {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(xhbCourtelListJson);
+        } catch (JsonProcessingException e) {
+            LOG.error("Error creating JSON String for {} object.", xhbCourtelListJson);
+        }
+        return json;
+    }
+
+    public void send(String jsonString) {
+        LOG.debug("send({})", jsonString);
         // TODO PDDA-364
     }
 }

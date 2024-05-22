@@ -1,14 +1,11 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
@@ -149,15 +146,8 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
-        xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
-        ObjectMapper mapper = new ObjectMapper();
-        String json = "";
-        try {
-            json = mapper.writeValueAsString(xhbCourtelListJson);
-        } catch (JsonProcessingException e) {
-            LOG.error("Error creating JSON String for {} object.", xhbCourtelListJson);
-        }
+        String json = cathHelper
+            .generateJsonString(cathHelper.convertDaoToJsonObject(xhbCourtelListDao, blobHelper));
         cathHelper.send(json);
     }
 
