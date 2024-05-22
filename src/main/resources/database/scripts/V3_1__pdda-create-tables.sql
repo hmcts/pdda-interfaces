@@ -8,7 +8,7 @@ CREATE TABLE xhb_courtel_list (
 	blob_id bigint,
     sent_to_courtel varchar(1) NOT NULL,
     num_send_attempts integer,
-    last_attempt_datetime timestamp NOT NULL,
+    last_attempt_datetime timestamp,
     message_text varchar(255) NOT NULL,
 	last_update_date timestamp NOT NULL,
 	creation_date timestamp NOT NULL,

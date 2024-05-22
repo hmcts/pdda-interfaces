@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +36,16 @@ public class XhbCourtelListRepository extends AbstractRepository<XhbCourtelListD
         @SuppressWarnings("unchecked")
         List<XhbCourtelListDao> resultList = query.getResultList();
         return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtelListDao> findCourtelList(final Integer courtelMaxRetry,
+        final Integer intervalValue, final LocalDateTime courtelListAmount) {
+        LOG.debug("findCourtelList()");
+        Query query = getEntityManager().createNamedQuery("XHB_COURTEL_LIST.findCourtelList");
+        query.setParameter("courtelMaxRetry", courtelMaxRetry);
+        query.setParameter("intervalValue", intervalValue);
+        query.setParameter("courtelListAmount", courtelListAmount);
+        return query.getResultList();
     }
 }

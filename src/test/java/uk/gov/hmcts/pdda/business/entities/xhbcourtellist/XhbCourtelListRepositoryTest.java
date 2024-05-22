@@ -13,6 +13,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,10 @@ import static org.mockito.ArgumentMatchers.isA;
 class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelListDao> {
 
     private static final String QUERY_XMLDOCUMENTID = "xmlDocumentId";
+    private static final String QUERY_FINDCOURTELLIST = "findCourtelList";
+    private static final Integer DUMMY_COURTEL_LIST_AMOUNT = 5;
+    private static final Integer DUMMY_INTERVAL = 0;
+    private static final Integer DUMMY_COURTEL_MAX_RETRY = 5;
     
     @Mock
     private EntityManager mockEntityManager;
@@ -74,6 +79,14 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
         result = testFindBy(QUERY_XMLDOCUMENTID, null);
         assertTrue(result, NOT_TRUE);
     }
+    
+    @Test
+    void testFindCourtelList() {
+        boolean result = testFindBy(QUERY_FINDCOURTELLIST, getDummyDao());
+        assertTrue(result, NOT_TRUE);
+        result = testFindBy(QUERY_FINDCOURTELLIST, null);
+        assertTrue(result, NOT_TRUE);
+    }
 
     private boolean testFindBy(String query, XhbCourtelListDao dao) {
         List<XhbCourtelListDao> list = new ArrayList<>();
@@ -86,6 +99,19 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
         if (QUERY_XMLDOCUMENTID.equals(query)) {
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId())).thenReturn(dao);
             result = (Optional<XhbCourtelListDao>) getClassUnderTest().findByXmlDocumentId(getDummyId());
+        } else if (QUERY_FINDCOURTELLIST.equals(query)) {
+            Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
+                .thenReturn(dao);
+            List<XhbCourtelListDao> resultList =
+                getClassUnderTest().findCourtelList(DUMMY_COURTEL_MAX_RETRY, DUMMY_INTERVAL,
+                    LocalDateTime.now().plusMinutes(DUMMY_COURTEL_LIST_AMOUNT));
+            assertNotNull(resultList, "Result is Null");
+            if (dao != null) {
+                assertSame(dao, resultList.get(0), SAME);
+            } else {
+                assertSame(0, resultList.size(), SAME);
+            }
+            return true;
         }
         assertNotNull(result, NOTNULL);
         if (dao != null) {

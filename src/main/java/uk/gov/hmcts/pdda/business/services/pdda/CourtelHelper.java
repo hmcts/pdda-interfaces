@@ -4,12 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -36,22 +37,30 @@ public class CourtelHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CourtelHelper.class);
     private static final String NO = "N";
 
+    private static final String CONFIG_COURTEL_MAX_RETRY = "COURTEL_MAX_RETRY";
+    private static final String CONFIG_MESSAGE_LOOKUP_DELAY = "MESSAGE_LOOKUP_DELAY"; 
+    private static final String CONFIG_COURTEL_LIST_AMOUNT = "COURTEL_LIST_AMOUNT"; 
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
+    private static final Integer SECONDS_IN_A_DAY = 86_400;
 
     private final XhbClobRepository xhbClobRepository;
     private final XhbCourtelListRepository xhbCourtelListRepository;
     private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
+    private final XhbConfigPropRepository xhbConfigPropRepository;
+    private ConfigPropMaintainer configPropMaintainer;
 
     private final BlobHelper blobHelper;
     private final CathHelper cathHelper;
 
     public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper, CathHelper cathHelper) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper,
+        XhbConfigPropRepository xhbConfigPropRepository, CathHelper cathHelper) {
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.blobHelper = blobHelper;
+        this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.cathHelper = cathHelper;
     }
 
@@ -98,11 +107,30 @@ public class CourtelHelper {
     }
 
     public List<XhbCourtelListDao> getCourtelList() {
-        // TODO Example code in here before PDDA-359 is done
-        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
-        List<XhbCourtelListDao> xhbCourtelListDaos = new ArrayList<>();
-        xhbCourtelListDaos.add(xhbCourtelListDao);
-        return xhbCourtelListDaos;
+        return xhbCourtelListRepository.findCourtelList(
+            getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
+            getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
+            LocalDateTime.now().plusMinutes(getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT)));
+    }
+    
+    private Integer getConfigPropValue(String value) {
+        try {
+            String propertyValue = getConfigPropMaintainer().getPropertyValue(value);
+            if (propertyValue != null) {
+                Integer maxRetry = Integer.parseInt(propertyValue);
+                LOG.error("{} = {}", value, propertyValue);
+                return maxRetry;
+            } else {
+                LOG.error("{} is null", value);
+            }
+        } catch (Exception ex) {
+            LOG.error("{} contains non-numeric data", value);
+        }
+        return null;
+    }
+
+    private Integer getIntervalValue(Integer messageLookupDelay) {
+        return messageLookupDelay / SECONDS_IN_A_DAY;
     }
 
     public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
@@ -119,5 +147,12 @@ public class CourtelHelper {
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         cathHelper.send(xhbCourtelListDao);
+    }
+    
+    protected ConfigPropMaintainer getConfigPropMaintainer() {
+        if (configPropMaintainer == null) {
+            configPropMaintainer = new ConfigPropMaintainer(xhbConfigPropRepository);
+        }
+        return configPropMaintainer;
     }
 }
