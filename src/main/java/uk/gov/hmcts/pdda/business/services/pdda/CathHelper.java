@@ -28,8 +28,13 @@ public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
 
-    public XhbCourtelListJson convertDaoToJsonObject(XhbCourtelListDao xhbCourtelListDao,
-        BlobHelper blobHelper) {
+    private final BlobHelper blobHelper;
+
+    public CathHelper(BlobHelper blobHelper) {
+        this.blobHelper = blobHelper;
+    }
+
+    public XhbCourtelListJson convertDaoToJsonObject(XhbCourtelListDao xhbCourtelListDao) {
         XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
         xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
         return xhbCourtelListJson;

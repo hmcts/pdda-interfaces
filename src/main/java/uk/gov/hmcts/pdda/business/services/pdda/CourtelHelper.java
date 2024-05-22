@@ -50,18 +50,17 @@ public class CourtelHelper {
     private ConfigPropMaintainer configPropMaintainer;
 
     private final BlobHelper blobHelper;
-    private final CathHelper cathHelper;
+    private CathHelper cathHelper;
 
     public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
         XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper,
-        XhbConfigPropRepository xhbConfigPropRepository, CathHelper cathHelper) {
+        XhbConfigPropRepository xhbConfigPropRepository) {
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.blobHelper = blobHelper;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
-        this.cathHelper = cathHelper;
     }
 
     public boolean isCourtelSendableDocument(String documentType) {
@@ -146,9 +145,9 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        String json = cathHelper
-            .generateJsonString(cathHelper.convertDaoToJsonObject(xhbCourtelListDao, blobHelper));
-        cathHelper.send(json);
+        String json = getCathHelper()
+            .generateJsonString(getCathHelper().convertDaoToJsonObject(xhbCourtelListDao));
+        getCathHelper().send(json);
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {
@@ -156,5 +155,12 @@ public class CourtelHelper {
             configPropMaintainer = new ConfigPropMaintainer(xhbConfigPropRepository);
         }
         return configPropMaintainer;
+    }
+
+    private CathHelper getCathHelper() {
+        if (cathHelper == null) {
+            this.cathHelper = new CathHelper(blobHelper);
+        }
+        return cathHelper;
     }
 }
