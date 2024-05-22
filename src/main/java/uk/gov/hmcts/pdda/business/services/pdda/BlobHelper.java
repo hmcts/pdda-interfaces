@@ -41,4 +41,9 @@ public class BlobHelper {
         Optional<XhbBlobDao> savedDao = xhbBlobRepository.update(dao);
         return savedDao.isPresent() ? savedDao.get().getBlobId() : null;
     }
+    
+    public byte[] getBlobData(Long blobId) {
+        Optional<XhbBlobDao> savedDao = xhbBlobRepository.findById(blobId);
+        return savedDao.isPresent() ? savedDao.get().getBlobData() : null;
+    }
 }

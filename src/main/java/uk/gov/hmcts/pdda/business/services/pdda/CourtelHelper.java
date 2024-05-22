@@ -1,11 +1,14 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
@@ -38,8 +41,8 @@ public class CourtelHelper {
     private static final String NO = "N";
 
     private static final String CONFIG_COURTEL_MAX_RETRY = "COURTEL_MAX_RETRY";
-    private static final String CONFIG_MESSAGE_LOOKUP_DELAY = "MESSAGE_LOOKUP_DELAY"; 
-    private static final String CONFIG_COURTEL_LIST_AMOUNT = "COURTEL_LIST_AMOUNT"; 
+    private static final String CONFIG_MESSAGE_LOOKUP_DELAY = "MESSAGE_LOOKUP_DELAY";
+    private static final String CONFIG_COURTEL_LIST_AMOUNT = "COURTEL_LIST_AMOUNT";
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
     private static final Integer SECONDS_IN_A_DAY = 86_400;
 
@@ -112,7 +115,7 @@ public class CourtelHelper {
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
             LocalDateTime.now().plusMinutes(getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT)));
     }
-    
+
     private Integer getConfigPropValue(String value) {
         try {
             String propertyValue = getConfigPropMaintainer().getPropertyValue(value);
@@ -146,9 +149,18 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        cathHelper.send(xhbCourtelListDao);
+        XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
+        xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(xhbCourtelListJson);
+        } catch (JsonProcessingException e) {
+            LOG.error("Error creating JSON String for {} object.", xhbCourtelListJson);
+        }
+        cathHelper.send(json);
     }
-    
+
     protected ConfigPropMaintainer getConfigPropMaintainer() {
         if (configPropMaintainer == null) {
             configPropMaintainer = new ConfigPropMaintainer(xhbConfigPropRepository);
