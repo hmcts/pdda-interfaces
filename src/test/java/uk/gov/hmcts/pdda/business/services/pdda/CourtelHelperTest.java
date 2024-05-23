@@ -53,6 +53,7 @@ class CourtelHelperTest {
     private XhbBlobRepository mockXhbBlobRepository;
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    private BlobHelper mockBlobHelper;
 
     private CourtelHelper classUnderTest;
 
@@ -62,7 +63,7 @@ class CourtelHelperTest {
         mockXhbBlobRepository = EasyMock.mock(XhbBlobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
-        BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
+        mockBlobHelper = EasyMock.mock(BlobHelper.class);
         XhbConfigPropRepository mockXhbConfigPropRepository =
             EasyMock.mock(XhbConfigPropRepository.class);
 
@@ -156,8 +157,6 @@ class CourtelHelperTest {
     void testProcessCourtelList() {
         // Setup
         Long clobId = Long.valueOf(-99);
-        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
-        xhbCourtelListDao.setXmlDocumentClobId(clobId);
         Optional<XhbClobDao> xhbClobDao =
             Optional.of(DummyFormattingUtil.getXhbClobDao(clobId, ""));
         Optional<XhbBlobDao> xhbBlobDao = Optional.of(new XhbBlobDao());
@@ -170,7 +169,7 @@ class CourtelHelperTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockXhbBlobRepository);
         // Run
-        XhbCourtelListDao result = classUnderTest.processCourtelList(xhbCourtelListDao);
+        XhbCourtelListDao result = classUnderTest.processCourtelList(getDummyCourtelList());
         // Checks
         assertNotNull(result, NULL);
     }
@@ -178,18 +177,37 @@ class CourtelHelperTest {
     @Test
     void testProcessCourtelListNull() {
         // Setup
-        Long clobId = Long.valueOf(-99);
-        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
-        xhbCourtelListDao.setXmlDocumentClobId(clobId);
-
         EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
             .andReturn(Optional.empty());
 
         EasyMock.replay(mockXhbClobRepository);
         // Run
-        XhbCourtelListDao result = classUnderTest.processCourtelList(xhbCourtelListDao);
+        XhbCourtelListDao result = classUnderTest.processCourtelList(getDummyCourtelList());
         // Checks
         assertNull(result, NOT_NULL);
+    }
+
+    @Test
+    void testSendCourtelList() {
+        // Setup
+        byte[] blobData = "TestData".getBytes();
+        EasyMock.expect(mockBlobHelper.getBlobData(EasyMock.isA(Long.class))).andReturn(blobData);
+        EasyMock.replay(mockBlobHelper);
+        boolean result;
+        // Run
+        classUnderTest.sendCourtelList(getDummyCourtelList());
+        result = true;
+        // Checks
+        EasyMock.verify(mockBlobHelper);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    private XhbCourtelListDao getDummyCourtelList() {
+        Long id = Long.valueOf(-99);
+        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        xhbCourtelListDao.setXmlDocumentClobId(id);
+        xhbCourtelListDao.setBlobId(id);
+        return xhbCourtelListDao;
     }
 
 }
