@@ -62,7 +62,8 @@ public final class SaxUtils {
                     filters[i].setParent(filters[i - 1]);
                 }
             }
-            return new SAXSource(filters[filters.length - 1], new InputSource(reader));
+            XMLFilter xmlFilter = filters[filters.length - 1];
+            return new SAXSource(xmlFilter, new InputSource(reader));
         }
     }
 
