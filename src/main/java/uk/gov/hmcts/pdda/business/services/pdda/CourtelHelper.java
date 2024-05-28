@@ -38,8 +38,8 @@ public class CourtelHelper {
     private static final String NO = "N";
 
     private static final String CONFIG_COURTEL_MAX_RETRY = "COURTEL_MAX_RETRY";
-    private static final String CONFIG_MESSAGE_LOOKUP_DELAY = "MESSAGE_LOOKUP_DELAY"; 
-    private static final String CONFIG_COURTEL_LIST_AMOUNT = "COURTEL_LIST_AMOUNT"; 
+    private static final String CONFIG_MESSAGE_LOOKUP_DELAY = "MESSAGE_LOOKUP_DELAY";
+    private static final String CONFIG_COURTEL_LIST_AMOUNT = "COURTEL_LIST_AMOUNT";
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
     private static final Integer SECONDS_IN_A_DAY = 86_400;
 
@@ -50,6 +50,7 @@ public class CourtelHelper {
     private ConfigPropMaintainer configPropMaintainer;
 
     private final BlobHelper blobHelper;
+    private CathHelper cathHelper;
 
     public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
@@ -110,7 +111,7 @@ public class CourtelHelper {
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
             LocalDateTime.now().plusMinutes(getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT)));
     }
-    
+
     private Integer getConfigPropValue(String value) {
         try {
             String propertyValue = getConfigPropMaintainer().getPropertyValue(value);
@@ -144,13 +145,22 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        // TODO PDDA-363
+        String json = getCathHelper()
+            .generateJsonString(getCathHelper().convertDaoToJsonObject(xhbCourtelListDao));
+        getCathHelper().send(json);
     }
-    
+
     protected ConfigPropMaintainer getConfigPropMaintainer() {
         if (configPropMaintainer == null) {
             configPropMaintainer = new ConfigPropMaintainer(xhbConfigPropRepository);
         }
         return configPropMaintainer;
+    }
+
+    private CathHelper getCathHelper() {
+        if (cathHelper == null) {
+            this.cathHelper = new CathHelper(blobHelper);
+        }
+        return cathHelper;
     }
 }
