@@ -209,6 +209,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
                 }
             }
 
+            // Use the 'xslt_config.xml' to determine the transformation from xml to html
             Writer buffer = TransformerUtils.transform(getXslServices(), getFormattingConfig(), formattingValue,
                 translationXml, new StringWriter());
             LOG.debug("\n\n\n\n\n\n\nprocessDocument({}):\n {}", formattingValue, buffer);
