@@ -193,7 +193,7 @@ class CppStagingInboundControllerBeanValidateTest {
         courts.add(DummyCourtUtil.getXhbCourtDao(Integer.valueOf(1), EMPTY_STRING));
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName(VALIDFILENAME);
-
+        dao.setDocumentType("PD");
 
         testingXhbConfigPropRepository();
 

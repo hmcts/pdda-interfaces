@@ -72,7 +72,7 @@ class BlobHelperTest {
         // Checks
         assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testGetBlob() {
         // Setup
@@ -81,7 +81,7 @@ class BlobHelperTest {
         Optional<XhbBlobDao> dummyBlobDao =
             Optional.of(DummyFormattingUtil.getXhbBlobDao(dummyByteArray));
         Mockito.when(mockXhbBlobRepository.findById(Mockito.isA(Long.class)))
-        .thenReturn(dummyBlobDao);
+            .thenReturn(dummyBlobDao);
         // Run
         byte[] result = classUnderTest.getBlobData(dummyId);
         // Checks
