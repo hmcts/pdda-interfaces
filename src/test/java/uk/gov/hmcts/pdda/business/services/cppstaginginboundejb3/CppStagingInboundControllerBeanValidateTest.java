@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
@@ -171,6 +173,7 @@ class CppStagingInboundControllerBeanValidateTest {
     void testValidateDocumentInvalidType() throws ValidationException {
         // Setup
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
+        dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("INVALID");
 
         testingXhbConfigPropRepository();
@@ -186,6 +189,8 @@ class CppStagingInboundControllerBeanValidateTest {
     @Test
     void testValidateDocumentSuccess() throws ValidationException {
         // Setup
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(Integer.valueOf(1), EMPTY_STRING));
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName(VALIDFILENAME);
 
@@ -197,10 +202,11 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.expect(
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
-
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class))).andReturn(courts);
         EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
 
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockValidationService);
         EasyMock.replay(mockValidationResult);
