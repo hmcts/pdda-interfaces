@@ -28,7 +28,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>DL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/dailyListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/dailyListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <xslttransform>
@@ -44,7 +44,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>DL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/dailyListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/dailyListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <!--
@@ -63,7 +63,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>WL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/warnedListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/warnedListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <xslttransform>
@@ -79,7 +79,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>WL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/warnedListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/warnedListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <!--
@@ -184,7 +184,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>FL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/firmListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/firmListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <xslttransform>
@@ -200,7 +200,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>FL</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/firmListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/firmListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <!--
@@ -219,7 +219,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>DLP</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/dailyPrisonListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/dailyPrisonListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <xslttransform>
@@ -235,7 +235,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>DLP</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/documentdistribution/dailyPrisonListHtml.xsl</xsltfilename>
+            <xsltfilename>/config/cjse/DocumentStylesheets/dailyPrisonListHtml.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <!--

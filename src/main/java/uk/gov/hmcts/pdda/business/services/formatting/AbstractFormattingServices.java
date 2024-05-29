@@ -22,8 +22,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormattingServices.class);
 
-    private final BlobHelper blobHelper;
-    
+    protected final BlobHelper blobHelper;
+
     public AbstractFormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
         super(entityManager);
         this.blobHelper = blobHelper;
@@ -36,7 +36,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     protected Optional<XhbFormattingDao> getXhbFormattingDao(FormattingValue formattingValue) {
         LOG.debug("getXhbFormattingDao({})", formattingValue);
-        Optional<XhbFormattingDao> bvCpp = getXhbFormattingRepository().findById(formattingValue.getFormattingId());
+        Optional<XhbFormattingDao> bvCpp =
+            getXhbFormattingRepository().findById(formattingValue.getFormattingId());
         if (bvCpp.isPresent()) {
             Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
             XhbFormattingDao xhbFormatting = new XhbFormattingDao();
@@ -63,11 +64,11 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         return Optional.empty();
     }
 
-    protected Long getLatestXhibitClobId(final Integer courtId, final String documentType, final String language,
-        final String courtSiteName) {
+    protected Long getLatestXhibitClobId(final Integer courtId, final String documentType,
+        final String language, final String courtSiteName) {
         Long clobId = null;
-        List<XhbFormattingDao> list =
-            getXhbFormattingRepository().findByDocumentAndClob(courtId, documentType, language, courtSiteName);
+        List<XhbFormattingDao> list = getXhbFormattingRepository().findByDocumentAndClob(courtId,
+            documentType, language, courtSiteName);
         if (!list.isEmpty()) {
             clobId = list.get(0).getXmlDocumentClobId();
         }
@@ -91,7 +92,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         return result.isPresent() ? result.get().getClobId() : null;
     }
 
-    protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal, final String clobData) {
+    protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal,
+        final String clobData) {
         LOG.debug("updatePostMerge({},{})", formattingMergeVal, clobData);
         // Create new XhbClob record and return the ClobId
         XhbClobDao clobVal = new XhbClobDao();
@@ -124,9 +126,11 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      * @param formatStatus Format Status
      * @param errorMessage Error Message
      */
-    public void updateCppFormatting(Integer cppFormattingId, String formatStatus, String errorMessage) {
+    public void updateCppFormatting(Integer cppFormattingId, String formatStatus,
+        String errorMessage) {
         LOG.debug("updateCppFormatting({},{},{})", cppFormattingId, formatStatus, errorMessage);
-        Optional<XhbCppFormattingDao> cppFormattingDao = getXhbCppFormattingRepository().findById(cppFormattingId);
+        Optional<XhbCppFormattingDao> cppFormattingDao =
+            getXhbCppFormattingRepository().findById(cppFormattingId);
         if (cppFormattingDao.isPresent()) {
             XhbCppFormattingDao cppFormatting = cppFormattingDao.get();
             cppFormatting.setErrorMessage(errorMessage);
@@ -150,7 +154,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      * @param success Success
      */
     public void updateFormattingStatus(Integer formattingId, boolean success) {
-        Optional<XhbFormattingDao> formattingDao = getXhbFormattingRepository().findById(formattingId);
+        Optional<XhbFormattingDao> formattingDao =
+            getXhbFormattingRepository().findById(formattingId);
         if (formattingDao.isPresent()) {
             XhbFormattingDao formatting = formattingDao.get();
 
