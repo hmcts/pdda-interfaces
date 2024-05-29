@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.OutputStream;
@@ -48,8 +49,12 @@ class FormattingServicesProcessingTest {
     @Mock
     private OutputStream mockOutputStream;
 
+    @Mock
+    private BlobHelper mockBlobHelper;
+
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
+    private final FormattingServices classUnderTest =
+        new FormattingServices(mockEntityManager, mockBlobHelper);
 
     @Test
     void testGetFormattingValue() {

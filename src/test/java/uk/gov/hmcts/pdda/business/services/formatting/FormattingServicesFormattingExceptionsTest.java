@@ -32,6 +32,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -281,9 +282,12 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
 
     @Mock
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
+    
+    @Mock
+    private BlobHelper mockBlobHelper;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
+    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";

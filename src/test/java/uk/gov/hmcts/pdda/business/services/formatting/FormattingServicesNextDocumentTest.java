@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.xml.sax.ContentHandler;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -29,6 +30,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
 
@@ -102,12 +104,34 @@ class FormattingServicesNextDocumentTest {
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
+    @Mock
+    private BlobHelper mockBlobHelper;
+
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager);
+    private FormattingServices classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Do nothing
+        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
+            mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
+        ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
+        ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
+        ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
+            mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
+            mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
+            mockXhbCppFormattingMergeRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
+            mockXhbXmlDocumentRepository);
     }
 
     @AfterEach
@@ -129,7 +153,8 @@ class FormattingServicesNextDocumentTest {
 
     private boolean testNextDocument(String formatStatus, String expectedFormatStatus) {
         // Setup
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
+        XhbClobDao xhbClobDao =
+            DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
         List<XhbFormattingDao> formattingDaoList = new ArrayList<>();
         XhbFormattingDao formattingDao = DummyFormattingUtil.getXhbFormattingDao();
         formattingDao.setFormatStatus(formatStatus);
@@ -147,7 +172,8 @@ class FormattingServicesNextDocumentTest {
             Mockito.when(mockXhbFormattingRepository.findByFormatStatus("ND"))
                 .thenReturn(new ArrayList<XhbFormattingDao>());
         }
-        Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus)).thenReturn(formattingDaoList);
+        Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus))
+            .thenReturn(formattingDaoList);
         Mockito.when(mockXhbBlobRepository.update(Mockito.isA(XhbBlobDao.class)))
             .thenReturn(Optional.of(DummyFormattingUtil.getXhbBlobDao(new byte[0])));
         Mockito.when(mockXhbFormattingRepository.update(Mockito.isA(XhbFormattingDao.class)))
@@ -162,6 +188,7 @@ class FormattingServicesNextDocumentTest {
     private void expectConfigProp(String propertyName, String propertyValue) {
         List<XhbConfigPropDao> daoList = new ArrayList<>();
         daoList.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName)).thenReturn(daoList);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+            .thenReturn(daoList);
     }
 }

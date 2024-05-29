@@ -17,17 +17,17 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
 
     private static final Logger LOG =
         LoggerFactory.getLogger(CppInitialProcessingControllerBean.class);
-    
+
     protected static final String ENTERED = " : entered";
     protected static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     protected static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
-    
+
     private CppStagingInboundControllerBean cppStagingInboundControllerBean;
     private CppListControllerBean cppListControllerBean;
     private CppStagingInboundHelper cppStagingInboundHelper;
     private AbstractXmlMergeUtils xmlUtils;
     private ValidationService validationService;
-    
+
     public AbstractCppInitialProcessingControllerBean() {
         super();
     }
@@ -35,9 +35,9 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
     public AbstractCppInitialProcessingControllerBean(EntityManager entityManager) {
         super(entityManager);
     }
-    
+
     public abstract boolean processValidatedDocument(XhbCppStagingInboundDao thisDoc);
-    
+
     protected void handleStuckDocuments(XhbCppStagingInboundDao doc) {
         try {
             if (doc != null) {
@@ -47,9 +47,8 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
                 if (processValidatedDocument(doc)) {
                     LOG.debug("The validated document has been successfully processed");
                 } else {
-                    LOG.debug(
-                        "The validated document has failed to be processed. Check database "
-                            + "error column for this record for further details.");
+                    LOG.debug("The validated document has failed to be processed. Check database "
+                        + "error column for this record for further details.");
                 }
             }
 
@@ -61,8 +60,8 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
                     + " Error: " + e.getMessage());
         }
     }
-    
-    
+
+
     /**
      * Retrieves a reference to the cppStagingInboundControllerBean.
      * 
@@ -72,11 +71,12 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         if (cppStagingInboundControllerBean == null) {
             cppStagingInboundControllerBean = new CppStagingInboundControllerBean(
                 getEntityManager(), getXhbConfigPropRepository(), getCppStagingInboundHelper(),
-                getXhbCourtRepository(), getXhbClobRepository(), getValidationService());
+                getXhbCourtRepository(), getXhbClobRepository(), getXhbBlobRepository(),
+                getValidationService());
         }
         return cppStagingInboundControllerBean;
     }
-    
+
     /**
      * Retrieves a reference to the cppListControllerBean.
      * 
@@ -102,7 +102,7 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         }
         return validationService;
     }
-    
+
     protected AbstractXmlMergeUtils getXmlUtils() {
         return xmlUtils;
     }

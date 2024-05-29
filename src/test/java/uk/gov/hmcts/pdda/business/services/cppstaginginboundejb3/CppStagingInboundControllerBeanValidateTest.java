@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
@@ -62,6 +63,9 @@ class CppStagingInboundControllerBeanValidateTest {
     private XhbClobRepository mockXhbClobRepository;
 
     @Mock
+    private XhbBlobRepository mockXhbBlobRepository;
+
+    @Mock
     private ValidationResult mockValidationResult;
 
     @Mock
@@ -69,8 +73,9 @@ class CppStagingInboundControllerBeanValidateTest {
 
     @TestSubject
     private final CppStagingInboundControllerBean classUnderTest =
-        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
-            mockXhbCourtRepository, mockXhbClobRepository, mockValidationService);
+        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository,
+            mockCppStagingInboundHelper, mockXhbCourtRepository, mockXhbClobRepository,
+            mockXhbBlobRepository, mockValidationService);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -94,8 +99,8 @@ class CppStagingInboundControllerBeanValidateTest {
 
             testingClobRepository(dao);
 
-            EasyMock.expect(mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
-                .andReturn(mockValidationResult);
+            EasyMock.expect(mockValidationService.validate(EasyMock.isA(String.class),
+                EasyMock.isA(String.class))).andReturn(mockValidationResult);
 
             mockValidationResult.isValid();
 
@@ -115,7 +120,7 @@ class CppStagingInboundControllerBeanValidateTest {
             assertFalse(validDocument, FALSE);
         });
     }
-    
+
     @Test
     void testValidateDocumentInvalidDocument() throws ValidationException {
         // Setup
@@ -126,7 +131,8 @@ class CppStagingInboundControllerBeanValidateTest {
 
         testingClobRepository(dao);
 
-        EasyMock.expect(mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
+        EasyMock.expect(
+            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
 
         EasyMock.expect(mockValidationResult.isValid()).andReturn(false);
@@ -144,7 +150,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockValidationResult);
         assertFalse(validDocument, FALSE);
     }
-    
+
     @Test
     void testValidateDocumentInvalidName() throws ValidationException {
         // Setup
@@ -176,7 +182,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockXhbConfigPropRepository);
         assertFalse(invalidDocument, FALSE);
     }
-    
+
     @Test
     void testValidateDocumentSuccess() throws ValidationException {
         // Setup
@@ -188,7 +194,8 @@ class CppStagingInboundControllerBeanValidateTest {
 
         testingClobRepository(dao);
 
-        EasyMock.expect(mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
+        EasyMock.expect(
+            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
 
         EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
@@ -206,14 +213,14 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockValidationResult);
         assertTrue(validDocument, TRUE);
     }
-    
+
     @Test
     void testGetNextValidatedDocument() {
         // Setup
         List<XhbCppStagingInboundDao> doc = new ArrayList<>();
         EasyMock.expect(mockCppStagingInboundHelper.findNextDocumentByStatus(
-            CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS, CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED))
-            .andReturn(doc);
+            CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS,
+            CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED)).andReturn(doc);
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
         try {
@@ -228,7 +235,8 @@ class CppStagingInboundControllerBeanValidateTest {
     @Test
     void testGetNextValidatedDocumentFail() throws Exception {
         // Setup
-        mockCppStagingInboundHelper.findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS,
+        mockCppStagingInboundHelper.findNextDocumentByStatus(
+            CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS,
             CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED);
         EasyMock.expectLastCall().andThrow(new CppStagingInboundControllerException());
         EasyMock.replay(mockCppStagingInboundHelper);
@@ -239,18 +247,20 @@ class CppStagingInboundControllerBeanValidateTest {
             EasyMock.verify(mockCppStagingInboundHelper);
         });
     }
-    
+
     private void testingXhbConfigPropRepository() {
         String documentType = "PD";
         List<XhbConfigPropDao> returnList = new ArrayList<>();
-        returnList.add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
+        returnList
+            .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
             .andReturn(returnList);
     }
-    
+
     private void testingClobRepository(XhbCppStagingInboundDao dao) {
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
-        EasyMock.expect(mockXhbClobRepository.findById(dao.getClobId())).andReturn(Optional.of(clobObj));
+        EasyMock.expect(mockXhbClobRepository.findById(dao.getClobId()))
+            .andReturn(Optional.of(clobObj));
     }
 }
