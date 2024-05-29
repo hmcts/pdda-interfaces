@@ -114,8 +114,10 @@ public class FormattingServices extends FormattingServicesProcessing {
         // If we've found a document then update the status
         if (dao != null) {
             LOG.debug("getNextDocument() - FormattingId={}", dao.getFormattingId());
-            Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
-            dao.setFormattedDocumentBlobId(blobId);
+            if (dao.getFormattedDocumentBlobId() == null) {
+                Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
+                dao.setFormattedDocumentBlobId(blobId);
+            }
             dao.setFormatStatus(newFormatStatus);
             Optional<XhbFormattingDao> savedDao = getXhbFormattingRepository().update(dao);
             if (savedDao.isPresent()) {

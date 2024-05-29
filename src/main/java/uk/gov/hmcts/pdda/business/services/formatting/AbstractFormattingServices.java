@@ -22,7 +22,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormattingServices.class);
 
-    private final BlobHelper blobHelper;
+    protected final BlobHelper blobHelper;
     
     public AbstractFormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
         super(entityManager);

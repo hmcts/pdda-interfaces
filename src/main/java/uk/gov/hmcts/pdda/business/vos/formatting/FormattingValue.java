@@ -46,6 +46,8 @@ public class FormattingValue {
     private Integer formattingId;
 
     private Long xmlDocumentClobId;
+    
+    private Long formattedDocumentBlobId;
 
     private XhbCppListDao cppList;
 
@@ -189,5 +191,13 @@ public class FormattingValue {
         if (field == null) {
             throw new IllegalArgumentException(name + " cannot be null!");
         }
+    }
+
+    public void setFormattedDocumentBlobId(Long formattedDocumentBlobId) {
+        this.formattedDocumentBlobId = formattedDocumentBlobId;
+    }
+    
+    public Long getFormattedDocumentBlobId() {
+        return formattedDocumentBlobId;
     }
 }
