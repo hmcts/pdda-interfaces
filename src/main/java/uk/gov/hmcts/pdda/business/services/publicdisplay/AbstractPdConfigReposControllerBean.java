@@ -56,7 +56,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
         XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
         PublicDisplayNotifier publicDisplayNotifier, VipDisplayDocumentQuery vipDisplayDocumentQuery,
         VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
-        super(entityManager, xhbClobRepository, xhbCourtRepository, xhbConfigPropRepository,
+        super(entityManager, xhbClobRepository, null, xhbCourtRepository, xhbConfigPropRepository,
             xhbCppFormattingRepository);
         this.xhbRotationSetsRepository = xhbRotationSetsRepository;
         this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;

@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
+import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.IOException;
@@ -50,8 +51,8 @@ public class FormattingServices extends FormattingServicesProcessing {
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
 
-    public FormattingServices(EntityManager entityManager) {
-        super(entityManager);
+    public FormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
+        super(entityManager, blobHelper);
     }
     
     /**
@@ -113,8 +114,10 @@ public class FormattingServices extends FormattingServicesProcessing {
         // If we've found a document then update the status
         if (dao != null) {
             LOG.debug("getNextDocument() - FormattingId={}", dao.getFormattingId());
-            Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
-            dao.setFormattedDocumentBlobId(blobId);
+            if (dao.getFormattedDocumentBlobId() == null) {
+                Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
+                dao.setFormattedDocumentBlobId(blobId);
+            }
             dao.setFormatStatus(newFormatStatus);
             Optional<XhbFormattingDao> savedDao = getXhbFormattingRepository().update(dao);
             if (savedDao.isPresent()) {

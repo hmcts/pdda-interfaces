@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -55,6 +56,9 @@ class CppStagingInboundControllerBeanUpdateTest {
     private XhbClobRepository mockXhbClobRepository;
 
     @Mock
+    private XhbBlobRepository mockXhbBlobRepository;
+
+    @Mock
     private ValidationResult mockValidationResult;
 
     @Mock
@@ -62,8 +66,9 @@ class CppStagingInboundControllerBeanUpdateTest {
 
     @TestSubject
     private final CppStagingInboundControllerBean classUnderTest =
-        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
-            mockXhbCourtRepository, mockXhbClobRepository, mockValidationService);
+        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository,
+            mockCppStagingInboundHelper, mockXhbCourtRepository, mockXhbClobRepository,
+            mockXhbBlobRepository, mockValidationService);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -144,7 +149,8 @@ class CppStagingInboundControllerBeanUpdateTest {
             .andReturn(optionalOfXhbCppStagingInboundDao);
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
-        optionalOfXhbCppStagingInboundDao = classUnderTest.updateStatusInProcess(dao, USERDISPLAYNAME);
+        optionalOfXhbCppStagingInboundDao =
+            classUnderTest.updateStatusInProcess(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockCppStagingInboundHelper);
         assertNotNull(optionalOfXhbCppStagingInboundDao, NOTNULL);
