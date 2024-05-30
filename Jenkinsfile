@@ -22,7 +22,7 @@ withPipeline(type, product, component) {
   disableCleanupOfHelmReleaseOnFailure()
 
   // Vars for Kubernetes
-  env.TEST_URL = "${DB_HOST}:${DB_PORT}"
+  env.TEST_URL = "https://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net"
 
   afterAlways('smokeTest:stg') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'smoke-test-report/**/*'
