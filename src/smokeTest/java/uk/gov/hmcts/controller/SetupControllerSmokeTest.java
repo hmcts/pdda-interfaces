@@ -37,6 +37,8 @@ class SetupControllerSmokeTest {
             .then()
             .extract().response();
         
+        LOG.info("Smoketest.pageContent={}",response.asString());
+        Assertions.assertTrue(response.asString().startsWith("Display"));
         LOG.info("Smoketest.status={}",response.statusCode());
         Assertions.assertEquals(200, response.statusCode());
     } 
