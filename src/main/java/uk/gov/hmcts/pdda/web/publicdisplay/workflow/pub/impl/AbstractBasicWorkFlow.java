@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Createable;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Removeable;
@@ -28,6 +30,10 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
  * @version $Revision: 1.3 $
  */
 public abstract class AbstractBasicWorkFlow implements WorkFlow {
+    
+    /** Logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractBasicWorkFlow.class);
+    
     private final WorkFlowContext context;
 
     private RenderChanges renderChanges;
@@ -85,9 +91,11 @@ public abstract class AbstractBasicWorkFlow implements WorkFlow {
      * @param createables CreateableArray
      */
     protected void createAll(Createable... createables) {
+        LOG.info("createAll() - start");
         for (Createable creatable : createables) {
             creatable.create();
         }
+        LOG.info("createAll() - finished");
     }
 
     /**
