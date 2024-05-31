@@ -110,6 +110,7 @@ class EventWorkTest {
         // Mockito.when(ErrorGatherer.getInstance()).thenReturn(mockErrorGatherer);
         ErrorGatherer errorGathererUnderTest = ErrorGatherer.getInstance();
         errorGathererUnderTest.setSize(1);
+        errorGathererUnderTest.flush();
         errorGathererUnderTest.addError(getDummyProcessingError());
         assertEquals(1, errorGathererUnderTest.getErrors().length, EQUALS);
         errorGathererUnderTest.addError(getDummyProcessingError());

@@ -71,7 +71,9 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
         courtsForPublicDisplay = pdConfigurationControllerBean.getCourtsForPublicDisplay();
         LOG.debug("setupWorkerInstances : 2");
         for (int i = courtsForPublicDisplay.length - 1; i > -1; i--) {
-            WORKER_INSTANCES.put(courtsForPublicDisplay[i], getDisplayConfigurationWorker(courtsForPublicDisplay[i],
+            Integer courtId = courtsForPublicDisplay[i];
+            LOG.info("setupWorkerInstances.courtId = {}", courtId);
+            WORKER_INSTANCES.put(courtId, getDisplayConfigurationWorker(courtId,
                 pdConfigurationControllerBean, getPdDataControllerBean(), getDisplayStoreControllerBean()));
         }
         LOG.debug("DefaultDisplayConfigurationReader : 3");
