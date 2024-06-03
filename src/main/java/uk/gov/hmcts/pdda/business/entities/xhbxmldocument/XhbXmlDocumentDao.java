@@ -13,9 +13,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity(name = "XHB_XML_DOCUMENT")
-@NamedQuery(name = "XHB_XML_DOCUMENT.findListByClobId",
+@NamedQuery(name = "XHB_XML_DOCUMENT.findDocumentByClobId",
     query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.xmlDocumentClobId = "
-        + ":xmlDocumentClobId AND SUBSTR(o.documentType,1,2) IN ('DL','FL','WL') "
+        + ":xmlDocumentClobId AND (SUBSTR(o.documentType,1,2) IN ('DL','FL','WL') "
+        + "OR SUBSTR(o.documentType,1,3) IN ('IWP') ) "
         + "AND (cast(:timeDelay as timestamp) IS NULL OR o.creationDate <= :timeDelay) "
         + "ORDER BY o.xmlDocumentId DESC")
 @NamedQuery(name = "XHB_XML_DOCUMENT.findByXmlDocumentClobId",
