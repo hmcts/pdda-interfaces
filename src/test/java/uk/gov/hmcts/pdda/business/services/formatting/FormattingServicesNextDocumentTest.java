@@ -163,7 +163,7 @@ class FormattingServicesNextDocumentTest {
         xmlDocumentList.add(xhbXmlDocumentDao);
         if ("ND".contentEquals(formatStatus)) {
             expectConfigProp(FORMATTING_LIST_DELAY, "3");
-            Mockito.when(mockXhbXmlDocumentRepository.findListByClobId(Mockito.isA(Long.class),
+            Mockito.when(mockXhbXmlDocumentRepository.findDocumentByClobId(Mockito.isA(Long.class),
                 Mockito.isA(LocalDateTime.class))).thenReturn(xmlDocumentList);
         } else if ("FE".contentEquals(formatStatus)) {
             Mockito.when(mockXhbFormattingRepository.findByFormatStatus("ND"))
