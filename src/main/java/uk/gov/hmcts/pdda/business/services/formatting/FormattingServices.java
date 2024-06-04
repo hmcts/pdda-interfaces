@@ -189,6 +189,8 @@ public class FormattingServices extends FormattingServicesProcessing {
             AbstractXmlMergeUtils xmlUtils = null;
             if (FormattingServiceUtils.isDailyList(documentType)) {
                 xmlUtils = new DailyListXmlMergeUtils();
+            } else if (FormattingServiceUtils.isFirmList(documentType)) {
+                xmlUtils = new FirmListXmlMergeUtils();
             } else if (IWP.equals(documentType)) {
                 xmlUtils = new IwpXmlMergeUtils();
             }
