@@ -8,8 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.services.TranslationServices;
-import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcppformattingmerge.XhbCppFormattingMergeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
@@ -26,12 +24,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -67,94 +65,77 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         LOG.debug("formattingValue is a CPP Internet Web Page document and ID is {}",
             formattingValue.getFormattingId());
 
-        XhbCppFormattingDao val = getXhbCppFormattingRepository()
-            .findLatestByCourtDateInDoc(formattingValue.getCourtId(), IWP, LocalDateTime.now());
         try {
-            Document cppDocument = getCppDocument(val);
-            List<Node> cppNodes = CourtUtils.getCourtSites(cppDocument);
-            List<StringBuilder> pddaClobAsString = new ArrayList<>();
-            for (Node cppNode : cppNodes) {
-                String courtSite = cppNode.getNodeValue().replace("\n", "").replace("\r", "");
+            // Use the 'xslt_config.xml' to determine the transformation from xml to html
+            Writer buffer = TransformerUtils.transform(getXslServices(), getFormattingConfig(),
+                formattingValue, translationXml, new StringWriter());
+            LOG.debug("\n\n\n\n\n\n\nprocessIwpDocument({}):\n {}", formattingValue, buffer);
 
-                StringBuilder formattedXml = getFormattedInternetWebpage(pddaClobAsString, val,
-                    formattingValue, courtSite, cppDocument, translationXml);
-                if (formattedXml != null) {
-                    pddaClobAsString.add(formattedXml);
-                }
-            }
-            // if we haven't had anything to merge in then we want to fail it as otherwise
-            // we'll be creating a blank row
-            if (pddaClobAsString.isEmpty()) {
-                throw new FormattingException("No CPP data was merged in for formatting id of "
-                    + formattingValue.getFormattingId());
-            }
-
-            // We should not get a finder exception as all the values we are searching on
-            // should not come back with a finder exception
-        } catch (XPathExpressionException ex) {
-            val.setErrorMessage(
-                MERGING_EXCEPTION_STRING + val.getCppFormattingId() + DELIMITER + ex.getMessage());
-            throw new FormattingException(
-                MERGING_EXCEPTION_STRING + val.getCppFormattingId() + DELIMITER + ex.getMessage(),
-                ex);
+        } catch (TransformerException ex) {
+            throw new FormattingException(MERGING_EXCEPTION_STRING
+                + formattingValue.getFormattingId() + DELIMITER + ex.getMessage(), ex);
         }
     }
 
-    private StringBuilder getFormattedInternetWebpage(List<StringBuilder> pddaClobAsString,
-        XhbCppFormattingDao val, FormattingValue formattingValue, String courtSite,
-        Document cppDocument, final String translationXml) throws IOException {
-        if (pddaClobAsString == null || pddaClobAsString.isEmpty()) {
-            Long pddaClobId = getLatestXhibitClobId(val.getCourtId(), IWP,
-                formattingValue.getLocale().getLanguage(), courtSite);
-            if (pddaClobId != null) {
-                return processIwpCppFormatting(pddaClobId, formattingValue, cppDocument,
-                    translationXml, val);
-                // Commented out - not required for PDDA, but may be required in the future
-                // saveDocInfo(formattingValue, courtSite);
-            }
-        } else if (!CourtUtils.isCourtSiteInClob(pddaClobAsString, courtSite)) {
-            // we have to go and get the next xhibit document with this courtsite in it
-            Long pddaClobId = getLatestXhibitClobId(val.getCourtId(), IWP,
-                formattingValue.getLocale().getLanguage(), courtSite);
-            // now we need to get the latest xhibit document
-            if (pddaClobId == null) {
-                return getFormattedInternetWebpageCourtSite(val, formattingValue, cppDocument,
-                    translationXml, pddaClobId);
-            }
-        }
-        return null;
-    }
+    // private StringBuilder getFormattedInternetWebpage(List<StringBuilder> pddaClobAsString,
+    // FormattingValue formattingValue, String courtSite,
+    // Document cppDocument, final String translationXml) throws IOException {
+    // if (pddaClobAsString == null || pddaClobAsString.isEmpty()) {
+    // Long pddaClobId = getLatestXhibitClobId(formattingValue.getCourtId(), IWP,
+    // formattingValue.getLocale().getLanguage(), courtSite);
+    // if (pddaClobId != null) {
+    // return processIwpCppFormatting(pddaClobId, formattingValue, cppDocument,
+    // translationXml);
+    // // Commented out - not required for PDDA, but may be required in the future
+    // // saveDocInfo(formattingValue, courtSite);
+    // }
+    // } else if (!CourtUtils.isCourtSiteInClob(pddaClobAsString, courtSite)) {
+    // // we have to go and get the next xhibit document with this courtsite in it
+    // Long pddaClobId = getLatestXhibitClobId(formattingValue.getCourtId(), IWP,
+    // formattingValue.getLocale().getLanguage(), courtSite);
+    // // now we need to get the latest xhibit document
+    // if (pddaClobId == null) {
+    // return getFormattedInternetWebpageCourtSite(formattingValue, cppDocument,
+    // translationXml, pddaClobId);
+    // }
+    // }
+    // return null;
+    // }
 
-    private StringBuilder getFormattedInternetWebpageCourtSite(XhbCppFormattingDao val,
-        FormattingValue formattingValue, Document cppDocument, final String translationXml,
-        Long pddaClobId) throws IOException {
-        // create a new xhb_formatting row first -- as this is a new merged
-        // xml that needs to be processed
-        Optional<XhbFormattingDao> createdBv = getXhbFormattingDao(formattingValue);
-        if (createdBv.isPresent()) {
-            try (OutputStream outputStream = FormattingServiceUtils.getByteArrayOutputStream()) {
-                FormattingValue cppFormattingVal =
-                    getFormattingValue(createdBv.get(), null, outputStream);
-                return processIwpCppFormatting(pddaClobId, cppFormattingVal, cppDocument,
-                    translationXml, val);
-                // Commented out - not required for PDDA, but may be required in
-                // the
-                // future
-                // saveDocInfo(cppFormattingVal, courtSite);
-            }
-        }
-        return null;
-    }
+    // private StringBuilder getFormattedInternetWebpageCourtSite(
+    // FormattingValue formattingValue, Document cppDocument, final String translationXml,
+    // Long pddaClobId) throws IOException {
+    // // create a new xhb_formatting row first -- as this is a new merged
+    // // xml that needs to be processed
+    // Optional<XhbFormattingDao> createdBv = getXhbFormattingDao(formattingValue);
+    // if (createdBv.isPresent()) {
+    // try (OutputStream outputStream = FormattingServiceUtils.getByteArrayOutputStream()) {
+    // FormattingValue cppFormattingVal =
+    // getFormattingValue(createdBv.get(), null, outputStream);
+    // return processIwpCppFormatting(pddaClobId, cppFormattingVal, cppDocument,
+    // translationXml);
+    // // Commented out - not required for PDDA, but may be required in
+    // // the
+    // // future
+    // // saveDocInfo(cppFormattingVal, courtSite);
+    // }
+    // }
+    // return null;
+    // }
 
-    private Document getCppDocument(XhbCppFormattingDao val)
+    private Document getCppDocument(Long xmlDocumentClobId)
         throws SAXException, IOException, ParserConfigurationException {
-        String cppClobAsString = getClobData(val.getXmlDocumentClobId());
+       // String cppClobAsString = getClobData(xmlDocumentClobId); //TODO
+        String cppClobAsString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            + "<?xml-stylesheet type=\"text/xsl\" href=\"InternetWebPageTemplate.xsl\"?>"
+            + "<currentcourtstatus xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"+
+            "<court><courtname>SNARESBROOK</courtname><courtsites><courtsite><courtsitename>SNARESBROOK</courtsitename><courtrooms><courtroom><currentstatus/><courtroomname>Court 1</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 2</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 3</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 4</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 5</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 6</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 7</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 8</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 9</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 10</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 11</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 12</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 13</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 14</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 15</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 16</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 17</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 18</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 19</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 20</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 21</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 22</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 24</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 88</courtroomname></courtroom></courtrooms></courtsite><courtsite><courtsitename>PRESTON-B</courtsitename><courtrooms><courtroom><currentstatus/><courtroomname>Crown Court 1</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 2</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Crown Court 3</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Crown Court 5</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Crown Court 10</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Crown Court 11</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Crown Court 12</courtroomname></courtroom></courtrooms></courtsite><courtsite><courtsitename>VILNIUS</courtsitename><courtrooms><courtroom><currentstatus/><courtroomname>Court 9</courtroomname></courtroom><courtroom><currentstatus/><courtroomname>Court 10</courtroomname></courtroom></courtrooms></courtsite><courtsite><courtsitename>VILLAGE HALL</courtsitename><courtrooms><courtroom><currentstatus/><courtroomname>Court 5</courtroomname></courtroom></courtrooms></courtsite></courtsites></court><datetimestamp><dayofweek>Tuesday</dayofweek><date>05</date><month>January</month><year>2021</year><hour>14</hour><min>32</min></datetimestamp><pagename>snaresbrook</pagename></currentcourtstatus>";
         return DocumentUtils.createInputDocument(cppClobAsString);
     }
 
     protected StringBuilder processIwpCppFormatting(final Long clobId,
         final FormattingValue formattingValue, final Document cppDocument,
-        final String translationXml, final XhbCppFormattingDao val) {
+        final String translationXml) {
         if (clobId != null) {
             try {
 
@@ -175,25 +156,12 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
                 Writer buffer = TransformerUtils.transform(getXslServices(), getFormattingConfig(),
                     formattingValue, translationXml, new StringWriter());
                 LOG.debug("\n\n\n\n\n\n\nprocessDocument({}):\n {}", formattingValue, buffer);
-
-                // insert a row into xhb clob , update clob id and write a row in the formatting
-                // merge
-                XhbCppFormattingMergeDao baseVal = new XhbCppFormattingMergeDao();
-                baseVal.setCourtId(formattingValue.getCourtId());
-                baseVal.setCppFormattingId(val.getCppFormattingId());
-                baseVal.setFormattingId(formattingValue.getFormattingId());
-                baseVal.setLanguage(formattingValue.getLocale().getLanguage());
-                baseVal.setXhibitClobId(clobId);
-                updatePostMerge(baseVal, write.getBuffer().toString());
-
                 return buff;
 
             } catch (IOException | XPathExpressionException | ParserConfigurationException
                 | TransformerException | SAXException ex) {
-                val.setErrorMessage(MERGING_EXCEPTION_STRING + val.getCppFormattingId() + DELIMITER
-                    + ex.getMessage());
-                throw new FormattingException(MERGING_EXCEPTION_STRING + val.getCppFormattingId()
-                    + DELIMITER + ex.getMessage(), ex);
+                throw new FormattingException(MERGING_EXCEPTION_STRING
+                    + formattingValue.getFormattingId() + DELIMITER + ex.getMessage(), ex);
             }
         } else {
             LOG.error("No Xhibit documents to process");
@@ -226,7 +194,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             // Use the 'xslt_config.xml' to determine the transformation from xml to html
             Writer buffer = TransformerUtils.transform(getXslServices(), getFormattingConfig(),
                 formattingValue, translationXml, new StringWriter());
-            LOG.debug("\n\n\n\n\n\n\nprocessDocument({}):\n {}", formattingValue, buffer);
+            LOG.debug("\n\n\n\n\n\n\nprocessListDocument({}):\n {}", formattingValue, buffer);
 
             // Set the status as successful
             Optional<XhbCppListDao> optCppList =
