@@ -4,4 +4,5 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: true
+    TEST_URL: http://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net
     POSTGRES_USER: "{{ .Values.postgresql.auth.username }}"
