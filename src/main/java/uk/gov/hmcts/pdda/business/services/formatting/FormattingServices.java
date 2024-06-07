@@ -79,9 +79,7 @@ public class FormattingServices extends FormattingServicesProcessing {
             // Get the xmlUtils type
             setXmlUtils(getXmlUtils(formattingValue.getDocumentType()));
 
-            if (FormattingServiceUtils.isInactiveOnPdda(formattingValue)) {
-                LOG.debug("{} is flagged as Inactive on PDDA", formattingValue.getDocumentType());
-            } else if (IWP.equals(formattingValue.getDocumentType()) && isMergeAllowed()) {
+            if (IWP.equals(formattingValue.getDocumentType()) && isMergeAllowed()) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
                 processListDocument(formattingValue, getTranslationBundles().toXml());
