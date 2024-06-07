@@ -28,15 +28,15 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
     }
 
     /**
-     * findListByClobId.
+     * findDocumentByClobId.
      * 
      * @return list
      */
     @SuppressWarnings("unchecked")
-    public List<XhbXmlDocumentDao> findListByClobId(Long xmlDocumentClobId,
+    public List<XhbXmlDocumentDao> findDocumentByClobId(Long xmlDocumentClobId,
         LocalDateTime timeDelay) {
         LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findListByClobId");
+        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findDocumentByClobId");
         query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
         query.setParameter("timeDelay", timeDelay);
         return query.getResultList();

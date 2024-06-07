@@ -48,22 +48,22 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
     }
 
     @Test
-    void testFindListByClobId() {
-        boolean result = testFindListBy(QUERY_CLOBID, getDummyDao());
+    void testFindDocumentByClobId() {
+        boolean result = testDocumentListBy(QUERY_CLOBID, getDummyDao());
         assertTrue(result, NOT_TRUE);
-        result = testFindListBy(QUERY_CLOBID, null);
+        result = testDocumentListBy(QUERY_CLOBID, null);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindListByXmlDocumentClobId() {
-        boolean result = testFindListBy(QUERY_XMLDOCUMENTCLOBID, getDummyDao());
+        boolean result = testDocumentListBy(QUERY_XMLDOCUMENTCLOBID, getDummyDao());
         assertTrue(result, NOT_TRUE);
-        result = testFindListBy(QUERY_XMLDOCUMENTCLOBID, null);
+        result = testDocumentListBy(QUERY_XMLDOCUMENTCLOBID, null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testFindListBy(String query, XhbXmlDocumentDao dao) {
+    private boolean testDocumentListBy(String query, XhbXmlDocumentDao dao) {
         List<XhbXmlDocumentDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
@@ -73,7 +73,7 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         Optional<XhbXmlDocumentDao> result = Optional.empty();
         if (QUERY_CLOBID.equals(query)) {
             List<XhbXmlDocumentDao> resultList = (List<XhbXmlDocumentDao>) getClassUnderTest()
-                .findListByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
+                .findDocumentByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
             assertNotNull(resultList, NOTNULL);
             result = resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
         } else if (QUERY_XMLDOCUMENTCLOBID.equals(query)) {

@@ -162,7 +162,7 @@ public class FormattingServices extends FormattingServicesProcessing {
             // Get the lists by their xmlDocumentClobId
             if (formattingDao.getXmlDocumentClobId() != null) {
                 List<XhbXmlDocumentDao> xmlDocumentDaoList =
-                    getXhbXmlDocumentRepository().findListByClobId(formattingDao.getXmlDocumentClobId(), timeDelay);
+                    getXhbXmlDocumentRepository().findDocumentByClobId(formattingDao.getXmlDocumentClobId(), timeDelay);
                 if (!xmlDocumentDaoList.isEmpty()) {
                     // Document is valid
                     return true;
@@ -191,6 +191,8 @@ public class FormattingServices extends FormattingServicesProcessing {
                 xmlUtils = new DailyListXmlMergeUtils();
             } else if (FormattingServiceUtils.isFirmList(documentType)) {
                 xmlUtils = new FirmListXmlMergeUtils();
+            } else if (FormattingServiceUtils.isWarnedList(documentType)) {
+                xmlUtils = new WarnedListXmlMergeUtils();
             } else if (IWP.equals(documentType)) {
                 xmlUtils = new IwpXmlMergeUtils();
             }
