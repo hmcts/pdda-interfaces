@@ -9,7 +9,7 @@ D:\projects\XHIBIT\metadata\schemas\xhibit-v2-2\FormattingConfig-v2-2.xsd">
         <mimetype>HTM</mimetype>
         <documenttype>IWP</documenttype>
         <xsltfilelist>
-            <xsltfilename>/config/xml/internet/InternetWebPageTemplate.xsl</xsltfilename>
+            <xsltfilename>/config/xml/internet/currentCourtStatus.xsl</xsltfilename>
         </xsltfilelist>
     </xslttransform>
     <!--
