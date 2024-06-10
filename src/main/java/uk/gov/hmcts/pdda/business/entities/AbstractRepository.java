@@ -104,6 +104,8 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 updatedDao = localEntityManager.merge(updatedDao);
                 localEntityManager.getTransaction().commit();
                 updatedDao.setVersion(updatedDao.getVersion() != null ? updatedDao.getVersion() + 1 : 1);
+                // Clear the cache on the EntityManager after updating
+                clearEntityManager();
                 return Optional.of(updatedDao);
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
@@ -149,5 +151,9 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      */
     private EntityManager createEntityManager() {
         return EntityManagerUtil.getEntityManager();
+    }
+    
+    public void clearEntityManager() {
+        getEntityManager().clear();
     }
 }
