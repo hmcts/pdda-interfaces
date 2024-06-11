@@ -17,6 +17,7 @@ def secrets = [
 withPipeline(type, product, component) {
   enableDbMigration(product)
   loadVaultSecrets(secrets)
+  disableCleanupOfHelmReleaseOnFailure()
 
   // Vars for Kubernetes
   env.TEST_URL = "https://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net"
