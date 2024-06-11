@@ -11,7 +11,6 @@ def secrets = [
     secret('public-display-data-aggregator-POSTGRES-PASS', 'DB_PASSWORD'),
     secret('public-display-data-aggregator-POSTGRES-HOST', 'DB_HOST'),
     secret('public-display-data-aggregator-POSTGRES-PORT', 'DB_PORT'),
-    secret('public-display-data-aggregator-POSTGRES-SCHEMA', 'DB_SCHEMA')
   ],
 ]
 
@@ -22,6 +21,7 @@ withPipeline(type, product, component) {
   // Vars for Kubernetes
   env.TEST_URL = "https://pdda-public-display-data-aggregator-staging.staging.platform.hmcts.net"
   env.DB_NAME = "pdda"
+  env.DB_SCHEMA = "pdda"
 
   afterAlways('smokeTest:stg') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'smoke-test-report/**/*'
