@@ -121,27 +121,16 @@ public final class TransformerUtils {
         // written
         Map<String, String> parameterMap = FormattingServiceUtils.createParameterMap();
 
-        // If this is an IWP then we need to prepend the DOCTYPE tag and make other
-        // amendments
-        // that the transform didnt pick up
         Source source = SaxUtils.createSource(xslServices, formattingConfig, formattingValue,
             translationXml, parameterMap);
-//        if (IWP.equals(formattingValue.getDocumentType())) {
-//            LOG.debug("Processing a IWP type");
-//            // Creating a dummy OutputStream so that the CORRECT outputstream doesnt get
-//            // written to before it should
-//            // as OutputStreams cannot be amended once written to - we will get the output
-//            // from the Buffer
-//            Result result = createResult(formattingValue.getOutputStream(), formattingValue.getMimeType(), bufferToUse);
-//            Transformer transformer = createTransformer(formattingValue, parameterMap);
-//            transformer.transform(source, result);
-//            transformIwp(formattingValue, bufferToUse);
-//        } else { // Do it as it did prior to the RFC 2787 changes
-            Result result = createResult(formattingValue.getOutputStream(),
-                formattingValue.getMimeType(), bufferToUse);
-            Transformer transformer = createTransformer(formattingValue, parameterMap);
-            transformer.transform(source, result);
-        //}
+        Result result = createResult(formattingValue.getOutputStream(),
+            formattingValue.getMimeType(), bufferToUse);
+        Transformer transformer = createTransformer(formattingValue, parameterMap);
+        transformer.transform(source, result);
+        if (IWP.equals(formattingValue.getDocumentType())) {
+            // Format the internet web page with a new html header
+            bufferToUse = transformIwp(formattingValue, bufferToUse);
+        }
 
         formattingValue.getOutputStream().flush();
         return bufferToUse;
