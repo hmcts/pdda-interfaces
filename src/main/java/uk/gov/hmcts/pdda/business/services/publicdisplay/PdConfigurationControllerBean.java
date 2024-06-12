@@ -41,6 +41,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.VipDisplayConfig
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -90,7 +91,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     public int[] getCourtsForPublicDisplay() {
         final String methodName = "getCourtsForPublicDisplay() - ";
         LOG.debug(ENTERED, methodName);
-        ArrayList<XhbCourtDao> courts = (ArrayList<XhbCourtDao>) getXhbCourtRepository().findAll();
+        List<XhbCourtDao> courts = getXhbCourtRepository().findAll();
+        Collections.sort(courts, (o1, o2) -> o1.getCourtId().compareTo(o2.getCourtId()));
         int[] courtArray = new int[courts.size()];
         Iterator<XhbCourtDao> courtIterator = courts.iterator();
         for (int i = 0; i < courtArray.length; i++) {
@@ -277,9 +279,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     public XhbCourtRoomDao[] getCourtRoomsForCourt(final Integer courtId) {
         final String methodName = "getCourtRoomsForCourt(" + courtId + METHOD_SUFFIX;
         LOG.debug(ENTERED, methodName);
-        ArrayList<XhbCourtRoomDao> al = new ArrayList<>();
-        ArrayList<XhbCourtSiteDao> courtSites =
-            (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository().findByCourtId(courtId);
+        List<XhbCourtRoomDao> al = new ArrayList<>();
+        List<XhbCourtSiteDao> courtSites =
+            getXhbCourtSiteRepository().findByCourtId(courtId);
         int numCourtSites = courtSites.size();
 
         Iterator<XhbCourtSiteDao> iter = courtSites.iterator();
@@ -312,8 +314,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         LOG.debug(ENTERED, methodName);
 
         boolean multiSite;
-        ArrayList<XhbCourtSiteDao> courtSites =
-            (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository().findByCourtId(courtId);
+        List<XhbCourtSiteDao> courtSites =
+            getXhbCourtSiteRepository().findByCourtId(courtId);
         multiSite = courtSites.size() > 1;
 
         VipCourtRoomsQuery vipQuery = getVipCourtRoomsQuery(multiSite);

@@ -49,12 +49,12 @@ public final class InitializationService {
     /**
      * Number of workers for initialization.
      */
-    private int numInitializationWorkers = 5;
+    private int numInitializationWorkers = 10;
 
     /**
      * Delay after each court initialization.
      */
-    private long initializationDelay = 10 * ONE_SECOND;
+    private long initializationDelay = 5 * ONE_SECOND;
 
     /**
      * Retry period in case of initialization failure.

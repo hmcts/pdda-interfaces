@@ -2,15 +2,14 @@ package uk.gov.hmcts.framework.services.threadpool;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.work.EventWork;
 
-/**
- * @author Meeraj
- *
- *         Generic thread pool implementation. Original version written by R Oberg for JBoss.
- */
 import java.util.Stack;
 
-
+/**      
+ * Generic thread pool implementation. Original version written by R Oberg for JBoss.
+ * @author Meeraj
+ */
 @SuppressWarnings("PMD.DoNotUseThreads")
 public final class ThreadPool {
 
@@ -59,7 +58,7 @@ public final class ThreadPool {
      * 
      * @param work Work that needs to be done
      */
-    public void scheduleWork(Runnable work) {
+    public void scheduleWork(EventWork work) {
 
         // Check whether the thread pool is active
         if (!active) {
@@ -207,11 +206,10 @@ public final class ThreadPool {
         }
 
         /** Schedules a work. */
-        void scheduleWork(Runnable work) {
+        void scheduleWork(EventWork work) {
             synchronized (this) {
                 if (work != null) {
                     this.work = work;
-                    notifyAll();
                     LOG.debug("Work scheduled: {}", work);
                 }
             }

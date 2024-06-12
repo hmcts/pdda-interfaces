@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.work.EventWork;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -21,7 +22,7 @@ class ThreadPoolTest {
     private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
 
     @Mock
-    private Runnable mockRunnable;
+    private EventWork mockEventWork;
 
     @InjectMocks
     private final ThreadPool classUnderTest = new ThreadPool(NO_OF_WORKERS);
@@ -40,7 +41,7 @@ class ThreadPoolTest {
     void testScheduleWorkSuccess() {
         boolean result = false;
         try {
-            classUnderTest.scheduleWork(mockRunnable);
+            classUnderTest.scheduleWork(mockEventWork);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -52,7 +53,7 @@ class ThreadPoolTest {
     void testThreadPoolInactiveException() {
         Assertions.assertThrows(ThreadPoolInactiveException.class, () -> {
             classUnderTest.shutdown();
-            classUnderTest.scheduleWork(mockRunnable);
+            classUnderTest.scheduleWork(mockEventWork);
         });
     }
 
