@@ -10,7 +10,6 @@ import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
 import uk.gov.hmcts.pdda.business.xmlbinding.hmcts.pdda.types.MimeTypeType;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -73,40 +72,21 @@ public final class TransformerUtils {
         return transformer;
     }
 
-    public static Writer transformIwp(FormattingValue formattingValue, Writer buffer)
+    public static Writer transformIwp(Writer buffer)
         throws IOException {
-        StringBuilder sb = new StringBuilder(
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/"
-                + "TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n");
         if (buffer == null) {
             LOG.warn("IWP: buffer is null; pages will NOT be generated.");
             return null;
         } else {
+            StringBuilder sb = new StringBuilder(
+                "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/"
+                    + "TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n");
             String updatedPage = FormattingServiceUtils.amendGeneratedPage(buffer.toString());
             sb.append(updatedPage);
             LOG.debug("updated page is {}", sb);
             Writer bufferToUse = new StringWriter();
             for (int i = 0; i < sb.length(); i++) {
                 bufferToUse.append(sb.charAt(i));
-            }
-
-            if (formattingValue.getOutputStream() instanceof ByteArrayOutputStream) {
-                ByteArrayOutputStream nbaos =
-                    (ByteArrayOutputStream) formattingValue.getOutputStream();
-                nbaos.write(sb.toString().getBytes());
-
-                formattingValue.setOutputStream(nbaos);
-            } else if (formattingValue.getOutputStream() instanceof OutputStream) {
-                // Used to output html
-                try (OutputStream bos = formattingValue.getOutputStream()) {
-                    LOG.debug("\n\n\nAbout to write to outputstream the page :\n{}\n\n\n", sb);
-                    bos.write(sb.toString().getBytes());
-                    formattingValue.setOutputStream(bos);
-                }
-            } else {
-                LOG.warn(
-                    "formattingValue is not a ByteArrayOutputStream and output path is undefined"
-                        + " - this shouldn't happen");
             }
             return bufferToUse;
         }
@@ -121,27 +101,15 @@ public final class TransformerUtils {
         // written
         Map<String, String> parameterMap = FormattingServiceUtils.createParameterMap();
 
-        // If this is an IWP then we need to prepend the DOCTYPE tag and make other
-        // amendments
-        // that the transform didnt pick up
         Source source = SaxUtils.createSource(xslServices, formattingConfig, formattingValue,
             translationXml, parameterMap);
+        Result result = createResult(formattingValue.getOutputStream(),
+            formattingValue.getMimeType(), bufferToUse);
+        Transformer transformer = createTransformer(formattingValue, parameterMap);
+        transformer.transform(source, result);
         if (IWP.equals(formattingValue.getDocumentType())) {
-            LOG.debug("Processing a IWP type");
-            // Creating a dummy OutputStream so that the CORRECT outputstream doesnt get
-            // written to before it should
-            // as OutputStreams cannot be amended once written to - we will get the output
-            // from the Buffer
-            ByteArrayOutputStream baos = FormattingServiceUtils.getByteArrayOutputStream();
-            Result result = createResult(baos, formattingValue.getMimeType(), bufferToUse);
-            Transformer transformer = createTransformer(formattingValue, parameterMap);
-            transformer.transform(source, result);
-            transformIwp(formattingValue, bufferToUse);
-        } else { // Do it as it did prior to the RFC 2787 changes
-            Result result = createResult(formattingValue.getOutputStream(),
-                formattingValue.getMimeType(), bufferToUse);
-            Transformer transformer = createTransformer(formattingValue, parameterMap);
-            transformer.transform(source, result);
+            // Format the internet web page with a new html header
+            return transformIwp(bufferToUse);
         }
 
         formattingValue.getOutputStream().flush();
