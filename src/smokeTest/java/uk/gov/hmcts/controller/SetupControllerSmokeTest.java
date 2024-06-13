@@ -17,19 +17,20 @@ import static io.restassured.RestAssured.given;
 class SetupControllerSmokeTest {
     
     private static final Logger LOG = LoggerFactory.getLogger(SetupControllerSmokeTest.class);
+    private static final String HEALTHPAGE = "/health";
     
     @Value("${TEST_URL:http://localhost:8080}")
     private String testUrl;
 
     @BeforeEach
     public void setUp() {
-        RestAssured.baseURI = testUrl;
+        RestAssured.baseURI = getTestUrl();
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
     void smokeTest() {
-        LOG.info("testUrl={}", testUrl);
+        LOG.info("testUrl={}", getTestUrl());
         Response response = given()
             .contentType(ContentType.JSON)
             .when()
@@ -40,4 +41,10 @@ class SetupControllerSmokeTest {
         LOG.info("Smoketest.status={}",response.statusCode());
         Assertions.assertEquals(200, response.statusCode());
     } 
+    
+    private String getTestUrl() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(testUrl).append(HEALTHPAGE);
+        return sb.toString();
+    }
 }
