@@ -433,7 +433,7 @@
 							<configuration>
 								<groupId>org.codehaus.castor</groupId>
 								<artifactId>castor</artifactId>
-								<version>1.0</version>
+								<version>1.4.1</version>
 								<packaging>jar</packaging>
 								<file>${basedir}/dependencies/castor-1.0.jar</file>
 								<generatePom>true</generatePom>
