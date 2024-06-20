@@ -40,7 +40,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
     // Junit constructor
     public DailyListNotifierControllerBean(EntityManager entityManager,
         PdConfigurationControllerBean pdConfigurationController, PddaDlNotifierHelper pddaDlNotifierHelper) {
-        super(entityManager, null, null, null, null, null);
+        super(entityManager, null, null, null, null, null, null, null);
         this.pdConfigurationController = pdConfigurationController;
         this.pddaDlNotifierHelper = pddaDlNotifierHelper;
     }
