@@ -5,6 +5,9 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -39,7 +42,9 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_INPROGRESS = "IP";
     private static final String MESSAGE_STATUS_PROCESSED = "VP";
     private static final String MESSAGE_STATUS_INVALID = "INV";
+    private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
 
+    @Autowired
     public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
             XhbCppStagingInboundRepository xhbCppStagingInboundRepository, EntityManager entityManager) {
         super();
@@ -89,11 +94,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
                 writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
             } else {
-                LOG.error("Filename is not valid : " + dao.getCpDocumentName());
+                LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
             }
         } catch (RuntimeException e) {
             LOG.error(
-                    "Error adding data to the database for file " + dao.getCpDocumentName() + " :" + e.getStackTrace());
+                    "Error adding data to the database for file {} :{}",
+                    dao.getCpDocumentName(), e.getStackTrace());
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
             updatePddaMessageForError(dao);
         }
@@ -106,7 +112,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      */
     private void writeToLog(final String string) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(System.currentTimeMillis() + " :: " + string);
+            LOG.debug("{} :: {}", System.currentTimeMillis(), string);
         }
     }
 

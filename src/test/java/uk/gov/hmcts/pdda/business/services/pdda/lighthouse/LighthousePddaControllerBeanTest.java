@@ -78,7 +78,6 @@ class LighthousePddaControllerBeanTest {
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
-        // new Parameters().properties().setFileName("");
         // Add Captured Values
         Capture<XhbPddaMessageDao> xhbPddaMessageDaoCapture = EasyMock.newCapture();
 

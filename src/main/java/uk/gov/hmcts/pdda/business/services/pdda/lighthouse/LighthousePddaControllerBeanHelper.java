@@ -12,7 +12,7 @@ public class LighthousePddaControllerBeanHelper {
     protected XhbPddaMessageRepository xhbPddaMessageRepository;
     protected XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
     protected EntityManager entityManager;
-    protected static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBeanHelper.class);
 
     public EntityManager getEntityManager() {
         if (entityManager == null) {
