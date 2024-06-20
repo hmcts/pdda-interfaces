@@ -1,13 +1,10 @@
 package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
-import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -34,11 +31,8 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-public class LighthousePddaControllerBean implements RemoteTask {
-    private XhbPddaMessageRepository xhbPddaMessageRepository;
-    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
-    private EntityManager entityManager;
-    private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
+public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
+
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final Integer FILE_PARTS = 3;
     private static final String NEW_STAGING_INBOUND_STATUS = "NP";
@@ -46,17 +40,21 @@ public class LighthousePddaControllerBean implements RemoteTask {
     private static final String MESSAGE_STATUS_PROCESSED = "VP";
     private static final String MESSAGE_STATUS_INVALID = "INV";
 
-    public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository, XhbCppStagingInboundRepository xhbCppStagingInboundRepository, EntityManager entityManager) {
+    public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
+            XhbCppStagingInboundRepository xhbCppStagingInboundRepository, EntityManager entityManager) {
+        super();
         this.xhbPddaMessageRepository = xhbPddaMessageRepository;
         this.xhbCppStagingInboundRepository = xhbCppStagingInboundRepository;
         this.entityManager = entityManager;
     }
 
     public LighthousePddaControllerBean(EntityManager entityManager) {
+        super();
         this.entityManager = entityManager;
     }
 
     public LighthousePddaControllerBean() {
+        super();
     }
 
     @Override
@@ -201,28 +199,6 @@ public class LighthousePddaControllerBean implements RemoteTask {
         } else {
             return docType.name();
         }
-    }
-
-    public EntityManager getEntityManager() {
-        if (entityManager == null) {
-            LOG.debug("getEntityManager() - Creating new entityManager");
-            entityManager = EntityManagerUtil.getEntityManager();
-        }
-        return entityManager;
-    }
-
-    public XhbPddaMessageRepository getXhbPddaMessageRepository() {
-        if (xhbPddaMessageRepository == null) {
-            xhbPddaMessageRepository = new XhbPddaMessageRepository(getEntityManager());
-        }
-        return xhbPddaMessageRepository;
-    }
-
-    public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null) {
-            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
-        }
-        return xhbCppStagingInboundRepository;
     }
 
 }
