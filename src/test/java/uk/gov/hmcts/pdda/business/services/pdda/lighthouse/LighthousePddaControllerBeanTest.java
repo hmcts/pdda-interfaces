@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,6 +29,7 @@ class LighthousePddaControllerBeanTest {
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String SAME = "Result is not Same";
+    private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String MESSAGE_STATUS_PROCESSED = "VP";
     private static final String MESSAGE_STATUS_INVALID = "INV";
     private static final String UNDERSCORE = "_";
@@ -55,6 +57,24 @@ class LighthousePddaControllerBeanTest {
     void testProcessFilesFailure() {
         boolean result = testProcessFiles(MESSAGE_STATUS_INVALID);
         assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testGetXhbPddaMessageRepository() {
+        assertInstanceOf(XhbPddaMessageRepository.class,
+                classUnderTest.getXhbPddaMessageRepository(), NOT_INSTANCE);
+    }
+
+    @Test
+    void testGetXhbCppStagingInboundRepository() {
+        assertInstanceOf(XhbCppStagingInboundRepository.class,
+                classUnderTest.getXhbCppStagingInboundRepository(), NOT_INSTANCE);
+    }
+
+    @Test
+    void testGetEntityManager() {
+        assertInstanceOf(EntityManager.class,
+                classUnderTest.getEntityManager(), NOT_INSTANCE);
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
@@ -125,5 +145,7 @@ class LighthousePddaControllerBeanTest {
     private RuntimeException getRuntimeException() {
         return new RuntimeException();
     }
+
+
 
 }
