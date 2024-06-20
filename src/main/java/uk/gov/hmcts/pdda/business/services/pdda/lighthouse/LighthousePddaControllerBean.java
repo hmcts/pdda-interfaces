@@ -78,7 +78,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             String[] fileParts = dao.getCpDocumentName().split("_");
             if (fileParts.length == FILE_PARTS) {
                 // Update the status to indicate it is being processed
-                updatePddaMessageInProgress(dao);
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
 
                 String strTimeLoaded = fileParts[2].replaceAll(".xml", "");
                 LocalDateTime timeLoaded = LocalDateTime.parse(strTimeLoaded.trim(), DATETIMEFORMAT);
@@ -101,7 +101,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                     "Error adding data to the database for file {} :{}",
                     dao.getCpDocumentName(), e.getStackTrace());
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
-            updatePddaMessageForError(dao);
+            updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
         }
     }
 
@@ -120,15 +120,6 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("fetchLatestXhbPddaMessageDao()");
         Optional<XhbPddaMessageDao> opt = getXhbPddaMessageRepository().findById(dao.getPrimaryKey());
         return opt.isPresent() ? opt.get() : dao;
-    }
-
-    /**
-     * Updates the XHB_PDDA_MESSAGE record to show it is in progress.
-     */
-    private void updatePddaMessageInProgress(XhbPddaMessageDao dao) {
-        XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
-        latest.setCpDocumentStatus(MESSAGE_STATUS_INPROGRESS);
-        getXhbPddaMessageRepository().update(latest);
     }
 
     /**
@@ -179,13 +170,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     }
 
     /**
-     * In the event of an error performing the normal database updates, this method updates the status
-     * of the XHB_PDDA_MESSAGE record to invalid.
+     * Updates the XHB_PDDA_MESSAGE record.
      */
-    private void updatePddaMessageForError(XhbPddaMessageDao dao) {
-        LOG.debug("updatePddaMessageForError()");
+    private void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
+        LOG.debug("updatePddaMessage()");
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
-        latest.setCpDocumentStatus(MESSAGE_STATUS_INVALID);
+        latest.setCpDocumentStatus(messageStatus);
         getXhbPddaMessageRepository().update(latest);
     }
 
