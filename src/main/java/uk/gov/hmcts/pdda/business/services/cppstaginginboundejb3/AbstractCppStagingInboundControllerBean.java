@@ -44,7 +44,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         XhbClobRepository xhbClobRepository, XhbBlobRepository xhbBlobRepository,
         ValidationService validationService) {
         super(entityManager, xhbClobRepository, xhbBlobRepository, xhbCourtRepository,
-            xhbConfigPropRepository, null, null, null);
+            xhbConfigPropRepository, null);
         this.cppStagingInboundHelper = cppStagingInboundHelper;
         this.validationService = validationService;
     }

@@ -10,9 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
 public class AbstractControllerBean {
 
@@ -26,23 +24,18 @@ public class AbstractControllerBean {
     private XhbCppFormattingRepository xhbCppFormattingRepository;
     private XhbCppListRepository xhbCppListRepository;
     private XhbFormattingRepository xhbFormattingRepository;
-    private XhbPddaMessageRepository xhbPddaMessageRepository;
-    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
 
     // For unit tests.
     protected AbstractControllerBean(EntityManager entityManager,
         XhbClobRepository xhbClobRepository, XhbBlobRepository xhbBlobRepository,
         XhbCourtRepository xhbCourtRepository, XhbConfigPropRepository xhbConfigPropRepository,
-        XhbCppFormattingRepository xhbCppFormattingRepository, XhbPddaMessageRepository xhbPddaMessageRepository,
-            XhbCppStagingInboundRepository xhbCppStagingInboundRepository) {
+        XhbCppFormattingRepository xhbCppFormattingRepository) {
         this(entityManager);
         this.xhbClobRepository = xhbClobRepository;
         this.xhbBlobRepository = xhbBlobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
-        this.xhbPddaMessageRepository = xhbPddaMessageRepository;
-        this.xhbCppStagingInboundRepository = xhbCppStagingInboundRepository;
     }
 
     protected AbstractControllerBean(EntityManager entityManager) {
@@ -121,17 +114,4 @@ public class AbstractControllerBean {
         return xhbFormattingRepository;
     }
 
-    protected XhbPddaMessageRepository getXhbPddaMessageRepository() {
-        if (xhbPddaMessageRepository == null) {
-            xhbPddaMessageRepository = new XhbPddaMessageRepository(getEntityManager());
-        }
-        return xhbPddaMessageRepository;
-    }
-
-    protected XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null) {
-            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
-        }
-        return xhbCppStagingInboundRepository;
-    }
 }
