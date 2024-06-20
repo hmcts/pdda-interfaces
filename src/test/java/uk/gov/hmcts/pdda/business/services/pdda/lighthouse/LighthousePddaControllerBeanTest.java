@@ -98,7 +98,6 @@ class LighthousePddaControllerBeanTest {
             EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.capture(xhbPddaMessageDaoCapture)))
                     .andReturn(xhbPddaMessageDao1).times(2);
 
-            mockEntityManager.clear();
             EasyMock.expectLastCall();
 
             if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {

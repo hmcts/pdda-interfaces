@@ -129,7 +129,6 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
         latest.setCpDocumentStatus(MESSAGE_STATUS_INPROGRESS);
         getXhbPddaMessageRepository().update(latest);
-        this.getEntityManager().clear();
     }
 
     /**
