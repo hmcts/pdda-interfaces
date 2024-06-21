@@ -127,24 +127,25 @@ class CourtelHelperTest {
         EasyMock.replay(mockXhbXmlDocumentRepository);
         EasyMock.replay(mockXhbCourtelListRepository);
         boolean result;
+        Long blobId = Long.valueOf(-99);
         // Run - 1st (No Clob)
-        result = testWriteToCourtel(clobId);
+        result = testWriteToCourtel(clobId, blobId);
         assertTrue(result, NOT_TRUE);
         // Run - 2nd (No XmlDocument)
-        result = testWriteToCourtel(clobId);
+        result = testWriteToCourtel(clobId, blobId);
         assertTrue(result, NOT_TRUE);
         // Run - 3rd (With CourtelList)
-        result = testWriteToCourtel(clobId);
+        result = testWriteToCourtel(clobId, blobId);
         assertTrue(result, NOT_TRUE);
         // Run - 4th (No CourtelList - FINAL SUCCESSFUL VERSION)
-        result = testWriteToCourtel(clobId);
+        result = testWriteToCourtel(clobId, blobId);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testWriteToCourtel(Long clobId) {
+    private boolean testWriteToCourtel(Long clobId, Long blobId) {
         boolean result = false;
         try {
-            classUnderTest.writeToCourtel(clobId);
+            classUnderTest.writeToCourtel(clobId, blobId);
             result = true;
         } catch (Exception exception) {
             fail(exception.getMessage());

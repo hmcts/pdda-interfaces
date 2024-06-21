@@ -67,7 +67,7 @@ public class CourtelHelper {
         return Arrays.asList(VALID_LISTS).contains(documentType);
     }
 
-    public void writeToCourtel(final Long xmlDocumentClobId) {
+    public void writeToCourtel(final Long xmlDocumentClobId, final Long formattedDocumentBlobId) {
         // Get the clob data
         Optional<XhbClobDao> clobDao = xhbClobRepository.findById(xmlDocumentClobId);
         if (clobDao.isPresent()) {
@@ -78,6 +78,7 @@ public class CourtelHelper {
                 XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
                 xhbCourtelListDao.setXmlDocumentId(xmlDocumentId);
                 xhbCourtelListDao.setXmlDocumentClobId(xmlDocumentClobId);
+                xhbCourtelListDao.setBlobId(formattedDocumentBlobId);
                 xhbCourtelListDao.setSentToCourtel(NO);
                 xhbCourtelListDao.setNumSendAttempts(Integer.valueOf(0));
                 // Write to Courtel
