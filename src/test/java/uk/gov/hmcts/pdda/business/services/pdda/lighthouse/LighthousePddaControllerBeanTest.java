@@ -72,6 +72,17 @@ class LighthousePddaControllerBeanTest {
     }
 
     @Test
+    void testConstructors() {
+        assertInstanceOf(LighthousePddaControllerBean.class,
+                new LighthousePddaControllerBean(), NOT_INSTANCE);
+        assertInstanceOf(LighthousePddaControllerBean.class,
+                new LighthousePddaControllerBean(mockXhbPddaMessageRepository, mockXhbCppStagingInboundRepository,
+                        mockEntityManager), NOT_INSTANCE);
+        assertInstanceOf(LighthousePddaControllerBean.class,
+                new LighthousePddaControllerBean(mockEntityManager), NOT_INSTANCE);
+    }
+
+    @Test
     void testGetXhbCppStagingInboundRepositoryNotNull() {
         mockXhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(mockEntityManager);
         assertInstanceOf(XhbCppStagingInboundRepository.class,
