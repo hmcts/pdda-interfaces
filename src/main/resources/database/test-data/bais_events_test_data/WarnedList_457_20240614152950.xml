@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cs:WarnedList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails">
+	<cs:DocumentID>
+		<cs:DocumentName>WarnedList_457_20240614152950.xml</cs:DocumentName>
+		<cs:UniqueID>5313bacb-2743-404a-b4ac-7f9c010ee2c5</cs:UniqueID>
+		<cs:DocumentType>WL</cs:DocumentType>
+		<cs:TimeStamp>2024-06-14T12:07:23.655</cs:TimeStamp>
+	</cs:DocumentID>
+	<cs:ListHeader>
+		<cs:ListCategory>Criminal</cs:ListCategory>
+		<cs:StartDate>2025-12-22</cs:StartDate>
+		<cs:EndDate>2025-12-28</cs:EndDate>
+		<cs:Version>NOT VERSIONED</cs:Version>
+		<cs:PublishedTime>2024-06-14T12:07:23.733Z</cs:PublishedTime>
+	</cs:ListHeader>
+	<cs:CrownCourt>
+		<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+		<cs:CourtHouseCode CourtHouseShortName="SWANS">457</cs:CourtHouseCode>
+		<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+	</cs:CrownCourt>
+	<cs:CourtLists>
+		<cs:CourtList>
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>457</cs:CourtHouseCode>
+				<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+			</cs:CourtHouse>
+			<cs:WithFixedDate HearingType="PLE">
+				<cs:Fixture>
+					<cs:FixedDate>2025-12-25</cs:FixedDate>
+					<cs:Cases>
+						<cs:Case>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Hearing HearingType="PLE">
+								<cs:HearingDescription>For Plea</cs:HearingDescription>
+								<cs:HearingDate>2025-12-25</cs:HearingDate>
+								<cs:ListNote>Section 49 of the Children and Young Persons Act 1933 applies</cs:ListNote>
+							</cs:Hearing>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>check</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>data</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>check data</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>DD-28654-12</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+						</cs:Case>
+						<cs:Case>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Hearing HearingType="PLE">
+								<cs:HearingDescription>For Plea</cs:HearingDescription>
+								<cs:HearingDate>2025-12-25</cs:HearingDate>
+								<cs:ListNote>Section 49 of the Children and Young Persons Act 1933 applies</cs:ListNote>
+							</cs:Hearing>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>check</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>data</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>check data</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>DD-28654-13</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+						</cs:Case>
+					</cs:Cases>
+				</cs:Fixture>
+			</cs:WithFixedDate>
+			<cs:WithoutFixedDate HearingType="PLE">
+				<cs:Fixture>
+					<cs:Cases>
+						<cs:Case>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Hearing HearingType="PLE">
+								<cs:HearingDescription>For Plea</cs:HearingDescription>
+								<cs:HearingDate>2025-12-22</cs:HearingDate>
+							</cs:Hearing>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Defendant2</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>York</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Defendant2 York</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>DD-28654-11</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+						</cs:Case>
+						<cs:Case>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Hearing HearingType="PLE">
+								<cs:HearingDescription>For Plea</cs:HearingDescription>
+								<cs:HearingDate>2025-12-22</cs:HearingDate>
+							</cs:Hearing>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Defendant2</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>York</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Defendant2 York</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>DD-28654-9</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+						</cs:Case>
+					</cs:Cases>
+				</cs:Fixture>
+			</cs:WithoutFixedDate>
+			<cs:WithoutFixedDate HearingType="PLE">
+				<cs:Fixture>
+					<cs:Cases>
+						<cs:Case>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Hearing HearingType="PLE">
+								<cs:HearingDescription>For Plea</cs:HearingDescription>
+								<cs:HearingDate>2025-12-22</cs:HearingDate>
+							</cs:Hearing>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Defendant2</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>York</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Defendant2 York</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>DD-28654-10</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+						</cs:Case>
+					</cs:Cases>
+				</cs:Fixture>
+			</cs:WithoutFixedDate>
+		</cs:CourtList>
+	</cs:CourtLists>
+</cs:WarnedList>
