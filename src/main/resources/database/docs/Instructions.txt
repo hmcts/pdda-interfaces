@@ -70,6 +70,18 @@ To ensure you are running on the pdda schema, then:
 
 	\i 'load_test_data.sql'
 
+-------------
+FLYWAY REPAIR
+-------------
+
+Make sure the following environment variables are populated. These should be the 
+url, username and password to the database you wish to repair.
+
+	FLYWAY_URL, FLYWAY_USER, FLYWAY_PASSWORD
+
+Then run the following command from the project folder in terminal:
+
+	gradle flywayrepair -i
 
 ----------------
 ADDITIONAL NOTES
