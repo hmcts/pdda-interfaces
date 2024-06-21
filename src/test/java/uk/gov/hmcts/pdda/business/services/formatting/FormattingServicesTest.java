@@ -76,7 +76,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.TooManyMethods"})
 class FormattingServicesTest {
 
     private static final String TRUE = "Result is not True";
@@ -354,7 +354,7 @@ class FormattingServicesTest {
         FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue(
             xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST_LETTER, HTML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
-        expectCreateSource(formattingValue.getDocumentType());
+        expectCreateSource();
         expectTransformer();
         Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
             .thenReturn(true);
@@ -467,7 +467,7 @@ class FormattingServicesTest {
         assertTrue(result, TRUE);
     }
 
-    private void expectCreateSource(String documentType) {
+    private void expectCreateSource() {
         String[] xsltNames = {};
         Mockito.when(mockFormattingConfig.getXslTransforms(Mockito.isA(FormattingValue.class)))
             .thenReturn(xsltNames);
@@ -501,7 +501,7 @@ class FormattingServicesTest {
             .thenReturn(propertyList);
         Mockito.when(mockTranslationBundles.toXml()).thenReturn(TRANSLATION_BUNDLE_XML);
         if (expectedXmlUtils != null) {
-            expectCreateSource(formattingValue.getDocumentType());
+            expectCreateSource();
         }
         // Run
         classUnderTest.processDocument(formattingValue, mockEntityManager);
