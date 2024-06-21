@@ -138,7 +138,7 @@ class LighthousePddaControllerBeanTest {
         String[] cpDocumentNames =
             {"DailyList_453_20220811235559.xml", "WarnedList_111_20220810010433.xml",
             "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
-            "WebPage_122_20220804031423.xml", "Invalid_File.csv"};
+            "WebPage_122_20220804031423.xml", "Invalid_File.csv", "NotAFile_100_20220802030423.xml"};
         for (String cpDocumentName : cpDocumentNames) {
             XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
             xhbPddaMessageDao.setCpDocumentName(cpDocumentName);
