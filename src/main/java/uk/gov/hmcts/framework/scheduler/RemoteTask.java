@@ -5,7 +5,7 @@ package uk.gov.hmcts.framework.scheduler;
  * Title: The RemoteTask interface.
  * </p>
  * <p>
- * Description: Interface to be implemented by a Session Bean renote interface that is to be called
+ * Description: Interface to be implemented by a Session Bean remote interface that is to be called
  * to perform a scheduled task.
  * </p>
  * <p>
