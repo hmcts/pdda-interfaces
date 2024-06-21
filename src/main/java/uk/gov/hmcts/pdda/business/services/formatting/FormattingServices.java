@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -16,7 +15,6 @@ import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
@@ -50,7 +48,6 @@ public class FormattingServices extends FormattingServicesProcessing {
     
     
     // Date Format for java date
-    private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
 
@@ -81,7 +78,7 @@ public class FormattingServices extends FormattingServicesProcessing {
 
             if (FormattingServiceUtils.isInactiveOnPdda(formattingValue)) {
                 LOG.debug("{} is flagged as Inactive on PDDA", formattingValue.getDocumentType());
-            } else if (IWP.equals(formattingValue.getDocumentType()) && isMergeAllowed()) {
+            } else if (IWP.equals(formattingValue.getDocumentType())) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
                 processListDocument(formattingValue, getTranslationBundles().toXml());
@@ -199,28 +196,5 @@ public class FormattingServices extends FormattingServicesProcessing {
             CsServices.getDefaultErrorHandler().handleError(e, FormattingServices.class);
             throw new FormattingException(" An error has occured during the setup of the xmlUtils process", e);
         }
-    }
-
-    /**
-     * Returns true if merge is allowed i.e. the time is before the cut off time defined in the db.
-     * 
-     * @return boolean
-     */
-    private boolean isMergeAllowed() {
-        LOG.debug("About to check if a merge is allowed");
-        String[] mergeCutOffTime =
-            getXhbConfigPropRepository().findByPropertyName(MERGE_CUT_OFF_TIME).get(0).getPropertyValue().split(":");
-        if (mergeCutOffTime != null && mergeCutOffTime.length == 3) {
-            final Calendar now = Calendar.getInstance();
-            Calendar mergeCutOff = Calendar.getInstance();
-            mergeCutOff.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mergeCutOffTime[0]));
-            mergeCutOff.set(Calendar.MINUTE, Integer.parseInt(mergeCutOffTime[1]));
-            mergeCutOff.set(Calendar.SECOND, Integer.parseInt(mergeCutOffTime[2]));
-
-            LOG.debug("Is {} after {}", DateTimeUtilities.calendarToDate(mergeCutOff),
-                DateTimeUtilities.calendarToDate(now));
-            return mergeCutOff.after(now);
-        }
-        return false;
     }
 }
