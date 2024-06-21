@@ -30,6 +30,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     protected static final String ENTERED = " : entered";
     protected static final String METHOD_NAME_SUFFIX = ") - ";
     protected static final Integer REASON_LIMIT = 4000;
+    protected static final String EMPTY_STRING = " ";
 
     private CppStagingInboundHelper cppStagingInboundHelper;
     private ValidationService validationService;
@@ -113,6 +114,10 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         List<XhbConfigPropDao> configPropReturnList =
             getXhbConfigPropRepository().findByPropertyName("CPPX_Schema" + documentType);
 
+        // No schema defined to validate against
+        if (configPropReturnList.isEmpty()) {
+            return EMPTY_STRING;
+        }
         XhbConfigPropDao tempConfigProp = configPropReturnList.get(0);
         return tempConfigProp.getPropertyValue();
     }

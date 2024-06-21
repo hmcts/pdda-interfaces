@@ -285,6 +285,11 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         LOG.debug(methodName + ENTERED);
         // Get schema to validate against
         String schemaName = getSchemaName(cppStagingInboundDao.getDocumentType());
+        if (EMPTY_STRING.equals(schemaName)) {
+            updateStatusFailed(cppStagingInboundDao, "Document schema config is invalid",
+                userDisplayName);
+            return false;
+        }
         try {
             if (DocumentValidationUtils
                 .isValidDocumentName(cppStagingInboundDao.getDocumentName())) {
