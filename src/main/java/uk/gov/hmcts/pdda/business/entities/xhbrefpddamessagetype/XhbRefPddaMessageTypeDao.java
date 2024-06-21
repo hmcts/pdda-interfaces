@@ -27,7 +27,7 @@ public class XhbRefPddaMessageTypeDao extends AbstractVersionedDao implements Se
     @GeneratedValue(generator = "xhb_ref_pdda_message_type_seq", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "xhb_ref_pdda_message_type_seq",
         sequenceName = "xhb_ref_pdda_message_type_seq", allocationSize = 1)
-    @Column(name = "REF_PDDA_MESSAGE_TYPE_ID")
+    @Column(name = "PDDA_MESSAGE_TYPE_ID")
     private Integer pddaMessageTypeId;
 
     @Column(name = "PDDA_MESSAGE_TYPE")

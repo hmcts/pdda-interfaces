@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersona
+lDetails">
+	<cs:DocumentID>
+		<cs:DocumentName>DailyList_457_20240614152950.xml</cs:DocumentName>
+		<cs:UniqueID>30d27450-306d-4bf8-b493-53b251f38e99</cs:UniqueID>
+		<cs:DocumentType>DL</cs:DocumentType>
+		<cs:TimeStamp>2024-06-14T09:32:38.329</cs:TimeStamp>
+	</cs:DocumentID>
+	<cs:ListHeader>
+		<cs:ListCategory>Criminal</cs:ListCategory>
+		<cs:StartDate>2024-05-28</cs:StartDate>
+		<cs:EndDate>2024-05-28</cs:EndDate>
+		<cs:Version>NOT VERSIONED</cs:Version>
+		<cs:PublishedTime>2024-06-148T09:32:38.425Z</cs:PublishedTime>
+	</cs:ListHeader>
+	<cs:CrownCourt>
+		<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+		<cs:CourtHouseCode CourtHouseShortName="SWANS">457</cs:CourtHouseCode>
+		<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+	</cs:CrownCourt>
+	<cs:CourtLists>
+		<cs:CourtList>
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>457</cs:CourtHouseCode>
+				<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>11:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>NONE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>NONE</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>NONE</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTP">
+								<cs:HearingDescription>Plea and Trial Preparation</cs:HearingDescription>
+								<cs:HearingDate>2024-05-28</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>11:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Santa</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>OScjoC</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Santa OScjoC</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>86GD2873322</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="OF61003A">
+											<cs:OffenceStatement>Attempt to solicit to commit murder</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+	</cs:CourtLists>
+</cs:DailyList>
