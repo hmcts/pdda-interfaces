@@ -173,7 +173,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * Updates the XHB_PDDA_MESSAGE record.
      */
     private void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
-        LOG.debug("updatePddaMessage()");
+        LOG.debug("updatePddaMessageStatus");
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
         latest.setCpDocumentStatus(messageStatus);
         getXhbPddaMessageRepository().update(latest);
