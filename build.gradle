@@ -193,7 +193,7 @@ dependencies {
     implementation 'org.springframework:spring-web:6.0.19'
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
-    implementation 'org.apache.commons:commons-configuration2:2.10.1'
+    implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.postgresql:postgresql:42.7.3'
     implementation 'net.bytebuddy:byte-buddy:1.14.17'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
