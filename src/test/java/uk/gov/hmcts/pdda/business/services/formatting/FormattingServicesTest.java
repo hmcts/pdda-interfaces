@@ -332,7 +332,35 @@ class FormattingServicesTest {
     }
 
     @Test
-    void testProcessDocumentFirmList() {
+    void testProcessDocumentFirmList() throws IOException, TransformerConfigurationException {
+        /* WIP PDDA-367 firm list test that gives a templatesArray null error */
+        // Setup
+        /*String xml = CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST);
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
+        XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
+        xhbCppListDao.setListClobId(xhbClobDao.getClobId());
+        //xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
+        xhbCppListDao.setListType(DOCTYPE_FIRM_LIST);
+        FormattingValue formattingValue =
+            DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_FIRM_LIST, XML, xhbCppListDao);
+        formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
+        List<XhbCppListDao> existingList = new ArrayList<>();
+        existingList.add(xhbCppListDao);
+        Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.isA(Long.class))).thenReturn(xhbCppListDao);
+        Mockito.when(mockXhbCppListRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbCppListDao));
+        Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
+            .thenReturn(Optional.of(existingList.get(0)));
+        Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
+            .thenReturn(Optional.of(existingList.get(0)));
+        expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class))).thenReturn(true);
+        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class));
+        
+        // Run
+        boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_FIRM_LIST), formattingValue);
+        assertTrue(result, TRUE);*/
+        
         // Setup
         String xml = CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST);
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
