@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cs:FirmList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails">
+	<cs:DocumentID>
+		<cs:DocumentName>FirmList_457_20240614152950.xml.xml</cs:DocumentName>
+		<cs:UniqueID>a2dc9770-a772-4d14-889c-654faeb76cbf</cs:UniqueID>
+		<cs:DocumentType>FL</cs:DocumentType>
+		<cs:TimeStamp>2024-06-14T10:20:37.940</cs:TimeStamp>
+	</cs:DocumentID>
+	<cs:ListHeader>
+		<cs:ListCategory>Criminal</cs:ListCategory>
+		<cs:StartDate>2024-06-14</cs:StartDate>
+		<cs:EndDate>2024-06-16</cs:EndDate>
+		<cs:Version>NOT VERSIONED</cs:Version>
+		<cs:PublishedTime>2024-06-14T10:20:38.050Z</cs:PublishedTime>
+	</cs:ListHeader>
+	<cs:CrownCourt>
+		<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+		<cs:CourtHouseCode CourtHouseShortName="SWANS">457</cs:CourtHouseCode>
+		<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+	</cs:CrownCourt>
+	<cs:CourtLists>
+		<cs:CourtList SittingDate="2024-06-12">
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>457</cs:CourtHouseCode>
+				<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>NONE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>NONE</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>NONE</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2024-06-12</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>BLXRA</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>AFESLLRLO</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>BLXRA AFESLLRLO</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>RQ25587454</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68013A">
+											<cs:OffenceStatement>Attempt theft of motor vehicle</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+		<cs:CourtList SittingDate="2024-06-15">
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>457</cs:CourtHouseCode>
+				<cs:CourtHouseName>SWANSEA</cs:CourtHouseName>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>NONE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>NONE</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>NONE</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTP">
+								<cs:HearingDescription>Plea and Trial Preparation</cs:HearingDescription>
+								<cs:HearingDate>2024-06-15</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Nekkyl</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>Mynna</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Nekkyl Mynna</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>FF39889674</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68023">
+											<cs:OffenceStatement>Robbery</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SX03207">
+											<cs:OffenceStatement>Sex offenders register - supply false information in purported compliance with interim notification - SOA 2003</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SX03229A">
+											<cs:OffenceStatement>Attempt to cause / incite the sexual exploitation of a child under 13 - SOA 2003</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Tervy</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>Roberyo</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Tervy Roberyo</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>FF39889674</cs:URN>
+									<cs:Charges>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="TH68010">
+											<cs:OffenceStatement>Theft from a shop</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SX03204">
+											<cs:OffenceStatement>Sex offenders register - fail comply with notification requirements - SOA 2003</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge IndictmentCountNumber="0" CJSoffenceCode="SX03229A">
+											<cs:OffenceStatement>Attempt to cause / incite the sexual exploitation of a child under 13 - SOA 2003</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+	</cs:CourtLists>
+</cs:FirmList>

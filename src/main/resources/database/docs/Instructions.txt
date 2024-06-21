@@ -1,3 +1,8 @@
+
+---------------
+CONNECTION INFO
+---------------
+
 open SQL Shell (psql)
 Server: localhost
 Database: pdda
@@ -5,15 +10,82 @@ Port: 5432
 Username: postgres
 Password: postgres
 
-Use \cd to navigate to the directory with the scripts e.g.
-\cd /Users/chrisvincent/git/pdda2/pdda_v2/src/main/resources/database/scripts
 
-SET schema 'pdda';
+----------------
+POSTGRESQL NOTES
+----------------
 
-Can use \! pwd to indicate the working directory
+Some commands to consider when using postgresql
 
-Install DB objects (tables, constraints, triggers, packages, refdata etc.):
-\i 'pdda_db_install.sql'
+\cd *path* - this will change directory to the specified path.
+\! pwd - this will print the current directory.
+\i '*filename*' - this will run the specified sql file.
+
+SET schema 'pdda'; - this will select the pdda schema. Ensure to set this before running any \i commands.
+
+
+-------------
+PDDA DB SETUP
+-------------
+
+Navigate to: 
+
+	/pdda-interfaces/src/main/resources/database/scripts
+
+To create the pdda DB, locate:
+
+	create-pdda-db.sql
+
+Either copy the contents of that file into a new SQL Script and run in DBeaver, this will create the pdda DB. 
+Alternatively you can run that file in postgresql to create the pdda DB.
+
+Now run the app using:
+
+	gradle run
+
+FlyWay will be configured to create all the tables, audit tables, indexes, constraints, sequences and triggers
+for the pdda schema, by running the files with the naming convention below.
+
+The database scripts follow a naming convention of:
+
+	V1_*__ - These refer to scripts made for Pdda-interfaces
+	V2_*__ - These refer to scripts made for Pdm-interfaces
+	V3_*__ - These refer to scripts made for Courtel and Firm List /
+		 Warned  List / Internet Web Page processing. In development also known as Pdda2.
+
+If you wish to add the test data to your local DB please add this manually by navigating to the test-data directory:
+
+	/pdda-interfaces/src/main/resources/database/test-data
+
+Then locate:
+
+	load_test_data.sql
+
+Either copy the contents of that file into a new SQL Script and run in DBeaver under the pdda schema, this will insert the test data. 
+Alternatively you can run that file in postgresql using:
+
+	SET schema 'pdda';
+
+To ensure you are running on the pdda schema, then:
+
+	\i 'load_test_data.sql'
+
+-------------
+FLYWAY REPAIR
+-------------
+
+Make sure the following environment variables are populated. These should be the 
+url, username and password to the database you wish to repair.
+
+	FLYWAY_URL, FLYWAY_USER, FLYWAY_PASSWORD
+
+Then run the following command from the project folder in terminal:
+
+	gradle flywayrepair -i
+
+----------------
+ADDITIONAL NOTES
+----------------
 
 Refresh the database using the temp tables (pdda-create-temp-tables.sql is in the temp folder):
 \i 'pdda-create-temp-tables.sql'
@@ -26,8 +98,22 @@ CALL xhb_housekeeping_pkg.find_all_hk_cases_for_deletion();
 CALL xhb_housekeeping_pkg.process_cpp();
 CALL xhb_housekeeping_pkg.process_judges();
 
-To Insert the test data navigate to the directory:
-/Users/chrisvincent/git/pdda2/pdda_v2/src/main/resources/database/test-data
 
-Then Run:
-\i 'load_test_data.sql'
+-------------------------------------
+CONNECTION DATA FOR BAIS SFTP TESTING
+-------------------------------------
+
+1. Setup test user on your Mac
+2. Enable Remote Login on your Mac
+3. Set the following values in your XHB_CONFIG_PROP TABLE:
+
+	PDDA_BAIS_SFTP_HOSTNAME = 127.0.0.1:22
+	PDDA_BAIS_CP_SFTP_USERNAME = (Your test user on your Mac i.e testUser)
+	PDDA_BAIS_CP_SFTP_PASSWORD = (The password for your test user on your Mac)
+	PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION = (A folder on the testUsers directory to use to place the test docs into i.e - /Users/testUser/temp_bais_events_folder/) Make sure to include forward slash at the end.
+
+4. Place the demo bais documents into that folder. These demo documents can be found in:
+
+	/pdda-interfaces/src/main/resources/database/test-data/bais_events_test_data
+
+5. Run the app and they should get processed
