@@ -18,21 +18,21 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    
+
     protected AbstractRepository() {
         super();
     }
-    
+
     protected AbstractRepository(EntityManager entityManager) {
         this();
         this.entityManager = entityManager;
     }
 
     protected abstract Class<T> getDaoClass();
-    
+
     /**
      * findById.
-     * 
+     *
      * @param id Integer
      * @return dao
      */
@@ -52,17 +52,17 @@ public abstract class AbstractRepository<T extends AbstractDao> {
         T dao = getEntityManager().find(getDaoClass(), id);
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
-    
+
     @SuppressWarnings("unchecked")
     private List<T> findAll(String sql) {
         LOG.debug("findAll({})", sql);
         Query query = getEntityManager().createQuery(sql);
         return query.getResultList();
     }
-    
+
     /**
      * findAll.
-     * 
+     *
      * @return List
      */
     public List<T> findAll() {
@@ -152,7 +152,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     private EntityManager createEntityManager() {
         return EntityManagerUtil.getEntityManager();
     }
-    
+
     public void clearEntityManager() {
         getEntityManager().clear();
     }
