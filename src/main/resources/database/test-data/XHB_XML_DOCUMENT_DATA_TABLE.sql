@@ -3,3 +3,6 @@ insert into xhb_xml_document (XML_DOCUMENT_ID,XML_DOCUMENT_CLOB_ID,COURT_ID,DOCU
 491001,421002,1,'WL','16-MARCH-20 13:36:08','16-MARCH-20 13:36:08','XHIBIT','XHIBIT',1),(
 491002,421003,1,'FL','16-MARCH-20 13:36:08','16-MARCH-20 13:36:08','XHIBIT','XHIBIT',1),(
 491003,421004,1,'IWP','16-MARCH-20 13:36:08','16-MARCH-20 13:36:08','XHIBIT','XHIBIT',1);
+
+-- Reset the sequence after insert --
+SELECT setval('xhb_xml_document_seq', COALESCE(MAX(xml_document_id)+1, 1), FALSE) FROM xhb_xml_document;

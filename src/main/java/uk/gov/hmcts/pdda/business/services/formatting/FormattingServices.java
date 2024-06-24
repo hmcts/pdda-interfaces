@@ -91,7 +91,8 @@ public class FormattingServices extends FormattingServicesProcessing {
         }
         
         if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
-            courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId());
+            courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
+                formattingValue.getFormattedDocumentBlobId());
         }
     }
 

@@ -1,2 +1,5 @@
 insert into xhb_defendant (DEFENDANT_ID,FIRST_NAME,MIDDLE_NAME,SURNAME,PUBLIC_DISPLAY_HIDE,COURT_ID,LAST_UPDATE_DATE,CREATION_DATE,CREATED_BY,LAST_UPDATED_BY,VERSION) values (
 1,'DAVID','JAMES','DUGAN','0',1,'16-MARCH-20 13:36:08','16-MARCH-20 13:36:08','XHIBIT','XHIBIT',1);
+
+-- Reset the sequence after insert --
+SELECT setval('xhb_defendant_seq', COALESCE(MAX(defendant_id)+1, 1), FALSE) FROM xhb_defendant;

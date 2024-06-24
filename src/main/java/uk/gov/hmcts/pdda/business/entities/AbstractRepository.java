@@ -152,7 +152,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     private EntityManager createEntityManager() {
         return EntityManagerUtil.getEntityManager();
     }
-    
+
     public void clearEntityManager() {
         getEntityManager().clear();
     }

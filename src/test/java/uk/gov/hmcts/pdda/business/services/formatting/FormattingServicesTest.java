@@ -358,7 +358,7 @@ class FormattingServicesTest {
         expectTransformer();
         Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
             .thenReturn(true);
-        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class));
+        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class), Mockito.isA(Long.class));
 
         // Run
         boolean result = testProcessDocuments(
@@ -409,7 +409,7 @@ class FormattingServicesTest {
         expectTransformer();
         Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
             .thenReturn(true);
-        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class));
+        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class), Mockito.isA(Long.class));
         // Run
         return testProcessDocuments(FormattingServices.getXmlUtils(listType), formattingValue);
     }
