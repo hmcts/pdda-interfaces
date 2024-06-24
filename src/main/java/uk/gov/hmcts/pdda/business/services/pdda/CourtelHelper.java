@@ -67,7 +67,7 @@ public class CourtelHelper {
         return Arrays.asList(VALID_LISTS).contains(documentType);
     }
 
-    public void writeToCourtel(final Long xmlDocumentClobId, final Long formattedDocumentBlobId) {
+    public void writeToCourtel(final Long xmlDocumentClobId, final Long blobId) {
         // Get the clob data
         Optional<XhbClobDao> clobDao = xhbClobRepository.findById(xmlDocumentClobId);
         if (clobDao.isPresent()) {
@@ -78,7 +78,7 @@ public class CourtelHelper {
                 XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
                 xhbCourtelListDao.setXmlDocumentId(xmlDocumentId);
                 xhbCourtelListDao.setXmlDocumentClobId(xmlDocumentClobId);
-                xhbCourtelListDao.setBlobId(formattedDocumentBlobId);
+                xhbCourtelListDao.setBlobId(blobId);
                 xhbCourtelListDao.setSentToCourtel(NO);
                 xhbCourtelListDao.setNumSendAttempts(Integer.valueOf(0));
                 // Write to Courtel
@@ -131,18 +131,6 @@ public class CourtelHelper {
 
     private Integer getIntervalValue(Integer messageLookupDelay) {
         return messageLookupDelay / SECONDS_IN_A_DAY;
-    }
-
-    public XhbCourtelListDao processCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        Optional<XhbClobDao> xhbClobDao =
-            xhbClobRepository.findById(xhbCourtelListDao.getXmlDocumentClobId());
-        if (xhbClobDao.isPresent()) {
-            Long blobId = blobHelper.createBlob(xhbClobDao.get().getClobData().getBytes());
-            xhbCourtelListDao.setBlobId(blobId);
-            xhbCourtelListRepository.save(xhbCourtelListDao);
-            return xhbCourtelListDao;
-        }
-        return null;
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {

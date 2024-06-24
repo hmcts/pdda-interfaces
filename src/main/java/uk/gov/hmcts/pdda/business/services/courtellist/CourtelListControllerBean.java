@@ -58,11 +58,7 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
         List<XhbCourtelListDao> xhbCourtelList = getCourtelHelper().getCourtelList();
 
         if (!xhbCourtelList.isEmpty()) {
-            for (XhbCourtelListDao xhbCourtelListDao : xhbCourtelList) {
-                XhbCourtelListDao updatedXhbCourtelListDao =
-                    getCourtelHelper().processCourtelList(xhbCourtelListDao);
-                getCourtelHelper().sendCourtelList(updatedXhbCourtelListDao);
-            }
+            xhbCourtelList.forEach(xhbCourtelListDao -> getCourtelHelper().sendCourtelList(xhbCourtelListDao));
         }
     }
 
