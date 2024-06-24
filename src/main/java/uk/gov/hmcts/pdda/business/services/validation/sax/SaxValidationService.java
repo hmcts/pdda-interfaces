@@ -30,6 +30,7 @@ public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
     private static final String DISALLOW_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+    private static final String ALLOW_GENERAL_ENTITIES = "http://xml.org/sax/features/external-general-entities";
 
     private final EntityResolver entityResolver;
 
@@ -82,8 +83,9 @@ public class SaxValidationService implements ValidationService {
             // to be compliant, completely disable DOCTYPE declaration:
             factory.setFeature(DISALLOW_DECL, true);
             // or prohibit the use of all protocols by external entities:
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,http"); // NOSONAR
+            factory.setFeature(ALLOW_GENERAL_ENTITIES, false);
+            //factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            //factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,http"); 
             return factory;
         }
         return schemaFactory;
