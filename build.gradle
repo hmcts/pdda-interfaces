@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.9.1")
+    classpath("org.flywaydb:flyway-database-postgresql:10.15.0")
   }
 }
 
@@ -18,7 +18,7 @@ plugins {
 	id 'checkstyle'
   id 'pmd'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.9.1'
+  id 'org.flywaydb.flyway' version '10.15.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -176,9 +176,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:3.1.11'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.11'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.25'
-    implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
-    implementation 'org.javassist:javassist:3.21.0-GA'
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+    implementation 'org.javassist:javassist:3.30.2-GA'
     implementation 'org.apache.commons:commons-lang3:3.14.0'
     implementation 'org.apache.openjpa:openjpa-persistence-jdbc:3.2.2'
     implementation 'org.codehaus.castor:castor-codegen:1.4.1'
@@ -216,9 +216,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.25'
     implementation 'com.squareup.okio:okio:3.9.0'
-    implementation 'org.flywaydb:flyway-core:10.9.1'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.9.1'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.9.1'
+    implementation 'org.flywaydb:flyway-core:10.15.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.15.0'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.15.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

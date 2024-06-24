@@ -1,8 +1,8 @@
 --Update the scheduler tasks to include pddabaistask
 update xhb_config_prop
-set property_value = 'transformtask,cppstagingtask,cppformattingtask,pddabaistask'
+set property_value = 'transformtask,cppstagingtask,cppformattingtask,pddabaistask,lighthousetask'
 where property_name = 'scheduledtasks.pdda'
-and property_value != 'transformtask,cppstagingtask,cppformattingtask,pddabaistask';
+and property_value != 'transformtask,cppstagingtask,cppformattingtask,pddabaistask,lighthousetask';
 
 --Update sftpConfig properties
 update xhb_config_prop
