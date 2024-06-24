@@ -28,7 +28,7 @@ SET schema 'pdda'; - this will select the pdda schema. Ensure to set this before
 PDDA DB SETUP
 -------------
 
-Navigate to:
+Navigate to: 
 
 	/pdda-interfaces/src/main/resources/database/scripts
 
@@ -36,7 +36,7 @@ To create the pdda DB, locate:
 
 	create-pdda-db.sql
 
-Either copy the contents of that file into a new SQL Script and run in DBeaver, this will create the pdda DB.
+Either copy the contents of that file into a new SQL Script and run in DBeaver, this will create the pdda DB. 
 Alternatively you can run that file in postgresql to create the pdda DB.
 
 Now run the app using:
@@ -61,7 +61,7 @@ Then locate:
 
 	load_test_data.sql
 
-Either copy the contents of that file into a new SQL Script and run in DBeaver under the pdda schema, this will insert the test data.
+Either copy the contents of that file into a new SQL Script and run in DBeaver under the pdda schema, this will insert the test data. 
 Alternatively you can run that file in postgresql using:
 
 	SET schema 'pdda';
@@ -74,7 +74,7 @@ To ensure you are running on the pdda schema, then:
 FLYWAY REPAIR
 -------------
 
-Make sure the following environment variables are populated. These should be the
+Make sure the following environment variables are populated. These should be the 
 url, username and password to the database you wish to repair.
 
 	FLYWAY_URL, FLYWAY_USER, FLYWAY_PASSWORD
