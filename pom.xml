@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.1.4</version>
+		<version>3.3.1</version>
 	</parent>
 
 	<groupId>uk.gov.hmcts</groupId>
@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<spring.version>6.1.10</spring.version>
-		<spring.data.version>3.1.4</spring.data.version>
+		<spring.data.version>3.3.1</spring.data.version>
 		<checkstyle.config.location>${basedir}/config/checkstyle/checkstyle.xml</checkstyle.config.location>
 	</properties>
 
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-activemq</artifactId>
-			<version>3.1.4</version>
+			<version>3.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
