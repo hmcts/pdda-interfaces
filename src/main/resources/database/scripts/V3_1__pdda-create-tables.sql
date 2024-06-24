@@ -9,7 +9,7 @@ CREATE TABLE xhb_courtel_list (
     sent_to_courtel varchar(1) NOT NULL,
     num_send_attempts integer,
     last_attempt_datetime timestamp,
-    message_text varchar(255) NOT NULL,
+    message_text varchar(255),
 	last_update_date timestamp NOT NULL,
 	creation_date timestamp NOT NULL,
 	created_by varchar(30) NOT NULL,

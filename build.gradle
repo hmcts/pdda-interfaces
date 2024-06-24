@@ -276,7 +276,7 @@ tasks.register('functional', Test) {
   schemas = ['pdda']
   locations = ["database", "database/data", "database/packages"]
   // change to false to allow flyway clean to be run
-  cleanDisabled = false
+  cleanDisabled = true
 }
 
 // this can be run to clean the DB down allowing from a fresh migration from scratch
