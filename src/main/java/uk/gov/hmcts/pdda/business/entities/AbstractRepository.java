@@ -41,7 +41,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
         T dao = getEntityManager().find(getDaoClass(), id);
         return dao != null ? (Optional<T>) Optional.of(dao) : Optional.empty();
     }
-    
+
     /**
      * findById.
      * @param id Long
@@ -52,7 +52,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
         T dao = getEntityManager().find(getDaoClass(), id);
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
-
+    
     @SuppressWarnings("unchecked")
     private List<T> findAll(String sql) {
         LOG.debug("findAll({})", sql);
