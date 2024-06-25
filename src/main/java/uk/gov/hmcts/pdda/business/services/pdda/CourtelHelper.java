@@ -135,7 +135,7 @@ public class CourtelHelper {
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
         String json = getCathHelper()
-            .generateJsonString(getCathHelper().convertDaoToJsonObject(xhbCourtelListDao));
+            .generateJsonString(getCathHelper().populateCourtelListBlob(xhbCourtelListDao));
         getCathHelper().send(json);
     }
 

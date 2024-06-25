@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.AbstractCourtelListBlob;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 
 /**
  * <p>
@@ -34,13 +34,12 @@ public class CathHelper {
         this.blobHelper = blobHelper;
     }
 
-    public XhbCourtelListJson convertDaoToJsonObject(XhbCourtelListDao xhbCourtelListDao) {
-        XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
-        xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
-        return xhbCourtelListJson;
+    public XhbCourtelListDao populateCourtelListBlob(XhbCourtelListDao xhbCourtelListDao) {
+        xhbCourtelListDao.setBlob(blobHelper.getBlob(xhbCourtelListDao.getBlobId()));
+        return xhbCourtelListDao;
     }
 
-    public String generateJsonString(XhbCourtelListJson xhbCourtelListJson) {
+    public String generateJsonString(AbstractCourtelListBlob xhbCourtelListJson) {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
         try {

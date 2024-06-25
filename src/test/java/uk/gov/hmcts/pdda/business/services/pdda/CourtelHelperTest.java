@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -149,8 +150,8 @@ class CourtelHelperTest {
     @Test
     void testSendCourtelList() {
         // Setup
-        byte[] blobData = "TestData".getBytes();
-        EasyMock.expect(mockBlobHelper.getBlobData(EasyMock.isA(Long.class))).andReturn(blobData);
+        XhbBlobDao xhbBlobDao = new XhbBlobDao();
+        EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
         EasyMock.replay(mockBlobHelper);
         boolean result;
         // Run

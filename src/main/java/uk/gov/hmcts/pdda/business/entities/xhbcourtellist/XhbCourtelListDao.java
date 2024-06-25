@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
-import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
         + "and o.numSendAttempts < :courtelMaxRetry and "
         + "(o.lastAttemptDatetime is null or "
         + "(o.lastAttemptDatetime + make_interval(0,0,0,0,0,0,:intervalValue) < :courtelListAmount))")
-public class XhbCourtelListDao extends AbstractVersionedDao implements Serializable {
+public class XhbCourtelListDao extends AbstractCourtelListBlob implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
 
