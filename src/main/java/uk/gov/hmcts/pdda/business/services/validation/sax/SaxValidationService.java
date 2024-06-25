@@ -26,11 +26,11 @@ import javax.xml.validation.SchemaFactory;
  * 
  * @author William Fardell
  */
+@SuppressWarnings("squid:S2755")
 public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
     private static final String DISALLOW_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
-    private static final String XMLPARSERSXXEATTACK = "squid:S2755";
 
     private final EntityResolver entityResolver;
 
@@ -50,7 +50,6 @@ public class SaxValidationService implements ValidationService {
     }
 
     @Override
-    @SuppressWarnings(XMLPARSERSXXEATTACK)
     public ValidationResult validate(final String xml, final String schemaName) throws ValidationException {
         LOG.debug("entered validate method");
 
