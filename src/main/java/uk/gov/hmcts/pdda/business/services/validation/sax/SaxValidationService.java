@@ -26,6 +26,7 @@ import javax.xml.validation.SchemaFactory;
  * 
  * @author William Fardell
  */
+@SuppressWarnings("squid:S2755")
 public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
@@ -83,7 +84,7 @@ public class SaxValidationService implements ValidationService {
             factory.setFeature(DISALLOW_DECL, true);
             // or prohibit the use of all protocols by external entities:
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file"); 
             return factory;
         }
         return schemaFactory;
