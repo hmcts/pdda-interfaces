@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.AbstractCourtelListBlob;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.AbstractCourtelDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 
 /**
@@ -39,7 +39,7 @@ public class CathHelper {
         return xhbCourtelListDao;
     }
 
-    public String generateJsonString(AbstractCourtelListBlob xhbCourtelListJson) {
+    public String generateJsonString(AbstractCourtelDao xhbCourtelListJson) {
         ObjectMapper mapper = new ObjectMapper();
         String json = "";
         try {

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
         + "and o.numSendAttempts < :courtelMaxRetry and "
         + "(o.lastAttemptDatetime is null or "
         + "(o.lastAttemptDatetime + make_interval(0,0,0,0,0,0,:intervalValue) < :courtelListAmount))")
-public class XhbCourtelListDao extends AbstractCourtelListBlob implements Serializable {
+public class XhbCourtelListDao extends AbstractCourtelDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
 
