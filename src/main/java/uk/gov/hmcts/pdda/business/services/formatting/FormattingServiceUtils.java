@@ -177,13 +177,9 @@ public final class FormattingServiceUtils {
     public static boolean isProcessingList(FormattingValue formattingValue) {
         return !isListLetterDocType(formattingValue.getDocumentType())
             && (isDailyList(formattingValue.getDocumentType())
-                || isWarnedList(formattingValue.getDocumentType()))
+                || isWarnedList(formattingValue.getDocumentType())
+                || isFirmList(formattingValue.getDocumentType()))
             && formattingValue.getXmlDocumentClobId() != null
             && formattingValue.getXmlDocumentClobId() != 0;
-    }
-
-    // TODO Remove this method in PDDA-367 as firm lists also need to be processed
-    public static boolean isInactiveOnPdda(FormattingValue formattingValue) {
-        return isFirmList(formattingValue.getDocumentType());
     }
 }

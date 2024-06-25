@@ -76,9 +76,7 @@ public class FormattingServices extends FormattingServicesProcessing {
             // Get the xmlUtils type
             setXmlUtils(getXmlUtils(formattingValue.getDocumentType()));
 
-            if (FormattingServiceUtils.isInactiveOnPdda(formattingValue)) {
-                LOG.debug("{} is flagged as Inactive on PDDA", formattingValue.getDocumentType());
-            } else if (IWP.equals(formattingValue.getDocumentType())) {
+            if (IWP.equals(formattingValue.getDocumentType())) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
                 processListDocument(formattingValue, getTranslationBundles().toXml());
@@ -187,6 +185,8 @@ public class FormattingServices extends FormattingServicesProcessing {
             AbstractXmlMergeUtils xmlUtils = null;
             if (FormattingServiceUtils.isDailyList(documentType)) {
                 xmlUtils = new DailyListXmlMergeUtils();
+            } else if (FormattingServiceUtils.isFirmList(documentType)) {
+                xmlUtils = new FirmListXmlMergeUtils();
             } else if (FormattingServiceUtils.isWarnedList(documentType)) {
                 xmlUtils = new WarnedListXmlMergeUtils();
             } else if (IWP.equals(documentType)) {

@@ -366,12 +366,12 @@ class FormattingServicesTest {
         assertTrue(result, TRUE);
     }
 
-    // @Test
-    //    void testProcessDocumentFirmList() throws IOException, TransformerConfigurationException {
-    //        boolean result = testProcessDocument(
-    //            CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST), DOCTYPE_FIRM_LIST);
-    //        assertTrue(result, TRUE);
-    //    }
+    @Test
+    void testProcessDocumentFirmList() throws IOException, TransformerConfigurationException {
+        boolean result = testProcessDocument(
+            CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST), DOCTYPE_FIRM_LIST);
+        assertTrue(result, TRUE);
+    }
 
     @Test
     void testProcessDocumentWarnList() throws IOException, TransformerConfigurationException {
