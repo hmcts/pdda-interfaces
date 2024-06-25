@@ -83,9 +83,8 @@ public class SaxValidationService implements ValidationService {
             // to be compliant, completely disable DOCTYPE declaration:
             factory.setFeature(DISALLOW_DECL, true);
             // or prohibit the use of all protocols by external entities:
-            factory.setFeature(ALLOW_GENERAL_ENTITIES, false);
-            //factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-            //factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,http"); 
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file"); 
             return factory;
         }
         return schemaFactory;
