@@ -15,6 +15,7 @@ import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.conversion.DateConverter;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -434,10 +435,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         }
         try {
             String documentType = thisDoc.getDocumentType();
+            String listType = documentType.substring(0, 1); // Only want first letter
             LocalDateTime listStartDate = getListStartDate(clobXml, documentType);
             LocalDateTime listEndDate = getListEndDate(clobXml, documentType);
             XhbCppListDao docToUpdate = getCppListControllerBean().checkForExistingCppListRecord(
-                Integer.valueOf(thisDoc.getCourtCode()), documentType, listStartDate, listEndDate);
+                Integer.valueOf(thisDoc.getCourtCode()), listType, listStartDate, listEndDate);
             if (docToUpdate != null) { // Update
                 // Set updated values
                 docToUpdate.setStatus(CppListHelper.NOT_PROCESSED);
@@ -455,12 +457,20 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 docToCreate.setCourtCode(Integer.valueOf(thisDoc.getCourtCode()));
                 docToCreate.setStatus(CppListHelper.NOT_PROCESSED);
                 docToCreate.setTimeLoaded(thisDoc.getTimeLoaded());
-                docToCreate.setListType(documentType.substring(0, 1)); // Only want first letter
+                docToCreate.setListType(listType); 
                 docToCreate.setListStartDate(listStartDate);
                 docToCreate.setListEndDate(listEndDate);
                 docToCreate.setListClobId(thisDoc.getClobId());
                 docToCreate.setObsInd("N");
                 getXhbCppListRepository().save(docToCreate);
+                
+                // Create the xhbFormatting record
+                List<XhbCourtDao> xhbCourtDaoList =
+                    getXhbCourtRepository().findByCrestCourtIdValue(thisDoc.getCourtCode());
+                Integer courtId = xhbCourtDaoList.get(0).getCourtId();
+                XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
+                    thisDoc.getTimeLoaded(), documentType, "en");
+                getXhbFormattingRepository().save(xfbv);
             }
 
             // If all successful then we need to set record in XHB_STAGING_INBOUND to
