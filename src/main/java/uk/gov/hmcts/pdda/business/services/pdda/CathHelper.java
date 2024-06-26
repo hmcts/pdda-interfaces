@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.AbstractCourtelDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 
 /**
@@ -39,15 +39,15 @@ public class CathHelper {
         return xhbCourtelListDao;
     }
 
-    public String generateJsonString(AbstractCourtelDao xhbCourtelListJson) {
+    public String generateJsonString(XhbCourtelListDao xhbCourtelListDao) {
         ObjectMapper mapper = new ObjectMapper();
-        String json = "";
+        CourtelJson courtelJson = new CourtelJson();
         try {
-            json = mapper.writeValueAsString(xhbCourtelListJson);
+            courtelJson.setJson(mapper.writeValueAsString(xhbCourtelListDao));
         } catch (JsonProcessingException e) {
-            LOG.error("Error creating JSON String for {} object.", xhbCourtelListJson);
+            LOG.error("Error creating JSON String for {} object.", xhbCourtelListDao);
         }
-        return json;
+        return courtelJson.getJson();
     }
 
     public void send(String jsonString) {
