@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CONFIG_PROP")
 @NamedQuery(name = "XHB_CONFIG_PROP.findByPropertyName",
     query = "SELECT o from XHB_CONFIG_PROP o WHERE o.propertyName = :propertyName")
@@ -73,7 +74,7 @@ public class XhbConfigPropDao extends AbstractDao implements Serializable {
         return propertyValue;
     }
 
-    public final void setPropertyValue(String propertyValue) {
+    public void setPropertyValue(String propertyValue) {
         this.propertyValue = propertyValue;
     }
 
@@ -83,7 +84,7 @@ public class XhbConfigPropDao extends AbstractDao implements Serializable {
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         // Do nothing.
     }
 

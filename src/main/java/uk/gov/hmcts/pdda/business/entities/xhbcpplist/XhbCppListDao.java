@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_LIST")
 @NamedQuery(name = "XHB_CPP_LIST.findByClobId",
     query = "SELECT o from XHB_CPP_LIST o WHERE o.listClobId = :listClobId ORDER BY o.creationDate DESC")
@@ -112,7 +112,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return cppListId;
     }
 
-    public final void setCppListId(final Integer cppListId) {
+    public void setCppListId(final Integer cppListId) {
         this.cppListId = cppListId;
     }
 
@@ -120,7 +120,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return courtCode;
     }
 
-    public final void setCourtCode(final Integer courtCode) {
+    public void setCourtCode(final Integer courtCode) {
         this.courtCode = courtCode;
     }
 
@@ -128,7 +128,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return listType;
     }
 
-    public final void setListType(final String listType) {
+    public void setListType(final String listType) {
         this.listType = listType;
     }
 
@@ -136,7 +136,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return timeLoaded;
     }
 
-    public final void setTimeLoaded(final LocalDateTime timeLoaded) {
+    public void setTimeLoaded(final LocalDateTime timeLoaded) {
         this.timeLoaded = timeLoaded;
     }
 
@@ -144,7 +144,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return listStartDate;
     }
 
-    public final void setListStartDate(final LocalDateTime listStartDate) {
+    public void setListStartDate(final LocalDateTime listStartDate) {
         this.listStartDate = listStartDate;
     }
 
@@ -152,7 +152,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return listEndDate;
     }
 
-    public final void setListEndDate(final LocalDateTime listEndDate) {
+    public void setListEndDate(final LocalDateTime listEndDate) {
         this.listEndDate = listEndDate;
     }
 
@@ -160,7 +160,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return listClobId;
     }
 
-    public final void setListClobId(final Long listClobId) {
+    public void setListClobId(final Long listClobId) {
         this.listClobId = listClobId;
     }
 
@@ -168,7 +168,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return mergedClobId;
     }
 
-    public final void setMergedClobId(final Long mergedClobId) {
+    public void setMergedClobId(final Long mergedClobId) {
         this.mergedClobId = mergedClobId;
     }
 
@@ -176,7 +176,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return status;
     }
 
-    public final void setStatus(final String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -184,7 +184,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return errorMessage;
     }
 
-    public final void setErrorMessage(final String errorMessage) {
+    public void setErrorMessage(final String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
@@ -192,7 +192,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return obsInd;
     }
 
-    public final void setObsInd(final String obsInd) {
+    public void setObsInd(final String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -200,7 +200,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -208,7 +208,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return creationDate;
     }
 
-    public final void setCreationDate(final LocalDateTime creationDate) {
+    public void setCreationDate(final LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -216,7 +216,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(final String lastUpdatedBy) {
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -224,7 +224,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         return createdBy;
     }
 
-    public final void setCreatedBy(final String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -234,7 +234,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
     }
 
     @Override
-    public final void setVersion(final Integer version) {
+    public void setVersion(final Integer version) {
         this.version = version;
     }
 }

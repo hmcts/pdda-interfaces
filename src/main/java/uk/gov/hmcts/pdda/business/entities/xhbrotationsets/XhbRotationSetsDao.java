@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
-@SuppressWarnings("PMD.LinguisticNaming")
+@SuppressWarnings({"PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_ROTATION_SETS")
 @NamedQuery(name = "XHB_ROTATION_SETS.findByCourtId",
     query = "SELECT o from XHB_ROTATION_SETS o WHERE o.courtId = :courtId ")
@@ -133,7 +133,7 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
         return rotationSetId;
     }
 
-    public final void setRotationSetId(Integer rotationSetsId) {
+    public void setRotationSetId(Integer rotationSetsId) {
         this.rotationSetId = rotationSetsId;
     }
 
@@ -141,7 +141,7 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -149,7 +149,7 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
         return description;
     }
 
-    public final void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -157,7 +157,7 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
         return defaultYn;
     }
 
-    public final void setDefaultYn(String defaultYn) {
+    public void setDefaultYn(String defaultYn) {
         this.defaultYn = defaultYn;
     }
 
