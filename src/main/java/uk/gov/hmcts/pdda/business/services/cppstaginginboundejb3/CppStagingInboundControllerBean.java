@@ -65,9 +65,6 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         LOG.debug(methodName + ENTERED);
 
         try {
-            LOG.debug("EM is null or is it:" + getEntityManager().toString());
-            LOG.info("Can you see this?");
-            LOG.debug("Checking for null");
             return getCppStagingInboundHelper().findNextDocumentByStatus(
                 CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED, null);
         } catch (CppStagingInboundControllerException cfce) {
