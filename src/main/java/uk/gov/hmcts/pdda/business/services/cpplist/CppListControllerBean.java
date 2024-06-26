@@ -89,7 +89,7 @@ public class CppListControllerBean implements Serializable {
      * @return XhbCppListDAO
      * 
      */
-    public XhbCppListDao checkForExistingCppListRecord(int courtCode, String listType,
+    public XhbCppListDao checkForExistingCppListRecord(Integer courtCode, String listType,
         LocalDateTime listStartDate, LocalDateTime listEndDate) {
         String methodName = "checkForExistingCppListRecord(" + courtCode + "," + listType + ","
             + listStartDate + "," + listEndDate + ") ";

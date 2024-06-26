@@ -4,8 +4,10 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -16,6 +18,7 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -39,11 +42,12 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(EasyMockExtension.class)
 @SuppressWarnings("PMD.ExcessiveImports")
-class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessingControllerBeanTest {
+class CppInitialProcessingControllerBeanTest
+    extends AbstractCppInitialProcessingControllerBeanTest {
 
     /**
-     * Test to invoke the doTask method which will call most of the other public methods in the class
-     * following the Daily List route.
+     * Test to invoke the doTask method which will call most of the other public methods in the
+     * class following the Daily List route.
      */
     @Test
     void testDoTask() {
@@ -64,40 +68,53 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         ArrayList<XhbCppStagingInboundDao> validatedDocList = new ArrayList<>();
         validatedDocList.add(validatedXcsi);
 
-        LocalDateTime startDate = LocalDateTime.of(2020, 01, 21, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2020, 01, 21, 0, 0);
-
         XhbCppListDao xcl = DummyFormattingUtil.getXhbCppListDao();
+
+        List<XhbCourtDao> xhbCourtDaoList = new ArrayList<>();
+        xhbCourtDaoList.add(DummyCourtUtil.getXhbCourtDao(1, ""));
 
         try {
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
-            EasyMock.expect(mockCppStagingInboundControllerBean.updateStatusInProcess(unprocessedXcsi, BATCH_USERNAME))
+            EasyMock.expect(mockCppStagingInboundControllerBean
+                .updateStatusInProcess(unprocessedXcsi, BATCH_USERNAME))
                 .andReturn(Optional.of(unprocessedXcsi));
-            EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi, BATCH_USERNAME))
-                .andReturn(true);
-            EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
-                .andReturn(DAILY_LIST_XML);
-
-            EasyMock.expect(mockCppListControllerBean.checkForExistingCppListRecord(
-                Integer.valueOf(unprocessedXcsi.getCourtCode()), unprocessedXcsi.getDocumentType(), startDate, endDate))
-                .andReturn(null);
-
-            mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
-
-            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi, BATCH_USERNAME);
-
-            EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument()).andReturn(validatedDocList);
-            EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(validatedXcsi.getClobId()))
+            EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
+                BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(
+                mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(DAILY_LIST_XML);
 
             EasyMock
                 .expect(mockCppListControllerBean.checkForExistingCppListRecord(
-                    Integer.valueOf(validatedXcsi.getCourtCode()), validatedXcsi.getDocumentType(), startDate, endDate))
+                    EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+                    EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
+                .andReturn(null);
+
+            mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
+            EasyMock
+                .expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+                .andReturn(xhbCourtDaoList);
+            mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
+
+            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
+                BATCH_USERNAME);
+
+            EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
+                .andReturn(validatedDocList);
+            EasyMock.expect(
+                mockCppStagingInboundControllerBean.getClobXmlAsString(validatedXcsi.getClobId()))
+                .andReturn(DAILY_LIST_XML);
+
+            EasyMock
+                .expect(mockCppListControllerBean.checkForExistingCppListRecord(
+                    EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+                    EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
                 .andReturn(xcl);
             mockCppListControllerBean.updateCppList(xcl);
 
-            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi, BATCH_USERNAME);
+            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
+                BATCH_USERNAME);
         } catch (CppStagingInboundControllerException | ValidationException exception) {
             fail(exception);
         }
@@ -141,39 +158,47 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         try {
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
-            EasyMock.expect(mockCppStagingInboundControllerBean.updateStatusInProcess(unprocessedXcsi, BATCH_USERNAME))
+            EasyMock.expect(mockCppStagingInboundControllerBean
+                .updateStatusInProcess(unprocessedXcsi, BATCH_USERNAME))
                 .andReturn(Optional.of(unprocessedXcsi));
-            EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi, BATCH_USERNAME))
-                .andReturn(true);
-            EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
+            EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
+                BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(
+                mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(INTERNET_WEBPAGE);
             EasyMock
-                .expect(mockCppStagingInboundControllerBean.getCourtId(Integer.valueOf(unprocessedXcsi.getCourtCode())))
+                .expect(mockCppStagingInboundControllerBean
+                    .getCourtId(Integer.valueOf(unprocessedXcsi.getCourtCode())))
                 .andReturn(courtId);
 
-            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(EasyMock.isA(Integer.class),
-                EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(null);
+            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(
+                EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+                EasyMock.isA(LocalDateTime.class))).andReturn(null);
             mockXhbCppFormattingRepository.save(EasyMock.isA(XhbCppFormattingDao.class));
 
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
 
-            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi, BATCH_USERNAME);
-            EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument()).andReturn(validatedDocList);
-            EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(validatedXcsi.getClobId()))
+            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
+                BATCH_USERNAME);
+            EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
+                .andReturn(validatedDocList);
+            EasyMock.expect(
+                mockCppStagingInboundControllerBean.getClobXmlAsString(validatedXcsi.getClobId()))
                 .andReturn(INTERNET_WEBPAGE);
-            EasyMock
-                .expect(mockCppStagingInboundControllerBean.getCourtId(Integer.valueOf(validatedXcsi.getCourtCode())))
-                .andReturn(courtId);
+            EasyMock.expect(mockCppStagingInboundControllerBean
+                .getCourtId(Integer.valueOf(validatedXcsi.getCourtCode()))).andReturn(courtId);
 
-            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(EasyMock.isA(Integer.class),
-                EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xcf);
+            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(
+                EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+                EasyMock.isA(LocalDateTime.class))).andReturn(xcf);
             EasyMock.expect(mockXhbCppFormattingRepository.update(xcf)).andReturn(null);
 
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
 
-            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi, BATCH_USERNAME);
+            mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
+                BATCH_USERNAME);
 
             replayMocks();
 
@@ -194,7 +219,8 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
     @Test
     void testHandleNewDocuments() {
         // Setup
-        EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument()).andReturn(null);
+        EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
+            .andReturn(null);
 
         replayMocks();
 
@@ -229,13 +255,14 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
     }
 
     /**
-     * Test to invoke the handleStuckDocuments method when there are no documents to be processed. The
-     * method will have been tested with documents to process in other tests.
+     * Test to invoke the handleStuckDocuments method when there are no documents to be processed.
+     * The method will have been tested with documents to process in other tests.
      */
     @Test
     void testHandleStuckDocuments() {
         // Setup
-        EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument()).andReturn(null);
+        EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
+            .andReturn(null);
 
         replayMocks();
 
@@ -269,9 +296,9 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
     }
 
     /**
-     * Test to invoke the processValidatedDocument method when a XhbCppStagingInboundDao with an invalid
-     * document type is processed. The method will have been tested with valid document types in other
-     * tests.
+     * Test to invoke the processValidatedDocument method when a XhbCppStagingInboundDao with an
+     * invalid document type is processed. The method will have been tested with valid document
+     * types in other tests.
      */
     @Test
     void testProcessValidatedDocument() {
@@ -282,10 +309,12 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         invalidXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         invalidXcsi.setProcessingStatus(null);
 
-        EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
+        EasyMock
+            .expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
             .andReturn(DAILY_LIST_XML);
-        mockCppStagingInboundControllerBean.updateStatusProcessingFail(EasyMock.isA(XhbCppStagingInboundDao.class),
-            EasyMock.isA(String.class), EasyMock.isA(String.class));
+        mockCppStagingInboundControllerBean.updateStatusProcessingFail(
+            EasyMock.isA(XhbCppStagingInboundDao.class), EasyMock.isA(String.class),
+            EasyMock.isA(String.class));
 
         replayMocks();
 
@@ -310,7 +339,8 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         invalidXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         invalidXcsi.setProcessingStatus(null);
 
-        EasyMock.expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
+        EasyMock
+            .expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
             .andReturn(null);
 
         replayMocks();
@@ -326,11 +356,11 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         // Checks
         verifyMocks();
     }
-    
-    
+
+
     /**
-     * Test to invoke the createUpdateNonListRecords method when the document court id cannot be found.
-     * The method will have been tested in a positive flow in other tests.
+     * Test to invoke the createUpdateNonListRecords method when the document court id cannot be
+     * found. The method will have been tested in a positive flow in other tests.
      */
     @Test
     void testCreateUpdateNonListRecords() {
@@ -342,10 +372,12 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         xcsi.setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED);
         int courtNotFound = 0;
 
-        EasyMock.expect(mockCppStagingInboundControllerBean.getCourtId(Integer.valueOf(xcsi.getCourtCode())))
+        EasyMock.expect(
+            mockCppStagingInboundControllerBean.getCourtId(Integer.valueOf(xcsi.getCourtCode())))
             .andReturn(courtNotFound);
-        mockCppStagingInboundControllerBean.updateStatusProcessingFail(EasyMock.isA(XhbCppStagingInboundDao.class),
-            EasyMock.isA(String.class), EasyMock.isA(String.class));
+        mockCppStagingInboundControllerBean.updateStatusProcessingFail(
+            EasyMock.isA(XhbCppStagingInboundDao.class), EasyMock.isA(String.class),
+            EasyMock.isA(String.class));
 
         replayMocks();
 
@@ -355,7 +387,7 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         // Checks
         verifyMocks();
     }
-    
+
     /**
      * Test to invoke the createUpdateListRecords method.
      */
@@ -368,12 +400,18 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         xcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         xcsi.setProcessingStatus(null);
 
-        LocalDateTime startDate = LocalDateTime.of(2020, 01, 21, 0, 0);
-        LocalDateTime endDate = LocalDateTime.of(2020, 01, 21, 0, 0);
+        List<XhbCourtDao> xhbCourtDaoList = new ArrayList<>();
+        xhbCourtDaoList.add(DummyCourtUtil.getXhbCourtDao(1, ""));
 
-        EasyMock.expect(mockCppListControllerBean.checkForExistingCppListRecord(Integer.valueOf(xcsi.getCourtCode()),
-            xcsi.getDocumentType(), startDate, endDate)).andReturn(null);
+        EasyMock
+            .expect(mockCppListControllerBean.checkForExistingCppListRecord(
+                EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+                EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(null);
         mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .andReturn(xhbCourtDaoList);
+        mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
 
         replayMocks();
@@ -388,6 +426,6 @@ class CppInitialProcessingControllerBeanTest extends AbstractCppInitialProcessin
         // Checks
         verifyMocks();
     }
-    
+
 
 }
