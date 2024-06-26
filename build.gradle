@@ -152,7 +152,7 @@ sonarqube {
   properties {
     property "sonar.projectName", "pdda"
     property "sonar.projectKey", "pdda-sonarqube"
-    property "sonar.cpd.exclusions", "src/main/java/uk/gov/hmcts/pdda/business/entities/"
+    property "sonar.exclusions", "src/main/java/uk/gov/hmcts/pdda/business/entities"
   }
 }
 
