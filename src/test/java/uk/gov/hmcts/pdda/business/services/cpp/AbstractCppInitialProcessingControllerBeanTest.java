@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.exception.CsBusinessException;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
@@ -183,6 +184,9 @@ class AbstractCppInitialProcessingControllerBeanTest {
 
     @Mock
     protected XhbFormattingRepository mockXhbFormattingRepository;
+    
+    @Mock
+    protected XhbCourtRepository mockXhbCourtRepository;
 
     @TestSubject
     protected final CppInitialProcessingControllerBean classUnderTest =
@@ -274,6 +278,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbFormattingRepository);
+        EasyMock.replay(mockXhbCourtRepository);
     }
 
     /**
