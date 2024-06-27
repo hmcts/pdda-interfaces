@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
@@ -41,6 +42,7 @@ public class CathHelper {
 
     public String generateJsonString(XhbCourtelListDao xhbCourtelListDao) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         CourtelJson courtelJson = new CourtelJson();
         try {
             courtelJson.setJson(mapper.writeValueAsString(xhbCourtelListDao));

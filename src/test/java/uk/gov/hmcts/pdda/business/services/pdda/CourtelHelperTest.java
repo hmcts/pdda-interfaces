@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
-import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -150,12 +149,13 @@ class CourtelHelperTest {
     @Test
     void testSendCourtelList() {
         // Setup
-        XhbBlobDao xhbBlobDao = new XhbBlobDao();
-        EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
+        XhbCourtelListDao xhbCourtelListDao = getDummyCourtelList();
+        EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class)))
+            .andReturn(xhbCourtelListDao.getBlob());
         EasyMock.replay(mockBlobHelper);
         boolean result;
         // Run
-        classUnderTest.sendCourtelList(getDummyCourtelList());
+        classUnderTest.sendCourtelList(xhbCourtelListDao);
         result = true;
         // Checks
         EasyMock.verify(mockBlobHelper);
@@ -164,7 +164,9 @@ class CourtelHelperTest {
 
     private XhbCourtelListDao getDummyCourtelList() {
         Long id = Long.valueOf(-99);
+        byte[] blobData = "Test Blob Data".getBytes();
         XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
+        xhbCourtelListDao.setBlob(DummyFormattingUtil.getXhbBlobDao(blobData));
         xhbCourtelListDao.setXmlDocumentClobId(id);
         xhbCourtelListDao.setBlobId(id);
         return xhbCourtelListDao;
