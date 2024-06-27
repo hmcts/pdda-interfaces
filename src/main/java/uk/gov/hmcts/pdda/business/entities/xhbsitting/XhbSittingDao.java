@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_SITTING")
 @NamedQuery(name = "XHB_SITTING.findBySittingSequenceNo",
     query = "SELECT o from XHB_SITTING o WHERE o.sittingSequenceNo = :sittingSequenceNo ")
@@ -118,7 +118,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return sittingId;
     }
 
-    public final void setSittingId(Integer sittingId) {
+    public void setSittingId(Integer sittingId) {
         this.sittingId = sittingId;
     }
 
@@ -126,7 +126,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return sittingSequenceNo;
     }
 
-    public final void setSittingSequenceNo(Integer sittingSequenceNo) {
+    public void setSittingSequenceNo(Integer sittingSequenceNo) {
         this.sittingSequenceNo = sittingSequenceNo;
     }
 
@@ -134,7 +134,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return isSittingJudge;
     }
 
-    public final void setIsSittingJudge(String isSittingJudge) {
+    public void setIsSittingJudge(String isSittingJudge) {
         this.isSittingJudge = isSittingJudge;
     }
 
@@ -142,7 +142,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return sittingTime;
     }
 
-    public final void setSittingTime(LocalDateTime sittingTime) {
+    public void setSittingTime(LocalDateTime sittingTime) {
         this.sittingTime = sittingTime;
     }
 
@@ -150,7 +150,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return sittingNote;
     }
 
-    public final void setSittingNote(String sittingNote) {
+    public void setSittingNote(String sittingNote) {
         this.sittingNote = sittingNote;
     }
 
@@ -158,7 +158,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return refJustice1Id;
     }
 
-    public final void setRefJustice1Id(Integer refJustice1Id) {
+    public void setRefJustice1Id(Integer refJustice1Id) {
         this.refJustice1Id = refJustice1Id;
     }
 
@@ -166,7 +166,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return refJustice2Id;
     }
 
-    public final void setRefJustice2Id(Integer refJustice2Id) {
+    public void setRefJustice2Id(Integer refJustice2Id) {
         this.refJustice2Id = refJustice2Id;
     }
 
@@ -174,7 +174,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return refJustice3Id;
     }
 
-    public final void setRefJustice3Id(Integer refJustice3Id) {
+    public void setRefJustice3Id(Integer refJustice3Id) {
         this.refJustice3Id = refJustice3Id;
     }
 
@@ -182,7 +182,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return refJustice4Id;
     }
 
-    public final void setRefJustice4Id(Integer refJustice4Id) {
+    public void setRefJustice4Id(Integer refJustice4Id) {
         this.refJustice4Id = refJustice4Id;
     }
 
@@ -190,7 +190,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return isFloating;
     }
 
-    public final void setIsFloating(String isFloating) {
+    public void setIsFloating(String isFloating) {
         this.isFloating = isFloating;
     }
 
@@ -198,7 +198,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return listId;
     }
 
-    public final void setListId(Integer listId) {
+    public void setListId(Integer listId) {
         this.listId = listId;
     }
 
@@ -206,7 +206,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return refJudgeId;
     }
 
-    public final void setRefJudgeId(Integer refJudgeId) {
+    public void setRefJudgeId(Integer refJudgeId) {
         this.refJudgeId = refJudgeId;
     }
 
@@ -214,7 +214,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -222,7 +222,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return courtSiteId;
     }
 
-    public final void setCourtSiteId(Integer courtSiteId) {
+    public void setCourtSiteId(Integer courtSiteId) {
         this.courtSiteId = courtSiteId;
     }
 
@@ -230,7 +230,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return xhbCourtRoom;
     }
 
-    public final void setXhbCourtRoom(XhbCourtRoomDao xhbCourtRoom) {
+    public void setXhbCourtRoom(XhbCourtRoomDao xhbCourtRoom) {
         this.xhbCourtRoom = xhbCourtRoom;
     }
 
@@ -238,7 +238,7 @@ public class XhbSittingDao extends AbstractVersionedDao implements Serializable 
         return xhbCourtSite;
     }
 
-    public final void setXhbCourtSite(XhbCourtSiteDao xhbCourtSite) {
+    public void setXhbCourtSite(XhbCourtSiteDao xhbCourtSite) {
         this.xhbCourtSite = xhbCourtSite;
     }
 

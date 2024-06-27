@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
  * @author scottatwell
  *
  */
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CR_LIVE_INTERNET")
 public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serializable {
 
@@ -73,7 +74,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return crLiveInternetId;
     }
 
-    public final void setCrLiveInternetId(Integer crLiveInternetId) {
+    public void setCrLiveInternetId(Integer crLiveInternetId) {
         this.crLiveInternetId = crLiveInternetId;
     }
 
@@ -81,7 +82,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -89,7 +90,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return scheduledHearingId;
     }
 
-    public final void setScheduledHearingId(Integer scheduledHearingId) {
+    public void setScheduledHearingId(Integer scheduledHearingId) {
         this.scheduledHearingId = scheduledHearingId;
     }
 
@@ -97,7 +98,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return timeStatusSet;
     }
 
-    public final void setTimeStatusSet(LocalDateTime timeStatusSet) {
+    public void setTimeStatusSet(LocalDateTime timeStatusSet) {
         this.timeStatusSet = timeStatusSet;
     }
 
@@ -105,7 +106,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return status;
     }
 
-    public final void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -113,7 +114,7 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 

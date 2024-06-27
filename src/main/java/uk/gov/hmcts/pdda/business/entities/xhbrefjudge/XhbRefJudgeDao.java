@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_REF_JUDGE")
 @NamedQuery(name = "XHB_REF_JUDGE.findScheduledAttendeeJudge",
     query = "SELECT o from XHB_REF_JUDGE o WHERE "
@@ -119,7 +119,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return refJudgeId;
     }
 
-    public final void setRefJudgeId(Integer refJudgeId) {
+    public void setRefJudgeId(Integer refJudgeId) {
         this.refJudgeId = refJudgeId;
     }
 
@@ -127,7 +127,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return judgeType;
     }
 
-    public final void setJudgeType(String judgeType) {
+    public void setJudgeType(String judgeType) {
         this.judgeType = judgeType;
     }
 
@@ -135,7 +135,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return crestJudgeId;
     }
 
-    public final void setCrestJudgeId(Integer crestJudgeId) {
+    public void setCrestJudgeId(Integer crestJudgeId) {
         this.crestJudgeId = crestJudgeId;
     }
 
@@ -143,7 +143,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return title;
     }
 
-    public final void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -151,7 +151,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return firstname;
     }
 
-    public final void setFirstname(String firstname) {
+    public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
 
@@ -159,7 +159,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return middleName;
     }
 
-    public final void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
@@ -167,7 +167,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return surname;
     }
 
-    public final void setSurname(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 
@@ -175,7 +175,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return fullListTitle1;
     }
 
-    public final void setFullListTitle1(String fullListTitle1) {
+    public void setFullListTitle1(String fullListTitle1) {
         this.fullListTitle1 = fullListTitle1;
     }
 
@@ -183,7 +183,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return fullListTitle2;
     }
 
-    public final void setFullListTitle2(String fullListTitle2) {
+    public void setFullListTitle2(String fullListTitle2) {
         this.fullListTitle2 = fullListTitle2;
     }
 
@@ -191,7 +191,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return fullListTitle3;
     }
 
-    public final void setFullListTitle3(String fullListTitle3) {
+    public void setFullListTitle3(String fullListTitle3) {
         this.fullListTitle3 = fullListTitle3;
     }
 
@@ -199,7 +199,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return statsCode;
     }
 
-    public final void setStatsCode(String statsCode) {
+    public void setStatsCode(String statsCode) {
         this.statsCode = statsCode;
     }
 
@@ -207,7 +207,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return initials;
     }
 
-    public final void setInitials(String initials) {
+    public void setInitials(String initials) {
         this.initials = initials;
     }
 
@@ -215,7 +215,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return honours;
     }
 
-    public final void setHonours(String honours) {
+    public void setHonours(String honours) {
         this.honours = honours;
     }
 
@@ -223,7 +223,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return judVers;
     }
 
-    public final void setJudVers(String judVers) {
+    public void setJudVers(String judVers) {
         this.judVers = judVers;
     }
 
@@ -231,7 +231,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -239,7 +239,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return sourceTable;
     }
 
-    public final void setSourceTable(String sourceTable) {
+    public void setSourceTable(String sourceTable) {
         this.sourceTable = sourceTable;
     }
 
@@ -247,7 +247,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 }

@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DISPLAY_STORE")
 @NamedQuery(name = "XHB_DISPLAY_STORE.findByRetrievalCode",
     query = "SELECT o from XHB_DISPLAY_STORE o WHERE o.retrievalCode = :retrievalCode AND (o.obsInd is null OR "
@@ -84,7 +85,7 @@ public class XhbDisplayStoreDao extends AbstractVersionedDao implements Serializ
         return retrievalCode;
     }
 
-    public final void setRetrievalCode(String retrievalCode) {
+    public void setRetrievalCode(String retrievalCode) {
         this.retrievalCode = retrievalCode;
     }
 
@@ -92,7 +93,7 @@ public class XhbDisplayStoreDao extends AbstractVersionedDao implements Serializ
         return content;
     }
 
-    public final void setContent(String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

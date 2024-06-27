@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_SCHED_HEARING_ATTENDEE")
 public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements Serializable {
     private static final long serialVersionUID = -6788003970955114552L;
@@ -72,7 +73,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return shAttendeeId;
     }
 
-    public final void setShAttendeeId(Integer shAttendeeId) {
+    public void setShAttendeeId(Integer shAttendeeId) {
         this.shAttendeeId = shAttendeeId;
     }
 
@@ -80,7 +81,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return attendeeType;
     }
 
-    public final void setAttendeeType(String attendeeType) {
+    public void setAttendeeType(String attendeeType) {
         this.attendeeType = attendeeType;
     }
 
@@ -88,7 +89,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return scheduledHearingId;
     }
 
-    public final void setScheduledHearingId(Integer scheduledHearingId) {
+    public void setScheduledHearingId(Integer scheduledHearingId) {
         this.scheduledHearingId = scheduledHearingId;
     }
 
@@ -96,7 +97,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return shStaffId;
     }
 
-    public final void setShStaffId(Integer shStaffId) {
+    public void setShStaffId(Integer shStaffId) {
         this.shStaffId = shStaffId;
     }
 
@@ -104,7 +105,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return shJusticeId;
     }
 
-    public final void setShJusticeId(Integer shJusticeId) {
+    public void setShJusticeId(Integer shJusticeId) {
         this.shJusticeId = shJusticeId;
     }
 
@@ -112,7 +113,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return refJudgeId;
     }
 
-    public final void setRefJudgeId(Integer refJudgeId) {
+    public void setRefJudgeId(Integer refJudgeId) {
         this.refJudgeId = refJudgeId;
     }
 
@@ -120,7 +121,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return refCourtReporterId;
     }
 
-    public final void setRefCourtReporterId(Integer refCourtReporterId) {
+    public void setRefCourtReporterId(Integer refCourtReporterId) {
         this.refCourtReporterId = refCourtReporterId;
     }
 
@@ -128,7 +129,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         return refJusticeId;
     }
 
-    public final void setRefJusticeId(Integer refJusticeId) {
+    public void setRefJusticeId(Integer refJusticeId) {
         this.refJusticeId = refJusticeId;
     }
 }

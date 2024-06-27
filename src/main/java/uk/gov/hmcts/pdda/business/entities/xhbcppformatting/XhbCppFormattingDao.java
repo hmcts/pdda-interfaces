@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_FORMATTING")
 @NamedQuery(name = "XHB_CPP_FORMATTING.findByCourtAndDocType",
     query = "SELECT o from XHB_CPP_FORMATTING o WHERE o.courtId = :courtId AND o.documentType "
@@ -104,7 +105,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return cppFormattingId;
     }
 
-    public final void setCppFormattingId(final Integer cppFormattingId) {
+    public void setCppFormattingId(final Integer cppFormattingId) {
         this.cppFormattingId = cppFormattingId;
     }
 
@@ -112,7 +113,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return stagingTableId;
     }
 
-    public final void setStagingTableId(Integer stagingTableId) {
+    public void setStagingTableId(Integer stagingTableId) {
         this.stagingTableId = stagingTableId;
     }
 
@@ -120,7 +121,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return dateIn;
     }
 
-    public final void setDateIn(final LocalDateTime dateIn) {
+    public void setDateIn(final LocalDateTime dateIn) {
         this.dateIn = dateIn;
     }
 
@@ -128,7 +129,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return formatStatus;
     }
 
-    public final void setFormatStatus(final String formatStatus) {
+    public void setFormatStatus(final String formatStatus) {
         this.formatStatus = formatStatus;
     }
 
@@ -136,7 +137,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return documentType;
     }
 
-    public final void setDocumentType(final String documentType) {
+    public void setDocumentType(final String documentType) {
         this.documentType = documentType;
     }
 
@@ -144,7 +145,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return courtId;
     }
 
-    public final void setCourtId(final Integer courtId) {
+    public void setCourtId(final Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -152,7 +153,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return xmlDocumentClobId;
     }
 
-    public final void setXmlDocumentClobId(final Long xmlDocumentClobId) {
+    public void setXmlDocumentClobId(final Long xmlDocumentClobId) {
         this.xmlDocumentClobId = xmlDocumentClobId;
     }
 
@@ -160,7 +161,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return errorMessage;
     }
 
-    public final void setErrorMessage(final String errorMessage) {
+    public void setErrorMessage(final String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
@@ -168,7 +169,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return obsInd;
     }
 
-    public final void setObsInd(final String obsInd) {
+    public void setObsInd(final String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -176,7 +177,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -184,7 +185,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return creationDate;
     }
 
-    public final void setCreationDate(final LocalDateTime creationDate) {
+    public void setCreationDate(final LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -192,7 +193,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(final String lastUpdatedBy) {
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -200,7 +201,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         return createdBy;
     }
 
-    public final void setCreatedBy(final String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -210,7 +211,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
     }
 
     @Override
-    public final void setVersion(final Integer version) {
+    public void setVersion(final Integer version) {
         this.version = version;
     }
 

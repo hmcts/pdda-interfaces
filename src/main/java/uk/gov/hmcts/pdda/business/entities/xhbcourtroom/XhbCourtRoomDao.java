@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import java.io.Serializable;
 import java.util.Collection;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURT_ROOM")
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteId",
     query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId ")
@@ -112,7 +112,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -120,7 +120,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return courtRoomName;
     }
 
-    public final void setCourtRoomName(String courtRoomName) {
+    public void setCourtRoomName(String courtRoomName) {
         this.courtRoomName = courtRoomName;
     }
 
@@ -128,7 +128,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return description;
     }
 
-    public final void setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -136,7 +136,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return crestCourtRoomNo;
     }
 
-    public final void setCrestCourtRoomNo(Integer crestCourtRoomNo) {
+    public void setCrestCourtRoomNo(Integer crestCourtRoomNo) {
         this.crestCourtRoomNo = crestCourtRoomNo;
     }
 
@@ -144,7 +144,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return courtSiteId;
     }
 
-    public final void setCourtSiteId(Integer courtSiteId) {
+    public void setCourtSiteId(Integer courtSiteId) {
         this.courtSiteId = courtSiteId;
     }
 
@@ -152,7 +152,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return displayName;
     }
 
-    public final void setDisplayName(String displayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
@@ -160,7 +160,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return securityInd;
     }
 
-    public final void setSecurityInd(String securityInd) {
+    public void setSecurityInd(String securityInd) {
         this.securityInd = securityInd;
     }
 
@@ -168,7 +168,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return videoInd;
     }
 
-    public final void setVideoInd(String videoInd) {
+    public void setVideoInd(String videoInd) {
         this.videoInd = videoInd;
     }
 
@@ -176,7 +176,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -184,7 +184,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return multiSiteDisplayName;
     }
 
-    public final void setMultiSiteDisplayName(String multiSiteDisplayName) {
+    public void setMultiSiteDisplayName(String multiSiteDisplayName) {
         this.multiSiteDisplayName = multiSiteDisplayName;
     }
 
@@ -192,7 +192,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return xhbCrLiveDisplays;
     }
 
-    public final void setXhbCrLiveDisplays(Collection<XhbCrLiveDisplayDao> xhbCrLiveDisplays) {
+    public void setXhbCrLiveDisplays(Collection<XhbCrLiveDisplayDao> xhbCrLiveDisplays) {
         this.xhbCrLiveDisplays = xhbCrLiveDisplays;
     }
 
@@ -200,7 +200,7 @@ public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializabl
         return xhbConfiguredPublicNotices;
     }
 
-    public final void setXhbConfiguredPublicNotices(
+    public void setXhbConfiguredPublicNotices(
         Collection<XhbConfiguredPublicNoticeDao> xhbConfiguredPublicNotices) {
         this.xhbConfiguredPublicNotices = xhbConfiguredPublicNotices;
     }

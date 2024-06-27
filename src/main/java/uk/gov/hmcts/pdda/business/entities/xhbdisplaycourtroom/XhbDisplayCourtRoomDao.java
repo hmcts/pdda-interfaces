@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DISPLAY_COURT_ROOM")
 @NamedQuery(name = "XHB_DISPLAY_COURT_ROOM.findByDisplayId",
     query = "SELECT o from XHB_DISPLAY_COURT_ROOM o WHERE o.displayId = :displayId")
@@ -42,7 +43,7 @@ public class XhbDisplayCourtRoomDao extends AbstractDao implements Serializable 
         return displayId;
     }
 
-    public final void setDisplayId(Integer displayId) {
+    public void setDisplayId(Integer displayId) {
         this.displayId = displayId;
     }
 
@@ -50,7 +51,7 @@ public class XhbDisplayCourtRoomDao extends AbstractDao implements Serializable 
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -60,6 +61,6 @@ public class XhbDisplayCourtRoomDao extends AbstractDao implements Serializable 
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
     }
 }
