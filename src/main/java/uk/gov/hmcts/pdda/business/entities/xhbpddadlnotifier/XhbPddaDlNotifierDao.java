@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_PDDA_DL_NOTIFIER")
 @NamedQuery(name = "XHB_PDDA_DL_NOTIFIER.findByCourtAndLastRunDate",
     query = "SELECT o from XHB_PDDA_DL_NOTIFIER o WHERE o.courtId = :courtId AND o.lastRunDate = :lastRunDate "
@@ -71,7 +71,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return pddaDlNotifierId;
     }
 
-    public final void setPddaDlNotifierId(Integer pddaDlNotifierId) {
+    public void setPddaDlNotifierId(Integer pddaDlNotifierId) {
         this.pddaDlNotifierId = pddaDlNotifierId;
     }
 
@@ -79,7 +79,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -87,7 +87,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return lastRunDate;
     }
 
-    public final void setLastRunDate(LocalDateTime lastRunDate) {
+    public void setLastRunDate(LocalDateTime lastRunDate) {
         this.lastRunDate = lastRunDate;
     }
 
@@ -95,7 +95,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return status;
     }
 
-    public final void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -103,7 +103,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return errorMessage;
     }
 
-    public final void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
@@ -111,7 +111,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 

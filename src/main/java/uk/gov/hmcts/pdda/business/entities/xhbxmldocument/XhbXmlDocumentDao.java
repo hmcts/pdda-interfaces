@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_XML_DOCUMENT")
 @NamedQuery(name = "XHB_XML_DOCUMENT.findListByClobId",
     query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.xmlDocumentClobId = "
@@ -95,7 +96,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return xmlDocumentId;
     }
 
-    public final void setXmlDocumentId(Integer xmlDocumentId) {
+    public void setXmlDocumentId(Integer xmlDocumentId) {
         this.xmlDocumentId = xmlDocumentId;
     }
 
@@ -103,7 +104,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return dateCreated;
     }
 
-    public final void setDateCreated(LocalDateTime dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -111,7 +112,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return documentTitle;
     }
 
-    public final void setDocumentTitle(String documentTitle) {
+    public void setDocumentTitle(String documentTitle) {
         this.documentTitle = documentTitle;
     }
 
@@ -119,7 +120,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return xmlDocumentClobId;
     }
 
-    public final void setXmlDocumentClobId(Long xmlDocumentClobId) {
+    public void setXmlDocumentClobId(Long xmlDocumentClobId) {
         this.xmlDocumentClobId = xmlDocumentClobId;
     }
 
@@ -127,7 +128,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return status;
     }
 
-    public final void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -135,7 +136,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return documentType;
     }
 
-    public final void setDocumentType(String documentType) {
+    public void setDocumentType(String documentType) {
         this.documentType = documentType;
     }
 
@@ -143,7 +144,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return expiryDate;
     }
 
-    public final void setExpiryDate(LocalDateTime expiryDate) {
+    public void setExpiryDate(LocalDateTime expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -151,7 +152,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -159,7 +160,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -167,7 +168,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return creationDate;
     }
 
-    public final void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -175,7 +176,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(String lastUpdatedBy) {
+    public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -183,7 +184,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         return createdBy;
     }
 
-    public final void setCreatedBy(String createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -193,7 +194,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

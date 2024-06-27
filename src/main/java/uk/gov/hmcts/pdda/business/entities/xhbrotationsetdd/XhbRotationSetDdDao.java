@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_ROTATION_SET_DD")
 @NamedQuery(name = "XHB_ROTATION_SET_DD.findByRotationSetId",
     query = "SELECT o from XHB_ROTATION_SET_DD o WHERE o.rotationSetId = :rotationSetId ")
@@ -65,7 +65,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         return rotationSetDdId;
     }
 
-    public final void setRotationSetDdId(Integer rotationSetDdId) {
+    public void setRotationSetDdId(Integer rotationSetDdId) {
         this.rotationSetDdId = rotationSetDdId;
     }
 
@@ -73,7 +73,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         return displayDocumentId;
     }
 
-    public final void setDisplayDocumentId(Integer displayDocumentId) {
+    public void setDisplayDocumentId(Integer displayDocumentId) {
         this.displayDocumentId = displayDocumentId;
     }
 
@@ -81,7 +81,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         return pageDelay;
     }
 
-    public final void setPageDelay(Integer pageDelay) {
+    public void setPageDelay(Integer pageDelay) {
         this.pageDelay = pageDelay;
     }
 
@@ -89,7 +89,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         return ordering;
     }
 
-    public final void setOrdering(Integer ordering) {
+    public void setOrdering(Integer ordering) {
         this.ordering = ordering;
     }
 
@@ -97,7 +97,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         return rotationSetId;
     }
 
-    public final void setRotationSetId(Integer rotationSetId) {
+    public void setRotationSetId(Integer rotationSetId) {
         this.rotationSetId = rotationSetId;
     }
 

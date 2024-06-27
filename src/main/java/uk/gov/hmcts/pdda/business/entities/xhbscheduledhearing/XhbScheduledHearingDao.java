@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_SCHEDULED_HEARING")
 @NamedQuery(name = "XHB_SCHEDULED_HEARING.findByHearingId",
     query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.hearingId = :hearingId")
@@ -120,7 +120,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return scheduledHearingId;
     }
 
-    public final void setScheduledHearingId(Integer scheduledHearingId) {
+    public void setScheduledHearingId(Integer scheduledHearingId) {
         this.scheduledHearingId = scheduledHearingId;
     }
 
@@ -128,7 +128,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return sequenceNo;
     }
 
-    public final void setSequenceNo(Integer sequenceNo) {
+    public void setSequenceNo(Integer sequenceNo) {
         this.sequenceNo = sequenceNo;
     }
 
@@ -136,7 +136,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return notBeforeTime;
     }
 
-    public final void setNotBeforeTime(LocalDateTime notBeforeTime) {
+    public void setNotBeforeTime(LocalDateTime notBeforeTime) {
         this.notBeforeTime = notBeforeTime;
     }
 
@@ -144,7 +144,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return originalTime;
     }
 
-    public final void setOriginalTime(LocalDateTime originalTime) {
+    public void setOriginalTime(LocalDateTime originalTime) {
         this.originalTime = originalTime;
     }
 
@@ -152,7 +152,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return listingNote;
     }
 
-    public final void setListingNote(String listingNote) {
+    public void setListingNote(String listingNote) {
         this.listingNote = listingNote;
     }
 
@@ -160,7 +160,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return hearingProgress;
     }
 
-    public final void setHearingProgress(Integer hearingProgress) {
+    public void setHearingProgress(Integer hearingProgress) {
         this.hearingProgress = hearingProgress;
     }
 
@@ -168,7 +168,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return sittingId;
     }
 
-    public final void setSittingId(Integer sittingId) {
+    public void setSittingId(Integer sittingId) {
         this.sittingId = sittingId;
     }
 
@@ -176,7 +176,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return hearingId;
     }
 
-    public final void setHearingId(Integer hearingId) {
+    public void setHearingId(Integer hearingId) {
         this.hearingId = hearingId;
     }
 
@@ -184,7 +184,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return movedFrom;
     }
 
-    public final void setMovedFrom(String movedFrom) {
+    public void setMovedFrom(String movedFrom) {
         this.movedFrom = movedFrom;
     }
 
@@ -192,7 +192,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return movedFromCourtRoomId;
     }
 
-    public final void setMovedFromCourtRoomId(Integer movedFromCourtRoomId) {
+    public void setMovedFromCourtRoomId(Integer movedFromCourtRoomId) {
         this.movedFromCourtRoomId = movedFromCourtRoomId;
     }
 
@@ -200,7 +200,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return isCaseActive;
     }
 
-    public final void setIsCaseActive(String isCaseActive) {
+    public void setIsCaseActive(String isCaseActive) {
         this.isCaseActive = isCaseActive;
     }
 
@@ -208,7 +208,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -216,7 +216,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return creationDate;
     }
 
-    public final void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -224,7 +224,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(String lastUpdatedBy) {
+    public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -232,7 +232,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return createdBy;
     }
 
-    public final void setCreatedBy(String createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -242,7 +242,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -250,7 +250,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return sitting;
     }
 
-    public final void setXhbSitting(XhbSittingDao sitting) {
+    public void setXhbSitting(XhbSittingDao sitting) {
         this.sitting = sitting;
     }
 
@@ -258,7 +258,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         return crLiveDisplays;
     }
 
-    public final void setXhbCrLiveDisplays(Collection<XhbCrLiveDisplayDao> crLiveDisplays) {
+    public void setXhbCrLiveDisplays(Collection<XhbCrLiveDisplayDao> crLiveDisplays) {
         this.crLiveDisplays = crLiveDisplays;
     }
 

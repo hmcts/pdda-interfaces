@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DISPLAY")
 @NamedQuery(name = "XHB_DISPLAY.findByRotationSetId",
     query = "SELECT o from XHB_DISPLAY o WHERE o.rotationSetId = :rotationSetId ")
@@ -74,7 +74,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return displayId;
     }
 
-    public final void setDisplayId(Integer displayId) {
+    public void setDisplayId(Integer displayId) {
         this.displayId = displayId;
     }
 
@@ -82,7 +82,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return displayTypeId;
     }
 
-    public final void setDisplayTypeId(Integer displayTypeId) {
+    public void setDisplayTypeId(Integer displayTypeId) {
         this.displayTypeId = displayTypeId;
     }
 
@@ -90,7 +90,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return displayLocationId;
     }
 
-    public final void setDisplayLocationId(Integer displayLocationId) {
+    public void setDisplayLocationId(Integer displayLocationId) {
         this.displayLocationId = displayLocationId;
     }
 
@@ -98,7 +98,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return rotationSetId;
     }
 
-    public final void setRotationSetId(Integer rotationSetId) {
+    public void setRotationSetId(Integer rotationSetId) {
         this.rotationSetId = rotationSetId;
     }
 
@@ -106,7 +106,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return descriptionCode;
     }
 
-    public final void setDescriptionCode(String descriptionCode) {
+    public void setDescriptionCode(String descriptionCode) {
         this.descriptionCode = descriptionCode;
     }
 
@@ -114,7 +114,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return locale;
     }
 
-    public final void setLocale(String locale) {
+    public void setLocale(String locale) {
         this.locale = locale;
     }
 
@@ -122,7 +122,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         return showUnassignedYn;
     }
 
-    public final void setShowUnassignedYn(String showUnassignedYn) {
+    public void setShowUnassignedYn(String showUnassignedYn) {
         this.showUnassignedYn = showUnassignedYn;
     }
 
