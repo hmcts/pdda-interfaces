@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -150,9 +151,15 @@ class CourtelHelperTest {
     void testSendCourtelList() {
         // Setup
         XhbCourtelListDao xhbCourtelListDao = getDummyCourtelList();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("DL");
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class)))
             .andReturn(xhbCourtelListDao.getBlob());
+        EasyMock.expect(mockXhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId()))
+            .andReturn(Optional.of(xhbXmlDocumentDao));
         EasyMock.replay(mockBlobHelper);
+        EasyMock.replay(mockXhbXmlDocumentRepository);
+
         boolean result;
         // Run
         classUnderTest.sendCourtelList(xhbCourtelListDao);
@@ -169,6 +176,7 @@ class CourtelHelperTest {
         xhbCourtelListDao.setBlob(DummyFormattingUtil.getXhbBlobDao(blobData));
         xhbCourtelListDao.setXmlDocumentClobId(id);
         xhbCourtelListDao.setBlobId(id);
+        xhbCourtelListDao.setLastUpdateDate(LocalDateTime.now());
         return xhbCourtelListDao;
     }
 

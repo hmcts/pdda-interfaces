@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -134,9 +136,26 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        String json = getCathHelper()
-            .generateJsonString(getCathHelper().populateCourtelListBlob(xhbCourtelListDao));
+        String json = getCathHelper().generateJsonString(
+            getCathHelper().populateCourtelListBlob(xhbCourtelListDao),
+            getJsonObjectByDocType(xhbCourtelListDao));
         getCathHelper().send(json);
+    }
+
+    private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
+            xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
+
+        if (!xhbXmlDocumentDao.isEmpty()) {
+            ListJson listJson = new ListJson();
+            listJson.setListType(xhbXmlDocumentDao.get().getDocumentType());
+            listJson.setCourtId(xhbXmlDocumentDao.get().getCourtId());
+            listJson.setContentDate(LocalDateTime.now());
+            listJson.setProvenance("UK");
+            listJson.setLanguage("en");
+            return new ListJson();
+        }
+        return new CourtelJson();
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {

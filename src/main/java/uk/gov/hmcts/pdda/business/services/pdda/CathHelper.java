@@ -40,10 +40,9 @@ public class CathHelper {
         return xhbCourtelListDao;
     }
 
-    public String generateJsonString(XhbCourtelListDao xhbCourtelListDao) {
+    public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-        CourtelJson courtelJson = new CourtelJson();
         try {
             courtelJson.setJson(mapper.writeValueAsString(xhbCourtelListDao));
         } catch (JsonProcessingException e) {
