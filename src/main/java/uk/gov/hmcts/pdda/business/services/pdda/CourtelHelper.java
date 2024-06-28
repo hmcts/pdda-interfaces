@@ -7,6 +7,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.WebPageJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -143,19 +144,41 @@ public class CourtelHelper {
     }
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
+        boolean isListType = false;
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
 
         if (!xhbXmlDocumentDao.isEmpty()) {
-            ListJson listJson = new ListJson();
-            listJson.setListType(xhbXmlDocumentDao.get().getDocumentType());
-            listJson.setCourtId(xhbXmlDocumentDao.get().getCourtId());
-            listJson.setContentDate(LocalDateTime.now());
-            listJson.setProvenance("UK");
-            listJson.setLanguage("en");
-            return new ListJson();
+            // Check for a List Type
+            for (String docType : VALID_LISTS) {
+                if (xhbXmlDocumentDao.get().getDocumentType().equals(docType)) {
+                    isListType = true;
+                }
+            }
+            // Set the correct JsonObject
+            if (isListType) {
+                return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
+            } else {
+                return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
+            }
         }
-        return new CourtelJson();
+        return null;
+    }
+    
+    private CourtelJson populateJsonObject(CourtelJson jsonObject, XhbXmlDocumentDao xhbXmlDocumentDao) {
+        // Populate type specific fields
+        if (jsonObject instanceof ListJson listJson) {
+            listJson.setListType(xhbXmlDocumentDao.getDocumentType());
+        } else if (jsonObject instanceof WebPageJson webPageJson) {
+            webPageJson.setIsWebPage(true);
+        }
+        // Populate shared fields
+        jsonObject.setCourtId(xhbXmlDocumentDao.getCourtId());
+        jsonObject.setContentDate(LocalDateTime.now());
+        jsonObject.setProvenance("UK");
+        jsonObject.setLanguage("en");
+        
+        return jsonObject;
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {

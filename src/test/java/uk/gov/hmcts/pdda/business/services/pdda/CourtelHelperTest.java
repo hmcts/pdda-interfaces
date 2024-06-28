@@ -149,10 +149,19 @@ class CourtelHelperTest {
 
     @Test
     void testSendCourtelList() {
+        testSendCourtelList("DL");
+    }
+    
+    @Test
+    void testSendCourtelListWebPage() {
+        testSendCourtelList("IWP");
+    }
+    
+    void testSendCourtelList(String type) {
         // Setup
         XhbCourtelListDao xhbCourtelListDao = getDummyCourtelList();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
-        xhbXmlDocumentDao.setDocumentType("DL");
+        xhbXmlDocumentDao.setDocumentType(type);
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class)))
             .andReturn(xhbCourtelListDao.getBlob());
         EasyMock.expect(mockXhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId()))
