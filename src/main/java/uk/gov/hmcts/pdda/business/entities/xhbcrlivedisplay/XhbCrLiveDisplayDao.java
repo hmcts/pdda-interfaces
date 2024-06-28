@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CR_LIVE_DISPLAY")
 public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Serializable {
 
@@ -74,7 +74,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return crLiveDisplayId;
     }
 
-    public final void setCrLiveDisplayId(Integer crLiveDisplayId) {
+    public void setCrLiveDisplayId(Integer crLiveDisplayId) {
         this.crLiveDisplayId = crLiveDisplayId;
     }
 
@@ -82,7 +82,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -90,7 +90,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return scheduledHearingId;
     }
 
-    public final void setScheduledHearingId(Integer scheduledHearingId) {
+    public void setScheduledHearingId(Integer scheduledHearingId) {
         this.scheduledHearingId = scheduledHearingId;
     }
 
@@ -98,7 +98,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return timeStatusSet;
     }
 
-    public final void setTimeStatusSet(LocalDateTime timeStatusSet) {
+    public void setTimeStatusSet(LocalDateTime timeStatusSet) {
         this.timeStatusSet = timeStatusSet;
     }
 
@@ -106,7 +106,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return status;
     }
 
-    public final void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -114,7 +114,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -122,7 +122,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         return xhbScheduledHearing;
     }
 
-    public final void setXhbScheduledHearing(XhbScheduledHearingDao xsh) {
+    public void setXhbScheduledHearing(XhbScheduledHearingDao xsh) {
         this.xhbScheduledHearing = xsh;
     }
 

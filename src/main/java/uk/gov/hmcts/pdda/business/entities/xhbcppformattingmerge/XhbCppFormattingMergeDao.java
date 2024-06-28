@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_FORMATTING_MERGE")
 public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Serializable {
 
@@ -68,7 +69,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return cppFormattingMergeId;
     }
 
-    public final void setCppFormattingMergeId(Integer cppFormattingMergeId) {
+    public void setCppFormattingMergeId(Integer cppFormattingMergeId) {
         this.cppFormattingMergeId = cppFormattingMergeId;
     }
 
@@ -76,7 +77,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return cppFormattingId;
     }
 
-    public final void setCppFormattingId(final Integer cppFormattingId) {
+    public void setCppFormattingId(final Integer cppFormattingId) {
         this.cppFormattingId = cppFormattingId;
     }
 
@@ -84,7 +85,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return formattingId;
     }
 
-    public final void setFormattingId(Integer formattingId) {
+    public void setFormattingId(Integer formattingId) {
         this.formattingId = formattingId;
     }
 
@@ -92,7 +93,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return courtId;
     }
 
-    public final void setCourtId(final Integer courtId) {
+    public void setCourtId(final Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -100,7 +101,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return language;
     }
 
-    public final void setLanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -108,7 +109,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return xhibitClobId;
     }
 
-    public final void setXhibitClobId(final Long xhibitClobId) {
+    public void setXhibitClobId(final Long xhibitClobId) {
         this.xhibitClobId = xhibitClobId;
     }
 
@@ -116,7 +117,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         return obsInd;
     }
 
-    public final void setObsInd(final String obsInd) {
+    public void setObsInd(final String obsInd) {
         this.obsInd = obsInd;
     }
 

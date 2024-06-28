@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURT_LOG_EVENT_DESC")
 public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable {
     private static final long serialVersionUID = -6788003970955114552L;
@@ -111,7 +111,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return eventDescId;
     }
 
-    public final void setEventDescId(Integer eventDescId) {
+    public void setEventDescId(Integer eventDescId) {
         this.eventDescId = eventDescId;
     }
 
@@ -119,7 +119,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return flaggedEvent;
     }
 
-    public final void setFlaggedEvent(Integer flaggedEvent) {
+    public void setFlaggedEvent(Integer flaggedEvent) {
         this.flaggedEvent = flaggedEvent;
     }
 
@@ -127,7 +127,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return editable;
     }
 
-    public final void setEditable(Integer editable) {
+    public void setEditable(Integer editable) {
         this.editable = editable;
     }
 
@@ -135,7 +135,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return sendToMercator;
     }
 
-    public final void setSendToMercator(Integer sendToMercator) {
+    public void setSendToMercator(Integer sendToMercator) {
         this.sendToMercator = sendToMercator;
     }
 
@@ -143,7 +143,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return updateLinkedCases;
     }
 
-    public final void setUpdateLinkedCases(Integer updateLinkedCases) {
+    public void setUpdateLinkedCases(Integer updateLinkedCases) {
         this.updateLinkedCases = updateLinkedCases;
     }
 
@@ -151,7 +151,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return publishToSubscribers;
     }
 
-    public final void setPublishToSubscribers(Integer publishToSubscribers) {
+    public void setPublishToSubscribers(Integer publishToSubscribers) {
         this.publishToSubscribers = publishToSubscribers;
     }
 
@@ -159,7 +159,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return clearPublicDisplays;
     }
 
-    public final void setClearPublicDisplays(Integer clearPublicDisplays) {
+    public void setClearPublicDisplays(Integer clearPublicDisplays) {
         this.clearPublicDisplays = clearPublicDisplays;
     }
 
@@ -167,7 +167,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return electronicInform;
     }
 
-    public final void setElectronicInform(Integer electronicInform) {
+    public void setElectronicInform(Integer electronicInform) {
         this.electronicInform = electronicInform;
     }
 
@@ -175,7 +175,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return publicDisplay;
     }
 
-    public final void setPublicDisplay(Integer publicDisplay) {
+    public void setPublicDisplay(Integer publicDisplay) {
         this.publicDisplay = publicDisplay;
     }
 
@@ -183,7 +183,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return linkedCaseText;
     }
 
-    public final void setLinkedCaseText(String linkedCaseText) {
+    public void setLinkedCaseText(String linkedCaseText) {
         this.linkedCaseText = linkedCaseText;
     }
 
@@ -191,7 +191,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return eventDescription;
     }
 
-    public final void setEventDescription(String eventDescription) {
+    public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
     }
 
@@ -199,7 +199,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return eventType;
     }
 
-    public final void setEventType(Integer eventType) {
+    public void setEventType(Integer eventType) {
         this.eventType = eventType;
     }
 
@@ -207,7 +207,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return publicNotice;
     }
 
-    public final void setPublicNotice(Integer publicNotice) {
+    public void setPublicNotice(Integer publicNotice) {
         this.publicNotice = publicNotice;
     }
 
@@ -215,7 +215,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return shortDescription;
     }
 
-    public final void setShortDescription(String shortDescription) {
+    public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
     }
 
@@ -223,7 +223,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -231,7 +231,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return creationDate;
     }
 
-    public final void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -239,7 +239,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(String lastUpdatedBy) {
+    public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -247,7 +247,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         return createdBy;
     }
 
-    public final void setCreatedBy(String createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -257,7 +257,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

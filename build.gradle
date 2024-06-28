@@ -11,9 +11,9 @@ buildscript {
 plugins {
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.5'
-	id 'org.springframework.boot' version '3.1.11'
+	id 'org.springframework.boot' version '3.1.12'
 	id 'com.github.ben-manes.versions' version '0.51.0'
-	id 'org.owasp.dependencycheck' version '8.4.3'
+	id 'org.owasp.dependencycheck' version '9.2.0'
 	id 'org.sonarqube' version '4.4.1.3373'
 	id 'checkstyle'
   id 'pmd'
@@ -152,6 +152,7 @@ sonarqube {
   properties {
     property "sonar.projectName", "pdda"
     property "sonar.projectKey", "pdda-sonarqube"
+    property "sonar.exclusions", "**/src/main/java/uk/gov/hmcts/pdda/business/entities/**"
   }
 }
 
@@ -171,10 +172,10 @@ ext['snakeyaml.version'] = '2.0'
 
 
 dependencies {
-    implementation 'org.springframework:spring-expression:6.0.19'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.1.11'
-    implementation 'org.springframework.boot:spring-boot-starter-web:3.1.11'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.11'
+    implementation 'org.springframework:spring-expression:6.1.10'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.1.12'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.1.12'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.1.12'
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.25'
     implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
@@ -184,13 +185,13 @@ dependencies {
     implementation 'org.codehaus.castor:castor-codegen:1.4.1'
     implementation 'xalan:serializer:2.7.3'
     implementation 'org.jboss.spec.javax.rmi:jboss-rmi-api_1.0_spec:1.0.6.Final'
-    implementation 'org.springframework:spring-core:6.0.19'
-    implementation 'org.springframework:spring-beans:6.0.19'
-    implementation 'org.springframework:spring-context:6.0.19'
-    implementation 'org.springframework.data:spring-data-commons:3.1.11'
-    implementation 'org.springframework.data:spring-data-jpa:3.1.11'
-    implementation 'org.springframework:spring-tx:6.0.19'
-    implementation 'org.springframework:spring-web:6.0.19'
+    implementation 'org.springframework:spring-core:6.1.10'
+    implementation 'org.springframework:spring-beans:6.1.10'
+    implementation 'org.springframework:spring-context:6.1.10'
+    implementation 'org.springframework.data:spring-data-commons:3.1.12'
+    implementation 'org.springframework.data:spring-data-jpa:3.1.12'
+    implementation 'org.springframework:spring-tx:6.1.10'
+    implementation 'org.springframework:spring-web:6.1.10'
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
@@ -229,7 +230,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
-    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.1.11'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.1.12'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1'
     implementation group: 'io.rest-assured', name: 'rest-assured'

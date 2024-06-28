@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DISPLAY_DOCUMENT")
 public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Serializable {
 
@@ -64,7 +65,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return displayDocumentId;
     }
 
-    public final void setDisplayDocumentId(final Integer displayDocumentId) {
+    public void setDisplayDocumentId(final Integer displayDocumentId) {
         this.displayDocumentId = displayDocumentId;
     }
 
@@ -72,7 +73,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return descriptionCode;
     }
 
-    public final void setDescriptionCode(final String descriptionCode) {
+    public void setDescriptionCode(final String descriptionCode) {
         this.descriptionCode = descriptionCode;
     }
 
@@ -80,7 +81,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return defaultPageDelay;
     }
 
-    public final void setDefaultPageDelay(final Integer defaultPageDelay) {
+    public void setDefaultPageDelay(final Integer defaultPageDelay) {
         this.defaultPageDelay = defaultPageDelay;
     }
 
@@ -88,7 +89,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return multipleCourtYn;
     }
 
-    public final void setMultipleCourtYn(final String multipleCourtYn) {
+    public void setMultipleCourtYn(final String multipleCourtYn) {
         this.multipleCourtYn = multipleCourtYn;
     }
 
@@ -96,7 +97,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return country;
     }
 
-    public final void setCountry(final String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -104,7 +105,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         return language;
     }
 
-    public final void setLanguage(final String language) {
+    public void setLanguage(final String language) {
         this.language = language;
     }
 

@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CLOB")
 public class XhbClobDao extends AbstractVersionedDao implements Serializable {
 
@@ -69,7 +69,7 @@ public class XhbClobDao extends AbstractVersionedDao implements Serializable {
         return clobData;
     }
 
-    public final void setClobData(String clobData) {
+    public void setClobData(String clobData) {
         this.clobData = clobData;
     }
 

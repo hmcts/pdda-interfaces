@@ -28,6 +28,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
+    private static final String EMPTY_STRING = "";
+    private static final String OAUTHTOKEN_PLACEHOLDER = "<OAuthToken>";
 
     private final BlobHelper blobHelper;
 
@@ -53,6 +55,40 @@ public class CathHelper {
 
     public void send(String jsonString) {
         LOG.debug("send({})", jsonString);
-        // TODO PDDA-364
+        // Get the credentials for the azure server
+        String credentials = getCredentials();
+        // Get the authentication token
+        String token = getToken(credentials);
+        // Add the authentication token to the json header
+        String jsonWithToken = addTokenToJsonHeader(token, jsonString);
+        // Post the json to CaTH
+        String errorMessage = postJsonToCath(jsonWithToken);
+        if (!EMPTY_STRING.equals(errorMessage)) {
+            LOG.error("Error sending Json: {}",jsonString);
+            LOG.error("Error from CaTH: {}",errorMessage);
+        }
+    }
+    
+    protected String getCredentials() {
+        LOG.debug("getCredentials()");
+        // PDDA-388
+        return "";
+    }
+    
+    protected String getToken(String credentials) {
+        LOG.debug("getToken()");
+        // PDDA-389
+        return "";
+    }
+    
+    protected String addTokenToJsonHeader(String token, String jsonString) {
+        LOG.debug("addTokenToJsonHeader()");
+        return jsonString.replace(OAUTHTOKEN_PLACEHOLDER, token);
+    }
+    
+    protected String postJsonToCath(String jsonWithToken) {
+        LOG.debug("postJsonToCath()");
+        // TODO
+        return EMPTY_STRING;
     }
 }

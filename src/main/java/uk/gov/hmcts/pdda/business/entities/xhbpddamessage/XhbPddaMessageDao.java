@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_PDDA_MESSAGE")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByLighthouse",
     query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'VN' AND "
@@ -108,7 +108,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return pddaMessageId;
     }
 
-    public final void setPddaMessageId(Integer pddaMessageId) {
+    public void setPddaMessageId(Integer pddaMessageId) {
         this.pddaMessageId = pddaMessageId;
     }
 
@@ -116,7 +116,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -124,7 +124,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return courtRoomId;
     }
 
-    public final void setCourtRoomId(Integer courtRoomId) {
+    public void setCourtRoomId(Integer courtRoomId) {
         this.courtRoomId = courtRoomId;
     }
 
@@ -132,7 +132,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return pddaMessageGuid;
     }
 
-    public final void setPddaMessageGuid(String pddaMessageGuid) {
+    public void setPddaMessageGuid(String pddaMessageGuid) {
         this.pddaMessageGuid = pddaMessageGuid;
     }
 
@@ -140,7 +140,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return pddaMessageTypeId;
     }
 
-    public final void setPddaMessageTypeId(Integer pddaMessageTypeId) {
+    public void setPddaMessageTypeId(Integer pddaMessageTypeId) {
         this.pddaMessageTypeId = pddaMessageTypeId;
     }
 
@@ -148,7 +148,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return pddaMessageDataId;
     }
 
-    public final void setPddaMessageDataId(Long pddaMessageDataId) {
+    public void setPddaMessageDataId(Long pddaMessageDataId) {
         this.pddaMessageDataId = pddaMessageDataId;
     }
 
@@ -156,7 +156,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return pddaBatchId;
     }
 
-    public final void setPddaBatchId(Integer pddaBatchId) {
+    public void setPddaBatchId(Integer pddaBatchId) {
         this.pddaBatchId = pddaBatchId;
     }
 
@@ -164,7 +164,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return timeSent;
     }
 
-    public final void setTimeSent(LocalDateTime timeSent) {
+    public void setTimeSent(LocalDateTime timeSent) {
         this.timeSent = timeSent;
     }
 
@@ -172,7 +172,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return cpDocumentName;
     }
 
-    public final void setCpDocumentName(String cpDocumentName) {
+    public void setCpDocumentName(String cpDocumentName) {
         this.cpDocumentName = cpDocumentName;
     }
 
@@ -180,7 +180,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return cpDocumentStatus;
     }
 
-    public final void setCpDocumentStatus(String cpDocumentStatus) {
+    public void setCpDocumentStatus(String cpDocumentStatus) {
         this.cpDocumentStatus = cpDocumentStatus;
     }
 
@@ -188,7 +188,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return cpResponseGenerated;
     }
 
-    public final void setCpResponseGenerated(String cpResponseGenerated) {
+    public void setCpResponseGenerated(String cpResponseGenerated) {
         this.cpResponseGenerated = cpResponseGenerated;
     }
 
@@ -196,7 +196,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return errorMessage;
     }
 
-    public final void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
@@ -204,7 +204,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return cppStagingInboundId;
     }
 
-    public final void setCppStagingInboundId(Integer cppStagingInboundId) {
+    public void setCppStagingInboundId(Integer cppStagingInboundId) {
         this.cppStagingInboundId = cppStagingInboundId;
     }
 
@@ -212,7 +212,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 

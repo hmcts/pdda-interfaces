@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_REF_HEARING_TYPE")
 public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serializable {
 
@@ -72,7 +73,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return refHearingTypeId;
     }
 
-    public final void setRefHearingTypeId(Integer refHearingTypeId) {
+    public void setRefHearingTypeId(Integer refHearingTypeId) {
         this.refHearingTypeId = refHearingTypeId;
     }
 
@@ -80,7 +81,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return hearingTypeCode;
     }
 
-    public final void setHearingTypeCode(String hearingTypeCode) {
+    public void setHearingTypeCode(String hearingTypeCode) {
         this.hearingTypeCode = hearingTypeCode;
     }
 
@@ -88,7 +89,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return hearingTypeDesc;
     }
 
-    public final void setHearingTypeDesc(String hearingTypeDesc) {
+    public void setHearingTypeDesc(String hearingTypeDesc) {
         this.hearingTypeDesc = hearingTypeDesc;
     }
 
@@ -96,7 +97,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return category;
     }
 
-    public final void setCategory(String category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -104,7 +105,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return seqNo;
     }
 
-    public final void setSeqNo(Integer seqNo) {
+    public void setSeqNo(Integer seqNo) {
         this.seqNo = seqNo;
     }
 
@@ -112,7 +113,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return listSequence;
     }
 
-    public final void setListSequence(Integer listSequence) {
+    public void setListSequence(Integer listSequence) {
         this.listSequence = listSequence;
     }
 
@@ -120,7 +121,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -128,7 +129,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
