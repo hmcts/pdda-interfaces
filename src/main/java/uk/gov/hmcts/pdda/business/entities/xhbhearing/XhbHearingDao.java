@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_HEARING")
 @NamedQuery(name = "XHB_HEARING.findByCaseId",
     query = "SELECT o from XHB_HEARING o WHERE o.caseId = :caseId")
@@ -86,7 +87,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return hearingId;
     }
 
-    public final void setHearingId(Integer hearingId) {
+    public void setHearingId(Integer hearingId) {
         this.hearingId = hearingId;
     }
 
@@ -94,7 +95,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return caseId;
     }
 
-    public final void setCaseId(Integer caseId) {
+    public void setCaseId(Integer caseId) {
         this.caseId = caseId;
     }
 
@@ -102,7 +103,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return refHearingTypeId;
     }
 
-    public final void setRefHearingTypeId(Integer refHearingTypeId) {
+    public void setRefHearingTypeId(Integer refHearingTypeId) {
         this.refHearingTypeId = refHearingTypeId;
     }
 
@@ -110,7 +111,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -118,7 +119,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return mpHearingType;
     }
 
-    public final void setMpHearingType(String mpHearingType) {
+    public void setMpHearingType(String mpHearingType) {
         this.mpHearingType = mpHearingType;
     }
 
@@ -126,7 +127,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return lastCalculatedDuration;
     }
 
-    public final void setLastCalculatedDuration(Double lastCalculatedDuration) {
+    public void setLastCalculatedDuration(Double lastCalculatedDuration) {
         this.lastCalculatedDuration = lastCalculatedDuration;
     }
 
@@ -134,7 +135,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return hearingStartDate;
     }
 
-    public final void setHearingStartDate(LocalDateTime hearingStartDate) {
+    public void setHearingStartDate(LocalDateTime hearingStartDate) {
         this.hearingStartDate = hearingStartDate;
     }
 
@@ -142,7 +143,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return hearingEndDate;
     }
 
-    public final void setHearingEndDate(LocalDateTime hearingEndDate) {
+    public void setHearingEndDate(LocalDateTime hearingEndDate) {
         this.hearingEndDate = hearingEndDate;
     }
 
@@ -150,7 +151,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return linkedHearingId;
     }
 
-    public final void setLinkedHearingId(Integer linkedHearingId) {
+    public void setLinkedHearingId(Integer linkedHearingId) {
         this.linkedHearingId = linkedHearingId;
     }
 
@@ -158,7 +159,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         return scheduledHearings;
     }
 
-    public final void setScheduledHearings(Collection<XhbScheduledHearingDao> scheduledHearings) {
+    public void setScheduledHearings(Collection<XhbScheduledHearingDao> scheduledHearings) {
         this.scheduledHearings = scheduledHearings;
     }
 

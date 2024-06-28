@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_STAGING_INBOUND")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationStatus",
     query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
@@ -150,7 +150,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return documentName;
     }
 
-    public final void setDocumentName(String documentName) {
+    public void setDocumentName(String documentName) {
         this.documentName = documentName;
     }
 
@@ -162,7 +162,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return courtCode;
     }
 
-    public final void setCourtCode(String courtCode) {
+    public void setCourtCode(String courtCode) {
         this.courtCode = courtCode;
     }
 
@@ -170,7 +170,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return documentType;
     }
 
-    public final void setDocumentType(String documentType) {
+    public void setDocumentType(String documentType) {
         this.documentType = documentType;
     }
 
@@ -178,7 +178,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return timeLoaded;
     }
 
-    public final void setTimeLoaded(LocalDateTime timeLoaded) {
+    public void setTimeLoaded(LocalDateTime timeLoaded) {
         this.timeLoaded = timeLoaded;
     }
 
@@ -186,7 +186,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return clobId;
     }
 
-    public final void setClobId(Long clobId) {
+    public void setClobId(Long clobId) {
         this.clobId = clobId;
     }
 
@@ -194,7 +194,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return validationStatus;
     }
 
-    public final void setValidationStatus(String validationStatus) {
+    public void setValidationStatus(String validationStatus) {
         this.validationStatus = validationStatus;
     }
 
@@ -202,7 +202,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return acknowledgmentStatus;
     }
 
-    public final void setAcknowledgmentStatus(String acknowledgmentStatus) {
+    public void setAcknowledgmentStatus(String acknowledgmentStatus) {
         this.acknowledgmentStatus = acknowledgmentStatus;
     }
 
@@ -210,7 +210,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return processingStatus;
     }
 
-    public final void setProcessingStatus(String processingStatus) {
+    public void setProcessingStatus(String processingStatus) {
         this.processingStatus = processingStatus;
     }
 
@@ -218,7 +218,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return validationErrorMessage;
     }
 
-    public final void setValidationErrorMessage(String validationErrorMessage) {
+    public void setValidationErrorMessage(String validationErrorMessage) {
         this.validationErrorMessage = validationErrorMessage;
     }
 
@@ -226,7 +226,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -234,7 +234,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -242,7 +242,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return creationDate;
     }
 
-    public final void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -250,7 +250,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(String lastUpdatedBy) {
+    public void setLastUpdatedBy(String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -258,7 +258,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return createdBy;
     }
 
-    public final void setCreatedBy(String createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -268,11 +268,11 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
     }
 
     @Override
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
-    public final void setCppStagingInboundId(Integer cppStagingInboundId) {
+    public void setCppStagingInboundId(Integer cppStagingInboundId) {
         this.cppStagingInboundId = cppStagingInboundId;
     }
 

@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DEFENDANT")
 public class XhbDefendantDao extends AbstractVersionedDao implements Serializable {
 
@@ -60,7 +61,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         return defendantId;
     }
 
-    public final void setDefendantId(Integer defendantId) {
+    public void setDefendantId(Integer defendantId) {
         this.defendantId = defendantId;
     }
 
@@ -68,7 +69,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         return firstName;
     }
 
-    public final void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
@@ -76,7 +77,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         return middleName;
     }
 
-    public final void setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
     }
 
@@ -84,7 +85,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         return surname;
     }
 
-    public final void setSurname(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 
@@ -92,7 +93,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         return publicDisplayHide;
     }
 
-    public final void setPublicDisplayHide(String publicDisplayHide) {
+    public void setPublicDisplayHide(String publicDisplayHide) {
         this.publicDisplayHide = publicDisplayHide;
     }
 

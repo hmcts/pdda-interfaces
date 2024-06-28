@@ -11,7 +11,8 @@ import jakarta.persistence.SequenceGenerator;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.GodClass","PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.GodClass","PMD.CyclomaticComplexity",
+                   "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CASE")
 @NamedQuery(name = "XHB_CASE.findByNumberTypeAndCourt",
     query = "SELECT o from XHB_CASE o WHERE o.caseNumber = :caseNumber "
@@ -282,7 +283,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseId;
     }
 
-    public final void setCaseId(Integer caseId) {
+    public void setCaseId(Integer caseId) {
         this.caseId = caseId;
     }
 
@@ -290,7 +291,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseNumber;
     }
 
-    public final void setCaseNumber(Integer caseNumber) {
+    public void setCaseNumber(Integer caseNumber) {
         this.caseNumber = caseNumber;
     }
 
@@ -298,7 +299,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseType;
     }
 
-    public final void setCaseType(String caseType) {
+    public void setCaseType(String caseType) {
         this.caseType = caseType;
     }
 
@@ -306,7 +307,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseSubType;
     }
 
-    public final void setCaseSubType(String caseSubType) {
+    public void setCaseSubType(String caseSubType) {
         this.caseSubType = caseSubType;
     }
 
@@ -314,7 +315,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseTitle;
     }
 
-    public final void setCaseTitle(String caseTitle) {
+    public void setCaseTitle(String caseTitle) {
         this.caseTitle = caseTitle;
     }
 
@@ -322,7 +323,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseDescription;
     }
 
-    public final void setCaseDescription(String caseDescription) {
+    public void setCaseDescription(String caseDescription) {
         this.caseDescription = caseDescription;
     }
 
@@ -330,7 +331,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return linkedCaseId;
     }
 
-    public final void setLinkedCaseId(Integer linkedCaseId) {
+    public void setLinkedCaseId(Integer linkedCaseId) {
         this.linkedCaseId = linkedCaseId;
     }
 
@@ -338,7 +339,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return bailMagCode;
     }
 
-    public final void setBailMagCode(String bailMagCode) {
+    public void setBailMagCode(String bailMagCode) {
         this.bailMagCode = bailMagCode;
     }
 
@@ -346,7 +347,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return refCourtId;
     }
 
-    public final void setRefCourtId(Integer refCourtId) {
+    public void setRefCourtId(Integer refCourtId) {
         this.refCourtId = refCourtId;
     }
 
@@ -354,7 +355,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -362,7 +363,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return chargeImportIndicator;
     }
 
-    public final void setChargeImportIndicator(String chargeImportIndicator) {
+    public void setChargeImportIndicator(String chargeImportIndicator) {
         this.chargeImportIndicator = chargeImportIndicator;
     }
 
@@ -370,7 +371,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return severedInd;
     }
 
-    public final void setSeveredInd(String severedInd) {
+    public void setSeveredInd(String severedInd) {
         this.severedInd = severedInd;
     }
 
@@ -378,7 +379,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return indictResp;
     }
 
-    public final void setIndictResp(String indictResp) {
+    public void setIndictResp(String indictResp) {
         this.indictResp = indictResp;
     }
 
@@ -386,7 +387,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return prosAgencyReference;
     }
 
-    public final void setProsAgencyReference(String prosAgencyReference) {
+    public void setProsAgencyReference(String prosAgencyReference) {
         this.prosAgencyReference = prosAgencyReference;
     }
 
@@ -394,7 +395,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseClass;
     }
 
-    public final void setCaseClass(Integer caseClass) {
+    public void setCaseClass(Integer caseClass) {
         this.caseClass = caseClass;
     }
 
@@ -402,7 +403,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return judgeReasonForAppeal;
     }
 
-    public final void setJudgeReasonForAppeal(String judgeReasonForAppeal) {
+    public void setJudgeReasonForAppeal(String judgeReasonForAppeal) {
         this.judgeReasonForAppeal = judgeReasonForAppeal;
     }
 
@@ -410,7 +411,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return resultsVerified;
     }
 
-    public final void setResultsVerified(String resultsVerified) {
+    public void setResultsVerified(String resultsVerified) {
         this.resultsVerified = resultsVerified;
     }
 
@@ -418,7 +419,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return lengthTape;
     }
 
-    public final void setLengthTape(Integer lengthTape) {
+    public void setLengthTape(Integer lengthTape) {
         this.lengthTape = lengthTape;
     }
 
@@ -426,7 +427,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return noPageProsEvidence;
     }
 
-    public final void setNoPageProsEvidence(Integer noPageProsEvidence) {
+    public void setNoPageProsEvidence(Integer noPageProsEvidence) {
         this.noPageProsEvidence = noPageProsEvidence;
     }
 
@@ -434,7 +435,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return noProsWitness;
     }
 
-    public final void setNoProsWitness(Integer noProsWitness) {
+    public void setNoProsWitness(Integer noProsWitness) {
         this.noProsWitness = noProsWitness;
     }
 
@@ -442,7 +443,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return estPdhTrialLength;
     }
 
-    public final void setEstPdhTrialLength(Integer estPdhTrialLength) {
+    public void setEstPdhTrialLength(Integer estPdhTrialLength) {
         this.estPdhTrialLength = estPdhTrialLength;
     }
 
@@ -450,7 +451,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return policeOfficerAttending;
     }
 
-    public final void setPoliceOfficerAttending(String policeOfficerAttending) {
+    public void setPoliceOfficerAttending(String policeOfficerAttending) {
         this.policeOfficerAttending = policeOfficerAttending;
     }
 
@@ -458,7 +459,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return cpsCaseWorker;
     }
 
-    public final void setCpsCaseWorker(String cpsCaseWorker) {
+    public void setCpsCaseWorker(String cpsCaseWorker) {
         this.cpsCaseWorker = cpsCaseWorker;
     }
 
@@ -466,7 +467,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return exportCharges;
     }
 
-    public final void setExportCharges(String exportCharges) {
+    public void setExportCharges(String exportCharges) {
         this.exportCharges = exportCharges;
     }
 
@@ -474,7 +475,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return indChangeStatus;
     }
 
-    public final void setIndChangeStatus(String indChangeStatus) {
+    public void setIndChangeStatus(String indChangeStatus) {
         this.indChangeStatus = indChangeStatus;
     }
 
@@ -482,7 +483,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return magistratesCaseRef;
     }
 
-    public final void setMagistratesCaseRef(String magistratesCaseRef) {
+    public void setMagistratesCaseRef(String magistratesCaseRef) {
         this.magistratesCaseRef = magistratesCaseRef;
     }
 
@@ -490,7 +491,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return classCode;
     }
 
-    public final void setClassCode(Integer classCode) {
+    public void setClassCode(Integer classCode) {
         this.classCode = classCode;
     }
 
@@ -498,7 +499,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return offenceGroupUpdate;
     }
 
-    public final void setOffenceGroupUpdate(String offenceGroupUpdate) {
+    public void setOffenceGroupUpdate(String offenceGroupUpdate) {
         this.offenceGroupUpdate = offenceGroupUpdate;
     }
 
@@ -506,7 +507,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return cccTransToRefCourtId;
     }
 
-    public final void setCccTransToRefCourtId(Integer cccTransToRefCourtId) {
+    public void setCccTransToRefCourtId(Integer cccTransToRefCourtId) {
         this.cccTransToRefCourtId = cccTransToRefCourtId;
     }
 
@@ -514,7 +515,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return receiptType;
     }
 
-    public final void setReceiptType(String receiptType) {
+    public void setReceiptType(String receiptType) {
         this.receiptType = receiptType;
     }
 
@@ -522,7 +523,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return cccTransFromRefCourtId;
     }
 
-    public final void setCccTransFromRefCourtId(Integer cccTransFromRefCourtId) {
+    public void setCccTransFromRefCourtId(Integer cccTransFromRefCourtId) {
         this.cccTransFromRefCourtId = cccTransFromRefCourtId;
     }
 
@@ -530,7 +531,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return retrial;
     }
 
-    public final void setRetrial(String retrial) {
+    public void setRetrial(String retrial) {
         this.retrial = retrial;
     }
 
@@ -538,7 +539,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return originalCaseNumber;
     }
 
-    public final void setOriginalCaseNumber(String originalCaseNumber) {
+    public void setOriginalCaseNumber(String originalCaseNumber) {
         this.originalCaseNumber = originalCaseNumber;
     }
 
@@ -546,7 +547,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return noCbProsWitness;
     }
 
-    public final void setNoCbProsWitness(Integer noCbProsWitness) {
+    public void setNoCbProsWitness(Integer noCbProsWitness) {
         this.noCbProsWitness = noCbProsWitness;
     }
 
@@ -554,7 +555,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return noOtherProsWitness;
     }
 
-    public final void setNoOtherProsWitness(Integer noOtherProsWitness) {
+    public void setNoOtherProsWitness(Integer noOtherProsWitness) {
         this.noOtherProsWitness = noOtherProsWitness;
     }
 
@@ -562,7 +563,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return vulnerableVictimIndicator;
     }
 
-    public final void setVulnerableVictimIndicator(String vulnerableVictimIndicator) {
+    public void setVulnerableVictimIndicator(String vulnerableVictimIndicator) {
         this.vulnerableVictimIndicator = vulnerableVictimIndicator;
     }
 
@@ -570,7 +571,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return publicDisplayHide;
     }
 
-    public final void setPublicDisplayHide(String publicDisplayHide) {
+    public void setPublicDisplayHide(String publicDisplayHide) {
         this.publicDisplayHide = publicDisplayHide;
     }
 
@@ -578,7 +579,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return transferredCase;
     }
 
-    public final void setTransferredCase(String transferredCase) {
+    public void setTransferredCase(String transferredCase) {
         this.transferredCase = transferredCase;
     }
 
@@ -586,7 +587,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return transferDeferredSentence;
     }
 
-    public final void setTransferDeferredSentence(String transferDeferredSentence) {
+    public void setTransferDeferredSentence(String transferDeferredSentence) {
         this.transferDeferredSentence = transferDeferredSentence;
     }
 
@@ -594,7 +595,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return monitoringCategoryId;
     }
 
-    public final void setMonitoringCategoryId(Integer monitoringCategoryId) {
+    public void setMonitoringCategoryId(Integer monitoringCategoryId) {
         this.monitoringCategoryId = monitoringCategoryId;
     }
 
@@ -602,7 +603,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return eitherWayType;
     }
 
-    public final void setEitherWayType(String eitherWayType) {
+    public void setEitherWayType(String eitherWayType) {
         this.eitherWayType = eitherWayType;
     }
 
@@ -610,7 +611,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return ticketRequired;
     }
 
-    public final void setTicketRequired(String ticketRequired) {
+    public void setTicketRequired(String ticketRequired) {
         this.ticketRequired = ticketRequired;
     }
 
@@ -618,7 +619,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return ticketTypeCode;
     }
 
-    public final void setTicketTypeCode(Integer ticketTypeCode) {
+    public void setTicketTypeCode(Integer ticketTypeCode) {
         this.ticketTypeCode = ticketTypeCode;
     }
 
@@ -626,7 +627,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return courtIdReceivingSite;
     }
 
-    public final void setCourtIdReceivingSite(Integer courtIdReceivingSite) {
+    public void setCourtIdReceivingSite(Integer courtIdReceivingSite) {
         this.courtIdReceivingSite = courtIdReceivingSite;
     }
 
@@ -634,7 +635,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return noDefendantsForCase;
     }
 
-    public final void setNoDefendantsForCase(Integer noDefendantsForCase) {
+    public void setNoDefendantsForCase(Integer noDefendantsForCase) {
         this.noDefendantsForCase = noDefendantsForCase;
     }
 
@@ -642,7 +643,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return secureCourt;
     }
 
-    public final void setSecureCourt(String secureCourt) {
+    public void setSecureCourt(String secureCourt) {
         this.secureCourt = secureCourt;
     }
 
@@ -650,7 +651,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return policeForceCode;
     }
 
-    public final void setPoliceForceCode(Integer policeForceCode) {
+    public void setPoliceForceCode(Integer policeForceCode) {
         this.policeForceCode = policeForceCode;
     }
 
@@ -658,7 +659,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return magcourtHearingtypeRefId;
     }
 
-    public final void setMagcourtHearingtypeRefid(Integer magcourtHearingtypeRefid) {
+    public void setMagcourtHearingtypeRefid(Integer magcourtHearingtypeRefid) {
         this.magcourtHearingtypeRefId = magcourtHearingtypeRefid;
     }
 
@@ -666,7 +667,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseListed;
     }
 
-    public final void setCaseListed(String caseListed) {
+    public void setCaseListed(String caseListed) {
         this.caseListed = caseListed;
     }
 
@@ -674,7 +675,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseStatus;
     }
 
-    public final void setCaseStatus(String caseStatus) {
+    public void setCaseStatus(String caseStatus) {
         this.caseStatus = caseStatus;
     }
 
@@ -682,7 +683,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return videoLinkRequired;
     }
 
-    public final void setVideoLinkRequired(String videoLinkRequired) {
+    public void setVideoLinkRequired(String videoLinkRequired) {
         this.videoLinkRequired = videoLinkRequired;
     }
 
@@ -690,7 +691,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return crackedIneffectiveId;
     }
 
-    public final void setCrackedIneffectiveId(Integer crackedIneffectiveId) {
+    public void setCrackedIneffectiveId(Integer crackedIneffectiveId) {
         this.crackedIneffectiveId = crackedIneffectiveId;
     }
 
@@ -698,7 +699,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return defaultHearingType;
     }
 
-    public final void setDefaultHearingType(Integer defaultHearingType) {
+    public void setDefaultHearingType(Integer defaultHearingType) {
         this.defaultHearingType = defaultHearingType;
     }
 
@@ -706,7 +707,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return caseGroupNumber;
     }
 
-    public final void setCaseGroupNumber(Integer caseGroupNumber) {
+    public void setCaseGroupNumber(Integer caseGroupNumber) {
         this.caseGroupNumber = caseGroupNumber;
     }
 
@@ -714,7 +715,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return pubRunningListId;
     }
 
-    public final void setPubRunningListId(Integer pubRunningListId) {
+    public void setPubRunningListId(Integer pubRunningListId) {
         this.pubRunningListId = pubRunningListId;
     }
 
@@ -722,7 +723,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return darRetentionPolicyId;
     }
 
-    public final void setDarRetentionPolicyId(Integer darRetentionPolicyId) {
+    public void setDarRetentionPolicyId(Integer darRetentionPolicyId) {
         this.darRetentionPolicyId = darRetentionPolicyId;
     }
 
@@ -730,7 +731,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return crpLastUpdateDate;
     }
 
-    public final void setCrpLastUpdateDate(LocalDateTime crpLastUpdateDate) {
+    public void setCrpLastUpdateDate(LocalDateTime crpLastUpdateDate) {
         this.crpLastUpdateDate = crpLastUpdateDate;
     }
 
@@ -738,7 +739,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         return civilUnrest;
     }
 
-    public final void setCivilUnrest(String civilUnrest) {
+    public void setCivilUnrest(String civilUnrest) {
         this.civilUnrest = civilUnrest;
     }
 

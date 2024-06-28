@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURT_SITE")
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtId",
     query = "SELECT o from XHB_COURT_SITE o WHERE o.courtId = :courtId ")
@@ -113,7 +113,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return courtSiteId;
     }
 
-    public final void setCourtSiteId(Integer courtSiteId) {
+    public void setCourtSiteId(Integer courtSiteId) {
         this.courtSiteId = courtSiteId;
     }
 
@@ -121,7 +121,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return courtSiteName;
     }
 
-    public final void setCourtSiteName(String courtSiteName) {
+    public void setCourtSiteName(String courtSiteName) {
         this.courtSiteName = courtSiteName;
     }
 
@@ -129,7 +129,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return courtSiteCode;
     }
 
-    public final void setCourtSiteCode(String courtSiteCode) {
+    public void setCourtSiteCode(String courtSiteCode) {
         this.courtSiteCode = courtSiteCode;
     }
 
@@ -137,7 +137,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -145,7 +145,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return addressId;
     }
 
-    public final void setAddressId(Integer addressId) {
+    public void setAddressId(Integer addressId) {
         this.addressId = addressId;
     }
 
@@ -153,7 +153,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return displayName;
     }
 
-    public final void setDisplayName(String displayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
@@ -161,7 +161,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return crestCourtId;
     }
 
-    public final void setCrestCourtId(String crestCourtId) {
+    public void setCrestCourtId(String crestCourtId) {
         this.crestCourtId = crestCourtId;
     }
 
@@ -169,7 +169,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return shortName;
     }
 
-    public final void setShortName(String shortName) {
+    public void setShortName(String shortName) {
         this.shortName = shortName;
     }
 
@@ -177,7 +177,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return siteGroup;
     }
 
-    public final void setSiteGroup(Integer siteGroup) {
+    public void setSiteGroup(Integer siteGroup) {
         this.siteGroup = siteGroup;
     }
 
@@ -185,7 +185,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return floaterText;
     }
 
-    public final void setFloaterText(String floaterText) {
+    public void setFloaterText(String floaterText) {
         this.floaterText = floaterText;
     }
 
@@ -193,7 +193,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return listName;
     }
 
-    public final void setListName(String listName) {
+    public void setListName(String listName) {
         this.listName = listName;
     }
 
@@ -201,7 +201,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return tier;
     }
 
-    public final void setTier(String tier) {
+    public void setTier(String tier) {
         this.tier = tier;
     }
 
@@ -209,7 +209,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
@@ -217,7 +217,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return xhbDisplayLocations;
     }
 
-    public final void setXhbDisplayLocations(List<XhbDisplayLocationDao> xhbDisplayLocations) {
+    public void setXhbDisplayLocations(List<XhbDisplayLocationDao> xhbDisplayLocations) {
         this.xhbDisplayLocations = xhbDisplayLocations;
     }
 
@@ -225,7 +225,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         return xhbCourtRooms;
     }
 
-    public final void setXhbCourtRooms(List<XhbCourtRoomDao> xhbCourtRooms) {
+    public void setXhbCourtRooms(List<XhbCourtRoomDao> xhbCourtRooms) {
         this.xhbCourtRooms = xhbCourtRooms;
     }
 }

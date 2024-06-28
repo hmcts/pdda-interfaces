@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.TooManyFields")
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_FORMATTING")
 @NamedQuery(name = "XHB_FORMATTING.findByDocumentType",
     query = "SELECT o from XHB_FORMATTING o WHERE o.documentType = :docType ORDER BY o.formattingId")
@@ -121,7 +121,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return formattingId;
     }
 
-    public final void setFormattingId(final Integer formattingId) {
+    public void setFormattingId(final Integer formattingId) {
         this.formattingId = formattingId;
     }
 
@@ -129,7 +129,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return dateIn;
     }
 
-    public final void setDateIn(final LocalDateTime dateIn) {
+    public void setDateIn(final LocalDateTime dateIn) {
         this.dateIn = dateIn;
     }
 
@@ -137,7 +137,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return formatStatus;
     }
 
-    public final void setFormatStatus(final String formatStatus) {
+    public void setFormatStatus(final String formatStatus) {
         this.formatStatus = formatStatus;
     }
 
@@ -145,7 +145,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return distributionType;
     }
 
-    public final void setDistributionType(final String distributionType) {
+    public void setDistributionType(final String distributionType) {
         this.distributionType = distributionType;
     }
 
@@ -153,7 +153,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return mimeType;
     }
 
-    public final void setMimeType(final String mimeType) {
+    public void setMimeType(final String mimeType) {
         this.mimeType = mimeType;
     }
 
@@ -161,7 +161,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return documentType;
     }
 
-    public final void setDocumentType(final String documentType) {
+    public void setDocumentType(final String documentType) {
         this.documentType = documentType;
     }
 
@@ -169,7 +169,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return courtId;
     }
 
-    public final void setCourtId(final Integer courtId) {
+    public void setCourtId(final Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -177,7 +177,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return formattedDocumentBlobId;
     }
 
-    public final void setFormattedDocumentBlobId(final Long formattedDocumentBlobId) {
+    public void setFormattedDocumentBlobId(final Long formattedDocumentBlobId) {
         this.formattedDocumentBlobId = formattedDocumentBlobId;
     }
 
@@ -185,7 +185,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return xmlDocumentClobId;
     }
 
-    public final void setXmlDocumentClobId(final Long xmlDocumentClobId) {
+    public void setXmlDocumentClobId(final Long xmlDocumentClobId) {
         this.xmlDocumentClobId = xmlDocumentClobId;
     }
 
@@ -193,7 +193,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return language;
     }
 
-    public final void setLanguage(final String language) {
+    public void setLanguage(final String language) {
         this.language = language;
     }
 
@@ -201,7 +201,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return country;
     }
 
-    public final void setCountry(final String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -209,7 +209,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return majorSchemaVersion;
     }
 
-    public final void setMajorSchemaVersion(final Integer majorSchemaVersion) {
+    public void setMajorSchemaVersion(final Integer majorSchemaVersion) {
         this.majorSchemaVersion = majorSchemaVersion;
     }
 
@@ -217,7 +217,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return minorSchemaVersion;
     }
 
-    public final void setMinorSchemaVersion(final Integer minorSchemaVersion) {
+    public void setMinorSchemaVersion(final Integer minorSchemaVersion) {
         this.minorSchemaVersion = minorSchemaVersion;
     }
 
@@ -225,7 +225,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return lastUpdateDate;
     }
 
-    public final void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(final LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
@@ -233,7 +233,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return creationDate;
     }
 
-    public final void setCreationDate(final LocalDateTime creationDate) {
+    public void setCreationDate(final LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -241,7 +241,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return lastUpdatedBy;
     }
 
-    public final void setLastUpdatedBy(final String lastUpdatedBy) {
+    public void setLastUpdatedBy(final String lastUpdatedBy) {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
@@ -249,7 +249,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         return createdBy;
     }
 
-    public final void setCreatedBy(final String createdBy) {
+    public void setCreatedBy(final String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -259,7 +259,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
     }
 
     @Override
-    public final void setVersion(final Integer version) {
+    public void setVersion(final Integer version) {
         this.version = version;
     }
 

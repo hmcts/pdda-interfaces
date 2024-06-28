@@ -12,7 +12,8 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.ExcessivePublicCount", "PMD.LinguisticNaming","PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.ExcessivePublicCount", "PMD.LinguisticNaming","PMD.CyclomaticComplexity",
+                   "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DEFENDANT_ON_CASE")
 @NamedQuery(name = "XHB_DEFENDANT_ON_CASE.findByDefendantAndCase",
     query = "SELECT o from XHB_DEFENDANT_ON_CASE o WHERE o.defendantId = :defendantId AND "
@@ -246,7 +247,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return defendantOnCaseId;
     }
 
-    public final void setDefendantOnCaseId(Integer defendantOnCaseId) {
+    public void setDefendantOnCaseId(Integer defendantOnCaseId) {
         this.defendantOnCaseId = defendantOnCaseId;
     }
 
@@ -254,7 +255,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return noOfTics;
     }
 
-    public final void setNoOfTics(Integer noOfTics) {
+    public void setNoOfTics(Integer noOfTics) {
         this.noOfTics = noOfTics;
     }
 
@@ -262,7 +263,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return finalDrivingLicenceStatus;
     }
 
-    public final void setFinalDrivingLicenceStatus(Integer finalDrivingLicenceStatus) {
+    public void setFinalDrivingLicenceStatus(Integer finalDrivingLicenceStatus) {
         this.finalDrivingLicenceStatus = finalDrivingLicenceStatus;
     }
 
@@ -270,7 +271,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return ptiurn;
     }
 
-    public final void setPtiurn(String ptiurn) {
+    public void setPtiurn(String ptiurn) {
         this.ptiurn = ptiurn;
     }
 
@@ -278,7 +279,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return isJuvenile;
     }
 
-    public final void setIsJuvenile(String isJuvenile) {
+    public void setIsJuvenile(String isJuvenile) {
         this.isJuvenile = isJuvenile;
     }
 
@@ -286,7 +287,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return isMasked;
     }
 
-    public final void setIsMasked(String isMasked) {
+    public void setIsMasked(String isMasked) {
         this.isMasked = isMasked;
     }
 
@@ -294,7 +295,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return maskedName;
     }
 
-    public final void setMaskedName(String maskedName) {
+    public void setMaskedName(String maskedName) {
         this.maskedName = maskedName;
     }
 
@@ -302,7 +303,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return caseId;
     }
 
-    public final void setCaseId(Integer caseId) {
+    public void setCaseId(Integer caseId) {
         this.caseId = caseId;
     }
 
@@ -310,7 +311,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return defendantId;
     }
 
-    public final void setDefendantId(Integer defendantId) {
+    public void setDefendantId(Integer defendantId) {
         this.defendantId = defendantId;
     }
 
@@ -318,7 +319,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return resultsVerified;
     }
 
-    public final void setResultsVerified(String resultsVerified) {
+    public void setResultsVerified(String resultsVerified) {
         this.resultsVerified = resultsVerified;
     }
 
@@ -326,7 +327,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return defendantNumber;
     }
 
-    public final void setDefendantNumber(Integer defendantNumber) {
+    public void setDefendantNumber(Integer defendantNumber) {
         this.defendantNumber = defendantNumber;
     }
 
@@ -334,7 +335,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return dateOfCommittal;
     }
 
-    public final void setDateOfCommittal(LocalDateTime dateOfCommittal) {
+    public void setDateOfCommittal(LocalDateTime dateOfCommittal) {
         this.dateOfCommittal = dateOfCommittal;
     }
 
@@ -342,7 +343,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return pncId;
     }
 
-    public final void setPncId(String pncId) {
+    public void setPncId(String pncId) {
         this.pncId = pncId;
     }
 
@@ -350,7 +351,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return collectMagistrateCourtId;
     }
 
-    public final void setCollectMagistrateCourtId(Integer collectMagistrateCourtId) {
+    public void setCollectMagistrateCourtId(Integer collectMagistrateCourtId) {
         this.collectMagistrateCourtId = collectMagistrateCourtId;
     }
 
@@ -358,7 +359,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return currentBcStatus;
     }
 
-    public final void setCurrentBcStatus(String currentBcStatus) {
+    public void setCurrentBcStatus(String currentBcStatus) {
         this.currentBcStatus = currentBcStatus;
     }
 
@@ -366,7 +367,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return asn;
     }
 
-    public final void setAsn(String asn) {
+    public void setAsn(String asn) {
         this.asn = asn;
     }
 
@@ -374,7 +375,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return benchWarrantExecDate;
     }
 
-    public final void setBenchWarrantExecDate(LocalDateTime benchWarrantExecDate) {
+    public void setBenchWarrantExecDate(LocalDateTime benchWarrantExecDate) {
         this.benchWarrantExecDate = benchWarrantExecDate;
     }
 
@@ -382,7 +383,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return commBcStatus;
     }
 
-    public final void setCommBcStatus(String commBcStatus) {
+    public void setCommBcStatus(String commBcStatus) {
         this.commBcStatus = commBcStatus;
     }
 
@@ -390,7 +391,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return bcStatusBwExecuted;
     }
 
-    public final void setBcStatusBwExecuted(String bcStatusBwExecuted) {
+    public void setBcStatusBwExecuted(String bcStatusBwExecuted) {
         this.bcStatusBwExecuted = bcStatusBwExecuted;
     }
 
@@ -398,7 +399,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return specialCirFound;
     }
 
-    public final void setSpecialCirFound(String specialCirFound) {
+    public void setSpecialCirFound(String specialCirFound) {
         this.specialCirFound = specialCirFound;
     }
 
@@ -406,7 +407,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return dateExported;
     }
 
-    public final void setDateExported(LocalDateTime dateExported) {
+    public void setDateExported(LocalDateTime dateExported) {
         this.dateExported = dateExported;
     }
 
@@ -414,7 +415,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return custodial;
     }
 
-    public final void setCustodial(String custodial) {
+    public void setCustodial(String custodial) {
         this.custodial = custodial;
     }
 
@@ -422,7 +423,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return suspended;
     }
 
-    public final void setSuspended(String suspended) {
+    public void setSuspended(String suspended) {
         this.suspended = suspended;
     }
 
@@ -430,7 +431,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return seriousDrugOffence;
     }
 
-    public final void setSeriousDrugOffence(String seriousDrugOffence) {
+    public void setSeriousDrugOffence(String seriousDrugOffence) {
         this.seriousDrugOffence = seriousDrugOffence;
     }
 
@@ -438,7 +439,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return recommendedDeportation;
     }
 
-    public final void setRecommendedDeportation(String recommendedDeportation) {
+    public void setRecommendedDeportation(String recommendedDeportation) {
         this.recommendedDeportation = recommendedDeportation;
     }
 
@@ -446,7 +447,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return nationality;
     }
 
-    public final void setNationality(String nationality) {
+    public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 
@@ -454,7 +455,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return firstFixedTrial;
     }
 
-    public final void setFirstFixedTrial(LocalDateTime firstFixedTrial) {
+    public void setFirstFixedTrial(LocalDateTime firstFixedTrial) {
         this.firstFixedTrial = firstFixedTrial;
     }
 
@@ -462,7 +463,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return firstHearingType;
     }
 
-    public final void setFirstHearingType(String firstHearingType) {
+    public void setFirstHearingType(String firstHearingType) {
         this.firstHearingType = firstHearingType;
     }
 
@@ -470,7 +471,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return publicDisplayHide;
     }
 
-    public final void setPublicDisplayHide(String publicDisplayHide) {
+    public void setPublicDisplayHide(String publicDisplayHide) {
         this.publicDisplayHide = publicDisplayHide;
     }
 
@@ -478,7 +479,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return amendedDateExported;
     }
 
-    public final void setAmendedDateExported(LocalDateTime amendedDateExported) {
+    public void setAmendedDateExported(LocalDateTime amendedDateExported) {
         this.amendedDateExported = amendedDateExported;
     }
 
@@ -486,7 +487,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return amendedReason;
     }
 
-    public final void setAmendedReason(String amendedReason) {
+    public void setAmendedReason(String amendedReason) {
         this.amendedReason = amendedReason;
     }
 
@@ -494,7 +495,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return hateInd;
     }
 
-    public final void setHateInd(String hateInd) {
+    public void setHateInd(String hateInd) {
         this.hateInd = hateInd;
     }
 
@@ -502,7 +503,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return hateType;
     }
 
-    public final void setHateType(String hateType) {
+    public void setHateType(String hateType) {
         this.hateType = hateType;
     }
 
@@ -510,7 +511,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return hateSentInd;
     }
 
-    public final void setHateSentInd(String hateSentInd) {
+    public void setHateSentInd(String hateSentInd) {
         this.hateSentInd = hateSentInd;
     }
 
@@ -518,7 +519,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return drivingDisqSuspendedDate;
     }
 
-    public final void setDrivingDisqSuspendedDate(LocalDateTime drivingDisqSuspendedDate) {
+    public void setDrivingDisqSuspendedDate(LocalDateTime drivingDisqSuspendedDate) {
         this.drivingDisqSuspendedDate = drivingDisqSuspendedDate;
     }
 
@@ -526,7 +527,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return magCourtFirstHearingDate;
     }
 
-    public final void setMagCourtFirstHearingDate(LocalDateTime magCourtFirstHearingDate) {
+    public void setMagCourtFirstHearingDate(LocalDateTime magCourtFirstHearingDate) {
         this.magCourtFirstHearingDate = magCourtFirstHearingDate;
     }
 
@@ -534,7 +535,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return magCourtFinalHearingDate;
     }
 
-    public final void setMagCourtFinalHearingDate(LocalDateTime magCourtFinalHearingDate) {
+    public void setMagCourtFinalHearingDate(LocalDateTime magCourtFinalHearingDate) {
         this.magCourtFinalHearingDate = magCourtFinalHearingDate;
     }
 
@@ -542,7 +543,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return custodyTimeLimit;
     }
 
-    public final void setCustodyTimeLimit(LocalDateTime custodyTimeLimit) {
+    public void setCustodyTimeLimit(LocalDateTime custodyTimeLimit) {
         this.custodyTimeLimit = custodyTimeLimit;
     }
 
@@ -550,7 +551,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return formNgSentDate;
     }
 
-    public final void setFormNgSentDate(LocalDateTime formNgSentDate) {
+    public void setFormNgSentDate(LocalDateTime formNgSentDate) {
         this.formNgSentDate = formNgSentDate;
     }
 
@@ -558,7 +559,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return cacdAppealResultDate;
     }
 
-    public final void setCacdAppealResultDate(LocalDateTime cacdAppealResultDate) {
+    public void setCacdAppealResultDate(LocalDateTime cacdAppealResultDate) {
         this.cacdAppealResultDate = cacdAppealResultDate;
     }
 
@@ -566,7 +567,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return section28Name1;
     }
 
-    public final void setSection28Name1(String section28Name1) {
+    public void setSection28Name1(String section28Name1) {
         this.section28Name1 = section28Name1;
     }
 
@@ -574,7 +575,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return section28Name2;
     }
 
-    public final void setSection28Name2(String section28Name2) {
+    public void setSection28Name2(String section28Name2) {
         this.section28Name2 = section28Name2;
     }
 
@@ -582,7 +583,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return section28Phone1;
     }
 
-    public final void setSection28Phone1(String section28Phone1) {
+    public void setSection28Phone1(String section28Phone1) {
         this.section28Phone1 = section28Phone1;
     }
 
@@ -590,7 +591,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return section28Phone2;
     }
 
-    public final void setSection28Phone2(String section28Phone2) {
+    public void setSection28Phone2(String section28Phone2) {
         this.section28Phone2 = section28Phone2;
     }
 
@@ -598,7 +599,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return dateRcptNoticeAppeal;
     }
 
-    public final void setDateRcptNoticeAppeal(LocalDateTime dateRcptNoticeAppeal) {
+    public void setDateRcptNoticeAppeal(LocalDateTime dateRcptNoticeAppeal) {
         this.dateRcptNoticeAppeal = dateRcptNoticeAppeal;
     }
 
@@ -606,7 +607,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return cacdAppealResult;
     }
 
-    public final void setCacdAppealResult(LocalDateTime cacdAppealResult) {
+    public void setCacdAppealResult(LocalDateTime cacdAppealResult) {
         this.cacdAppealResult = cacdAppealResult;
     }
 
@@ -614,7 +615,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return coaStatus;
     }
 
-    public final void setCoaStatus(String coaStatus) {
+    public void setCoaStatus(String coaStatus) {
         this.coaStatus = coaStatus;
     }
 
@@ -622,7 +623,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return ctlApplies;
     }
 
-    public final void setCtlApplies(String ctlApplies) {
+    public void setCtlApplies(String ctlApplies) {
         this.ctlApplies = ctlApplies;
     }
 
@@ -630,7 +631,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return darRetentionPolicyId;
     }
 
-    public final void setDarRetentionPolicyId(Integer darRetentionPolicyId) {
+    public void setDarRetentionPolicyId(Integer darRetentionPolicyId) {
         this.darRetentionPolicyId = darRetentionPolicyId;
     }
 
@@ -638,7 +639,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 

@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_HEARING_LIST")
 @NamedQuery(name = "XHB_HEARING_LIST.findByCourtIdAndDate",
     query = "SELECT o from XHB_HEARING_LIST o WHERE o.courtId = :courtId AND o.startDate = :startDate")
@@ -84,7 +85,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return listId;
     }
 
-    public final void setListId(Integer listId) {
+    public void setListId(Integer listId) {
         this.listId = listId;
     }
 
@@ -92,7 +93,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return listType;
     }
 
-    public final void setListType(String listType) {
+    public void setListType(String listType) {
         this.listType = listType;
     }
 
@@ -100,7 +101,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return startDate;
     }
 
-    public final void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
@@ -108,7 +109,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return endDate;
     }
 
-    public final void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -116,7 +117,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return status;
     }
 
-    public final void setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -124,7 +125,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return editionNo;
     }
 
-    public final void setEditionNo(Integer editionNo) {
+    public void setEditionNo(Integer editionNo) {
         this.editionNo = editionNo;
     }
 
@@ -132,7 +133,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return publishedTime;
     }
 
-    public final void setPublishedTime(LocalDateTime publishedTime) {
+    public void setPublishedTime(LocalDateTime publishedTime) {
         this.publishedTime = publishedTime;
     }
 
@@ -140,7 +141,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return printReference;
     }
 
-    public final void setPrintReference(String printReference) {
+    public void setPrintReference(String printReference) {
         this.printReference = printReference;
     }
 
@@ -148,7 +149,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return crestListId;
     }
 
-    public final void setCrestListId(Integer crestListId) {
+    public void setCrestListId(Integer crestListId) {
         this.crestListId = crestListId;
     }
 
@@ -156,7 +157,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 

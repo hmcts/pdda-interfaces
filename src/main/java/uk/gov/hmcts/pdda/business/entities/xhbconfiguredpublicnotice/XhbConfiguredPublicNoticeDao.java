@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.LinguisticNaming")
+@SuppressWarnings({"PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CONFIGURED_PUBLIC_NOTICE")
 @NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePNCourtRoomValue",
     query = "SELECT o from XHB_CONFIGURED_PUBLIC_NOTICE o WHERE o.courtRoomId = :courtRoomId "
@@ -94,7 +94,7 @@ public class XhbConfiguredPublicNoticeDao extends AbstractVersionedDao implement
         return isActive;
     }
 
-    public final void setIsActive(String isActive) {
+    public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
 
@@ -118,7 +118,7 @@ public class XhbConfiguredPublicNoticeDao extends AbstractVersionedDao implement
         return xhbPublicNotice;
     }
 
-    public final void setXhbPublicNotice(XhbPublicNoticeDao xhbPublicNotice) {
+    public void setXhbPublicNotice(XhbPublicNoticeDao xhbPublicNotice) {
         this.xhbPublicNotice = xhbPublicNotice;
     }
 

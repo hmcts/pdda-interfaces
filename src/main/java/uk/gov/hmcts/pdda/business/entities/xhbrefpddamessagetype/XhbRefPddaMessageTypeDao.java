@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_REF_PDDA_MESSAGE_TYPE")
 @NamedQuery(name = "XHB_REF_PDDA_MESSAGE_TYPE.findByMessageType",
     query = "SELECT o from XHB_REF_PDDA_MESSAGE_TYPE o WHERE o.pddaMessageType = "
@@ -88,7 +88,7 @@ public class XhbRefPddaMessageTypeDao extends AbstractVersionedDao implements Se
         return pddaMessageType;
     }
 
-    public final void setPddaMessageType(String pddaMessageType) {
+    public void setPddaMessageType(String pddaMessageType) {
         this.pddaMessageType = pddaMessageType;
     }
 
@@ -96,7 +96,7 @@ public class XhbRefPddaMessageTypeDao extends AbstractVersionedDao implements Se
         return pddaMessageDescription;
     }
 
-    public final void setPddaMessageDescription(String pddaMessageDescription) {
+    public void setPddaMessageDescription(String pddaMessageDescription) {
         this.pddaMessageDescription = pddaMessageDescription;
     }
 

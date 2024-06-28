@@ -13,7 +13,8 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
 
-@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.LinguisticNaming","PMD.GodClass"})
+@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.LinguisticNaming","PMD.GodClass",
+                   "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURT")
 @NamedQuery(name = "XHB_COURT.findByCrestCourtIdValue",
     query = "SELECT o from XHB_COURT o WHERE o.crestCourtId = :crestCourtId ")
@@ -172,7 +173,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtId;
     }
 
-    public final void setCourtId(Integer courtId) {
+    public void setCourtId(Integer courtId) {
         this.courtId = courtId;
     }
 
@@ -180,7 +181,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtType;
     }
 
-    public final void setCourtType(String courtType) {
+    public void setCourtType(String courtType) {
         this.courtType = courtType;
     }
 
@@ -188,7 +189,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return circuit;
     }
 
-    public final void setCircuit(String circuit) {
+    public void setCircuit(String circuit) {
         this.circuit = circuit;
     }
 
@@ -196,7 +197,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtName;
     }
 
-    public final void setCourtName(String courtName) {
+    public void setCourtName(String courtName) {
         this.courtName = courtName;
     }
 
@@ -204,7 +205,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return crestCourtId;
     }
 
-    public final void setCrestCourtId(String crestCourtId) {
+    public void setCrestCourtId(String crestCourtId) {
         this.crestCourtId = crestCourtId;
     }
 
@@ -212,7 +213,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtPrefix;
     }
 
-    public final void setCourtPrefix(String courtPrefix) {
+    public void setCourtPrefix(String courtPrefix) {
         this.courtPrefix = courtPrefix;
     }
 
@@ -220,7 +221,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return shortName;
     }
 
-    public final void setShortName(String shortName) {
+    public void setShortName(String shortName) {
         this.shortName = shortName;
     }
 
@@ -228,7 +229,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return addressId;
     }
 
-    public final void setAddressId(Integer addressId) {
+    public void setAddressId(Integer addressId) {
         this.addressId = addressId;
     }
 
@@ -236,7 +237,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return crestIpAddress;
     }
 
-    public final void setCrestIpAddress(String crestIpAddress) {
+    public void setCrestIpAddress(String crestIpAddress) {
         this.crestIpAddress = crestIpAddress;
     }
 
@@ -244,7 +245,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return inServiceFlag;
     }
 
-    public final void setInServiceFlag(String inServiceFlag) {
+    public void setInServiceFlag(String inServiceFlag) {
         this.inServiceFlag = inServiceFlag;
     }
 
@@ -252,7 +253,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return probationOfficeName;
     }
 
-    public final void setProbationOfficeName(String probationOfficeName) {
+    public void setProbationOfficeName(String probationOfficeName) {
         this.probationOfficeName = probationOfficeName;
     }
 
@@ -260,7 +261,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return internetCourtName;
     }
 
-    public final void setInternetCourtName(String internetCourtName) {
+    public void setInternetCourtName(String internetCourtName) {
         this.internetCourtName = internetCourtName;
     }
 
@@ -268,7 +269,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return displayName;
     }
 
-    public final void setDisplayName(String displayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
@@ -276,7 +277,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtCode;
     }
 
-    public final void setCourtCode(String courtCode) {
+    public void setCourtCode(String courtCode) {
         this.courtCode = courtCode;
     }
 
@@ -284,7 +285,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return country;
     }
 
-    public final void setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
@@ -292,7 +293,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return language;
     }
 
-    public final void setLanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
     }
 
@@ -300,7 +301,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return policeForceCode;
     }
 
-    public final void setPoliceForceCode(Integer policeForceCode) {
+    public void setPoliceForceCode(Integer policeForceCode) {
         this.policeForceCode = policeForceCode;
     }
 
@@ -308,7 +309,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return flRepSort;
     }
 
-    public final void setFlRepSort(String flRepSort) {
+    public void setFlRepSort(String flRepSort) {
         this.flRepSort = flRepSort;
     }
 
@@ -316,7 +317,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return courtStartTime;
     }
 
-    public final void setCourtStartTime(String courtStartTime) {
+    public void setCourtStartTime(String courtStartTime) {
         this.courtStartTime = courtStartTime;
     }
 
@@ -324,7 +325,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return wlRepSort;
     }
 
-    public final void setWlRepSort(String wlRepSort) {
+    public void setWlRepSort(String wlRepSort) {
         this.wlRepSort = wlRepSort;
     }
 
@@ -332,7 +333,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return wlRepPeriod;
     }
 
-    public final void setWlRepPeriod(Integer wlRepPeriod) {
+    public void setWlRepPeriod(Integer wlRepPeriod) {
         this.wlRepPeriod = wlRepPeriod;
     }
 
@@ -340,7 +341,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return wlRepTime;
     }
 
-    public final void setWlRepTime(String wlRepTime) {
+    public void setWlRepTime(String wlRepTime) {
         this.wlRepTime = wlRepTime;
     }
 
@@ -348,7 +349,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return wlFreeText;
     }
 
-    public final void setWlFreeText(String wlFreeText) {
+    public void setWlFreeText(String wlFreeText) {
         this.wlFreeText = wlFreeText;
     }
 
@@ -356,7 +357,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return isPilot;
     }
 
-    public final void setIsPilot(String isPilot) {
+    public void setIsPilot(String isPilot) {
         this.isPilot = isPilot;
     }
 
@@ -364,7 +365,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return dxRef;
     }
 
-    public final void setDxRef(String dxRef) {
+    public void setDxRef(String dxRef) {
         this.dxRef = dxRef;
     }
 
@@ -372,7 +373,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return countyLocCode;
     }
 
-    public final void setCountyLocCode(String countyLocCode) {
+    public void setCountyLocCode(String countyLocCode) {
         this.countyLocCode = countyLocCode;
     }
 
@@ -380,7 +381,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return tier;
     }
 
-    public final void setTier(String tier) {
+    public void setTier(String tier) {
         this.tier = tier;
     }
 
@@ -388,7 +389,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return cppCourt;
     }
 
-    public final void setCppCourt(String cppCourt) {
+    public void setCppCourt(String cppCourt) {
         this.cppCourt = cppCourt;
     }
 
@@ -396,7 +397,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
         return obsInd;
     }
 
-    public final void setObsInd(String obsInd) {
+    public void setObsInd(String obsInd) {
         this.obsInd = obsInd;
     }
 
