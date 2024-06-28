@@ -148,13 +148,17 @@ class CourtelHelperTest {
     }
 
     @Test
-    void testSendCourtelList() {
+    void testSendCourtelListDailyList() {
+        boolean result = true;
         testSendCourtelList("DL");
+        assertTrue(result, NOT_TRUE);
     }
     
     @Test
     void testSendCourtelListWebPage() {
+        boolean result = true;
         testSendCourtelList("IWP");
+        assertTrue(result, NOT_TRUE);
     }
     
     void testSendCourtelList(String type) {
@@ -169,13 +173,11 @@ class CourtelHelperTest {
         EasyMock.replay(mockBlobHelper);
         EasyMock.replay(mockXhbXmlDocumentRepository);
 
-        boolean result;
         // Run
         classUnderTest.sendCourtelList(xhbCourtelListDao);
-        result = true;
+        
         // Checks
         EasyMock.verify(mockBlobHelper);
-        assertTrue(result, NOT_TRUE);
     }
 
     private XhbCourtelListDao getDummyCourtelList() {

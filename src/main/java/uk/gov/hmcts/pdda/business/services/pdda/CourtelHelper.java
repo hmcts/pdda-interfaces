@@ -144,19 +144,12 @@ public class CourtelHelper {
     }
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
-        boolean isListType = false;
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
 
         if (!xhbXmlDocumentDao.isEmpty()) {
-            // Check for a List Type
-            for (String docType : VALID_LISTS) {
-                if (xhbXmlDocumentDao.get().getDocumentType().equals(docType)) {
-                    isListType = true;
-                }
-            }
-            // Set the correct JsonObject
-            if (isListType) {
+            // Check Document Type and create appropriate object
+            if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.get().getDocumentType())) {
                 return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
             } else {
                 return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
@@ -169,8 +162,6 @@ public class CourtelHelper {
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
             listJson.setListType(xhbXmlDocumentDao.getDocumentType());
-        } else if (jsonObject instanceof WebPageJson webPageJson) {
-            webPageJson.setIsWebPage(true);
         }
         // Populate shared fields
         jsonObject.setCourtId(xhbXmlDocumentDao.getCourtId());
