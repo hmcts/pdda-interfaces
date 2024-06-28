@@ -1,7 +1,6 @@
 package uk.gov.hmcts;
 
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 
 import java.time.LocalDateTime;
 
@@ -41,9 +40,4 @@ public final class DummyCourtelUtil {
         result.setVersion(version);
         return new XhbCourtelListDao(result);
     }
-    
-    public static XhbCourtelListJson getXhbCourtelListJson() {
-        return new XhbCourtelListJson();
-    }
-
 }
