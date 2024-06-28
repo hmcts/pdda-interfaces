@@ -83,8 +83,7 @@ public class CathHelper {
     
     protected String addTokenToJsonHeader(String token, String jsonString) {
         LOG.debug("addTokenToJsonHeader()");
-        jsonString.replace(OAUTHTOKEN_PLACEHOLDER, token);
-        return jsonString;
+        return jsonString.replace(OAUTHTOKEN_PLACEHOLDER, token);
     }
     
     protected String postJsonToCath(String jsonWithToken) {
