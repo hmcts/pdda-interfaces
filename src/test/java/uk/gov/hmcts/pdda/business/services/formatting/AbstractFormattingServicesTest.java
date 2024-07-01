@@ -49,7 +49,7 @@ class AbstractFormattingServicesTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-
+    
     @Mock
     private BlobHelper mockBlobHelper;
 

@@ -29,6 +29,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -104,6 +105,9 @@ class FormattingServicesPddaSwitcherTest {
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @Mock
+    private CourtelHelper mockCourtelHelper;
+    
+    @Mock
     private BlobHelper mockBlobHelper;
 
     @InjectMocks
@@ -111,26 +115,20 @@ class FormattingServicesPddaSwitcherTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
-            mockXhbConfigPropRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
-            mockXhbCppListRepository);
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
         ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
         ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
         ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
         ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
-            mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
-            mockXhbCppFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
-            mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository", mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository", mockXhbFormattingRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
             mockXhbCppFormattingMergeRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
-            mockXhbXmlDocumentRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository", mockXhbXmlDocumentRepository);
     }
 
     @AfterEach
@@ -140,8 +138,7 @@ class FormattingServicesPddaSwitcherTest {
 
     @Test
     void testPddaSwitcherBothXhibitAndPdda() {
-        boolean result =
-            testPddaSwitcherBlocked(FormattingServicesTest.PddaSwitcher.PDDA_AND_XHIBIT);
+        boolean result = testPddaSwitcherBlocked(FormattingServicesTest.PddaSwitcher.PDDA_AND_XHIBIT);
         assertTrue(result, TRUE);
     }
 
@@ -154,13 +151,12 @@ class FormattingServicesPddaSwitcherTest {
     private boolean testPddaSwitcherBlocked(String pddaSwitcherValue) {
         // Setup
         expectPddaSwitcher(pddaSwitcherValue);
-        XhbClobDao xhbClobDao =
-            DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
         xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
-        FormattingValue formattingValue = DummyFormattingUtil
-            .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
+        FormattingValue formattingValue =
+            DummyFormattingUtil.getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
         Mockito.when(mockTranslationBundles.toXml()).thenReturn(TRANSLATION_BUNDLE_XML);
         // Run
         classUnderTest.processDocument(formattingValue, mockEntityManager);
@@ -177,7 +173,6 @@ class FormattingServicesPddaSwitcherTest {
     private void expectConfigProp(String propertyName, String propertyValue) {
         List<XhbConfigPropDao> daoList = new ArrayList<>();
         daoList.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName))
-            .thenReturn(daoList);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName)).thenReturn(daoList);
     }
 }

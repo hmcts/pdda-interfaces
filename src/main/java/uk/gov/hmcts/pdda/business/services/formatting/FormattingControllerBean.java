@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.ByteArrayOutputStream;
@@ -30,6 +31,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public class FormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     @SuppressWarnings("unused")
@@ -41,6 +43,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private static final String METHOD_SUFFIX = ") - ";
 
     private FormattingServices formattingServices;
+    private CourtelHelper courtelHelper;
     private BlobHelper blobHelper;
 
     public FormattingControllerBean(EntityManager entityManager) {
@@ -211,9 +214,18 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private FormattingServices getFormattingServices() {
         if (formattingServices == null) {
-            formattingServices = new FormattingServices(getEntityManager(), getBlobHelper());
+            formattingServices =
+                new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
         }
         return formattingServices;
+    }
+
+    private CourtelHelper getCourtelHelper() {
+        if (courtelHelper == null) {
+            courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
+                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository());
+        }
+        return courtelHelper;
     }
 
     private BlobHelper getBlobHelper() {
@@ -222,5 +234,4 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
         }
         return blobHelper;
     }
-
 }

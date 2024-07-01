@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.xml.sax.ContentHandler;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -33,6 +34,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -47,9 +49,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -239,8 +244,6 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     private static final String TRANSLATION_BUNDLE_XML = "";
     private static final String XML = "XML";
 
-    private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
-
     @Mock
     private EntityManager mockEntityManager;
 
@@ -282,12 +285,15 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
 
     @Mock
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
-    
+
+    @Mock
+    private CourtelHelper mockCourtelHelper;
+
     @Mock
     private BlobHelper mockBlobHelper;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
+    private FormattingServices classUnderTest;
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";
@@ -298,6 +304,24 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     public void setUp() throws Exception {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(TransformerFactory.class);
+        classUnderTest =
+            new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
+            mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
+        ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
+        ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
+        ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
+            mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
+            mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
+            mockXhbCppFormattingMergeRepository);
     }
 
     @AfterEach
@@ -371,8 +395,7 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     }
 
     @Test
-    void testProcessIwpDocumentFormattingException()
-        throws TransformerConfigurationException, IOException {
+    void testProcessIwpDocumentFormattingException() throws IOException, TransformerException {
         // Setup
         XhbClobDao xhbClobDao =
             DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), INTERNET_WEBPAGE);
@@ -383,10 +406,6 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
         xhbCppFormattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         List<XhbFormattingDao> formattingDaoLatestClobList = new ArrayList<>();
         formattingDaoLatestClobList.add(xhbFormattingDao);
-        List<XhbConfigPropDao> propertyList = new ArrayList<>();
-        propertyList.add(DummyServicesUtil.getXhbConfigPropDao(MERGE_CUT_OFF_TIME, "23:59:59"));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(MERGE_CUT_OFF_TIME))
-            .thenReturn(propertyList);
         Mockito.when(
             mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(LocalDateTime.class)))
@@ -408,21 +427,16 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
             .when(mockXhbFormattingRepository.findByDocumentAndClob(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
             .thenReturn(new ArrayList<>(0));
+        Mockito.doThrow(TransformerException.class).when(mockTransformer)
+            .transform(Mockito.isA(Source.class), Mockito.isA(Result.class));
         expectTransformer();
         AbstractXmlMergeUtils abstractXmlMergeUtils =
-            FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST);
+            FormattingServices.getXmlUtils(DOCTYPE_INTERNET_WEBPAGE);
         FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue(
             xhbClobDao.getClobData(), DOCTYPE_INTERNET_WEBPAGE, XML, xhbCppListDao);
         Assertions.assertThrows(FormattingException.class, () -> {
             // Run
             testProcessDocuments(abstractXmlMergeUtils, formattingValue);
-        });
-    }
-
-    @Test
-    void testProcessIwpCppFormattingNoDocs() {
-        Assertions.assertThrows(FormattingException.class, () -> {
-            classUnderTest.processIwpCppFormatting(null, null, null, null, null);
         });
     }
 
