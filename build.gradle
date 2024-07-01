@@ -235,6 +235,13 @@ dependencies {
     implementation group: 'io.rest-assured', name: 'rest-assured'
 }
 
+//tomcat {
+//    ignoreTldScan = true
+//}
+
+configurations {
+    all*.exclude group: 'org.apache.tomee', module: 'openejb-core'
+}
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
 
