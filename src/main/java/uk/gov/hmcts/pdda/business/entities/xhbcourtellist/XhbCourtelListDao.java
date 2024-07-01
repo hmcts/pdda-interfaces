@@ -7,6 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
+import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,7 +24,7 @@ import java.time.LocalDateTime;
         + "and o.numSendAttempts < :courtelMaxRetry and "
         + "(o.lastAttemptDatetime is null or "
         + "(o.lastAttemptDatetime + make_interval(0,0,0,0,0,0,:intervalValue) < :courtelListAmount))")
-public class XhbCourtelListDao extends AbstractCourtelDao implements Serializable {
+public class XhbCourtelListDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
 
@@ -51,6 +54,10 @@ public class XhbCourtelListDao extends AbstractCourtelDao implements Serializabl
 
     @Column(name = "MESSAGE_TEXT")
     private String messageText;
+    
+    // Non-columns
+    @Transient
+    private XhbBlobDao blob;
 
     public XhbCourtelListDao() {
         super();
@@ -139,5 +146,13 @@ public class XhbCourtelListDao extends AbstractCourtelDao implements Serializabl
 
     public final void setMessageText(String messageText) {
         this.messageText = messageText;
+    }
+    
+    public XhbBlobDao getBlob() {
+        return blob;
+    }
+
+    public void setBlob(XhbBlobDao blob) {
+        this.blob = blob;
     }
 }
