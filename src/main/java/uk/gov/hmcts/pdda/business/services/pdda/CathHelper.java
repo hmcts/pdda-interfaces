@@ -2,10 +2,11 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 
 /**
  * <p>
@@ -36,21 +37,20 @@ public class CathHelper {
         this.blobHelper = blobHelper;
     }
 
-    public XhbCourtelListJson convertDaoToJsonObject(XhbCourtelListDao xhbCourtelListDao) {
-        XhbCourtelListJson xhbCourtelListJson = new XhbCourtelListJson();
-        xhbCourtelListJson.setBlobData(blobHelper.getBlobData(xhbCourtelListDao.getBlobId()));
-        return xhbCourtelListJson;
+    public XhbCourtelListDao populateCourtelListBlob(XhbCourtelListDao xhbCourtelListDao) {
+        xhbCourtelListDao.setBlob(blobHelper.getBlob(xhbCourtelListDao.getBlobId()));
+        return xhbCourtelListDao;
     }
 
-    public String generateJsonString(XhbCourtelListJson xhbCourtelListJson) {
+    public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
         ObjectMapper mapper = new ObjectMapper();
-        String json = "";
+        mapper.registerModule(new JavaTimeModule());
         try {
-            json = mapper.writeValueAsString(xhbCourtelListJson);
+            courtelJson.setJson(mapper.writeValueAsString(xhbCourtelListDao));
         } catch (JsonProcessingException e) {
-            LOG.error("Error creating JSON String for {} object.", xhbCourtelListJson);
+            LOG.error("Error creating JSON String for {} object.", xhbCourtelListDao);
         }
-        return json;
+        return courtelJson.getJson();
     }
 
     public void send(String jsonString) {

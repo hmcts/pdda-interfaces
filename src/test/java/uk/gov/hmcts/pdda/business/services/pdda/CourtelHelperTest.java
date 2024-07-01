@@ -147,26 +147,35 @@ class CourtelHelperTest {
     }
 
     @Test
-    void testSendCourtelList() {
-        // Setup
-        byte[] blobData = "TestData".getBytes();
-        EasyMock.expect(mockBlobHelper.getBlobData(EasyMock.isA(Long.class))).andReturn(blobData);
-        EasyMock.replay(mockBlobHelper);
-        boolean result;
-        // Run
-        classUnderTest.sendCourtelList(getDummyCourtelList());
-        result = true;
-        // Checks
-        EasyMock.verify(mockBlobHelper);
+    void testSendCourtelListDailyList() {
+        boolean result = true;
+        testSendCourtelList("DL");
         assertTrue(result, NOT_TRUE);
     }
-
-    private XhbCourtelListDao getDummyCourtelList() {
-        Long id = Long.valueOf(-99);
-        XhbCourtelListDao xhbCourtelListDao = new XhbCourtelListDao();
-        xhbCourtelListDao.setXmlDocumentClobId(id);
-        xhbCourtelListDao.setBlobId(id);
-        return xhbCourtelListDao;
+    
+    @Test
+    void testSendCourtelListWebPage() {
+        boolean result = true;
+        testSendCourtelList("IWP");
+        assertTrue(result, NOT_TRUE);
     }
-
+    
+    void testSendCourtelList(String type) {
+        // Setup
+        byte[] blobData = "Test Blob Data".getBytes();
+        XhbCourtelListDao xhbCourtelListDao = DummyCourtelUtil.getXhbCourtelListDao();
+        xhbCourtelListDao.setBlob(DummyFormattingUtil.getXhbBlobDao(blobData));
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType(type);
+        EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class)))
+            .andReturn(xhbCourtelListDao.getBlob());
+        EasyMock.expect(mockXhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId()))
+            .andReturn(Optional.of(xhbXmlDocumentDao));
+        EasyMock.replay(mockBlobHelper);
+        EasyMock.replay(mockXhbXmlDocumentRepository);
+        // Run
+        classUnderTest.sendCourtelList(xhbCourtelListDao);
+        // Checks
+        EasyMock.verify(mockBlobHelper);
+    }
 }

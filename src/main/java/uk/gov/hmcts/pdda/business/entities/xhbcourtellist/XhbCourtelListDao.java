@@ -7,7 +7,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -52,6 +54,10 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
 
     @Column(name = "MESSAGE_TEXT")
     private String messageText;
+    
+    // Non-columns
+    @Transient
+    private XhbBlobDao blob;
 
     public XhbCourtelListDao() {
         super();
@@ -140,5 +146,13 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
 
     public final void setMessageText(String messageText) {
         this.messageText = messageText;
+    }
+    
+    public XhbBlobDao getBlob() {
+        return blob;
+    }
+
+    public void setBlob(XhbBlobDao blob) {
+        this.blob = blob;
     }
 }
