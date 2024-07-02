@@ -6,8 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
 import java.net.URI;
@@ -40,25 +40,34 @@ import java.util.stream.Collectors;
  * @author Mark Harris
  * @version 1.0
  */
-@Configuration
 public class OAuth2Helper {
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
     private static final String EMPTY_STRING = "";
-    private static final String TOKEN_URL = "http://localhost:8080/api/token"; // TODO
-
-
-    @Value("${AZURE_CLIENT_ID")
-    public String clientId;
-
-    @Value("${AZURE_CLIENT_SECRET}")
-    public String clientSecret;
-
+    private static final String AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token.url";
+    private static final String AZURE_TENANT_ID = "spring.cloud.azure.active-directory.profile.tenant-id";
+    private static final String AZURE_CLIENT_ID = "spring.cloud.azure.active-directory.credential.client-id";
+    private static final String AZURE_CLIENT_SECRET = "spring.cloud.azure.active-directory.credential.client-secret";
+    
+    // Values from application.properties
+    private final String tenantId;
+    private final String clientId;
+    private final String clientSecret;
+    private final String tokenUrl;
+    
+    public OAuth2Helper() {
+        Environment env = InitializationService.getInstance().getEnvironment();
+        this.tenantId = env.getProperty(AZURE_TENANT_ID);
+        this.clientId = env.getProperty(AZURE_CLIENT_ID);
+        this.clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
+        this.tokenUrl = env.getProperty(AZURE_TOKEN_URL);
+    }
 
     public String getAccessToken() {
         LOG.debug("getAccessToken()");
+        String url = String.format(this.tokenUrl,this.tenantId);
         // Get the authentication request
-        HttpRequest request = getAuthenticationRequest(TOKEN_URL);
+        HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
         String response = sendAuthenticationRequest(request);
         // Get the access token from the authentication response
@@ -66,7 +75,7 @@ public class OAuth2Helper {
     }
 
     private HttpRequest getAuthenticationRequest(String url) {
-        LOG.debug("getAuthorizationRequest()");
+        LOG.debug("getAuthorizationRequest({})", url);
         // Build the encoded clientId / clientSecret key
         String key = clientId + ":" + clientSecret;
         String encodedKey =  Base64.getEncoder().encodeToString(key.getBytes());
