@@ -1,7 +1,6 @@
 package uk.gov.hmcts;
 
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListJson;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -47,10 +46,6 @@ public final class DummyCourtelUtil {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         return new XhbCourtelListDao(result);
-    }
-
-    public static XhbCourtelListJson getXhbCourtelListJson() {
-        return new XhbCourtelListJson();
     }
 
     public static HttpResponse<String> getHttpResponse(int statusCode, String body) {

@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.WebPageJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -134,9 +137,39 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
-        String json = getCathHelper()
-            .generateJsonString(getCathHelper().convertDaoToJsonObject(xhbCourtelListDao));
+        String json = getCathHelper().generateJsonString(
+            getCathHelper().populateCourtelListBlob(xhbCourtelListDao),
+            getJsonObjectByDocType(xhbCourtelListDao));
         getCathHelper().send(json);
+    }
+
+    private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
+            xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
+
+        if (!xhbXmlDocumentDao.isEmpty()) {
+            // Check Document Type and create appropriate object
+            if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.get().getDocumentType())) {
+                return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
+            } else {
+                return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
+            }
+        }
+        return null;
+    }
+    
+    private CourtelJson populateJsonObject(CourtelJson jsonObject, XhbXmlDocumentDao xhbXmlDocumentDao) {
+        // Populate type specific fields
+        if (jsonObject instanceof ListJson listJson) {
+            listJson.setListType(xhbXmlDocumentDao.getDocumentType());
+        }
+        // Populate shared fields
+        jsonObject.setCourtId(xhbXmlDocumentDao.getCourtId());
+        jsonObject.setContentDate(LocalDateTime.now());
+        jsonObject.setProvenance("UK");
+        jsonObject.setLanguage("en");
+        
+        return jsonObject;
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {
