@@ -45,18 +45,24 @@ public class OAuth2Helper {
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
     private static final String EMPTY_STRING = "";
     private static final String AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token.url";
-    private static final String AZURE_TENANT_ID = "spring.cloud.azure.active-directory.profile.tenant-id";
-    private static final String AZURE_CLIENT_ID = "spring.cloud.azure.active-directory.credential.client-id";
-    private static final String AZURE_CLIENT_SECRET = "spring.cloud.azure.active-directory.credential.client-secret";
-    
+    private static final String AZURE_TENANT_ID =
+        "spring.cloud.azure.active-directory.profile.tenant-id";
+    private static final String AZURE_CLIENT_ID =
+        "spring.cloud.azure.active-directory.credential.client-id";
+    private static final String AZURE_CLIENT_SECRET =
+        "spring.cloud.azure.active-directory.credential.client-secret";
+
     // Values from application.properties
     private final String tenantId;
     private final String clientId;
     private final String clientSecret;
     private final String tokenUrl;
-    
+
     public OAuth2Helper() {
-        Environment env = InitializationService.getInstance().getEnvironment();
+        this(InitializationService.getInstance().getEnvironment());
+    }
+
+    protected OAuth2Helper(Environment env) {
         this.tenantId = env.getProperty(AZURE_TENANT_ID);
         this.clientId = env.getProperty(AZURE_CLIENT_ID);
         this.clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
@@ -65,7 +71,7 @@ public class OAuth2Helper {
 
     public String getAccessToken() {
         LOG.debug("getAccessToken()");
-        String url = String.format(this.tokenUrl,this.tenantId);
+        String url = String.format(this.tokenUrl, this.tenantId);
         // Get the authentication request
         HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
@@ -78,9 +84,9 @@ public class OAuth2Helper {
         LOG.debug("getAuthorizationRequest({})", url);
         // Build the encoded clientId / clientSecret key
         String key = clientId + ":" + clientSecret;
-        String encodedKey =  Base64.getEncoder().encodeToString(key.getBytes());
+        String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
         LOG.debug("encodedKey generated");
-        // Build the authentication post request 
+        // Build the authentication post request
         return HttpRequest.newBuilder().uri(URI.create(url))
             .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
                 "Basic " + encodedKey)
@@ -108,7 +114,7 @@ public class OAuth2Helper {
             String response = httpResponse.body().toString();
             LOG.debug("Response: {}", response);
             return response;
-        } catch (IOException | InterruptedException exception) {
+        } catch (IOException | InterruptedException | RuntimeException exception) {
             LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
         }
         return EMPTY_STRING;
@@ -125,7 +131,7 @@ public class OAuth2Helper {
                 LOG.error("Error in getAccessTokenFromResponse(): {}", exception.getMessage());
             }
         }
-        return null;
+        return EMPTY_STRING;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
