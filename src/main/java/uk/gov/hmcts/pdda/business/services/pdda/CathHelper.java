@@ -32,9 +32,16 @@ public class CathHelper {
     private static final String OAUTHTOKEN_PLACEHOLDER = "<OAuthToken>";
 
     private final BlobHelper blobHelper;
+    private OAuth2Helper oauth2Helper;
 
     public CathHelper(BlobHelper blobHelper) {
         this.blobHelper = blobHelper;
+    }
+    
+    // JUnit
+    public CathHelper(BlobHelper blobHelper, OAuth2Helper oauth2Helper) {
+        this(blobHelper);
+        this.oauth2Helper = oauth2Helper;
     }
 
     public XhbCourtelListDao populateCourtelListBlob(XhbCourtelListDao xhbCourtelListDao) {
@@ -55,10 +62,8 @@ public class CathHelper {
 
     public void send(String jsonString) {
         LOG.debug("send({})", jsonString);
-        // Get the credentials for the azure server
-        String credentials = getCredentials();
         // Get the authentication token
-        String token = getToken(credentials);
+        String token = getToken();
         // Add the authentication token to the json header
         String jsonWithToken = addTokenToJsonHeader(token, jsonString);
         // Post the json to CaTH
@@ -69,16 +74,9 @@ public class CathHelper {
         }
     }
     
-    protected String getCredentials() {
-        LOG.debug("getCredentials()");
-        // PDDA-388
-        return "";
-    }
-    
-    protected String getToken(String credentials) {
+    protected String getToken() {
         LOG.debug("getToken()");
-        // PDDA-389
-        return "";
+        return getOAuth2Helper().getAccessToken();
     }
     
     protected String addTokenToJsonHeader(String token, String jsonString) {
@@ -90,5 +88,12 @@ public class CathHelper {
         LOG.debug("postJsonToCath()");
         // TODO
         return EMPTY_STRING;
+    }
+    
+    private OAuth2Helper getOAuth2Helper() {
+        if (oauth2Helper == null) {
+            this.oauth2Helper = new OAuth2Helper();
+        }
+        return oauth2Helper;
     }
 }
