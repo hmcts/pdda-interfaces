@@ -51,7 +51,8 @@ import java.util.Optional;
 @LocalBean
 @ApplicationException(rollback = true)
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.ExcessiveParameterList"})
-public class PdConfigurationControllerBean extends PublicDisplayControllerBean implements Serializable {
+public class PdConfigurationControllerBean extends PublicDisplayControllerBean
+    implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
 
@@ -66,16 +67,20 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         super(entityManager);
     }
 
-    public PdConfigurationControllerBean(EntityManager entityManager, XhbCourtRepository xhbCourtRepository,
-        XhbRotationSetsRepository xhbRotationSetsRepository, XhbRotationSetDdRepository xhbRotationSetDdRepository,
-        XhbDisplayTypeRepository xhbDisplayTypeRepository, XhbDisplayRepository xhbDisplayRepository,
-        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
+    public PdConfigurationControllerBean(EntityManager entityManager,
+        XhbCourtRepository xhbCourtRepository, XhbRotationSetsRepository xhbRotationSetsRepository,
+        XhbRotationSetDdRepository xhbRotationSetDdRepository,
+        XhbDisplayTypeRepository xhbDisplayTypeRepository,
+        XhbDisplayRepository xhbDisplayRepository,
+        XhbDisplayLocationRepository xhbDisplayLocationRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository, PublicDisplayNotifier publicDisplayNotifier,
-        VipDisplayDocumentQuery vipDisplayDocumentQuery, VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
+        VipDisplayDocumentQuery vipDisplayDocumentQuery,
+        VipDisplayCourtRoomQuery vipDisplayCourtRoomQuery) {
         super(entityManager, null, xhbCourtRepository, null, null, xhbRotationSetsRepository,
-            xhbRotationSetDdRepository, xhbDisplayTypeRepository, xhbDisplayRepository, xhbDisplayLocationRepository,
-            xhbCourtSiteRepository, xhbCourtRoomRepository, publicDisplayNotifier, vipDisplayDocumentQuery,
-            vipDisplayCourtRoomQuery);
+            xhbRotationSetDdRepository, xhbDisplayTypeRepository, xhbDisplayRepository,
+            xhbDisplayLocationRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
+            publicDisplayNotifier, vipDisplayDocumentQuery, vipDisplayCourtRoomQuery);
     }
 
     public PdConfigurationControllerBean() {
@@ -116,39 +121,46 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
                 throw new CourtNotFoundException(courtId);
             }
 
-            return getDisplayRotationSetDataHelper().getDataForCourt(court.get(), getXhbDisplayRepository(),
-                getXhbRotationSetsRepository(), getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
-                getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
-                getXhbCourtRoomRepository());
+            return getDisplayRotationSetDataHelper().getDataForCourt(court.get(),
+                getXhbDisplayRepository(), getXhbRotationSetsRepository(),
+                getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
+                getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(),
+                getXhbCourtSiteRepository(), getXhbCourtRoomRepository());
         }
     }
 
     /**
      * Gets the configuration data for all displays using the rotation set.
      *
-     * @param courtId The court that the rotation set belongs to.
+     * @param courtId       The court that the rotation set belongs to.
      * @param rotationSetId The rotation set for which to get the data.
-     * @return An array of <code>DisplayRotationSetData</code>, one for every display using the rotation set.
+     * @return An array of <code>DisplayRotationSetData</code>, one for every display using the
+     *     rotation set.
      */
-    public DisplayRotationSetData[] getUpdatedRotationSet(final int courtId, final int rotationSetId) {
-        final String methodName = "getUpdatedRotationSet(" + courtId + "," + rotationSetId + METHOD_SUFFIX;
+    public DisplayRotationSetData[] getUpdatedRotationSet(final int courtId,
+        final int rotationSetId) {
+        final String methodName =
+            "getUpdatedRotationSet(" + courtId + "," + rotationSetId + METHOD_SUFFIX;
         LOG.debug(ENTERED, methodName);
 
         DisplayRotationSetData[] returnArray;
 
-        Optional<XhbRotationSetsDao> rotationSet = getXhbRotationSetsRepository().findById(Long.valueOf(rotationSetId));
+        Optional<XhbRotationSetsDao> rotationSet =
+            getXhbRotationSetsRepository().findById(Long.valueOf(rotationSetId));
         if (rotationSet.isPresent()) {
             // Set the court object on the XhbRotationSetsDAO
             Optional<XhbCourtDao> court = getXhbCourtRepository().findById(courtId);
             if (!court.isPresent()) {
                 throw new CourtNotFoundException(courtId);
             }
-            List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository().findByRotationSetId(rotationSetId);
+            List<XhbDisplayDao> xhbDisplays =
+                getXhbDisplayRepository().findByRotationSetId(rotationSetId);
 
             returnArray =
-                getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(), rotationSet.get(),
-                    xhbDisplays, getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
-                    getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
+                getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(),
+                    rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(),
+                    getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
+                    getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
                     getXhbCourtRoomRepository());
         } else {
             returnArray = new DisplayRotationSetData[0];
@@ -159,10 +171,10 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     /**
      * Gets the configuration data for a given display in a court.
      *
-     * @param courtId The court that the rotation set belongs to.
+     * @param courtId   The court that the rotation set belongs to.
      * @param displayId The display for which to get the data
-     * @return A <code>DisplayRotationSetData</code> array representing the configuration of the display. If no display
-     *     exists of this ID then it returns a zero length array.
+     * @return A <code>DisplayRotationSetData</code> array representing the configuration of the
+     *     display. If no display exists of this ID then it returns a zero length array.
      */
     @SuppressWarnings("checkstyle:JavadocTagContinuationIndentation")
     public DisplayRotationSetData[] getUpdatedDisplay(final int courtId, final int displayId) {
@@ -179,13 +191,14 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
             }
 
             DisplayRotationSetData displayRotationSetData = null;
-            Optional<XhbRotationSetsDao> rotationSet =
-                getXhbRotationSetsRepository().findById(Long.valueOf(display.get().getRotationSetId()));
+            Optional<XhbRotationSetsDao> rotationSet = getXhbRotationSetsRepository().findById(
+                Long.valueOf(display.get().getRotationSetId()));
             if (rotationSet.isPresent()) {
                 displayRotationSetData =
-                    getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(), display.get(),
-                        rotationSet.get(), getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
-                        getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
+                    getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(),
+                        display.get(), rotationSet.get(), getXhbRotationSetDdRepository(),
+                        getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
+                        getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
                         getXhbCourtRoomRepository());
             }
             if (displayRotationSetData != null) {
@@ -200,7 +213,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     }
 
     /**
-     * Returns a rotation set with an array of the display documents that are assigned in to the rotation set.
+     * Returns a rotation set with an array of the display documents that are assigned in to the
+     * rotation set.
      *
      * @param rotationSetId The rotation set being queried
      * @return RotationSetComplexValue
@@ -217,27 +231,31 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         RotationSetComplexValue returnValue = new RotationSetComplexValue();
         returnValue.setRotationSetDao(rotationSetLocal.get());
 
-        List<XhbRotationSetDdDao> rotationSetDdCol = getXhbRotationSetDdRepository().findByRotationSetId(rotationSetId);
+        List<XhbRotationSetDdDao> rotationSetDdCol =
+            getXhbRotationSetDdRepository().findByRotationSetId(rotationSetId);
         List<RotationSetDdComplexValue> results = new ArrayList<>();
         RotationSetDdComplexValue ddComplex;
         Iterator<XhbRotationSetDdDao> rotationSetDdIter = rotationSetDdCol.iterator();
         while (rotationSetDdIter.hasNext()) {
             XhbRotationSetDdDao rotationSetDdLocal = rotationSetDdIter.next();
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
-                getXhbDisplayDocumentRepository().findById(rotationSetDdLocal.getDisplayDocumentId());
+                getXhbDisplayDocumentRepository().findById(
+                    rotationSetDdLocal.getDisplayDocumentId());
             XhbDisplayDocumentDao xhbDisplayDocumentDao =
                 xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
             ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);
             results.add(ddComplex);
         }
-        returnValue.setRotationSetDdComplexValues(results.toArray(new RotationSetDdComplexValue[0]));
+        returnValue.setRotationSetDdComplexValues(
+            results.toArray(new RotationSetDdComplexValue[0]));
         return returnValue;
     }
 
     /**
-     * Requests that the rotation set and display documents within the rotation set are all re-rendered from scratch.
-     * <p/>
-     * Note: sends a RenderEntireDisplayRotationSet JMS configuration message
+     * Requests that the rotation set and display documents within the rotation set are all
+     * re-rendered from scratch.
+     *
+     * <p>Note: sends a RenderEntireDisplayRotationSet JMS configuration message
      *
      * @param displayId the display that will have its pages and rotation set re-rendered
      */
@@ -255,8 +273,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
 
     /**
      * Requests that all rotation sets and display documents are all re-rendered from scratch.
-     * <p/>
-     * Note: sends a RenderEntireCourt JMS configuration message
+     *
+     * <p>Note: sends a RenderEntireCourt JMS configuration message
      *
      * @param courtId the court to be completely re-rendered.
      */
@@ -293,7 +311,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
                 // If a multi site court, set the multi site display name to '<Court Site Short
                 // Name>-<Court Room Display Name>'
                 if (numCourtSites > ONE) {
-                    courtRoom.setMultiSiteDisplayName(site.getShortName() + "-" + courtRoom.getDisplayName());
+                    courtRoom.setMultiSiteDisplayName(
+                        site.getShortName() + "-" + courtRoom.getDisplayName());
                 }
                 al.add(courtRoom);
             }
@@ -303,8 +322,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     }
 
     /**
-     * Requests courtrooms assigned to the VIP screen for a court house If none are found, falls back to returning all
-     * court rooms.
+     * Requests courtrooms assigned to the VIP screen for a court house If none are found, falls
+     * back to returning all court rooms.
      *
      * @param courtId the court house
      * @return array of XhbCourtRoomDAO
@@ -328,8 +347,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
     }
 
     /**
-     * Returns a composite value object containing display document, court room and unassigned cases information for the
-     * court site.
+     * Returns a composite value object containing display document, court room and unassigned cases
+     * information for the court site.
      *
      * @return VIPDisplayConfiguration
      */
@@ -345,7 +364,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         Collection<VipDisplayConfigurationDisplayDocument> vipDisplayDocumentCol =
             vipDisplayDocumentQuery.getData(courtSiteId);
         if (vipDisplayDocumentCol != null) {
-            displayDocArray = new VipDisplayConfigurationDisplayDocument[vipDisplayDocumentCol.size()];
+            displayDocArray =
+                new VipDisplayConfigurationDisplayDocument[vipDisplayDocumentCol.size()];
             vipDisplayDocumentCol.toArray(displayDocArray);
         }
 
@@ -367,8 +387,8 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean i
         return array.toArray(new XhbCourtRoomDao[0]);
     }
 
-    protected RotationSetDdComplexValue getRotationSetDdComplexValue(XhbRotationSetDdDao rotationSetDdDao,
-        XhbDisplayDocumentDao displayDocumentDao) {
+    protected RotationSetDdComplexValue getRotationSetDdComplexValue(
+        XhbRotationSetDdDao rotationSetDdDao, XhbDisplayDocumentDao displayDocumentDao) {
         return new RotationSetDdComplexValue(rotationSetDdDao, displayDocumentDao);
     }
 }
