@@ -17,6 +17,7 @@ plugins {
 	id 'org.sonarqube' version '5.0.0.4638'
 	id 'checkstyle'
   id 'pmd'
+  id 'war'
   id 'jacoco'
   id 'org.flywaydb.flyway' version '10.15.0'
 }
