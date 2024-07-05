@@ -132,10 +132,10 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Gets the configuration data for all displays using the rotation set.
      *
-     * @param courtId       The court that the rotation set belongs to.
+     * @param courtId The court that the rotation set belongs to.
      * @param rotationSetId The rotation set for which to get the data.
      * @return An array of <code>DisplayRotationSetData</code>, one for every display using the
-     *     rotation set.
+     *         rotation set.
      */
     public DisplayRotationSetData[] getUpdatedRotationSet(final int courtId,
         final int rotationSetId) {
@@ -156,12 +156,11 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
             List<XhbDisplayDao> xhbDisplays =
                 getXhbDisplayRepository().findByRotationSetId(rotationSetId);
 
-            returnArray =
-                getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(court.get(),
-                    rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(),
-                    getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
-                    getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
-                    getXhbCourtRoomRepository());
+            returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(
+                court.get(), rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(),
+                getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
+                getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
+                getXhbCourtRoomRepository());
         } else {
             returnArray = new DisplayRotationSetData[0];
         }
@@ -171,10 +170,10 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Gets the configuration data for a given display in a court.
      *
-     * @param courtId   The court that the rotation set belongs to.
+     * @param courtId The court that the rotation set belongs to.
      * @param displayId The display for which to get the data
      * @return A <code>DisplayRotationSetData</code> array representing the configuration of the
-     *     display. If no display exists of this ID then it returns a zero length array.
+     *         display. If no display exists of this ID then it returns a zero length array.
      */
     @SuppressWarnings("checkstyle:JavadocTagContinuationIndentation")
     public DisplayRotationSetData[] getUpdatedDisplay(final int courtId, final int displayId) {
@@ -191,15 +190,14 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
             }
 
             DisplayRotationSetData displayRotationSetData = null;
-            Optional<XhbRotationSetsDao> rotationSet = getXhbRotationSetsRepository().findById(
-                Long.valueOf(display.get().getRotationSetId()));
+            Optional<XhbRotationSetsDao> rotationSet = getXhbRotationSetsRepository()
+                .findById(Long.valueOf(display.get().getRotationSetId()));
             if (rotationSet.isPresent()) {
-                displayRotationSetData =
-                    getDisplayRotationSetDataHelper().getDisplayRotationSetData(court.get(),
-                        display.get(), rotationSet.get(), getXhbRotationSetDdRepository(),
-                        getXhbDisplayDocumentRepository(), getXhbDisplayTypeRepository(),
-                        getXhbDisplayLocationRepository(), getXhbCourtSiteRepository(),
-                        getXhbCourtRoomRepository());
+                displayRotationSetData = getDisplayRotationSetDataHelper()
+                    .getDisplayRotationSetData(court.get(), display.get(), rotationSet.get(),
+                        getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
+                        getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(),
+                        getXhbCourtSiteRepository(), getXhbCourtRoomRepository());
             }
             if (displayRotationSetData != null) {
                 returnArray = new DisplayRotationSetData[] {displayRotationSetData};
@@ -238,16 +236,15 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         Iterator<XhbRotationSetDdDao> rotationSetDdIter = rotationSetDdCol.iterator();
         while (rotationSetDdIter.hasNext()) {
             XhbRotationSetDdDao rotationSetDdLocal = rotationSetDdIter.next();
-            Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
-                getXhbDisplayDocumentRepository().findById(
-                    rotationSetDdLocal.getDisplayDocumentId());
+            Optional<XhbDisplayDocumentDao> xhbDisplayDocument = getXhbDisplayDocumentRepository()
+                .findById(rotationSetDdLocal.getDisplayDocumentId());
             XhbDisplayDocumentDao xhbDisplayDocumentDao =
                 xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
             ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);
             results.add(ddComplex);
         }
-        returnValue.setRotationSetDdComplexValues(
-            results.toArray(new RotationSetDdComplexValue[0]));
+        returnValue
+            .setRotationSetDdComplexValues(results.toArray(new RotationSetDdComplexValue[0]));
         return returnValue;
     }
 
