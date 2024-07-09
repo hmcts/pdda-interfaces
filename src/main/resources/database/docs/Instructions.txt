@@ -70,6 +70,14 @@ To ensure you are running on the pdda schema, then:
 
 	\i 'load_test_data.sql'
 
+---------------------------------
+SETTING MAX NUMBER OF CONNECTIONS
+---------------------------------
+
+Make sure to run the following command in postgresql to increase the maximum number of connections, ensure you are in the pdda schema:
+
+	ALTER SYSTEM SET max_connections TO '800';
+
 -------------
 FLYWAY REPAIR
 -------------
