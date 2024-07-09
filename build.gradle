@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.15.0")
+    classpath("org.flywaydb:flyway-database-postgresql:10.15.2")
   }
 }
 
@@ -13,12 +13,13 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.5'
 	id 'org.springframework.boot' version '3.1.12'
 	id 'com.github.ben-manes.versions' version '0.51.0'
-	id 'org.owasp.dependencycheck' version '9.2.0'
+	id 'org.owasp.dependencycheck' version '10.0.2'
 	id 'org.sonarqube' version '5.0.0.4638'
 	id 'checkstyle'
   id 'pmd'
+  id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.15.0'
+  id 'org.flywaydb.flyway' version '10.15.2'
 }
 
 group = 'uk.gov.hmcts'
@@ -170,7 +171,6 @@ ext {
 
 ext['snakeyaml.version'] = '2.0'
 
-
 dependencies {
     implementation 'org.springframework:spring-expression:6.1.10'
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.1.12'
@@ -181,7 +181,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
     implementation 'org.apache.commons:commons-lang3:3.14.0'
-    implementation 'org.apache.openjpa:openjpa-persistence-jdbc:3.2.2'
+    implementation 'org.apache.openjpa:openjpa-persistence-jdbc:4.0.0'
     implementation 'org.codehaus.castor:castor-codegen:1.4.1'
     implementation 'xalan:serializer:2.7.3'
     implementation 'org.jboss.spec.javax.rmi:jboss-rmi-api_1.0_spec:1.0.6.Final'
@@ -218,15 +218,15 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.25'
     implementation 'com.squareup.okio:okio:3.9.0'
-    implementation 'org.flywaydb:flyway-core:10.15.0'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.15.0'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.15.0'
+    implementation 'org.flywaydb:flyway-core:10.15.2'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.15.2'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.15.2'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
   }
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
-    testImplementation 'org.easymock:easymock:5.0.0'
+    testImplementation 'org.easymock:easymock:5.3.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
@@ -235,7 +235,6 @@ dependencies {
     compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:4.0.0'
     implementation group: 'io.rest-assured', name: 'rest-assured'
 }
-
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
 
@@ -254,6 +253,8 @@ configurations {
    functionalTestImplementation.extendsFrom testImplementation
    functionalTestRuntimeOnly.extendsFrom runtimeOnly
    all*.exclude group: 'xml-apis', module: 'xml-apis'
+   all*.exclude group: 'org.apache.tomee', module: 'openejb-core'
+   all*.exclude group: 'commons-logging', module: 'commons-logging'
  }
 
  tasks.register('smoke', Test) {
