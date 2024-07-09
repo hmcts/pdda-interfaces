@@ -102,6 +102,7 @@ public class OAuth2Helper {
             .collect(Collectors.joining("&"));
     }
 
+    @SuppressWarnings("squid:S2142")
     private String sendAuthenticationRequest(HttpRequest request) {
         LOG.debug("sendAuthorizationRequest()");
         try {
