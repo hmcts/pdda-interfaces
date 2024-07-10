@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 
 import java.util.Locale;
@@ -60,10 +61,13 @@ class InitServletTest {
     private ServletConfig config;
     
     @Mock
+    private Environment mockEnvironment;
+    
+    @Mock
     private EntityManagerFactory mockEntityManagerFactory;
 
     @InjectMocks
-    private final InitServlet classUnderTest = new InitServlet(mockEntityManagerFactory);
+    private final InitServlet classUnderTest = new InitServlet(mockEntityManagerFactory, mockEnvironment);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -92,6 +96,7 @@ class InitServletTest {
         mockInitializationService.setInitializationDelay(Long.parseLong(initializationDelay));
         Mockito.when(config.getInitParameter("num.initialization.workers")).thenReturn(initilizationWorkers);
         mockInitializationService.setNumInitializationWorkers(Integer.parseInt(initilizationWorkers));
+        mockInitializationService.setEnvironment(mockEnvironment);
         mockInitializationService.initialize();
 
         boolean result = false;

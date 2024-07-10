@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 
 import java.util.Locale;
 
@@ -34,10 +35,12 @@ public class InitServlet extends HttpServlet {
     private static final String INITIALIZATION_DELAY = "initialization.delay";
     
     private final EntityManagerFactory entityManagerFactory;
+    private final Environment env;
     
-    public InitServlet(EntityManagerFactory entityManagerFactory) {
+    public InitServlet(EntityManagerFactory entityManagerFactory, Environment env) {
         super();
         this.entityManagerFactory = entityManagerFactory;
+        this.env = env;
     }
 
     /**
@@ -57,6 +60,9 @@ public class InitServlet extends HttpServlet {
 
         // Setup the entityManagerFactory
         service.setEntityManagerFactory(this.entityManagerFactory);
+        
+        // Setup the envionment
+        service.setEnvironment(this.env);
         
         // Setup the default locale
         service.setDefaultLocale(getDefaultLocale());

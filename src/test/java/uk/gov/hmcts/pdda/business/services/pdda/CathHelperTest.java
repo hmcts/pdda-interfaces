@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -37,13 +38,16 @@ class CathHelperTest {
 
     @Mock
     private BlobHelper mockBlobHelper;
+    
+    @Mock
+    private OAuth2Helper mockOAuth2Helper;
 
     @InjectMocks
     private CathHelper classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
-        classUnderTest = new CathHelper(mockBlobHelper);
+        classUnderTest = new CathHelper(mockBlobHelper, mockOAuth2Helper);
     }
 
     @AfterEach
@@ -55,6 +59,8 @@ class CathHelperTest {
     void testSend() {
         // Setup
         String json = "";
+        // Expects
+        Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
         // Run
         boolean result = false;
         try {
