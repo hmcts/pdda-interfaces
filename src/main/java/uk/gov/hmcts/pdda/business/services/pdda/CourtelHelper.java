@@ -12,7 +12,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -137,10 +136,11 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
+        CourtelJson courtelJson = getJsonObjectByDocType(xhbCourtelListDao);
         String json = getCathHelper().generateJsonString(
             getCathHelper().populateCourtelListBlob(xhbCourtelListDao),
-            getJsonObjectByDocType(xhbCourtelListDao));
-        getCathHelper().send(json);
+            courtelJson);
+        getCathHelper().send(courtelJson.getArtefactType(), json);
     }
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
