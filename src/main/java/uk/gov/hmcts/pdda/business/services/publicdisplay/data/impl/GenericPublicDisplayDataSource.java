@@ -120,7 +120,8 @@ public class GenericPublicDisplayDataSource extends DataSource {
             } catch (Exception e) {
                 // Other Exception adding the CPP Data so log the error and just use the Xhibit
                 // data
-                LOG.error("retrieve() - Exception retrieving CPP Data - {}", e.getMessage());
+                LOG.error("retrieve() - Exception retrieving CPP Data - {}, {}",
+                    cppDataSource.getClass().getName(), e.getMessage());
                 setData(summaryByNameData);
             }
         } else {
@@ -164,8 +165,7 @@ public class GenericPublicDisplayDataSource extends DataSource {
     private void setCourtName(final Integer courtId, final EntityManager entityManager) {
         Optional<XhbCourtDao> court = getXhbCourtRepository(entityManager).findById(courtId);
         if (!court.isPresent()) {
-            throw new CourtNotFoundException(
-                courtId);
+            throw new CourtNotFoundException(courtId);
         }
         getData().setCourtName(StringUtilities.toSentenceCase(court.get().getCourtName()));
     }
