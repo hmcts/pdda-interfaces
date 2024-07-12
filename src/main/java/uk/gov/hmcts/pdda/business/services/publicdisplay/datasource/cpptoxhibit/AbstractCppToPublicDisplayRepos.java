@@ -31,7 +31,8 @@ import javax.xml.xpath.XPathFactory;
 @SuppressWarnings("PMD.GodClass")
 public class AbstractCppToPublicDisplayRepos {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractCppToPublicDisplayRepos.class);
+    private static final Logger LOG =
+        LoggerFactory.getLogger(AbstractCppToPublicDisplayRepos.class);
     private static final Integer ONE = 1;
     private static final String DATE_MASK = "dd/MM/yy HH:mm";
     protected static final String EMPTY_STRING = "";
@@ -51,8 +52,9 @@ public class AbstractCppToPublicDisplayRepos {
 
     // Use only in unit test
     protected AbstractCppToPublicDisplayRepos(XhbCourtRepository xhbCourtRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
-        XhbClobRepository xhbClobRepository, CppFormattingHelper cppFormattingHelper) {
+        XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRoomRepository xhbCourtRoomRepository, XhbClobRepository xhbClobRepository,
+        CppFormattingHelper cppFormattingHelper) {
         this();
         this.xhbCourtRepository = xhbCourtRepository;
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
@@ -69,7 +71,8 @@ public class AbstractCppToPublicDisplayRepos {
      */
     protected LocalDateTime convertStringToTimestamp(String dateTime) {
         LocalDateTime timestamp = null;
-        String methodName = "convertStringToTimestamp(dateTime=>" + dateTime + ", mask=>" + DATE_MASK + ") ";
+        String methodName =
+            "convertStringToTimestamp(dateTime=>" + dateTime + ", mask=>" + DATE_MASK + ") ";
         try {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_MASK);
             timestamp = LocalDateTime.parse(dateTime, dateFormat);
@@ -104,23 +107,26 @@ public class AbstractCppToPublicDisplayRepos {
     /**
      * Get a court structure object to use with retrieving the CPP data from the XML.
      */
-    protected void retrieveCourtStructure(XhbCourtDao court) {
+    protected void retrieveCourtStructure(final EntityManager entityManager, XhbCourtDao court) {
         CourtStructureValue courtStructureValue = new CourtStructureValue();
 
         courtStructureValue.setCourt(court);
 
         XhbCourtRoomDao[] courtRoomArray = new XhbCourtRoomDao[0];
         List<XhbCourtSiteDao> courtSitesList = new ArrayList<>();
-        List<XhbCourtSiteDao> allCourtSitesForCourt = xhbCourtSiteRepository.findByCourtId(court.getCourtId());
+        List<XhbCourtSiteDao> allCourtSitesForCourt =
+            getXhbCourtSiteRepository(entityManager).findByCourtId(court.getCourtId());
         for (XhbCourtSiteDao courtSite : allCourtSitesForCourt) {
             if ("Y".equals(courtSite.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtSite");
             } else {
                 courtSitesList.add(courtSite);
 
-                List<XhbCourtRoomDao> courtRoomList = getCourtRoomList(courtSite, allCourtSitesForCourt);
+                List<XhbCourtRoomDao> courtRoomList =
+                    getCourtRoomList(entityManager, courtSite, allCourtSitesForCourt);
 
-                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(), courtRoomList.toArray(courtRoomArray));
+                courtStructureValue.addCourtRooms(courtSite.getCourtSiteId(),
+                    courtRoomList.toArray(courtRoomArray));
             }
         }
 
@@ -129,15 +135,18 @@ public class AbstractCppToPublicDisplayRepos {
         xhbCourtStructure = courtStructureValue;
     }
 
-    private List<XhbCourtRoomDao> getCourtRoomList(XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
+    private List<XhbCourtRoomDao> getCourtRoomList(final EntityManager entityManager,
+        XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
         List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
-        List<XhbCourtRoomDao> allCourtRooms = xhbCourtRoomRepository.findByCourtSiteId(courtSite.getCourtSiteId());
+        List<XhbCourtRoomDao> allCourtRooms =
+            getXhbCourtRoomRepository(entityManager).findByCourtSiteId(courtSite.getCourtSiteId());
         for (XhbCourtRoomDao courtRoom : allCourtRooms) {
             if ("Y".equals(courtRoom.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtRoom");
             } else {
                 if (xhbCourtSites.size() > ONE) {
-                    courtRoom.setMultiSiteDisplayName(courtSite.getShortName() + "-" + courtRoom.getDisplayName());
+                    courtRoom.setMultiSiteDisplayName(
+                        courtSite.getShortName() + "-" + courtRoom.getDisplayName());
                 }
 
                 courtRoomList.add(courtRoom);
@@ -169,6 +178,21 @@ public class AbstractCppToPublicDisplayRepos {
         }
         return xhbCourtRepository;
     }
+
+    protected XhbCourtSiteRepository getXhbCourtSiteRepository(EntityManager entityManager) {
+        if (xhbCourtSiteRepository == null) {
+            return new XhbCourtSiteRepository(entityManager);
+        }
+        return xhbCourtSiteRepository;
+    }
+
+    protected XhbCourtRoomRepository getXhbCourtRoomRepository(EntityManager entityManager) {
+        if (xhbCourtRoomRepository == null) {
+            return new XhbCourtRoomRepository(entityManager);
+        }
+        return xhbCourtRoomRepository;
+    }
+
 
     protected XhbClobRepository getXhbClobRepository(EntityManager entityManager) {
         if (xhbClobRepository == null) {
