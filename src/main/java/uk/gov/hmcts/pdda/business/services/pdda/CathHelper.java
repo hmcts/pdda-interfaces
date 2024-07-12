@@ -54,10 +54,11 @@ public class CathHelper {
         mapper.registerModule(new JavaTimeModule());
         try {
             courtelJson.setJson(mapper.writeValueAsString(xhbCourtelListDao));
+            return courtelJson.getJson();
         } catch (JsonProcessingException e) {
             LOG.error("Error creating JSON String for {} object.", xhbCourtelListDao);
         }
-        return courtelJson.getJson();
+        return EMPTY_STRING;
     }
 
     public void send(CourtelJson courtelJson) {
