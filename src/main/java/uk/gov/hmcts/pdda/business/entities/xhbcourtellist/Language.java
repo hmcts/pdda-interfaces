@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.business.services.pdda.cath;
+package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
 /**
  * A class which defines the language of the publication.

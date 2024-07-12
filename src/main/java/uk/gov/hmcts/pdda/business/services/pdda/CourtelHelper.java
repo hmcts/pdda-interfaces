@@ -6,7 +6,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListType;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.WebPageJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
@@ -136,11 +138,14 @@ public class CourtelHelper {
     }
 
     public void sendCourtelList(XhbCourtelListDao xhbCourtelListDao) {
+        // Populate the blob
+        xhbCourtelListDao.setBlob(blobHelper.getBlob(xhbCourtelListDao.getBlobId()));
+        // Get the Courtel Json object
         CourtelJson courtelJson = getJsonObjectByDocType(xhbCourtelListDao);
-        String json = getCathHelper().generateJsonString(
-            getCathHelper().populateCourtelListBlob(xhbCourtelListDao),
-            courtelJson);
-        getCathHelper().send(courtelJson.getArtefactType(), json);
+        // Set the Json string
+        courtelJson.setJson(getCathHelper().generateJsonString(xhbCourtelListDao, courtelJson));
+        // Send the Json to CaTH
+        getCathHelper().send(courtelJson);
     }
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
@@ -157,18 +162,18 @@ public class CourtelHelper {
         }
         return null;
     }
-    
-    private CourtelJson populateJsonObject(CourtelJson jsonObject, XhbXmlDocumentDao xhbXmlDocumentDao) {
+
+    private CourtelJson populateJsonObject(CourtelJson jsonObject,
+        XhbXmlDocumentDao xhbXmlDocumentDao) {
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
-            listJson.setListType(xhbXmlDocumentDao.getDocumentType());
+            listJson.setListType(ListType.fromString(xhbXmlDocumentDao.getDocumentType()));
         }
         // Populate shared fields
         jsonObject.setCourtId(xhbXmlDocumentDao.getCourtId());
         jsonObject.setContentDate(LocalDateTime.now());
-        jsonObject.setProvenance("UK");
-        jsonObject.setLanguage("en");
-        
+        jsonObject.setLanguage(Language.ENGLISH);
+
         return jsonObject;
     }
 
@@ -181,7 +186,7 @@ public class CourtelHelper {
 
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
-            this.cathHelper = new CathHelper(blobHelper);
+            this.cathHelper = new CathHelper();
         }
         return cathHelper;
     }

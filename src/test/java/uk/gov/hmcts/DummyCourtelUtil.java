@@ -1,5 +1,9 @@
 package uk.gov.hmcts;
 
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ArtefactType;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListType;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 
 import java.net.URI;
@@ -46,6 +50,14 @@ public final class DummyCourtelUtil {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         return new XhbCourtelListDao(result);
+    }
+    
+    public static ListJson getListJson() {
+        ListJson result = new ListJson();
+        result.setListType(ListType.CROWN_DAILY_LIST);
+        result.setLanguage(Language.ENGLISH);
+        result.setJson("");
+        return result;
     }
 
     public static HttpResponse<String> getHttpResponse(int statusCode, String body) {

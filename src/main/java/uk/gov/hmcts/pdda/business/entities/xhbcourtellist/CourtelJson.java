@@ -1,15 +1,14 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
-import uk.gov.hmcts.pdda.business.services.pdda.cath.ArtefactType;
 import java.time.LocalDateTime;
 
-public class CourtelJson {
+public abstract class CourtelJson {
 
     private String json;
     private Integer courtId;
     private LocalDateTime contentDate;
     private String provenance;
-    private String language;
+    private Language language;
     private ArtefactType artefactType;
 
     public String getJson() {
@@ -44,11 +43,11 @@ public class CourtelJson {
         this.provenance = provenance;
     }
     
-    public String getLanguage() {
+    public Language getLanguage() {
         return language;
     }
     
-    public void setLanguage(String language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
     
@@ -59,4 +58,6 @@ public class CourtelJson {
     public void setArtefactType(ArtefactType artefactType) {
         this.artefactType = artefactType;
     }
+    
+    public abstract ListType getListType();
 }

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.business.services.pdda.cath;
+package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
 /**
  * An enum which represents the Artefact type.

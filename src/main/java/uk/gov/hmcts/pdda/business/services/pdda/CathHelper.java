@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
-import uk.gov.hmcts.pdda.business.services.pdda.cath.ArtefactType;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
+
+import java.net.http.HttpRequest;
+import java.time.LocalDateTime;
 
 
 /**
@@ -33,25 +36,18 @@ public class CathHelper {
     private static final String EMPTY_STRING = "";
     private static final String OAUTHTOKEN_PLACEHOLDER = "<OAuthToken>";
     private static final String POST_URL = "/publication";
-    private static final String PROVENANCE = "Provenance";
 
-    private final BlobHelper blobHelper;
     private OAuth2Helper oauth2Helper;
 
-    public CathHelper(BlobHelper blobHelper) {
-        this.blobHelper = blobHelper;
+    public CathHelper() {
+        super();
     }
 
     // JUnit
-    public CathHelper(BlobHelper blobHelper, OAuth2Helper oauth2Helper) {
-        this(blobHelper);
+    public CathHelper(OAuth2Helper oauth2Helper) {
         this.oauth2Helper = oauth2Helper;
     }
 
-    public XhbCourtelListDao populateCourtelListBlob(XhbCourtelListDao xhbCourtelListDao) {
-        xhbCourtelListDao.setBlob(blobHelper.getBlob(xhbCourtelListDao.getBlobId()));
-        return xhbCourtelListDao;
-    }
 
     public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
         ObjectMapper mapper = new ObjectMapper();
@@ -64,16 +60,17 @@ public class CathHelper {
         return courtelJson.getJson();
     }
 
-    public void send(ArtefactType artefactType, String jsonString) {
-        LOG.debug("send({}, {})", artefactType, jsonString);
+    public void send(CourtelJson courtelJson) {
+        LOG.debug("send({})", courtelJson.getJson());
         // Get the authentication token
         String token = getToken();
         // Add the authentication token to the json header
-        String jsonWithToken = addTokenToJsonHeader(token, jsonString);
+        String jsonWithToken = addTokenToJsonHeader(token, courtelJson.getJson());
+        courtelJson.setJson(jsonWithToken);
         // Post the json to CaTH
-        String errorMessage = postJsonToCath(artefactType, jsonWithToken);
+        String errorMessage = postJsonToCath(courtelJson);
         if (!EMPTY_STRING.equals(errorMessage)) {
-            LOG.error("Error sending Json: {}", jsonString);
+            LOG.error("Error sending Json: {}", courtelJson.getJson());
             LOG.error("Error from CaTH: {}", errorMessage);
         }
     }
@@ -88,29 +85,12 @@ public class CathHelper {
         return jsonString.replace(OAUTHTOKEN_PLACEHOLDER, token);
     }
 
-    protected String postJsonToCath(ArtefactType artefactType, String jsonWithToken) {
+    protected String postJsonToCath(CourtelJson courtelJson) {
         LOG.debug("postJsonToCath()");
-        // TODO - review these
-//        String now = LocalDateTime.now().toString();
-//        String nextMonth = LocalDateTime.now().plusMonths(1).toString(); 
-//        Integer courtId = Integer.valueOf(1);
-//        ListType listType = ListType.CROWN_DAILY_LIST;
-//        String pddaSystemid = "12345"; 
-//        String language = Language.ENGLISH.toString();
-        // TODO - POST the json to CaTH
-//        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(POST_URL))
-//            .header(PublicationConfiguration.TYPE_HEADER, artefactType.toString())
-//            .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
-//            .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, pddaSystemid)
-//            .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
-//            .header(PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth)
-//            .header(PublicationConfiguration.COURT_ID, courtId.toString())
-//            .header(PublicationConfiguration.LIST_TYPE, listType.toString())
-//            .header(PublicationConfiguration.LANGUAGE_HEADER, language)
-//            .header(PublicationConfiguration.CONTENT_DATE, now)).content(jsonWithToken)
-//            .contentType(MediaType.APPLICATION_JSON);
-//        
-        
+        HttpRequest httpRequest = CathUtils.getHttpPostRequest(LocalDateTime.now(), POST_URL,
+            courtelJson.getArtefactType().toString(), courtelJson.getListType().toString(),
+            courtelJson.getCourtId(), courtelJson.getLanguage().toString(), courtelJson.getJson());
+
         return EMPTY_STRING;
     }
 

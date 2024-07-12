@@ -10,6 +10,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyCourtelUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
+
+import java.net.http.HttpRequest;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -38,29 +44,40 @@ class CathHelperTest {
 
     @Mock
     private BlobHelper mockBlobHelper;
-    
+
     @Mock
     private OAuth2Helper mockOAuth2Helper;
+
+    @Mock
+    private HttpRequest mockHttpRequest;
 
     @InjectMocks
     private CathHelper classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
-        classUnderTest = new CathHelper(mockBlobHelper, mockOAuth2Helper);
+        Mockito.mockStatic(CathUtils.class);
+
+        classUnderTest = new CathHelper(mockOAuth2Helper);
     }
 
     @AfterEach
     public void tearDown() throws Exception {
-        // Do nothing
+        // Clear down statics
+        Mockito.clearAllCaches();
     }
 
     @Test
     void testSend() {
         // Setup
-        String json = "";
+        CourtelJson json = DummyCourtelUtil.getListJson();
         // Expects
         Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
+        Mockito
+            .when(CathUtils.getHttpPostRequest(Mockito.isA(java.time.LocalDateTime.class),
+                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
+                Mockito.isA(Integer.class), Mockito.isA(String.class), Mockito.isA(String.class)))
+            .thenReturn(mockHttpRequest);
         // Run
         boolean result = false;
         try {

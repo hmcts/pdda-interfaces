@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -49,6 +50,7 @@ class CourtelHelperTest {
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
     private CathHelper mockCathHelper;
+    private BlobHelper mockBlobHelper;
 
     private CourtelHelper classUnderTest;
 
@@ -57,7 +59,7 @@ class CourtelHelperTest {
         mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
-        BlobHelper mockBlobHelper = EasyMock.mock(BlobHelper.class);
+        mockBlobHelper = EasyMock.mock(BlobHelper.class);
         mockCathHelper = EasyMock.mock(CathHelper.class);
         XhbConfigPropRepository mockXhbConfigPropRepository =
             EasyMock.mock(XhbConfigPropRepository.class);
@@ -168,18 +170,17 @@ class CourtelHelperTest {
     void testSendCourtelList(String type) {
         // Setup
         byte[] blobData = "Test Blob Data".getBytes();
+        XhbBlobDao xhbBlobDao = DummyFormattingUtil.getXhbBlobDao(blobData);
         XhbCourtelListDao xhbCourtelListDao = DummyCourtelUtil.getXhbCourtelListDao();
-        xhbCourtelListDao.setBlob(DummyFormattingUtil.getXhbBlobDao(blobData));
+        xhbCourtelListDao.setBlob(xhbBlobDao);
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType(type);
         EasyMock.expect(mockXhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId()))
             .andReturn(Optional.of(xhbXmlDocumentDao));
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
-        EasyMock
-            .expect(mockCathHelper.populateCourtelListBlob(EasyMock.isA(XhbCourtelListDao.class)))
-            .andReturn(xhbCourtelListDao);
-        mockCathHelper.send(EasyMock.isA(String.class));
+        EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
+        mockCathHelper.send(EasyMock.isA(CourtelJson.class));
         EasyMock.expectLastCall();
         EasyMock.replay(mockXhbXmlDocumentRepository);
         EasyMock.replay(mockCathHelper);
