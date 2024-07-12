@@ -143,25 +143,28 @@ public class CourtelHelper {
         xhbCourtelListDao.setBlob(blobHelper.getBlob(xhbCourtelListDao.getBlobId()));
         // Get the Courtel Json object
         CourtelJson courtelJson = getJsonObjectByDocType(xhbCourtelListDao);
-        // Set the Json string
-        courtelJson.setJson(getCathHelper().generateJsonString(xhbCourtelListDao, courtelJson));
-        // Send the Json to CaTH
-        getCathHelper().send(courtelJson);
+        if (courtelJson != null) {
+            // Set the Json string
+            courtelJson.setJson(getCathHelper().generateJsonString(xhbCourtelListDao, courtelJson));
+            // Send the Json to CaTH
+            getCathHelper().send(courtelJson);
+        }
     }
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
-
-        if (!xhbXmlDocumentDao.isEmpty()) {
-            // Check Document Type and create appropriate object
-            if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.get().getDocumentType())) {
-                return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
-            } else {
-                return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
-            }
+        if (xhbXmlDocumentDao.isEmpty()) {
+            LOG.debug("No XhbXmlDocumentDao found for id {}", xhbCourtelListDao.getXmlDocumentId());
+            return null;
         }
-        return null;
+
+        // Check Document Type and create appropriate object
+        if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.get().getDocumentType())) {
+            return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
+        } else {
+            return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
+        }
     }
 
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
