@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class CathUtils {
 
-    private static final String DATETIME_FORMAT = "yyyy-MM-ddTHH:mm";
+    private static final String DATETIME_FORMAT = "yyyy-MM-ddHH:mm";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String PROVENANCE = "PDDA";
@@ -21,7 +21,7 @@ public final class CathUtils {
     }
 
     public static String getDateTimeAsString(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT));
+        return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
     }
 
     public static HttpRequest getHttpPostRequest(LocalDateTime dateTime, String url,
