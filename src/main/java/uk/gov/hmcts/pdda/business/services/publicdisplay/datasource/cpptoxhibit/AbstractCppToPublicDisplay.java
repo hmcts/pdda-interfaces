@@ -116,7 +116,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
             // set the court name as will be continuing with the process and have this information
             // to hand
             this.setCourtName(xhbCourt.get().getCourtName());
-            retrieveCourtStructure(xhbCourt.get());
+            retrieveCourtStructure(entityManager, xhbCourt.get());
         }
 
         return isCppSite;
