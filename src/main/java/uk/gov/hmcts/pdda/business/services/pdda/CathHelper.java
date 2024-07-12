@@ -88,9 +88,8 @@ public class CathHelper {
     protected String postJsonToCath(CourtelJson courtelJson) {
         LOG.debug("postJsonToCath()");
         HttpRequest httpRequest = CathUtils.getHttpPostRequest(LocalDateTime.now(), POST_URL,
-            courtelJson.getArtefactType().toString(), courtelJson.getListType().toString(),
-            courtelJson.getCourtId(), courtelJson.getLanguage().toString(), courtelJson.getJson());
-
+            courtelJson);
+        LOG.debug(httpRequest.toString());
         return EMPTY_STRING;
     }
 

@@ -9,6 +9,7 @@ public class ListJson extends CourtelJson {
         setArtefactType(ArtefactType.LIST);
     }
     
+    @Override
     public ListType getListType() {
         return listType;
     }

@@ -7,6 +7,7 @@ public class WebPageJson extends CourtelJson {
         setArtefactType(ArtefactType.GENERAL_PUBLICATION);
     }
     
+    @Override
     public ListType getListType() {
         return ListType.SJP_PUBLIC_LIST;
     }

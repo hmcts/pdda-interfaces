@@ -1,6 +1,5 @@
 package uk.gov.hmcts;
 
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ArtefactType;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListType;

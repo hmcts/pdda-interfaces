@@ -12,10 +12,10 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.net.http.HttpRequest;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -74,9 +74,8 @@ class CathHelperTest {
         // Expects
         Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
         Mockito
-            .when(CathUtils.getHttpPostRequest(Mockito.isA(java.time.LocalDateTime.class),
-                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
-                Mockito.isA(Integer.class), Mockito.isA(String.class), Mockito.isA(String.class)))
+            .when(CathUtils.getHttpPostRequest(Mockito.isA(LocalDateTime.class),
+                Mockito.isA(String.class), Mockito.isA(CourtelJson.class)))
             .thenReturn(mockHttpRequest);
         // Run
         boolean result = false;
