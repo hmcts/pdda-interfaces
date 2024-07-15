@@ -9,7 +9,11 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
+import java.io.IOException;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDateTime;
 
 
@@ -34,7 +38,6 @@ public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
     private static final String EMPTY_STRING = "";
-    private static final String POST_URL = "/publication";
 
     private OAuth2Helper oauth2Helper;
 
@@ -74,14 +77,31 @@ public class CathHelper {
 
     protected String getToken() {
         LOG.debug("getToken()");
-        return getOAuth2Helper().getAccessToken();
+        if (CathUtils.isApimEnabled()) {
+            return getOAuth2Helper().getAccessToken();
+        }
+        return EMPTY_STRING;
     }
 
+    @SuppressWarnings("squid:S2142")
     protected String postJsonToCath(CourtelJson courtelJson) {
         LOG.debug("postJsonToCath()");
-        HttpRequest httpRequest = CathUtils.getHttpPostRequest(LocalDateTime.now(), POST_URL,
-            courtelJson);
-        LOG.debug(httpRequest.toString());
+        String cathUrl = CathUtils.getApimUrl();
+        LOG.debug("cathUrl - {}", cathUrl);
+        HttpRequest httpRequest =
+            CathUtils.getHttpPostRequest(LocalDateTime.now(), cathUrl, courtelJson);
+
+        try {
+            HttpResponse<?> httpResponse =
+                HttpClient.newHttpClient().send(httpRequest, BodyHandlers.ofString());
+            Integer statusCode = Integer.valueOf(httpResponse.statusCode());
+            LOG.debug("Response status code: {}", statusCode);
+            String response = httpResponse.body().toString();
+            LOG.debug("Response: {}", response);
+        } catch (IOException | InterruptedException | RuntimeException exception) {
+            LOG.error("Error in postJsonToCath(): {}", exception.getMessage());
+            return exception.getMessage();
+        }
         return EMPTY_STRING;
     }
 
