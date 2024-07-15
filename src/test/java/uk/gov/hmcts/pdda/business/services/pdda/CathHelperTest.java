@@ -12,11 +12,13 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -40,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CathHelperTest {
 
+    private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is False";
 
     @Mock
@@ -65,6 +68,16 @@ class CathHelperTest {
     public void tearDown() throws Exception {
         // Clear down statics
         Mockito.clearAllCaches();
+    }
+    
+    @Test
+    void testGenerateJsonString() {
+        // Setup
+        XhbCourtelListDao xhbCourtelListDao = DummyCourtelUtil.getXhbCourtelListDao();
+        CourtelJson courtelJson = DummyCourtelUtil.getListJson();
+        // Run
+        String result = classUnderTest.generateJsonString(xhbCourtelListDao, courtelJson);
+        assertNotNull(result, NOTNULL);
     }
 
     @Test

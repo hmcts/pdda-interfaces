@@ -18,9 +18,13 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -43,6 +47,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(EasyMockExtension.class)
 class CourtelHelperTest {
 
+    private static final String NULL = "Result is Null";
     private static final String NOT_TRUE = "Result is not True";
     private static final String NOT_FALSE = "Result is not False";
 
@@ -51,6 +56,7 @@ class CourtelHelperTest {
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
     private CathHelper mockCathHelper;
     private BlobHelper mockBlobHelper;
+    private ConfigPropMaintainer mockConfigPropMaintainer;
 
     private CourtelHelper classUnderTest;
 
@@ -61,6 +67,7 @@ class CourtelHelperTest {
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
         mockBlobHelper = EasyMock.mock(BlobHelper.class);
         mockCathHelper = EasyMock.mock(CathHelper.class);
+        mockConfigPropMaintainer = EasyMock.mock(ConfigPropMaintainer.class);
         XhbConfigPropRepository mockXhbConfigPropRepository =
             EasyMock.mock(XhbConfigPropRepository.class);
 
@@ -68,6 +75,8 @@ class CourtelHelperTest {
             mockXhbXmlDocumentRepository, mockBlobHelper, mockXhbConfigPropRepository);
 
         ReflectionTestUtils.setField(classUnderTest, "cathHelper", mockCathHelper);
+        ReflectionTestUtils.setField(classUnderTest, "configPropMaintainer",
+            mockConfigPropMaintainer);
     }
 
     @Test
@@ -175,7 +184,7 @@ class CourtelHelperTest {
         xhbCourtelListDao.setBlob(xhbBlobDao);
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType(type);
-        EasyMock.expect(mockXhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId()))
+        EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbXmlDocumentDao));
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
@@ -188,5 +197,32 @@ class CourtelHelperTest {
         classUnderTest.sendCourtelList(xhbCourtelListDao);
         // Checks
         EasyMock.verify(mockCathHelper);
+    }
+
+    @Test
+    void testGetCourtelList() {
+        // Setup
+        List<XhbCourtelListDao> xhbCourtelListDaoList = new ArrayList<>();
+        final Integer courtelMaxRetry = Integer.valueOf(5);
+        final Integer courtelLookupDelay = Integer.valueOf(2);
+        final Integer courtelLisAmount = Integer.valueOf(20);
+        // Expects
+        EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
+            .andReturn(courtelMaxRetry.toString());
+        EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
+            .andReturn(courtelLookupDelay.toString());
+        EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
+            .andReturn(courtelLisAmount.toString());
+        EasyMock
+            .expect(mockXhbCourtelListRepository.findCourtelList(EasyMock.isA(Integer.class),
+                EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(xhbCourtelListDaoList);
+        EasyMock.replay(mockConfigPropMaintainer);
+        EasyMock.replay(mockXhbCourtelListRepository);
+        // Run
+        List<XhbCourtelListDao> results = classUnderTest.getCourtelList();
+        // Checks
+        assertNotNull(results, NULL);
+
     }
 }
