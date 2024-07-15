@@ -86,10 +86,10 @@ public class CathHelper {
     @SuppressWarnings("squid:S2142")
     protected String postJsonToCath(CourtelJson courtelJson) {
         LOG.debug("postJsonToCath()");
-        String cathUrl = CathUtils.getApimUrl();
-        LOG.debug("cathUrl - {}", cathUrl);
+        String cathUri = CathUtils.getApimUri();
+        LOG.debug("cathUri - {}", cathUri);
         HttpRequest httpRequest =
-            CathUtils.getHttpPostRequest(LocalDateTime.now(), cathUrl, courtelJson);
+            CathUtils.getHttpPostRequest(LocalDateTime.now(), cathUri, courtelJson);
 
         try {
             HttpResponse<?> httpResponse =

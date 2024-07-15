@@ -57,8 +57,8 @@ public final class CathUtils {
             InitializationService.getInstance().getEnvironment().getProperty(APIM_ENABLED));
     }
 
-    public static String getApimUrl() {
-        String apimUrl = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
-        return String.format(POST_URL, apimUrl);
+    public static String getApimUri() {
+        String apimUri = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
+        return String.format(POST_URL, apimUri);
     }
 }
