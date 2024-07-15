@@ -11,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 
 public final class CathUtils {
 
+    private static final String AUTHENTICATION = "Authorization";
+    private static final String BEARER = "Bearer %s";
     private static final String DATETIME_FORMAT = "yyyy-MM-ddHH:mm";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -29,6 +31,8 @@ public final class CathUtils {
         // Get the times
         String now = CathUtils.getDateTimeAsString(dateTime);
         String nextMonth = CathUtils.getDateTimeAsString(dateTime.plusMonths(1));
+        //Get the bearer token 
+        String bearerToken = String.format(BEARER, courtelJson.getToken());
         // Return the HttpRequest for the post
         return HttpRequest.newBuilder().uri(URI.create(url))
             .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
@@ -39,6 +43,7 @@ public final class CathUtils {
             .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
             .header(PublicationConfiguration.CONTENT_DATE, now)
+            .header(AUTHENTICATION, bearerToken)
             .header(CONTENT_TYPE, CONTENT_TYPE_JSON)
             .POST(BodyPublishers.ofString(courtelJson.getJson())).build();
     }

@@ -10,6 +10,7 @@ public abstract class CourtelJson {
     private String provenance;
     private Language language;
     private ArtefactType artefactType;
+    private String token;
 
     public String getJson() {
         return json;
@@ -57,6 +58,14 @@ public abstract class CourtelJson {
     
     public void setArtefactType(ArtefactType artefactType) {
         this.artefactType = artefactType;
+    }
+  
+    public String getToken() {
+        return this.token;
+    }
+    
+    public void setToken(String token) {
+        this.token = token;
     }
     
     public abstract ListType getListType();
