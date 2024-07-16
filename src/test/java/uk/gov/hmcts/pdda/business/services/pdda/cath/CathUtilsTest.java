@@ -70,7 +70,7 @@ class CathUtilsTest {
         CourtelJson courtelJson = DummyCourtelUtil.getListJson();
         String url = "https://dummy.com/url";
         // Run
-        HttpRequest result = CathUtils.getHttpPostRequest(LocalDateTime.now(), url, courtelJson);
+        HttpRequest result = CathUtils.getHttpPostRequest(url, courtelJson);
         assertNotNull(result, NOTNULL);
     }
 

@@ -15,9 +15,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.time.LocalDateTime;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -42,6 +45,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CathHelperTest {
 
+    private static final String EMPTY_STRING = "";
+    private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is False";
 
@@ -54,22 +59,31 @@ class CathHelperTest {
     @Mock
     private HttpRequest mockHttpRequest;
 
+    @Mock
+    private HttpClient mockHttpClient;
+
+    @Mock
+    private HttpResponse<String> mockHttpResponse;
+
     @InjectMocks
     private CathHelper classUnderTest;
 
     @BeforeEach
     public void setUp() throws Exception {
         Mockito.mockStatic(CathUtils.class);
+        Mockito.mockStatic(HttpClient.class);
 
         classUnderTest = new CathHelper(mockOAuth2Helper);
     }
 
     @AfterEach
     public void tearDown() throws Exception {
+        // Test default constructor
+        classUnderTest = new CathHelper();
         // Clear down statics
         Mockito.clearAllCaches();
     }
-    
+
     @Test
     void testGenerateJsonString() {
         // Setup
@@ -80,19 +94,28 @@ class CathHelperTest {
         assertNotNull(result, NOTNULL);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     void testSend() {
-        // Setup
-        CourtelJson json = DummyCourtelUtil.getListJson();
-        // Expects
-        Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
-        Mockito
-            .when(CathUtils.getHttpPostRequest(Mockito.isA(LocalDateTime.class),
-                Mockito.isA(String.class), Mockito.isA(CourtelJson.class)))
-            .thenReturn(mockHttpRequest);
-        // Run
         boolean result = false;
         try {
+            // Setup
+            CourtelJson json = DummyCourtelUtil.getListJson();
+            String uri = "uri";
+            // Expects
+            Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
+            Mockito.when(CathUtils.isApimEnabled()).thenReturn(true);
+            Mockito.when(CathUtils.getApimUri()).thenReturn(uri);
+            Mockito.when(CathUtils.getHttpPostRequest(uri, json)).thenReturn(mockHttpRequest);
+
+            // Expects - HttpClient.newHttpClient()
+            Mockito.when(HttpClient.newHttpClient()).thenReturn(mockHttpClient);
+            Mockito.when(mockHttpClient.send(Mockito.isA(HttpRequest.class),
+                Mockito.isA(BodyHandlers.ofString().getClass()))).thenReturn(mockHttpResponse);
+            Mockito.when(mockHttpResponse.statusCode()).thenReturn(Integer.valueOf(200));
+            Mockito.when(mockHttpResponse.body()).thenReturn("Body");
+
+            // Run
             classUnderTest.send(json);
             result = true;
         } catch (Exception exception) {
@@ -100,5 +123,14 @@ class CathHelperTest {
         }
         // Checks
         assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testGetTokenEmpty() {
+        Mockito.when(CathUtils.isApimEnabled()).thenReturn(false);
+        // Run
+        String result = classUnderTest.getToken();
+        // Checks
+        assertEquals(EMPTY_STRING, result, EQUALS);
     }
 }

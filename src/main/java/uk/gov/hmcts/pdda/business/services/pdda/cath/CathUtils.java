@@ -31,11 +31,11 @@ public final class CathUtils {
         return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
     }
 
-    public static HttpRequest getHttpPostRequest(LocalDateTime dateTime, String url,
+    public static HttpRequest getHttpPostRequest(String url,
         CourtelJson courtelJson) {
         // Get the times
-        String now = CathUtils.getDateTimeAsString(dateTime);
-        String nextMonth = CathUtils.getDateTimeAsString(dateTime.plusMonths(1));
+        String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
+        String nextMonth = CathUtils.getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
         // Get the bearer token
         String bearerToken = String.format(BEARER, courtelJson.getToken());
         // Return the HttpRequest for the post

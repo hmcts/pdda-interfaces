@@ -56,6 +56,7 @@ public final class DummyCourtelUtil {
         result.setListType(ListType.CROWN_DAILY_LIST);
         result.setLanguage(Language.ENGLISH);
         result.setCourtId(Integer.valueOf(1));
+        result.setContentDate(LocalDateTime.now());
         result.setJson("");
         return result;
     }

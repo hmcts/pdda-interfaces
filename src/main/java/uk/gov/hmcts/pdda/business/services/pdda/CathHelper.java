@@ -67,6 +67,8 @@ public class CathHelper {
         LOG.debug("send({})", courtelJson.getJson());
         // Get the authentication token
         courtelJson.setToken(getToken());
+        // Set the content date
+        courtelJson.setContentDate(LocalDateTime.now());
         // Post the json to CaTH
         String errorMessage = postJsonToCath(courtelJson);
         if (!EMPTY_STRING.equals(errorMessage)) {
@@ -88,8 +90,7 @@ public class CathHelper {
         LOG.debug("postJsonToCath()");
         String cathUri = CathUtils.getApimUri();
         LOG.debug("cathUri - {}", cathUri);
-        HttpRequest httpRequest =
-            CathUtils.getHttpPostRequest(LocalDateTime.now(), cathUri, courtelJson);
+        HttpRequest httpRequest = CathUtils.getHttpPostRequest(cathUri, courtelJson);
 
         try {
             HttpResponse<?> httpResponse =
