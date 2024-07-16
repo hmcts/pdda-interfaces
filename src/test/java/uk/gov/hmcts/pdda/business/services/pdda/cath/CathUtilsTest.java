@@ -48,12 +48,12 @@ class CathUtilsTest {
     private Environment mockEnvironment;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         Mockito.mockStatic(InitializationService.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Clear down statics
         Mockito.clearAllCaches();
     }
