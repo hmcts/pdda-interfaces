@@ -96,7 +96,7 @@ public class CathHelper {
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(httpRequest, BodyHandlers.ofString());
             Integer statusCode = Integer.valueOf(httpResponse.statusCode());
-            LOG.debug("Response status code: {}", statusCode);
+            LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
             LOG.debug("Response: {}", response);
         } catch (IOException | InterruptedException | RuntimeException exception) {
