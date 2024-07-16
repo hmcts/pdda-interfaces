@@ -64,7 +64,7 @@ public class CathHelper {
     }
 
     public void send(CourtelJson courtelJson) {
-        LOG.debug("send({})", courtelJson.getJson());
+        LOG.info("send()");
         // Get the authentication token
         courtelJson.setToken(getToken());
         // Set the content date
@@ -78,7 +78,7 @@ public class CathHelper {
     }
 
     protected String getToken() {
-        LOG.debug("getToken()");
+        LOG.info("getToken()");
         if (CathUtils.isApimEnabled()) {
             return getOAuth2Helper().getAccessToken();
         }
