@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings("PMD.ExcessiveParameterList")
+@SuppressWarnings({"PMD.ExcessiveParameterList","PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURTEL_LIST")
 @NamedQuery(name = "XHB_COURTEL_LIST.findByXmlDocumentId",
     query = "SELECT o from XHB_COURTEL_LIST o WHERE o.xmlDocumentId = :xmlDocumentId "
@@ -88,7 +88,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return courtelListId;
     }
 
-    public final void setCourtelListId(Integer courtelListId) {
+    public void setCourtelListId(Integer courtelListId) {
         this.courtelListId = courtelListId;
     }
 
@@ -96,7 +96,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return xmlDocumentId;
     }
 
-    public final void setXmlDocumentId(Integer xmlDocumentId) {
+    public void setXmlDocumentId(Integer xmlDocumentId) {
         this.xmlDocumentId = xmlDocumentId;
     }
 
@@ -104,7 +104,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return xmlDocumentClobId;
     }
 
-    public final void setXmlDocumentClobId(Long xmlDocumentClobId) {
+    public void setXmlDocumentClobId(Long xmlDocumentClobId) {
         this.xmlDocumentClobId = xmlDocumentClobId;
     }
 
@@ -112,7 +112,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return blobId;
     }
 
-    public final void setBlobId(Long blobId) {
+    public void setBlobId(Long blobId) {
         this.blobId = blobId;
     }
 
@@ -120,7 +120,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return sentToCourtel;
     }
 
-    public final void setSentToCourtel(String sentToCourtel) {
+    public void setSentToCourtel(String sentToCourtel) {
         this.sentToCourtel = sentToCourtel;
     }
 
@@ -128,7 +128,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return numSendAttempts;
     }
 
-    public final void setNumSendAttempts(Integer numSendAttempts) {
+    public void setNumSendAttempts(Integer numSendAttempts) {
         this.numSendAttempts = numSendAttempts;
     }
 
@@ -136,7 +136,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return lastAttemptDatetime;
     }
 
-    public final void setLastAttemptDatetime(LocalDateTime lastAttemptDatetime) {
+    public void setLastAttemptDatetime(LocalDateTime lastAttemptDatetime) {
         this.lastAttemptDatetime = lastAttemptDatetime;
     }
 
@@ -144,7 +144,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         return messageText;
     }
 
-    public final void setMessageText(String messageText) {
+    public void setMessageText(String messageText) {
         this.messageText = messageText;
     }
     

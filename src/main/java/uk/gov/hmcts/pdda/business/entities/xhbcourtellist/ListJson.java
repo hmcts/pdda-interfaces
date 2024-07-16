@@ -2,13 +2,19 @@ package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
 public class ListJson extends CourtelJson {
 
-    private String listType;
+    private ListType listType;
     
-    public String getListType() {
+    public ListJson() {
+        super();
+        setArtefactType(ArtefactType.LIST);
+    }
+    
+    @Override
+    public ListType getListType() {
         return listType;
     }
     
-    public void setListType(String listType) {
+    public void setListType(ListType listType) {
         this.listType = listType;
     }
 }
