@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import jakarta.persistence.EntityManager;
-import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
@@ -47,19 +46,6 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         super(entityManager, xhbConfigPropRepository);
     }
 
-    public static String serializePublicEvent(PublicDisplayEvent event) {
-        byte[] byteArray = SerializationUtils.serialize(event);
-        return new String(byteArray, java.nio.charset.StandardCharsets.ISO_8859_1);
-    }
-
-    public static PublicDisplayEvent deserializePublicEvent(String eventString) {
-        if (eventString != null && !EMPTY_STRING.equals(eventString)) {
-            return (PublicDisplayEvent) SerializationUtils
-                .deserialize(eventString.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1));
-        }
-        return null;
-    }
-    
     /**
      * Sends a public display event.
      * 

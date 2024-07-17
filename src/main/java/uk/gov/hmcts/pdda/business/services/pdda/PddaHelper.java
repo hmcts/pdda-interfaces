@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 @SuppressWarnings("PMD.GodClass")
-public class PddaHelper extends XhibitPddaHelper {
+public class PddaHelper extends XhibitPddaEncoderHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
     private final DateFormat cpResponseFileDateFormat = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault());
@@ -452,7 +452,7 @@ public class PddaHelper extends XhibitPddaHelper {
         @Override
         public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
             if (isValidNoOfParts(filename) && validateTitle(filename)) {
-                return PddaHelper.deserializePublicEvent(fileContents);
+                return PddaHelper.deserializePublicEvent(PddaHelper.decodePublicEvent(fileContents));
             }
             return null;
         }

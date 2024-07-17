@@ -60,7 +60,8 @@ public final class DummyFileUtil {
             PublicDisplayEvent event = DummyEventUtil.getEvent(messageType);
             fileResult = DummyFileUtil.getFileResults();
             fileResult.filename = messageType + "_111_" + nowAsString + ".xml";
-            fileResult.fileContents = PddaHelper.serializePublicEvent(event);
+            fileResult.fileContents = 
+                PddaHelper.encodePublicEvent(PddaHelper.serializePublicEvent(event));
             fileResult.isValid = isValid;
             result.add(fileResult);
         }
