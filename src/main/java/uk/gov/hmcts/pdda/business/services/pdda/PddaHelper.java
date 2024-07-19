@@ -469,8 +469,8 @@ public class PddaHelper extends XhibitPddaHelper {
         @Override
         public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
             if (isValidNoOfParts(filename) && validateTitle(filename)) {
-                String deserializedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
-                return PddaSerializationUtils.deserializePublicEvent(deserializedEvent);
+                String decodedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
+                return PddaSerializationUtils.deserializePublicEvent(decodedEvent);
             }
             return null;
         }
