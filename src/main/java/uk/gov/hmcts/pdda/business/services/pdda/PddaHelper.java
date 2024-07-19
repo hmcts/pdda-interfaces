@@ -49,10 +49,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 @SuppressWarnings("PMD.GodClass")
-public class PddaHelper extends XhibitPddaEncoderHelper {
+public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
-    private final DateFormat cpResponseFileDateFormat = new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault());
+    private final DateFormat cpResponseFileDateFormat =
+        new SimpleDateFormat("ddMMyyyy_HHmmss", Locale.getDefault());
     private static final String NO = "N";
     private static final String INVALID_MESSAGE_TYPE = "Invalid";
     private static final String CP_FILE_EXTENSION = ".xml";
@@ -68,7 +69,8 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
     }
 
     // Junit constructor
-    public PddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository) {
+    public PddaHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository) {
         super(entityManager, xhbConfigPropRepository);
     }
 
@@ -127,12 +129,14 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         }
     }
 
-    private void processBaisFile(SftpConfig config, BaisValidation validation, String filename, String clobData) {
+    private void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
+        String clobData) {
         try {
             LOG.debug("Processing filename " + filename);
 
             // Validate this filename hasn't been processed previously
-            Optional<XhbPddaMessageDao> pddaMessageDao = validation.getPddaMessageDao(getPddaMessageHelper(), filename);
+            Optional<XhbPddaMessageDao> pddaMessageDao =
+                validation.getPddaMessageDao(getPddaMessageHelper(), filename);
             if (pddaMessageDao.isPresent()) {
                 LOG.debug("Filename " + filename + " already processed");
                 return;
@@ -163,16 +167,18 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         }
     }
 
-    private void createBaisMessage(final Integer courtId, final String messageType, final String filename,
-        final String clobData, String errorMessage) throws NotFoundException {
+    private void createBaisMessage(final Integer courtId, final String messageType,
+        final String filename, final String clobData, String errorMessage)
+        throws NotFoundException {
         methodName = "createBaisMessage(" + filename + ")";
         LOG.debug(methodName + LOG_CALLED);
 
         // Call to createMessageType
-        Optional<XhbRefPddaMessageTypeDao> messageTypeDao = getPddaMessageHelper().findByMessageType(messageType);
+        Optional<XhbRefPddaMessageTypeDao> messageTypeDao =
+            getPddaMessageHelper().findByMessageType(messageType);
         if (messageTypeDao.isEmpty()) {
-            messageTypeDao =
-                PddaMessageUtil.createMessageType(getPddaMessageHelper(), messageType, LocalDateTime.now());
+            messageTypeDao = PddaMessageUtil.createMessageType(getPddaMessageHelper(), messageType,
+                LocalDateTime.now());
         }
         if (messageTypeDao.isEmpty()) {
             // This should never occur
@@ -185,7 +191,8 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
         // Call createMessage
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
-            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, filename, NO, errorMessage);
+            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, filename, NO,
+            errorMessage);
     }
 
     private Map<String, String> getBaisFileList(SftpConfig config, BaisValidation validation) {
@@ -198,10 +205,12 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
     }
 
     private SftpConfig getSftpConfigs() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD, Config.SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
+            Config.SFTP_UPLOAD_LOCATION);
     }
 
-    private SftpConfig getSftpConfigs(String configUsername, String configPassword, String configLocation) {
+    private SftpConfig getSftpConfigs(String configUsername, String configPassword,
+        String configLocation) {
         SftpConfig sftpConfig = new SftpConfig();
 
         // Fetch and validate the properties
@@ -249,8 +258,8 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
 
         // Create a session
         try {
-            sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username, sftpConfig.password,
-                sftpConfig.host, sftpConfig.port));
+            sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
+                sftpConfig.password, sftpConfig.host, sftpConfig.port));
         } catch (Exception ex) {
             sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
             return sftpConfig;
@@ -261,18 +270,21 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
 
     // This method is used for reference to SftpConfig in the unit tests
     public SftpConfig getSftpConfigsForTest() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD, Config.SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
+            Config.SFTP_UPLOAD_LOCATION);
     }
 
     private SftpConfig getBaisCpConfigs() {
-        return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD, Config.CP_SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD,
+            Config.CP_SFTP_UPLOAD_LOCATION);
     }
 
     public void checkForCpMessages(String userDisplayName) throws IOException {
         // Find Messages
         LOG.debug("checkForCpMessages({})", userDisplayName);
         List<XhbPddaMessageDao> messages = getPddaMessageHelper().findUnrespondedCpMessages();
-        List<XhbCppStagingInboundDao> cppMessages = getCppStagingInboundHelper().findUnrespondedCppMessages();
+        List<XhbCppStagingInboundDao> cppMessages =
+            getCppStagingInboundHelper().findUnrespondedCppMessages();
 
         Map<String, InputStream> responses = new ConcurrentHashMap<>();
         Map<String, InputStream> cppResponses = new ConcurrentHashMap<>();
@@ -294,20 +306,23 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
 
         // Update database records
         if (sftpSuccess) {
-            PddaMessageUtil.updatePddaMessageRecords(getPddaMessageHelper(), messages, userDisplayName);
-            PddaMessageUtil.updateCppStagingInboundRecords(getCppStagingInboundHelper(), cppMessages, userDisplayName);
+            PddaMessageUtil.updatePddaMessageRecords(getPddaMessageHelper(), messages,
+                userDisplayName);
+            PddaMessageUtil.updateCppStagingInboundRecords(getCppStagingInboundHelper(),
+                cppMessages, userDisplayName);
         } else {
             LOG.debug("SFTP Error: No records have been updated");
         }
     }
 
-    public Map<String, InputStream> respondToPddaMessage(List<XhbPddaMessageDao> messages) throws IOException {
+    public Map<String, InputStream> respondToPddaMessage(List<XhbPddaMessageDao> messages)
+        throws IOException {
         Map<String, InputStream> files = new ConcurrentHashMap<>();
         LOG.debug("respondToPddaMessage({})", messages);
         for (XhbPddaMessageDao message : messages) {
             // Set Filename
-            String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, "")) + "_Response_"
-                + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
+            String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+                + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
             String msg;
@@ -326,15 +341,15 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         return files;
     }
 
-    public Map<String, InputStream> respondToCppStagingInbound(List<XhbCppStagingInboundDao> cppMessages)
-        throws IOException {
+    public Map<String, InputStream> respondToCppStagingInbound(
+        List<XhbCppStagingInboundDao> cppMessages) throws IOException {
         LOG.debug("respondToCppStagingInbound({})", cppMessages);
         Map<String, InputStream> files = new ConcurrentHashMap<>();
 
         for (XhbCppStagingInboundDao cppMessage : cppMessages) {
             // Set Filename
-            String fileName = (cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, "")) + "_Response_"
-                + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
+            String fileName = (cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+                + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
             String msg;
@@ -424,13 +439,15 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         }
 
         @Override
-        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper, String filename) {
+        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper,
+            String filename) {
             return Optional.empty();
         }
 
         @Override
         public boolean validateTitle(String filename) {
-            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0), new String[] {PDDA});
+            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
+                new String[] {PDDA});
         }
 
         @Override
@@ -452,7 +469,8 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
         @Override
         public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
             if (isValidNoOfParts(filename) && validateTitle(filename)) {
-                return PddaHelper.deserializePublicEvent(PddaHelper.decodePublicEvent(fileContents));
+                String deserializedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
+                return PddaSerializationUtils.deserializePublicEvent(deserializedEvent);
             }
             return null;
         }
@@ -515,11 +533,13 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
 
         @Override
         public boolean validateTitle(String filename) {
-            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0), POSSIBLETITLES);
+            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
+                POSSIBLETITLES);
         }
 
         @Override
-        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper, String filename) {
+        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper,
+            String filename) {
             return pddaMessageHelper.findByCpDocumentName(filename);
         }
 
@@ -538,7 +558,8 @@ public class PddaHelper extends XhibitPddaEncoderHelper {
             Integer courtId = null;
             String crestCourtId = getCrestCourtId(filename);
             if (!EMPTY_STRING.equals(crestCourtId)) {
-                List<XhbCourtDao> courtDao = xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
+                List<XhbCourtDao> courtDao =
+                    xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
                 if (courtDao.isEmpty()) {
                     LOG.debug("No court exists for crestCourtId {}", crestCourtId);
                 } else {
