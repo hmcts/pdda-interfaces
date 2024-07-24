@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.events.types;
+package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

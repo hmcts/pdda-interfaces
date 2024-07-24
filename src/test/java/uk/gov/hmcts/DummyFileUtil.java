@@ -1,7 +1,7 @@
 package uk.gov.hmcts;
 
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;

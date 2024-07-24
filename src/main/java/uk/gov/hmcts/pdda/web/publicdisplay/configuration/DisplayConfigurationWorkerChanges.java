@@ -2,10 +2,10 @@ package uk.gov.hmcts.pdda.web.publicdisplay.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.PdConfigurationControllerBean;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.data.ejb.PdDataControllerBean;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtDisplayConfigurationChange;

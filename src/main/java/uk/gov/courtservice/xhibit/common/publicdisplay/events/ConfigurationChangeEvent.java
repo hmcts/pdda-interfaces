@@ -1,6 +1,6 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.events;
+package uk.gov.courtservice.xhibit.common.publicdisplay.events;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.EventType;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 
 /**

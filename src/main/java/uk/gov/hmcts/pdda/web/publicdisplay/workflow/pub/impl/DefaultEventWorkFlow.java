@@ -1,7 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.CourtRoomEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CourtRoomEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.DocumentsForEvent;
 

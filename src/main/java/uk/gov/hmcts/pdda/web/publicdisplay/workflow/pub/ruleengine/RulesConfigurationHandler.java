@@ -3,7 +3,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.EventType;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentType;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.rules.Rule;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.rules.RuleFlyweightPool;

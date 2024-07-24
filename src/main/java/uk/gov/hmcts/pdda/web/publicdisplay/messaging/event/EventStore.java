@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.messaging.event;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 
 /**
  * The interface that should be implemented by event stores.

@@ -2,7 +2,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentType;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;

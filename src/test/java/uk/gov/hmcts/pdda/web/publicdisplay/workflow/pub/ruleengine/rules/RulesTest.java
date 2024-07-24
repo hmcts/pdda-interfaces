@@ -7,12 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ActivateCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ConfigurationChangeEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicNoticeEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CaseChangeInformation;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ActivateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeInformation;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

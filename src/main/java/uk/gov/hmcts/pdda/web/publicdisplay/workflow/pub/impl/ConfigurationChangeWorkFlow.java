@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
