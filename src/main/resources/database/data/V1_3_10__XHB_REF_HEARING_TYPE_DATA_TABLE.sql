@@ -1,5 +1,5 @@
 insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_TYPE_DESC,CATEGORY,SEQ_NO,LIST_SEQUENCE,LAST_UPDATE_DATE,CREATION_DATE,CREATED_BY,LAST_UPDATED_BY,VERSION,COURT_ID,OBS_IND) values (
-18324,'BRP','Breach of Requirements of Probation Order','S',70,1680,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
+18324,'BRP','Breach of Requirements of Probation Order','S',70,1680,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
 18406,'SAC','For Sentence (at another Court)','S',650,945,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18407,'SAC','For Sentence (at another Court)','T',950,945,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18408,'SAC','For Sentence (at another Court)','U',750,945,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
@@ -79,160 +79,160 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 18482,'BRG','For Application to Rescind Grant of Bail','A',220,1220,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18483,'BRG','For Application to Rescind Grant of Bail','U',40,1220,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18484,'RLA','For Application to Remove from List','C',150,1330,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
-18325,'BPS','Breach of Partly Suspended Sentence','S',90,1700,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18326,'BSS','Breach of Suspended Sentence','S',100,1710,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18327,'CSE','Committal for Sentence','S',150,410,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18328,'CSS','Committals for Sentence','S',160,400,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18329,'CSP','Committal for Sentence (Part Heard)','S',170,420,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18330,'AHC','For Appeal in respect of Hackney Carriage Licence','A',110,550,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18331,'APH','Appeal (Part Heard)','A',20,490,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18332,'ACN','For Appeal against Conviction','A',30,450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18333,'ACS','For Appeal against Conviction and Sentence','A',40,460,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18334,'ASE','For Appeal against Sentence','A',50,470,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18335,'BLA','For Application for Bail','U',30,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18336,'ACO','For Appeal against Compensation Order','A',60,500,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18337,'ABG','For Appeal under the Betting, Gaming and Lotteries Act 1963','A',70,510,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18338,'ACY','For Appeal under the Children and Young Persons Act 1969','A',80,520,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18339,'ACF','For Appeal in respect of Firearms Certificate','A',90,530,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18340,'BFA','For Application to Break Fixture','U',60,1320,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18341,'APL','For Appeal','C',10,480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18342,'APH','Appeal (Part Heard)','C',20,490,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18343,'ADJ','For Appeal against District Judge''s Order','C',30,600,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18344,'APN','For Application','C',100,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18345,'APN','For Application','U',10,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18346,'PAF','For Plea and to Fix','T',40,230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18347,'DSE','For Deferred Sentence','T',550,950,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18348,'DIR','For Directions','U',300,810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18349,'DPR','For Deferred Sentence (Prosecution Released)','T',560,960,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18350,'BVA','For Application to Vary Bail Conditions','T',330,1230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18351,'SEN','For Sentence','T',900,900,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18352,'DPR','For Deferred Sentence (Prosecution Released)','S',410,960,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18353,'SUB','For Surrender to Bail','T',1000,1200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18354,'APN','For Application','S',200,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18355,'DRA','For Application under the Drug Trafficking Act 1994','T',395,1375,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18356,'DRS','For Application under the Drug Trafficking Act 1994, and Sentence','T',405,1385,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18357,'DRA','For Application under the Drug Trafficking Act 1994','U',85,1375,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18358,'DRS','For Application under the Drug Trafficking Act 1994, and Sentence','U',95,1385,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18359,'TBK','For Trial (Backer)','T',200,80,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18360,'DTS','For Application under Drug Trafficking Offences Act 1986, and Sentence','U',90,1380,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18361,'RPA','For Application to Revoke Probation Order','T',460,1450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18362,'RPA','For Application to Revoke Probation Order','S',310,1450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18363,'RCF','For Application to Revoke Curfew Order','T',450,1430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18364,'RCF','For Application to Revoke Curfew Order','S',300,1430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18365,'RBA','For Application to Revoke Community Service Order and Probation Order','T',470,1480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18366,'RBA','For Application to Revoke Community Service Order and Probation Order','S',320,1480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18367,'BCF','Breach of Requirements of Curfew Order','S',45,1650,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18368,'BCP','Breach of Requirements of Community Service Order and Probation Order','S',80,1690,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18369,'BLA','For Application for Bail','T',310,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18370,'PLE','For Plea','T',10,200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18371,'PPH','Plea (Part Heard)','T',20,210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18372,'PAD','For Plea and Directions','T',30,220,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18373,'PTN','For Plea to be Taken','T',50,240,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18374,'PPT','For Plea/Pre-Trial Review','T',70,260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18375,'TRL','For Trial','T',100,40,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18376,'TPH','Trial (Part Heard)','T',110,110,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18377,'TNW','For Trial (No Witnesses)','T',120,90,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18378,'TIS','For Trial of Issue','T',130,100,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18379,'APN','For Application','T',300,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18380,'XPA','For Application (Ex Parte)','C',110,1310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18381,'PLY','For Preliminary Hearing','T',810,800,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18382,'CBR','Committal for Breaches','S',175,430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18383,'AEH','Admissibility of Evidence - Half day','C',670,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18384,'AEH','Admissibility of Evidence - Half day','T',80,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18385,'AEH','Admissibility of Evidence - Half day','U',650,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18386,'AEW','Admissibility of Evidence - Whole Day','C',680,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18387,'AEW','Admissibility of Evidence - Whole Day','T',90,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18388,'AEW','Admissibility of Evidence - Whole Day','U',660,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18389,'CTL','Custody Time Limit application','A',245,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18390,'CTL','Custody Time Limit application','C',190,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18391,'CTL','Custody Time Limit application','T',345,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18392,'CTL','Custody Time Limit application','U',120,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18393,'TRN','For Trial','T',105,45,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18394,'PCM','Plea and Case Management','U',565,225,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18395,'PCM','Plea and Case Management','T',35,225,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
+18325,'BPS','Breach of Partly Suspended Sentence','S',90,1700,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18326,'BSS','Breach of Suspended Sentence','S',100,1710,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18327,'CSE','Committal for Sentence','S',150,410,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18328,'CSS','Committals for Sentence','S',160,400,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18329,'CSP','Committal for Sentence (Part Heard)','S',170,420,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18330,'AHC','For Appeal in respect of Hackney Carriage Licence','A',110,550,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18331,'APH','Appeal (Part Heard)','A',20,490,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18332,'ACN','For Appeal against Conviction','A',30,450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18333,'ACS','For Appeal against Conviction and Sentence','A',40,460,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18334,'ASE','For Appeal against Sentence','A',50,470,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18335,'BLA','For Application for Bail','U',30,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18336,'ACO','For Appeal against Compensation Order','A',60,500,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18337,'ABG','For Appeal under the Betting, Gaming and Lotteries Act 1963','A',70,510,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18338,'ACY','For Appeal under the Children and Young Persons Act 1969','A',80,520,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18339,'ACF','For Appeal in respect of Firearms Certificate','A',90,530,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18340,'BFA','For Application to Break Fixture','U',60,1320,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18341,'APL','For Appeal','C',10,480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18342,'APH','Appeal (Part Heard)','C',20,490,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18343,'ADJ','For Appeal against District Judge''s Order','C',30,600,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18344,'APN','For Application','C',100,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18345,'APN','For Application','U',10,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18346,'PAF','For Plea and to Fix','T',40,230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18347,'DSE','For Deferred Sentence','T',550,950,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18348,'DIR','For Directions','U',300,810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18349,'DPR','For Deferred Sentence (Prosecution Released)','T',560,960,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18350,'BVA','For Application to Vary Bail Conditions','T',330,1230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18351,'SEN','For Sentence','T',900,900,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18352,'DPR','For Deferred Sentence (Prosecution Released)','S',410,960,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18353,'SUB','For Surrender to Bail','T',1000,1200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18354,'APN','For Application','S',200,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18355,'DRA','For Application under the Drug Trafficking Act 1994','T',395,1375,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18356,'DRS','For Application under the Drug Trafficking Act 1994, and Sentence','T',405,1385,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18357,'DRA','For Application under the Drug Trafficking Act 1994','U',85,1375,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18358,'DRS','For Application under the Drug Trafficking Act 1994, and Sentence','U',95,1385,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18359,'TBK','For Trial (Backer)','T',200,80,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18360,'DTS','For Application under Drug Trafficking Offences Act 1986, and Sentence','U',90,1380,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18361,'RPA','For Application to Revoke Probation Order','T',460,1450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18362,'RPA','For Application to Revoke Probation Order','S',310,1450,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18363,'RCF','For Application to Revoke Curfew Order','T',450,1430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18364,'RCF','For Application to Revoke Curfew Order','S',300,1430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18365,'RBA','For Application to Revoke Community Service Order and Probation Order','T',470,1480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18366,'RBA','For Application to Revoke Community Service Order and Probation Order','S',320,1480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18367,'BCF','Breach of Requirements of Curfew Order','S',45,1650,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18368,'BCP','Breach of Requirements of Community Service Order and Probation Order','S',80,1690,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18369,'BLA','For Application for Bail','T',310,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18370,'PLE','For Plea','T',10,200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18371,'PPH','Plea (Part Heard)','T',20,210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18372,'PAD','For Plea and Directions','T',30,220,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18373,'PTN','For Plea to be Taken','T',50,240,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18374,'PPT','For Plea/Pre-Trial Review','T',70,260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18375,'TRL','For Trial','T',100,40,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18376,'TPH','Trial (Part Heard)','T',110,110,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18377,'TNW','For Trial (No Witnesses)','T',120,90,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18378,'TIS','For Trial of Issue','T',130,100,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18379,'APN','For Application','T',300,1300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18380,'XPA','For Application (Ex Parte)','C',110,1310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18381,'PLY','For Preliminary Hearing','T',810,800,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18382,'CBR','Committal for Breaches','S',175,430,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18383,'AEH','Admissibility of Evidence - Half day','C',670,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18384,'AEH','Admissibility of Evidence - Half day','T',80,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18385,'AEH','Admissibility of Evidence - Half day','U',650,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18386,'AEW','Admissibility of Evidence - Whole Day','C',680,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18387,'AEW','Admissibility of Evidence - Whole Day','T',90,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18388,'AEW','Admissibility of Evidence - Whole Day','U',660,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18389,'CTL','Custody Time Limit application','A',245,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18390,'CTL','Custody Time Limit application','C',190,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18391,'CTL','Custody Time Limit application','T',345,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18392,'CTL','Custody Time Limit application','U',120,1260,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18393,'TRN','For Trial','T',105,45,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18394,'PCM','Plea and Case Management','U',565,225,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18395,'PCM','Plea and Case Management','T',35,225,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
 18485,'RLA','For Application to Remove from List','U',70,1330,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18486,'INJ','For Application for Injunction','C',160,1540,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18487,'INJ','For Application for Injunction','U',110,1540,'14-JUN-11 13:45:48','20-MAY-11 15:20:55','XHIBIT','XHIBIT',19,80,'N'),(
 18488,'CCT','Contempt of Court Proceedings','C',250,1800,'14-JUN-11 13:45:48','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
-18245,'RLA','For Application to Remove from List','U',70,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18246,'INJ','For Application for Injunction','C',160,1540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18247,'INJ','For Application for Injunction','U',110,1540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18248,'CCT','Contempt of Court Proceedings','C',250,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18249,'RVA','For Application for Review','C',180,1430,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18250,'CPT','For Contempt','C',260,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18251,'CON','Continued','C',300,760,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18252,'TPH','Trial (Part Heard)','C',810,110,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18253,'JGT','For Judgment','C',450,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18254,'HRG','For Hearing','C',400,700,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18255,'MEN','For Mention','C',500,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18256,'PCA','For Application under the Police and Criminal Evidence Act','T',410,1390,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18257,'MEF','For Mention and to Fix','T',760,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18258,'MEF','For Mention and to Fix','C',510,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18259,'MEF','For Mention and to Fix','A',560,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18260,'EBW','For Execution of Bench Warrant','U',350,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18261,'EBW','For Execution of Bench Warrant','T',650,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18262,'EBW','For Execution of Bench Warrant','S',450,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18263,'SPA','For Sentence (Prosecution to Attend)','U',710,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18264,'SPA','For Sentence (Prosecution to Attend)','T',910,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18265,'SPA','For Sentence (Prosecution to Attend)','S',610,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18266,'SOA','For Sentence (Officer to Attend)','U',720,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18267,'FHA','For Application to Fix Hearing Date','T',360,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18268,'LAA','For Application to Add to List','T',370,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18269,'RLA','For Application to Remove from List','T',380,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18270,'RDA','For Application to Remove Driving Disqualification','T',420,1360,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18271,'SDA','For Application to Suspend Driving Disqualification','A',280,1410,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18272,'CCT','Contempt of Court Proceedings','A',350,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18273,'CPT','For Contempt','A',360,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18274,'DIR','For Directions','A',450,810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18275,'APN','For Application','A',200,1300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18276,'BLA','For Application for Bail','A',210,1210,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18277,'DTA','For Application under the Drug Trafficking Offences Act 1986','U',80,1370,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18278,'DTA','For Application under the Drug Trafficking Offences Act 1986','T',390,1370,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18279,'PCA','For Application under the Police and Criminal Evidence Act','U',100,1390,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18280,'TWC','For Trial (Fixed for this Week)','T',140,10,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18281,'TPR','For Trial (Priority)','T',150,20,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18282,'TFW','For Trial (First Warning)','T',170,50,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18283,'TPW','For Trial (Previously Warned)','T',160,30,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18284,'TFL','For Trial (Floater)','T',180,60,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18285,'TRE','For Trial (Reserve)','T',190,70,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18286,'DTS','For Application under Drug Trafficking Offences Act 1986, and Sentence','T',400,1380,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18287,'CMA','For Application to Commit','C',170,1470,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18288,'TPI','For Trial of Preliminary Issue','C',820,120,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18289,'SPR','For Sentence (Prosecution Released)','T',940,940,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18290,'DIR','For Directions','T',600,810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18291,'JGT','For Judgment','T',700,1000,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18292,'MEN','For Mention','T',750,1030,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18293,'MAP','For Mention (All Parties to Attend)','T',770,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18294,'MDA','For Mention (Defendant to Attend)','T',780,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18295,'MNW','For Mention (No Witnesses Required)','T',790,1070,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18296,'MOA','For Mention (Officer to Attend)','T',800,1080,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18297,'PTR','For Pre-Trial Review','T',870,300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18298,'REV','For Review','T',880,1020,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18299,'CCT','Contempt of Court Proceedings','T',500,1800,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18300,'CPT','For Contempt','T',510,1810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18301,'BRG','For Application to Rescind Grant of Bail','T',320,1220,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18302,'BLA','For Application for Bail','S',210,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18303,'BVA','For Application to Vary Bail Conditions','S',230,1230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18304,'FHA','For Application to Fix Hearing Date','S',240,1340,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18305,'TRA','For Application to Terminate Restriction Order','S',280,1400,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18306,'REP','For Plea and Reparation','T',60,250,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18307,'PAF','For Plea and to Fix','U',570,230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18308,'RCA','For Application to Revoke Community Service Order','T',440,1420,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18309,'BFA','For Application to Break Fixture','A',240,1320,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18310,'JGT','For Judgment','U',410,1000,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18311,'MEN','For Mention','U',450,1030,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18312,'XPA','For Application (Ex Parte)','U',20,1310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18313,'PRY','For Preparatory Hearing','T',850,310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18314,'CTA','For Application to Extend Custody Time Limit','T',340,1250,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18315,'SEN','For Sentence','S',600,900,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18316,'SPR','For Sentence (Prosecution Released)','S',640,940,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18317,'SUB','For Surrender to Bail','S',700,1200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18318,'BAC','Breach of Attendance Centre Order','S',10,1610,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18319,'BBO','Breach of Bind Over','S',20,1620,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18320,'APL','For Appeal','A',10,480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18321,'BCD','Breach of Conditional Discharge','S',40,1640,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18322,'BEX','Breach of Exclusion Order','S',50,1660,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18323,'BOO','Breach of Order','S',60,1600,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
+18245,'RLA','For Application to Remove from List','U',70,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18246,'INJ','For Application for Injunction','C',160,1540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18247,'INJ','For Application for Injunction','U',110,1540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18248,'CCT','Contempt of Court Proceedings','C',250,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18249,'RVA','For Application for Review','C',180,1430,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18250,'CPT','For Contempt','C',260,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18251,'CON','Continued','C',300,760,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18252,'TPH','Trial (Part Heard)','C',810,110,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18253,'JGT','For Judgment','C',450,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18254,'HRG','For Hearing','C',400,700,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18255,'MEN','For Mention','C',500,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18256,'PCA','For Application under the Police and Criminal Evidence Act','T',410,1390,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18257,'MEF','For Mention and to Fix','T',760,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18258,'MEF','For Mention and to Fix','C',510,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18259,'MEF','For Mention and to Fix','A',560,1040,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18260,'EBW','For Execution of Bench Warrant','U',350,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18261,'EBW','For Execution of Bench Warrant','T',650,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18262,'EBW','For Execution of Bench Warrant','S',450,1240,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18263,'SPA','For Sentence (Prosecution to Attend)','U',710,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18264,'SPA','For Sentence (Prosecution to Attend)','T',910,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18265,'SPA','For Sentence (Prosecution to Attend)','S',610,910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18266,'SOA','For Sentence (Officer to Attend)','U',720,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18267,'FHA','For Application to Fix Hearing Date','T',360,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18268,'LAA','For Application to Add to List','T',370,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18269,'RLA','For Application to Remove from List','T',380,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18270,'RDA','For Application to Remove Driving Disqualification','T',420,1360,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18271,'SDA','For Application to Suspend Driving Disqualification','A',280,1410,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18272,'CCT','Contempt of Court Proceedings','A',350,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18273,'CPT','For Contempt','A',360,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18274,'DIR','For Directions','A',450,810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18275,'APN','For Application','A',200,1300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18276,'BLA','For Application for Bail','A',210,1210,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18277,'DTA','For Application under the Drug Trafficking Offences Act 1986','U',80,1370,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18278,'DTA','For Application under the Drug Trafficking Offences Act 1986','T',390,1370,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18279,'PCA','For Application under the Police and Criminal Evidence Act','U',100,1390,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18280,'TWC','For Trial (Fixed for this Week)','T',140,10,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18281,'TPR','For Trial (Priority)','T',150,20,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18282,'TFW','For Trial (First Warning)','T',170,50,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18283,'TPW','For Trial (Previously Warned)','T',160,30,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18284,'TFL','For Trial (Floater)','T',180,60,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18285,'TRE','For Trial (Reserve)','T',190,70,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18286,'DTS','For Application under Drug Trafficking Offences Act 1986, and Sentence','T',400,1380,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18287,'CMA','For Application to Commit','C',170,1470,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18288,'TPI','For Trial of Preliminary Issue','C',820,120,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18289,'SPR','For Sentence (Prosecution Released)','T',940,940,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18290,'DIR','For Directions','T',600,810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18291,'JGT','For Judgment','T',700,1000,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18292,'MEN','For Mention','T',750,1030,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18293,'MAP','For Mention (All Parties to Attend)','T',770,1050,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18294,'MDA','For Mention (Defendant to Attend)','T',780,1060,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18295,'MNW','For Mention (No Witnesses Required)','T',790,1070,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18296,'MOA','For Mention (Officer to Attend)','T',800,1080,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18297,'PTR','For Pre-Trial Review','T',870,300,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18298,'REV','For Review','T',880,1020,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18299,'CCT','Contempt of Court Proceedings','T',500,1800,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18300,'CPT','For Contempt','T',510,1810,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18301,'BRG','For Application to Rescind Grant of Bail','T',320,1220,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18302,'BLA','For Application for Bail','S',210,1210,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18303,'BVA','For Application to Vary Bail Conditions','S',230,1230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18304,'FHA','For Application to Fix Hearing Date','S',240,1340,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18305,'TRA','For Application to Terminate Restriction Order','S',280,1400,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18306,'REP','For Plea and Reparation','T',60,250,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18307,'PAF','For Plea and to Fix','U',570,230,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18308,'RCA','For Application to Revoke Community Service Order','T',440,1420,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18309,'BFA','For Application to Break Fixture','A',240,1320,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18310,'JGT','For Judgment','U',410,1000,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18311,'MEN','For Mention','U',450,1030,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18312,'XPA','For Application (Ex Parte)','U',20,1310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18313,'PRY','For Preparatory Hearing','T',850,310,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18314,'CTA','For Application to Extend Custody Time Limit','T',340,1250,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18315,'SEN','For Sentence','S',600,900,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18316,'SPR','For Sentence (Prosecution Released)','S',640,940,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18317,'SUB','For Surrender to Bail','S',700,1200,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18318,'BAC','Breach of Attendance Centre Order','S',10,1610,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18319,'BBO','Breach of Bind Over','S',20,1620,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18320,'APL','For Appeal','A',10,480,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18321,'BCD','Breach of Conditional Discharge','S',40,1640,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18322,'BEX','Breach of Exclusion Order','S',50,1660,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18323,'BOO','Breach of Order','S',60,1600,'10-DEC-15 12:04:30','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
 18489,'RVA','For Application for Review','C',180,1430,'14-JUN-11 13:45:48','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18490,'CPT','For Contempt','C',260,1810,'14-JUN-11 13:45:48','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18491,'CON','Continued','C',300,760,'14-JUN-11 13:45:48','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
@@ -314,83 +314,83 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 18567,'CSE','Committal for Sentence','S',150,410,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18568,'CSS','Committals for Sentence','S',160,400,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18569,'CSP','Committal for Sentence (Part Heard)','S',170,420,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
-18166,'SAC','For Sentence (at another Court)','S',650,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',118,81,'N'),(
-18167,'SAC','For Sentence (at another Court)','T',950,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18168,'SAC','For Sentence (at another Court)','U',750,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18169,'LAA','For Application to Add to List','S',250,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18170,'RLA','For Application to Remove from List','S',260,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18171,'RDA','For Application to Remove Driving Disqualification','S',270,1360,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18172,'RCA','For Application to Revoke Community Service Order','S',290,1420,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18173,'DSE','For Deferred Sentence','S',400,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18174,'BCS','Breach of Requirements of Community Service Order','S',30,1630,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18175,'JGT','For Judgment','S',500,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18176,'FHA','For Application to Fix Hearing Date','A',250,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18177,'LAA','For Application to Add to List','A',260,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18178,'RLA','For Application to Remove from List','A',270,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18179,'ALA','For Appeal under the Lotteries and Amusements Act 1976','A',150,590,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18180,'DSE','For Deferred Sentence','A',400,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18181,'DRR','For Deferred Sentence (Respondent Released)','A',410,970,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18182,'JGT','For Judgment','A',500,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18183,'MEN','For Mention','A',550,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18184,'MAA','For Mention (Appellant to Attend)','A',570,1090,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18185,'REV','For Review','A',600,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18186,'SUB','For Surrender to Bail','A',650,1200,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18187,'AHA','For Appeal under the Housing Act 1957','A',120,560,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18188,'ALD','For Appeal under the Land Drainage Act 1976','A',130,570,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18189,'ALJ','For Appeal against Licensing Justices Decision','A',140,580,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18190,'BVA','For Application to Vary Bail Conditions','A',230,1230,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18191,'PHD','Part Heard','C',600,750,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18192,'PLY','For Preliminary Hearing','C',650,800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18193,'PTR','For Pre-Trial Review','C',660,300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18194,'RJT','For Reserved Judgment','C',700,1010,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18195,'RIN','For Return Injunction','U',630,1550,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18196,'BFA','For Application to Break Fixture','T',350,1320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18197,'MEN','For Mention','S',510,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18198,'MDA','For Mention (Defendant to Attend)','S',520,1060,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18199,'MOA','For Mention (Officer to Attend)','S',530,1080,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18200,'REV','For Review','S',550,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18201,'PRA','For Application under the Proceeds of Crime Act 2002','S',330,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18202,'PRA','For Application under the Proceeds of Crime Act 2002','U',105,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18203,'SOA','For Sentence (Officer to Attend)','T',920,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18204,'SOA','For Sentence (Officer to Attend)','S',620,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18205,'SPO','For Sentence (Prosecution and Officer to Attend)','U',730,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18206,'SPO','For Sentence (Prosecution and Officer to Attend)','T',930,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18207,'SPO','For Sentence (Prosecution and Officer to Attend)','S',630,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18208,'DCA','For Application for Dismissal of Charges','T',860,320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18209,'MBO','For Motion By Order','C',550,650,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18210,'PAD','For Plea and Directions','U',560,220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18211,'CCT','Contempt of Court Proceedings','U',200,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18212,'CPT','For Contempt','U',210,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18213,'DSE','For Deferred Sentence','U',250,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18214,'DPR','For Deferred Sentence (Prosecution Released)','U',260,960,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18215,'PLE','For Plea','U',550,200,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18216,'BVA','For Application to Vary Bail Conditions','U',50,1230,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18217,'PTR','For Pre-Trial Review','U',610,300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18218,'PLY','For Preliminary Hearing','U',600,800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18219,'SEN','For Sentence','U',700,900,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18220,'SPR','For Sentence (Prosecution Released)','U',740,940,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18221,'SCE','To Show Cause','U',800,1900,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18222,'SCJ','For Juror to Show Cause','U',810,1910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18223,'SCS','For Solicitor to Show Cause','U',820,1920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18224,'SCY','For Surety to Show Cause','U',830,1930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18225,'SCW','For Witness to Show Cause','U',840,1940,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18226,'APL','For Appeal','U',150,480,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18227,'HRG','For Hearing','U',400,700,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18228,'PHD','Part Heard','U',500,750,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18229,'RJT','For Reserved Judgment','U',620,1010,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18230,'RIN','For Return Injunction','C',710,1550,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18231,'TRA','For Application to Terminate Restriction Order','T',430,1400,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18232,'AGA','For Appeal under the Gaming Act 1968','A',100,540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18233,'REV','For Review','C',720,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18234,'TRL','For Trial','C',800,40,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18235,'REV','For Review','U',640,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18236,'PRA','For Application under the Proceeds of Crime Act 2002','T',480,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18237,'BFA','For Application to Break Fixture','C',120,1320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18238,'DIR','For Directions','C',350,810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18239,'FHA','For Application to Fix Hearing Date','C',130,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18240,'LAA','For Application to Add to List','C',140,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18241,'BRG','For Application to Rescind Grant of Bail','S',220,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18242,'BRG','For Application to Rescind Grant of Bail','A',220,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
+18166,'SAC','For Sentence (at another Court)','S',650,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',118,95,'N'),(
+18167,'SAC','For Sentence (at another Court)','T',950,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18168,'SAC','For Sentence (at another Court)','U',750,945,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18169,'LAA','For Application to Add to List','S',250,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18170,'RLA','For Application to Remove from List','S',260,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18171,'RDA','For Application to Remove Driving Disqualification','S',270,1360,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18172,'RCA','For Application to Revoke Community Service Order','S',290,1420,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18173,'DSE','For Deferred Sentence','S',400,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18174,'BCS','Breach of Requirements of Community Service Order','S',30,1630,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18175,'JGT','For Judgment','S',500,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18176,'FHA','For Application to Fix Hearing Date','A',250,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18177,'LAA','For Application to Add to List','A',260,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18178,'RLA','For Application to Remove from List','A',270,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18179,'ALA','For Appeal under the Lotteries and Amusements Act 1976','A',150,590,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18180,'DSE','For Deferred Sentence','A',400,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18181,'DRR','For Deferred Sentence (Respondent Released)','A',410,970,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18182,'JGT','For Judgment','A',500,1000,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18183,'MEN','For Mention','A',550,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18184,'MAA','For Mention (Appellant to Attend)','A',570,1090,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18185,'REV','For Review','A',600,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18186,'SUB','For Surrender to Bail','A',650,1200,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18187,'AHA','For Appeal under the Housing Act 1957','A',120,560,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18188,'ALD','For Appeal under the Land Drainage Act 1976','A',130,570,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18189,'ALJ','For Appeal against Licensing Justices Decision','A',140,580,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18190,'BVA','For Application to Vary Bail Conditions','A',230,1230,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18191,'PHD','Part Heard','C',600,750,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18192,'PLY','For Preliminary Hearing','C',650,800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18193,'PTR','For Pre-Trial Review','C',660,300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18194,'RJT','For Reserved Judgment','C',700,1010,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18195,'RIN','For Return Injunction','U',630,1550,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18196,'BFA','For Application to Break Fixture','T',350,1320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18197,'MEN','For Mention','S',510,1030,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18198,'MDA','For Mention (Defendant to Attend)','S',520,1060,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18199,'MOA','For Mention (Officer to Attend)','S',530,1080,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18200,'REV','For Review','S',550,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18201,'PRA','For Application under the Proceeds of Crime Act 2002','S',330,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18202,'PRA','For Application under the Proceeds of Crime Act 2002','U',105,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18203,'SOA','For Sentence (Officer to Attend)','T',920,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18204,'SOA','For Sentence (Officer to Attend)','S',620,920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18205,'SPO','For Sentence (Prosecution and Officer to Attend)','U',730,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18206,'SPO','For Sentence (Prosecution and Officer to Attend)','T',930,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18207,'SPO','For Sentence (Prosecution and Officer to Attend)','S',630,930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18208,'DCA','For Application for Dismissal of Charges','T',860,320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18209,'MBO','For Motion By Order','C',550,650,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18210,'PAD','For Plea and Directions','U',560,220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18211,'CCT','Contempt of Court Proceedings','U',200,1800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18212,'CPT','For Contempt','U',210,1810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18213,'DSE','For Deferred Sentence','U',250,950,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18214,'DPR','For Deferred Sentence (Prosecution Released)','U',260,960,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18215,'PLE','For Plea','U',550,200,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18216,'BVA','For Application to Vary Bail Conditions','U',50,1230,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18217,'PTR','For Pre-Trial Review','U',610,300,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18218,'PLY','For Preliminary Hearing','U',600,800,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18219,'SEN','For Sentence','U',700,900,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18220,'SPR','For Sentence (Prosecution Released)','U',740,940,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18221,'SCE','To Show Cause','U',800,1900,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18222,'SCJ','For Juror to Show Cause','U',810,1910,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18223,'SCS','For Solicitor to Show Cause','U',820,1920,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18224,'SCY','For Surety to Show Cause','U',830,1930,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18225,'SCW','For Witness to Show Cause','U',840,1940,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18226,'APL','For Appeal','U',150,480,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18227,'HRG','For Hearing','U',400,700,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18228,'PHD','Part Heard','U',500,750,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18229,'RJT','For Reserved Judgment','U',620,1010,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18230,'RIN','For Return Injunction','C',710,1550,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18231,'TRA','For Application to Terminate Restriction Order','T',430,1400,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18232,'AGA','For Appeal under the Gaming Act 1968','A',100,540,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18233,'REV','For Review','C',720,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18234,'TRL','For Trial','C',800,40,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18235,'REV','For Review','U',640,1020,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18236,'PRA','For Application under the Proceeds of Crime Act 2002','T',480,1490,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18237,'BFA','For Application to Break Fixture','C',120,1320,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18238,'DIR','For Directions','C',350,810,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18239,'FHA','For Application to Fix Hearing Date','C',130,1340,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18240,'LAA','For Application to Add to List','C',140,1350,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18241,'BRG','For Application to Rescind Grant of Bail','S',220,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18242,'BRG','For Application to Rescind Grant of Bail','A',220,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
 18647,'LAA','For Application to Add to List','A',260,1350,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
 18648,'RLA','For Application to Remove from List','A',270,1330,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
 18649,'ALA','For Appeal under the Lotteries and Amusements Act 1976','A',150,590,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
@@ -504,7 +504,7 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 19132,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,70,''),(
 19133,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,36,''),(
 19134,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,66,''),(
-19135,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,81,''),(
+19135,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,95,''),(
 19136,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,24,''),(
 19137,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,52,''),(
 19138,'AST','For Appeal under the Stalking Prevention Act 2019','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,58,''),(
@@ -676,12 +676,12 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 19093,'TRN','For Trial','T',105,45,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
 19094,'PCM','Plea and Case Management','U',565,225,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
 19095,'PCM','Plea and Case Management','T',35,225,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
-19096,'EGP','For Early Guilty Plea','T',35,5,'10-DEC-15 12:04:30','17-APR-14 11:30:03','XHIBIT','XHIBIT',80,81,'N'),(
-19097,'EGP','For Early Guilty Plea','U',35,5,'10-DEC-15 12:04:30','17-APR-14 11:30:03','XHIBIT','XHIBIT',80,81,'N'),(
-19098,'BWR','Review of Bench Warrant','U',850,1950,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,81,'N'),(
-19099,'BWR','Review of Bench Warrant','T',1010,1960,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,81,'N'),(
-19100,'FCM','Further Case Management','U',860,1970,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,81,'N'),(
-19101,'FCM','Further Case Management','T',1020,1980,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,81,'N'),(
+19096,'EGP','For Early Guilty Plea','T',35,5,'10-DEC-15 12:04:30','17-APR-14 11:30:03','XHIBIT','XHIBIT',80,95,'N'),(
+19097,'EGP','For Early Guilty Plea','U',35,5,'10-DEC-15 12:04:30','17-APR-14 11:30:03','XHIBIT','XHIBIT',80,95,'N'),(
+19098,'BWR','Review of Bench Warrant','U',850,1950,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,95,'N'),(
+19099,'BWR','Review of Bench Warrant','T',1010,1960,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,95,'N'),(
+19100,'FCM','Further Case Management','U',860,1970,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,95,'N'),(
+19101,'FCM','Further Case Management','T',1020,1980,'10-DEC-15 12:04:30','01-DEC-15 15:41:01','XHIBIT','XHIBIT',18,95,'N'),(
 18570,'AHC','For Appeal in respect of Hackney Carriage Licence','A',110,550,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18571,'APH','Appeal (Part Heard)','A',20,490,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
 18572,'ACN','For Appeal against Conviction','A',30,450,'14-JUN-11 13:45:49','20-MAY-11 15:20:56','XHIBIT','XHIBIT',19,80,'N'),(
@@ -989,8 +989,8 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 19022,'BEX','Breach of Exclusion Order','S',50,1660,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
 19023,'BOO','Breach of Order','S',60,1600,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
 19024,'BRP','Breach of Requirements of Probation Order','S',70,1680,'19-APR-12 15:48:23','19-APR-12 15:48:23','XHIBIT','XHIBIT',1,12,'N'),(
-18243,'BRG','For Application to Rescind Grant of Bail','U',40,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
-18244,'RLA','For Application to Remove from List','C',150,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,81,'N'),(
+18243,'BRG','For Application to Rescind Grant of Bail','U',40,1220,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
+18244,'RLA','For Application to Remove from List','C',150,1330,'10-DEC-15 12:04:29','12-MAY-09 15:13:44','XHIBIT','XHIBIT',117,95,'N'),(
 18636,'SAC','For Sentence (at another Court)','S',650,945,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
 18637,'SAC','For Sentence (at another Court)','T',950,945,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
 18638,'SAC','For Sentence (at another Court)','U',750,945,'18-APR-12 16:56:36','18-APR-12 16:50:00','XHIBIT','XHIBIT',3,55,'N'),(
@@ -1031,7 +1031,7 @@ insert into xhb_ref_hearing_type (REF_HEARING_TYPE_ID,HEARING_TYPE_CODE,HEARING_
 19204,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,70,''),(
 19205,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,36,''),(
 19206,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,66,''),(
-19207,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,81,''),(
+19207,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,95,''),(
 19208,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,24,''),(
 19209,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,52,''),(
 19210,'PST','For Application under the Stalking Prevention Act','X',95,535,'16-FEB-21 12:11:48','16-FEB-21 12:11:48','XHIBIT','XHIBIT',1,58,''),(

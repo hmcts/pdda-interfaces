@@ -15,7 +15,7 @@ insert into xhb_court_site (COURT_SITE_ID,COURT_SITE_NAME,COURT_SITE_CODE,COURT_
 261,'WORCESTER SHIRE HALL','A',36,183582,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','466','W',null,'','',''),(
 262,'HEREFORD','B',36,183583,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site B','762','H',null,'','',''),(
 594,'KINGSTON UPON HULL','A',66,383482,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','403','',null,'','',''),(
-1610,'SNARESBROOK','A',81,518973,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','453','',null,'','',''),(
+1610,'SNARESBROOK','A',95,518973,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','453','',null,'','',''),(
 151,'LINCOLN','A',24,120905,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','432','',null,'','',''),(
 428,'HARROW','A',52,290310,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','468','',null,'','',''),(
 484,'BIRMINGHAM','A',58,330721,'01-APR-09 15:26:01','01-APR-09 15:26:01','XHIBIT','XHIBIT',1,'','Court Site A','404','Q',null,'','',''),(
