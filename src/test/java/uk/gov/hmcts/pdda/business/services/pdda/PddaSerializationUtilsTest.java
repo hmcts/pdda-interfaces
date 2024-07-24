@@ -3,9 +3,9 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.DummyEventUtil;
 import uk.gov.hmcts.DummyFileUtil;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -27,20 +27,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(EasyMockExtension.class)
 class PddaSerializationUtilsTest {
+
     @Test
-    void testDeserialize() {
-        String decodedEvent =
+    void testDecodeDeserialize() {
+        byte[] decodedEvent =
             PddaSerializationUtils.decodePublicEvent(DummyFileUtil.SERIALIZED_HEARINGSTATUSEVENT);
         assertNotNull(decodedEvent, "decodePublicEvent produced null");
-        // PublicDisplayEvent event = PddaSerializationUtils.deserializePublicEvent(decodedEvent);
-        // assertNotNull(event, "deserializePublicEvent produced null");
+        PublicDisplayEvent event = PddaSerializationUtils.deserializePublicEvent(decodedEvent);
+        assertNotNull(event, "deserializePublicEvent produced null");
     }
 
     @Test
-    void testSerialize() {
+    void testSerializeEncode() {
         PublicDisplayEvent event = DummyEventUtil.getHearingStatusEvent();
-
-        String serialized = PddaSerializationUtils.serializePublicEvent(event);
+        byte[] serialized = PddaSerializationUtils.serializePublicEvent(event);
         assertNotNull(serialized, "serializePublicEvent produced null");
         String encoded = PddaSerializationUtils.encodePublicEvent(serialized);
         assertNotNull(encoded, "encodePublicEvent produced null");

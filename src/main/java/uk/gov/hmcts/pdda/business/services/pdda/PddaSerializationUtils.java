@@ -1,11 +1,11 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.apache.commons.lang3.SerializationUtils;
-import org.castor.core.util.Base64Decoder;
-import org.castor.core.util.Base64Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+
+import java.util.Base64;
 
 /**
  * <p>
@@ -31,29 +31,27 @@ public final class PddaSerializationUtils {
     private PddaSerializationUtils() {
         // Private constructor
     }
-    
-    public static String serializePublicEvent(PublicDisplayEvent event) {
+
+    public static byte[] serializePublicEvent(PublicDisplayEvent event) {
         LOG.debug("Serializing event: {}", event);
-        byte[] byteArray = SerializationUtils.serialize(event);
-        return new String(byteArray, java.nio.charset.StandardCharsets.ISO_8859_1);
+        return SerializationUtils.serialize(event);
     }
 
-    public static PublicDisplayEvent deserializePublicEvent(String eventString) {
-        if (eventString != null && !EMPTY_STRING.equals(eventString)) {
-            LOG.debug("Deserializing event: {}", eventString);
-            return (PublicDisplayEvent) SerializationUtils
-                .deserialize(eventString.getBytes(java.nio.charset.StandardCharsets.ISO_8859_1));
+    public static PublicDisplayEvent deserializePublicEvent(byte[] eventBytes) {
+        if (eventBytes != null && !EMPTY_STRING.equals(eventBytes)) {
+            LOG.debug("Deserializing event: {}", eventBytes);
+            return (PublicDisplayEvent) SerializationUtils.deserialize(eventBytes);
         }
         return null;
     }
 
-    public static String encodePublicEvent(String event) {
+    public static String encodePublicEvent(byte[] event) {
         LOG.debug("Encoding event: {}", event);
-        return new String(Base64Encoder.encode(event.getBytes()));
+        return new String(Base64.getEncoder().encode(event));
     }
 
-    public static String decodePublicEvent(String encodedEvent) {
+    public static byte[] decodePublicEvent(String encodedEvent) {
         LOG.debug("Decoding event: {}", encodedEvent);
-        return new String(Base64Decoder.decode(encodedEvent));
+        return Base64.getDecoder().decode(encodedEvent);
     }
 }

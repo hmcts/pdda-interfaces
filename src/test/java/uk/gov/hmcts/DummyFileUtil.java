@@ -1,5 +1,6 @@
 package uk.gov.hmcts;
 
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
 
@@ -33,7 +34,7 @@ public final class DummyFileUtil {
             + "5sYW5nLkludGVnZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5"
             + "OdW1iZXKGrJUdC5TgiwIAAHhwAAAAX3NxAH4ACQAAH9xzcgBSdWsuZ292LmNv"
             + "dXJ0c2VydmljZS54aGliaXQuY29tbW9uLnB1YmxpY2Rpc3BsYXkuZXZlbnRzL"
-            + "nR5cGVzLkNhc2VDaGFuZ2VJbmZvcm1hdGlvbvCPqqw6fCKnAgABWgAKY2FzZU" 
+            + "nR5cGVzLkNhc2VDaGFuZ2VJbmZvcm1hdGlvbvCPqqw6fCKnAgABWgAKY2FzZU"
             + "FjdGl2ZXhwAQ==";
 
     private DummyFileUtil() {
@@ -82,12 +83,12 @@ public final class DummyFileUtil {
             PublicDisplayEvent event = DummyEventUtil.getEvent(messageType);
             fileResult = DummyFileUtil.getFileResults();
             fileResult.filename = messageType + "_111_" + nowAsString + ".xml";
-            // if (event instanceof HearingStatusEvent) {
-            // fileResult.fileContents = SERIALIZED_HEARINGSTATUSEVENT;
-            // } else {
-            fileResult.fileContents = PddaSerializationUtils
-                .encodePublicEvent(PddaSerializationUtils.serializePublicEvent(event));
-            // }
+            if (event instanceof HearingStatusEvent) {
+                fileResult.fileContents = SERIALIZED_HEARINGSTATUSEVENT;
+            } else {
+                fileResult.fileContents = PddaSerializationUtils
+                    .encodePublicEvent(PddaSerializationUtils.serializePublicEvent(event));
+            }
             fileResult.isValid = isValid;
             result.add(fileResult);
         }

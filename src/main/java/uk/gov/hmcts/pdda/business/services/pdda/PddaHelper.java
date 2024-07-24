@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -16,7 +17,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -469,7 +469,7 @@ public class PddaHelper extends XhibitPddaHelper {
         @Override
         public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
             if (isValidNoOfParts(filename) && validateTitle(filename)) {
-                String decodedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
+                byte[] decodedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
                 return PddaSerializationUtils.deserializePublicEvent(decodedEvent);
             }
             return null;
