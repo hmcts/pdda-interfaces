@@ -26,7 +26,6 @@ import java.util.Base64;
  */
 public final class PddaSerializationUtils {
     private static final Logger LOG = LoggerFactory.getLogger(PddaSerializationUtils.class);
-    private static final String EMPTY_STRING = "";
 
     private PddaSerializationUtils() {
         // Private constructor
@@ -38,7 +37,7 @@ public final class PddaSerializationUtils {
     }
 
     public static PublicDisplayEvent deserializePublicEvent(byte[] eventBytes) {
-        if (eventBytes != null && !EMPTY_STRING.equals(eventBytes)) {
+        if (eventBytes != null) {
             LOG.debug("Deserializing event: {}", eventBytes);
             return (PublicDisplayEvent) SerializationUtils.deserialize(eventBytes);
         }
