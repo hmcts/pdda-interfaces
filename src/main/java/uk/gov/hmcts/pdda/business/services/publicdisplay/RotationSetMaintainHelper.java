@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtRotationSetConfigurationChange;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
@@ -15,8 +17,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsReposi
 import uk.gov.hmcts.pdda.business.services.publicdisplay.exceptions.PublicDisplayCheckedException;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.exceptions.RotationSetNotFoundCheckedException;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtRotationSetConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.RotationSetComplexValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.RotationSetDdComplexValue;
 

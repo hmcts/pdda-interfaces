@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtDisplayConfigurationChange;
 import uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
@@ -29,8 +31,6 @@ import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDispl
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayDocumentQuery;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.exceptions.RotationSetNotFoundCheckedException;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtDisplayConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.rotationset.DisplayRotationSetData;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.RotationSetComplexValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.RotationSetDdComplexValue;

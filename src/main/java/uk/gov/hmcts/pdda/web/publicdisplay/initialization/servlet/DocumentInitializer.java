@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.framework.services.threadpool.ThreadPool;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.ProcessingInstance;
 import uk.gov.hmcts.pdda.web.publicdisplay.messaging.work.EventWork;
 

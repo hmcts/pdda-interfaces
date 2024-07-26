@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.types.configuration;
+package uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration;
 
 import java.io.Serializable;
 

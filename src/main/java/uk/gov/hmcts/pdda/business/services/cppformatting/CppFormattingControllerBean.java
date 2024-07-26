@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

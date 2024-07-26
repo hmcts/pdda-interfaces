@@ -16,7 +16,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentType;
 import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;

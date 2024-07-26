@@ -13,7 +13,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
