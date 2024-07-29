@@ -33,7 +33,7 @@ public class CourtConfigurationChange implements Serializable {
 
     private final Integer courtId;
 
-    private Boolean forceRecreate = Boolean.TRUE;
+    private boolean forceRecreate = Boolean.TRUE;
 
     /**
      * Construct a general CourtConfigurationChange that results in a complete recreate of all

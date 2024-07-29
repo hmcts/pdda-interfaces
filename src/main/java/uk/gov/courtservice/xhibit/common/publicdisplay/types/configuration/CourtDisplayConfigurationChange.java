@@ -31,7 +31,7 @@ public class CourtDisplayConfigurationChange extends CourtConfigurationChange {
 
     static final long serialVersionUID = 5164433718490600709L;
 
-    private final Integer displayId;
+    private final int displayId;
 
     /**
      * Creates a new CourtDisplayConfigurationChange object that will not result in the display
