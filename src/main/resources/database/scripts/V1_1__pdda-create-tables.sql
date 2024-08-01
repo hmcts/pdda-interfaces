@@ -631,26 +631,6 @@ CREATE TABLE xhb_ref_justice (
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT xhb_ref_justice_pk PRIMARY KEY (ref_justice_id);
 
 
-DROP TABLE IF EXISTS xhb_ref_legal_representative CASCADE;
-CREATE TABLE xhb_ref_legal_representative (
-	ref_legal_rep_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	title varchar(255),
-	initials varchar(4),
-	legal_rep_type varchar(1),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL,
-	obs_ind varchar(1)
-);
-ALTER TABLE xhb_ref_legal_representative ADD CONSTRAINT xhb_ref_legal_representative_pk PRIMARY KEY (ref_legal_rep_id);
-
-
 DROP TABLE IF EXISTS xhb_ref_listing_data CASCADE;
 CREATE TABLE xhb_ref_listing_data (
 	ref_listing_data_id integer NOT NULL,

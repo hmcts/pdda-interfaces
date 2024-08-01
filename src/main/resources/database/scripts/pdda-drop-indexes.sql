@@ -71,7 +71,6 @@ DROP INDEX IF EXISTS ref_judge_c_jud_id_ct_id_idx;
 DROP INDEX IF EXISTS xhb_ref_judge_court_fk;
 DROP INDEX IF EXISTS ref_justice_c_jp_id_ct_id_idx;
 DROP INDEX IF EXISTS xhb_ref_justice_court_fk;
-DROP INDEX IF EXISTS xhb_ref_legal_rep_court_fk;
 DROP INDEX IF EXISTS ref_solicitor_firm_court_idx;
 DROP INDEX IF EXISTS xhb_ref_solicitor_firm_addr_fk;
 DROP INDEX IF EXISTS xhb_ref_solicitor_firm_crt_fk;

@@ -18,7 +18,6 @@
 \i 'upsert-xhb_ref_hearing_type.sql'
 \i 'upsert-xhb_ref_judge.sql'
 \i 'upsert-xhb_ref_justice.sql'
-\i 'upsert-xhb_ref_legal_representative.sql'
 \i 'upsert-xhb_ref_listing_data.sql'
 \i 'upsert-xhb_ref_monitoring_category.sql'
 \i 'upsert-xhb_ref_pdda_message_type.sql'

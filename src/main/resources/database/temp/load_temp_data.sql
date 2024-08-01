@@ -25,8 +25,6 @@
 
 \copy temp.tmp_ref_justice (ref_justice_id, justice_name, crest_justice_id, court_id, psd_court_code, title, initials, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'XHB_REF_JUSTICE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_legal_representative (ref_legal_rep_id, first_name, middle_name, surname, title, initials, legal_rep_type, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_LEGAL_REPRESENTATIVE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_listing_data (ref_listing_data_id, ref_data_type, ref_data_value, created_by, last_updated_by, creation_date, last_update_date, obs_ind, version) FROM 'XHB_REF_LISTING_DATA_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_ref_monitoring_category (ref_monitoring_category_id, monitoring_category_code, monitoring_category_name, created_by, last_updated_by, creation_date, last_update_date, version) FROM 'XHB_REF_MONITORING_CATEGORY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
