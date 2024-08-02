@@ -38,7 +38,6 @@ CREATE INDEX xhb_case_on_list_hear_type_fk ON xhb_case_on_list (hearing_type_id)
 CREATE INDEX xhb_case_on_list_list_fk ON xhb_case_on_list (list_id);
 CREATE INDEX xhb_case_on_list_sitting_fk ON xhb_case_on_list (sitting_on_list_id);
 CREATE INDEX xhb_case_on_list_tm_marking_fk ON xhb_case_on_list (time_marking_id);
-CREATE INDEX xhb_court_address_fk ON xhb_court (address_id);
 CREATE INDEX xhb_court_crst_id_crt_id ON xhb_court (crest_court_id, court_id);
 CREATE INDEX xhb_court_in_service_flag ON xhb_court (in_service_flag);
 CREATE UNIQUE INDEX xhb_court_short_name_idx ON xhb_court (short_name);
@@ -62,7 +61,6 @@ CREATE INDEX xhb_list_court_fk ON xhb_list (court_id);
 CREATE INDEX xhb_list_list_parent_id_fk ON xhb_list (list_parent_id);
 CREATE INDEX xhb_list_list_type_fk ON xhb_list (list_type_id);
 CREATE INDEX ref_court_ct_cd_crt_id_idx ON xhb_ref_court (crest_code, court_id);
-CREATE INDEX xhb_ref_court_address_fk ON xhb_ref_court (address_id);
 CREATE INDEX xhb_ref_court_court_fk ON xhb_ref_court (court_id);
 CREATE INDEX ref_crt_rep_ccrpt_id_ct_idx ON xhb_ref_court_reporter (crest_court_reporter_id, court_id);
 CREATE INDEX xhb_ref_court_reporter_crt_fk ON xhb_ref_court_reporter (court_id);

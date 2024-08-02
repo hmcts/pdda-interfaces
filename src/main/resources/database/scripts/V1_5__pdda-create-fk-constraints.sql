@@ -66,7 +66,6 @@ ALTER TABLE xhb_case_on_list ADD CONSTRAINT xhb_case_on_list_sol_fk FOREIGN KEY 
 ALTER TABLE xhb_case_on_list ADD CONSTRAINT xhb_case_on_list_tm_id_fk FOREIGN KEY (time_marking_id) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_case_on_list ADD CONSTRAINT xhb_case_on_list_vpdri_fk FOREIGN KEY (vacation_pre_defined_rson_id) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_court ADD CONSTRAINT court_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_court ADD CONSTRAINT xhb_police_force_code_fk FOREIGN KEY (police_force_code) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_court_room ADD CONSTRAINT court_room_court_site_id_fk FOREIGN KEY (court_site_id) REFERENCES xhb_court_site(court_site_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -105,7 +104,6 @@ ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_court_id_fk FOREIGN KEY (court_id) 
 ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_list_type_id_fk FOREIGN KEY (list_type_id) REFERENCES xhb_ref_listing_data(ref_listing_data_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_parent_fk FOREIGN KEY (list_parent_id) REFERENCES xhb_list(list_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_ref_court ADD CONSTRAINT ref_court_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_ref_court ADD CONSTRAINT ref_court_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT ref_ct_rep_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
