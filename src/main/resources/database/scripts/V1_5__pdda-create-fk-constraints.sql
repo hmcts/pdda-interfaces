@@ -70,7 +70,6 @@ ALTER TABLE xhb_case_on_list ADD CONSTRAINT xhb_case_on_list_vpdri_fk FOREIGN KE
 ALTER TABLE xhb_court ADD CONSTRAINT xhb_police_force_code_fk FOREIGN KEY (police_force_code) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_court_room ADD CONSTRAINT court_room_court_site_id_fk FOREIGN KEY (court_site_id) REFERENCES xhb_court_site(court_site_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_court_satellite ADD CONSTRAINT sys_c0012884 FOREIGN KEY (court_site_id) REFERENCES xhb_court_site(court_site_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_court_site ADD CONSTRAINT court_site_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_court_site ADD CONSTRAINT court_site_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_cpp_formatting ADD CONSTRAINT cpp_clob_id_fk FOREIGN KEY (xml_document_clob_id) REFERENCES xhb_clob(clob_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -109,13 +108,11 @@ ALTER TABLE xhb_ref_court ADD CONSTRAINT ref_court_court_id_fk FOREIGN KEY (cour
 ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT ref_ct_rep_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT ref_ct_rep_ref_ct_rep_f_id_fk FOREIGN KEY (ref_court_reporter_firm_id) REFERENCES xhb_ref_court_reporter_firm(ref_court_reporter_firm_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_ref_court_reporter_firm ADD CONSTRAINT ref_ct_rep_firm_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_ref_court_reporter_firm ADD CONSTRAINT ref_ct_rep_firm_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_hearing_type ADD CONSTRAINT ref_hearing_type_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_judge ADD CONSTRAINT ref_judge_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT ref_justice_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_ref_solicitor_firm ADD CONSTRAINT ref_sol_firm_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_ref_solicitor_firm ADD CONSTRAINT ref_sol_firm_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_system_code ADD CONSTRAINT ref_system_code_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -196,7 +193,6 @@ ALTER TABLE xhb_court_log_entry ADD CONSTRAINT ct_log_entry_sched_hear_id_fk FOR
 ALTER TABLE xhb_cr_live_display ADD CONSTRAINT cr_live_disp_court_room_id_fk FOREIGN KEY (court_room_id) REFERENCES xhb_court_room(court_room_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_cr_live_display ADD CONSTRAINT cr_live_disp_sched_hear_id_fk FOREIGN KEY (scheduled_hearing_id) REFERENCES xhb_scheduled_hearing(scheduled_hearing_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_defendant ADD CONSTRAINT defendant_address_id_fk FOREIGN KEY (address_id) REFERENCES xhb_address(address_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_defendant ADD CONSTRAINT defendant_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_defendant_on_case ADD CONSTRAINT def_on_case_case_id_fk FOREIGN KEY (case_id) REFERENCES xhb_case(case_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;

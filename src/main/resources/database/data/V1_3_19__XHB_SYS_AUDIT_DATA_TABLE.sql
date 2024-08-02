@@ -1,7 +1,6 @@
 insert into xhb_sys_audit (SYS_AUDIT_ID,TABLE_TO_AUDIT,AUDIT_TABLE,AUDITABLE) values (
 1,'XHB_CLOB','AUD_CLOB','Y'),(
 2,'XHB_BLOB','AUD_BLOB','Y'),(
-3,'XHB_ADDRESS','AUD_ADDRESS','Y'),(
 4,'XHB_CASE','AUD_CASE','Y'),(
 5,'XHB_CC_INFO','AUD_CC_INFO','Y'),(
 6,'XHB_COURT','AUD_COURT','Y'),(
