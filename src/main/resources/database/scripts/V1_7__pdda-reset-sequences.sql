@@ -1,6 +1,5 @@
 SET client_encoding TO 'UTF8';
 
-SELECT setval('xhb_address_seq', COALESCE(MAX(address_id)+1, 1), FALSE) FROM xhb_address;
 SELECT setval('xhb_blob_seq', COALESCE(MAX(blob_id)+1, 1), FALSE) FROM xhb_blob;
 SELECT setval('xhb_case_diary_fixture_seq', COALESCE(MAX(case_diary_fixture_id)+1, 1), FALSE) FROM xhb_case_diary_fixture;
 SELECT setval('xhb_case_listing_entry_seq', COALESCE(MAX(case_listing_entry_id)+1, 1), FALSE) FROM xhb_case_listing_entry;

@@ -1,24 +1,5 @@
 SET client_encoding TO 'UTF8';
 
-DROP TABLE IF EXISTS xhb_address CASCADE;
-CREATE TABLE xhb_address (
-	address_id integer NOT NULL,
-	address_1 varchar(30),
-	address_2 varchar(30),
-	address_3 varchar(30),
-	address_4 varchar(30),
-	town varchar(30),
-	county varchar(30),
-	postcode varchar(8),
-	country varchar(255),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL
-);
-ALTER TABLE xhb_address ADD CONSTRAINT xhb_address_pk PRIMARY KEY (address_id);
-
 
 DROP TABLE IF EXISTS xhb_case CASCADE;
 CREATE TABLE xhb_case (

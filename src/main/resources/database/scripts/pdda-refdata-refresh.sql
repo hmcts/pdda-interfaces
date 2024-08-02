@@ -5,7 +5,6 @@
 -- disabling triggers and merge of data from staging tables into the main tables before
 -- re-enabling the triggers.
 \cd temp
-\i 'upsert-xhb_address.sql'
 \i 'upsert-xhb_config_prop.sql'
 \i 'upsert-xhb_court.sql'
 \i 'upsert-xhb_court_room.sql'

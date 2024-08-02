@@ -163,4 +163,3 @@ CREATE INDEX aud_case_i1 ON aud_case (case_id);
 CREATE INDEX aud_hearing_hearing_id ON aud_hearing (case_id, case_id);
 CREATE INDEX aud_sched_hearing_attendee_1 ON aud_sched_hearing_attendee (scheduled_hearing_id);
 CREATE INDEX aud_sched_hearing ON aud_scheduled_hearing (hearing_id);
-CREATE INDEX aud_address_idx ON aud_address (address_id, version);

@@ -3,24 +3,6 @@ SET client_encoding TO 'UTF8';
 DROP SCHEMA IF EXISTS temp CASCADE;
 CREATE SCHEMA IF NOT EXISTS temp;
 
-CREATE TABLE temp.tmp_address (
-	address_id integer NOT NULL,
-	address_1 varchar(30),
-	address_2 varchar(30),
-	address_3 varchar(30),
-	address_4 varchar(30),
-	town varchar(30),
-	county varchar(30),
-	postcode varchar(8),
-	country varchar(255),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL
-) ;
-ALTER TABLE temp.tmp_address ADD CONSTRAINT tmp_address_pk PRIMARY KEY (address_id);
-
 
 CREATE TABLE temp.tmp_config_prop (
 	config_prop_id integer NOT NULL,
