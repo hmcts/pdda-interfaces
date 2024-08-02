@@ -114,7 +114,6 @@ ALTER TABLE xhb_ref_hearing_type ADD CONSTRAINT ref_hearing_type_court_id_fk FOR
 ALTER TABLE xhb_ref_judge ADD CONSTRAINT ref_judge_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT ref_justice_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE xhb_ref_solicitor_firm ADD CONSTRAINT ref_sol_firm_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_system_code ADD CONSTRAINT ref_system_code_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_scheduled_hearing ADD CONSTRAINT sched_hear_hearing_id_fk FOREIGN KEY (hearing_id) REFERENCES xhb_hearing(hearing_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 

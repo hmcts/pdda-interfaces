@@ -30,8 +30,6 @@
 
 \copy temp.tmp_ref_pdda_message_type (pdda_message_type_id, pdda_message_type, pdda_message_description, obs_ind, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_REF_PDDA_MESSAGE_TYPE_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_solicitor_firm (ref_solicitor_firm_id, solicitor_firm_name, crest_sof_id, court_id, obs_ind, short_name, dx_ref, vat_no, last_update_date, creation_date, created_by, last_updated_by, version, address_id, la_code) FROM 'XHB_REF_SOLICITOR_FIRM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_system_code (ref_system_code_id, code, code_type, code_title, de_code, ref_code_order, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_SYSTEM_CODE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_configured_public_notice (configured_public_notice_id, is_active, court_room_id, public_notice_id, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_CONFIGURED_PUBLIC_NOTICE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER

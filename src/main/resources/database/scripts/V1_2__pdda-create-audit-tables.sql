@@ -726,29 +726,6 @@ ALTER TABLE aud_ref_monitoring_category ADD CONSTRAINT aud_ref_monitoring_catego
 
 
 
-DROP TABLE IF EXISTS aud_ref_solicitor_firm CASCADE;
-CREATE TABLE aud_ref_solicitor_firm (
-	ref_solicitor_firm_id integer NOT NULL,
-	solicitor_firm_name varchar(35),
-	crest_sof_id integer,
-	court_id integer NOT NULL,
-	obs_ind varchar(1),
-	short_name varchar(28),
-	dx_ref varchar(35),
-	vat_no varchar(9),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	insert_event varchar(1) NOT NULL,
-	la_code varchar(6)
-);
-ALTER TABLE aud_ref_solicitor_firm ADD CONSTRAINT aud_ref_solicitor_firm_pk PRIMARY KEY (ref_solicitor_firm_id, last_update_date);
-
-
-
 DROP TABLE IF EXISTS aud_ref_system_code CASCADE;
 CREATE TABLE aud_ref_system_code (
 	ref_system_code_id integer NOT NULL,

@@ -20,7 +20,6 @@
 \i 'upsert-xhb_ref_listing_data.sql'
 \i 'upsert-xhb_ref_monitoring_category.sql'
 \i 'upsert-xhb_ref_pdda_message_type.sql'
-\i 'upsert-xhb_ref_solicitor_firm.sql'
 \i 'upsert-xhb_ref_system_code.sql'
 \i 'upsert-xhb_configured_public_notice.sql'
 \i 'upsert-xhb_court_log_event_desc.sql'

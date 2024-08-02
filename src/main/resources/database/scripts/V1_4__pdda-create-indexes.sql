@@ -74,9 +74,6 @@ CREATE INDEX ref_judge_c_jud_id_ct_id_idx ON xhb_ref_judge (crest_judge_id, cour
 CREATE INDEX xhb_ref_judge_court_fk ON xhb_ref_judge (court_id);
 CREATE INDEX ref_justice_c_jp_id_ct_id_idx ON xhb_ref_justice (crest_justice_id, court_id);
 CREATE INDEX xhb_ref_justice_court_fk ON xhb_ref_justice (court_id);
-CREATE INDEX ref_solicitor_firm_court_idx ON xhb_ref_solicitor_firm (court_id, crest_sof_id);
-CREATE INDEX xhb_ref_solicitor_firm_addr_fk ON xhb_ref_solicitor_firm (address_id);
-CREATE INDEX xhb_ref_solicitor_firm_crt_fk ON xhb_ref_solicitor_firm (court_id);
 CREATE INDEX ref_system_code_c_t_ct_id_idx ON xhb_ref_system_code (code, code_type, court_id);
 CREATE INDEX xhb_ref_system_code_court_fk ON xhb_ref_system_code (court_id, obs_ind);
 CREATE INDEX xhb_ref_system_code_obs_ind ON xhb_ref_system_code (obs_ind);

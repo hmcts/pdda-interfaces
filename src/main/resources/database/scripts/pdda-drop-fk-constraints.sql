@@ -67,8 +67,6 @@ ALTER TABLE xhb_ref_court_reporter_firm DROP CONSTRAINT ref_ct_rep_firm_court_id
 ALTER TABLE xhb_ref_hearing_type DROP CONSTRAINT ref_hearing_type_court_id_fk;
 ALTER TABLE xhb_ref_judge DROP CONSTRAINT ref_judge_court_id_fk;
 ALTER TABLE xhb_ref_justice DROP CONSTRAINT ref_justice_court_id_fk;
-ALTER TABLE xhb_ref_solicitor_firm DROP CONSTRAINT ref_sol_firm_address_id_fk;
-ALTER TABLE xhb_ref_solicitor_firm DROP CONSTRAINT ref_sol_firm_court_id_fk;
 ALTER TABLE xhb_ref_system_code DROP CONSTRAINT ref_system_code_court_id_fk;
 ALTER TABLE xhb_scheduled_hearing DROP CONSTRAINT sched_hear_hearing_id_fk;
 ALTER TABLE xhb_scheduled_hearing DROP CONSTRAINT sched_hear_moved_f_ct_rm_id_fk;
