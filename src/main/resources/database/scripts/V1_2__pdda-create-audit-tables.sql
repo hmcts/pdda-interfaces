@@ -710,22 +710,6 @@ ALTER TABLE aud_ref_listing_data ADD CONSTRAINT aud_ref_listing_data_pk PRIMARY 
 
 
 
-DROP TABLE IF EXISTS aud_ref_monitoring_category CASCADE;
-CREATE TABLE aud_ref_monitoring_category (
-	ref_monitoring_category_id bigint NOT NULL,
-	monitoring_category_code varchar(5) NOT NULL,
-	monitoring_category_name varchar(255) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version bigint DEFAULT 1,
-	insert_event varchar(1)
-);
-ALTER TABLE aud_ref_monitoring_category ADD CONSTRAINT aud_ref_monitoring_category_pk PRIMARY KEY (ref_monitoring_category_id, last_update_date);
-
-
-
 DROP TABLE IF EXISTS aud_ref_system_code CASCADE;
 CREATE TABLE aud_ref_system_code (
 	ref_system_code_id integer NOT NULL,

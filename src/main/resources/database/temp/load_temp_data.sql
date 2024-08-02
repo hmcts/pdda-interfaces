@@ -26,8 +26,6 @@
 
 \copy temp.tmp_ref_listing_data (ref_listing_data_id, ref_data_type, ref_data_value, created_by, last_updated_by, creation_date, last_update_date, obs_ind, version) FROM 'XHB_REF_LISTING_DATA_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_monitoring_category (ref_monitoring_category_id, monitoring_category_code, monitoring_category_name, created_by, last_updated_by, creation_date, last_update_date, version) FROM 'XHB_REF_MONITORING_CATEGORY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_pdda_message_type (pdda_message_type_id, pdda_message_type, pdda_message_description, obs_ind, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_REF_PDDA_MESSAGE_TYPE_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_ref_system_code (ref_system_code_id, code, code_type, code_title, de_code, ref_code_order, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_SYSTEM_CODE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER

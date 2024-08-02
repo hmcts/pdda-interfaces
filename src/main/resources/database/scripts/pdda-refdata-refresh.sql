@@ -18,7 +18,6 @@
 \i 'upsert-xhb_ref_judge.sql'
 \i 'upsert-xhb_ref_justice.sql'
 \i 'upsert-xhb_ref_listing_data.sql'
-\i 'upsert-xhb_ref_monitoring_category.sql'
 \i 'upsert-xhb_ref_pdda_message_type.sql'
 \i 'upsert-xhb_ref_system_code.sql'
 \i 'upsert-xhb_configured_public_notice.sql'

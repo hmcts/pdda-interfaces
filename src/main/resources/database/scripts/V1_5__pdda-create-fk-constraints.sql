@@ -16,8 +16,6 @@ ALTER TABLE xhb_case ADD CONSTRAINT xhb_court_receiving_code_fk FOREIGN KEY (cou
 
 ALTER TABLE xhb_case ADD CONSTRAINT xhb_magcourt_hearing_fk FOREIGN KEY (magcourt_hearingtype_ref_id) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE xhb_case ADD CONSTRAINT xhb_monitoringcategory_id_fk FOREIGN KEY (monitoring_category_id) REFERENCES xhb_ref_monitoring_category(ref_monitoring_category_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
 ALTER TABLE xhb_case ADD CONSTRAINT xhb_policeforce_code_fk FOREIGN KEY (police_force_code) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_case ADD CONSTRAINT xhb_tickettype_code_fk FOREIGN KEY (ticket_type_code) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
