@@ -60,8 +60,6 @@ CREATE INDEX xhb_hearing_list_court_fk ON xhb_hearing_list (court_id);
 CREATE INDEX xhb_list_court_fk ON xhb_list (court_id);
 CREATE INDEX xhb_list_list_parent_id_fk ON xhb_list (list_parent_id);
 CREATE INDEX xhb_list_list_type_fk ON xhb_list (list_type_id);
-CREATE INDEX ref_court_ct_cd_crt_id_idx ON xhb_ref_court (crest_code, court_id);
-CREATE INDEX xhb_ref_court_court_fk ON xhb_ref_court (court_id);
 CREATE INDEX ref_crt_rep_ccrpt_id_ct_idx ON xhb_ref_court_reporter (crest_court_reporter_id, court_id);
 CREATE INDEX xhb_ref_court_reporter_crt_fk ON xhb_ref_court_reporter (court_id);
 CREATE INDEX xhb_ref_crt_rep_report_firm_fk ON xhb_ref_court_reporter (ref_court_reporter_firm_id);

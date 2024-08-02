@@ -111,28 +111,6 @@ ALTER TABLE temp.tmp_court_site ADD CONSTRAINT tmp_court_site_pk PRIMARY KEY (co
 
 
 
-CREATE TABLE temp.tmp_ref_court (
-	ref_court_id integer NOT NULL,
-	court_full_name varchar(255),
-	court_short_name varchar(5),
-	name_prefix varchar(11),
-	court_type varchar(1),
-	crest_code varchar(4),
-	obs_ind varchar(1),
-	is_psd varchar(1),
-	dx_ref varchar(35),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	court_id integer
-) ;
-ALTER TABLE temp.tmp_ref_court ADD CONSTRAINT tmp_ref_court_pk PRIMARY KEY (ref_court_id);
-
-
-
 CREATE TABLE temp.tmp_ref_court_reporter (
 	ref_court_reporter_id integer NOT NULL,
 	first_name varchar(35),

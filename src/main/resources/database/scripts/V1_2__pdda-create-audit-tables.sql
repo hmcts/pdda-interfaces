@@ -524,30 +524,6 @@ ALTER TABLE aud_list ADD CONSTRAINT aud_list_pk PRIMARY KEY (list_id, last_updat
 
 
 
-DROP TABLE IF EXISTS aud_ref_court CASCADE;
-CREATE TABLE aud_ref_court (
-	ref_court_id integer NOT NULL,
-	court_full_name varchar(255),
-	court_short_name varchar(5),
-	name_prefix varchar(11),
-	court_type varchar(1),
-	crest_code varchar(4),
-	obs_ind varchar(1),
-	is_psd varchar(1),
-	dx_ref varchar(35),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	court_id integer,
-	insert_event varchar(1) NOT NULL
-);
-ALTER TABLE aud_ref_court ADD CONSTRAINT aud_ref_court_pk PRIMARY KEY (ref_court_id, last_update_date);
-
-
-
 DROP TABLE IF EXISTS aud_ref_court_reporter CASCADE;
 CREATE TABLE aud_ref_court_reporter (
 	ref_court_reporter_id integer NOT NULL,
