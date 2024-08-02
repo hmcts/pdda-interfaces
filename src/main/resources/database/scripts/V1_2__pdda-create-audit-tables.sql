@@ -889,33 +889,6 @@ CREATE TABLE aud_sh_justice (
 ALTER TABLE aud_sh_justice ADD CONSTRAINT aud_sh_justice_pk PRIMARY KEY (sh_justice_id, last_update_date);
 
 
-
-DROP TABLE IF EXISTS aud_sh_leg_rep CASCADE;
-CREATE TABLE aud_sh_leg_rep (
-	sh_leg_rep_id integer NOT NULL,
-	crest_sequence_no integer,
-	legal_role varchar(1),
-	is_signed_in varchar(1),
-	sol_firm_or_ref_legal_rep varchar(1),
-	sched_hear_def_id integer,
-	ref_legal_rep_id integer,
-	version integer NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	cc_info_id integer,
-	ref_solicitor_firm_id integer,
-	ref_defence_category_id integer,
-	scheduled_hearing_id integer,
-	insert_event varchar(1) NOT NULL DEFAULT 'X',
-	sub_inst varchar(1),
-	substituted_ref_legal_rep_id integer
-);
-ALTER TABLE aud_sh_leg_rep ADD CONSTRAINT aud_sh_leg_rep_pk PRIMARY KEY (sh_leg_rep_id, last_update_date);
-
-
-
 DROP TABLE IF EXISTS aud_sh_staff CASCADE;
 CREATE TABLE aud_sh_staff (
 	sh_staff_id integer NOT NULL,

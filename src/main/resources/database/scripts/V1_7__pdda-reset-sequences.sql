@@ -37,7 +37,6 @@ SELECT setval('xhb_scheduled_hearing_seq', COALESCE(MAX(scheduled_hearing_id)+1,
 SELECT setval('xhb_sched_hearing_attend_seq', COALESCE(MAX(sh_attendee_id)+1, 1), FALSE) FROM xhb_sched_hearing_attendee;
 SELECT setval('xhb_sh_judge_seq', COALESCE(MAX(sh_judge_id)+1, 1), FALSE) FROM xhb_sh_judge;
 SELECT setval('xhb_sh_justice_seq', COALESCE(MAX(sh_justice_id)+1, 1), FALSE) FROM xhb_sh_justice;
-SELECT setval('xhb_sh_leg_rep_seq', COALESCE(MAX(sh_leg_rep_id)+1, 1), FALSE) FROM xhb_sh_leg_rep;
 SELECT setval('xhb_sh_staff_seq', COALESCE(MAX(sh_staff_id)+1, 1), FALSE) FROM xhb_sh_staff;
 SELECT setval('xhb_sitting_on_list_seq', COALESCE(MAX(sitting_on_list_id)+1, 1), FALSE) FROM xhb_sitting_on_list;
 SELECT setval('xhb_sitting_seq', COALESCE(MAX(sitting_id)+1, 1), FALSE) FROM xhb_sitting;

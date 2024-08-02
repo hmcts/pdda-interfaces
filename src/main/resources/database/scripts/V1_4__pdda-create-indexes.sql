@@ -101,12 +101,6 @@ CREATE INDEX xhb_sch_hear_sit_hear_sched_hr ON xhb_scheduled_hearing (sitting_id
 CREATE INDEX xhb_sh_judge_ref_judge_fk ON xhb_sh_judge (ref_judge_id);
 CREATE INDEX xhb_sh_judge_sched_hear_att_fk ON xhb_sh_judge (sh_attendee_id);
 CREATE INDEX xhb_justice_hearing_fk ON xhb_sh_justice (hearing_id);
-CREATE INDEX xhb_sh_leg_rep_cc_info_fk ON xhb_sh_leg_rep (cc_info_id);
-CREATE INDEX xhb_sh_leg_rep_ref_defence_fk ON xhb_sh_leg_rep (ref_defence_category_id);
-CREATE INDEX xhb_sh_leg_rep_ref_leg_rep_fk ON xhb_sh_leg_rep (ref_legal_rep_id);
-CREATE INDEX xhb_sh_leg_rep_ref_sol_firm_fk ON xhb_sh_leg_rep (ref_solicitor_firm_id);
-CREATE INDEX xhb_sh_leg_rep_sched_hear_fk ON xhb_sh_leg_rep (scheduled_hearing_id);
-CREATE INDEX xhb_sh_leg_rep_sch_hear_def_fk ON xhb_sh_leg_rep (sched_hear_def_id);
 CREATE INDEX xhb_sitting_court_room_fk ON xhb_sitting (court_room_id);
 CREATE INDEX xhb_sitting_court_site_fk ON xhb_sitting (court_site_id, sitting_id);
 CREATE INDEX xhb_sitting_hearing_list_fk ON xhb_sitting (list_id);

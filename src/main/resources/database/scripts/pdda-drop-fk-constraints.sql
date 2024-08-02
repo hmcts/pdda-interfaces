@@ -84,13 +84,6 @@ ALTER TABLE xhb_sched_hearing_defendant DROP CONSTRAINT sched_h_def_sched_hear_i
 ALTER TABLE xhb_sh_judge DROP CONSTRAINT sh_judge_ref_judge_id_fk;
 ALTER TABLE xhb_sh_judge DROP CONSTRAINT sh_judge_sh_attendee_id_fk;
 ALTER TABLE xhb_sh_justice DROP CONSTRAINT sh_justice_hearing_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_cc_info_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_ref_def_cat_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_ref_legal_rep_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_ref_sol_firm_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_sched_hearing_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_sched_h_def_id_fk;
-ALTER TABLE xhb_sh_leg_rep DROP CONSTRAINT sh_leg_rep_sub_ref_leg_rep_fk;
 ALTER TABLE xhb_sitting DROP CONSTRAINT sitting_court_room_id_fk;
 ALTER TABLE xhb_sitting DROP CONSTRAINT sitting_court_site_id_fk;
 ALTER TABLE xhb_sitting DROP CONSTRAINT sitting_list_id_fk;

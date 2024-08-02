@@ -143,15 +143,6 @@ ALTER TABLE xhb_sh_judge ADD CONSTRAINT sh_judge_ref_judge_id_fk FOREIGN KEY (re
 
 ALTER TABLE xhb_sh_judge ADD CONSTRAINT sh_judge_sh_attendee_id_fk FOREIGN KEY (sh_attendee_id) REFERENCES xhb_sched_hearing_attendee(sh_attendee_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_sh_justice ADD CONSTRAINT sh_justice_hearing_id_fk FOREIGN KEY (hearing_id) REFERENCES xhb_hearing(hearing_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT sh_leg_rep_cc_info_id_fk FOREIGN KEY (cc_info_id) REFERENCES xhb_cc_info(cc_info_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT sh_leg_rep_ref_def_cat_id_fk FOREIGN KEY (ref_defence_category_id) REFERENCES xhb_ref_system_code(ref_system_code_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT sh_leg_rep_ref_sol_firm_id_fk FOREIGN KEY (ref_solicitor_firm_id) REFERENCES xhb_ref_solicitor_firm(ref_solicitor_firm_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT sh_leg_rep_sched_hearing_id_fk FOREIGN KEY (scheduled_hearing_id) REFERENCES xhb_scheduled_hearing(scheduled_hearing_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT sh_leg_rep_sched_h_def_id_fk FOREIGN KEY (sched_hear_def_id) REFERENCES xhb_sched_hearing_defendant(sched_hear_def_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_sitting ADD CONSTRAINT sitting_court_room_id_fk FOREIGN KEY (court_room_id) REFERENCES xhb_court_room(court_room_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
