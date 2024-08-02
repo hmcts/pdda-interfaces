@@ -96,11 +96,6 @@ ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_list_type_id_fk FOREIGN KEY (list_t
 
 ALTER TABLE xhb_list ADD CONSTRAINT xhb_list_parent_fk FOREIGN KEY (list_parent_id) REFERENCES xhb_list(list_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
-ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT ref_ct_rep_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT ref_ct_rep_ref_ct_rep_f_id_fk FOREIGN KEY (ref_court_reporter_firm_id) REFERENCES xhb_ref_court_reporter_firm(ref_court_reporter_firm_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE xhb_ref_court_reporter_firm ADD CONSTRAINT ref_ct_rep_firm_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_hearing_type ADD CONSTRAINT ref_hearing_type_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_judge ADD CONSTRAINT ref_judge_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT ref_justice_court_id_fk FOREIGN KEY (court_id) REFERENCES xhb_court(court_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -113,7 +108,6 @@ ALTER TABLE xhb_scheduled_hearing ADD CONSTRAINT sched_hear_moved_f_ct_rm_id_fk 
 ALTER TABLE xhb_scheduled_hearing ADD CONSTRAINT sched_hear_sitting_id_fk FOREIGN KEY (sitting_id) REFERENCES xhb_sitting(sitting_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_scheduled_hearing ADD CONSTRAINT xhb_scheduled_hearing_rce_fk FOREIGN KEY (ref_cracked_effective_id) REFERENCES xhb_ref_cracked_effective(ref_cracked_effective_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE xhb_sched_hearing_attendee ADD CONSTRAINT sched_h_att_ref_ct_rep_id_fk FOREIGN KEY (ref_court_reporter_id) REFERENCES xhb_ref_court_reporter(ref_court_reporter_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 ALTER TABLE xhb_sched_hearing_attendee ADD CONSTRAINT sched_h_att_ref_judge_id_fk FOREIGN KEY (ref_judge_id) REFERENCES xhb_ref_judge(ref_judge_id) ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE;
 

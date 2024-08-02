@@ -111,46 +111,6 @@ ALTER TABLE temp.tmp_court_site ADD CONSTRAINT tmp_court_site_pk PRIMARY KEY (co
 
 
 
-CREATE TABLE temp.tmp_ref_court_reporter (
-	ref_court_reporter_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	crest_court_reporter_id numeric(38),
-	initials varchar(4),
-	report_method varchar(1),
-	obs_ind varchar(1),
-	ref_court_reporter_firm_id integer NOT NULL,
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL
-) ;
-ALTER TABLE temp.tmp_ref_court_reporter ADD CONSTRAINT tmp_ref_court_reporter_pk PRIMARY KEY (ref_court_reporter_id);
-
-
-CREATE TABLE temp.tmp_ref_court_reporter_firm (
-	ref_court_reporter_firm_id integer NOT NULL,
-	obs_ind varchar(1),
-	display_first varchar(1) NOT NULL,
-	dx_ref varchar(35),
-	vat_no varchar(35),
-	firm_name varchar(35),
-	address_id integer,
-	court_id integer NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version integer NOT NULL,
-	crest_court_reporter_firm_id integer
-) ;
-ALTER TABLE temp.tmp_ref_court_reporter_firm ADD CONSTRAINT tmp_ref_court_reporter_firm_pk PRIMARY KEY (ref_court_reporter_firm_id);
-
-
-
 CREATE TABLE temp.tmp_ref_cracked_effective (
 	ref_cracked_effective_id integer NOT NULL,
 	code varchar(2) NOT NULL,

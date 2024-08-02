@@ -10,8 +10,6 @@
 \i 'upsert-xhb_court_room.sql'
 \i 'upsert-xhb_court_satellite.sql'
 \i 'upsert-xhb_court_site.sql'
-\i 'upsert-xhb_ref_court_reporter.sql'
-\i 'upsert-xhb_ref_court_reporter_firm.sql'
 \i 'upsert-xhb_ref_cracked_effective.sql'
 \i 'upsert-xhb_ref_hearing_type.sql'
 \i 'upsert-xhb_ref_judge.sql'
