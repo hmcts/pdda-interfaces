@@ -1,4 +1,4 @@
-Insert into XHB_REF_CRACKED_EFFECTIVE
+ï»¿Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, PARTY_RESPONSIBLE, LAST_UPDATE_DATE, 
     CREATION_DATE, LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
@@ -38,7 +38,7 @@ Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, PARTY_RESPONSIBLE, LAST_UPDATE_DATE, 
     CREATION_DATE, LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (7, 'F', 'Defendant bound over, now acceptable to prosecution – previously rejected by prosecution', 'P', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (7, 'F', 'Defendant bound over, now acceptable to prosecution â€“ previously rejected by prosecution', 'P', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
     TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 'XHIBIT', 2, 'C');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, PARTY_RESPONSIBLE, LAST_UPDATE_DATE, 
@@ -128,7 +128,7 @@ Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
     LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (22, 'P', 'Prosecution increased time estimate – insufficient time for trial to start', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (22, 'P', 'Prosecution increased time estimate â€“ insufficient time for trial to start', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', 'XHIBIT', 2, 'I');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
@@ -158,7 +158,7 @@ Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
     LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (27, 'S1', 'Defendant absent – did not proceed in absence (judicial discretion)', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (27, 'S1', 'Defendant absent â€“ did not proceed in absence (judicial discretion)', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', 'XHIBIT', 2, 'I');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
@@ -176,13 +176,13 @@ Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
     LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (30, 'S4', 'Defendant absent – unable to proceed as defendant not notified of place and time of hearing', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (30, 'S4', 'Defendant absent â€“ unable to proceed as defendant not notified of place and time of hearing', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', 'XHIBIT', 2, 'I');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
     LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (31, 'T', 'Defence increased time estimate – insufficient time for trial to start', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (31, 'T', 'Defence increased time estimate â€“ insufficient time for trial to start', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', 'XHIBIT', 2, 'I');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
@@ -242,7 +242,7 @@ Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 
     LAST_UPDATED_BY, CREATED_BY, VERSION, TRIAL_CODE_TYPE)
  Values
-   (41, 'Y', 'Outstanding committals in a magistrates’ court', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+   (41, 'Y', 'Outstanding committals in a magistratesâ€™ court', TO_DATE('9/7/2018 10:24:21 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('9/6/2018 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', 'XHIBIT', 2, 'I');
 Insert into XHB_REF_CRACKED_EFFECTIVE
    (REF_CRACKED_EFFECTIVE_ID, CODE, DESCRIPTION, LAST_UPDATE_DATE, CREATION_DATE, 

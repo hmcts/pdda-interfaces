@@ -1,4 +1,4 @@
-Insert into XHB_DISPLAY_COURT_ROOM
+﻿Insert into XHB_DISPLAY_COURT_ROOM
    (DISPLAY_ID, COURT_ROOM_ID)
  Values
    (1, 1);

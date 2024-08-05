@@ -1,4 +1,4 @@
-Insert into XHB_CONFIG_PROP
+﻿Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
    (6, 'Refresh_Resynch_Debug', 'N');
@@ -89,87 +89,87 @@ Insert into XHB_CONFIG_PROP
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (29, 'scheduledtasks.midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (29, 'scheduledtasks.midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (30, 'scheduledtasks.midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (30, 'scheduledtasks.midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (31, 'scheduledtasks.midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (31, 'scheduledtasks.midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (32, 'scheduledtasks.DevTest_as1_midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (32, 'scheduledtasks.DevTest_as1_midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (33, 'scheduledtasks.DevTest_as1_midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (33, 'scheduledtasks.DevTest_as1_midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (34, 'scheduledtasks.DevTest_as1_midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (34, 'scheduledtasks.DevTest_as1_midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (35, 'scheduledtasks.DevTest_as1_midM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (35, 'scheduledtasks.DevTest_as1_midM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask, dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (36, 'scheduledtasks.DevTest1midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (36, 'scheduledtasks.DevTest1midM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (37, 'scheduledtasks.DevTest1midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (37, 'scheduledtasks.DevTest1midM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (38, 'scheduledtasks.DevTest1midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (38, 'scheduledtasks.DevTest1midM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (39, 'scheduledtasks.DevTest1midM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (39, 'scheduledtasks.DevTest1midM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (40, 'scheduledtasks.NLEmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (40, 'scheduledtasks.NLEmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (41, 'scheduledtasks.NLEmidM2', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (41, 'scheduledtasks.NLEmidM2', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (42, 'scheduledtasks.NLEmidM3', 'transformtask,messagegeneratortask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (42, 'scheduledtasks.NLEmidM3', 'transformtask,messagegeneratortask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (43, 'scheduledtasks.NLEmidM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,messagegeneratortask,cppstagingtask,cppformattingtask');
+   (43, 'scheduledtasks.NLEmidM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,messagegeneratortask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (44, 'scheduledtasks.NLEmidM5', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,messagegeneratortask,cppstagingtask,cppformattingtask');
+   (44, 'scheduledtasks.NLEmidM5', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,messagegeneratortask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (45, 'scheduledtasks.LIVEmidM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (45, 'scheduledtasks.LIVEmidM1', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (46, 'scheduledtasks.LIVEmidM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (46, 'scheduledtasks.LIVEmidM2', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (47, 'scheduledtasks.LIVEmidM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (47, 'scheduledtasks.LIVEmidM3', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (48, 'scheduledtasks.LIVEmidM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (48, 'scheduledtasks.LIVEmidM4', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (49, 'scheduledtasks.LIVEmidM5', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask');
+   (49, 'scheduledtasks.LIVEmidM5', 'transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
@@ -265,21 +265,73 @@ Insert into XHB_CONFIG_PROP
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (68, 'scheduledtasks.PREPRODmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (68, 'scheduledtasks.PREPRODmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (69, 'scheduledtasks.PREPRODmidM2', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (74, 'PDDA_BAIS_SFTP_BATCH_MAX_SIZE', '30');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (70, 'scheduledtasks.PREPRODmidM3', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (75, 'PDDA_BAIS_SFTP_HOSTNAME', 'TO_BE_SET');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (71, 'scheduledtasks.PREPRODmidM4', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (76, 'PDDA_BAIS_CP_MAX_NUM_MESSAGES_TO_RETRIEVE', '20');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (72, 'scheduledtasks.PREPRODmidM5', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask');
+   (77, 'PDDA_BAIS_SFTP_BATCH_TIME_TO_WAIT', '120');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (78, 'PDDA_BAIS_CP_SFTP_PASSWORD', 'somepass');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (79, 'PDDA_BAIS_SFTP_UPLOAD_LOCATION', '/');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (80, 'PDDA_SWITCHER', '2');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (81, 'PDDA_BAIS_SFTP_PASSWORD', 'somepass');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (82, 'PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION', '/');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (83, 'PDDA_BAIS_MAX_RESENDS', '3');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (84, 'PDDA_BAIS_CP_SFTP_USERNAME', 'BAISXhibittoPDDA');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (85, 'PDDA_SWITCHER_DESC', '1=Send to PDDA only; 2=Send to PDDA but continue to process in XHIBIT; 3=Do not send to PDDA, process in XHIBIT only');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (86, 'PDDA_BAIS_SFTP_USERNAME', 'XhibittoBAISPDDA');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (69, 'scheduledtasks.PREPRODmidM2', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (70, 'scheduledtasks.PREPRODmidM3', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (71, 'scheduledtasks.PREPRODmidM4', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (72, 'scheduledtasks.PREPRODmidM5', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 COMMIT;
