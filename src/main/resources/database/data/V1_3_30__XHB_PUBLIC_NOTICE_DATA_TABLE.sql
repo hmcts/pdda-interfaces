@@ -171,16 +171,16 @@ insert into xhb_public_notice (PUBLIC_NOTICE_ID,PUBLIC_NOTICE_DESC,COURT_ID,LAST
 390,'Bench warrant in progress.',39,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,1000),(
 501,'Reporting restrictions. For details please see Court Manager.',51,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,100),(
 502,'In chambers, no entry.',51,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,200),(
-801,'Reporting restrictions. For details please see Court Manager.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,100),(
-802,'In chambers, no entry.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,200),(
-803,'Members of the public are requested not to enter.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,300),(
-804,'TV link in progress - please enter quietly.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,400),(
-805,'Video being played - please enter quietly.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,500),(
-806,'If you wish to enter, please do so quietly.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,600),(
-807,'Reporting restrictions lifted.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,700),(
-808,'Please switch off mobile phones.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,800),(
-809,'Food and drink must not be consumed in the courtrooms.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,900),(
-810,'Bench warrant in progress.',81,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,1000),(
+801,'Reporting restrictions. For details please see Court Manager.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,100),(
+802,'In chambers, no entry.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,200),(
+803,'Members of the public are requested not to enter.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,300),(
+804,'TV link in progress - please enter quietly.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,400),(
+805,'Video being played - please enter quietly.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,500),(
+806,'If you wish to enter, please do so quietly.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,600),(
+807,'Reporting restrictions lifted.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,700),(
+808,'Please switch off mobile phones.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,800),(
+809,'Food and drink must not be consumed in the courtrooms.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,900),(
+810,'Bench warrant in progress.',95,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,1000),(
 503,'Members of the public are requested not to enter.',51,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,300),(
 504,'TV link in progress - please enter quietly.',51,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,400),(
 505,'Video being played - please enter quietly.',51,'01-APR-09 15:27:30','01-APR-09 15:27:30','XHIBIT','XHIBIT',1,500),(

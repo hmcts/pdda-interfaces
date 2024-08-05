@@ -1,6 +1,6 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.events;
+package uk.gov.courtservice.xhibit.common.publicdisplay.events;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 
 /**
  * <p>

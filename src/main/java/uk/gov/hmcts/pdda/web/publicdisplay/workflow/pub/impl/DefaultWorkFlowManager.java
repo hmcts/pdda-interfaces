@@ -1,9 +1,9 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ConfigurationChangeEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.CourtRoomEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CourtRoomEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlow;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowManager;

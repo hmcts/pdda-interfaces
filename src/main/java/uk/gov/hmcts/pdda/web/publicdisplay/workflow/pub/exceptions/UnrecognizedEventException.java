@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.exceptions;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 
 /**

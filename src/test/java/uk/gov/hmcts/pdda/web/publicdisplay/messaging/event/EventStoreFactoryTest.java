@@ -11,11 +11,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.framework.services.ConfigServices;
 import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;

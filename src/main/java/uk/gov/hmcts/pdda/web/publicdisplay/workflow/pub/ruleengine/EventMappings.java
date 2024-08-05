@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.EventType;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.exceptions.RulesConfigurationException;
 
 import java.util.HashMap;

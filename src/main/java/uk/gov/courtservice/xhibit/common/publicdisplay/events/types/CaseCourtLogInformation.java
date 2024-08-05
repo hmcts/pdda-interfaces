@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.events.types;
+package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
