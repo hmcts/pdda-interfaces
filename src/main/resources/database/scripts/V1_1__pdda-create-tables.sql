@@ -1154,11 +1154,11 @@ DROP TABLE IF EXISTS xhb_display_court_room CASCADE;
 CREATE TABLE xhb_display_court_room (
 	display_id bigint NOT NULL,
 	court_room_id bigint NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version integer NOT NULL
+	created_by varchar(30) NOT NULL DEFAULT 'Imported',
+	creation_date timestamp NOT NULL DEFAULT NOW(),
+	last_updated_by varchar(30) NOT NULL DEFAULT 'Imported',
+	last_update_date timestamp NOT NULL DEFAULT NOW(),
+	version integer NOT NULL DEFAULT 1
 );
 ALTER TABLE xhb_display_court_room ADD CONSTRAINT xhb_display_court_room_pk PRIMARY KEY (display_id,court_room_id);
 
