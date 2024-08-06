@@ -783,7 +783,7 @@ CREATE TABLE aud_sitting (
 	sitting_sequence_no smallint,
 	is_sitting_judge varchar(1),
 	sitting_time timestamp,
-	sitting_note varchar(80),
+	sitting_note varchar(200),
 	ref_justice1_id numeric(38),
 	ref_justice2_id numeric(38),
 	ref_justice3_id numeric(38),
