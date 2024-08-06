@@ -1,11 +1,11 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 
-import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
-
+import org.springframework.core.env.Environment;
 import java.util.Locale;
+import jakarta.persistence.EntityManagerFactory;
+import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
 
 /**
  * <p/>
@@ -63,6 +63,8 @@ public final class InitializationService {
 
     private EntityManagerFactory entityManagerFactory;
     
+    private Environment env;
+
     /**
      * DOn't instantiate me.
      */
@@ -227,5 +229,13 @@ public final class InitializationService {
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    public Environment getEnvironment() {
+        return env;
+    }
+
+    public void setEnvironment(Environment env) {
+        this.env = env;
     }
 }
