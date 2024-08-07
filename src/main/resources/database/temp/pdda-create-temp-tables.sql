@@ -3,24 +3,6 @@ SET client_encoding TO 'UTF8';
 DROP SCHEMA IF EXISTS temp CASCADE;
 CREATE SCHEMA IF NOT EXISTS temp;
 
-CREATE TABLE temp.tmp_address (
-	address_id integer NOT NULL,
-	address_1 varchar(30),
-	address_2 varchar(30),
-	address_3 varchar(30),
-	address_4 varchar(30),
-	town varchar(30),
-	county varchar(30),
-	postcode varchar(8),
-	country varchar(255),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL
-) ;
-ALTER TABLE temp.tmp_address ADD CONSTRAINT tmp_address_pk PRIMARY KEY (address_id);
-
 
 CREATE TABLE temp.tmp_config_prop (
 	config_prop_id integer NOT NULL,
@@ -129,68 +111,6 @@ ALTER TABLE temp.tmp_court_site ADD CONSTRAINT tmp_court_site_pk PRIMARY KEY (co
 
 
 
-CREATE TABLE temp.tmp_ref_court (
-	ref_court_id integer NOT NULL,
-	court_full_name varchar(255),
-	court_short_name varchar(5),
-	name_prefix varchar(11),
-	court_type varchar(1),
-	crest_code varchar(4),
-	obs_ind varchar(1),
-	is_psd varchar(1),
-	dx_ref varchar(35),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	court_id integer
-) ;
-ALTER TABLE temp.tmp_ref_court ADD CONSTRAINT tmp_ref_court_pk PRIMARY KEY (ref_court_id);
-
-
-
-CREATE TABLE temp.tmp_ref_court_reporter (
-	ref_court_reporter_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	crest_court_reporter_id numeric(38),
-	initials varchar(4),
-	report_method varchar(1),
-	obs_ind varchar(1),
-	ref_court_reporter_firm_id integer NOT NULL,
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL
-) ;
-ALTER TABLE temp.tmp_ref_court_reporter ADD CONSTRAINT tmp_ref_court_reporter_pk PRIMARY KEY (ref_court_reporter_id);
-
-
-CREATE TABLE temp.tmp_ref_court_reporter_firm (
-	ref_court_reporter_firm_id integer NOT NULL,
-	obs_ind varchar(1),
-	display_first varchar(1) NOT NULL,
-	dx_ref varchar(35),
-	vat_no varchar(35),
-	firm_name varchar(35),
-	address_id integer,
-	court_id integer NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version integer NOT NULL,
-	crest_court_reporter_firm_id integer
-) ;
-ALTER TABLE temp.tmp_ref_court_reporter_firm ADD CONSTRAINT tmp_ref_court_reporter_firm_pk PRIMARY KEY (ref_court_reporter_firm_id);
-
-
-
 CREATE TABLE temp.tmp_ref_cracked_effective (
 	ref_cracked_effective_id integer NOT NULL,
 	code varchar(2) NOT NULL,
@@ -273,26 +193,6 @@ ALTER TABLE temp.tmp_ref_justice ADD CONSTRAINT tmp_ref_justice_pk PRIMARY KEY (
 
 
 
-CREATE TABLE temp.tmp_ref_legal_representative (
-	ref_legal_rep_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	title varchar(255),
-	initials varchar(4),
-	legal_rep_type varchar(1),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL,
-	obs_ind varchar(1)
-) ;
-ALTER TABLE temp.tmp_ref_legal_representative ADD CONSTRAINT tmp_ref_legal_representative_pk PRIMARY KEY (ref_legal_rep_id);
-
-
-
 CREATE TABLE temp.tmp_ref_listing_data (
 	ref_listing_data_id integer NOT NULL,
 	ref_data_type varchar(50) NOT NULL,
@@ -305,41 +205,6 @@ CREATE TABLE temp.tmp_ref_listing_data (
 	version integer NOT NULL DEFAULT 1
 ) ;
 ALTER TABLE temp.tmp_ref_listing_data ADD CONSTRAINT tmp_ref_listing_data_pk PRIMARY KEY (ref_listing_data_id);
-
-
-
-CREATE TABLE temp.tmp_ref_monitoring_category (
-	ref_monitoring_category_id bigint NOT NULL,
-	monitoring_category_code varchar(5) NOT NULL,
-	monitoring_category_name varchar(255) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version bigint DEFAULT 1
-) ;
-ALTER TABLE temp.tmp_ref_monitoring_category ADD CONSTRAINT tmp_ref_monitoring_category_pk PRIMARY KEY (ref_monitoring_category_id);
-
-
-
-CREATE TABLE temp.tmp_ref_solicitor_firm (
-	ref_solicitor_firm_id integer NOT NULL,
-	solicitor_firm_name varchar(35),
-	crest_sof_id integer,
-	court_id integer NOT NULL,
-	obs_ind varchar(1),
-	short_name varchar(28),
-	dx_ref varchar(35),
-	vat_no varchar(9),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	la_code varchar(6)
-) ;
-ALTER TABLE temp.tmp_ref_solicitor_firm ADD CONSTRAINT tmp_ref_solicitor_firm_pk PRIMARY KEY (ref_solicitor_firm_id);
 
 
 
