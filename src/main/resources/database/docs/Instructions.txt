@@ -125,3 +125,31 @@ CONNECTION DATA FOR BAIS SFTP TESTING
 	/pdda-interfaces/src/main/resources/database/test-data/bais_events_test_data
 
 5. Run the app and they should get processed
+
+
+
+
+
+-------------------------------------
+Importing data from Preprod / Prod
+-------------------------------------
+On preprod / prod connect to the database via Toad.  To export a table right click and choose Data | Export. 
+
+-- NOTE: Step 3 is the default action if a specific where clause is not listed below: -- 
+XHB_CASE - WHERE CASE_ID IN (SELECT CASE_ID FROM XHB_HEARING WHERE HEARING_ID IN (SELECT HEARING_ID FROM XHB_SCHEDULED_HEARING WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY)))
+XHB_HEARING - WHERE HEARING_ID IN (SELECT HEARING_ID FROM XHB_SCHEDULED_HEARING WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY))
+XHB_HEARING_LIST - WHERE LIST_ID IN (SELECT LIST_ID FROM XHB_SITTING WHERE SITTING_ID IN (SELECT SITTING_ID FROM XHB_HEARING WHERE HEARING_ID IN (SELECT HEARING_ID FROM XHB_SCHEDULED_HEARING WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY))))
+XHB_REF_JUDGE - WHERE REF_JUDGE_ID IN (SELECT REF_JUDGE_ID FROM XHB_SITTING WHERE SITTING_ID IN (SELECT SITTING_ID FROM XHB_HEARING WHERE HEARING_ID IN (SELECT HEARING_ID FROM XHB_SCHEDULED_HEARING WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY))))
+XHB_REF_SYSTEM_CODE - WHERE NVL(OBS_IND,'N')='N' AND CODE_TYPE IN ('HO_POL_FORCE', 'JUDGE_TYPE')
+XHB_SCHEDULED_HEARING - WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY)
+XHB_SITTING - WHERE SITTING_ID IN (SELECT SITTING_ID FROM XHB_HEARING WHERE HEARING_ID IN (SELECT HEARING_ID FROM XHB_SCHEDULED_HEARING WHERE SCHEDULED_HEARING_ID IN (SELECT SCHEDULED_HEARING_ID FROM XHB_CR_LIVE_DISPLAY)))
+
+
+-- Steps to export --
+1. Untick all checkboxes except ‘Detect Automatically'.  
+2. Make sure the encoding = UTF8
+3. On the Dataset tab add a where clause of “ WHERE NVL(OBS_IND,’N’)='N' “ (this is not required for those tables without an OBS_IND column).
+4. The export name must match and replace the ones listed in src/main/resources/database/data so they are automatically imported using flyway. 
+
+-- Steps to import --
+5. The pdda schema on the target database must be deleted.  The next run of the application will run flyway and automatically populate the data.
