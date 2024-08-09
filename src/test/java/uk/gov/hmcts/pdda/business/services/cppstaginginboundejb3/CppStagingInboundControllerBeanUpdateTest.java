@@ -54,7 +54,7 @@ class CppStagingInboundControllerBeanUpdateTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-
+    
     @Mock
     private XhbBlobRepository mockXhbBlobRepository;
 
@@ -66,9 +66,8 @@ class CppStagingInboundControllerBeanUpdateTest {
 
     @TestSubject
     private final CppStagingInboundControllerBean classUnderTest =
-        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository,
-            mockCppStagingInboundHelper, mockXhbCourtRepository, mockXhbClobRepository,
-            mockXhbBlobRepository, mockValidationService);
+        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
+            mockXhbCourtRepository, mockXhbClobRepository, mockXhbBlobRepository, mockValidationService);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -149,8 +148,7 @@ class CppStagingInboundControllerBeanUpdateTest {
             .andReturn(optionalOfXhbCppStagingInboundDao);
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
-        optionalOfXhbCppStagingInboundDao =
-            classUnderTest.updateStatusInProcess(dao, USERDISPLAYNAME);
+        optionalOfXhbCppStagingInboundDao = classUnderTest.updateStatusInProcess(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockCppStagingInboundHelper);
         assertNotNull(optionalOfXhbCppStagingInboundDao, NOTNULL);

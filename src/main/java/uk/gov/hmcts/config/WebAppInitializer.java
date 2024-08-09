@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.core.env.Environment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import uk.gov.hmcts.framework.scheduler.web.SchedulerInitServlet;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
@@ -21,6 +22,9 @@ public class WebAppInitializer implements ServletContextInitializer {
     private final EntityManagerFactory entityManagerFactory;
     
     @Autowired
+    private Environment environment;
+    
+    @Autowired
     private CppStagingInboundControllerBean csicb;
 
     public WebAppInitializer(EntityManagerFactory entityManagerFactory) {
@@ -33,7 +37,7 @@ public class WebAppInitializer implements ServletContextInitializer {
             ctx.setServletContext(servletContext);
 
             ServletRegistration.Dynamic initServlet =
-                servletContext.addServlet(INIT_SERVLET_NAME, new InitServlet(entityManagerFactory));
+                servletContext.addServlet(INIT_SERVLET_NAME, new InitServlet(entityManagerFactory, environment));
             initServlet.setLoadOnStartup(1);
             
             ServletRegistration.Dynamic schedulerInitServlet =

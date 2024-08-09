@@ -33,6 +33,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -75,7 +76,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.TooManyMethods"})
 class FormattingServicesTest {
 
     private static final String TRUE = "Result is not True";
@@ -294,6 +295,9 @@ class FormattingServicesTest {
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @Mock
+    private CourtelHelper mockCourtelHelper;
+
+    @Mock
     private BlobHelper mockBlobHelper;
 
     @InjectMocks
@@ -310,22 +314,28 @@ class FormattingServicesTest {
     public void setUp() throws Exception {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(TransformerFactory.class);
-        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        classUnderTest =
+            new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
+            mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
         ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
         ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
         ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
         ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository", mockXhbCppFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository", mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
+            mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
+            mockXhbFormattingRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
             mockXhbCppFormattingMergeRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository", mockXhbXmlDocumentRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
+            mockXhbXmlDocumentRepository);
     }
-
 
     @AfterEach
     public void tearDown() throws Exception {
@@ -344,8 +354,12 @@ class FormattingServicesTest {
         FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue(
             xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST_LETTER, HTML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
-        expectCreateSource(formattingValue.getDocumentType());
+        expectCreateSource();
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
+            .thenReturn(true);
+        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class), Mockito.isA(Long.class));
+
         // Run
         boolean result = testProcessDocuments(
             FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST_LETTER), formattingValue);
@@ -353,48 +367,34 @@ class FormattingServicesTest {
     }
 
     @Test
-    void testProcessDocumentFirmList() {
-        // Setup
-        String xml = CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST);
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
-        XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
-        xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
-        FormattingValue formattingValue = DummyFormattingUtil
-            .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_FIRM_LIST, XML, xhbCppListDao);
-        formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
-        // Run
-        boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_FIRM_LIST),
-            formattingValue);
+    void testProcessDocumentFirmList() throws IOException, TransformerConfigurationException {
+        boolean result = testProcessDocument(
+            CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_FIRM_LIST), DOCTYPE_FIRM_LIST);
         assertTrue(result, TRUE);
     }
 
     @Test
-    void testProcessDocumentWarnList() {
-        // Setup
-        String xml = CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_WARN_LIST);
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
-        XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
-        xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
-        FormattingValue formattingValue = DummyFormattingUtil
-            .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_WARN_LIST, XML, xhbCppListDao);
-        formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
-        // Run
-        boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_WARN_LIST),
-            formattingValue);
+    void testProcessDocumentWarnList() throws IOException, TransformerConfigurationException {
+        boolean result = testProcessDocument(
+            CPP_LIST.replace(DOCTYPE_DAILY_LIST, DOCTYPE_WARN_LIST), DOCTYPE_WARN_LIST);
         assertTrue(result, TRUE);
     }
 
     @Test
     void testProcessDocument() throws IOException, TransformerConfigurationException {
+        boolean result = testProcessDocument(CPP_LIST, DOCTYPE_DAILY_LIST);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testProcessDocument(String xml, String listType)
+        throws IOException, TransformerConfigurationException {
         // Setup
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), CPP_LIST);
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), xml);
         XhbCppListDao xhbCppListDao = DummyFormattingUtil.getXhbCppListDao();
         xhbCppListDao.setListClobId(xhbClobDao.getClobId());
-        xhbCppListDao.setListType(DOCTYPE_DAILY_LIST);
+        xhbCppListDao.setListType(listType);
         FormattingValue formattingValue = DummyFormattingUtil
-            .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
+            .getFormattingValue(xhbClobDao.getClobData(), listType, XML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
         List<XhbCppListDao> existingList = new ArrayList<>();
         existingList.add(xhbCppListDao);
@@ -407,10 +407,11 @@ class FormattingServicesTest {
         Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
             .thenReturn(Optional.of(existingList.get(0)));
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
+            .thenReturn(true);
+        mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class), Mockito.isA(Long.class));
         // Run
-        boolean result = testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST),
-            formattingValue);
-        assertTrue(result, TRUE);
+        return testProcessDocuments(FormattingServices.getXmlUtils(listType), formattingValue);
     }
 
     @Test
@@ -455,6 +456,9 @@ class FormattingServicesTest {
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
         expectTransformer();
+        Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
+            .thenReturn(false);
+
         // Run
         boolean result =
             testProcessDocuments(FormattingServices.getXmlUtils(DOCTYPE_INTERNET_WEBPAGE),
@@ -463,15 +467,13 @@ class FormattingServicesTest {
         assertTrue(result, TRUE);
     }
 
-    private void expectCreateSource(String documentType) {
-        if (!DOCTYPE_FIRM_LIST.equals(documentType) && !DOCTYPE_WARN_LIST.equals(documentType)) {
-            String[] xsltNames = {};
-            Mockito.when(mockFormattingConfig.getXslTransforms(Mockito.isA(FormattingValue.class)))
-                .thenReturn(xsltNames);
-            Templates[] templates = {};
-            Mockito.when(mockXslServices.getTemplatesArray(Mockito.isA(String[].class),
-                Mockito.isA(Locale.class), Mockito.isA(Map.class))).thenReturn(templates);
-        }
+    private void expectCreateSource() {
+        String[] xsltNames = {};
+        Mockito.when(mockFormattingConfig.getXslTransforms(Mockito.isA(FormattingValue.class)))
+            .thenReturn(xsltNames);
+        Templates[] templates = {};
+        Mockito.when(mockXslServices.getTemplatesArray(Mockito.isA(String[].class),
+            Mockito.isA(Locale.class), Mockito.isA(Map.class))).thenReturn(templates);
     }
 
     private void expectTransformer() throws IOException, TransformerConfigurationException {
@@ -499,7 +501,7 @@ class FormattingServicesTest {
             .thenReturn(propertyList);
         Mockito.when(mockTranslationBundles.toXml()).thenReturn(TRANSLATION_BUNDLE_XML);
         if (expectedXmlUtils != null) {
-            expectCreateSource(formattingValue.getDocumentType());
+            expectCreateSource();
         }
         // Run
         classUnderTest.processDocument(formattingValue, mockEntityManager);

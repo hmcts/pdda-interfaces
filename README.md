@@ -14,3 +14,7 @@ DB_PORT - Database Port
 DB_NAME - Database Schema name
 
 DB_OPTIONS - (Optional) Addtional parameters
+
+APIM_ENABLED - true or false
+
+APIM_URI - Connection uri for azure pip data management (ie https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management)

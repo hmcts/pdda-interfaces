@@ -31,7 +31,10 @@
             <!-- Look up the language then try the key, if not found try rule. If not found return key plus marker-->
             <xsl:otherwise>
                 <xsl:variable name="translation">
-                    <xsl:for-each select="$data/translation:D/translation:B[@l = $language]"><!-- Country is currently not used -->
+                    <!-- Introduced because the subsequent code causes data loss -->
+                    <xsl:value-of select="$key"/>
+                    <!-- Removed because it causes data loss in the transform process
+                    <xsl:for-each select="$data/translation:D/translation:B[@l = $language]">
                         <xsl:if test="position() = 1">
                             <xsl:variable name="translationFromKey">                                
                                 <xsl:for-each select="./translation:V[(./translation:K = $key) and ((not($context)and not(./translation:C)) or (./translation:C = $context))]">
@@ -66,6 +69,7 @@
                             </xsl:choose>
                         </xsl:if>
                     </xsl:for-each>
+                    -->
                 </xsl:variable>
                 <xsl:choose>
                     <xsl:when test="string-length($translation) > 0">
