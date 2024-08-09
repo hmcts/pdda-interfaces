@@ -115,18 +115,16 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         final String methodName = "getCourtConfiguration(" + courtId + METHOD_SUFFIX;
         LOG.debug(ENTERED, methodName);
 
-        synchronized (this) {
-            Optional<XhbCourtDao> court = getXhbCourtRepository().findById(courtId);
-            if (!court.isPresent()) {
-                throw new CourtNotFoundException(courtId);
-            }
-
-            return getDisplayRotationSetDataHelper().getDataForCourt(court.get(),
-                getXhbDisplayRepository(), getXhbRotationSetsRepository(),
-                getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
-                getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(),
-                getXhbCourtSiteRepository(), getXhbCourtRoomRepository());
+        Optional<XhbCourtDao> court = getXhbCourtRepository().findById(courtId);
+        if (!court.isPresent()) {
+            throw new CourtNotFoundException(courtId);
         }
+
+        return getDisplayRotationSetDataHelper().getDataForCourt(court.get(),
+            getXhbDisplayRepository(), getXhbRotationSetsRepository(),
+            getXhbRotationSetDdRepository(), getXhbDisplayDocumentRepository(),
+            getXhbDisplayTypeRepository(), getXhbDisplayLocationRepository(),
+            getXhbCourtSiteRepository(), getXhbCourtRoomRepository());
     }
 
     /**

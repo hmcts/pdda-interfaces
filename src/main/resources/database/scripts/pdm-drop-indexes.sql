@@ -26,4 +26,3 @@ DROP INDEX IF EXISTS dm_qz_t_nft_st_misfire_idx;
 DROP INDEX IF EXISTS dm_qz_t_n_g_state_idx;
 DROP INDEX IF EXISTS dm_qz_t_n_state_idx;
 DROP INDEX IF EXISTS dm_qz_t_state_idx);
-DROP INDEX IF EXISTS aud_address_idx;
