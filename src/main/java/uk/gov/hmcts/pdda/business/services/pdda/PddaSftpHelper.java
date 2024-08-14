@@ -46,7 +46,7 @@ public class PddaSftpHelper {
     public void sftpFiles(Session session, String remoteFolder, Map<String, InputStream> files)
         throws JSchException, SftpException {
         methodName = "sftpFiles()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         try {
             // Create a channel
@@ -77,7 +77,7 @@ public class PddaSftpHelper {
     public Session createSession(String username, String password, String host, Integer port)
         throws JSchException {
         methodName = "createSession()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         Session session = getJSch().getSession(username, host, port);
         session.setConfig("StrictHostKeyChecking", "no");
@@ -90,7 +90,7 @@ public class PddaSftpHelper {
     public void sftpDeleteFile(Session session, String remoteFolder, String filename)
         throws JSchException, SftpException {
         methodName = "sftpDeleteFile()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         try {
             // Create a channel
@@ -114,14 +114,14 @@ public class PddaSftpHelper {
     public Map<String, String> sftpFetch(Session session, String remoteFolder,
         SftpValidation validation) throws JSchException, SftpException {
         methodName = "sftpFetch()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         try {
             // Create a channel
             ChannelSftp sftpChannel = PddaSftpUtil.createChannel(session);
 
             // Validate the remote folder
-            LOG.debug("Validating folder: " + remoteFolder);
+            LOG.debug("Validating folder: {}", remoteFolder);
             PddaSftpUtil.validateFolder(sftpChannel, remoteFolder);
 
             // Fetch Files
@@ -140,17 +140,17 @@ public class PddaSftpHelper {
     private List<String> listFilesInFolder(ChannelSftp sftpChannel, String folder,
         SftpValidation validation) throws SftpException {
         methodName = "listFilesInFolder()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
         // Get the directory contents from the OS
         @SuppressWarnings("unchecked")
         List<String> filesInFolder = new ArrayList<>(sftpChannel.ls(folder));
-        LOG.debug("No Of Files In Folder: " + filesInFolder.size());
+        LOG.debug("No Of Files In Folder: {}", filesInFolder.size());
         // Validate whether to include directories, etc
         List<String> results = validation.validateFilesInFolder(filesInFolder);
-        LOG.debug("No Of Files (excluding any folders): " + (results != null ? results.size() : 0));
+        LOG.debug("No Of Files (excluding any folders): {}", results != null ? results.size() : 0);
         // User validation that can be overridden in the calling class
         results = validation.validateFilenames(results);
-        LOG.debug("No Of Files (after filters applied): " + (results != null ? results.size() : 0));
+        LOG.debug("No Of Files (after filters applied): {}", results != null ? results.size() : 0);
         // Return the end list of files required
         return results;
     }
@@ -158,15 +158,19 @@ public class PddaSftpHelper {
     private Map<String, String> fetchFiles(ChannelSftp sftpChannel, String remoteFolder,
         SftpValidation validation) throws SftpException {
         methodName = "fetchFiles()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         Map<String, String> files = new ConcurrentHashMap<>();
         try {
             List<String> listOfFilesInFolder =
                 listFilesInFolder(sftpChannel, remoteFolder, validation);
             if (LOG.isDebugEnabled()) {
-                LOG.debug("List of files in remote folder: " + remoteFolder);
-                listOfFilesInFolder.forEach(filename -> LOG.debug("File: {}", filename));
+                if (listOfFilesInFolder != null) {
+                    LOG.debug("List of files in remote folder: {}", remoteFolder);
+                    listOfFilesInFolder.forEach(filename -> LOG.debug("File: {}", filename));
+                } else {
+                    LOG.debug("No files in remote folder");
+                }
             }
             if (listOfFilesInFolder != null) {
                 for (String filename : listOfFilesInFolder) {
@@ -188,7 +192,7 @@ public class PddaSftpHelper {
     private String getFileContents(String filename, InputStream inputStream) {
         String fileContents = null;
         methodName = "getFileContents(" + filename + ")";
-        LOG.info(methodName + LOG_CALLED);
+        LOG.info(methodName, LOG_CALLED);
         try (InputStreamReader fileReader = new InputStreamReader(inputStream)) {
             try (BufferedReader reader = new BufferedReader(fileReader)) {
                 StringBuilder stringBuilder = new StringBuilder();
