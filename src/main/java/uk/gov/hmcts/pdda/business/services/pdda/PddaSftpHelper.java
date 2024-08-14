@@ -82,6 +82,7 @@ public class PddaSftpHelper {
         Session session = getJSch().getSession(username, host, port);
         session.setConfig("StrictHostKeyChecking", "no");
         session.setPassword(password);
+        LOG.debug("Connecting to host: {}:{} with username: {} ", host, port, username);
         session.connect();
         return session;
     }
@@ -120,6 +121,7 @@ public class PddaSftpHelper {
             ChannelSftp sftpChannel = PddaSftpUtil.createChannel(session);
 
             // Validate the remote folder
+            LOG.debug("Validating folder: " + remoteFolder);
             PddaSftpUtil.validateFolder(sftpChannel, remoteFolder);
 
             // Fetch Files
@@ -162,6 +164,10 @@ public class PddaSftpHelper {
         try {
             List<String> listOfFilesInFolder =
                 listFilesInFolder(sftpChannel, remoteFolder, validation);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("List of files in remote folder: " + remoteFolder);
+                listOfFilesInFolder.forEach(filename -> LOG.debug("File: {}", filename));
+            }
             if (listOfFilesInFolder != null) {
                 for (String filename : listOfFilesInFolder) {
                     try (InputStream inputStream = sftpChannel.get(remoteFolder + filename)) {
@@ -181,6 +187,8 @@ public class PddaSftpHelper {
 
     private String getFileContents(String filename, InputStream inputStream) {
         String fileContents = null;
+        methodName = "getFileContents(" + filename + ")";
+        LOG.info(methodName + LOG_CALLED);
         try (InputStreamReader fileReader = new InputStreamReader(inputStream)) {
             try (BufferedReader reader = new BufferedReader(fileReader)) {
                 StringBuilder stringBuilder = new StringBuilder();

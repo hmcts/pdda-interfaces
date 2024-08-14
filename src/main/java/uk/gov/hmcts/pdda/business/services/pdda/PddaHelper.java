@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass","PMD.TooManyMethods"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -92,7 +92,7 @@ public class PddaHelper extends XhibitPddaHelper {
      * Retrieve events from Bais (processed by Xhibit).
      */
     public void retrieveFromBaisXhibit() {
-        methodName = "retrieveFromBiasXhibit()";
+        methodName = "retrieveFromBaisXhibit()";
         LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getSftpConfigs();
@@ -202,11 +202,14 @@ public class PddaHelper extends XhibitPddaHelper {
     }
 
     private SftpConfig getSftpConfigs(String configUsername, String configPassword, String configLocation) {
+        methodName = "getSftpConfigs()";
+        LOG.debug(methodName + LOG_CALLED);
         SftpConfig sftpConfig = new SftpConfig();
 
         // Fetch and validate the properties
         try {
             sftpConfig.username = getMandatoryConfigValue(configUsername);
+            LOG.debug("SFTP Username: " + sftpConfig.username);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configUsername + NOT_FOUND;
             return sftpConfig;
@@ -219,6 +222,7 @@ public class PddaHelper extends XhibitPddaHelper {
         }
         try {
             sftpConfig.remoteFolder = getMandatoryConfigValue(configLocation);
+            LOG.debug("SFTP Remote Folder: " + sftpConfig.remoteFolder);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configLocation + NOT_FOUND;
             return sftpConfig;
@@ -226,12 +230,14 @@ public class PddaHelper extends XhibitPddaHelper {
         String hostAndPort;
         try {
             hostAndPort = getMandatoryConfigValue(Config.SFTP_HOST);
+            LOG.debug("SFTP Host and port: " + hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
             return sftpConfig;
         }
 
         // Validate the host and port
+        LOG.debug("Validating host and port");
         String portDelimiter = ":";
         Integer pos = hostAndPort.indexOf(portDelimiter);
         if (pos <= 0) {
@@ -249,6 +255,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Create a session
         try {
+            LOG.debug("Connection validated successfully");
             sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username, sftpConfig.password,
                 sftpConfig.host, sftpConfig.port));
         } catch (Exception ex) {
@@ -256,6 +263,7 @@ public class PddaHelper extends XhibitPddaHelper {
             return sftpConfig;
         }
 
+        LOG.debug("Connected successfully");
         return sftpConfig;
     }
 
@@ -265,6 +273,8 @@ public class PddaHelper extends XhibitPddaHelper {
     }
 
     private SftpConfig getBaisCpConfigs() {
+        methodName = "getBaisCpConfigs()";
+        LOG.debug(methodName + LOG_CALLED);
         return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD, Config.CP_SFTP_UPLOAD_LOCATION);
     }
 
