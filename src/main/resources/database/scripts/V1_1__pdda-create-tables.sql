@@ -1,24 +1,5 @@
 SET client_encoding TO 'UTF8';
 
-DROP TABLE IF EXISTS xhb_address CASCADE;
-CREATE TABLE xhb_address (
-	address_id integer NOT NULL,
-	address_1 varchar(30),
-	address_2 varchar(30),
-	address_3 varchar(30),
-	address_4 varchar(30),
-	town varchar(30),
-	county varchar(30),
-	postcode varchar(8),
-	country varchar(255),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL
-);
-ALTER TABLE xhb_address ADD CONSTRAINT xhb_address_pk PRIMARY KEY (address_id);
-
 
 DROP TABLE IF EXISTS xhb_case CASCADE;
 CREATE TABLE xhb_case (
@@ -475,69 +456,6 @@ ALTER TABLE xhb_list ADD CONSTRAINT draft_or_final_chk CHECK (draft_or_final IN 
 ALTER TABLE xhb_list ADD CONSTRAINT publish_status_chk CHECK (publish_status IN ('SUCCESS','FAILURE','DELETED'));
 
 
-DROP TABLE IF EXISTS xhb_ref_court CASCADE;
-CREATE TABLE xhb_ref_court (
-	ref_court_id integer NOT NULL,
-	court_full_name varchar(255),
-	court_short_name varchar(5),
-	name_prefix varchar(11),
-	court_type varchar(1),
-	crest_code varchar(4),
-	obs_ind varchar(1),
-	is_psd varchar(1),
-	dx_ref varchar(35),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	court_id integer
-);
-ALTER TABLE xhb_ref_court ADD CONSTRAINT xhb_ref_court_pk PRIMARY KEY (ref_court_id);
-
-
-DROP TABLE IF EXISTS xhb_ref_court_reporter CASCADE;
-CREATE TABLE xhb_ref_court_reporter (
-	ref_court_reporter_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	crest_court_reporter_id numeric(38),
-	initials varchar(4),
-	report_method varchar(1),
-	obs_ind varchar(1),
-	ref_court_reporter_firm_id integer NOT NULL,
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL
-);
-ALTER TABLE xhb_ref_court_reporter ADD CONSTRAINT xhb_ref_court_reporter_pk PRIMARY KEY (ref_court_reporter_id);
-
-
-DROP TABLE IF EXISTS xhb_ref_court_reporter_firm CASCADE;
-CREATE TABLE xhb_ref_court_reporter_firm (
-	ref_court_reporter_firm_id integer NOT NULL,
-	obs_ind varchar(1),
-	display_first varchar(1) NOT NULL,
-	dx_ref varchar(35),
-	vat_no varchar(35),
-	firm_name varchar(35),
-	address_id integer,
-	court_id integer NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version integer NOT NULL,
-	crest_court_reporter_firm_id integer
-);
-ALTER TABLE xhb_ref_court_reporter_firm ADD CONSTRAINT xhb_ref_court_reporter_firm_pk PRIMARY KEY (ref_court_reporter_firm_id);
-
-
 DROP TABLE IF EXISTS xhb_ref_cracked_effective CASCADE;
 CREATE TABLE xhb_ref_cracked_effective (
 	ref_cracked_effective_id integer NOT NULL,
@@ -631,26 +549,6 @@ CREATE TABLE xhb_ref_justice (
 ALTER TABLE xhb_ref_justice ADD CONSTRAINT xhb_ref_justice_pk PRIMARY KEY (ref_justice_id);
 
 
-DROP TABLE IF EXISTS xhb_ref_legal_representative CASCADE;
-CREATE TABLE xhb_ref_legal_representative (
-	ref_legal_rep_id integer NOT NULL,
-	first_name varchar(35),
-	middle_name varchar(35),
-	surname varchar(35),
-	title varchar(255),
-	initials varchar(4),
-	legal_rep_type varchar(1),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	court_id integer NOT NULL,
-	obs_ind varchar(1)
-);
-ALTER TABLE xhb_ref_legal_representative ADD CONSTRAINT xhb_ref_legal_representative_pk PRIMARY KEY (ref_legal_rep_id);
-
-
 DROP TABLE IF EXISTS xhb_ref_listing_data CASCADE;
 CREATE TABLE xhb_ref_listing_data (
 	ref_listing_data_id integer NOT NULL,
@@ -664,41 +562,6 @@ CREATE TABLE xhb_ref_listing_data (
 	version integer NOT NULL DEFAULT 1
 );
 ALTER TABLE xhb_ref_listing_data ADD CONSTRAINT xhb_ref_listing_data_pk PRIMARY KEY (ref_listing_data_id);
-
-
-DROP TABLE IF EXISTS xhb_ref_monitoring_category CASCADE;
-CREATE TABLE xhb_ref_monitoring_category (
-	ref_monitoring_category_id bigint NOT NULL,
-	monitoring_category_code varchar(5) NOT NULL,
-	monitoring_category_name varchar(255) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version bigint DEFAULT 1
-);
-ALTER TABLE xhb_ref_monitoring_category ADD CONSTRAINT xhb_ref_monitoring_category_pk PRIMARY KEY (ref_monitoring_category_id);
-
-
-DROP TABLE IF EXISTS xhb_ref_solicitor_firm CASCADE;
-CREATE TABLE xhb_ref_solicitor_firm (
-	ref_solicitor_firm_id integer NOT NULL,
-	solicitor_firm_name varchar(35),
-	crest_sof_id integer,
-	court_id integer NOT NULL,
-	obs_ind varchar(1),
-	short_name varchar(28),
-	dx_ref varchar(35),
-	vat_no varchar(9),
-	last_update_date timestamp NOT NULL,
-	creation_date timestamp NOT NULL,
-	created_by varchar(30) NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	version integer NOT NULL,
-	address_id integer,
-	la_code varchar(6)
-);
-ALTER TABLE xhb_ref_solicitor_firm ADD CONSTRAINT xhb_ref_solicitor_firm_pk PRIMARY KEY (ref_solicitor_firm_id);
 
 
 DROP TABLE IF EXISTS xhb_ref_system_code CASCADE;
@@ -810,30 +673,6 @@ CREATE TABLE xhb_sh_justice (
 ALTER TABLE xhb_sh_justice ADD CONSTRAINT xhb_sh_justice_pk PRIMARY KEY (sh_justice_id);
 
 
-DROP TABLE IF EXISTS xhb_sh_leg_rep CASCADE;
-CREATE TABLE xhb_sh_leg_rep (
-	sh_leg_rep_id integer NOT NULL,
-	crest_sequence_no integer,
-	legal_role varchar(1),
-	is_signed_in varchar(1),
-	sol_firm_or_ref_legal_rep varchar(1),
-	sched_hear_def_id integer,
-	ref_legal_rep_id integer,
-	version integer NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_update_date timestamp NOT NULL,
-	cc_info_id integer,
-	ref_solicitor_firm_id integer,
-	ref_defence_category_id integer,
-	scheduled_hearing_id integer,
-	sub_inst varchar(1),
-	substituted_ref_legal_rep_id integer
-);
-ALTER TABLE xhb_sh_leg_rep ADD CONSTRAINT xhb_sh_leg_rep_pk PRIMARY KEY (sh_leg_rep_id);
-
-
 DROP TABLE IF EXISTS xhb_sh_staff CASCADE;
 CREATE TABLE xhb_sh_staff (
 	sh_staff_id integer NOT NULL,
@@ -854,7 +693,7 @@ CREATE TABLE xhb_sitting (
 	sitting_sequence_no smallint,
 	is_sitting_judge varchar(1),
 	sitting_time timestamp,
-	sitting_note varchar(80),
+	sitting_note varchar(200),
 	ref_justice1_id numeric(38),
 	ref_justice2_id numeric(38),
 	ref_justice3_id numeric(38),
@@ -1315,11 +1154,11 @@ DROP TABLE IF EXISTS xhb_display_court_room CASCADE;
 CREATE TABLE xhb_display_court_room (
 	display_id bigint NOT NULL,
 	court_room_id bigint NOT NULL,
-	created_by varchar(30) NOT NULL,
-	creation_date timestamp NOT NULL,
-	last_updated_by varchar(30) NOT NULL,
-	last_update_date timestamp NOT NULL,
-	version integer NOT NULL
+	created_by varchar(30) NOT NULL DEFAULT 'Imported',
+	creation_date timestamp NOT NULL DEFAULT NOW(),
+	last_updated_by varchar(30) NOT NULL DEFAULT 'Imported',
+	last_update_date timestamp NOT NULL DEFAULT NOW(),
+	version integer NOT NULL DEFAULT 1
 );
 ALTER TABLE xhb_display_court_room ADD CONSTRAINT xhb_display_court_room_pk PRIMARY KEY (display_id,court_room_id);
 

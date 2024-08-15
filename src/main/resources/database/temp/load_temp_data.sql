@@ -1,5 +1,4 @@
 \cd data
-\copy temp.tmp_address (address_id, address_1, address_2, address_3, address_4, town, county, postcode, country, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_ADDRESS_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_config_prop (config_prop_id, property_name, property_value) FROM 'XHB_CONFIG_PROP_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
@@ -11,12 +10,6 @@
 
 \copy temp.tmp_court_site (court_site_id, court_site_name, court_site_code, court_id, address_id, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind, display_name, crest_court_id, short_name, site_group, floater_text, list_name, tier) FROM 'XHB_COURT_SITE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_court (ref_court_id, court_full_name, court_short_name, name_prefix, court_type, crest_code, obs_ind, is_psd, dx_ref, last_update_date, creation_date, created_by, last_updated_by, version, address_id, court_id) FROM 'XHB_REF_COURT_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
-\copy temp.tmp_ref_court_reporter (ref_court_reporter_id, first_name, middle_name, surname, crest_court_reporter_id, initials, report_method, obs_ind, ref_court_reporter_firm_id, last_update_date, creation_date, created_by, last_updated_by, version, court_id) FROM 'XHB_REF_COURT_REPORTER_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
-\copy temp.tmp_ref_court_reporter_firm (ref_court_reporter_firm_id, obs_ind, display_first, dx_ref, vat_no, firm_name, address_id, court_id, last_updated_by, created_by, creation_date, last_update_date, version, crest_court_reporter_firm_id) FROM 'XHB_REF_COURT_REPORTER_FIRM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_cracked_effective (ref_cracked_effective_id, code, description, party_responsible, obs_ind, last_update_date, creation_date, last_updated_by, created_by, version, trial_code_type) FROM 'XHB_REF_CRACKED_EFFECTIVE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_ref_hearing_type (ref_hearing_type_id, hearing_type_code, hearing_type_desc, category, seq_no, list_sequence, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_HEARING_TYPE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
@@ -25,15 +18,9 @@
 
 \copy temp.tmp_ref_justice (ref_justice_id, justice_name, crest_justice_id, court_id, psd_court_code, title, initials, last_update_date, creation_date, created_by, last_updated_by, version, obs_ind) FROM 'XHB_REF_JUSTICE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_legal_representative (ref_legal_rep_id, first_name, middle_name, surname, title, initials, legal_rep_type, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_LEGAL_REPRESENTATIVE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_listing_data (ref_listing_data_id, ref_data_type, ref_data_value, created_by, last_updated_by, creation_date, last_update_date, obs_ind, version) FROM 'XHB_REF_LISTING_DATA_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
-\copy temp.tmp_ref_monitoring_category (ref_monitoring_category_id, monitoring_category_code, monitoring_category_name, created_by, last_updated_by, creation_date, last_update_date, version) FROM 'XHB_REF_MONITORING_CATEGORY_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
-
 \copy temp.tmp_ref_pdda_message_type (pdda_message_type_id, pdda_message_type, pdda_message_description, obs_ind, last_update_date, creation_date, created_by, last_updated_by, version) FROM 'XHB_REF_PDDA_MESSAGE_TYPE_TABLE.csv' DELIMITER ',' CSV HEADER
-
-\copy temp.tmp_ref_solicitor_firm (ref_solicitor_firm_id, solicitor_firm_name, crest_sof_id, court_id, obs_ind, short_name, dx_ref, vat_no, last_update_date, creation_date, created_by, last_updated_by, version, address_id, la_code) FROM 'XHB_REF_SOLICITOR_FIRM_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 
 \copy temp.tmp_ref_system_code (ref_system_code_id, code, code_type, code_title, de_code, ref_code_order, last_update_date, creation_date, created_by, last_updated_by, version, court_id, obs_ind) FROM 'XHB_REF_SYSTEM_CODE_DATA_TABLE.csv' DELIMITER ',' CSV HEADER
 

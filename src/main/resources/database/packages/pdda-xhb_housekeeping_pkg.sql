@@ -592,23 +592,6 @@ BEGIN
     EXECUTE l_delete USING p_case_id;
     PERFORM set_config('xhb_housekeeping_pkg.l_error_point', 'DELETE HEARING 5 ', false);
 
-    -- 1.5
-    l_delete := '
-    DELETE FROM xhb_sh_leg_rep
-    WHERE  scheduled_hearing_id IN (SELECT scheduled_hearing_id
-                                    FROM   xhb_scheduled_hearing
-                                    WHERE  hearing_id IN (SELECT hearing_id
-                                                          FROM   xhb_hearing
-                                                          WHERE  case_id = $1
-                                                          )
-                                   )';
-    EXECUTE l_delete USING p_case_id;
-	GET DIAGNOSTICS rowcount = ROW_COUNT;
-	IF rowcount > 0 THEN
-		CALL xhb_housekeeping_pkg.log_deletion(p_table_name      => 'xhb_sh_leg_rep', p_log_delete => p_log_delete );
-	END IF;
-    l_delete := REPLACE(l_delete,'xhb','aud');
-    EXECUTE l_delete USING p_case_id;
     PERFORM set_config('xhb_housekeeping_pkg.l_error_point', 'DELETE HEARING 6 ', false);
 
     -- 1.6
