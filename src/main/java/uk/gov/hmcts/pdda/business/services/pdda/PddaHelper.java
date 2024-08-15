@@ -121,6 +121,12 @@ public class PddaHelper extends XhibitPddaHelper {
             }
         } finally {
             if (config.session != null) {
+                // Check the contents of Bais to verify all processed files are deleted
+                LOG.debug("Checking contents of Bais prior to closing the connection");
+                Map<String, String> files = getBaisFileList(config, validation);
+                if (files.isEmpty()) {
+                    LOG.debug("Contents of Bais is now empty");
+                }
                 PddaSftpUtil.disconnectSession(config.session);
                 config.setSession(null);
             }
