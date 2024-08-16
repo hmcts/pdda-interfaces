@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -79,7 +79,7 @@ public class PddaHelper extends XhibitPddaHelper {
      */
     public void retrieveFromBaisCp() {
         methodName = "retrieveFromBaisCp()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getBaisCpConfigs();
         if (config.errorMsg != null) {
@@ -94,7 +94,7 @@ public class PddaHelper extends XhibitPddaHelper {
      * Retrieve events from Bais (processed by Xhibit).
      */
     public void retrieveFromBaisXhibit() {
-        methodName = "retrieveFromBiasXhibit()";
+        methodName = "retrieveFromBaisXhibit()";
         LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getSftpConfigs();
@@ -132,13 +132,13 @@ public class PddaHelper extends XhibitPddaHelper {
     private void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
         String clobData) {
         try {
-            LOG.debug("Processing filename " + filename);
+            LOG.debug("Processing filename {}", filename);
 
             // Validate this filename hasn't been processed previously
             Optional<XhbPddaMessageDao> pddaMessageDao =
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
             if (pddaMessageDao.isPresent()) {
-                LOG.debug("Filename " + filename + " already processed");
+                LOG.debug("Filename {}{}", filename, " already processed");
                 return;
             }
 
@@ -171,7 +171,7 @@ public class PddaHelper extends XhibitPddaHelper {
         final String filename, final String clobData, String errorMessage)
         throws NotFoundException {
         methodName = "createBaisMessage(" + filename + ")";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
 
         // Call to createMessageType
         Optional<XhbRefPddaMessageTypeDao> messageTypeDao =
@@ -199,7 +199,7 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             return getSftpHelper().sftpFetch(config.session, config.remoteFolder, validation);
         } catch (Exception ex) {
-            LOG.error(SFTP_ERROR + ex.getMessage());
+            LOG.error(SFTP_ERROR, ex.getMessage());
             return Collections.emptyMap();
         }
     }
@@ -211,11 +211,14 @@ public class PddaHelper extends XhibitPddaHelper {
 
     private SftpConfig getSftpConfigs(String configUsername, String configPassword,
         String configLocation) {
+        methodName = "getSftpConfigs()";
+        LOG.debug(methodName, LOG_CALLED);
         SftpConfig sftpConfig = new SftpConfig();
 
         // Fetch and validate the properties
         try {
             sftpConfig.username = getMandatoryConfigValue(configUsername);
+            LOG.debug("SFTP Username: {}", sftpConfig.username);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configUsername + NOT_FOUND;
             return sftpConfig;
@@ -228,6 +231,7 @@ public class PddaHelper extends XhibitPddaHelper {
         }
         try {
             sftpConfig.remoteFolder = getMandatoryConfigValue(configLocation);
+            LOG.debug("SFTP Remote Folder: {}", sftpConfig.remoteFolder);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configLocation + NOT_FOUND;
             return sftpConfig;
@@ -235,12 +239,14 @@ public class PddaHelper extends XhibitPddaHelper {
         String hostAndPort;
         try {
             hostAndPort = getMandatoryConfigValue(Config.SFTP_HOST);
+            LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
             return sftpConfig;
         }
 
         // Validate the host and port
+        LOG.debug("Validating host and port");
         String portDelimiter = ":";
         Integer pos = hostAndPort.indexOf(portDelimiter);
         if (pos <= 0) {
@@ -258,6 +264,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Create a session
         try {
+            LOG.debug("Connection validated successfully");
             sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
                 sftpConfig.password, sftpConfig.host, sftpConfig.port));
         } catch (Exception ex) {
@@ -265,6 +272,7 @@ public class PddaHelper extends XhibitPddaHelper {
             return sftpConfig;
         }
 
+        LOG.debug("Connected successfully");
         return sftpConfig;
     }
 
@@ -275,6 +283,8 @@ public class PddaHelper extends XhibitPddaHelper {
     }
 
     private SftpConfig getBaisCpConfigs() {
+        methodName = "getBaisCpConfigs()";
+        LOG.debug(methodName, LOG_CALLED);
         return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD,
             Config.CP_SFTP_UPLOAD_LOCATION);
     }
@@ -377,7 +387,7 @@ public class PddaHelper extends XhibitPddaHelper {
                 getSftpHelper().sftpFiles(sftpConfig.session, sftpConfig.remoteFolder, responses);
                 return true;
             } catch (Exception ex) {
-                LOG.error(SFTP_ERROR + ex);
+                LOG.error(SFTP_ERROR, ex);
             }
         }
         return false;
@@ -397,10 +407,10 @@ public class PddaHelper extends XhibitPddaHelper {
 
         @Override
         public String validateFilename(String filename, PublicDisplayEvent event) {
-            String debugErrorPrefix = filename + " error: ";
+            String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
             if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
@@ -409,7 +419,7 @@ public class PddaHelper extends XhibitPddaHelper {
                 LOG.debug("Valid filename - No. Of Parts");
             } else {
                 errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
             // Check Title is right format
@@ -417,20 +427,20 @@ public class PddaHelper extends XhibitPddaHelper {
                 LOG.debug("Valid filename - Title");
             } else {
                 errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // Check we have the event from the file contents
             if (event == null) {
                 errorMessage = "Invalid filename - Invalid event in filecontents";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
 
                 // Check the crest court Id
             } else if (getCourtId(filename, event) == null) {
                 errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
@@ -487,45 +497,45 @@ public class PddaHelper extends XhibitPddaHelper {
 
         @Override
         public String validateFilename(String filename, PublicDisplayEvent event) {
-            String debugErrorPrefix = filename + " error: ";
+            String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
             if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // First check file extension is an xml file
             if (!PddaSftpValidationUtil.validateExtension(filename)) {
                 errorMessage = "Invalid filename - Extension";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // Check the file has the right overall format of 3 parts
             if (!isValidNoOfParts(filename)) {
                 errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // Check Title is right format
             if (!validateTitle(filename)) {
                 errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // Check CrestCourtID is valid and exists in the database
             if (getCourtId(filename, event) == null) {
                 errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
 
             // Check dateTime is valid format
             if (!validateDateTime(getFilenamePart(filename, 2))) {
                 errorMessage = "Invalid filename - DateTime";
-                LOG.debug(debugErrorPrefix + errorMessage);
+                LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
             return null;
