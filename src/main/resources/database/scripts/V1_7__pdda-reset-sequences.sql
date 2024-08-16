@@ -1,6 +1,5 @@
 SET client_encoding TO 'UTF8';
 
-SELECT setval('xhb_address_seq', COALESCE(MAX(address_id)+1, 1), FALSE) FROM xhb_address;
 SELECT setval('xhb_blob_seq', COALESCE(MAX(blob_id)+1, 1), FALSE) FROM xhb_blob;
 SELECT setval('xhb_case_diary_fixture_seq', COALESCE(MAX(case_diary_fixture_id)+1, 1), FALSE) FROM xhb_case_diary_fixture;
 SELECT setval('xhb_case_listing_entry_seq', COALESCE(MAX(case_listing_entry_id)+1, 1), FALSE) FROM xhb_case_listing_entry;
@@ -21,24 +20,17 @@ SELECT setval('xhb_formatting_seq', COALESCE(MAX(formatting_id)+1, 1), FALSE) FR
 SELECT setval('xhb_hearing_list_seq', COALESCE(MAX(list_id)+1, 1), FALSE) FROM xhb_hearing_list;
 SELECT setval('xhb_hearing_seq', COALESCE(MAX(hearing_id)+1, 1), FALSE) FROM xhb_hearing;
 SELECT setval('xhb_list_seq', COALESCE(MAX(list_id)+1, 1), FALSE) FROM xhb_list;
-SELECT setval('xhb_ref_court_reporter_seq', COALESCE(MAX(ref_court_reporter_id)+1, 1), FALSE) FROM xhb_ref_court_reporter;
-SELECT setval('xhb_ref_court_report_f_seq', COALESCE(MAX(ref_court_reporter_firm_id)+1, 1), FALSE) FROM xhb_ref_court_reporter_firm;
-SELECT setval('xhb_ref_court_seq', COALESCE(MAX(ref_court_id)+1, 1), FALSE) FROM xhb_ref_court;
 SELECT setval('xhb_ref_cracked_effective_seq', COALESCE(MAX(ref_cracked_effective_id)+1, 1), FALSE) FROM xhb_ref_cracked_effective;
 SELECT setval('xhb_ref_hearing_type_seq', COALESCE(MAX(ref_hearing_type_id)+1, 1), FALSE) FROM xhb_ref_hearing_type;
 SELECT setval('xhb_ref_judge_seq', COALESCE(MAX(ref_judge_id)+1, 1), FALSE) FROM xhb_ref_judge;
 SELECT setval('xhb_ref_justice_seq', COALESCE(MAX(ref_justice_id)+1, 1), FALSE) FROM xhb_ref_justice;
-SELECT setval('xhb_ref_legal_rep_seq', COALESCE(MAX(ref_legal_rep_id)+1, 1), FALSE) FROM xhb_ref_legal_representative;
 SELECT setval('xhb_ref_listing_data_seq', COALESCE(MAX(ref_listing_data_id)+1, 1), FALSE) FROM xhb_ref_listing_data;
-SELECT setval('xhb_ref_monitoring_cat_seq', COALESCE(MAX(ref_monitoring_category_id)+1, 1), FALSE) FROM xhb_ref_monitoring_category;
-SELECT setval('xhb_ref_solicitor_firm_seq', COALESCE(MAX(ref_solicitor_firm_id)+1, 1), FALSE) FROM xhb_ref_solicitor_firm;
 SELECT setval('xhb_ref_system_code_seq', COALESCE(MAX(ref_system_code_id)+1, 1), FALSE) FROM xhb_ref_system_code;
 SELECT setval('xhb_scheduled_hearing_def_seq', COALESCE(MAX(sched_hear_def_id)+1, 1), FALSE) FROM xhb_sched_hearing_defendant;
 SELECT setval('xhb_scheduled_hearing_seq', COALESCE(MAX(scheduled_hearing_id)+1, 1), FALSE) FROM xhb_scheduled_hearing;
 SELECT setval('xhb_sched_hearing_attend_seq', COALESCE(MAX(sh_attendee_id)+1, 1), FALSE) FROM xhb_sched_hearing_attendee;
 SELECT setval('xhb_sh_judge_seq', COALESCE(MAX(sh_judge_id)+1, 1), FALSE) FROM xhb_sh_judge;
 SELECT setval('xhb_sh_justice_seq', COALESCE(MAX(sh_justice_id)+1, 1), FALSE) FROM xhb_sh_justice;
-SELECT setval('xhb_sh_leg_rep_seq', COALESCE(MAX(sh_leg_rep_id)+1, 1), FALSE) FROM xhb_sh_leg_rep;
 SELECT setval('xhb_sh_staff_seq', COALESCE(MAX(sh_staff_id)+1, 1), FALSE) FROM xhb_sh_staff;
 SELECT setval('xhb_sitting_on_list_seq', COALESCE(MAX(sitting_on_list_id)+1, 1), FALSE) FROM xhb_sitting_on_list;
 SELECT setval('xhb_sitting_seq', COALESCE(MAX(sitting_id)+1, 1), FALSE) FROM xhb_sitting;

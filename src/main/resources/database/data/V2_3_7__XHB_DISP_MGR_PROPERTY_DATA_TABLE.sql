@@ -1,20 +1,115 @@
-insert into xhb_disp_mgr_property (PROPERTY_ID,PROPERTY_NAME,PROPERTY_VALUE,LAST_UPDATE_DATE,CREATION_DATE,CREATED_BY,LAST_UPDATED_BY,VERSION) values (
-1,'software.update.directory','C:\Temp','26-MAY-22 08:56:14','17-MAY-18 13:30:13','XHIBIT','XHIBIT',3),(
-2,'xhibit.public.display.url','http://192.168.1.254/software/index.php?','26-MAY-22 08:56:14','17-MAY-18 13:30:13','XHIBIT','XHIBIT',3),(
-3,'software.update.checksum.cron','0 30 * * * ?','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-4,'software.update.filenames','cdu.tar,localproxy.tar,localproxyupdatescripts.tar,ipdmanager.tar,ipdmanager.war,ipdmanager.properties','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-5,'rag.status.overall.red.percent','60','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-6,'rag.status.overall.amber.percent','80','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-7,'rag.status.courtsite.red.percent','50','17-MAY-18 13:42:21','17-MAY-18 13:30:13','XHIBIT','XHIBIT',2),(
-8,'rag.status.courtsite.amber.percent','80','17-MAY-18 13:42:21','17-MAY-18 13:30:13','XHIBIT','XHIBIT',2),(
-9,'rest.client.timeout','30','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-10,'rest.token.expiry','300','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-11,'register.cdu.network','192.168.1','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-12,'register.cdu.host.min','100','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-13,'register.cdu.host.max','199','17-MAY-18 13:30:13','17-MAY-18 13:30:13','XHIBIT','XHIBIT',1),(
-14,'rag.status.update.threads','5','17-MAY-18 13:42:21','17-MAY-18 13:42:21','XHIBIT','XHIBIT',1),(
-15,'rag.status.update.cron','0 0 * * * ?','17-MAY-18 13:42:21','17-MAY-18 13:42:21','XHIBIT','XHIBIT',1),(
-16,'rag.status.reload.interval','900','17-MAY-18 13:42:21','17-MAY-18 13:42:21','XHIBIT','XHIBIT',1),(
-23,'rag.status.localproxy.red.percent','50','26-MAY-22 08:57:33','26-MAY-22 08:57:33','XHIBIT','XHIBIT',1),(
-24,'rag.status.localproxy.amber.percent','80','26-MAY-22 08:57:33','26-MAY-22 08:57:33','XHIBIT','XHIBIT',1),(
-25,'housekeeping.pkg.job.cron','0 0 19 * * ?','17-OCT-23 16:14:26','17-OCT-23 11:52:46','XHIBIT','XHIBIT',1);
+﻿Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (1, 'software.update.directory', '/opt/moj/bea/user_projects/domains/XHIBIT_PREPROD/localproxy', TO_DATE('2/6/2024 11:13:19 AM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 3);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (2, 'xhibit.public.display.url', 'http://xhibitdisplay.staging.internal.hmcts.net/PublicDisplay/FileServlet?', TO_DATE('4/15/2024 2:54:56 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 2);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (3, 'software.update.checksum.cron', '0 30 * * * ?', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (4, 'software.update.filenames', 'cdu.tar,localproxy.tar,localproxyupdatescripts.tar,ipdmanager.tar,ipdmanager.war,ipdmanager.properties', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (5, 'rag.status.overall.red.percent', '60', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (6, 'rag.status.overall.amber.percent', '80', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (7, 'rag.status.courtsite.red.percent', '50', TO_DATE('6/7/2017 12:35:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 2);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (8, 'rag.status.courtsite.amber.percent', '80', TO_DATE('6/7/2017 12:35:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 2);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (9, 'rest.client.timeout', '30', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (10, 'rest.token.expiry', '300', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (11, 'register.cdu.network', '192.168.1', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (12, 'register.cdu.host.min', '100', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (13, 'register.cdu.host.max', '199', TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('3/6/2017 2:17:22 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (14, 'rag.status.update.threads', '5', TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (15, 'rag.status.update.cron', '0 */3 * * * ?', TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (16, 'rag.status.reload.interval', '180', TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), TO_DATE('6/7/2017 12:35:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
+    'XHIBIT', 'XHIBIT', 1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (23,'rag.status.localproxy.red.percent','50','2022-05-26 08:57:33.000','2022-05-26 08:57:33.000',
+   'XHIBIT','XHIBIT',1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (24,'rag.status.localproxy.amber.percent','80','2022-05-26 08:57:33.000','2022-05-26 08:57:33.000',
+   'XHIBIT','XHIBIT',1);
+Insert into XHB_DISP_MGR_PROPERTY
+   (PROPERTY_ID, PROPERTY_NAME, PROPERTY_VALUE, LAST_UPDATE_DATE, CREATION_DATE, 
+    CREATED_BY, LAST_UPDATED_BY, VERSION)
+ Values
+   (25,'housekeeping.pkg.job.cron','0 0 19 * * ?','2023-10-17 16:14:26.000','2023-10-17 11:52:46.000',
+   'XHIBIT','XHIBIT',1);
+COMMIT;
