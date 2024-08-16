@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.15.2")
+    classpath("org.flywaydb:flyway-database-postgresql:10.17.1")
   }
 }
 
@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.15.2'
+  id 'org.flywaydb.flyway' version '10.17.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -218,9 +218,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.25'
     implementation 'com.squareup.okio:okio:3.9.0'
-    implementation 'org.flywaydb:flyway-core:10.15.2'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.15.2'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.15.2'
+    implementation 'org.flywaydb:flyway-core:10.17.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.17.1'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.17.1'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
     exclude group: 'junit', module: 'junit'
     exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
