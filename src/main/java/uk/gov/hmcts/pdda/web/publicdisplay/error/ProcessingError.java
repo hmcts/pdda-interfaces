@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.error;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.ProcessingInstance;
 
 import java.io.Serializable;

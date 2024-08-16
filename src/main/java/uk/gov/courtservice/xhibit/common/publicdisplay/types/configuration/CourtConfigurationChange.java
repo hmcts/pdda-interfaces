@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.types.configuration;
+package uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration;
 
 import java.io.Serializable;
 
@@ -33,7 +33,7 @@ public class CourtConfigurationChange implements Serializable {
 
     private final Integer courtId;
 
-    private Boolean forceRecreate = Boolean.TRUE;
+    private boolean forceRecreate = Boolean.TRUE;
 
     /**
      * Construct a general CourtConfigurationChange that results in a complete recreate of all
