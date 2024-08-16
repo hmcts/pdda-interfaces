@@ -1,12 +1,13 @@
--- Set Court 80 as CPP
-update xhb_court 
+-- Set Court 82 as CPP
+update xhb_court
 set cpp_court = 'Y'
-where court_id = 80;
+where court_id = 82;
 
 -- Reset the cppStagingINbound test data
 update XHB_CPP_STAGING_INBOUND
 set validation_Status = 'NP', processing_Status = null, time_loaded = current_timestamp
 where cpp_staging_inbound_id = 321001;
+
 delete from XHB_CPP_FORMATTING
 where staging_table_id = 321001;
 
@@ -21,7 +22,7 @@ set format_Status = 'ND', creation_date = current_timestamp
 where formatting_id = 621000;
 
 -- Reset CourtListQuery / AllCaseStatusQuery
-update xhb_hearing_list 
+update xhb_hearing_list
 set start_date = current_date, end_date = current_date
 where list_id = 1;
 
