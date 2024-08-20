@@ -3,7 +3,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.EventType;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.exceptions.UnrecognizedEventException;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.exceptions.RulesConfigurationException;
 

@@ -1,19 +1,19 @@
 package uk.gov.hmcts;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ActivateCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.AddCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.CaseStatusEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.ConfigurationChangeEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.HearingStatusEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicNoticeEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.UpdateCaseEvent;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CaseChangeInformation;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CaseCourtLogInformation;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ActivateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.AddCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.UpdateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeInformation;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLogInformation;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
-import uk.gov.hmcts.pdda.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 

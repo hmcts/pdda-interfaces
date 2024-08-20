@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.common.publicdisplay.types.configuration;
+package uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration;
 
 /**
  * <p>
@@ -31,7 +31,7 @@ public class CourtRotationSetConfigurationChange extends CourtConfigurationChang
 
     static final long serialVersionUID = 5393913310600248721L;
 
-    private final Integer rotationSetId;
+    private final int rotationSetId;
 
     /**
      * Creates a new CourtRotationSetConfigurationChange object. Will not force recreation of

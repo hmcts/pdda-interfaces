@@ -334,4 +334,8 @@ Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
    (72, 'scheduledtasks.PREPRODmidM5', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (87, 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask');
 COMMIT;
