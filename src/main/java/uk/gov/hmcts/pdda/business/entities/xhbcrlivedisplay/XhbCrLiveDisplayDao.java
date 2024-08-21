@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CR_LIVE_DISPLAY")
+@NamedQuery(name = "XHB_CR_LIVE_DISPLAY.findLiveDisplaysWhereStatusNotNull",
+    query = "SELECT o from XHB_CR_LIVE_DISPLAY o WHERE o.status IS NOT NULL ")
 public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;
