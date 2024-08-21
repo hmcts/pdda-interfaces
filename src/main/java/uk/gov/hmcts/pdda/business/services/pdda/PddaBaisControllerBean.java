@@ -66,7 +66,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
      */
     public void retrieveFromBaisCP() {
         methodName = "retrieveFromBaisCP()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
         getPddaHelper().retrieveFromBaisCp();
     }
 
@@ -77,7 +77,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
      */
     public void retrieveFromBaisXhibit() {
         methodName = "retrieveFromBaisXhibit()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(methodName, LOG_CALLED);
         getPddaHelper().retrieveFromBaisXhibit();
     }
 
