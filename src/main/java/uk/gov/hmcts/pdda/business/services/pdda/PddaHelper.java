@@ -111,18 +111,23 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             LOG.debug("retrieveFromBais({},{})", config, validation);
             Map<String, String> files = getBaisFileList(config, validation);
+            LOG.debug("Total of {}{}", files.size()," files, before processing, in this transaction.");
             if (!files.isEmpty()) {
-
                 // Process the files we have retrieved.
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     String filename = entry.getKey();
                     String clobData = entry.getValue();
-
                     processBaisFile(config, validation, filename, clobData);
                 }
             }
         } finally {
             if (config.session != null) {
+                // Check the contents of Bais to verify all processed files are deleted
+                LOG.debug("Checking contents of Bais prior to closing the connection");
+                Map<String, String> files = getBaisFileList(config, validation);
+                if (files.isEmpty()) {
+                    LOG.debug("Contents of Bais is now empty");
+                }
                 PddaSftpUtil.disconnectSession(config.session);
                 config.setSession(null);
             }
@@ -161,6 +166,7 @@ public class PddaHelper extends XhibitPddaHelper {
             createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
 
             getSftpHelper().sftpDeleteFile(config.session, config.remoteFolder, filename);
+            LOG.debug("Removed file from bais after processing: {}", filename);
         } catch (JSchException | SftpException | NotFoundException ex) {
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
             throw new EJBException(ex);
