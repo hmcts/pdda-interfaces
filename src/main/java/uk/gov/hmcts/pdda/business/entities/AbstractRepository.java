@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.entities;
 
-import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -150,7 +149,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * Create local one off EntityManager for save, update, delete.
      */
     private EntityManager createEntityManager() {
-        return EntityManagerUtil.getEntityManager();
+        return getEntityManager();
     }
 
     public void clearEntityManager() {
