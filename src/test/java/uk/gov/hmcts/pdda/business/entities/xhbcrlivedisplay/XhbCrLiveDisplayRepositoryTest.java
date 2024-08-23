@@ -49,14 +49,12 @@ class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDis
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
         Integer version = Integer.valueOf(3);
-        String obsInd = "N";
         XhbCrLiveDisplayDao result = new XhbCrLiveDisplayDao();
         result.setCrLiveDisplayId(crLiveDisplayId);
         result.setCourtRoomId(courtRoomId);
         result.setScheduledHearingId(scheduledHearingId);
         result.setTimeStatusSet(timeStatusSet);
         result.setStatus(status);
-        result.setObsInd(obsInd);
         result.setLastUpdateDate(lastUpdateDate);
         result.setCreationDate(creationDate);
         result.setLastUpdatedBy(lastUpdatedBy);

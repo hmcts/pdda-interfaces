@@ -40,9 +40,6 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
     @Column(name = "STATUS")
     private String status;
 
-    @Column(name = "OBS_IND")
-    private String obsInd;
-
 
     // Non-columns
     @jakarta.persistence.Transient
@@ -60,7 +57,6 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         setScheduledHearingId(otherData.getScheduledHearingId());
         setTimeStatusSet(otherData.getTimeStatusSet());
         setStatus(otherData.getStatus());
-        setObsInd(otherData.getObsInd());
         setLastUpdateDate(otherData.getLastUpdateDate());
         setCreationDate(otherData.getCreationDate());
         setLastUpdatedBy(otherData.getLastUpdatedBy());
@@ -111,14 +107,6 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getObsInd() {
-        return obsInd;
-    }
-
-    public void setObsInd(String obsInd) {
-        this.obsInd = obsInd;
     }
 
     public XhbScheduledHearingDao getXhbScheduledHearing() {

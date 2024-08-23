@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -38,6 +39,7 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
     private static final String LOG_CALLED = " called";
 
     private String methodName;
+    private ClearDownHelper clearDownHelper;
 
     public ClearDownControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -54,7 +56,7 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      */
     @Override
     public void doTask() {
-        resetCrLiveDisplay();
+        resetLiveDisplays();
         resetCrLiveInternet();
     }
 
@@ -63,18 +65,33 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      * Reset the records in XHB_CR_LIVE_DISPLAY.
      * </p>
      */
-    public void resetCrLiveDisplay() {
-        methodName = "resetCrLiveDisplay()";
+    public void resetLiveDisplays() {
+        methodName = "resetLiveDisplays()";
         LOG.debug(methodName + LOG_CALLED);
+        getClearDownHelper().resetLiveDisplays();
+        
     }
 
     /**
      * <p>
      * Reset the records in XHB_CR_LIVE_INTERNET.
+     * This might not be needed as XHB_CR_LIVE_INTERNET does not exist in PDDA?
      * </p>
      */
     public void resetCrLiveInternet() {
         methodName = "resetCrLiveInternet()";
         LOG.debug(methodName + LOG_CALLED);
+    }
+    
+    /**
+     * Returns a reference to the pddaDlNotifierHelper object.
+     * 
+     * @return pddaDlNotifierHelper
+     */
+    private ClearDownHelper getClearDownHelper() {
+        if (clearDownHelper == null) {
+            clearDownHelper = new ClearDownHelper(EntityManagerUtil.getEntityManager());
+        }
+        return clearDownHelper;
     }
 }
