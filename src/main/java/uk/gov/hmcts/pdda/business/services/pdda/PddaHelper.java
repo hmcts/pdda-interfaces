@@ -273,6 +273,7 @@ public class PddaHelper extends XhibitPddaHelper {
             LOG.debug("Connection validated successfully");
             sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
                 sftpConfig.password, sftpConfig.host, sftpConfig.port));
+            LOG.debug("A session has been established");
         } catch (Exception ex) {
             sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
             return sftpConfig;

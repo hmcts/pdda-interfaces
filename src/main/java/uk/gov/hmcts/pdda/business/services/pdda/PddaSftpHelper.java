@@ -80,6 +80,7 @@ public class PddaSftpHelper {
         LOG.debug(methodName, LOG_CALLED);
 
         Session session = getJSch().getSession(username, host, port);
+        LOG.debug("We now have a session but is it null: {}", session == null);
         session.setConfig("StrictHostKeyChecking", "no");
         session.setPassword(password);
         LOG.debug("Connecting to host: {}:{} with username: {} ", host, port, username);
