@@ -85,6 +85,7 @@ public class PddaSftpHelper {
         session.setPassword(password);
         LOG.debug("Connecting to host: {}:{} with username: {} ", host, port, username);
         session.connect();
+        LOG.debug("Has a session been established? {}", session == null);
         return session;
     }
 
