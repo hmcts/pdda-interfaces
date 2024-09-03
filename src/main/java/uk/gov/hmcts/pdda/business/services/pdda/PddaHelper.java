@@ -80,10 +80,14 @@ public class PddaHelper extends XhibitPddaHelper {
     public void retrieveFromBaisCp() {
         methodName = "retrieveFromBaisCp()";
         LOG.debug(methodName, LOG_CALLED);
+        LOG.info(methodName, LOG_CALLED);
+        LOG.error(methodName, LOG_CALLED);
 
         SftpConfig config = getBaisCpConfigs();
         if (config.errorMsg != null) {
             LOG.error(config.errorMsg);
+            LOG.info(config.errorMsg);
+            LOG.debug(config.errorMsg);
             return;
         }
 
@@ -273,6 +277,7 @@ public class PddaHelper extends XhibitPddaHelper {
             LOG.debug("Connection validated successfully");
             sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
                 sftpConfig.password, sftpConfig.host, sftpConfig.port));
+            LOG.debug("A session has been established");
         } catch (Exception ex) {
             sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
             return sftpConfig;
