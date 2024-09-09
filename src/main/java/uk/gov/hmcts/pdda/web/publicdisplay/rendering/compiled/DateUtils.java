@@ -5,13 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 public final class DateUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(DateUtils.class);
-
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HHmm");
+    public static final DateTimeFormatter DATETIME_NOSEC_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmm");  
+    
     private DateUtils() {
     }
 
@@ -23,6 +28,14 @@ public final class DateUtils {
      */
     public static Date getDate() {
         return new Date();
+    }
+    
+    public static String getDate(LocalDateTime localDateTime) {
+        return localDateTime.format(DATE_FORMAT); 
+    }
+    
+    public static String getTime(LocalDateTime localDateTime) {
+        return localDateTime.format(TIME_FORMAT); 
     }
 
     public static String get2digits(int valueIn) {
@@ -112,4 +125,5 @@ public final class DateUtils {
         }
         return null;
     }
+    
 }
