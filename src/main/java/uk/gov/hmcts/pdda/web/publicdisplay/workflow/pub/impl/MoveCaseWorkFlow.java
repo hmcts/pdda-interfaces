@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.events.MoveCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.DocumentsForEvent;
 

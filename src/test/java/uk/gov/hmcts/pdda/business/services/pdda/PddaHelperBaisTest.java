@@ -143,6 +143,7 @@ class PddaHelperBaisTest {
                 EasyMock.isA(String.class), EasyMock.isA(Integer.class))).andReturn(mockSession);
             EasyMock.expect(mockPddaSftpHelper.sftpFetch(EasyMock.isA(Session.class), EasyMock.isA(String.class),
                 EasyMock.isA(PddaHelper.BaisCpValidation.class))).andReturn(dummyMap);
+            EasyMock.expectLastCall().times(2);
             mockSession.disconnect();
             EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
                 .andReturn(courtDaos);
@@ -212,6 +213,7 @@ class PddaHelperBaisTest {
                 EasyMock.isA(String.class), EasyMock.isA(Integer.class))).andReturn(mockSession);
             EasyMock.expect(mockPddaSftpHelper.sftpFetch(EasyMock.isA(Session.class), EasyMock.isA(String.class),
                 EasyMock.isA(PddaHelper.BaisXhibitValidation.class))).andReturn(dummyMap);
+            EasyMock.expectLastCall().times(2);
             mockSession.disconnect();
             for (FileResults entry : dummyFiles) {
                 LOG.debug("Test:{}",entry);

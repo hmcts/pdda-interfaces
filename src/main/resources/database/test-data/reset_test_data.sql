@@ -1,12 +1,13 @@
--- Set Court 80 as CPP
+-- Set Court 82 as CPP
 update xhb_court
 set cpp_court = 'Y'
-where court_id = 80;
+where court_id = 82;
 
 -- Reset the cppStagingINbound test data
 update XHB_CPP_STAGING_INBOUND
 set validation_Status = 'NP', processing_Status = null, time_loaded = current_timestamp
 where cpp_staging_inbound_id = 321001;
+
 delete from XHB_CPP_FORMATTING
 where staging_table_id = 321001;
 

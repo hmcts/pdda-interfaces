@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import ch.qos.logback.classic.Level;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.DummyFileUtil;
 
 import java.io.InputStream;
@@ -245,6 +248,8 @@ class PddaSftpHelperTest {
     @Test
     void testSftpFetchSuccess() {
         // Setup
+        Logger root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+        ((ch.qos.logback.classic.Logger) root).setLevel(Level.DEBUG);
         String remoteFolder = LINUX_REMOTE_FOLDER;
         List<String> filenamesList = DummyFileUtil.getFilenames();
         Map<String, InputStream> files = DummyFileUtil.getFiles(filenamesList);

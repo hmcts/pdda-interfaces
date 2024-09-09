@@ -2,9 +2,9 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
-import uk.gov.hmcts.pdda.common.publicdisplay.events.PublicDisplayEvent;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
