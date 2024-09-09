@@ -212,7 +212,7 @@ dependencies {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
-    implementation 'ch.qos.logback:logback-core:1.5.7'
+    implementation 'ch.qos.logback:logback-core:1.5.8'
     implementation 'ch.qos.logback:logback-classic:1.5.7'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
