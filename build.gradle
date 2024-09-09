@@ -181,7 +181,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
-    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.openjpa:openjpa-persistence-jdbc:4.0.0'
     implementation 'org.codehaus.castor:castor-codegen:1.4.1'
     implementation 'xalan:serializer:2.7.3'
