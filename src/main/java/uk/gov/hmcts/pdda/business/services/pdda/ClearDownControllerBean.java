@@ -20,7 +20,7 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
  * Description:
  * </p>
  * <p>
- * Copyright: Copyright (c) 2022
+ * Copyright: Copyright (c) 2024
  * </p>
  * <p>
  * Company: CGI
