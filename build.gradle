@@ -196,7 +196,7 @@ dependencies {
     implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
-    implementation 'org.postgresql:postgresql:42.7.3'
+    implementation 'org.postgresql:postgresql:42.7.4'
     implementation 'net.bytebuddy:byte-buddy:1.14.17'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
