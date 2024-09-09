@@ -78,8 +78,9 @@ public class ClearDownHelper {
     public LocalDateTime getClearDownTime(String propertyValue) {
         LOG.debug("getclearDownTime({})", propertyValue);
         String todaysDate = DateUtils.getDate(LocalDateTime.now());
+        String todaysTime = propertyValue.replace(":", "").substring(0, 4);
         try {
-            return LocalDateTime.parse(todaysDate + propertyValue, DATETIME_FORMAT);
+            return LocalDateTime.parse(todaysDate + todaysTime, DATETIME_FORMAT);
         } catch (DateTimeParseException ex) {
             return null;
         }

@@ -338,4 +338,8 @@ Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
    (87, 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
+   (88, 'RESET_DISPLAY_IWP_TIME', '21:00');
 COMMIT;
