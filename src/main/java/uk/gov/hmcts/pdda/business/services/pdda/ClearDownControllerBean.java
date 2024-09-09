@@ -36,9 +36,7 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 public class ClearDownControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClearDownControllerBean.class);
-    private static final String LOG_CALLED = " called";
 
-    private String methodName;
     private ClearDownHelper clearDownHelper;
 
     public ClearDownControllerBean(EntityManager entityManager) {
@@ -56,8 +54,9 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      */
     @Override
     public void doTask() {
-        resetLiveDisplays();
-        resetCrLiveInternet();
+        if (getClearDownHelper().isClearDownRequired()) {
+            resetLiveDisplays();
+        }
     }
 
     /**
@@ -66,21 +65,9 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      * </p>
      */
     public void resetLiveDisplays() {
-        methodName = "resetLiveDisplays()";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug("resetLiveDisplays()");
         getClearDownHelper().resetLiveDisplays();
         
-    }
-
-    /**
-     * <p>
-     * Reset the records in XHB_CR_LIVE_INTERNET.
-     * This might not be needed as XHB_CR_LIVE_INTERNET does not exist in PDDA?
-     * </p>
-     */
-    public void resetCrLiveInternet() {
-        methodName = "resetCrLiveInternet()";
-        LOG.debug(methodName + LOG_CALLED);
     }
     
     /**
