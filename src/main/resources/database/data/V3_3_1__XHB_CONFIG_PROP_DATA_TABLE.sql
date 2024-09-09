@@ -2,7 +2,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS xhb_config_prop_idx ON xhb_config_prop (proper
 insert into xhb_config_prop
 (config_prop_id, property_name, property_value)
 values
-(nextval('xhb_config_prop_seq'), 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask, courtellisttask'),
+(nextval('xhb_config_prop_seq'), 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask,cleardowntask,courtellisttask'),
 (nextval('xhb_config_prop_seq'), 'COURTEL_LIST_AMOUNT', '5'),
 (nextval('xhb_config_prop_seq'), 'COURTEL_MAX_RETRY', '5'),
 (nextval('xhb_config_prop_seq'), 'MESSAGE_LOOKUP_DELAY', '60'),
