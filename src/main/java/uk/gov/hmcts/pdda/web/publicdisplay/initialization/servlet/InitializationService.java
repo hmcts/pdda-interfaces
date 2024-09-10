@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
 
 import java.util.Locale;
@@ -62,6 +63,8 @@ public final class InitializationService {
     private long retryPeriod = 60 * ONE_SECOND;
 
     private EntityManagerFactory entityManagerFactory;
+    
+    private Environment env;
     
     /**
      * DOn't instantiate me.
@@ -227,5 +230,13 @@ public final class InitializationService {
 
     public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+    
+    public Environment getEnvironment() {
+        return env;
+    }
+
+    public void setEnvironment(Environment env) {
+        this.env = env;
     }
 }

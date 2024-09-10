@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 
 import java.util.Locale;
@@ -58,12 +59,16 @@ class InitServletTest {
 
     @Mock
     private ServletConfig config;
-    
+
+    @Mock
+    private Environment mockEnvironment;
+
     @Mock
     private EntityManagerFactory mockEntityManagerFactory;
 
     @InjectMocks
-    private final InitServlet classUnderTest = new InitServlet(mockEntityManagerFactory);
+    private final InitServlet classUnderTest =
+        new InitServlet(mockEntityManagerFactory, mockEnvironment);
 
     @BeforeAll
     public static void setUp() throws Exception {
@@ -88,10 +93,13 @@ class InitServletTest {
         mockInitializationService.setDefaultLocale(dummyLocale);
         Mockito.when(config.getInitParameter("retry.period")).thenReturn(retryPeriod);
         mockInitializationService.setRetryPeriod(Long.parseLong(retryPeriod));
-        Mockito.when(config.getInitParameter("initialization.delay")).thenReturn(initializationDelay);
+        Mockito.when(config.getInitParameter("initialization.delay"))
+            .thenReturn(initializationDelay);
         mockInitializationService.setInitializationDelay(Long.parseLong(initializationDelay));
-        Mockito.when(config.getInitParameter("num.initialization.workers")).thenReturn(initilizationWorkers);
-        mockInitializationService.setNumInitializationWorkers(Integer.parseInt(initilizationWorkers));
+        Mockito.when(config.getInitParameter("num.initialization.workers"))
+            .thenReturn(initilizationWorkers);
+        mockInitializationService
+            .setNumInitializationWorkers(Integer.parseInt(initilizationWorkers));
         mockInitializationService.initialize();
 
         boolean result = false;
