@@ -27,8 +27,9 @@ public class WebAppInitializer implements ServletContextInitializer {
     @Autowired
     private CppStagingInboundControllerBean csicb;
 
-    public WebAppInitializer(EntityManagerFactory entityManagerFactory) {
+    public WebAppInitializer(EntityManagerFactory entityManagerFactory, Environment environment) {
         this.entityManagerFactory = entityManagerFactory;
+        this.environment = environment;
     }
 
     @Override
