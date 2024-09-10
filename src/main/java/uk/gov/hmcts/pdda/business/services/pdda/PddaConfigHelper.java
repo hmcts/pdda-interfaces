@@ -29,6 +29,7 @@ public class PddaConfigHelper {
     private static final String CONFIG_PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String CONFIG_PDDA_SWITCHER_DEFAULT = "3";
     protected static final String EMPTY_STRING = "";
+    private static final String LOG_BRACKETS = "{}{}";
 
     protected static final String LOG_CALLED = " called";
     private ConfigPropMaintainer configPropMaintainer;
@@ -69,9 +70,9 @@ public class PddaConfigHelper {
     public String getPddaSwitcher() {
         if (pddaSwitcher == null) {
             methodName = "getPDDASwitcher()";
-            LOG.debug(methodName + LOG_CALLED);
+            LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
             String result = getConfigValue(CONFIG_PDDA_SWITCHER);
-            LOG.debug("PDDA_SWITCHER =" + result);
+            LOG.debug(LOG_BRACKETS, "PDDA_SWITCHER = ", result);
             pddaSwitcher = result != null ? result : CONFIG_PDDA_SWITCHER_DEFAULT;
         }
         return pddaSwitcher;
@@ -79,15 +80,15 @@ public class PddaConfigHelper {
 
     public String getConfigValue(final String propertyName) {
         methodName = "getConfigValue(" + propertyName + ")";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
         String result = getConfigPropMaintainer().getPropertyValue(propertyName);
-        LOG.debug(propertyName + " = " + result);
+        LOG.debug("{}{}{}", propertyName, " = ", result);
         return result;
     }
     
     public String getMandatoryConfigValue(final String propertyName) {
         methodName = "getMandatoryConfigValue(" + propertyName + ")";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
         String result = getConfigValue(propertyName);
         validateConfigValue(result);
         return result;
@@ -95,15 +96,15 @@ public class PddaConfigHelper {
     
     public String getEnvValue(final String propertyName) {
         methodName = "getConfigValue(" + propertyName + ")";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
         String result = environment.getProperty(propertyName);
-        LOG.debug(propertyName + " = " + result);
+        LOG.debug("{}{}{}", propertyName, " = ", result);
         return result;
     }
     
     public String getMandatoryEnvValue(final String propertyName) {
         methodName = "getMandatoryEnvValue(" + propertyName + ")";
-        LOG.debug(methodName + LOG_CALLED);
+        LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
         String result = getEnvValue(propertyName);
         validateConfigValue(result);
         return result;
