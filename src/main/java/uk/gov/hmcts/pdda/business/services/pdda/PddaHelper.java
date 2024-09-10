@@ -229,14 +229,14 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Fetch and validate the properties
         try {
-            sftpConfig.username = getMandatoryConfigValue(configUsername);
+            sftpConfig.username = getMandatoryEnvValue(configUsername);
             LOG.debug("SFTP Username: {}", sftpConfig.username);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configUsername + NOT_FOUND;
             return sftpConfig;
         }
         try {
-            sftpConfig.password = getMandatoryConfigValue(configPassword);
+            sftpConfig.password = getMandatoryEnvValue(configPassword);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configPassword + NOT_FOUND;
             return sftpConfig;
@@ -250,7 +250,7 @@ public class PddaHelper extends XhibitPddaHelper {
         }
         String hostAndPort;
         try {
-            hostAndPort = getMandatoryConfigValue(Config.SFTP_HOST);
+            hostAndPort = getMandatoryEnvValue(Config.SFTP_HOST);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
