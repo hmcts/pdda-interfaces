@@ -22,7 +22,7 @@ public class WebAppInitializer implements ServletContextInitializer {
     private final EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     @Autowired
     private CppStagingInboundControllerBean csicb;
