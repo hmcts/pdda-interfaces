@@ -8,6 +8,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -84,6 +85,9 @@ class PddaHelperTest {
 
     @Mock
     private SftpConfig mockSftpConfig;
+    
+    @Mock
+    private Environment mockEnvironment;
 
     @Mock
     private final PddaHelper mockPddaHelper = new PddaHelper(mockEntityManager);
@@ -94,7 +98,7 @@ class PddaHelperTest {
     @Test
     void testDefaultConstructor() {
         boolean result = true;
-        new PddaHelper(mockEntityManager, mockXhbConfigPropRepository);
+        new PddaHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment);
         assertTrue(result, NOT_TRUE);
     }
     

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
+import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,13 +67,13 @@ public class PddaHelper extends XhibitPddaHelper {
     private static final String NOT_FOUND = " not found";
 
     public PddaHelper(EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, InitializationService.getInstance().getEnvironment());
     }
 
     // Junit constructor
     public PddaHelper(EntityManager entityManager,
-        XhbConfigPropRepository xhbConfigPropRepository) {
-        super(entityManager, xhbConfigPropRepository);
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment) {
+        super(entityManager, xhbConfigPropRepository, environment);
     }
 
     /**

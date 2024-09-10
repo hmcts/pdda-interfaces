@@ -3,11 +3,13 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier.XhbPddaDlNotifierDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier.XhbPddaDlNotifierRepository;
+import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,12 +49,13 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
     private XhbCourtRepository courtRepository;
 
     public PddaDlNotifierHelper(EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, InitializationService.getInstance().getEnvironment());
     }
 
     // Junit constructor
-    public PddaDlNotifierHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository) {
-        super(entityManager, xhbConfigPropRepository);
+    public PddaDlNotifierHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
+        Environment environment) {
+        super(entityManager, xhbConfigPropRepository, environment);
     }
     
     public boolean isDailyNotifierRequired() {
