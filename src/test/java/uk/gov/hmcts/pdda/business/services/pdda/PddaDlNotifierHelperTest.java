@@ -8,6 +8,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -64,9 +65,12 @@ class PddaDlNotifierHelperTest {
     @Mock
     private XhbPddaDlNotifierRepository mockXhbPddaDlNotifierRepository;
 
+    @Mock
+    private Environment mockEnvironment;
+    
     @TestSubject
     private final PddaDlNotifierHelper classUnderTest =
-        new PddaDlNotifierHelper(mockEntityManager, mockXhbConfigPropRepository);
+        new PddaDlNotifierHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment);
 
 
     private static class Config {

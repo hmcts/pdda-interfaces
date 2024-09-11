@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -37,13 +38,14 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private CppStagingInboundHelper cppStagingInboundHelper;
     private PddaSftpHelper sftpHelper;
 
-    protected XhibitPddaHelper(EntityManager entityManager) {
-        super(entityManager);
+    protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
+        super(entityManager, environment);
     }
     
     // Junit constructor
-    protected XhibitPddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository) {
-        super(entityManager, xhbConfigPropRepository);
+    protected XhibitPddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
+        Environment environment) {
+        super(entityManager, xhbConfigPropRepository, environment);
     }
 
     /**

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
+import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,13 +67,13 @@ public class PddaHelper extends XhibitPddaHelper {
     private static final String NOT_FOUND = " not found";
 
     public PddaHelper(EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, InitializationService.getInstance().getEnvironment());
     }
 
     // Junit constructor
     public PddaHelper(EntityManager entityManager,
-        XhbConfigPropRepository xhbConfigPropRepository) {
-        super(entityManager, xhbConfigPropRepository);
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment) {
+        super(entityManager, xhbConfigPropRepository, environment);
     }
 
     /**
@@ -227,14 +229,14 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Fetch and validate the properties
         try {
-            sftpConfig.username = getMandatoryConfigValue(configUsername);
+            sftpConfig.username = getMandatoryEnvValue(configUsername);
             LOG.debug("SFTP Username: {}", sftpConfig.username);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configUsername + NOT_FOUND;
             return sftpConfig;
         }
         try {
-            sftpConfig.password = getMandatoryConfigValue(configPassword);
+            sftpConfig.password = getMandatoryEnvValue(configPassword);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configPassword + NOT_FOUND;
             return sftpConfig;
@@ -248,7 +250,7 @@ public class PddaHelper extends XhibitPddaHelper {
         }
         String hostAndPort;
         try {
-            hostAndPort = getMandatoryConfigValue(Config.SFTP_HOST);
+            hostAndPort = getMandatoryEnvValue(Config.SFTP_HOST);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
