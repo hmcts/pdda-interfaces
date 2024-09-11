@@ -81,7 +81,7 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
 
         BranchEventXmlNode laoOptions =
             (BranchEventXmlNode) node.get("E30200_Long_Adjourn_Options");
-        String laoType = ((LeafEventXmlNode) (laoOptions.get("E30200_LAO_Type"))).getValue();
+        String laoType = ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Type")).getValue();
 
         LOG.debug("laoType: " + laoType);
 

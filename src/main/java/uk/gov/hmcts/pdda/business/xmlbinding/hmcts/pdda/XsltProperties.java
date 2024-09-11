@@ -51,7 +51,7 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
             XsltProperties temp = (XsltProperties) obj;
             if (this.getList() != null) {
-                if (temp.getList() == null || !(this.getList().equals(temp.getList()))) {
+                if (temp.getList() == null || !this.getList().equals(temp.getList())) {
                     return false;
                 }
             } else if (temp.getList() != null) {

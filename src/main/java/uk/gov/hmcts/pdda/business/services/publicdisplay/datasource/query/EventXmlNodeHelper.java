@@ -157,6 +157,6 @@ public final class EventXmlNodeHelper {
     }
 
     private static boolean checkForWhiteSpace(Node node) {
-        return node.getNodeType() == (Node.TEXT_NODE) && "".equals(node.getNodeValue().trim());
+        return node.getNodeType() == Node.TEXT_NODE && "".equals(node.getNodeValue().trim());
     }
 }

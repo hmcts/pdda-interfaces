@@ -230,7 +230,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
         BranchEventXmlNode laoOptions =
             (BranchEventXmlNode) node.get("E30200_Long_Adjourn_Options");
-        String laoType = ((LeafEventXmlNode) (laoOptions.get("E30200_LAO_Type"))).getValue();
+        String laoType = ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Type")).getValue();
 
         // Add LAO Type text
         if ("E30200_Case_to_be_listed_in_week_commencing".equals(laoType)) {

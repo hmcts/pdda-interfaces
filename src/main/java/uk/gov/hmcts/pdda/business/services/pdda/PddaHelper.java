@@ -344,7 +344,7 @@ public class PddaHelper extends XhibitPddaHelper {
         LOG.debug("respondToPddaMessage({})", messages);
         for (XhbPddaMessageDao message : messages) {
             // Set Filename
-            String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
@@ -371,7 +371,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         for (XhbCppStagingInboundDao cppMessage : cppMessages) {
             // Set Filename
-            String fileName = (cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents

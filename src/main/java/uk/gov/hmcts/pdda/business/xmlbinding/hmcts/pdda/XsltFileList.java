@@ -55,7 +55,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
             XsltFileList temp = (XsltFileList) obj;
             if (this.getList() != null) {
                 if (temp.getList() == null
-                    || !(this.getList().equals(temp.getList()))) {
+                    || !this.getList().equals(temp.getList())) {
                     return false;
                 }
             } else if (temp.getList() != null) {
