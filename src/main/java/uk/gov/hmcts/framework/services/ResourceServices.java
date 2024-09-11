@@ -28,6 +28,7 @@ import java.util.Locale;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class ResourceServices {
 
     private static final char FULLSTOP = '.';

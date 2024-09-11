@@ -27,6 +27,7 @@ import java.net.URL;
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: DiscoveryServices.java,v 1.3 2006/06/05 12:30:18 bzjrnl Exp $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class DiscoveryServices {
     private static final Logger LOG = LoggerFactory.getLogger(DiscoveryServices.class);
 

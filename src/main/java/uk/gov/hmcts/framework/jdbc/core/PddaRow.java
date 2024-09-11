@@ -35,6 +35,7 @@ import java.sql.Timestamp;
  * @author Meeraj Kunnumpurath
  * @version $Id: Row.java,v 1.19 2014/06/20 18:01:08 atwells Exp $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class PddaRow {
     /** Backing result set. */
     private final ResultSet rs;

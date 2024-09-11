@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
  * 
  * @author pznwc5
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class RecordingHandler extends DecoratingHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(RecordingHandler.class);

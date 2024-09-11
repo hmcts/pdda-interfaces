@@ -35,6 +35,7 @@ import javax.sql.rowset.serial.SerialClob;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class DefaultStatementCreator implements StatementCreator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultStatementCreator.class);

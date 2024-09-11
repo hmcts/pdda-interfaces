@@ -18,6 +18,7 @@ import java.util.StringTokenizer;
  * @author pznwc5
  * 
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class DecoratorFactory {
     private static final Logger LOG = LoggerFactory.getLogger(DecoratorFactory.class);
 
