@@ -24,6 +24,7 @@ import java.util.List;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.LawOfDemeter")
 public class CppFormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(CppFormattingControllerBean.class);

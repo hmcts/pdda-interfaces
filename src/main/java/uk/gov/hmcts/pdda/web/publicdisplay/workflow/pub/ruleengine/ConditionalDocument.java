@@ -23,6 +23,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.rules.Rule;
  * @version $Id: ConditionalDocument.java,v 1.4 2006/06/05 12:32:37 bzjrnl Exp $
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class ConditionalDocument {
 
     private DisplayDocumentType[] docTypes;

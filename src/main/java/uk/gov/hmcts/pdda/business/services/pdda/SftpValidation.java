@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * SftpValidation.
  **/
+@SuppressWarnings("PMD.LawOfDemeter")
 public class SftpValidation {
     
     protected static final String EMPTY_STRING = "";

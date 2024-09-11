@@ -26,6 +26,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class ConfigurationChangeWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Creates a new ConfigurationChangeWorkFlow object.

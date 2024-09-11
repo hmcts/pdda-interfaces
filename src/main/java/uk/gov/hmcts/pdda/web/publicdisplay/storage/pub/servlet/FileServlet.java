@@ -45,6 +45,7 @@ import java.util.Date;
  * @version $Revision: 1.11 $
  */
 @WebServlet("/FileServlet")
+@SuppressWarnings("PMD.LawOfDemeter")
 public class FileServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

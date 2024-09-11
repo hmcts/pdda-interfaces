@@ -30,6 +30,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.LawOfDemeter")
 public class FormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     @SuppressWarnings("unused")

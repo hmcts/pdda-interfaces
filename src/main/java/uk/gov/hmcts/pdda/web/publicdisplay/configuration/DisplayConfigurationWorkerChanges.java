@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public abstract class DisplayConfigurationWorkerChanges {
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationWorkerChanges.class);
