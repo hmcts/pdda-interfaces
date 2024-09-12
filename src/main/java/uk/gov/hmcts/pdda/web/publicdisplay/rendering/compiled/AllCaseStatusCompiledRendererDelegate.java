@@ -148,7 +148,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
                     cases.put(caseNumber, Boolean.FALSE);
                 }
             } else {
-                cases.put(caseNumber, Boolean.valueOf(hideThisDefendantInPublicDisplay));
+                cases.put(caseNumber, hideThisDefendantInPublicDisplay);
             }
         }
 

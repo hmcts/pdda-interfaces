@@ -99,7 +99,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         int[] courtArray = new int[courts.size()];
         Iterator<XhbCourtDao> courtIterator = courts.iterator();
         for (int i = 0; i < courtArray.length; i++) {
-            courtArray[i] = courtIterator.next().getCourtId().intValue();
+            courtArray[i] = courtIterator.next().getCourtId();
         }
         return courtArray;
     }
@@ -259,7 +259,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         LOG.debug(ENTERED, methodName);
 
         CourtConfigurationChange ccc =
-            new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue(), true);
+            new CourtDisplayConfigurationChange(courtId, displayId, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Display initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);
@@ -276,7 +276,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     public void initialiseCourt(final Integer courtId) {
         LOG.debug("initialiseCourt({})", courtId);
 
-        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId.intValue(), true);
+        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Court initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);

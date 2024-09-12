@@ -35,9 +35,9 @@ import java.util.Optional;
 public final class PublicNoticeChangeNotifier {
     private static final Logger LOG = LoggerFactory.getLogger(PublicNoticeChangeNotifier.class);
 
-    private static final Integer REPORTING_RESTRICTIONS = Integer.valueOf(21_200);
+    private static final Integer REPORTING_RESTRICTIONS = 21_200;
 
-    private static final Integer REPORTING_RESTRICTIONS_LIFTED = Integer.valueOf(21_201);
+    private static final Integer REPORTING_RESTRICTIONS_LIFTED = 21_201;
 
     /**
      * Constructor for the PublicNoticeChangeNotifier object.
@@ -87,7 +87,7 @@ public final class PublicNoticeChangeNotifier {
 
     private static void sendNotificationToNewPublicDisplays(CourtLogSubscriptionValue courtLogSubscriptionValue,
         boolean reportingRestrictionsChanged) {
-        sendNotificationToNewPublicDisplays(courtLogSubscriptionValue.getCourtRoomId().intValue(),
+        sendNotificationToNewPublicDisplays(courtLogSubscriptionValue.getCourtRoomId(),
             reportingRestrictionsChanged);
     }
 }

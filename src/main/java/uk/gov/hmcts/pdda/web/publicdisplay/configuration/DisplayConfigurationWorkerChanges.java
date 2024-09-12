@@ -114,7 +114,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     public RenderChanges getRenderChanges(DisplayDocumentType[] documentTypes,
         CourtRoomIdentifier courtRoom) {
-        if (courtRoom.getCourtId().intValue() != courtId) {
+        if (courtRoom.getCourtId() != courtId) {
             throw new PublicDisplayRuntimeException(
                 "Problem getting render changes for a court room and display documents: "
                     + "This instance is configured for court: " + courtId + " and not for court: "

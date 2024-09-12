@@ -21,11 +21,11 @@ public class PublicDisplayQueryLogEntry {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQueryLogEntry.class);
     
-    private final Integer shortAdjourn = Integer.valueOf(30_100);
-    private final Integer longAdjourn = Integer.valueOf(30_200);
-    private final Integer caseClosed = Integer.valueOf(30_300);
-    private final Integer resume = Integer.valueOf(10_500);
-    private final Integer[] validEventTypes = {shortAdjourn, longAdjourn, caseClosed, resume};
+    private static final Integer SHORT_ADJOURN = 30_100;
+    private static final Integer LONG_ADJOURN = 30_200;
+    private static final Integer CASE_CLOSED = 30_300;
+    private static final Integer RESUME = 10_500;
+    private final Integer[] validEventTypes = {SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME};
 
     private EntityManager entityManager;
     private XhbCourtLogEntryRepository xhbCourtLogEntryRepository;
@@ -79,14 +79,14 @@ public class PublicDisplayQueryLogEntry {
                 // Increment the valid event recNo
                 recNo++;
 
-                if (recNo == 1 && !resume.equals(eventType)) {
+                if (recNo == 1 && !RESUME.equals(eventType)) {
                     // Use the first record if its not a RESUME and there are no higher priority
                     // event logs
                     firstRec = courtLogEntryDao;
-                } else if (longAdjourn.equals(eventType)) {
+                } else if (LONG_ADJOURN.equals(eventType)) {
                     // Use the first caseClosedRec, if there is one, otherwise use this record
                     return caseClosedRec != null ? caseClosedRec : courtLogEntryDao;
-                } else if (caseClosed.equals(eventType) && caseClosedRec == null) {
+                } else if (CASE_CLOSED.equals(eventType) && caseClosedRec == null) {
                     // Store the first caseClosedRec
                     caseClosedRec = courtLogEntryDao;
                 }

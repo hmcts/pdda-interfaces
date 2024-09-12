@@ -234,8 +234,8 @@ public class RotationSetMaintainHelper {
             Integer rotationSetDdId = rotationSetDdLocal.getRotationSetDdId();
             if (rotationSet.hasRotationSetDd(rotationSetDdId)) {
                 XhbRotationSetDdDao rotationSetDd = rotationSet.getRotationSetDd(rotationSetDdId);
-                LOG.debug("Rotation Set DD for id " + rotationSetDd.getPrimaryKey() + " found.");
-                LOG.debug("Page order = " + rotationSetDd.getOrdering() + ", delay = " + rotationSetDd.getPageDelay());
+                LOG.debug("{}{}{}", "Rotation Set DD for id ", rotationSetDd.getPrimaryKey(), " found.");
+                LOG.debug("{}{}{}{}", "Page order = ", rotationSetDd.getOrdering(), ", delay = ", rotationSetDd.getPageDelay());
                 repo.update(rotationSetDd);
                 hasUpdatedOrDeleted = true;
             } else {
@@ -255,8 +255,8 @@ public class RotationSetMaintainHelper {
     private static void sendNotification(RotationSetComplexValue rotationSet, PublicDisplayNotifier notifier) {
         LOG.debug("sendNotification({},{})", rotationSet, notifier);
         CourtConfigurationChange ccc =
-            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId().intValue(),
-                rotationSet.getRotationSetsDao().getPrimaryKey().intValue());
+            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId(),
+                rotationSet.getRotationSetsDao().getPrimaryKey());
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }

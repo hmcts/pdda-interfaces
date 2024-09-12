@@ -121,7 +121,7 @@ public final class RendererUtils {
         Collection<DefendantName> names) {
         if (names != null && defOnCaseId != null) {
             for (DefendantName name : names) {
-                if (defOnCaseId.intValue() == name.getDefendantOnCaseId()) {
+                if (defOnCaseId == name.getDefendantOnCaseId()) {
                     return name.isHideInPublicDisplay();
                 }
             }
