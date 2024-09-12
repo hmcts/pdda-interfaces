@@ -175,7 +175,7 @@ public final class Sorter {
          * 
          * @return True - ascending
          */
-        public boolean getAscending() {
+        public boolean isAscending() {
             return this.ascending;
         }
 
@@ -264,7 +264,7 @@ public final class Sorter {
 
         private int adjustCompareResult(Integer result) {
             // If descending then reverse sign on result
-            if (getAscending()) {
+            if (isAscending()) {
                 return result;
             } else {
                 return result * (-1);
