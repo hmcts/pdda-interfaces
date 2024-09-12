@@ -221,8 +221,7 @@ public final class PublicNoticeXmlHelper {
                 log.debug(" Attribute value is {}", defPnStatus.getNodeValue());
 
                 theList.add(new DefinitivePublicNoticeStatusValue(Integer.valueOf(defPnid.getNodeValue()),
-                    Boolean.valueOf(defPnStatus.getNodeValue()).booleanValue()));
-
+                    Boolean.parseBoolean(defPnStatus.getNodeValue())));
             }
         }
 
