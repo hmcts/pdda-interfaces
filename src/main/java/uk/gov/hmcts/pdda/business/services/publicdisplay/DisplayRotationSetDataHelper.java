@@ -199,7 +199,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         String xhbDisplayTypeDesc = xhbDisplayType != null ? xhbDisplayType.getDescriptionCode() : null;
 
         // Construct the return object.
-        return new DisplayRotationSetData(displayUri, rotationSetDDs, display.getDisplayId().intValue(),
+        return new DisplayRotationSetData(displayUri, rotationSetDDs, display.getDisplayId(),
             rotationSet.getRotationSetId(), xhbDisplayTypeDesc);
     }
 
@@ -251,7 +251,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             courtRoomIds = new int[courtRoomArray.length + 1];
             // Get the court room IDs.
             for (int i = courtRoomArray.length - 1; i >= 0; i--) {
-                courtRoomIds[i] = courtRoomArray[i].getCourtRoomId().intValue();
+                courtRoomIds[i] = courtRoomArray[i].getCourtRoomId();
             }
             // Add the unassigned court room id to the last element of the
             // array.
@@ -261,7 +261,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             courtRoomIds = new int[courtRoomArray.length];
             // Get the court room IDs.
             for (int i = courtRoomArray.length - 1; i >= 0; i--) {
-                courtRoomIds[i] = courtRoomArray[i].getCourtRoomId().intValue();
+                courtRoomIds[i] = courtRoomArray[i].getCourtRoomId();
             }
         }
         return courtRoomIds;
@@ -298,7 +298,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
                 xhbDisplayDocumentRepository.findById(rotationSetDd.getDisplayDocumentId());
             if (xhbDisplayDocument.isPresent()) {
                 // Add the one or many RotationSetDisplayDocuments
-                result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay().intValue(),
+                result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay(),
                     xhbDisplayDocument.get().getLanguage(), xhbDisplayDocument.get().getCountry(),
                     xhbDisplayDocument.get().getDescriptionCode(), xhbDisplayDocument.get().getMultipleCourtYn(),
                     courtRoomIds));

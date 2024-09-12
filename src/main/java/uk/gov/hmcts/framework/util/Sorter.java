@@ -175,7 +175,7 @@ public final class Sorter {
          * 
          * @return True - ascending
          */
-        public Boolean getAscending() {
+        public boolean getAscending() {
             return this.ascending;
         }
 
@@ -212,16 +212,16 @@ public final class Sorter {
                         // If one object is null and the other not then
                         // they are not equal
                     } else if (res1 == null) {
-                        return adjustCompareResult(Integer.valueOf(-1));
+                        return adjustCompareResult(-1);
 
                     } else if (res2 == null) {
-                        return adjustCompareResult(Integer.valueOf(1));
+                        return adjustCompareResult(1);
                     }
                     /*
                      * Note compareTo can be on the class itself, or its superclasses
                      */
                     Integer result = getResult(res1, res2);
-                    if (result.intValue() != 0) {
+                    if (result != 0) {
 
                         // If descending then reverse sign on result
                         return adjustCompareResult(result);
@@ -264,10 +264,10 @@ public final class Sorter {
 
         private int adjustCompareResult(Integer result) {
             // If descending then reverse sign on result
-            if (getAscending().booleanValue()) {
-                return result.intValue();
+            if (getAscending()) {
+                return result;
             } else {
-                return result.intValue() * (-1);
+                return result * (-1);
             }
         }
     }

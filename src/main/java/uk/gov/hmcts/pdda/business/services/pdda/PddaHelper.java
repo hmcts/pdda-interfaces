@@ -415,7 +415,7 @@ public class PddaHelper extends XhibitPddaHelper {
         private static final String PDDA = "PDDA";
 
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, Integer.valueOf(4));
+            super(courtRepository, false, 4);
         }
 
         @Override
@@ -505,7 +505,7 @@ public class PddaHelper extends XhibitPddaHelper {
             {"DailyList", "FirmList", "WarnedList", "WebPage", "PublicDisplay"};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
-            super(courtRespository, false, Integer.valueOf(3));
+            super(courtRespository, false, 3);
         }
 
         @Override

@@ -259,7 +259,7 @@ public class DisplayConfigurationHelper {
     private static void sendNotification(final Integer displayId, final XhbDisplayDao displayLocal,
         final Integer courtId, PublicDisplayNotifier notifier) {
         LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
-        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue());
+        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId, displayId);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }
