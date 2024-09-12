@@ -18,6 +18,8 @@ public class AllCourtStatusValue extends PublicDisplayValue {
     private static final long serialVersionUID = 1L;
     
     private static final Logger LOG = LoggerFactory.getLogger(AllCourtStatusValue.class);
+    
+    private static final String EMPTY_STRING = "";
 
     /**
      * Reporting restricted.
@@ -104,7 +106,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
     }
 
     public boolean hasCaseTitle() {
-        return caseTitle != null && caseTitle.trim().length() > 0;
+        return caseTitle != null && !EMPTY_STRING.equals(caseTitle);
     }
 
     /**
