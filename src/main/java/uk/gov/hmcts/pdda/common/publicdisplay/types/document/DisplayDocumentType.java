@@ -250,14 +250,15 @@ public final class DisplayDocumentType implements Serializable {
         if (!(anObject instanceof DisplayDocumentType)) {
             return false;
         }
-        return shortName.equals(((DisplayDocumentType) anObject).shortName)
-            && longName.equals(((DisplayDocumentType) anObject).longName) && language == null
-            && ((DisplayDocumentType) anObject).language == null
-            || (language != null && ((DisplayDocumentType) anObject).language != null
-                && language.equals(((DisplayDocumentType) anObject).language))
-                && (country == null && ((DisplayDocumentType) anObject).country == null
-                    || (country != null && ((DisplayDocumentType) anObject).country != null)
-                        && country.equals(((DisplayDocumentType) anObject).country));
+        DisplayDocumentType displayDocumentType = (DisplayDocumentType) anObject;
+        return shortName.equals(displayDocumentType.shortName)
+            && longName.equals(displayDocumentType.longName) && language == null
+            && displayDocumentType.language == null
+            || (language != null && displayDocumentType.language != null
+                && language.equals(displayDocumentType.language))
+                && (country == null && displayDocumentType.country == null
+                    || (country != null && displayDocumentType.country != null)
+                        && country.equals(displayDocumentType.country));
     }
 
     /**
