@@ -235,7 +235,8 @@ public class RotationSetMaintainHelper {
             if (rotationSet.hasRotationSetDd(rotationSetDdId)) {
                 XhbRotationSetDdDao rotationSetDd = rotationSet.getRotationSetDd(rotationSetDdId);
                 LOG.debug("{}{}{}", "Rotation Set DD for id ", rotationSetDd.getPrimaryKey(), " found.");
-                LOG.debug("{}{}{}{}", "Page order = ", rotationSetDd.getOrdering(), ", delay = ", rotationSetDd.getPageDelay());
+                LOG.debug("{}{}{}{}", "Page order = ", rotationSetDd.getOrdering(),
+                    ", delay = ", rotationSetDd.getPageDelay());
                 repo.update(rotationSetDd);
                 hasUpdatedOrDeleted = true;
             } else {
