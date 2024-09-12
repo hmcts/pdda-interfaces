@@ -21,7 +21,7 @@ public class ValueConverterMap {
     protected static final String NULL_STRING = "null";
     protected static final String SEMI_COLON = ";";
     
-    protected static final Integer ONE = Integer.valueOf(1);
+    protected static final Integer ONE = 1;
     
     private final Map<String, Serializable> map = new ConcurrentHashMap<>();
 

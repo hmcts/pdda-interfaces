@@ -42,7 +42,7 @@ public class ByteMap extends CharMap {
         String stringValue;
         Byte byteValue = (Byte) method.invoke(bean, args);
         if (byteValue != null) {
-            stringValue = getConverter().formatByte(byteValue.byteValue());
+            stringValue = getConverter().formatByte(byteValue);
         } else {
             stringValue = NULL_STRING;
         }
