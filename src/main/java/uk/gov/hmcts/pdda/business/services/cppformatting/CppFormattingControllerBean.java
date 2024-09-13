@@ -152,7 +152,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
         getPublicDisplayNotifier().sendMessage(ccEvent);
     }
 
-    private PublicDisplayNotifier getPublicDisplayNotifier() {
+    protected PublicDisplayNotifier getPublicDisplayNotifier() {
         if (publicDisplayNotifier == null) {
             publicDisplayNotifier = new PublicDisplayNotifier();
         }
