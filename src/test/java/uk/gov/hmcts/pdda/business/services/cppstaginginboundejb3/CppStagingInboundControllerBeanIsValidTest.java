@@ -45,33 +45,24 @@ class CppStagingInboundControllerBeanIsValidTest {
     private static EntityManager mockEntityManager;
 
     @Mock
-    private CppStagingInboundHelper mockCppStagingInboundHelper;
-
-    @Mock
     private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @Mock
     private XhbConfigPropDao mockXhbConfigPropDao;
 
     @Mock
-    private XhbCourtRepository mockXhbCourtRepository;
-
-    @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
-    @Mock
-    private XhbBlobRepository mockXhbBlobRepository;
 
     @Mock
     private ValidationResult mockValidationResult;
 
-    @Mock
-    private ValidationService mockValidationService;
-
     @TestSubject
     private final CppStagingInboundControllerBean classUnderTest =
-        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
-            mockXhbCourtRepository, mockXhbClobRepository, mockXhbBlobRepository, mockValidationService);
+        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository,
+            EasyMock.createMock(CppStagingInboundHelper.class),
+            EasyMock.createMock(XhbCourtRepository.class), mockXhbClobRepository,
+            EasyMock.createMock(XhbBlobRepository.class),
+            EasyMock.createMock(ValidationService.class));
 
     @BeforeEach
     public void setUp() {
@@ -114,8 +105,9 @@ class CppStagingInboundControllerBeanIsValidTest {
         // Setup
         boolean resultValue;
         String documentName = EMPTY_STRING;
-        String[] invalidDocTimes = {"20230515154330000000", "30000515154330", "20231615154330", "20230554154330",
-            "20230515454330", "20230515156530", "20230515154367", "££££££££££££££"};
+        String[] invalidDocTimes =
+            {"20230515154330000000", "30000515154330", "20231615154330", "20230554154330",
+                "20230515454330", "20230515156530", "20230515154367", "££££££££££££££"};
         // Run
         for (String invalidDocTime : invalidDocTimes) {
             resultValue = DocumentValidationUtils.isValidDocumentTime(invalidDocTime, documentName);
@@ -143,13 +135,14 @@ class CppStagingInboundControllerBeanIsValidTest {
         // Checks
         assertTrue(methodResult, TRUE);
     }
-    
+
     @Test
     void testFindConfigEntryByPropertyName() {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
         properties.add(DummyServicesUtil.getXhbConfigPropDao(TESTING, EMPTY_STRING));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda")).andReturn(properties);
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
+            .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
         // Run
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
@@ -162,7 +155,8 @@ class CppStagingInboundControllerBeanIsValidTest {
     void testFindConfigEntryByPropertyNameNullArray() {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda")).andReturn(properties);
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
+            .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
         // Run
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
@@ -170,7 +164,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         EasyMock.verify(mockXhbConfigPropRepository);
         assertNull(returnString, NULL);
     }
-    
+
     @Test
     void testGetClobXmlAsString() {
         // Setup

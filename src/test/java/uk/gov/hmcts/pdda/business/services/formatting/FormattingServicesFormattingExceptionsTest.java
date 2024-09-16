@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.formatting;
 
 import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -282,12 +283,10 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
 
     @Mock
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
-    
-    @Mock
-    private BlobHelper mockBlobHelper;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
+    private final FormattingServices classUnderTest =
+        new FormattingServices(mockEntityManager, EasyMock.createMock(BlobHelper.class));
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";

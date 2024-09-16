@@ -64,7 +64,7 @@ class FormattingConfigTest {
 
 
     @TestSubject
-    private final FormattingConfig classUnderTest = FormattingConfig.Singleton.INSTANCE;
+    private static final FormattingConfig CLASSUNDERTEST = FormattingConfig.Singleton.INSTANCE;
 
     @BeforeAll
     public static void setUp() {
@@ -80,7 +80,7 @@ class FormattingConfigTest {
     void testGetXslTransformsFailure() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             // Run
-            classUnderTest.getXslTransforms(null);
+            CLASSUNDERTEST.getXslTransforms(null);
         });
     }
 
@@ -103,7 +103,7 @@ class FormattingConfigTest {
         FormattingValue formattingValue =
             getDummyFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, HTM, EMAIL, xhbCppListDao);
         // Run
-        classUnderTest.getXslTransforms(formattingValue);
+        CLASSUNDERTEST.getXslTransforms(formattingValue);
         result = true;
 
         assertTrue(result, TRUE);

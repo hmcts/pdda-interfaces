@@ -70,9 +70,6 @@ class PddaHelperBaisTest {
     private static final String FILE_CONTENTS = " file contents";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private PddaMessageHelper mockPddaMessageHelper;
 
     @Mock
@@ -94,8 +91,8 @@ class PddaHelperBaisTest {
     private Environment mockEnvironment;
 
     @TestSubject
-    private final PddaHelper classUnderTest =
-        new PddaHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment);
+    private final PddaHelper classUnderTest = new PddaHelper(
+        EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository, mockEnvironment);
 
     private static class Config {
         static final String SFTP_HOST = "pdda.bais_sftp_hostname";

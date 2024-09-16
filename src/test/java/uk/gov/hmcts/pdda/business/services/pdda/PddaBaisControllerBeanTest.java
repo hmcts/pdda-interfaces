@@ -35,13 +35,11 @@ class PddaBaisControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private PddaHelper mockPddaHelper;
 
     @TestSubject
-    private final PddaBaisControllerBean classUnderTest = new PddaBaisControllerBean(mockEntityManager);
+    private final PddaBaisControllerBean classUnderTest =
+        new PddaBaisControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
     public static void setUp() {

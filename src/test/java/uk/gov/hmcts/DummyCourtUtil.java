@@ -7,7 +7,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtDetailValue;
-import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicNoticeValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.CourtSitePdComplexValue;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
@@ -247,7 +246,7 @@ public final class DummyCourtUtil {
         assertTrue(result.hasDefendants(), TRUE);
         assertFalse(result.hasPublicNotices(), FALSE);
         result
-            .setPublicNotices(new PublicNoticeValue[] {DummyPdNotifierUtil.getPublicNoticeValue()});
+            .setPublicNotices(DummyPdNotifierUtil.getPublicNoticeValue());
         assertTrue(result.hasPublicNotices(), TRUE);
         assertFalse(result.hasCaseTitle(), FALSE);
         assertFalse(result.hasInformationForDisplay(), FALSE);

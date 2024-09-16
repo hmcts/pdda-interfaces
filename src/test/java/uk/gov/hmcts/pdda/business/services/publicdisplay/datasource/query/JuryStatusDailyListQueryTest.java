@@ -64,7 +64,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
 class JuryStatusDailyListQueryTest extends AbstractQueryTest {
 
     protected static final String TRUE = "Result is not True";

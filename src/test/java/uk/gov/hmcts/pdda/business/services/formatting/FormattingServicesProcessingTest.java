@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.formatting;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,20 +42,15 @@ class FormattingServicesProcessingTest {
     private static final String NULL = "Result is Null";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private Reader mockReader;
 
     @Mock
     private OutputStream mockOutputStream;
 
-    @Mock
-    private BlobHelper mockBlobHelper;
 
     @InjectMocks
-    private final FormattingServices classUnderTest =
-        new FormattingServices(mockEntityManager, mockBlobHelper);
+    private final FormattingServices classUnderTest = new FormattingServices(
+        EasyMock.createMock(EntityManager.class), EasyMock.createMock(BlobHelper.class));
 
     @Test
     void testGetFormattingValue() {
