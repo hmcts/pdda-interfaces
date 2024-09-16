@@ -18,7 +18,7 @@ public class CsBusinessDelegateHandler extends XhibitHandler {
     /**
      * EJBObject associated with this business delegate.
      */
-    final private EJBObject remote;
+    private final EJBObject remote;
 
     /**
      * Number of retries.
