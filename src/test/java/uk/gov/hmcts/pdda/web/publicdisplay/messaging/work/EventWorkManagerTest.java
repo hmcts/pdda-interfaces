@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("PMD.DoNotUseThreads")
 class EventWorkManagerTest {
 
-    private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
+    private static final Integer NO_OF_WORKERS = 1;
     private static final Long TIMEOUT = Long.valueOf(1);
     private static final String TRUE = "Result is not True";
 
@@ -46,12 +46,12 @@ class EventWorkManagerTest {
     private final EventWorkManager classUnderTest = new EventWorkManager(mockEventStore, mockThreadPool);
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(LoggerFactory.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -96,7 +96,7 @@ class EventWorkManagerTest {
     @Test
     void testThreadPool() {
         ThreadPool threadPoolUnderTest = new ThreadPool(0, TIMEOUT);
-        assertNotNull(Integer.valueOf(threadPoolUnderTest.getNumFreeWorkers()), "Result is Null");
+        assertNotNull(threadPoolUnderTest.getNumFreeWorkers(), "Result is Null");
         threadPoolUnderTest.shutdown();
     }
 
@@ -126,8 +126,8 @@ class EventWorkManagerTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         return new MoveCaseEvent(from, to, null);

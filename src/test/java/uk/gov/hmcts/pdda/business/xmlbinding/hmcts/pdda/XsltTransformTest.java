@@ -45,12 +45,12 @@ class XsltTransformTest {
     private final XsltTransform classUnderTest = getClassUnderTest();
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         // Do nothing
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         // Do nothing
     }
 
@@ -61,7 +61,7 @@ class XsltTransformTest {
         classUnderTest.setDocumentType(DocumentTypeType.DL);
         classUnderTest.setMajorVersion(1);
         classUnderTest.setMinorVersion(0);
-        classUnderTest.setXsltFileList(getDummyXsltFileList(new String[] {"filename1", "filename2"}));
+        classUnderTest.setXsltFileList(getDummyXsltFileList("filename1", "filename2"));
         return classUnderTest;
     }
 
@@ -74,7 +74,7 @@ class XsltTransformTest {
         classUnderTest.setMinorVersion(classUnderTest.getMinorVersion());
         classUnderTest.setXsltFileList(classUnderTest.getXsltFileList());
         classUnderTest.getXsltFileList().setXsltFileName(classUnderTest.getXsltFileList().getXsltFileName());
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), NOTNULL);
+        assertNotNull(classUnderTest.hashCode(), NOTNULL);
     }
 
     @Test
@@ -86,7 +86,7 @@ class XsltTransformTest {
         compareTo.setDocumentType(DocumentTypeType.IWP);
         compareTo.setMajorVersion(2);
         compareTo.setMinorVersion(1);
-        compareTo.setXsltFileList(getDummyXsltFileList(new String[] {"filename2"}));
+        compareTo.setXsltFileList(getDummyXsltFileList("filename2"));
         // Checks
         assertFalse(classUnderTest.equals(compareTo), FALSE);
         // Distibution type

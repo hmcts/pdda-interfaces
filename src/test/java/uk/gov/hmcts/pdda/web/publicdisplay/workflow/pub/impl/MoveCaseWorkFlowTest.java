@@ -86,8 +86,8 @@ class MoveCaseWorkFlowTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        return new MoveCaseEvent(getDummyCourtRoomIdentifier(Integer.valueOf(-99)),
-            getDummyCourtRoomIdentifier(Integer.valueOf(-1)), getDummyCaseChangeInformation());
+        return new MoveCaseEvent(getDummyCourtRoomIdentifier(-99),
+            getDummyCourtRoomIdentifier(-1), getDummyCaseChangeInformation());
     }
 
     private DocumentsForEvent getDummyDocumentsForEvent() {

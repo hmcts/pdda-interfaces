@@ -110,7 +110,7 @@ class DisplayRotationSetDataHelperTest {
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         List<XhbRotationSetDdDao> xhbRotationSetDdDaoList = new ArrayList<>();
         xhbRotationSetDdDaoList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
-        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(-1, "Shortname");
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         // Expects
@@ -139,7 +139,7 @@ class DisplayRotationSetDataHelperTest {
     void testGetDataForDisplayRotationSetsWithDisplays() {
         // Setup
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
-        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(-1, "Shortname");
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         xhbDisplays.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
@@ -170,7 +170,7 @@ class DisplayRotationSetDataHelperTest {
 
     @Test
     void testGetDataForCourt() {
-        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(-1), "Shortname");
+        XhbCourtDao court = DummyCourtUtil.getXhbCourtDao(-1, "Shortname");
         // Run
         DisplayRotationSetData[] result =
             classUnderTest.getDataForCourt(court, mockXhbDisplayRepository, mockXhbRotationSetsRepository,

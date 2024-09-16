@@ -200,7 +200,7 @@ class DisplayStoreControllerBeanTest {
         LocalDateTime creationDate = NOW.minusMinutes(15);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(2);
+        Integer version = 2;
 
         XhbDisplayStoreDao xcsi = new XhbDisplayStoreDao(displayStoreId, retrievalCode, content, lastUpdateDate,
             creationDate, lastUpdatedBy, createdBy, version, obsInd);

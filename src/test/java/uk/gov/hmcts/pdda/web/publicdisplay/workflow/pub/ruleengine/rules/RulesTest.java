@@ -92,7 +92,7 @@ class RulesTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        return new CourtRoomIdentifier(-99, null);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

@@ -136,8 +136,8 @@ class DefaultDisplayConfigurationReaderTest {
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
         int[] courtsForPublicDisplay = {80};
-        Integer courtId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(-1);
+        Integer courtId = -1;
+        Integer courtRoomId = -1;
         CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(courtId, courtRoomId);
         DisplayDocumentType[] documentTypes = {displayDocumentType};
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);

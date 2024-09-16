@@ -19,7 +19,7 @@ class DocumentInitializerTest {
 
     private static final int[] COURT_IDS = {81, 51};
     private static final Long DELAY = Long.valueOf(1);
-    private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
+    private static final Integer NO_OF_WORKERS = 1;
     private static final String TRUE = "Result is not True";
 
     @Mock

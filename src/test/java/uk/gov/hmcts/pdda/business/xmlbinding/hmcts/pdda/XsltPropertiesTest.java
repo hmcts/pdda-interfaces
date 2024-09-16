@@ -32,12 +32,12 @@ class XsltPropertiesTest {
     private final XsltProperties classUnderTest = getClassUnderTest();
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         // Do nothing
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         // Do nothing
     }
 
@@ -54,7 +54,7 @@ class XsltPropertiesTest {
     void testTypeSettersGetters() {
         int arrayNo = classUnderTest.getXsltTransformCount();
         classUnderTest.setXsltTransform(classUnderTest.getXsltTransform());
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), NOTNULL);
+        assertNotNull(classUnderTest.hashCode(), NOTNULL);
         assertEquals(arrayNo, classUnderTest.getXsltTransform().length, EQUALS);
         classUnderTest.addXsltTransform(getXsltTransform(DocumentTypeType.FL));
         classUnderTest.setXsltTransform(arrayNo - 1, getXsltTransform(DocumentTypeType.WL));
