@@ -29,7 +29,7 @@ class RotationSetCompiledRendererDelegateTest {
     private static final String NOTNULL = "Result is Null";
     private static final String VALID_DISPLAY_URL = "pd://display/snaresbrook/453/reception/mainscreen";
     private static final String VALID_DOCUMENT_URL = "pd://document:81/DailyList:";
-    private static final long PAGE_DELAY = Long.valueOf(1).longValue();
+    private static final long PAGE_DELAY = 1L;
 
     @Mock
     private DisplayStoreControllerBean mockDisplayStoreControllerBean;

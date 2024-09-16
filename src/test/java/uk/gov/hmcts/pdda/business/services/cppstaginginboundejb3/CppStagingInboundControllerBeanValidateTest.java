@@ -65,9 +65,6 @@ class CppStagingInboundControllerBeanValidateTest {
     private XhbClobRepository mockXhbClobRepository;
 
     @Mock
-    private XhbBlobRepository mockXhbBlobRepository;
-
-    @Mock
     private ValidationResult mockValidationResult;
 
     @Mock
@@ -77,7 +74,7 @@ class CppStagingInboundControllerBeanValidateTest {
     private final CppStagingInboundControllerBean classUnderTest =
         new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository,
             mockCppStagingInboundHelper, mockXhbCourtRepository, mockXhbClobRepository,
-            mockXhbBlobRepository, mockValidationService);
+            EasyMock.createMock(XhbBlobRepository.class), mockValidationService);
 
     @BeforeEach
     public void setUp() {
@@ -190,7 +187,7 @@ class CppStagingInboundControllerBeanValidateTest {
     void testValidateDocumentSuccess() throws ValidationException {
         // Setup
         List<XhbCourtDao> courts = new ArrayList<>();
-        courts.add(DummyCourtUtil.getXhbCourtDao(Integer.valueOf(1), EMPTY_STRING));
+        courts.add(DummyCourtUtil.getXhbCourtDao(1, EMPTY_STRING));
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("PD");
@@ -202,7 +199,8 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.expect(
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class))).andReturn(courts);
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .andReturn(courts);
         EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
 
         EasyMock.replay(mockXhbConfigPropRepository);

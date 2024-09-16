@@ -54,16 +54,14 @@ class CaseControllerBeanTest {
     private static final String USERNAME = "TestUser1";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private XhbHearingRepository mockXhbHearingRepository;
 
     @Mock
     private XhbHearingListRepository mockXhbHearingListRepository;
 
     @TestSubject
-    private final CaseControllerBean classUnderTest = new CaseControllerBean(mockEntityManager);
+    private final CaseControllerBean classUnderTest =
+        new CaseControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
     public static void setUp() {
@@ -84,21 +82,27 @@ class CaseControllerBeanTest {
         final Calendar today = Calendar.getInstance();
         LocalDateTime ldt = LocalDateTime.now();
         List<XhbHearingDao> xhList = getDummyHearingDaoList();
-        Optional<XhbHearingListDao> list = Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt, ldt));
+        Optional<XhbHearingListDao> list =
+            Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt, ldt));
         Optional<XhbHearingListDao> oldList =
             Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt.minusDays(1), ldt.minusDays(1)));
 
         EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
 
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class))).andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class))).andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class))).andReturn(oldList);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class))).andReturn(list);
+        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(list);
+        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(list);
+        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(oldList);
+        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(list);
 
         replayMocks();
 
         // Run method
-        ScheduledHearingValue[] result = classUnderTest.getScheduledHearingsForCaseOnDay(CASE_ID, today);
+        ScheduledHearingValue[] result =
+            classUnderTest.getScheduledHearingsForCaseOnDay(CASE_ID, today);
 
         // Checks
         verifyMocks();

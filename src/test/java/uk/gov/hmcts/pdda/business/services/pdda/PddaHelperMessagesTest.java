@@ -53,14 +53,11 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(EasyMockExtension.class)
 class PddaHelperMessagesTest {
-    
+
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String SAME = "Result is not Same";
     private static final String TESTUSER = "TestUser";
-
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private PddaMessageHelper mockPddaMessageHelper;
@@ -88,13 +85,15 @@ class PddaHelperMessagesTest {
 
     @Mock
     private SftpConfig mockSftpConfig;
-    
+
     @Mock
-    private final PddaHelper mockPddaHelper = new PddaHelper(mockEntityManager);
+    private final PddaHelper mockPddaHelper =
+        new PddaHelper(EasyMock.createMock(EntityManager.class));
 
     @TestSubject
-    private final PddaHelper classUnderTest = new PddaHelper(mockEntityManager);
-    
+    private final PddaHelper classUnderTest =
+        new PddaHelper(EasyMock.createMock(EntityManager.class));
+
     @BeforeAll
     public static void setUp() {
         // Do nothing
@@ -104,7 +103,7 @@ class PddaHelperMessagesTest {
     public static void tearDown() {
         // Do nothing
     }
-    
+
     @Test
     void testSendMessage() {
         // Setup
@@ -125,7 +124,8 @@ class PddaHelperMessagesTest {
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         Optional<XhbPddaMessageDao> expectedResult = Optional.of(xhbPddaMessageDao);
         // Run
-        Optional<XhbPddaMessageDao> actualResult = testCreateMessage(xhbPddaMessageDao, expectedResult);
+        Optional<XhbPddaMessageDao> actualResult =
+            testCreateMessage(xhbPddaMessageDao, expectedResult);
         // Checks
         assertTrue(actualResult.isPresent(), TRUE);
         assertSame(expectedResult, actualResult, SAME);
@@ -135,15 +135,17 @@ class PddaHelperMessagesTest {
     private Optional<XhbPddaMessageDao> testCreateMessage(XhbPddaMessageDao xhbPddaMessageDao,
         Optional<XhbPddaMessageDao> expectedResult) {
         // Setup
-        EasyMock.expect(mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class)))
+        EasyMock
+            .expect(mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class)))
             .andReturn(expectedResult);
         EasyMock.replay(mockPddaMessageHelper);
         // Run
-        Optional<XhbPddaMessageDao> actualResult = PddaMessageUtil.createMessage(mockPddaMessageHelper,
-            xhbPddaMessageDao.getCourtId(), xhbPddaMessageDao.getCourtRoomId(),
-            xhbPddaMessageDao.getPddaMessageTypeId(), xhbPddaMessageDao.getPddaMessageDataId(),
-            xhbPddaMessageDao.getPddaBatchId(), xhbPddaMessageDao.getCpDocumentName(),
-            xhbPddaMessageDao.getCpResponseGenerated(), xhbPddaMessageDao.getErrorMessage());
+        Optional<XhbPddaMessageDao> actualResult =
+            PddaMessageUtil.createMessage(mockPddaMessageHelper, xhbPddaMessageDao.getCourtId(),
+                xhbPddaMessageDao.getCourtRoomId(), xhbPddaMessageDao.getPddaMessageTypeId(),
+                xhbPddaMessageDao.getPddaMessageDataId(), xhbPddaMessageDao.getPddaBatchId(),
+                xhbPddaMessageDao.getCpDocumentName(), xhbPddaMessageDao.getCpResponseGenerated(),
+                xhbPddaMessageDao.getErrorMessage());
         // Checks
         EasyMock.verify(mockPddaMessageHelper);
         assertNotNull(actualResult, NOTNULL);
@@ -157,7 +159,8 @@ class PddaHelperMessagesTest {
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         Optional<XhbPddaMessageDao> expectedResult = Optional.empty();
         // Run
-        Optional<XhbPddaMessageDao> actualResult = testCreateMessage(xhbPddaMessageDao, expectedResult);
+        Optional<XhbPddaMessageDao> actualResult =
+            testCreateMessage(xhbPddaMessageDao, expectedResult);
         // Checks
         assertTrue(actualResult.isEmpty(), "Result is not empty");
     }
@@ -165,7 +168,8 @@ class PddaHelperMessagesTest {
     @Test
     void testCreateMessageTypeSuccess() {
         // Setup
-        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao = DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
+        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao =
+            DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
         Optional<XhbRefPddaMessageTypeDao> expectedResult = Optional.of(xhbRefPddaMessageTypeDao);
         // Run
         Optional<XhbRefPddaMessageTypeDao> actualResult =
@@ -176,15 +180,19 @@ class PddaHelperMessagesTest {
         assertSame(expectedResult.get().getPrimaryKey(), actualResult.get().getPrimaryKey(), SAME);
     }
 
-    private Optional<XhbRefPddaMessageTypeDao> testCreateMessageType(XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao,
+    private Optional<XhbRefPddaMessageTypeDao> testCreateMessageType(
+        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao,
         Optional<XhbRefPddaMessageTypeDao> expectedResult) {
         // Setup
-        EasyMock.expect(mockPddaMessageHelper.savePddaMessageType(EasyMock.isA(XhbRefPddaMessageTypeDao.class)))
+        EasyMock
+            .expect(mockPddaMessageHelper
+                .savePddaMessageType(EasyMock.isA(XhbRefPddaMessageTypeDao.class)))
             .andReturn(expectedResult);
         EasyMock.replay(mockPddaMessageHelper);
         // Run
-        Optional<XhbRefPddaMessageTypeDao> actualResult = PddaMessageUtil.createMessageType(mockPddaMessageHelper,
-            xhbRefPddaMessageTypeDao.getPddaMessageType(), LocalDateTime.now());
+        Optional<XhbRefPddaMessageTypeDao> actualResult =
+            PddaMessageUtil.createMessageType(mockPddaMessageHelper,
+                xhbRefPddaMessageTypeDao.getPddaMessageType(), LocalDateTime.now());
         // Checks
         EasyMock.verify(mockPddaMessageHelper);
         assertNotNull(actualResult, NOTNULL);
@@ -195,7 +203,8 @@ class PddaHelperMessagesTest {
     @Test
     void testCreateMessageTypeFailure() {
         // Setup
-        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao = DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
+        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao =
+            DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
         Optional<XhbRefPddaMessageTypeDao> expectedResult = Optional.empty();
         // Run
         Optional<XhbRefPddaMessageTypeDao> actualResult =
@@ -203,21 +212,23 @@ class PddaHelperMessagesTest {
         // Checks
         assertTrue(actualResult.isEmpty(), "Result is not empty");
     }
-    
+
     @Test
     void testRespondToPddaMessage() throws IOException {
         // Setup
         List<XhbPddaMessageDao> pddaMessageDaoList = new ArrayList<>();
         pddaMessageDaoList.add(DummyPdNotifierUtil.getXhbPddaMessageDao());
         Map<String, InputStream> filesMap = new ConcurrentHashMap<>();
-        EasyMock.expect(mockPddaHelper.respondToPddaMessage(pddaMessageDaoList)).andReturn(filesMap);
+        EasyMock.expect(mockPddaHelper.respondToPddaMessage(pddaMessageDaoList))
+            .andReturn(filesMap);
         EasyMock.replay(mockPddaHelper);
         // Run
-        Map<String, InputStream> actualResult = classUnderTest.respondToPddaMessage(pddaMessageDaoList);
+        Map<String, InputStream> actualResult =
+            classUnderTest.respondToPddaMessage(pddaMessageDaoList);
         // Checks
         assertNotNull(actualResult, NOTNULL);
     }
-    
+
     @Test
     void testUpdatePddaMessageRecords() {
         // Setup
@@ -233,7 +244,8 @@ class PddaHelperMessagesTest {
         // Run
         boolean result = false;
         try {
-            PddaMessageUtil.updatePddaMessageRecords(mockPddaMessageHelper, pddaMessageDaoList, userDisplayName);
+            PddaMessageUtil.updatePddaMessageRecords(mockPddaMessageHelper, pddaMessageDaoList,
+                userDisplayName);
             result = true;
         } catch (Exception exception) {
             fail(exception);

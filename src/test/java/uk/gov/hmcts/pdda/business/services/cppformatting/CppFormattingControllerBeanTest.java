@@ -46,9 +46,6 @@ class CppFormattingControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private XhbCppFormattingRepository mockCppFormattingRepo;
 
     @Mock
@@ -58,7 +55,8 @@ class CppFormattingControllerBeanTest {
     private ConfigurationChangeEvent mockConfigurationChangeEvent;
 
     @TestSubject
-    private final CppFormattingControllerBean classUnderTest = new CppFormattingControllerBean(mockEntityManager);
+    private final CppFormattingControllerBean classUnderTest =
+        new CppFormattingControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
     public static void setUp() {
@@ -88,12 +86,12 @@ class CppFormattingControllerBeanTest {
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
         List<XhbCppFormattingDao> cppFormattingList = new ArrayList<>();
         cppFormattingList.add(xhbCppFormattingDao);
-        EasyMock.expect(
-            mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class)))
-            .andReturn(cppFormattingList);
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+            EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));
-            EasyMock.expect(mockCppFormattingRepo.update(cppFormattingDao)).andReturn(Optional.of(cppFormattingDao));
+            EasyMock.expect(mockCppFormattingRepo.update(cppFormattingDao))
+                .andReturn(Optional.of(cppFormattingDao));
             EasyMock.replay(mockPublicDisplayNotifier);
             EasyMock.replay(mockCppFormattingRepo);
         }
@@ -117,12 +115,12 @@ class CppFormattingControllerBeanTest {
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
         List<XhbCppFormattingDao> cppFormattingList = new ArrayList<>();
         cppFormattingList.add(xhbCppFormattingDao);
-        EasyMock.expect(
-            mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class)))
-            .andReturn(cppFormattingList);
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+            EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));
-            EasyMock.expect(mockCppFormattingRepo.update(cppFormattingDao)).andReturn(Optional.of(cppFormattingDao));
+            EasyMock.expect(mockCppFormattingRepo.update(cppFormattingDao))
+                .andReturn(Optional.of(cppFormattingDao));
             EasyMock.replay(mockPublicDisplayNotifier);
             EasyMock.replay(mockCppFormattingRepo);
         }
@@ -144,8 +142,11 @@ class CppFormattingControllerBeanTest {
     void testGetLatestPublicDisplayDocument() {
         // Setup
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
-        EasyMock.expect(mockCppFormattingRepo.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
-            EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xhbCppFormattingDao);
+        EasyMock
+            .expect(
+                mockCppFormattingRepo.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
+                    EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(xhbCppFormattingDao);
         EasyMock.replay(mockCppFormattingRepo);
         // Run
         XhbCppFormattingDao actualResult =
@@ -160,11 +161,15 @@ class CppFormattingControllerBeanTest {
     void testGetLatestWebPageDocument() {
         // Setup
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
-        EasyMock.expect(mockCppFormattingRepo.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
-            EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xhbCppFormattingDao);
+        EasyMock
+            .expect(
+                mockCppFormattingRepo.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
+                    EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(xhbCppFormattingDao);
         EasyMock.replay(mockCppFormattingRepo);
         // Run
-        XhbCppFormattingDao actualResult = classUnderTest.getLatestWebPageDocument(xhbCppFormattingDao.getCourtId());
+        XhbCppFormattingDao actualResult =
+            classUnderTest.getLatestWebPageDocument(xhbCppFormattingDao.getCourtId());
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
         assertNotNull(actualResult, "Result is Null");
@@ -175,7 +180,8 @@ class CppFormattingControllerBeanTest {
     void testUpdateStatusSuccess() {
         // Setup
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
-        EasyMock.expect(mockCppFormattingRepo.update(xhbCppFormattingDao)).andReturn(Optional.of(xhbCppFormattingDao));
+        EasyMock.expect(mockCppFormattingRepo.update(xhbCppFormattingDao))
+            .andReturn(Optional.of(xhbCppFormattingDao));
         EasyMock.replay(mockCppFormattingRepo);
         // Run
         boolean result = false;
@@ -194,7 +200,8 @@ class CppFormattingControllerBeanTest {
     void testUpdateStatusFailed() {
         // Setup
         XhbCppFormattingDao xhbCppFormattingDao = getDummyXhbCppFormattingDao();
-        EasyMock.expect(mockCppFormattingRepo.update(xhbCppFormattingDao)).andReturn(Optional.of(xhbCppFormattingDao));
+        EasyMock.expect(mockCppFormattingRepo.update(xhbCppFormattingDao))
+            .andReturn(Optional.of(xhbCppFormattingDao));
         EasyMock.replay(mockCppFormattingRepo);
         // Run
         boolean result = false;

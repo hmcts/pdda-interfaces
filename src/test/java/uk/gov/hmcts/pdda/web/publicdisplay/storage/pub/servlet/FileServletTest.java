@@ -147,7 +147,7 @@ class FileServletTest {
 
     private boolean testgetLastModified(String url, AbstractUri uri) {
         // Setup
-        long lastModified = url != null ? Long.valueOf(1).longValue() : Long.MAX_VALUE;
+        long lastModified = url != null ? 1L : Long.MAX_VALUE;
         // Expects
         Mockito.when(mockHttpServletRequest.getParameter(Mockito.isA(String.class)))
             .thenReturn(url);

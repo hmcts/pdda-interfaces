@@ -45,7 +45,7 @@ class DisplayDocumentTypeTest {
     private Logger mockLogger;
 
     @InjectMocks
-    private final DisplayDocumentType classUnderTest = DisplayDocumentType.DAILY_LIST;
+    private static final DisplayDocumentType CLASSUNDERTEST = DisplayDocumentType.DAILY_LIST;
 
     @BeforeAll
     public static void setUp() {
@@ -59,7 +59,7 @@ class DisplayDocumentTypeTest {
 
     @Test
     void testGetCasesRequired() {
-        CasesRequired result = classUnderTest.getCasesRequired();
+        CasesRequired result = CLASSUNDERTEST.getCasesRequired();
         assertNotNull(result, NOTNULL);
         assertEquals(getDummyCasesRequired(), result, "Results are not Equal");
     }
@@ -68,9 +68,9 @@ class DisplayDocumentTypeTest {
     void testGetDisplayDocumentTypes() {
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("DailyList"), NOTNULL);
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("CourtList"), NOTNULL);
-        assertNotNull(classUnderTest.getLongName(), NOTNULL);
-        assertNotNull(classUnderTest.toLowerCaseString(), NOTNULL);
-        assertNotNull(classUnderTest.hashCode(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.getLongName(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.toLowerCaseString(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.hashCode(), NOTNULL);
     }
 
     @Test
@@ -92,10 +92,10 @@ class DisplayDocumentTypeTest {
 
     @Test
     void testEquals() {
-        assertFalse(Boolean.valueOf(classUnderTest.equals(DisplayDocumentType.DAILY_LIST_CY)), "Result is not False");
-        assertTrue(Boolean.valueOf(classUnderTest.equals(DisplayDocumentType.DAILY_LIST)), "Result is not True");
-        assertNotNull(classUnderTest.toString(), NOTNULL);
-        assertNotNull(classUnderTest.getCountry(), NOTNULL);
+        assertFalse(CLASSUNDERTEST.equals(DisplayDocumentType.DAILY_LIST_CY), "Result is not False");
+        assertTrue(CLASSUNDERTEST.equals(DisplayDocumentType.DAILY_LIST), "Result is not True");
+        assertNotNull(CLASSUNDERTEST.toString(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.getCountry(), NOTNULL);
     }
 
     private CasesRequired getDummyCasesRequired() {

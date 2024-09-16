@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.dailylistnotifier;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,20 +46,19 @@ class DailyListNotifierControllerBeanTest {
     @Mock
     private PdConfigurationControllerBean mockPdConfigurationControllerBean;
 
-    @Mock
-    private PddaDlNotifierHelper mockPddaDlNotifierHelper;
-
     @InjectMocks
-    private final DailyListNotifierControllerBean classUnderTest = new DailyListNotifierControllerBean(
-        mockEntityManager, mockPdConfigurationControllerBean, mockPddaDlNotifierHelper);
+    private final DailyListNotifierControllerBean classUnderTest =
+        new DailyListNotifierControllerBean(mockEntityManager, mockPdConfigurationControllerBean,
+            EasyMock.createMock(PddaDlNotifierHelper.class));
 
     @Test
     void testDoTask() {
         // Setup
-        int[] courtIds = {1,2};
-        
+        int[] courtIds = {1, 2};
+
         // Expects
-        Mockito.when(mockPdConfigurationControllerBean.getCourtsForPublicDisplay()).thenReturn(courtIds);
+        Mockito.when(mockPdConfigurationControllerBean.getCourtsForPublicDisplay())
+            .thenReturn(courtIds);
 
         // Run method
         boolean result;
@@ -69,16 +69,17 @@ class DailyListNotifierControllerBeanTest {
             result = false;
         }
         // Check results
-        assertTrue(result, TRUE); 
+        assertTrue(result, TRUE);
     }
 
     @Test
     void testCallDailyListNotifierHelper() {
         // Setup
-        int[] courtIds = {1,2};
-        
+        int[] courtIds = {1, 2};
+
         // Expects
-        Mockito.when(mockPdConfigurationControllerBean.getCourtsForPublicDisplay()).thenReturn(courtIds);
+        Mockito.when(mockPdConfigurationControllerBean.getCourtsForPublicDisplay())
+            .thenReturn(courtIds);
 
         // Run method
         boolean result;
@@ -91,12 +92,12 @@ class DailyListNotifierControllerBeanTest {
         // Check results
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testRefreshPublicDisplaysForCourt() {
         // Setup
         int courtId = 80;
-        
+
         // Run method
         boolean result;
         try {
@@ -108,13 +109,14 @@ class DailyListNotifierControllerBeanTest {
         // Check results
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testDefaultConstructorEntityManager() {
-        DailyListNotifierControllerBean testConstructor = new DailyListNotifierControllerBean(mockEntityManager);
+        DailyListNotifierControllerBean testConstructor =
+            new DailyListNotifierControllerBean(mockEntityManager);
         assertNotNull(testConstructor, NOT_NULL);
     }
-    
+
     @Test
     void testDefaultConstructor() {
         DailyListNotifierControllerBean testConstructor = new DailyListNotifierControllerBean();

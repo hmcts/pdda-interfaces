@@ -43,7 +43,7 @@ class DisplayUriTest {
     @Test
     void testDisplayUrlEquals() {
         DisplayUri anotherOne = new DisplayUri("anotherOne", COURTSITECODE, LOCATION, DISPLAY);
-        assertFalse(Boolean.valueOf(classUnderTest.equals(anotherOne)), "Result is not False");
+        assertFalse(classUnderTest.equals(anotherOne), "Result is not False");
         assertNotNull(classUnderTest.hashCode(), "Result is Null");
         assertNotNull(classUnderTest.compareTo(anotherOne), "Result is Null");
     }

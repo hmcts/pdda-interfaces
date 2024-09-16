@@ -1,8 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.cppformatting;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
-import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,15 +31,13 @@ class CppFormattingControllerBeanConstructorTest {
 
     private static final String NOT_INSTANCE = "Result is not an Instance";
 
-    @Mock
-    private EntityManager mockEntityManager;
-
     @TestSubject
-    private final CppFormattingControllerBean classUnderTest = new CppFormattingControllerBean(mockEntityManager);
+    private final CppFormattingControllerBean classUnderTest =
+        new CppFormattingControllerBean(EasyMock.createMock(EntityManager.class));
 
     @Test
     void testGetPublicDisplayNotifier() {
-        assertInstanceOf(PublicDisplayNotifier.class,
-            classUnderTest.getPublicDisplayNotifier(), NOT_INSTANCE);
+        assertInstanceOf(PublicDisplayNotifier.class, classUnderTest.getPublicDisplayNotifier(),
+            NOT_INSTANCE);
     }
 }
