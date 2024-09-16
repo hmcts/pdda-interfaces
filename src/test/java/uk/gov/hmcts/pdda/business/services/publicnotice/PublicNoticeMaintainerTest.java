@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class PublicNoticeMaintainerTest {
 
-    private static final Integer COURT_ROOM_ID = Integer.valueOf(81);
+    private static final Integer COURT_ROOM_ID = 81;
     private static final String TRUE = "Result is not True";
 
     @BeforeAll

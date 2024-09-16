@@ -74,7 +74,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class CourtDetailQueryTest extends AbstractQueryTest {
 
     private static final String TRUE = "Result is not True";
-    private static final Integer COURTID = Integer.valueOf(81);
+    private static final Integer COURTID = 81;
     private static final int[] COURTROOMIDS = {8112, 8113, 8114};
 
     @Mock
@@ -201,7 +201,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         List<XhbSittingDao> xhbSittingDaoList = new ArrayList<>();
         xhbSittingDaoList.add(DummyHearingUtil.getXhbSittingDao());
         XhbSittingDao invalidXhbSittingDao = DummyHearingUtil.getXhbSittingDao();
-        invalidXhbSittingDao.setCourtRoomId(Integer.valueOf(-1));
+        invalidXhbSittingDao.setCourtRoomId(-1);
         xhbSittingDaoList.add(invalidXhbSittingDao);
         List<XhbScheduledHearingDao> xhbScheduledHearingDaoList = new ArrayList<>();
         xhbScheduledHearingDaoList.add(DummyHearingUtil.getXhbScheduledHearingDao());

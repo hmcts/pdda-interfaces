@@ -82,7 +82,7 @@ class VipCourtRoomsQueryTest {
 
     private boolean testGetData(List<XhbCourtRoomDao> xhbCourtRoomDaos, boolean isMultiSite) {
         // Setup
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
 
         // Expects
         if (isMultiSite) {

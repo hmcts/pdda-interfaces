@@ -144,7 +144,7 @@ class VipDisplayDocumentQueryTest {
         List<XhbDisplayDao> xhbDisplayDaoList, List<XhbRotationSetDdDao> xhbRotationSetDdDaoList,
         Optional<XhbDisplayDocumentDao> xhbDisplayDocumentDao) {
         // Setup
-        final Integer courtSiteId = Integer.valueOf(81);
+        final Integer courtSiteId = 81;
         List<AbstractRepository<?>> replayArray = new ArrayList<>();
 
         // Expects

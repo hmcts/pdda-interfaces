@@ -89,7 +89,7 @@ class PdDataControllerBeanTest {
     }
 
     private DisplayDocumentUri getDummyDisplayDocumentUri(DisplayDocumentType displayDocumentType) {
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         int[] courtRoomIds = {8112, 8113, 8114};
         return new DisplayDocumentUri(dummyLocale, courtId, displayDocumentType, courtRoomIds);
     }

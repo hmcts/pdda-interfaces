@@ -168,7 +168,7 @@ class VipDisplayCourtRoomQueryTest {
         Optional<XhbCourtSiteDao> xhbCourtSiteDao, List<XhbDisplayDao> xhbDisplayDaoList,
         List<XhbDisplayCourtRoomDao> xhbDisplayCourtRoomDaoList, Optional<XhbCourtRoomDao> xhbCourtRoomDao) {
         // Setup
-        final Integer courtSiteId = Integer.valueOf(81);
+        final Integer courtSiteId = 81;
         List<AbstractRepository<?>> replayArray = new ArrayList<>();
 
         // Expects
