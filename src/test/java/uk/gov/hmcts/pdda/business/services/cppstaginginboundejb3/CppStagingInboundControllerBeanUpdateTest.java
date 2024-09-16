@@ -47,16 +47,14 @@ class CppStagingInboundControllerBeanUpdateTest {
     private XhbConfigPropDao mockXhbConfigPropDao;
 
     @Mock
-    private XhbCourtRepository mockXhbCourtRepository;
-
-    @Mock
     private ValidationResult mockValidationResult;
 
     @TestSubject
     private final CppStagingInboundControllerBean classUnderTest =
         new CppStagingInboundControllerBean(mockEntityManager,
             EasyMock.createMock(XhbConfigPropRepository.class), mockCppStagingInboundHelper,
-            mockXhbCourtRepository, EasyMock.createMock(XhbClobRepository.class),
+            EasyMock.createMock(XhbCourtRepository.class),
+            EasyMock.createMock(XhbClobRepository.class),
             EasyMock.createMock(XhbBlobRepository.class),
             EasyMock.createMock(ValidationService.class));
 

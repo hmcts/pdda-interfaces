@@ -132,7 +132,7 @@ class AllCaseStatusCppToPublicDisplayTest {
         // Checks
         assertArrayEquals(ROOM_ARRAY, classUnderTest.getCourtRoomIds(), EQUALS);
         assertEquals(COURT_NAME, classUnderTest.getCourtName(), EQUALS);
-        assertEquals(COURT_ID, Integer.valueOf(classUnderTest.getCourtId()), EQUALS);
+        assertEquals(COURT_ID, classUnderTest.getCourtId(), EQUALS);
         assertEquals(LIST_DATE, classUnderTest.getDate(), EQUALS);
     }
 }

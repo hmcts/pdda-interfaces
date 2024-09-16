@@ -123,7 +123,7 @@ class PublicNoticeQueryTest {
         Optional<XhbPublicNoticeDao> xhbPublicNoticeDao,
         Optional<XhbDefinitivePublicNoticeDao> xhbDefinitivePublicNoticeDao) {
         // Setup
-        Integer courtRoomId = Integer.valueOf(8112);
+        Integer courtRoomId = 8112;
 
         // Expects
         EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNotices(courtRoomId))

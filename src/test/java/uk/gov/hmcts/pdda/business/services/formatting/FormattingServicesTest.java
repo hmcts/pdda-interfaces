@@ -75,7 +75,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.LawOfDemeter"})
 class FormattingServicesTest {
 
     private static final String TRUE = "Result is not True";
@@ -311,19 +312,25 @@ class FormattingServicesTest {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(TransformerFactory.class);
         classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
+            mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
         ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
         ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
         ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
         ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository", mockXhbCppFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository", mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
+            mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
+            mockXhbFormattingRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
             mockXhbCppFormattingMergeRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository", mockXhbXmlDocumentRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
+            mockXhbXmlDocumentRepository);
     }
 
 

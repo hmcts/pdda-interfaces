@@ -63,9 +63,6 @@ class PdConfigurationControllerBeanDisplayTest {
     private static final String DAILYLIST = "DailyList";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
@@ -96,26 +93,18 @@ class PdConfigurationControllerBeanDisplayTest {
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
 
     @Mock
-    private VipDisplayDocumentQuery mockVipDisplayDocumentQuery;
-
-    @Mock
-    private VipDisplayCourtRoomQuery mockVipDisplayCourtRoomQuery;
-
-    @Mock
     private XhbRotationSetDdRepository mockXhbRotationSetDdRepository;
-
-    @Mock
-    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
     @Mock
     private VipCourtRoomsQuery mockVipQuery;
 
     @InjectMocks
-    private final PdConfigurationControllerBean classUnderTest =
-        new PdConfigurationControllerBean(mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
-            mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRoomRepository,
-            mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
+    private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(
+        Mockito.mock(EntityManager.class), mockXhbCourtRepository, mockXhbRotationSetsRepository,
+        mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
+        mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository,
+        Mockito.mock(XhbCourtRoomRepository.class), mockPublicDisplayNotifier,
+        Mockito.mock(VipDisplayDocumentQuery.class), Mockito.mock(VipDisplayCourtRoomQuery.class));
 
     @BeforeAll
     public static void setUp() {
@@ -175,7 +164,8 @@ class PdConfigurationControllerBeanDisplayTest {
         xhbDisplayDao.setRotationSetId(ROTATION_SET_ID);
         xhbDisplayDao.setShowUnassignedYn(YES);
 
-        XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
+        XhbDisplayDocumentDao xhbDisplayDocumentDao =
+            DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
         xhbDisplayDocumentDao.setDescriptionCode(DAILYLIST);
 
@@ -192,11 +182,13 @@ class PdConfigurationControllerBeanDisplayTest {
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
         String courtName = "Test Court Name";
-        Optional<XhbCourtDao> court = Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
+        Optional<XhbCourtDao> court =
+            Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
         Mockito.when(mockXhbDisplayRepository.findById(DISPLAY_ID)).thenReturn(xd);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
-        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
+        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
+            .thenReturn(xrs);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
@@ -213,7 +205,7 @@ class PdConfigurationControllerBeanDisplayTest {
 
         // Check results
         assertEquals(1, result.length, EQUALS);
-        assertEquals(ROTATION_SET_ID, Integer.valueOf(result[0].getRotationSetId()), EQUALS);
-        assertEquals(DISPLAY_ID, Integer.valueOf(result[0].getDisplayId()), EQUALS);
+        assertEquals(ROTATION_SET_ID, result[0].getRotationSetId(), EQUALS);
+        assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
     }
 }
