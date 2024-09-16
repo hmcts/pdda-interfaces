@@ -18,9 +18,9 @@ public final class DummyJudgeUtil {
     }
     
     public static XhbRefJudgeDao getXhbRefJudgeDao() {
-        Integer refJudgeId = Integer.valueOf(-1);
+        Integer refJudgeId = -1;
         String judgeType = "judgeType";
-        Integer crestJudgeId = Integer.valueOf(-1);
+        Integer crestJudgeId = -1;
         String title = "title";
         String firstname = "firstname";
         String middleName = "middleName";
@@ -34,12 +34,12 @@ public final class DummyJudgeUtil {
         String judVers = "judVers";
         String obsInd = "N";
         String sourceTable = "sourceTable";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbRefJudgeDao result = new XhbRefJudgeDao();
         result.setRefJudgeId(refJudgeId);
         result.setJudgeType(judgeType);

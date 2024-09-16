@@ -49,8 +49,8 @@ public final class DummyEventUtil {
     }
 
     public static MoveCaseEvent getMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(true);
@@ -62,7 +62,7 @@ public final class DummyEventUtil {
     }
 
     public static UpdateCaseEvent getUpdateCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseUpdatedInfo = new CaseChangeInformation(false);
         caseUpdatedInfo.setCaseActive(caseUpdatedInfo.isCaseActive());
         UpdateCaseEvent result = new UpdateCaseEvent(courtRoom, caseUpdatedInfo);
@@ -71,7 +71,7 @@ public final class DummyEventUtil {
     }
 
     public static AddCaseEvent getAddCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseUpdatedInfo = new CaseChangeInformation(false);
         caseUpdatedInfo.setCaseActive(caseUpdatedInfo.isCaseActive());
         AddCaseEvent result = new AddCaseEvent(courtRoom, caseUpdatedInfo);
@@ -81,7 +81,7 @@ public final class DummyEventUtil {
     }
 
     public static PublicNoticeEvent getPublicNoticeEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         PublicNoticeEvent result = new PublicNoticeEvent(courtRoom, false);
         assertNotNull(result.getEventType(), NOTNULL);
         assertFalse(result.isReportingRestrictionsChanged(), FALSE);
@@ -89,7 +89,7 @@ public final class DummyEventUtil {
     }
 
     public static ActivateCaseEvent getActivateCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(false);
         ActivateCaseEvent result = new ActivateCaseEvent(courtRoom, caseChangeInformation);
         assertNotNull(result.getEventType(), NOTNULL);
@@ -98,7 +98,7 @@ public final class DummyEventUtil {
 
     public static ConfigurationChangeEvent getConfigurationChangeEvent() {
         CourtConfigurationChange courtConfigurationChange =
-            new CourtConfigurationChange(Integer.valueOf(-99));
+            new CourtConfigurationChange(-99);
         ConfigurationChangeEvent result = new ConfigurationChangeEvent(courtConfigurationChange);
         assertNotNull(result.getEventType(), NOTNULL);
         assertNotNull(result.getChange(), NOTNULL);
@@ -106,7 +106,7 @@ public final class DummyEventUtil {
     }
 
     public static HearingStatusEvent getHearingStatusEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(false);
         HearingStatusEvent result = new HearingStatusEvent(courtRoom, caseChangeInformation);
         assertNotNull(result.getEventType(), NOTNULL);
@@ -142,7 +142,7 @@ public final class DummyEventUtil {
             new CaseCourtLogInformation(courtLogSubscriptionValue, false);
         caseCourtLogInformation
             .setCourtLogSubscriptionValue(caseCourtLogInformation.getCourtLogSubscriptionValue());
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseStatusEvent result = new CaseStatusEvent(courtRoom, caseCourtLogInformation);
         assertNotNull(result.getEventType(), NOTNULL);
         assertNotNull(result.getCaseCourtLogInformation(), NOTNULL);

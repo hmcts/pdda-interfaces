@@ -49,10 +49,10 @@ public final class DummyPublicDisplayValueUtil {
         PublicDisplayValue compareTo = new PublicDisplayValue();
         compareTo.setCourtSiteShortName(compareTo.getCourtSiteShortName());
         compareTo.setCourtSiteCode("");
-        assertNotNull(Integer.valueOf(compareTo.compareTo(result)), NOTNULL);
+        assertNotNull(compareTo.compareTo(result), NOTNULL);
         compareTo.setCourtSiteCode(result.getCourtSiteCode());
-        compareTo.setCrestCourtRoomNo(Integer.valueOf(-999));
-        assertNotNull(Integer.valueOf(compareTo.compareTo(result)), NOTNULL);
+        compareTo.setCrestCourtRoomNo(-999);
+        assertNotNull(compareTo.compareTo(result), NOTNULL);
         compareTo.setCrestCourtRoomNo(result.getCrestCourtRoomNo());
         assertEquals(0, compareTo.compareTo(result), EQUALS);
         return result;
