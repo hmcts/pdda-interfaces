@@ -217,7 +217,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.29'
-    implementation 'com.squareup.okio:okio:3.9.0'
+    implementation 'com.squareup.okio:okio:3.9.1'
     implementation 'org.flywaydb:flyway-core:10.18.0'
     implementation 'org.flywaydb:flyway-database-postgresql:10.18.0'
     implementation 'org.flywaydb:flyway-database-hsqldb:10.18.0'
