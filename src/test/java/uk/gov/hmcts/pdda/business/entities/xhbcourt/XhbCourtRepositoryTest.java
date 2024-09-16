@@ -107,11 +107,11 @@ class XhbCourtRepositoryTest extends AbstractRepositoryTest<XhbCourtDao> {
         if (BYCRESTCOURTID.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCourtDao>) getClassUnderTest().findByCrestCourtIdValue(getDummyDao().getCrestCourtId());
+            result = getClassUnderTest().findByCrestCourtIdValue(getDummyDao().getCrestCourtId());
         } else if (BYNONOBSCRESTCOURTID.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCourtDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNonObsoleteByCrestCourtIdValue(getDummyDao().getCrestCourtId());
         } else if (BYSHORTNAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
@@ -121,7 +121,7 @@ class XhbCourtRepositoryTest extends AbstractRepositoryTest<XhbCourtDao> {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             result =
-                (List<XhbCourtDao>) getClassUnderTest().findNonObsoleteByShortNameValue(getDummyDao().getShortName());
+                getClassUnderTest().findNonObsoleteByShortNameValue(getDummyDao().getShortName());
         }
         assertNotNull(result, NOTNULL);
         if (dao != null) {

@@ -63,7 +63,7 @@ class XhbCaseReferenceRepositoryTest extends AbstractRepositoryTest<XhbCaseRefer
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbCaseReferenceDao> result =
-            (List<XhbCaseReferenceDao>) getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
+            getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");
@@ -76,13 +76,13 @@ class XhbCaseReferenceRepositoryTest extends AbstractRepositoryTest<XhbCaseRefer
     @Override
     protected XhbCaseReferenceDao getDummyDao() {
         Integer caseReferenceId = getDummyId();
-        Integer reportingRestrictions = Integer.valueOf(-1);
+        Integer reportingRestrictions = -1;
         Integer caseId = getDummyId();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbCaseReferenceDao result = new XhbCaseReferenceDao();
         assertNotNull(result, NOTNULL);

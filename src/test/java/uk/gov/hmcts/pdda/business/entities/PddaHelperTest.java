@@ -30,19 +30,19 @@ class PddaHelperTest {
 
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(EntityManagerUtil.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
     @Test
     void testXcpnFindByPrimaryKey() {
         // Setup
-        Integer id = Integer.valueOf(1);
+        Integer id = 1;
         // Expects
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         // Run
@@ -54,7 +54,7 @@ class PddaHelperTest {
     @Test
     void testXcstFindByPrimaryKey() {
         // Setup
-        Integer id = Integer.valueOf(1);
+        Integer id = 1;
         // Expects
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         // Run

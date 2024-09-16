@@ -62,7 +62,7 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         if (dao != null) {
             list.add(dao);
         }
-        Integer scheduledHearingId = Integer.valueOf(-1);
+        Integer scheduledHearingId = -1;
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         Optional<XhbRefJudgeDao> result = getClassUnderTest().findScheduledAttendeeJudge(scheduledHearingId);
@@ -92,7 +92,7 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         if (dao != null) {
             list.add(dao);
         }
-        Integer scheduledHearingId = Integer.valueOf(-1);
+        Integer scheduledHearingId = -1;
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         Optional<XhbRefJudgeDao> result = getClassUnderTest().findScheduledSittingJudge(scheduledHearingId);
@@ -109,7 +109,7 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
     protected XhbRefJudgeDao getDummyDao() {
         Integer refJudgeId = getDummyId();
         String judgeType = "judgeType";
-        Integer crestJudgeId = Integer.valueOf(-1);
+        Integer crestJudgeId = -1;
         String title = "title";
         String firstname = "firstname";
         String middleName = "middleName";
@@ -123,12 +123,12 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         String judVers = "judVers";
         String obsInd = "N";
         String sourceTable = "sourceTable";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbRefJudgeDao result = new XhbRefJudgeDao();
         result.setRefJudgeId(refJudgeId);
         result.setJudgeType(judgeType);

@@ -152,21 +152,21 @@ public final class DummyEventUtil {
 
     public static PublicDisplayEvent getEvent(String messageType) {
         if (MOVE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getMoveCaseEvent();
+            return getMoveCaseEvent();
         } else if (ADD_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getAddCaseEvent();
+            return getAddCaseEvent();
         } else if (UPDATE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getUpdateCaseEvent();
+            return getUpdateCaseEvent();
         } else if (CASE_STATUS_EVENT.equals(messageType)) {
-            return DummyEventUtil.getCaseStatusEvent();
+            return getCaseStatusEvent();
         } else if (HEARING_STATUS_EVENT.equals(messageType)) {
-            return DummyEventUtil.getHearingStatusEvent();
+            return getHearingStatusEvent();
         } else if (ACTIVATE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getActivateCaseEvent();
+            return getActivateCaseEvent();
         } else if (CONFIG_CHANGE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getConfigurationChangeEvent();
+            return getConfigurationChangeEvent();
         } else {
-            return DummyEventUtil.getPublicNoticeEvent();
+            return getPublicNoticeEvent();
         }
     }
 
