@@ -43,14 +43,14 @@ class XhbRefHearingTypeRepositoryTest extends AbstractRepositoryTest<XhbRefHeari
         String hearingTypeCode = "hearingTypeCode";
         String hearingTypeDesc = "hearingTypeDesc";
         String category = "category";
-        Integer seqNo = Integer.valueOf(-1);
-        Integer listSequence = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer seqNo = -1;
+        Integer listSequence = -1;
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbRefHearingTypeDao result = new XhbRefHearingTypeDao();
         result.setRefHearingTypeId(refHearingTypeId);

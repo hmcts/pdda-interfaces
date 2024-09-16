@@ -107,33 +107,33 @@ class XhbCppStagingInboundRepositoryTest extends AbstractRepositoryTest<XhbCppSt
         if (BYVALIDATIONANDPROCESSINGSTATUS.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNextDocumentByValidationAndProcessingStatus(getDummyDao().getTimeLoaded(),
                     getDummyDao().getValidationStatus(), getDummyDao().getProcessingStatus());
         } else if (BYSTATUS.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNextDocumentByProcessingStatus(getDummyDao().getTimeLoaded(), getDummyDao().getProcessingStatus());
         } else if (BYVALIDATIONSTATUS.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNextDocumentByValidationStatus(getDummyDao().getTimeLoaded(), getDummyDao().getValidationStatus());
         } else if (BYNEXTDOCUMENT.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNextDocument(getDummyDao().getValidationStatus(), getDummyDao().getProcessingStatus());
         } else if (BYNEXTDOCUMENTTEST.equals(whichTest)) {
             Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest()
+            result = getClassUnderTest()
                 .findNextDocumentTest(getDummyDao().getTimeLoaded(), getDummyDao().getValidationStatus());
         } else if (UNRESPONDED.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCppStagingInboundDao>) getClassUnderTest().findUnrespondedCppMessages();
+            result = getClassUnderTest().findUnrespondedCppMessages();
         }
         assertNotNull(result, NOTNULL);
         if (dao != null) {

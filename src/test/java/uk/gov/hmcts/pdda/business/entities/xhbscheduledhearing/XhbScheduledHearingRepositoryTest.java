@@ -61,11 +61,11 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
         if (dao != null) {
             list.add(dao);
         }
-        Integer listId = Integer.valueOf(-99);
-        Integer courtRoomId = Integer.valueOf(-98);
+        Integer listId = -99;
+        Integer courtRoomId = -98;
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbScheduledHearingDao> result = (List<XhbScheduledHearingDao>) getClassUnderTest()
+        List<XhbScheduledHearingDao> result = getClassUnderTest()
             .findActiveCasesInRoom(listId, courtRoomId, getDummyDao().getScheduledHearingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -96,7 +96,7 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbScheduledHearingDao> result =
-            (List<XhbScheduledHearingDao>) getClassUnderTest().findBySittingId(getDummyDao().getSittingId());
+            getClassUnderTest().findBySittingId(getDummyDao().getSittingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -108,22 +108,22 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
 
     @Override
     protected XhbScheduledHearingDao getDummyDao() {
-        Integer scheduledHearingId = Integer.valueOf(-1);
-        Integer sequenceNo = Integer.valueOf(-1);
+        Integer scheduledHearingId = -1;
+        Integer sequenceNo = -1;
         LocalDateTime notBeforeTime = LocalDateTime.now();
         LocalDateTime originalTime = LocalDateTime.now();
         String listingNote = "listingNote";
-        Integer hearingProgress = Integer.valueOf(-1);
-        Integer sittingId = Integer.valueOf(-1);
-        Integer hearingId = Integer.valueOf(-1);
+        Integer hearingProgress = -1;
+        Integer sittingId = -1;
+        Integer hearingId = -1;
         String caseActive = "isCaseActive";
         String movedFrom = "movedFrom";
-        Integer movedFromCourtRoomId = Integer.valueOf(-1);
+        Integer movedFromCourtRoomId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbScheduledHearingDao result = new XhbScheduledHearingDao();
         result.setScheduledHearingId(scheduledHearingId);
         result.setSequenceNo(sequenceNo);

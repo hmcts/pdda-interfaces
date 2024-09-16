@@ -62,7 +62,7 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbXmlDocumentDao> result = (List<XhbXmlDocumentDao>) getClassUnderTest()
+        List<XhbXmlDocumentDao> result = getClassUnderTest()
             .findListByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -82,12 +82,12 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         String status = "status";
         LocalDateTime expiryDate = LocalDateTime.now();
         String documentType = "documentType";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbXmlDocumentDao result = new XhbXmlDocumentDao();
         result.setXmlDocumentId(xmlDocumentId);
         result.setDateCreated(dateCreated);

@@ -22,7 +22,7 @@ public final class DummyDisplayUtil {
     
     private static final String NOTNULL = "Result is Null";
    
-    private static final long PAGE_DELAY = Long.valueOf(1).longValue();
+    private static final long PAGE_DELAY = 1L;
     
     private static final String DISPLAY_URL = "pd://display/snaresbrook/453/reception/mainscreen";
     

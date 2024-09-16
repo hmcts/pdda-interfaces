@@ -46,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
 class FormattingServicesPddaSwitcherTest {
 
     private static final String NULL = "Result is not Null";
@@ -110,7 +110,7 @@ class FormattingServicesPddaSwitcherTest {
     private FormattingServices classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
         ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
             mockXhbConfigPropRepository);
@@ -134,7 +134,7 @@ class FormattingServicesPddaSwitcherTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

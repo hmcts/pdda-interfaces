@@ -116,7 +116,7 @@ class XhbCourtRepositoryTest extends AbstractRepositoryTest<XhbCourtDao> {
         } else if (BYSHORTNAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbCourtDao>) getClassUnderTest().findByShortNameValue(getDummyDao().getShortName());
+            result = getClassUnderTest().findByShortNameValue(getDummyDao().getShortName());
         } else if (BYNONOBSSHORTNAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);

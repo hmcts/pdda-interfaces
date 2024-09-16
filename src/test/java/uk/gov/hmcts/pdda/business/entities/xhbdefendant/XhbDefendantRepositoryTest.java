@@ -48,7 +48,7 @@ class XhbDefendantRepositoryTest extends AbstractRepositoryTest<XhbDefendantDao>
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDefendantDao result = new XhbDefendantDao();
         result.setDefendantId(defendantId);
         result.setFirstName(firstName);

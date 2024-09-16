@@ -1,14 +1,17 @@
 package uk.gov.hmcts.controller;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -16,24 +19,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SetupControllerTest {
 
     @Mock
-    private ModelMap mockModelMap;
+    private Map<String, Object> mockModelMap;
 
     @TestSubject
-    private final SetupController classUnderTest = new SetupController();
+    private SetupController classUnderTest;
 
-    @BeforeAll
-    public static void setUp() throws Exception {
-        // Do nothing
+    @BeforeEach
+    public void setUp() {
+        mockModelMap = EasyMock.createMock(ModelMap.class);
+        
+        classUnderTest = new SetupController();
     }
 
-    @AfterAll
-    public static void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() {
         // Do nothing
     }
 
     @Test
     void testDisplaySelectorServlet() {
-        ModelAndView result = classUnderTest.displaySelectorServlet(mockModelMap);
+        ModelAndView result = classUnderTest.displaySelectorServlet((ModelMap) mockModelMap);
         assertNotNull(result, "Result is Null");
     }
 }

@@ -57,7 +57,7 @@ class CppInitialProcessingControllerBeanTest
         unprocessedXcsi.setDocumentType(DAILY_LIST_DOCTYPE);
         unprocessedXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         unprocessedXcsi.setProcessingStatus(null);
-        ArrayList<XhbCppStagingInboundDao> unprocessedDocList = new ArrayList<>();
+        List<XhbCppStagingInboundDao> unprocessedDocList = new ArrayList<>();
         unprocessedDocList.add(unprocessedXcsi);
 
         XhbCppStagingInboundDao validatedXcsi = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
@@ -65,7 +65,7 @@ class CppInitialProcessingControllerBeanTest
         validatedXcsi.setDocumentType(DAILY_LIST_DOCTYPE);
         validatedXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS);
         validatedXcsi.setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED);
-        ArrayList<XhbCppStagingInboundDao> validatedDocList = new ArrayList<>();
+        List<XhbCppStagingInboundDao> validatedDocList = new ArrayList<>();
         validatedDocList.add(validatedXcsi);
 
         XhbCppListDao xcl = DummyFormattingUtil.getXhbCppListDao();
@@ -140,7 +140,7 @@ class CppInitialProcessingControllerBeanTest
         unprocessedXcsi.setDocumentType(WEBPAGE_DOCTYPE);
         unprocessedXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         unprocessedXcsi.setProcessingStatus(null);
-        ArrayList<XhbCppStagingInboundDao> unprocessedDocList = new ArrayList<>();
+        List<XhbCppStagingInboundDao> unprocessedDocList = new ArrayList<>();
         unprocessedDocList.add(unprocessedXcsi);
 
         XhbCppStagingInboundDao validatedXcsi = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
@@ -148,7 +148,7 @@ class CppInitialProcessingControllerBeanTest
         validatedXcsi.setDocumentType(WEBPAGE_DOCTYPE);
         validatedXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_SUCCESS);
         validatedXcsi.setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED);
-        ArrayList<XhbCppStagingInboundDao> validatedDocList = new ArrayList<>();
+        List<XhbCppStagingInboundDao> validatedDocList = new ArrayList<>();
         validatedDocList.add(validatedXcsi);
 
         int courtId = 1;

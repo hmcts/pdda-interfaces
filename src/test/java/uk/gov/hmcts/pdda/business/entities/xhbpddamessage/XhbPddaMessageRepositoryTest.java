@@ -92,16 +92,16 @@ class XhbPddaMessageRepositoryTest extends AbstractRepositoryTest<XhbPddaMessage
         if (BYLIGHTHOUSE.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbPddaMessageDao>) getClassUnderTest().findByLighthouse();
+            result = getClassUnderTest().findByLighthouse();
         } else if (UNRESPONDED.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = (List<XhbPddaMessageDao>) getClassUnderTest().findUnrespondedCpMessages();
+            result = getClassUnderTest().findUnrespondedCpMessages();
         } else if (BYCPDOCUMENTNAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             result =
-                (List<XhbPddaMessageDao>) getClassUnderTest().findByCpDocumentName(getDummyDao().getCpDocumentName());
+                getClassUnderTest().findByCpDocumentName(getDummyDao().getCpDocumentName());
         }
         assertNotNull(result, "Result is Null");
         if (dao != null) {

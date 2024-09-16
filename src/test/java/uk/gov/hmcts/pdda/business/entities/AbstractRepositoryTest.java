@@ -45,7 +45,7 @@ public abstract class AbstractRepositoryTest<T extends AbstractDao> {
     protected boolean testfindById(T dao) {
         Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
             .thenReturn(dao);
-        Optional<T> result = (Optional<T>) getClassUnderTest().findById(getDummyId());
+        Optional<T> result = getClassUnderTest().findById(getDummyId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(), SAME);
@@ -74,7 +74,7 @@ public abstract class AbstractRepositoryTest<T extends AbstractDao> {
         }
         Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<T> result = (List<T>) getClassUnderTest().findAll();
+        List<T> result = getClassUnderTest().findAll();
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -85,7 +85,7 @@ public abstract class AbstractRepositoryTest<T extends AbstractDao> {
     }
 
     protected Integer getDummyId() {
-        return Integer.valueOf(-99);
+        return -99;
     }
 
     protected Long getDummyLongId() {

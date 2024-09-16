@@ -235,8 +235,8 @@ class FormattingControllerBeanTest {
     }
 
     private XhbCppListDao getDummyCppList(final XhbClobDao listClob) {
-        Integer cppListId = Integer.valueOf(1);
-        Integer courtCode = Integer.valueOf(81);
+        Integer cppListId = 1;
+        Integer courtCode = 81;
         LocalDateTime timeLoaded = null;
         LocalDateTime listStartDate = LocalDateTime.now().minusDays(5);
         LocalDateTime listEndDate = LocalDateTime.now().plusDays(1);
@@ -247,7 +247,7 @@ class FormattingControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         String listType = "DL";
         XhbCppListDao result = new XhbCppListDao();
@@ -278,18 +278,18 @@ class FormattingControllerBeanTest {
         String distributionType = "distributionType";
         String mimType = "pdf";
         String documentType = "IWP";
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         Long formattedDocumentBlobId = null;
         Long xmlDocumentClobId = null;
         String language = "en";
         String country = "gb";
-        Integer majorSchemaVersion = Integer.valueOf(1);
-        Integer minorSchemaVersion = Integer.valueOf(1);
+        Integer majorSchemaVersion = 1;
+        Integer minorSchemaVersion = 1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbFormattingDao result = new XhbFormattingDao();
         result.setFormattingId(formattingId);

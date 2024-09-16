@@ -29,12 +29,12 @@ class ThreadPoolTest {
     private final ThreadPool classUnderTest = new ThreadPool(NO_OF_WORKERS);
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // Do nothing
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

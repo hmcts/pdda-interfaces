@@ -41,12 +41,12 @@ class XhbDefinitivePublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
     protected XhbDefinitivePublicNoticeDao getDummyDao() {
         Integer definitivePnId = getDummyId();
         String definitivePnDesc = "definitivePnDesc";
-        Integer priority = Integer.valueOf(-1);
+        Integer priority = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDefinitivePublicNoticeDao result = new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc,
             priority, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         definitivePnId = result.getPrimaryKey();

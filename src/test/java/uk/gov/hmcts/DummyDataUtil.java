@@ -6,6 +6,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -27,8 +28,9 @@ public final class DummyDataUtil {
     
 
     public static Data getDataWithTable(Collection<PublicDisplayValue> table) {
+        List<PublicDisplayValue> emptyTable = new ArrayList<>();
         Data data = new Data();
-        data.setTable(new ArrayList<PublicDisplayValue>());
+        data.setTable(emptyTable);
         data.clear();
         data.setCourtName("Test Court Name");
         data.setCourtRoomName("Test Court Room Name");

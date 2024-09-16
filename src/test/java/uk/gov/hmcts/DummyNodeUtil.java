@@ -4,8 +4,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNod
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.LeafEventXmlNode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,7 +56,8 @@ public final class DummyNodeUtil {
         result.get(LIST);
         result.add(new LeafEventXmlNode(LIST, "new value"));
         // Test non-list type
-        result.getMap().put("HashMap", new HashMap<String, String>());
+        Map<String, String> emptyMap = new ConcurrentHashMap<>();
+        result.getMap().put("HashMap", emptyMap);
         result.getList("HashMap");
         result.add(new LeafEventXmlNode("HashMap", "new value"));
         return result;

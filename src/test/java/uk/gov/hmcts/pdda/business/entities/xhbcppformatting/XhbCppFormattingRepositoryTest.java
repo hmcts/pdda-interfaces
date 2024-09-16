@@ -118,7 +118,7 @@ class XhbCppFormattingRepositoryTest extends AbstractRepositoryTest<XhbCppFormat
         if (BYDOCTYPE.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            List<XhbCppFormattingDao> resultList = (List<XhbCppFormattingDao>) getClassUnderTest()
+            List<XhbCppFormattingDao> resultList = getClassUnderTest()
                 .findAllNewByDocType(getDummyDao().getDocumentType(), getDummyDao().getCreationDate());
             assertNotNull(resultList, NOTNULL);
             if (dao != null) {

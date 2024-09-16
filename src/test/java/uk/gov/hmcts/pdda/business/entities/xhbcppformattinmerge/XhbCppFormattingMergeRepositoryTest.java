@@ -41,17 +41,17 @@ class XhbCppFormattingMergeRepositoryTest extends AbstractRepositoryTest<XhbCppF
 
     @Override
     protected XhbCppFormattingMergeDao getDummyDao() {
-        Integer cppFormattingMergeId = Integer.valueOf(99);
-        Integer cppCppFormattingId = Integer.valueOf(-1);
-        Integer formattingId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(81);
+        Integer cppFormattingMergeId = 99;
+        Integer cppCppFormattingId = -1;
+        Integer formattingId = -1;
+        Integer courtId = 81;
         Long xhibitClobId = getDummyLongId();
         String language = "language";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbCppFormattingMergeDao result = new XhbCppFormattingMergeDao();
         result.setCppFormattingMergeId(cppFormattingMergeId);

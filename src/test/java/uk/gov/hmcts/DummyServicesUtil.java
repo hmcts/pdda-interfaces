@@ -20,7 +20,7 @@ public final class DummyServicesUtil {
     }
 
     public static Integer getDummyId() {
-        return Integer.valueOf(-99);
+        return -99;
     }
 
     public static Long getDummyLongId() {
@@ -51,7 +51,7 @@ public final class DummyServicesUtil {
     }
 
     public static XhbConfigPropDao getXhbConfigPropDao(String propertyName, String propertyValue) {
-        Integer configPropId = DummyServicesUtil.getRandomNumber();
+        Integer configPropId = getRandomNumber();
         return new XhbConfigPropDao(configPropId, propertyName, propertyValue);
     }
 }

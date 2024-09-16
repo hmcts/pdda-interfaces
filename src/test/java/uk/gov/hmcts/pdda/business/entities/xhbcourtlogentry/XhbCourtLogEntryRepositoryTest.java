@@ -63,7 +63,7 @@ class XhbCourtLogEntryRepositoryTest extends AbstractRepositoryTest<XhbCourtLogE
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbCourtLogEntryDao> result =
-            (List<XhbCourtLogEntryDao>) getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
+            getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");
@@ -76,18 +76,18 @@ class XhbCourtLogEntryRepositoryTest extends AbstractRepositoryTest<XhbCourtLogE
     @Override
     protected XhbCourtLogEntryDao getDummyDao() {
         Integer entryId = getDummyId();
-        Integer caseId = Integer.valueOf(-1);
-        Integer defendantOnCaseId = Integer.valueOf(-2);
-        Integer defendantOnOffenceId = Integer.valueOf(-3);
-        Integer scheduledHearingId = Integer.valueOf(-4);
-        Integer eventDescId = Integer.valueOf(-5);
+        Integer caseId = -1;
+        Integer defendantOnCaseId = -2;
+        Integer defendantOnOffenceId = -3;
+        Integer scheduledHearingId = -4;
+        Integer eventDescId = -5;
         String logEntryXml = "logEntryXml";
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
 
         XhbCourtLogEntryDao result = new XhbCourtLogEntryDao();
