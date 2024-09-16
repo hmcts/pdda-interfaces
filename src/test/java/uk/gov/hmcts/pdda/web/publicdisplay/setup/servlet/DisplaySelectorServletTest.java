@@ -68,13 +68,17 @@ class DisplaySelectorServletTest {
     private static DisplaySelectorServlet classUnderTest = new DisplaySelectorServlet(mockPDSetupControllerBean);
 
     @BeforeAll
-    public static void setUp() throws Exception {
-        config = EasyMock.createMock(ServletConfig.class);
-        classUnderTest.init(config);
+    public static void setUp() { 
+        try {
+            config = EasyMock.createMock(ServletConfig.class);
+            classUnderTest.init(config);
+        } catch (ServletException ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

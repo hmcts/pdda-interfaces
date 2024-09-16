@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -43,8 +45,12 @@ class FirmListXmlMergeUtilsNodesTest {
     private static FirmListXmlMergeUtils classUnderTest;
 
     @BeforeAll
-    public static void setUp() throws Exception {
-        classUnderTest = new FirmListXmlMergeUtils();
+    public static void setUp() {
+        try {
+            classUnderTest = new FirmListXmlMergeUtils();
+        } catch (XPathExpressionException ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @Test

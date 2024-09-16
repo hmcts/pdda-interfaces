@@ -28,12 +28,12 @@ class PublicNoticeMaintainerTest {
     private static final String TRUE = "Result is not True";
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // No setup required
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // No teardown required
     }
 

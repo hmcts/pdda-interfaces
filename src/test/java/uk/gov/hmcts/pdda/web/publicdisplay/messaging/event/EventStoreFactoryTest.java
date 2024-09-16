@@ -39,13 +39,13 @@ class EventStoreFactoryTest {
     private final DefaultEventStore eventStoreUnderTest = new DefaultEventStore();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(ConfigServices.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 

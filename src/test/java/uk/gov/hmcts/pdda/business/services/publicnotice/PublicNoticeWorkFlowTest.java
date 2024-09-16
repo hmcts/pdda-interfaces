@@ -40,12 +40,12 @@ class PublicNoticeWorkFlowTest {
     private final PublicNoticeWorkFlow classUnderTest = new PublicNoticeWorkFlow();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(PublicNoticeSelectionManipulator.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
