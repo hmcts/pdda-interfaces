@@ -78,18 +78,14 @@ class RulesConfigurationTest {
 
     @Test
     void testGetConditionalDocumentsForEvent() throws SAXException {
-        Mockito.when(mockRulesConfigurationHandler.getEventMappings())
-            .thenReturn(getDummyEventMappings());
+        Mockito.when(mockRulesConfigurationHandler.getEventMappings()).thenReturn(getDummyEventMappings());
         classUnderTest.loadConfiguration();
-        ConditionalDocument[] results =
-            classUnderTest.getConditionalDocumentsForEvent(getDummyEventType());
+        ConditionalDocument[] results = classUnderTest.getConditionalDocumentsForEvent(getDummyEventType());
         assertNotNull(results, "Result is Null");
-        assertTrue(results[0].isDocumentValidForEvent(getDummyPublicDisplayEvent()),
-            "Result is not True");
+        assertTrue(results[0].isDocumentValidForEvent(getDummyPublicDisplayEvent()), "Result is not True");
         // Test the invalid type
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            assertFalse(results[0].isDocumentValidForEvent(DummyEventUtil.getAddCaseEvent()),
-                "Result is not False");
+            assertFalse(results[0].isDocumentValidForEvent(DummyEventUtil.getAddCaseEvent()), "Result is not False");
         });
     }
 
@@ -118,10 +114,10 @@ class RulesConfigurationTest {
             eventMappings.getConditionalDocumentsForEvent(null);
         });
     }
-
+    
     protected PublicDisplayEvent getDummyPublicDisplayEvent() {
         return DummyEventUtil.getMoveCaseEvent();
-    }
+    }    
 
     private EventType getDummyEventType() {
         return EventType.getEventType(EventType.MOVE_CASE_EVENT);
@@ -129,20 +125,20 @@ class RulesConfigurationTest {
 
     private EventMappings getDummyEventMappings() {
         EventMappings result = new EventMappings();
-        result.putConditionalDocumentsForEvent(getDummyEventType(), getDummyConditionalDocument());
+        result.putConditionalDocumentsForEvent(getDummyEventType(),
+            new ConditionalDocument[] {getDummyConditionalDocument()});
         return result;
     }
-
+    
     private ConditionalDocument getDummyConditionalDocument() {
         DisplayDocumentType[] docTypes = {getDummyDisplayDocumentType("DailyList")};
         Rule[] rules = {new DefendantNameChangedRule()};
-        return new ConditionalDocument(docTypes, rules,
-            DummyEventUtil.getMoveCaseEvent().getEventType());
+        return new ConditionalDocument(docTypes, rules, DummyEventUtil.getMoveCaseEvent().getEventType());
     }
 
     private DisplayDocumentType getDummyDisplayDocumentType(String descriptionCode) {
         Locale locale = Locale.UK;
-        return DisplayDocumentTypeUtils.getDisplayDocumentType(descriptionCode,
-            locale.getLanguage(), locale.getCountry());
+        return DisplayDocumentTypeUtils.getDisplayDocumentType(descriptionCode, locale.getLanguage(),
+            locale.getCountry());
     }
 }

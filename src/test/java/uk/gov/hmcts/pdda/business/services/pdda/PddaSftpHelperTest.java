@@ -143,7 +143,7 @@ class PddaSftpHelperTest {
         String username = "username";
         String password = "password";
         String host = "host";
-        int port = Integer.valueOf(2).intValue();
+        int port = 2;
         try {
             EasyMock.expect(mockJSch.getSession(username, host, port)).andReturn(mockSession);
             mockSession.setConfig("StrictHostKeyChecking", "no");
@@ -253,12 +253,12 @@ class PddaSftpHelperTest {
         String remoteFolder = LINUX_REMOTE_FOLDER;
         List<String> filenamesList = DummyFileUtil.getFilenames();
         Map<String, InputStream> files = DummyFileUtil.getFiles(filenamesList);
-        Vector<String> filenames = new Vector<>(filenamesList);
+        List<String> filenames = new Vector<>(filenamesList);
         try {
             EasyMock.expect(mockSession.openChannel(SFTP)).andReturn(mockChannelSftp);
             mockChannelSftp.connect();
             EasyMock.expect(mockChannelSftp.stat(remoteFolder)).andReturn(null);
-            EasyMock.expect(mockChannelSftp.ls(EasyMock.isA(String.class))).andReturn(filenames);
+            EasyMock.expect(mockChannelSftp.ls(EasyMock.isA(String.class))).andReturn((Vector) filenames);
             for (Map.Entry<String, InputStream> entry : files.entrySet()) {
                 EasyMock.expect(mockChannelSftp.get(EasyMock.isA(String.class))).andReturn(entry.getValue());
             }

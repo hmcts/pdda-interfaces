@@ -94,7 +94,7 @@ class CourtDetailCppToPublicDisplayTest {
     @Test
     void testGetCppData() {
         // Setup
-        ArrayList<XhbCppFormattingDao> xcfList = new ArrayList<>();
+        List<XhbCppFormattingDao> xcfList = new ArrayList<>();
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
         List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
