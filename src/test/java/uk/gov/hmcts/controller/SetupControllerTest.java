@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SetupControllerTest {
 
     @Mock
-    private ModelMap mockModelMap;
+    private ModelAndView mockModelAndView;
 
     @TestSubject
     private final SetupController classUnderTest = new SetupController();
@@ -33,7 +32,7 @@ class SetupControllerTest {
 
     @Test
     void testDisplaySelectorServlet() {
-        ModelAndView result = classUnderTest.displaySelectorServlet(mockModelMap);
+        ModelAndView result = classUnderTest.displaySelectorServlet(mockModelAndView);
         assertNotNull(result, "Result is Null");
     }
 }
