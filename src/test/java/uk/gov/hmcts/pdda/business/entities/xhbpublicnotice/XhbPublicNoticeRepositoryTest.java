@@ -41,13 +41,13 @@ class XhbPublicNoticeRepositoryTest extends AbstractRepositoryTest<XhbPublicNoti
     protected XhbPublicNoticeDao getDummyDao() {
         Integer publicNoticeId = getDummyId();
         String publicNoticeDesc = "publicNoticeDesc";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         Integer definitivePnId = getDummyId();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbPublicNoticeDao result = new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
             creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
         publicNoticeId = result.getPrimaryKey();

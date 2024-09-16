@@ -43,17 +43,17 @@ class XhbSchedHearingAttendeeRepositoryTest extends AbstractRepositoryTest<XhbSc
     protected XhbSchedHearingAttendeeDao getDummyDao() {
         Integer shAttendeeId = getDummyId();
         String attendeeType = "";
-        Integer scheduledHearingId = Integer.valueOf(-1);
-        Integer shStaffId = Integer.valueOf(-1);
-        Integer shJusticeId = Integer.valueOf(-1);
-        Integer refJudgeId = Integer.valueOf(-1);
-        Integer refCourtReporterId = Integer.valueOf(-1);
-        Integer refJusticeId = Integer.valueOf(-1);
+        Integer scheduledHearingId = -1;
+        Integer shStaffId = -1;
+        Integer shJusticeId = -1;
+        Integer refJudgeId = -1;
+        Integer refCourtReporterId = -1;
+        Integer refJusticeId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbSchedHearingAttendeeDao result = new XhbSchedHearingAttendeeDao();
         result.setShAttendeeId(shAttendeeId);
         result.setAttendeeType(attendeeType);

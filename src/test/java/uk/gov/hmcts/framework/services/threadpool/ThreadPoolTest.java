@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class ThreadPoolTest {
 
-    private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
+    private static final Integer NO_OF_WORKERS = 1;
 
     @Mock
     private Runnable mockRunnable;
@@ -27,12 +27,12 @@ class ThreadPoolTest {
     private final ThreadPool classUnderTest = new ThreadPool(NO_OF_WORKERS);
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // Do nothing
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

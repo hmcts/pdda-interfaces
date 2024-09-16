@@ -112,12 +112,12 @@ class DefaultDisplayConfigurationReaderTest {
     private DefaultDisplayConfigurationReader classUnderTest;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -136,8 +136,8 @@ class DefaultDisplayConfigurationReaderTest {
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
         int[] courtsForPublicDisplay = {80};
-        Integer courtId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(-1);
+        Integer courtId = -1;
+        Integer courtRoomId = -1;
         CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(courtId, courtRoomId);
         DisplayDocumentType[] documentTypes = {displayDocumentType};
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);

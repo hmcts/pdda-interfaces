@@ -46,7 +46,7 @@ class XhbDisplayTypeRepositoryTest extends AbstractRepositoryTest<XhbDisplayType
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDisplayTypeDao result = new XhbDisplayTypeDao(displayTypeId, descriptionCode, lastUpdateDate, creationDate,
             lastUpdatedBy, createdBy, version);
         displayTypeId = result.getPrimaryKey();

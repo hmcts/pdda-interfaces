@@ -55,12 +55,12 @@ class CppListControllerBeanTest {
     private final CppListControllerBean classUnderTest = new CppListControllerBean(mockEntityManager);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -138,7 +138,7 @@ class CppListControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
 
         XhbCppListDao result = new XhbCppListDao();

@@ -50,12 +50,12 @@ class DisplayConfigurationWorkerTest {
     private final DisplayConfigurationWorker classUnderTest = getClassUnderTest();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -138,9 +138,9 @@ class DisplayConfigurationWorkerTest {
             DummyDisplayUtil.getDisplayRotationSetData(VALID_DISPLAY_URL, VALID_DOCUMENT_URL);
 
         DisplayRotationSetDataByDisplayComparator comparator = DisplayRotationSetDataByDisplayComparator.getInstance();
-        assertNotNull(Integer.valueOf(comparator.compare(oldOne, newOne)), NOTNULL);
+        assertNotNull(comparator.compare(oldOne, newOne), NOTNULL);
         assertEquals(0, comparator.compare(oldOne, oldOne), NOTEQUALS);
-        assertNotNull(Integer.valueOf(comparator.hashCode()), NOTNULL);
+        assertNotNull(comparator.hashCode(), NOTNULL);
         Boolean isEquals = comparator == null || false;
         assertFalse(isEquals, "Result is not False");
         isEquals = comparator.equals(comparator);

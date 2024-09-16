@@ -44,7 +44,7 @@ class DisplayLocationDataHelperTest {
     private static final String NOT_TRUE = "Result is not True";
     private static final String NULL = "Result is Null";
 
-    private static final Integer COURT_ID = Integer.valueOf(-1);
+    private static final Integer COURT_ID = -1;
 
     @Mock
     private ResourceBundle mockResourceBundle;
@@ -179,7 +179,7 @@ class DisplayLocationDataHelperTest {
 
     @Test
     void testGetDisplaysForCourtWrapper() {
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
         CourtSitePdComplexValue[] results = DisplayLocationDataHelper.getDisplaysForCourt(courtId, mockEntityManager);
         assertNotNull(results, NULL);
@@ -187,7 +187,7 @@ class DisplayLocationDataHelperTest {
 
     @Test
     void testGetRotationSetsDetailForCourtWrapper() {
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
         boolean result = false;
         try {

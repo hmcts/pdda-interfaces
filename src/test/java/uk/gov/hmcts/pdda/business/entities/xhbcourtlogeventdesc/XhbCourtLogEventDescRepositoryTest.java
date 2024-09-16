@@ -41,24 +41,24 @@ class XhbCourtLogEventDescRepositoryTest extends AbstractRepositoryTest<XhbCourt
     @Override
     protected XhbCourtLogEventDescDao getDummyDao() {
         Integer eventDescId = getDummyId();
-        Integer flaggedEvent = Integer.valueOf(-1);
-        Integer editable = Integer.valueOf(-2);
-        Integer sendToMercator = Integer.valueOf(-3);
-        Integer updateLinkedCases = Integer.valueOf(-4);
-        Integer publishToSubscribers = Integer.valueOf(-5);
-        Integer clearPublicDisplays = Integer.valueOf(-6);
-        Integer electronicInform = Integer.valueOf(-1);
-        Integer publicDisplay = Integer.valueOf(-1);
+        Integer flaggedEvent = -1;
+        Integer editable = -2;
+        Integer sendToMercator = -3;
+        Integer updateLinkedCases = -4;
+        Integer publishToSubscribers = -5;
+        Integer clearPublicDisplays = -6;
+        Integer electronicInform = -1;
+        Integer publicDisplay = -1;
         String linkedCaseText = "linkedCaseText";
         String eventDescription = "eventDescription";
-        Integer eventType = Integer.valueOf(-1);
-        Integer publicNotice = Integer.valueOf(-1);
+        Integer eventType = -1;
+        Integer publicNotice = -1;
         String shortDescription = "shortDescription";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbCourtLogEventDescDao result = new XhbCourtLogEventDescDao();
         result.setEventDescId(eventDescId);

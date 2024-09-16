@@ -63,7 +63,7 @@ class XhbSchedHearingDefendantRepositoryTest extends AbstractRepositoryTest<XhbS
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbSchedHearingDefendantDao> result = (List<XhbSchedHearingDefendantDao>) getClassUnderTest()
+        List<XhbSchedHearingDefendantDao> result = getClassUnderTest()
             .findByScheduledHearingId(getDummyDao().getScheduledHearingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -76,14 +76,14 @@ class XhbSchedHearingDefendantRepositoryTest extends AbstractRepositoryTest<XhbS
 
     @Override
     protected XhbSchedHearingDefendantDao getDummyDao() {
-        Integer schedHearingDefendantId = Integer.valueOf(-1);
-        Integer scheduledHearingId = Integer.valueOf(-1);
-        Integer defendantOnCaseId = Integer.valueOf(-1);
+        Integer schedHearingDefendantId = -1;
+        Integer scheduledHearingId = -1;
+        Integer defendantOnCaseId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbSchedHearingDefendantDao result = new XhbSchedHearingDefendantDao(schedHearingDefendantId,
             scheduledHearingId, defendantOnCaseId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         schedHearingDefendantId = result.getPrimaryKey();

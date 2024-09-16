@@ -49,12 +49,16 @@ class FirmListXmlMergeUtilsTest {
     private static FirmListXmlMergeUtils classUnderTest;
 
     @BeforeAll
-    public static void setUp() throws Exception {
-        classUnderTest = new FirmListXmlMergeUtils();
+    public static void setUp() {
+        try {
+            classUnderTest = new FirmListXmlMergeUtils();
+        } catch (XPathExpressionException ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

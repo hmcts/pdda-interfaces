@@ -38,12 +38,12 @@ class RotationSetCompiledRendererDelegateTest {
     private final RotationSetCompiledRendererDelegate classUnderTest = new RotationSetCompiledRendererDelegate();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

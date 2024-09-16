@@ -28,6 +28,8 @@ public final class DummyEventUtil {
     private static final String NO20904 = "20904";
     private static final String NO20935 = "20935";
     private static final String NO30200 = "30200";
+    private static final String NO20903 = "20903";
+    private static final String NO30100 = "30100";
     private static final String NOTNULL = "Result is Null";
     private static final String NULL = "Result is not Null";
     private static final String FALSE = "Result is not False";
@@ -180,11 +182,11 @@ public final class DummyEventUtil {
             node.add(DummyNodeUtil.getE20901TimeEstimateOptions(laoType));
         } else if (NO20904.equals(event)) {
             node.add(DummyNodeUtil.getE20904WitnessSwornOptions(laoType));
-        } else if ("20903".equals(event)) {
+        } else if (NO20903.equals(event)) {
             node.add(DummyNodeUtil.getE20903ProsecutionCaseOptions(laoType));
         } else if (NO20935.equals(event)) {
             node.add(DummyNodeUtil.getE20935WitnessReadOptions(laoType));
-        } else if ("30100".equals(event)) {
+        } else if (NO30100.equals(event)) {
             node.add(DummyNodeUtil.getE30100ShortAdjournOptions(laoType));
         }
         return node;

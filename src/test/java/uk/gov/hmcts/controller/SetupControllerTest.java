@@ -1,10 +1,11 @@
 package uk.gov.hmcts.controller;
 
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,21 +19,23 @@ class SetupControllerTest {
     private ModelAndView mockModelAndView;
 
     @TestSubject
-    private final SetupController classUnderTest = new SetupController();
+    private SetupController classUnderTest;
 
-    @BeforeAll
-    public static void setUp() throws Exception {
-        // Do nothing
+    @BeforeEach
+    public void setUp() {
+        mockModelAndView = EasyMock.createMock(ModelAndView.class);
+        
+        classUnderTest = new SetupController();
     }
 
-    @AfterAll
-    public static void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() {
         // Do nothing
     }
 
     @Test
     void testDisplaySelectorServlet() {
-        ModelAndView result = classUnderTest.displaySelectorServlet(mockModelAndView);
+        ModelAndView result = classUnderTest.displaySelectorServlet((ModelAndView) mockModelAndView);
         assertNotNull(result, "Result is Null");
     }
 }

@@ -44,7 +44,7 @@ public final class DummyDisplayDocumentUtil {
     public static DisplayDocument getDisplayDocument(Collection<PublicDisplayValue> table,
         PdDataControllerBean mockPdDataControllerBean,
         DisplayStoreControllerBean mockDisplayStoreControllerBean) {
-        DisplayDocument doc = new DisplayDocument(DummyDisplayDocumentUtil.getDisplayDocumentUri(),
+        DisplayDocument doc = new DisplayDocument(getDisplayDocumentUri(),
             mockPdDataControllerBean, mockDisplayStoreControllerBean) {
 
             private static final long serialVersionUID = 1L;
@@ -55,7 +55,7 @@ public final class DummyDisplayDocumentUtil {
             }
         };
         doc.setRenderedString("Test Rendered String");
-        assertFalse(doc.equals(new DisplayDocument(DummyDisplayDocumentUtil.getDisplayDocumentUri(),
+        assertFalse(doc.equals(new DisplayDocument(getDisplayDocumentUri(),
             mockPdDataControllerBean, mockDisplayStoreControllerBean)), "Result is not False");
         return doc;
     }

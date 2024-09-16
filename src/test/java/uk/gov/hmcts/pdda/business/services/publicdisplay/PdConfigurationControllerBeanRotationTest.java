@@ -131,7 +131,7 @@ class PdConfigurationControllerBeanRotationTest {
             mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(DisplayLocationDataHelper.class);
         Mockito.mockStatic(RotationSetMaintainHelper.class);
         Mockito.mockStatic(DisplayConfigurationHelper.class);
@@ -139,7 +139,7 @@ class PdConfigurationControllerBeanRotationTest {
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -288,7 +288,7 @@ class PdConfigurationControllerBeanRotationTest {
     @Test
     void testRotationSetNotFoundCheckedException() {
         Assertions.assertThrows(RotationSetNotFoundCheckedException.class, () -> {
-            throw new RotationSetNotFoundCheckedException(Integer.valueOf(-1));
+            throw new RotationSetNotFoundCheckedException(-1);
         });
     }
 
@@ -401,11 +401,11 @@ class PdConfigurationControllerBeanRotationTest {
         assertEquals(rsddComplex.getDisplayDocumentId(), displayDocumentDao.getDisplayDocumentId(), EQUALS);
         assertEquals(rotationSetDdDao, rsComplex.getRotationSetDd(rotationSetDdDao.getRotationSetDdId()), EQUALS);
         assertNull(rsComplex.getRotationSetDd(2), NULL);
-        assertNotNull(Integer.valueOf(displayBasicValueSortAdapters[0].hashCode()), NOTNULL);
+        assertNotNull(displayBasicValueSortAdapters[0].hashCode(), NOTNULL);
         assertSame(displayBasicValueSortAdapters[0].getDao(), xhbDisplayDao, "Result is not Same");
         assertNotNull(
-            Integer.valueOf(
-                displayBasicValueSortAdapter.compareTo(new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2"))),
+            
+                displayBasicValueSortAdapter.compareTo(new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2")),
             NOTNULL);
     }
 

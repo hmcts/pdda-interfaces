@@ -137,7 +137,7 @@ class PdConfigurationControllerBeanGetTest {
             mockPublicDisplayNotifier, mockVipDisplayDocumentQuery, mockVipDisplayCourtRoomQuery);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(DisplayLocationDataHelper.class);
         Mockito.mockStatic(RotationSetMaintainHelper.class);
         Mockito.mockStatic(DisplayConfigurationHelper.class);
@@ -145,7 +145,7 @@ class PdConfigurationControllerBeanGetTest {
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -198,7 +198,7 @@ class PdConfigurationControllerBeanGetTest {
 
         // Check results
         assertEquals(2, result.length, EQUALS);
-        assertEquals(DISPLAY_ID, Integer.valueOf(result[0].getDisplayId()), EQUALS);
+        assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
     }
 
     @Test
@@ -254,8 +254,8 @@ class PdConfigurationControllerBeanGetTest {
 
         // Checks
         assertEquals(1, result.length, EQUALS);
-        assertEquals(ROTATION_SET_ID, Integer.valueOf(result[0].getRotationSetId()), EQUALS);
-        assertEquals(DISPLAY_ID, Integer.valueOf(result[0].getDisplayId()), EQUALS);
+        assertEquals(ROTATION_SET_ID, result[0].getRotationSetId(), EQUALS);
+        assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
         assertNotNull(result[0].getDisplayType(), NOTNULL);
         assertNotNull(result[0].getDisplayUri(), NOTNULL);
         assertTrue(result[0].getRotationSetDisplayDocuments().length > 0, TRUE);

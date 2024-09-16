@@ -111,7 +111,7 @@ class FormattingServicesNextDocumentTest {
     private FormattingServices classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
         ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
             mockXhbConfigPropRepository);
@@ -135,7 +135,7 @@ class FormattingServicesNextDocumentTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

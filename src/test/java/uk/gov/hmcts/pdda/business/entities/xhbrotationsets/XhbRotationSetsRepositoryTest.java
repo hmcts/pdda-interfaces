@@ -64,7 +64,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbRotationSetsDao> result =
-            (List<XhbRotationSetsDao>) getClassUnderTest().findByCourtId(getDummyDao().getRotationSetId());
+            getClassUnderTest().findByCourtId(getDummyDao().getRotationSetId());
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -142,14 +142,14 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
     @Override
     protected XhbRotationSetsDao getDummyDao() {
         Integer rotationSetsId = getDummyId();
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         String description = "description";
         String defaultYn = "defaultYn";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbRotationSetsDao result = new XhbRotationSetsDao();
         result.setRotationSetId(rotationSetsId);
         result.setCourtId(courtId);

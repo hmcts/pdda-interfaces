@@ -52,14 +52,14 @@ class TranslationServicesTest {
     private final TranslationServices classUnderTest = TranslationServices.getInstance();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(InitializationService.class);
         Mockito.mockStatic(ResourceServices.class);
 
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 

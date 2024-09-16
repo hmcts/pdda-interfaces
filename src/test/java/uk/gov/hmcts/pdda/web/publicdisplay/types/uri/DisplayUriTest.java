@@ -31,12 +31,12 @@ class DisplayUriTest {
     private final DisplayUri classUnderTest = new DisplayUri(COURTHOUSENAME, COURTSITECODE, LOCATION, DISPLAY);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -44,8 +44,8 @@ class DisplayUriTest {
     void testDisplayUrlEquals() {
         DisplayUri anotherOne = new DisplayUri("anotherOne", COURTSITECODE, LOCATION, DISPLAY);
         assertFalse(Boolean.valueOf(classUnderTest.equals(anotherOne)), "Result is not False");
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), "Result is Null");
-        assertNotNull(Integer.valueOf(classUnderTest.compareTo(anotherOne)), "Result is Null");
+        assertNotNull(classUnderTest.hashCode(), "Result is Null");
+        assertNotNull(classUnderTest.compareTo(anotherOne), "Result is Null");
     }
 
     @Test

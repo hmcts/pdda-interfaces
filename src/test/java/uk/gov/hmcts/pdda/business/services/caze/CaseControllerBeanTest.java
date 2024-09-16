@@ -66,12 +66,12 @@ class CaseControllerBeanTest {
     private final CaseControllerBean classUnderTest = new CaseControllerBean(mockEntityManager);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         new CaseControllerBean();
     }
 
@@ -83,7 +83,7 @@ class CaseControllerBeanTest {
         // Setup
         final Calendar today = Calendar.getInstance();
         LocalDateTime ldt = LocalDateTime.now();
-        ArrayList<XhbHearingDao> xhList = (ArrayList<XhbHearingDao>) getDummyHearingDaoList();
+        List<XhbHearingDao> xhList = getDummyHearingDaoList();
         Optional<XhbHearingListDao> list = Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt, ldt));
         Optional<XhbHearingListDao> oldList =
             Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt.minusDays(1), ldt.minusDays(1)));
@@ -109,7 +109,7 @@ class CaseControllerBeanTest {
         Integer refHearingTypeId = Double.valueOf(Math.random()).intValue();
         Integer courtId = COURT_ID;
         String mpHearingType = null;
-        Double lastCalculatedDuration = Double.valueOf(Math.random());
+        Double lastCalculatedDuration = Math.random();
         LocalDateTime hearingStartDate = LocalDateTime.now();
         LocalDateTime hearingEndDate = LocalDateTime.now();
         Integer linkedHearingId = Double.valueOf(Math.random()).intValue();
@@ -117,7 +117,7 @@ class CaseControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(15);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(2);
+        Integer version = 2;
 
         XhbHearingDao result = new XhbHearingDao();
         result.setHearingId(hearingId);
@@ -159,7 +159,7 @@ class CaseControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(15);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(2);
+        Integer version = 2;
 
         XhbHearingListDao result = new XhbHearingListDao();
         result.setListId(listId);

@@ -64,7 +64,7 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayLocationDao> result =
-            (List<XhbDisplayLocationDao>) getClassUnderTest().findByVipCourtSite(getDummyDao().getCourtSiteId());
+            getClassUnderTest().findByVipCourtSite(getDummyDao().getCourtSiteId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -94,7 +94,7 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayLocationDao> result =
-            (List<XhbDisplayLocationDao>) getClassUnderTest().findByCourtSite(getDummyDao().getCourtSiteId());
+            getClassUnderTest().findByCourtSite(getDummyDao().getCourtSiteId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -108,12 +108,12 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
     protected XhbDisplayLocationDao getDummyDao() {
         Integer displayLocationId = getDummyId();
         String descriptionCode = "descriptionCode";
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer courtSiteId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDisplayLocationDao result = new XhbDisplayLocationDao(displayLocationId, descriptionCode, courtSiteId,
             lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         displayLocationId = result.getPrimaryKey();

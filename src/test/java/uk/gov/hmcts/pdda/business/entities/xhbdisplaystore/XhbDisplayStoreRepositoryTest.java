@@ -82,7 +82,7 @@ class XhbDisplayStoreRepositoryTest extends AbstractRepositoryTest<XhbDisplaySto
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbDisplayStoreDao result = new XhbDisplayStoreDao(displayStoreId, retrievalCode, content, lastUpdateDate,
             creationDate, lastUpdatedBy, createdBy, version, obsInd);

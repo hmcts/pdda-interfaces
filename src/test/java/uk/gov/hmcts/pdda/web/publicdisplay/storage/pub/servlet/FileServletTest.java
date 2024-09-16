@@ -59,13 +59,13 @@ class FileServletTest {
     private final FileServlet classUnderTest = new FileServlet();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(StorerFactory.class);
         Mockito.mockStatic(UriFactory.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 

@@ -54,14 +54,14 @@ class TranslationServicesFailureTest {
     private final TranslationServices classUnderTest = TranslationServices.getInstance();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(InitializationService.class);
         Mockito.mockStatic(ResourceServices.class);
 
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -72,13 +72,15 @@ class TranslationServicesFailureTest {
         // Run
         classUnderTest.setTranslationBundlesMap(bundlesMap);
         // Check
-        assertEquals(bundlesMap, classUnderTest.getTranslationBundlesMap(), "Results are not Equal");
+        assertEquals(bundlesMap, classUnderTest.getTranslationBundlesMap(),
+            "Results are not Equal");
     }
 
     @Test
     void testGetTranslationBundlesFailureNull() {
         // Setup
-        classUnderTest.setTranslationBundlesMap(new ConcurrentHashMap<TranslationEnum, TranslationBundles>());
+        Map<TranslationEnum, TranslationBundles> emptyMap = new ConcurrentHashMap<>();
+        classUnderTest.setTranslationBundlesMap(emptyMap);
         Mockito.when(InitializationService.getInstance()).thenReturn(mockInitializationService);
         Mockito.when(mockInitializationService.getDefaultLocale()).thenReturn(Locale.UK);
         // Run
@@ -90,7 +92,8 @@ class TranslationServicesFailureTest {
     @Test
     void testGetTranslationBundlesFailure() {
         // Setup
-        classUnderTest.setTranslationBundlesMap(new ConcurrentHashMap<TranslationEnum, TranslationBundles>());
+        Map<TranslationEnum, TranslationBundles> emptyMap = new ConcurrentHashMap<>();
+        classUnderTest.setTranslationBundlesMap(emptyMap);
         Mockito.when(InitializationService.getInstance()).thenReturn(mockInitializationService);
         Mockito.when(mockInitializationService.getDefaultLocale()).thenReturn(Locale.UK);
         // Run
@@ -107,7 +110,8 @@ class TranslationServicesFailureTest {
 
     @Test
     void testAddTranslationBundleKeyFailure() {
-        boolean result = testAddTranslationBundleFailure(Locale.FRANCE, null, "Bonjour", null, false);
+        boolean result =
+            testAddTranslationBundleFailure(Locale.FRANCE, null, "Bonjour", null, false);
         assertTrue(result, TRUE);
     }
 
@@ -117,8 +121,8 @@ class TranslationServicesFailureTest {
         assertTrue(result, TRUE);
     }
 
-    private boolean testAddTranslationBundleFailure(Locale locale, String key, String translation, String context,
-        boolean exactMatch) {
+    private boolean testAddTranslationBundleFailure(Locale locale, String key, String translation,
+        String context, boolean exactMatch) {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             TranslationBundles translationBundle = new TranslationBundles(locale);
             translationBundle.addTranslation(locale, key, translation, context, exactMatch);

@@ -48,12 +48,12 @@ class DisplayDocumentTypeTest {
     private final DisplayDocumentType classUnderTest = DisplayDocumentType.DAILY_LIST;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -70,7 +70,7 @@ class DisplayDocumentTypeTest {
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("CourtList"), NOTNULL);
         assertNotNull(classUnderTest.getLongName(), NOTNULL);
         assertNotNull(classUnderTest.toLowerCaseString(), NOTNULL);
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), NOTNULL);
+        assertNotNull(classUnderTest.hashCode(), NOTNULL);
     }
 
     @Test
@@ -101,7 +101,7 @@ class DisplayDocumentTypeTest {
     private CasesRequired getDummyCasesRequired() {
         CasesRequired result = CasesRequired.ALL;
         assertNotNull(result.toString(), NOTNULL);
-        assertNotNull(Integer.valueOf(result.hashCode()), NOTNULL);
+        assertNotNull(result.hashCode(), NOTNULL);
         return result;
     }
 }

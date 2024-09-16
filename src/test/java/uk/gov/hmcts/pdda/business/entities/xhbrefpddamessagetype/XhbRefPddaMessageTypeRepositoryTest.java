@@ -64,7 +64,7 @@ class XhbRefPddaMessageTypeRepositoryTest extends AbstractRepositoryTest<XhbRefP
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbRefPddaMessageTypeDao> result =
-            (List<XhbRefPddaMessageTypeDao>) getClassUnderTest().findByMessageType(getDummyDao().getPddaMessageType());
+            getClassUnderTest().findByMessageType(getDummyDao().getPddaMessageType());
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -83,7 +83,7 @@ class XhbRefPddaMessageTypeRepositoryTest extends AbstractRepositoryTest<XhbRefP
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbRefPddaMessageTypeDao result = new XhbRefPddaMessageTypeDao(pddaMessageTypeId, pddaMessageType,
             pddaMessageDescription, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version, obsInd);

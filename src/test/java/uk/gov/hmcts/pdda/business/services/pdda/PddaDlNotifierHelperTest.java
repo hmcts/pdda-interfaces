@@ -189,13 +189,13 @@ class PddaDlNotifierHelperTest {
     
     private List<XhbCourtDao> getXhbCourtDaoList() {
         List<XhbCourtDao> result = DummyServicesUtil.getNewArrayList();
-        XhbCourtDao courtDao1 = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(453), "Court1");
+        XhbCourtDao courtDao1 = DummyCourtUtil.getXhbCourtDao(453, "Court1");
         courtDao1.setObsInd(null);
         result.add(courtDao1);
-        XhbCourtDao courtDao2 = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(777), "Court2");
+        XhbCourtDao courtDao2 = DummyCourtUtil.getXhbCourtDao(777, "Court2");
         courtDao2.setObsInd(NO);
         result.add(courtDao2);
-        XhbCourtDao courtDao3 = DummyCourtUtil.getXhbCourtDao(Integer.valueOf(999), "Court3");
+        XhbCourtDao courtDao3 = DummyCourtUtil.getXhbCourtDao(999, "Court3");
         courtDao2.setObsInd(YES);
         result.add(courtDao3);
         return result;
