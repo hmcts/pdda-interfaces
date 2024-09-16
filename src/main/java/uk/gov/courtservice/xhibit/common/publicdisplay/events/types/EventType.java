@@ -120,7 +120,7 @@ public final class EventType {
      */
     @Override
     public boolean equals(Object anObject) {
-        return anObject instanceof EventType && value.equals(((EventType) anObject).value);
+        return anObject instanceof EventType eventType && value.equals(eventType.value);
     }
 
     /**
