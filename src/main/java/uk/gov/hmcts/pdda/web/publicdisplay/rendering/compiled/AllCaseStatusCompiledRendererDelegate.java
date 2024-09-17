@@ -22,6 +22,19 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
     private static final Logger LOG =
         LoggerFactory.getLogger(AllCaseStatusCompiledRendererDelegate.class);
 
+    private static final String E30200_CASE_TO_BE_LISTED_IN_WEEK_COMMENCING =
+        "E30200_Case_to_be_listed_in_week_commencing";
+    private static final String E30200_CASE_TO_BE_LISTED_ON = "E30200_Case_to_be_listed_on";
+    private static final String E30200_CASE_TO_BE_LISTED_ON_DATE_TO_BE_FIXED =
+        "E30200_Case_to_be_listed_on_date_to_be_fixed";
+    private static final String E30200_CASE_TO_BE_LISTED_FOR_SENTENCE =
+        "E30200_Case_to_be_listed_for_Sentence";
+    private static final String E30200_CASE_TO_BE_LISTED_FOR_FURTHER_MENTION_PAD =
+        "E30200_Case_to_be_listed_for_Further_Mention/PAD";
+    private static final String E30200_CASE_TO_BE_LISTED_FOR_TRIAL =
+        "E30200_Case_to_be_listed_for_trial";
+    private static final String TRUE = "true";
+
     /**
      * Append the html for the display document.
      * 
@@ -114,7 +127,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
         } else {
             return false;
         }
-        if (newCaseNumber && allDefendantsHidden.get(caseNumber).booleanValue()) {
+        if (newCaseNumber && allDefendantsHidden.get(caseNumber)) {
             // If all the defendants on the case are hidden then we still
             // want to show one row for the case, so dont skip this item.
             // If the case itself is hidden then no rows for the case
@@ -144,7 +157,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
             boolean hideThisDefendantInPublicDisplay = RendererUtils.isHideInPublicDisplay(item);
 
             if (cases.containsKey(caseNumber)) {
-                if (cases.get(caseNumber).booleanValue() && !hideThisDefendantInPublicDisplay) {
+                if (cases.get(caseNumber) && !hideThisDefendantInPublicDisplay) {
                     cases.put(caseNumber, Boolean.FALSE);
                 }
             } else {
@@ -233,25 +246,22 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
         String laoType = ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Type")).getValue();
 
         // Add LAO Type text
-        if ("E30200_Case_to_be_listed_in_week_commencing".equals(laoType)) {
+        if (E30200_CASE_TO_BE_LISTED_IN_WEEK_COMMENCING.equals(laoType)) {
             AppendEventsThirtyTwoHundredLaoUtils.appendE30200LaoDate(buffer, documentI18n,
-                laoOptions,
-                "Case_to_be_listed_in_week_commencing");
-        } else if ("E30200_Case_to_be_listed_on".equals(laoType)) {
+                laoOptions, "Case_to_be_listed_in_week_commencing");
+        } else if (E30200_CASE_TO_BE_LISTED_ON.equals(laoType)) {
             AppendEventsThirtyTwoHundredLaoUtils.appendE30200LaoDate(buffer, documentI18n,
                 laoOptions, "Case_to_be_listed_on");
-        } else if ("E30200_Case_to_be_listed_on_date_to_be_fixed".equals(laoType)) {
+        } else if (E30200_CASE_TO_BE_LISTED_ON_DATE_TO_BE_FIXED.equals(laoType)) {
             AppendUtils.append(buffer,
                 TranslationUtils.translate(documentI18n, "Case_to_be_listed_on_date_to_be_fixed"));
-        } else if ("E30200_Case_to_be_listed_for_Sentence".equals(laoType)) {
+        } else if (E30200_CASE_TO_BE_LISTED_FOR_SENTENCE.equals(laoType)) {
             AppendEventsThirtyTwoHundredLaoUtils.appendE30200LaoDate(buffer, documentI18n,
-                laoOptions,
-                "Case_to_be_listed_for_Sentence_on");
-        } else if ("E30200_Case_to_be_listed_for_Further_Mention/PAD".equals(laoType)) {
+                laoOptions, "Case_to_be_listed_for_Sentence_on");
+        } else if (E30200_CASE_TO_BE_LISTED_FOR_FURTHER_MENTION_PAD.equals(laoType)) {
             AppendEventsThirtyTwoHundredLaoUtils.appendE30200LaoDate(buffer, documentI18n,
-                laoOptions,
-                "Case_to_be_listed_for_Further_Mention/PAD_on");
-        } else if ("E30200_Case_to_be_listed_for_trial".equals(laoType)) {
+                laoOptions, "Case_to_be_listed_for_Further_Mention/PAD_on");
+        } else if (E30200_CASE_TO_BE_LISTED_FOR_TRIAL.equals(laoType)) {
             AppendEventsThirtyTwoHundredLaoUtils.appendE30200LaoDate(buffer, documentI18n,
                 laoOptions, "Case_to_be_listed_for_Trial_on");
         } else {
@@ -263,11 +273,11 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
         // Separate listing text from below
         AppendUtils.append(buffer, SEMI_COLON);
         AppendUtils.append(buffer, SPACE);
-        
+
         appendAdditional30200(buffer, documentI18n, laoOptions);
     }
-     
-    private void appendAdditional30200(StringBuilder buffer, TranslationBundle documentI18n, 
+
+    private void appendAdditional30200(StringBuilder buffer, TranslationBundle documentI18n,
         BranchEventXmlNode laoOptions) {
         // PSR Required
         if (isPsrRequired(laoOptions)) {
@@ -290,25 +300,24 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
             AppendUtils.append(buffer, SPACE);
         }
     }
-    
+
     private boolean isNotReserved(BranchEventXmlNode laoOptions) {
-        return laoOptions.get("E30200_LAO_Not_Reserved") != null
-            && ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Not_Reserved")).getValue()
-            .equalsIgnoreCase("true");
+        return laoOptions.get("E30200_LAO_Not_Reserved") != null && TRUE.equalsIgnoreCase(
+            ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Not_Reserved")).getValue());
     }
-    
+
     private boolean isReservedWithJudge(BranchEventXmlNode laoOptions) {
         return laoOptions.get(E30200_LAO_JUDGE_NAME) != null
             && !"".equals(((LeafEventXmlNode) laoOptions.get(E30200_LAO_JUDGE_NAME)).getValue());
     }
-    
+
     private boolean isPsrRequired(BranchEventXmlNode laoOptions) {
-        return laoOptions.get("E30200_LAO_PSR_Required") != null
-            && ((LeafEventXmlNode) laoOptions.get("E30200_LAO_PSR_Required")).getValue()
-                .equalsIgnoreCase("true");
+        return laoOptions.get("E30200_LAO_PSR_Required") != null && TRUE.equalsIgnoreCase(
+            ((LeafEventXmlNode) laoOptions.get("E30200_LAO_PSR_Required")).getValue());
     }
 
     protected boolean hasDefendant(Object item) {
-        return item instanceof AllCaseStatusValue allCaseStatusValue && allCaseStatusValue.hasDefendant();
+        return item instanceof AllCaseStatusValue allCaseStatusValue
+            && allCaseStatusValue.hasDefendant();
     }
 }
