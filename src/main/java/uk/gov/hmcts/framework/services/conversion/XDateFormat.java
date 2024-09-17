@@ -69,14 +69,14 @@ public final class XDateFormat {
     }
 
     public static String format(Timestamp date, int dateTimeFormat) {
-        return XDateFormat.format((Date) date, dateTimeFormat);
+        return format((Date) date, dateTimeFormat);
     }
 
     public static String format(Calendar date, int dateTimeFormat) {
         if (date == null) {
             return "";
         } else {
-            return XDateFormat.format(date.getTime(), dateTimeFormat);
+            return format(date.getTime(), dateTimeFormat);
         }
     }
 

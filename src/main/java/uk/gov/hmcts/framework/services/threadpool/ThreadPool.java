@@ -231,7 +231,7 @@ public final class ThreadPool {
                             this.wait(); // NOSONAR
                         } catch (InterruptedException ex) {
                             LOG.error(ex.getMessage(), ex);
-                            Thread.currentThread().interrupt();
+                            currentThread().interrupt();
                         }
                     }
                     // Do the work
