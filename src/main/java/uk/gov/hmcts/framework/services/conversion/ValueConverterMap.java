@@ -58,14 +58,14 @@ public class ValueConverterMap {
     @SuppressWarnings("unchecked")
     public void addInnerMap(String name, StringMap innerMap) {
         Object obj = getMap().get(name);
-        ArrayList<Object> inMaps;
+        List<Object> inMaps;
         if (obj == null) {
             inMaps = new ArrayList<>();
         } else {
             inMaps = (ArrayList) obj;
         }
         inMaps.add(innerMap);
-        getMap().put(name, inMaps);
+        getMap().put(name, (ArrayList) inMaps);
     }
     
     protected void copyTypeToMap(Class<?> type, String propertyName, Method method, Object bean) {
@@ -80,7 +80,7 @@ public class ValueConverterMap {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         Iterator<?> entries = getMap().entrySet().iterator();
-        TreeSet treeSet = new TreeSet();
+        TreeSet<String> treeSet = new TreeSet<>();
 
         while (entries.hasNext()) {
             Map.Entry entry = (Map.Entry) entries.next();

@@ -111,13 +111,13 @@ public final class CppDataSourceFactory {
     
     private static List<CourtDetailValue> getSortedCourtDetailValueList(List<CourtDetailValue> data) {
         // Sort the collection by court site, court room and then event time descending
-        Collections.sort((List<CourtDetailValue>) data);
+        Collections.sort(data);
 
         // Remove Duplicates
         ArrayList<CourtDetailValue> newList = new ArrayList<>();
         int previousRoomNo = -1;
         String previousCourtSiteCode = "";
-        for (CourtDetailValue value : (ArrayList<CourtDetailValue>) data) {
+        for (CourtDetailValue value : data) {
             // First check we're not processing the same court room at the same court site
             // multiple
             // times
@@ -126,7 +126,7 @@ public final class CppDataSourceFactory {
 
                 // Get all matching elements
                 List<CourtDetailValue> matchingList =
-                    (List<CourtDetailValue>) findAllObjects(value, (List<CourtDetailValue>) data);
+                    findAllObjects(value, data);
                 if (matchingList.size() == ONE) {
                     newList.add(value);
                 } else if (matchingList.size() > ONE) {
@@ -156,13 +156,13 @@ public final class CppDataSourceFactory {
     
     private static List<AllCourtStatusValue> getSortedAllCourtStatusValueList(List<AllCourtStatusValue> data) {
         // Sort the collection by court site, court room and then event time descending
-        Collections.sort((List<AllCourtStatusValue>) data);
+        Collections.sort(data);
 
         // Remove Duplicates
         ArrayList<AllCourtStatusValue> newList = new ArrayList<>();
         int previousRoomNo = -1;
         String previousCourtSiteCode = EMPTY_STRING;
-        for (AllCourtStatusValue value : (ArrayList<AllCourtStatusValue>) data) {
+        for (AllCourtStatusValue value : data) {
             // First check we're not processing the same court room at the same court site
             // multiple
             // times
@@ -171,7 +171,7 @@ public final class CppDataSourceFactory {
 
                 // Get all matching elements
                 List<AllCourtStatusValue> matchingList =
-                    (List<AllCourtStatusValue>) findAllObjects(value, (List<AllCourtStatusValue>) data);
+                    findAllObjects(value, data);
                 if (matchingList.size() == ONE) {
                     newList.add(value);
                 } else if (matchingList.size() > ONE) {
@@ -201,7 +201,7 @@ public final class CppDataSourceFactory {
     
     private static <T extends PublicDisplayValue> List<T> getSortedList(List<T> data) {
         if (null != data && data.size() > ONE) {
-            Collections.sort((List<T>) data);
+            Collections.sort(data);
         }
         return data;
     }
