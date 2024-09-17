@@ -116,7 +116,7 @@ public final class ResourceServices {
         }
 
         throw new CsUnrecoverableException(
-            new Message(LOOKUP_ERROR_KEY, new Object[] {name, locale}),
+            new Message(LOOKUP_ERROR_KEY, name, locale),
             "Could not find resource \"" + name + "\" in locale \"" + locale + "\"");
     }
     

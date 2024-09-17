@@ -101,7 +101,7 @@ public final class LocaleServices {
             }
         }
         throw new CsUnrecoverableException(
-            new Message(LOOKUP_RESOURCE_ERROR_KEY, new Object[] {name, locale}),
+            new Message(LOOKUP_RESOURCE_ERROR_KEY, name, locale),
             "Could not open resource \"" + name + "\" in locale \"" + locale + "\"");
     }
 

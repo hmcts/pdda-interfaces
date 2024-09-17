@@ -99,7 +99,7 @@ public class TransformServices extends TemplateServices {
             transformer.transform(source, new StreamResult(writerResult));
         } catch (TransformerException te) {
             Message userMessage =
-                new Message("xslservices.transformationerror", new Object[] {source, systemId, resolver});
+                new Message("xslservices.transformationerror", source, systemId, resolver);
             String logMessage = "Could not transform XML \"" + source + "\" using transform \"" + systemId + RESOLVED_BY
                 + resolver + "\"";
             throw new CsUnrecoverableException(userMessage, te, logMessage);
@@ -153,7 +153,7 @@ public class TransformServices extends TemplateServices {
             LOG.debug("getTransformer({},{},{})", systemId, resolver, paramaterMap);
             return getTemplates(systemId, resolver, paramaterMap).newTransformer();
         } catch (TransformerException te) {
-            Message userMessage = new Message("xslservices.transformererror", new Object[] {systemId, resolver});
+            Message userMessage = new Message("xslservices.transformererror", systemId, resolver);
             String logMessage = "Could not create transformer from template created from xsl \"" + systemId
                 + RESOLVED_BY + resolver + "\"";
 

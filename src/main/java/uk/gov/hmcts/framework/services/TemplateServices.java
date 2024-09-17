@@ -149,7 +149,7 @@ public class TemplateServices {
             return new UriResolverTemplatesAdapter(
                 getTransformerFactory(resolver).newTemplates(resolver.resolve(systemId, null)), resolver);
         } catch (TransformerException te) {
-            Message userMessage = new Message("xslservices.templateserror", new Object[] {systemId, resolver});
+            Message userMessage = new Message("xslservices.templateserror", systemId, resolver);
             String logMessage = "Could not create templates from xsl \"" + systemId + RESOLVED_BY + resolver + "\"";
             throw new CsUnrecoverableException(userMessage, te, logMessage);
         }

@@ -78,17 +78,6 @@ public class Message implements Serializable {
      * 
      * @param key external key in properties file
      * @param parameter paramater that will be passed into MessageFormat.format(String, Object[])
-     */
-    public Message(String key, Object parameter) {
-        this(key, new Object[] {parameter});
-    }
-
-    /**
-     * Convienience constructor that passes the parameter into Object[] and calls the
-     * Message(String, Object[]) constructor.
-     * 
-     * @param key external key in properties file
-     * @param parameter paramater that will be passed into MessageFormat.format(String, Object[])
      * @param properties file if not using default
      */
     public Message(String key, Object parameter, String properties) {

@@ -24,7 +24,8 @@ import java.io.IOException;
  * @author Will Fardel
  * @version $Id: FileUtil.java,v 1.3 2006/06/05 12:30:21 bzjrnl Exp $
  */
-@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidThreadGroup", "PMD.AvoidSynchronizedStatement"})
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidThreadGroup", "PMD.AvoidSynchronizedStatement",
+    "PMD.NullAssignment"})
 public final class FileUtil {
     private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
 
