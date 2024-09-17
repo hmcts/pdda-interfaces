@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
  * @author: Kevin Buckthorpe
  * @author: Bal Bhamra
  */
+@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class CsUnrecoverableException extends AbstractCsException {
 
     private static final long serialVersionUID = 1L;

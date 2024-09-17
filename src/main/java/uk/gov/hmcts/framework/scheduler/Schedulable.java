@@ -42,7 +42,7 @@ import java.util.TimerTask;
  * @see java.util.Timer
  * @see TaskStrategy
  */
-@SuppressWarnings("PMD.AvoidCalendarDateCreation")
+@SuppressWarnings({"PMD.AvoidCalendarDateCreation","PMD.AvoidSynchronizedStatement"})
 public class Schedulable {
     private static final String CLASS_DEFINED_IN = "Class defined in ";
     private static final Long ZERO = 0L;
