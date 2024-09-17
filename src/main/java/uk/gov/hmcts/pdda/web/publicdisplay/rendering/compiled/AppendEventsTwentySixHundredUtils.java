@@ -15,6 +15,8 @@ public final class AppendEventsTwentySixHundredUtils {
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
     private static final String WITNESS_NUMBER = "Witness_Number";
     private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
+    private static final String E20603_INTERPRETER_SWORN = "E20603_Interpreter_Sworn";
+    private static final String E20603_APPELLANT_SWORN = "E20603_Appellant_Sworn";
 
     private AppendEventsTwentySixHundredUtils() {
     }
@@ -31,9 +33,9 @@ public final class AppendEventsTwentySixHundredUtils {
             (BranchEventXmlNode) node.get("E20603_Witness_Sworn_Options");
         String wsList = ((LeafEventXmlNode) wsOptions.get("E20603_WS_List")).getValue();
 
-        if ("E20603_Appellant_Sworn".equals(wsList)) {
+        if (E20603_APPELLANT_SWORN.equals(wsList)) {
             AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Appellant_Sworn"));
-        } else if ("E20603_Interpreter_Sworn".equals(wsList)) {
+        } else if (E20603_INTERPRETER_SWORN.equals(wsList)) {
             AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, INTERPRETER_SWORN));
         } else if (EMPTY_STRING
             .equals(((LeafEventXmlNode) wsOptions.get("E20603_Witness_No")).getValue())) {
