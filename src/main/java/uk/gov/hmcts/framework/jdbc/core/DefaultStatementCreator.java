@@ -282,7 +282,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
         LOG.debug("<< isClobProcessingEnabled: {} >>", clobProcessingEnabled);
 
-        return clobProcessingEnabled != null && clobProcessingEnabled.equalsIgnoreCase("TRUE");
+        return clobProcessingEnabled != null && "TRUE".equalsIgnoreCase(clobProcessingEnabled);
     }
 
     /**
@@ -304,6 +304,6 @@ public class DefaultStatementCreator implements StatementCreator {
 
         LOG.debug("<< isBlobProcessingEnabled: {} >>", blobProcessingEnabled);
 
-        return blobProcessingEnabled != null && blobProcessingEnabled.equalsIgnoreCase("TRUE");
+        return blobProcessingEnabled != null && "TRUE".equalsIgnoreCase(blobProcessingEnabled);
     }
 }
