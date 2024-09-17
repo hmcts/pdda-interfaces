@@ -16,7 +16,7 @@ public enum WarnedTag {
     }
     
     public static WarnedTag fromString(String value) {
-        for (WarnedTag tag : WarnedTag.values()) {
+        for (WarnedTag tag : values()) {
             if (tag.getValue().equalsIgnoreCase(value)) {
                 return tag;
             }

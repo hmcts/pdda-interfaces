@@ -36,8 +36,8 @@ public final class WarnedListUtils {
     public static boolean isWarnedListChildNodeValid(Node childNode, Node childNodeToMerge,
         boolean isWithFixedDateToMerge, boolean isWithoutFixedDateToMerge, String mergeType, boolean isFirmList,
         boolean isWarnedList) {
-        boolean isWithFixedDateChild = WarnedListUtils.isWithFixedDateToMerge(childNode, isWarnedList);
-        boolean isWithoutFixedDateChild = WarnedListUtils.isWithoutFixedDateToMerge(childNode, isWarnedList);
+        boolean isWithFixedDateChild = isWithFixedDateToMerge(childNode, isWarnedList);
+        boolean isWithoutFixedDateChild = isWithoutFixedDateToMerge(childNode, isWarnedList);
 
         // We've passed the point to merge, so merge here
         return isWithFixedDateToMerge && isWithoutFixedDateChild

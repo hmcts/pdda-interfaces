@@ -27,7 +27,7 @@ public final class MergeIwpUtils {
             String cases = MergeNodeUtils.getNodeMapValues(Arrays.asList(CASES), insertBeforeNode).get(CASES);
 
             // or if the time in cpp is after
-            if (cases == null || cases.equals(EMPTY_STRING)
+            if (cases == null || EMPTY_STRING.equals(cases)
                 || MergeDateUtils.isCppAfterXhibit(insertBeforeNode, childNodeToMerge)) {
                 node.replaceChild(childNodeToMerge, insertBeforeNode);
             }
