@@ -34,6 +34,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class TemplateServices {
 
     protected static final String RESOLVED_BY = "\" resolved by \"";

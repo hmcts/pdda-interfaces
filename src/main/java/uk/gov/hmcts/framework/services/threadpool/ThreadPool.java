@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Stack;
 
 
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement"})
 public final class ThreadPool {
 
     /** Pool size. */

@@ -12,6 +12,7 @@ import java.util.List;
  *         
  * @author meekun
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class DefaultEventStore implements EventStore {
 
     /** Logger. */

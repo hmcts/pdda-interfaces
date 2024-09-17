@@ -27,6 +27,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
  * @author Bob Boothby
  * @version $Revision: 1.5 $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public abstract class DisplayConfigurationReader {
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationReader.class);
     private static DisplayConfigurationReader instance;

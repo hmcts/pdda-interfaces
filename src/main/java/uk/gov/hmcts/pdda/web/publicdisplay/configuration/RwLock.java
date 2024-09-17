@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * @author Bob Boothby, Meeraj Kunnumpurath
  * @version 1.0
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class RwLock {
     // Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(RwLock.class);

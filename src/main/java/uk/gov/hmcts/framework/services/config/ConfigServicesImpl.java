@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
  * @editors Frederik Vandendriessche - changed BUNDLE_BASENAME accessibility to public so other
  *          components may read from the bundle root.
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public final class ConfigServicesImpl implements ConfigServices {
 
     private static ConfigServicesImpl instance = new ConfigServicesImpl();

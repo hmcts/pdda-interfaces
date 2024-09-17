@@ -24,7 +24,7 @@ import java.io.IOException;
  * @author Will Fardel
  * @version $Id: FileUtil.java,v 1.3 2006/06/05 12:30:21 bzjrnl Exp $
  */
-@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidThreadGroup"})
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidThreadGroup", "PMD.AvoidSynchronizedStatement"})
 public final class FileUtil {
     private static final Logger LOG = LoggerFactory.getLogger(FileUtil.class);
 
@@ -36,8 +36,8 @@ public final class FileUtil {
     }
 
     /**
-     * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work around
-     * 4742723.
+     * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work
+     * around 4742723.
      * 
      * @param path the dir to create
      * @throws IOException if cant create the dir for any reason
@@ -50,8 +50,8 @@ public final class FileUtil {
     }
 
     /**
-     * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work around
-     * 4742723.del.
+     * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work
+     * around 4742723.del.
      * 
      * @param dir path the dir to create
      * @throws IOException if cant create the dir for any reason
@@ -137,8 +137,8 @@ public final class FileUtil {
         deltree(new File(rootDir));
     }
 
-    private static void runThread(final int id, final Object lock, final Object localLock, final String rootDir,
-        final int parentCount, final int dirCount, final int... makeErrors) {
+    private static void runThread(final int id, final Object lock, final Object localLock,
+        final String rootDir, final int parentCount, final int dirCount, final int... makeErrors) {
         synchronized (FileUtil.class) {
             localLock.notifyAll();
             try {

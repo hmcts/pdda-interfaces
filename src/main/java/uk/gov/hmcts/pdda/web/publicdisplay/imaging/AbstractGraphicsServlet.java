@@ -42,6 +42,7 @@ import java.util.Date;
  * @author Neil Ellis
  * @version $Revision: 1.24 $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public abstract class AbstractGraphicsServlet extends HttpServlet implements ImageObserver {
 
     private static final long serialVersionUID = 1L;

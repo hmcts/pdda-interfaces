@@ -41,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class ImageLoader implements ImageObserver {
     private static final Logger LOG = LoggerFactory.getLogger(ImageLoader.class);
 
