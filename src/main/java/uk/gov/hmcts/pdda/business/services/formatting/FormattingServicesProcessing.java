@@ -42,7 +42,7 @@ import javax.xml.xpath.XPathExpressionException;
  * FormattingServicesProcessing.
  */
 
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 public abstract class FormattingServicesProcessing extends AbstractFormattingServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServicesProcessing.class);

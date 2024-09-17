@@ -7,7 +7,7 @@ public class IwpXmlMergeUtils extends AbstractXmlMergeUtils {
     private static final String IWP = "IWP";
 
     public IwpXmlMergeUtils() throws XPathExpressionException {
-        super(new String[] {"currentcourtstatus/court/courtsites/courtsite/courtrooms"});
+        super("currentcourtstatus/court/courtsites/courtsite/courtrooms");
     }
 
     @Override

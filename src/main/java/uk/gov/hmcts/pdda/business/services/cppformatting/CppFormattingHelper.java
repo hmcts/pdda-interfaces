@@ -62,7 +62,7 @@ public class CppFormattingHelper {
         xfbv.setDateIn(dateIn);
         xfbv.setDistributionType("FTP");
         xfbv.setDocumentType(documentType);
-        xfbv.setFormatStatus(CppFormattingHelper.FORMAT_STATUS_NOT_PROCESSED);
+        xfbv.setFormatStatus(FORMAT_STATUS_NOT_PROCESSED);
         xfbv.setMimeType("HTM");
         xfbv.setXmlDocumentClobId(Long.valueOf(0));
         xfbv.setCountry("GB");
