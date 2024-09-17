@@ -48,6 +48,7 @@ import java.util.ResourceBundle;
  * @version $Id: DisplayLocationDataHelper.java,v 1.9 2005/11/17 10:55:46 bzjrnl Exp $
  */
 
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DisplayLocationDataHelper {
     private static final String PRE_DISPLAY = "pd.displaydescription.";
 

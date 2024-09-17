@@ -53,7 +53,7 @@ import java.util.Optional;
  * @author Bob Boothby
  * @version 1.0
  */
-
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DisplayRotationSetDataHelper.class);
