@@ -40,7 +40,7 @@ public class CourtLogViewValue extends CourtLogAbstractValue {
         }
         
         public static EventTypes fromInteger(Integer value) {
-            for (EventTypes type : EventTypes.values()) {
+            for (EventTypes type : values()) {
                 if (type.getValue().equals(value)) {
                     return type;
                 }
