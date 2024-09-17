@@ -44,11 +44,11 @@ public class XhbCaseReferenceDao extends AbstractVersionedDao implements Seriali
         setCaseReferenceId(caseReferenceId);
         setReportingRestrictions(reportingRestrictions);
         setCaseId(caseId);
-        setLastUpdateDate(lastUpdateDate);
-        setCreationDate(creationDate);
-        setLastUpdatedBy(lastUpdatedBy);
-        setCreatedBy(createdBy);
-        setVersion(version);
+        super.setLastUpdateDate(lastUpdateDate);
+        super.setCreationDate(creationDate);
+        super.setLastUpdatedBy(lastUpdatedBy);
+        super.setCreatedBy(createdBy);
+        super.setVersion(version);
     }
 
     public XhbCaseReferenceDao(XhbCaseReferenceDao otherData) {
@@ -56,11 +56,11 @@ public class XhbCaseReferenceDao extends AbstractVersionedDao implements Seriali
         setCaseReferenceId(otherData.getCaseReferenceId());
         setReportingRestrictions(otherData.getReportingRestrictions());
         setCaseId(otherData.getCaseId());
-        setLastUpdateDate(otherData.getLastUpdateDate());
-        setCreationDate(otherData.getCreationDate());
-        setLastUpdatedBy(otherData.getLastUpdatedBy());
-        setCreatedBy(otherData.getCreatedBy());
-        setVersion(otherData.getVersion());
+        super.setLastUpdateDate(otherData.getLastUpdateDate());
+        super.setCreationDate(otherData.getCreationDate());
+        super.setLastUpdatedBy(otherData.getLastUpdatedBy());
+        super.setCreatedBy(otherData.getCreatedBy());
+        super.setVersion(otherData.getVersion());
     }
 
     public Integer getPrimaryKey() {
