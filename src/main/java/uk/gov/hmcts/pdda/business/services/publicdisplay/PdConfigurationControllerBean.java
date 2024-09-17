@@ -50,7 +50,8 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.ExcessiveParameterList",
+    "PMD.CouplingBetweenObjects", "PMD.UseArraysAsList"})
 public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     implements Serializable {
 
@@ -95,7 +96,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     public int[] getCourtsForPublicDisplay() {
         final String methodName = "getCourtsForPublicDisplay() - ";
         LOG.debug(ENTERED, methodName);
-        ArrayList<XhbCourtDao> courts = (ArrayList<XhbCourtDao>) getXhbCourtRepository().findAll();
+        List<XhbCourtDao> courts = (ArrayList<XhbCourtDao>) getXhbCourtRepository().findAll();
         int[] courtArray = new int[courts.size()];
         Iterator<XhbCourtDao> courtIterator = courts.iterator();
         for (int i = 0; i < courtArray.length; i++) {
@@ -292,16 +293,15 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     public XhbCourtRoomDao[] getCourtRoomsForCourt(final Integer courtId) {
         final String methodName = "getCourtRoomsForCourt(" + courtId + METHOD_SUFFIX;
         LOG.debug(ENTERED, methodName);
-        ArrayList<XhbCourtRoomDao> al = new ArrayList<>();
-        ArrayList<XhbCourtSiteDao> courtSites =
-            (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository().findByCourtId(courtId);
+        List<XhbCourtRoomDao> al = new ArrayList<>();
+        List<XhbCourtSiteDao> courtSites = getXhbCourtSiteRepository().findByCourtId(courtId);
         int numCourtSites = courtSites.size();
 
         Iterator<XhbCourtSiteDao> iter = courtSites.iterator();
         while (iter.hasNext()) {
             XhbCourtSiteDao site = iter.next();
             XhbCourtRoomDao[] courtRooms = getXhbCourtRoomDaoArray(site.getXhbCourtRooms());
-
+            
             for (XhbCourtRoomDao courtRoom : courtRooms) {
                 // If a multi site court, set the multi site display name to '<Court Site Short
                 // Name>-<Court Room Display Name>'
@@ -328,8 +328,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         LOG.debug(ENTERED, methodName);
 
         boolean multiSite;
-        ArrayList<XhbCourtSiteDao> courtSites =
-            (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository().findByCourtId(courtId);
+        List<XhbCourtSiteDao> courtSites = getXhbCourtSiteRepository().findByCourtId(courtId);
         multiSite = courtSites.size() > 1;
 
         VipCourtRoomsQuery vipQuery = getVipCourtRoomsQuery(multiSite);
