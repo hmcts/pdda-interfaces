@@ -83,7 +83,7 @@ public class CppStagingInboundHelper implements Serializable {
         XhbConfigPropRepository xhbConfigPropRepository) {
         this();
         LOG.debug("Constructor...");
-        ArrayList<XhbConfigPropDao> properties = null;
+        List<XhbConfigPropDao> properties = null;
         try {
             properties = (ArrayList<XhbConfigPropDao>) xhbConfigPropRepository
                 .findByPropertyName("STAGING_DOCS_TO_PROCESS");

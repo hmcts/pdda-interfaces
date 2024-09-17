@@ -19,7 +19,7 @@ public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
 
     private static final Logger LOG = LoggerFactory.getLogger(EagerLoadingServiceLocatorImpl.class);
     
-    private Map<Object, Object> jndiCache;
+    private final Map<Object, Object> jndiCache;
 
     /**
      * Eager loads the service locator cache.
@@ -29,7 +29,7 @@ public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
         super();
         try {
             LOG.debug("Entered into EagerLoadingServiceLocatorImpl()");
-            LookupHelper lookupHelper = new LookupHelper(getEnv());
+            LookupHelper lookupHelper = new LookupHelper(super.getEnv());
             jndiCache = (HashMap<Object, Object>) SubjectManager.getInstance().runAs(lookupHelper);
         } catch (PrivilegedActionException ex) {
             throw handleException(ex);

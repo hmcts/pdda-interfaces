@@ -16,7 +16,6 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 import uk.gov.hmcts.pdda.business.services.validation.sax.FileEntityResolver;
 import uk.gov.hmcts.pdda.business.services.validation.sax.SaxValidationService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AbstractCppStagingInboundControllerBean extends AbstractControllerBean {
@@ -125,8 +124,8 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     public String findConfigEntryByPropertyName(String propertyName) {
         String returnString = null;
         LOG.info("findConfigEntryByPropertyName(" + propertyName + ")");
-        ArrayList<XhbConfigPropDao> properties =
-            (ArrayList<XhbConfigPropDao>) getXhbConfigPropRepository()
+        List<XhbConfigPropDao> properties =
+            getXhbConfigPropRepository()
                 .findByPropertyName("scheduledtasks.pdda");
         if (null != properties && !properties.isEmpty()) {
             returnString = properties.get(0).getPropertyValue();
