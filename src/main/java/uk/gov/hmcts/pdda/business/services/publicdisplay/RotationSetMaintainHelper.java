@@ -44,6 +44,8 @@ import java.util.Optional;
 public class RotationSetMaintainHelper {
     private static final Logger LOG = LoggerFactory.getLogger(RotationSetMaintainHelper.class);
 
+    private static final String YES = "Y";
+    
     protected RotationSetMaintainHelper() {
         // Protected constructor
     }
@@ -112,7 +114,7 @@ public class RotationSetMaintainHelper {
         }
 
         // Check that we are not editing a system RS.
-        if ("Y".equals(rotationSetLocal.get().getDefaultYn())) {
+        if (YES.equals(rotationSetLocal.get().getDefaultYn())) {
             throw new PublicDisplayCheckedException("pubdisp.rotationset.editsystem",
                 new String[] {rotationSetLocal.get().getDescription()}, "Can not edit a system rotation set");
         }
@@ -164,7 +166,7 @@ public class RotationSetMaintainHelper {
         }
 
         // Check that we are not deleting a system RS.
-        if ("Y".equals(rotationSetLocal.get().getDefaultYn())) {
+        if (YES.equals(rotationSetLocal.get().getDefaultYn())) {
             throw new PublicDisplayCheckedException("pubdisp.rotationset.deletesystem",
                 new String[] {rotationSetLocal.get().getDescription()}, "Can not delete a system rotation set");
         }

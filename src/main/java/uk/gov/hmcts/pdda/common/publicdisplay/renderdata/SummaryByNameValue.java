@@ -46,7 +46,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
     }
 
     public boolean isFloating() {
-        return floating.equals(IS_FLOATING);
+        return IS_FLOATING.equals(floating);
     }
 
     /**

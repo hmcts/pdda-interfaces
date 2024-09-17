@@ -50,6 +50,8 @@ public final class PublicNoticeXmlHelper {
     private static final String XML_CONFIG_FILE = "XML_CONFIG_FILE";
     // Properties file for general public notice configuration
     private static final String PROPERTIESFILENAME = "publicnotice";
+    private static final String COURT_LOG_EVENT = "CourtLogEvent";
+    private static final String DEFINITIVE_PUBLIC_NOTICE = "DefinitivePublicNotice";
 
     private final Map<Integer, List<DefinitivePublicNoticeStatusValue>> manipulatorMap 
         = new ConcurrentHashMap<>();
@@ -151,7 +153,7 @@ public final class PublicNoticeXmlHelper {
         if (Node.ELEMENT_NODE == node.getNodeType()) {
             // if it's a <courtlogEvent> tag then we create an
             // array list and add to Map
-            if ("CourtLogEvent".equals(node.getNodeName())) {
+            if (COURT_LOG_EVENT.equals(node.getNodeName())) {
                 NamedNodeMap theAttributes = node.getAttributes();
 
                 String theEventType = theAttributes.item(0).getNodeValue();
@@ -203,7 +205,7 @@ public final class PublicNoticeXmlHelper {
         for (int i = 0; i < nl.getLength(); i++) {
             Node defnotice = nl.item(i);
             log.debug(" Node name = {}", defnotice.getNodeName());
-            if ("DefinitivePublicNotice".equals(defnotice.getNodeName())) {
+            if (DEFINITIVE_PUBLIC_NOTICE.equals(defnotice.getNodeName())) {
 
                 log.debug(" Getting the attributes");
                 NamedNodeMap theAttributes = defnotice.getAttributes();

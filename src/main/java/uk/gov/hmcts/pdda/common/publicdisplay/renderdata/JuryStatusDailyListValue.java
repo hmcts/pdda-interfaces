@@ -60,7 +60,7 @@ public class JuryStatusDailyListValue extends CourtListValue {
      * @return true if the cases is unassigned
      */
     public boolean isFloating() {
-        return floating.equals(IS_FLOATING);
+        return IS_FLOATING.equals(floating);
     }
 
     @Override

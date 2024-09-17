@@ -42,6 +42,8 @@ public class PublicNoticeWorkFlow {
 
     private static final Integer REPORTING_RESTRICTIONS_LIFTED = 700;
     private static final Integer REPORTING_RESTRICTIONS = 100;
+    
+    private static final String ONE = "1";
 
     protected PublicNoticeWorkFlow() {
         // Protected constructor
@@ -226,7 +228,7 @@ public class PublicNoticeWorkFlow {
         XhbDefinitivePublicNoticeDao definitivePublicNotice = publicNotice.getXhbDefinitivePublicNotice();
 
         boolean isActive = false;
-        if (configuredPublicNotice.getIsActive() != null && configuredPublicNotice.getIsActive().equals("1")) {
+        if (configuredPublicNotice.getIsActive() != null && ONE.equals(configuredPublicNotice.getIsActive())) {
             isActive = true;
         }
 
