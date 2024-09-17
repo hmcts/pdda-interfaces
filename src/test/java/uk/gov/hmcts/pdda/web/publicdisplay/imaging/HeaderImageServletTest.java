@@ -119,6 +119,6 @@ class HeaderImageServletTest {
         for (int i = 0; i < paramNames.length; i++) {
             Mockito.when(mockHttpServletRequest.getParameter(paramNames[i])).thenReturn(paramValues[i]);
         }
-        Mockito.when(mockImage.getHeight(null)).thenReturn(Integer.valueOf(100));
+        Mockito.when(mockImage.getHeight(null)).thenReturn(100);
     }
 }

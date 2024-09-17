@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.configuration;
 
 import jakarta.persistence.EntityManager;
-import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -107,10 +106,6 @@ class DefaultDisplayConfigurationReaderTest {
     @Mock
     private CourtConfigurationChange mockCourtConfigurationChange;
 
-
-    @TestSubject
-    private DefaultDisplayConfigurationReader classUnderTest;
-
     @BeforeAll
     public static void setUp() {
         // Do nothing
@@ -123,15 +118,18 @@ class DefaultDisplayConfigurationReaderTest {
 
     @Test
     void testGetRenderChangesArray() {
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
@@ -140,11 +138,14 @@ class DefaultDisplayConfigurationReaderTest {
         Integer courtRoomId = -1;
         CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(courtId, courtRoomId);
         DisplayDocumentType[] documentTypes = {displayDocumentType};
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
-        Mockito.when(mockWorker.getRenderChanges(documentTypes, courtRoom)).thenReturn(renderChanges);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(courtsForPublicDisplay);
+        Mockito.when(mockWorker.getRenderChanges(documentTypes, courtRoom))
+            .thenReturn(renderChanges);
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         RenderChanges result = classUnderTest.getRenderChanges(documentTypes, courtRoom);
 
         assertNotNull(result, NOTNULL);
@@ -167,16 +168,19 @@ class DefaultDisplayConfigurationReaderTest {
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(getDummyDisplayDao());
 
-        
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
@@ -185,15 +189,20 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(courtDao);
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(new int[] {80});
+        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(courtDao);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(new int[] {80});
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xdList);
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
-        RenderChanges result = classUnderTest.getRenderChanges(new CourtConfigurationChange(COURT_ID));
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
+        RenderChanges result =
+            classUnderTest.getRenderChanges(new CourtConfigurationChange(COURT_ID));
 
         assertNotNull(result, NOTNULL);
     }
@@ -216,40 +225,49 @@ class DefaultDisplayConfigurationReaderTest {
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
 
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
 
         int[] courtsForPublicDisplay = {80};
-        Optional<XhbRotationSetsDao> xrs = Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao());
+        Optional<XhbRotationSetsDao> xrs =
+            Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao());
         Optional<XhbDisplayDao> displayDao = Optional.of(getDummyDisplayDao());
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(COURT_ID, TESTCOURT1);
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbDisplayRepository.findById(Mockito.isA(Integer.class))).thenReturn(displayDao);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(Optional.of(xhbCourtDao));
-        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
+        Mockito.when(mockXhbDisplayRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(displayDao);
+        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbCourtDao));
+        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
+            .thenReturn(xrs);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(courtsForPublicDisplay);
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
 
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
-        RenderChanges result =
-            classUnderTest.getRenderChanges(new CourtDisplayConfigurationChange(COURT_ID, DISPLAY_ID));
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
+        RenderChanges result = classUnderTest
+            .getRenderChanges(new CourtDisplayConfigurationChange(COURT_ID, DISPLAY_ID));
 
         assertNotNull(result, NOTNULL);
     }
@@ -274,15 +292,18 @@ class DefaultDisplayConfigurationReaderTest {
 
         List<XhbDisplayDao> xdList = new ArrayList<>();
         xdList.add(getDummyDisplayDao());
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
@@ -293,20 +314,25 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID))).thenReturn(xrs);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(Optional.of(xhbCourtDao));
+        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
+            .thenReturn(xrs);
+        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbCourtDao));
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(courtsForPublicDisplay);
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class))).thenReturn(xdList);
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+            .thenReturn(xdList);
 
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
-        RenderChanges result =
-            classUnderTest.getRenderChanges(new CourtRotationSetConfigurationChange(COURT_ID, ROTATION_SET_ID));
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
+        RenderChanges result = classUnderTest
+            .getRenderChanges(new CourtRotationSetConfigurationChange(COURT_ID, ROTATION_SET_ID));
 
         assertNotNull(result, NOTNULL);
     }
@@ -325,15 +351,18 @@ class DefaultDisplayConfigurationReaderTest {
         dummyCourtList.add(court1);
         dummyCourtList.add(court2);
         dummyCourtList.add(court3);
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
@@ -342,12 +371,14 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(courtsForPublicDisplay);
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         RenderChanges result = classUnderTest.getRenderChanges(mockCourtConfigurationChange);
 
         assertNotNull(result, NOTNULL);
@@ -367,15 +398,18 @@ class DefaultDisplayConfigurationReaderTest {
         dummyCourtList.add(court1);
         dummyCourtList.add(court2);
         dummyCourtList.add(court3);
-        DisplayRotationSetData displayRotationSetData = new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
-            new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
-        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils.getDisplayDocumentType(DAILYLIST,
-            DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
+        DisplayRotationSetData displayRotationSetData =
+            new DisplayRotationSetData(DummyDisplayUtil.getDisplayUri(),
+                new RotationSetDisplayDocument[] {}, 100, 200, DISPLAY_SIZE);
+        DisplayDocumentType displayDocumentType = DisplayDocumentTypeUtils
+            .getDisplayDocumentType(DAILYLIST, DUMMYLOCALE.getLanguage(), DUMMYLOCALE.getCountry());
         DisplayDocumentUri displayDocumentUri =
             new DisplayDocumentUri(DUMMYLOCALE, COURT_ID, displayDocumentType, COURTROOMIDS);
         RenderChanges renderChanges = new RenderChanges();
-        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
-        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean, mockDisplayStoreControllerBean);
+        renderChanges.addStartDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
+        renderChanges.addStopDocument(displayDocumentUri, mockPdDataControllerBean,
+            mockDisplayStoreControllerBean);
         renderChanges.addStartRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         renderChanges.addStopRotationSet(displayRotationSetData, mockDisplayStoreControllerBean);
         assertNotNull(renderChanges.toString(), NOTNULL);
@@ -384,12 +418,14 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay()).thenReturn(courtsForPublicDisplay);
+        Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
+            .thenReturn(courtsForPublicDisplay);
         Mockito.when(mockWorker.getRenderChanges(Mockito.isA(CourtConfigurationChange.class)))
             .thenReturn(renderChanges);
 
-        classUnderTest = new DefaultDisplayConfigurationReader(mockPdConfigurationController, mockPdDataControllerBean,
-            mockDisplayStoreControllerBean, mockWorker);
+        DefaultDisplayConfigurationReader classUnderTest =
+            new DefaultDisplayConfigurationReader(mockPdConfigurationController,
+                mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         int[] result = classUnderTest.getConfiguredCourtIds();
 
         assertNotNull(result, NOTNULL);
