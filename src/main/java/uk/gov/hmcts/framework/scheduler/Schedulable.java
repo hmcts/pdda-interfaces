@@ -395,7 +395,7 @@ public class Schedulable {
      * Private internal TimerTask descendant designed to pick up and execute the instance of
      * schedulable. NEVER to be exposed to the outside world.
      */
-    private class InternalTimerTask extends TimerTask {
+    private final class InternalTimerTask extends TimerTask {
         private final TaskStrategy taskStrategy;
 
         /**
