@@ -309,9 +309,6 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
     }
 
     protected boolean hasDefendant(Object item) {
-        if (item instanceof AllCaseStatusValue) {
-            return ((AllCaseStatusValue) item).hasDefendant();
-        }
-        return false;
+        return item instanceof AllCaseStatusValue allCaseStatusValue && allCaseStatusValue.hasDefendant();
     }
 }

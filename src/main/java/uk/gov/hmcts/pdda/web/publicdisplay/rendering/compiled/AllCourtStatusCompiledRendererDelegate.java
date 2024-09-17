@@ -124,10 +124,8 @@ public class AllCourtStatusCompiledRendererDelegate
     }
 
     private boolean hasInformationForDisplay(Object item) {
-        if (item instanceof AllCourtStatusValue) {
-            return ((AllCourtStatusValue) item).hasInformationForDisplay();
-        }
-        return false;
+        return item instanceof AllCourtStatusValue allCourtStatusValue
+            && allCourtStatusValue.hasInformationForDisplay();
     }
 
 }

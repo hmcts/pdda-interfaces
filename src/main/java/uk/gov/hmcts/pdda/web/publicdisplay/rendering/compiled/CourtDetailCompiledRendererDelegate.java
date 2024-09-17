@@ -243,8 +243,8 @@ public class CourtDetailCompiledRendererDelegate extends DisplayDocumentCompiled
     }
 
     private PublicNoticeValue[] getPublicNotices(Object item) {
-        if (item instanceof CourtDetailValue) {
-            PublicNoticeValue[] notices = ((CourtDetailValue) item).getPublicNotices();
+        if (item instanceof CourtDetailValue courtDetailValue) {
+            PublicNoticeValue[] notices = courtDetailValue.getPublicNotices();
             if (notices != null) {
                 return notices;
             }
@@ -253,9 +253,6 @@ public class CourtDetailCompiledRendererDelegate extends DisplayDocumentCompiled
     }
 
     private boolean hasPublicNotices(Object item) {
-        if (item instanceof CourtDetailValue) {
-            return ((CourtDetailValue) item).hasPublicNotices();
-        }
-        return false;
+        return item instanceof CourtDetailValue courtDetailValue && courtDetailValue.hasPublicNotices();
     }
 }

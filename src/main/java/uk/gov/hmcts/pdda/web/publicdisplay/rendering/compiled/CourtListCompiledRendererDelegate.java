@@ -124,10 +124,6 @@ public class CourtListCompiledRendererDelegate extends DisplayDocumentCompiledRe
     }
 
     private boolean isListedInThisCourtRoom(Object item) {
-        if (item instanceof CourtListValue) {
-            return ((CourtListValue) item).isListedInThisCourtRoom();
-        }
-        return false;
+        return item instanceof CourtListValue courtListValue && courtListValue.isListedInThisCourtRoom();
     }
-
 }
