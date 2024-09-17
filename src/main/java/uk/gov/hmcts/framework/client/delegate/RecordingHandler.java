@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -121,7 +122,7 @@ public class RecordingHandler extends DecoratingHandler {
 
     private RecordingEntry[] readFile() throws IOException {
         boolean isReading = true;
-        ArrayList<RecordingEntry> list = new ArrayList<>();
+        List<RecordingEntry> list = new ArrayList<>();
         try (ObjectInputStream stream = getObjectInputStream()) {
             if (stream != null) {
                 RecordingEntry entry;
@@ -164,7 +165,7 @@ public class RecordingHandler extends DecoratingHandler {
         return null;
     }
 
-    private class RecordingEntry {
+    private final class RecordingEntry {
         Object homeClass;
 
         Object remoteMethodName;
