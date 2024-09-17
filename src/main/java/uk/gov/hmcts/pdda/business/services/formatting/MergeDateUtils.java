@@ -122,11 +122,11 @@ public final class MergeDateUtils {
             NodeList childNodes = nodes.item(j).getChildNodes();
             for (int i = 0; i < childNodes.getLength(); i++) {
                 if (DAYOFWEEK.equals(childNodes.item(i).getNodeName())) {
-                    childNodes.item(i).setTextContent(MergeDateUtils.returnDay(cal));
+                    childNodes.item(i).setTextContent(returnDay(cal));
                 } else if (DATE.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(String.format("%02d", date));
                 } else if (MONTH.equals(childNodes.item(i).getNodeName())) {
-                    childNodes.item(i).setTextContent(MergeDateUtils.returnMonth(cal));
+                    childNodes.item(i).setTextContent(returnMonth(cal));
                 } else if (YEAR.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(Integer.toString(year));
                 } else if (HOUR.equals(childNodes.item(i).getNodeName())) {
@@ -150,11 +150,11 @@ public final class MergeDateUtils {
 
         String timeOnInsert = MergeNodeUtils.getNodeMapValues(Arrays.asList(TIME), childNodeToMerge).get(TIME);
         String dateOnInsert = MergeNodeUtils.getNodeMapValues(Arrays.asList(DATE), childNodeToMerge).get(DATE);
-        Calendar cppTime = MergeDateUtils.setupCalendar(timeOnInsert, dateOnInsert);
+        Calendar cppTime = setupCalendar(timeOnInsert, dateOnInsert);
 
         String timeOnOriginal = MergeNodeUtils.getNodeMapValues(Arrays.asList(TIME), insertBeforeNode).get(TIME);
         String dateOnOriginal = MergeNodeUtils.getNodeMapValues(Arrays.asList(DATE), insertBeforeNode).get(DATE);
-        Calendar xhibitTime = MergeDateUtils.setupCalendar(timeOnOriginal, dateOnOriginal);
+        Calendar xhibitTime = setupCalendar(timeOnOriginal, dateOnOriginal);
 
         if (xhibitTime != null && cppTime != null) {
             LOG.debug(xhibitTime.toString() + " after " + cppTime.toString() + " ?");

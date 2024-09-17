@@ -15,7 +15,7 @@ public enum FirmTag {
     }
     
     public static FirmTag fromString(String value) {
-        for (FirmTag tag : FirmTag.values()) {
+        for (FirmTag tag : values()) {
             if (tag.getValue().equalsIgnoreCase(value)) {
                 return tag;
             }
