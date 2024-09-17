@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -22,12 +22,9 @@ class DocumentInitializerTest {
     private static final Integer NO_OF_WORKERS = 1;
     private static final String TRUE = "Result is not True";
 
-    @Mock
-    private ThreadPool mockThreadPool;
-
     @InjectMocks
     private final DocumentInitializer classUnderTest =
-        new DocumentInitializer(COURT_IDS, NO_OF_WORKERS, DELAY, mockThreadPool);
+        new DocumentInitializer(COURT_IDS, NO_OF_WORKERS, DELAY, Mockito.mock(ThreadPool.class));
 
     @BeforeAll
     public static void setUp() {
@@ -44,7 +41,7 @@ class DocumentInitializerTest {
         boolean result;
         classUnderTest.initialize();
         result = true;
-        
+
         assertTrue(result, TRUE);
     }
 }

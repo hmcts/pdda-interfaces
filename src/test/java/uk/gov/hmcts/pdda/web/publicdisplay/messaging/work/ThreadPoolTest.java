@@ -61,11 +61,7 @@ class ThreadPoolTest {
     @Test
     void testWorkerUnavailableException() {
         Assertions.assertThrows(WorkerUnavailableException.class, () -> {
-            try {
-                throw new InterruptedException();
-            } catch (InterruptedException e) {
-                throw new WorkerUnavailableException(e);
-            }
+            throw new WorkerUnavailableException(new InterruptedException());
         });
     }
 

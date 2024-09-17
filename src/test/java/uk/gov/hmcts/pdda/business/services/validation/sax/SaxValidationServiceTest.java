@@ -42,9 +42,6 @@ class SaxValidationServiceTest {
     private final FileEntityResolver dummyFileEntityResolver = getDummyFileEntityResolver();
 
     @Mock
-    private SchemaFactory mockSchemaFactory;
-
-    @Mock
     private SAXParser mockSaxParser;
 
     @Mock
@@ -60,8 +57,8 @@ class SaxValidationServiceTest {
     private Locator mockLocator;
 
     @InjectMocks
-    private final SaxValidationService classUnderTest =
-        new SaxValidationService(dummyFileEntityResolver, mockSchemaFactory, mockSaxParserFactory);
+    private final SaxValidationService classUnderTest = new SaxValidationService(
+        dummyFileEntityResolver, Mockito.mock(SchemaFactory.class), mockSaxParserFactory);
 
     @BeforeAll
     public static void setUp() {
@@ -96,7 +93,8 @@ class SaxValidationServiceTest {
     @Test
     void testErrorHandlerValidationResult() throws SAXException {
         SAXParseException dummySaxParseException = new SAXParseException("", mockLocator);
-        ErrorHandlerValidationResult errorHandlerValidationResult = new ErrorHandlerValidationResult();
+        ErrorHandlerValidationResult errorHandlerValidationResult =
+            new ErrorHandlerValidationResult();
         assertEquals(0, errorHandlerValidationResult.toString().length(), NOTEQUALS);
         errorHandlerValidationResult.error(dummySaxParseException);
         errorHandlerValidationResult.fatalError(dummySaxParseException);
@@ -117,10 +115,11 @@ class SaxValidationServiceTest {
 
     @Test
     void testSaxFactories() {
-        SaxValidationService localClassUnderTest = new SaxValidationService(dummyFileEntityResolver, null, null);  
+        SaxValidationService localClassUnderTest =
+            new SaxValidationService(dummyFileEntityResolver, null, null);
         try {
-            assertNotNull(localClassUnderTest.getSaxParserFactory(),"SaxParserFactory IS NULL");
-            assertNotNull(localClassUnderTest.getSchemaFactory(),"SchemaFactory IS NULL");
+            assertNotNull(localClassUnderTest.getSaxParserFactory(), "SaxParserFactory IS NULL");
+            assertNotNull(localClassUnderTest.getSchemaFactory(), "SchemaFactory IS NULL");
         } catch (Exception exception) {
             fail("Failed on exception" + exception.getMessage());
         }

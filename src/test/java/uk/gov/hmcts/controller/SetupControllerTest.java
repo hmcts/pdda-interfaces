@@ -35,7 +35,7 @@ class SetupControllerTest {
 
     @Test
     void testDisplaySelectorServlet() {
-        ModelAndView result = classUnderTest.displaySelectorServlet((ModelAndView) mockModelAndView);
+        ModelAndView result = classUnderTest.displaySelectorServlet(mockModelAndView);
         assertNotNull(result, "Result is Null");
     }
 }

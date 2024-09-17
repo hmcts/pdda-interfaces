@@ -57,9 +57,6 @@ class PdSetupControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
@@ -72,7 +69,8 @@ class PdSetupControllerBeanTest {
     private XhbDisplayRepository mockXhbDisplayRepository;
 
     @TestSubject
-    private final PdSetupControllerBean classUnderTest = new PdSetupControllerBean(mockEntityManager);
+    private final PdSetupControllerBean classUnderTest =
+        new PdSetupControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
     public static void setUp() {
@@ -105,7 +103,8 @@ class PdSetupControllerBeanTest {
         List<XhbCourtSiteDao> courtSiteList = (ArrayList<XhbCourtSiteDao>) getDummyCourtSiteList();
 
         EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.of(courtDao));
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andReturn(courtSiteList);
 
         List<XhbDisplayLocationDao> displayLocationList;
@@ -113,12 +112,16 @@ class PdSetupControllerBeanTest {
 
         for (XhbCourtSiteDao xhbCourtSite : courtSiteList) {
             displayLocationList = (ArrayList<XhbDisplayLocationDao>) getDummyDisplayLocationList();
-            EasyMock.expect(mockXhbDisplayLocationRepository.findByCourtSite(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbDisplayLocationRepository.findByCourtSite(EasyMock.isA(Integer.class)))
                 .andReturn(displayLocationList);
 
             for (XhbDisplayLocationDao displayLocation : displayLocationList) {
                 displaysList = (ArrayList<XhbDisplayDao>) getDummyDisplayList();
-                EasyMock.expect(mockXhbDisplayRepository.findByDisplayLocationId(EasyMock.isA(Integer.class)))
+                EasyMock
+                    .expect(mockXhbDisplayRepository
+                        .findByDisplayLocationId(EasyMock.isA(Integer.class)))
                     .andReturn(displaysList);
             }
         }

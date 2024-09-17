@@ -94,9 +94,6 @@ class PdConfigurationControllerBeanTest {
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
-    private XhbDisplayRepository mockXhbDisplayRepository;
-
-    @Mock
     private XhbRotationSetsRepository mockXhbRotationSetsRepository;
 
     @Mock
@@ -118,7 +115,7 @@ class PdConfigurationControllerBeanTest {
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(
         Mockito.mock(EntityManager.class), Mockito.mock(XhbCourtRepository.class),
         mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository,
-        Mockito.mock(XhbDisplayTypeRepository.class), mockXhbDisplayRepository,
+        Mockito.mock(XhbDisplayTypeRepository.class), Mockito.mock(XhbDisplayRepository.class),
         Mockito.mock(XhbDisplayLocationRepository.class), mockXhbCourtSiteRepository,
         Mockito.mock(XhbCourtRoomRepository.class), mockPublicDisplayNotifier,
         Mockito.mock(VipDisplayDocumentQuery.class), Mockito.mock(VipDisplayCourtRoomQuery.class));

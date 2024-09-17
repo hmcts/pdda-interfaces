@@ -27,20 +27,17 @@ class VipCourtRoomsQueryTest {
 
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
-    
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
     @InjectMocks
     private final VipCourtRoomsQuery classUnderTestMultiSite =
-        new VipCourtRoomsQuery(mockEntityManager, true, mockXhbCourtRoomRepository);
+        new VipCourtRoomsQuery(Mockito.mock(EntityManager.class), true, mockXhbCourtRoomRepository);
 
     @InjectMocks
-    private final VipCourtRoomsQuery classUnderTestSingleSite =
-        new VipCourtRoomsQuery(mockEntityManager, false, mockXhbCourtRoomRepository);
+    private final VipCourtRoomsQuery classUnderTestSingleSite = new VipCourtRoomsQuery(
+        Mockito.mock(EntityManager.class), false, mockXhbCourtRoomRepository);
 
     @BeforeAll
     public static void setUp() {

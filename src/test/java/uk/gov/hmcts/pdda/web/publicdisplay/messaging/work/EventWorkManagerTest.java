@@ -37,13 +37,11 @@ class EventWorkManagerTest {
     private EventStore mockEventStore;
 
     @Mock
-    private ThreadPool mockThreadPool;
-    
-    @Mock
     private Logger mockLogger;
 
     @InjectMocks
-    private final EventWorkManager classUnderTest = new EventWorkManager(mockEventStore, mockThreadPool);
+    private final EventWorkManager classUnderTest =
+        new EventWorkManager(mockEventStore, Mockito.mock(ThreadPool.class));
 
     @BeforeEach
     public void setUp() {
@@ -111,13 +109,10 @@ class EventWorkManagerTest {
 
     @Test
     void testWorkerUnavailableException() {
-        Mockito.when(LoggerFactory.getLogger(PublicDisplayRuntimeException.class)).thenReturn(mockLogger);
+        Mockito.when(LoggerFactory.getLogger(PublicDisplayRuntimeException.class))
+            .thenReturn(mockLogger);
         Assertions.assertThrows(WorkerUnavailableException.class, () -> {
-            try {
-                throw new InterruptedException();
-            } catch (InterruptedException e) {
-                throw new WorkerUnavailableException(e);
-            }
+            throw new WorkerUnavailableException(new InterruptedException());
         });
     }
 

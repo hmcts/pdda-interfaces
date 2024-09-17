@@ -49,9 +49,6 @@ class PublicDisplayQueryLogEntryTest {
         "<testNode><testChildNode>courtroomname</testChildNode></testNode>";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private PublicDisplayValue mockPublicDisplayValue;
 
     @Mock
@@ -62,7 +59,7 @@ class PublicDisplayQueryLogEntryTest {
 
     @TestSubject
     private final PublicDisplayQueryLogEntry classUnderTest =
-        new PublicDisplayQueryLogEntry(mockEntityManager);
+        new PublicDisplayQueryLogEntry(EasyMock.createMock(EntityManager.class));
 
     @Test
     void testPopulateEventData() {
@@ -83,7 +80,7 @@ class PublicDisplayQueryLogEntryTest {
         EasyMock.expect(mockXhbCourtLogEventDescRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbCourtLogEventDescDao));
         EasyMock.expectLastCall().times(2);
-        
+
         EasyMock.replay(mockXhbCourtLogEntryRepository);
         EasyMock.replay(mockXhbCourtLogEventDescRepository);
 
@@ -95,7 +92,7 @@ class PublicDisplayQueryLogEntryTest {
         EasyMock.verify(mockXhbCourtLogEventDescRepository);
         assertTrue(result, TRUE);
     }
-   
+
     @Test
     void testGetXhbCaseRepository() {
         assertInstanceOf(XhbCaseRepository.class, classUnderTest.getXhbCaseRepository(),
