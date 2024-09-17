@@ -39,7 +39,7 @@ public class DefaultEventWorkFlow extends AbstractEventWorkFlow {
      */
     public DefaultEventWorkFlow(WorkFlowContext context, CourtRoomEvent event) {
         super(context);
-        this.documents = processRules(event);
+        this.documents = super.processRules(event);
         this.courtRoomIdentifier = event.getCourtRoomIdentifier();
     }
 
