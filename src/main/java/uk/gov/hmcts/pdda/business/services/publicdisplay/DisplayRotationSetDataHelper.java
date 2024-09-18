@@ -72,9 +72,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
      * @param list The list to add the array to.
      */
     private void addArrayToList(DisplayRotationSetData[] array, List<DisplayRotationSetData> list) {
-        for (DisplayRotationSetData displayRotationSetData : array) {
-            list.add(displayRotationSetData);
-        }
+        list.addAll(Arrays.asList(array));
     }
 
     /**
