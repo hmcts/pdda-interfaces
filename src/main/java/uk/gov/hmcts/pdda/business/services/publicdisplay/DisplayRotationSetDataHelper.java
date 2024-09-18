@@ -376,8 +376,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
     private String getCourtRoomIdString(int... courtRoomIds) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < courtRoomIds.length; i++) {
-            sb.append(courtRoomIds[i]);
-            sb.append(i < courtRoomIds.length - 1 ? "," : "");
+            sb.append(courtRoomIds[i]).append(i < courtRoomIds.length - 1 ? "," : "");
         }
         return sb.toString();
     }

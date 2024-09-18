@@ -254,11 +254,15 @@ public final class DisplayDocumentType implements Serializable {
         return shortName.equals(displayDocumentType.shortName)
             && longName.equals(displayDocumentType.longName) && language == null
             && displayDocumentType.language == null
-            || (language != null && displayDocumentType.language != null
-                && language.equals(displayDocumentType.language))
-                && (country == null && displayDocumentType.country == null
-                    || (country != null && displayDocumentType.country != null)
-                        && country.equals(displayDocumentType.country));
+            || isLanguageAndCoiunrtyPopulated(displayDocumentType);
+    }
+
+    private boolean isLanguageAndCoiunrtyPopulated(DisplayDocumentType displayDocumentType) {
+        return language != null && displayDocumentType.language != null
+            && language.equals(displayDocumentType.language)
+            && (country == null && displayDocumentType.country == null
+                || country != null && displayDocumentType.country != null)
+            && country.equals(displayDocumentType.country);
     }
 
     /**

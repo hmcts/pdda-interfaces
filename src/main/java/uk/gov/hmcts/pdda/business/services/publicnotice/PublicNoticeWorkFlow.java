@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -208,7 +209,7 @@ public class PublicNoticeWorkFlow {
 
         Collection<?> configuredPublicNotices = courtRoom.get().getXhbConfiguredPublicNotices();
 
-        ArrayList<Object> displayablePublicNotices = new ArrayList<>();
+        List<Object> displayablePublicNotices = new ArrayList<>();
         Iterator<?> iterator = configuredPublicNotices.iterator();
         while (iterator.hasNext()) {
             displayablePublicNotices.add(createDisplayablePublicNotice((XhbConfiguredPublicNoticeDao) iterator.next()));

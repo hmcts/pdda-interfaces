@@ -114,7 +114,7 @@ public final class CppDataSourceFactory {
         Collections.sort(data);
 
         // Remove Duplicates
-        ArrayList<CourtDetailValue> newList = new ArrayList<>();
+        List<CourtDetailValue> newList = new ArrayList<>();
         int previousRoomNo = -1;
         String previousCourtSiteCode = "";
         for (CourtDetailValue value : data) {
@@ -159,7 +159,7 @@ public final class CppDataSourceFactory {
         Collections.sort(data);
 
         // Remove Duplicates
-        ArrayList<AllCourtStatusValue> newList = new ArrayList<>();
+        List<AllCourtStatusValue> newList = new ArrayList<>();
         int previousRoomNo = -1;
         String previousCourtSiteCode = EMPTY_STRING;
         for (AllCourtStatusValue value : data) {

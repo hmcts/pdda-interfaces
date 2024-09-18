@@ -75,7 +75,7 @@ public class DisplayLocationDataHelper {
     public static CourtSitePdComplexValue[] getDisplaysForCourt(final Integer courtId,
         final XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("getDisplaysForCourt called for courtId {}", courtId);
-        ArrayList<CourtSitePdComplexValue> results = new ArrayList<>();
+        List<CourtSitePdComplexValue> results = new ArrayList<>();
 
         CourtSitePdComplexValue sitePdComplex;
         List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtId(courtId);

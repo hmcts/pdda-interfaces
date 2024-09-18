@@ -145,7 +145,7 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
      */
     protected void populatePublicNotices(CourtDetailValue value, Element caseNode) throws XPathExpressionException {
         // Loop through all Public Notices
-        ArrayList<PublicNoticeValue> publicNotices = new ArrayList<>();
+        List<PublicNoticeValue> publicNotices = new ArrayList<>();
         NodeList publicNoticeList =
             (NodeList) getXPath().evaluate(XPATH_PUBLICNOTICE, caseNode, XPathConstants.NODESET);
         PublicNoticeValue pnValue;

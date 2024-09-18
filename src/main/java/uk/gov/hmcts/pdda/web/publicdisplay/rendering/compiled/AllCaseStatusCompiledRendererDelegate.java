@@ -11,10 +11,10 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.document.DisplayDocument;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompiledRendererDelegate {
@@ -150,7 +150,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
      *         defendant is hidden, FALSE otherwise.
      */
     private Map<String, Boolean> checkForCasesWithAllDefendantsHidden(Collection<?> table) {
-        HashMap<String, Boolean> cases = new HashMap<>();
+        Map<String, Boolean> cases = new ConcurrentHashMap<>();
 
         for (Object item : table) {
             String caseNumber = AttributesUtils.getCaseNumber(item);

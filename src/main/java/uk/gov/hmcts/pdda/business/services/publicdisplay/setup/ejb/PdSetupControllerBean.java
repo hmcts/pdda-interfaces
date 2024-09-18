@@ -72,13 +72,13 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
             throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
         }
 
-        ArrayList<XhbCourtSiteDao> xhbCourtSites = (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository()
+        List<XhbCourtSiteDao> xhbCourtSites = (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository()
             .findByCrestCourtIdValue(court.get().getCrestCourtId());
 
         CourtDrillDown courtDrillDown = new CourtDrillDown(court.get().getDisplayName());
         for (XhbCourtSiteDao xhbCourtSite : xhbCourtSites) {
 
-            ArrayList<XhbDisplayLocationDao> xhbDisplayLocations =
+            List<XhbDisplayLocationDao> xhbDisplayLocations =
                 (ArrayList<XhbDisplayLocationDao>) getXhbDisplayLocationRepository()
                     .findByCourtSite(xhbCourtSite.getCourtSiteId());
 
@@ -86,7 +86,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
             for (XhbDisplayLocationDao xhbDisplayLocation : xhbDisplayLocations) {
 
-                ArrayList<XhbDisplayDao> xhbDisplays = (ArrayList<XhbDisplayDao>) getXhbDisplayRepository()
+                List<XhbDisplayDao> xhbDisplays = (ArrayList<XhbDisplayDao>) getXhbDisplayRepository()
                     .findByDisplayLocationId(xhbDisplayLocation.getDisplayLocationId());
 
                 DisplayLocationDrillDown displayLocationDrillDown =

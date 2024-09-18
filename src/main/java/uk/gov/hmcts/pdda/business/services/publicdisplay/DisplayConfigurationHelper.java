@@ -48,7 +48,7 @@ import java.util.Optional;
  * @author Rakesh Lakhani
  * @version $Id: DisplayConfigurationHelper.java,v 1.6 2005/11/17 10:55:46 bzjrnl Exp $
  */
-
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DisplayConfigurationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationHelper.class);
