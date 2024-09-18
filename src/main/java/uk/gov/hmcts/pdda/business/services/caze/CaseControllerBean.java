@@ -102,7 +102,7 @@ public class CaseControllerBean extends AbstractControllerBean {
         while (hearingsIterator.hasNext()) {
             XhbHearingDao hearing = hearingsIterator.next();
             List<XhbScheduledHearingDao> scheduledHearingBeans =
-                (ArrayList<XhbScheduledHearingDao>) hearing.getScheduledHearings();
+                (List<XhbScheduledHearingDao>) hearing.getScheduledHearings();
             LOG.debug("found " + scheduledHearingBeans.size() + " scheduled hearings for hearing="
                 + hearing);
 

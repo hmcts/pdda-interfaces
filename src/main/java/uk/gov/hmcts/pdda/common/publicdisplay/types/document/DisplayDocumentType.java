@@ -252,17 +252,13 @@ public final class DisplayDocumentType implements Serializable {
         }
         DisplayDocumentType displayDocumentType = (DisplayDocumentType) anObject;
         return shortName.equals(displayDocumentType.shortName)
-            && longName.equals(displayDocumentType.longName) && language == null
-            && displayDocumentType.language == null
-            || isLanguageAndCoiunrtyPopulated(displayDocumentType);
+            && longName.equals(displayDocumentType.longName)
+            && isBothSame(language, displayDocumentType.language)
+            && isBothSame(country, displayDocumentType.country);
     }
 
-    private boolean isLanguageAndCoiunrtyPopulated(DisplayDocumentType displayDocumentType) {
-        return language != null && displayDocumentType.language != null
-            && language.equals(displayDocumentType.language)
-            && (country == null && displayDocumentType.country == null
-                || country != null && displayDocumentType.country != null)
-            && country.equals(displayDocumentType.country);
+    private boolean isBothSame(String s1, String s2) {
+        return s1 == null && s2 == null || s2.equals(s1);
     }
 
     /**

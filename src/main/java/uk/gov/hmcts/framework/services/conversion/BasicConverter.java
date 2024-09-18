@@ -98,7 +98,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
      */
     @Override
     public String formatBoolean(boolean value) {
-        return value ? "true" : "false";
+        return value ? TRUE_STRING : FALSE_STRING;
     }
 
     /**

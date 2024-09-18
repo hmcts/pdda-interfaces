@@ -22,7 +22,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.setup.drilldown.DisplayLocationDri
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayUri;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -72,21 +71,21 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
             throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
         }
 
-        List<XhbCourtSiteDao> xhbCourtSites = (ArrayList<XhbCourtSiteDao>) getXhbCourtSiteRepository()
+        List<XhbCourtSiteDao> xhbCourtSites = getXhbCourtSiteRepository()
             .findByCrestCourtIdValue(court.get().getCrestCourtId());
 
         CourtDrillDown courtDrillDown = new CourtDrillDown(court.get().getDisplayName());
         for (XhbCourtSiteDao xhbCourtSite : xhbCourtSites) {
 
             List<XhbDisplayLocationDao> xhbDisplayLocations =
-                (ArrayList<XhbDisplayLocationDao>) getXhbDisplayLocationRepository()
+                getXhbDisplayLocationRepository()
                     .findByCourtSite(xhbCourtSite.getCourtSiteId());
 
             CourtSiteDrillDown courtSiteDrillDown = getCourtSiteDrillDown(xhbCourtSite.getDisplayName());
 
             for (XhbDisplayLocationDao xhbDisplayLocation : xhbDisplayLocations) {
 
-                List<XhbDisplayDao> xhbDisplays = (ArrayList<XhbDisplayDao>) getXhbDisplayRepository()
+                List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository()
                     .findByDisplayLocationId(xhbDisplayLocation.getDisplayLocationId());
 
                 DisplayLocationDrillDown displayLocationDrillDown =

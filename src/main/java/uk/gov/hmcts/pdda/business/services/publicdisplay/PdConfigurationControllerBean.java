@@ -96,7 +96,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     public int[] getCourtsForPublicDisplay() {
         final String methodName = "getCourtsForPublicDisplay() - ";
         LOG.debug(ENTERED, methodName);
-        List<XhbCourtDao> courts = (ArrayList<XhbCourtDao>) getXhbCourtRepository().findAll();
+        List<XhbCourtDao> courts = getXhbCourtRepository().findAll();
         int[] courtArray = new int[courts.size()];
         Iterator<XhbCourtDao> courtIterator = courts.iterator();
         for (int i = 0; i < courtArray.length; i++) {

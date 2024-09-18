@@ -83,7 +83,7 @@ public class CppStagingInboundHelper implements Serializable {
         LOG.debug("Constructor...");
         List<XhbConfigPropDao> properties = null;
         try {
-            properties = (ArrayList<XhbConfigPropDao>) xhbConfigPropRepository
+            properties = xhbConfigPropRepository
                 .findByPropertyName("STAGING_DOCS_TO_PROCESS");
         } catch (Exception e) {
             LOG.debug("Error...{}", e.getMessage());
@@ -91,7 +91,7 @@ public class CppStagingInboundHelper implements Serializable {
 
         try {
             if (properties == null) {
-                properties = (ArrayList<XhbConfigPropDao>) xhbConfigPropRepository
+                properties = xhbConfigPropRepository
                     .findByPropertyName("STAGING_DOCS_TO_PROCESS");
             }
         } catch (Exception e) {
