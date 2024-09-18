@@ -46,7 +46,7 @@ public final class StringUtilities {
                 }
                 nextLetterUpperCase = !Character.isLetter(displayChars[i]);
             }
-            return new String(tempChars);
+            return String.copyValueOf(tempChars);
         }
         return null;
     }
