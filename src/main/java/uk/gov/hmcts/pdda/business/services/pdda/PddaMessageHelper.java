@@ -32,7 +32,6 @@ public class PddaMessageHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaMessageHelper.class);
     private static final String LOG_CALLED = " called";
 
-    private String methodName;
     private final EntityManager entityManager;
     private XhbPddaMessageRepository pddaMessageRepository;
     private XhbRefPddaMessageTypeRepository refPddaMessageTypeRepository;
@@ -47,7 +46,7 @@ public class PddaMessageHelper {
      * @return XhbPddaMessageDao
      */
     public Optional<XhbPddaMessageDao> findByPddaMessageId(final Integer pddaMessageId) {
-        methodName = "findByPddaMessageId()";
+        String methodName = "findByPddaMessageId()";
         LOG.debug(methodName + LOG_CALLED);
         return getPddaMessageRepository().findById(pddaMessageId);
     }
@@ -59,7 +58,7 @@ public class PddaMessageHelper {
      */
     @SuppressWarnings("unchecked")
     public Optional<XhbRefPddaMessageTypeDao> findByMessageType(String messageType) {
-        methodName = "findByMessageType()";
+        String methodName = "findByMessageType()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbRefPddaMessageTypeDao> daoList =
             getRefPddaMessageTypeRepository().findByMessageType(messageType);
@@ -73,7 +72,7 @@ public class PddaMessageHelper {
      */
     @SuppressWarnings("unchecked")
     public Optional<XhbPddaMessageDao> findByCpDocumentName(String cpDocumentName) {
-        methodName = "findByCpDocumentName()";
+        String methodName = "findByCpDocumentName()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbPddaMessageDao> daoList =
             getPddaMessageRepository().findByCpDocumentName(cpDocumentName);
@@ -85,7 +84,7 @@ public class PddaMessageHelper {
      * @return List
      */
     public List<XhbPddaMessageDao> findUnrespondedCpMessages() {
-        methodName = "findUnrespondedCPMessages()";
+        String methodName = "findUnrespondedCPMessages()";
         LOG.debug(methodName + LOG_CALLED);
         return getPddaMessageRepository().findUnrespondedCpMessages();
     }
@@ -96,7 +95,7 @@ public class PddaMessageHelper {
      * @return XhbPddaMessageDao
      */
     public Optional<XhbPddaMessageDao> savePddaMessage(XhbPddaMessageDao dao) {
-        methodName = "savePddaMessage()";
+        String methodName = "savePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
         return getPddaMessageRepository().update(dao);
     }
@@ -107,14 +106,14 @@ public class PddaMessageHelper {
      * @return XhbPddaMessageDao
      */
     public Optional<XhbRefPddaMessageTypeDao> savePddaMessageType(XhbRefPddaMessageTypeDao dao) {
-        methodName = "savePddaMessageType()";
+        String methodName = "savePddaMessageType()";
         LOG.debug(methodName + LOG_CALLED);
         return getRefPddaMessageTypeRepository().update(dao);
     }
 
     public Optional<XhbPddaMessageDao> updatePddaMessage(XhbPddaMessageDao dao,
         String userDisplayName) {
-        methodName = "updatePddaMessage()";
+        String methodName = "updatePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
         dao.setLastUpdatedBy(userDisplayName);
         return getPddaMessageRepository().update(dao);
@@ -135,7 +134,7 @@ public class PddaMessageHelper {
     }
 
     private Optional<?> getFirstInList(List<?> daoList) {
-        methodName = "getFirstInList()";
+        String methodName = "getFirstInList()";
         LOG.debug(methodName + LOG_CALLED);
         return daoList != null && !daoList.isEmpty() ? Optional.of(daoList.get(0))
             : Optional.empty();

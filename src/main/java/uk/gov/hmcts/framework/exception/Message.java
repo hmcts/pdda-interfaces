@@ -5,6 +5,7 @@ import uk.gov.hmcts.framework.services.CsServices;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -90,7 +91,7 @@ public class Message implements Serializable {
      * @param key external key in properties file
      */
     public Message(String key) {
-        this(key, new Object[] {});
+        this(key, new ArrayList<>());
     }
 
     /**
