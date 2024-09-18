@@ -214,12 +214,12 @@ public final class DummyCourtUtil {
         assertFalse(result.isBwHistoryEndWarrantEvent(), FALSE);
         assertFalse(result.isCrackedIneffectiveEvent(), FALSE);
         assertNull(result.getId(), "Result is not Null");
-        assertNotNull(result.hashCode(), NOTNULL);
         CourtLogViewValue compareTo = new CourtLogViewValue(2);
         compareTo.setEntryDate(result.getEntryDate());
         assertEquals(0, result.compareTo(compareTo), EQUALS);
         Boolean isEqual = result.equals(compareTo);
         assertFalse(isEqual, FALSE);
+        assertNotEquals(compareTo.hashCode() * -1, result.hashCode(), NOTEQUALS);
         return result;
     }
 
