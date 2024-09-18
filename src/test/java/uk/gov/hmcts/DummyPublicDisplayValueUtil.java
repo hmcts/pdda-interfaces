@@ -49,10 +49,8 @@ public final class DummyPublicDisplayValueUtil {
         PublicDisplayValue compareTo = new PublicDisplayValue();
         compareTo.setCourtSiteShortName(compareTo.getCourtSiteShortName());
         compareTo.setCourtSiteCode("");
-        assertNotNull(compareTo.compareTo(result), NOTNULL);
         compareTo.setCourtSiteCode(result.getCourtSiteCode());
         compareTo.setCrestCourtRoomNo(-999);
-        assertNotNull(compareTo.compareTo(result), NOTNULL);
         compareTo.setCrestCourtRoomNo(result.getCrestCourtRoomNo());
         assertEquals(0, compareTo.compareTo(result), EQUALS);
         return result;

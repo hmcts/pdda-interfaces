@@ -65,6 +65,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class PdConfigurationControllerBeanRotationTest {
 
     private static final String EQUALS = "Results are not Equal";
+    private static final String NOTEQUALS = "Results are Equal";
     private static final String NOTNULL = "Result is Null";
     private static final String NULL = "Result is not Null";
     private static final String FALSE = "Result is not False";
@@ -396,11 +397,10 @@ class PdConfigurationControllerBeanRotationTest {
         assertNull(rsComplex.getRotationSetDd(2), NULL);
         assertNotNull(displayBasicValueSortAdapters[0].hashCode(), NOTNULL);
         assertSame(displayBasicValueSortAdapters[0].getDao(), xhbDisplayDao, "Result is not Same");
-        assertNotNull(
-
-            displayBasicValueSortAdapter
-                .compareTo(new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2")),
-            NOTNULL);
+        DisplayBasicValueSortAdapter sort =
+            new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2");
+        assertEquals(displayBasicValueSortAdapter.compareTo(sort) * -1,
+            sort.compareTo(displayBasicValueSortAdapter), NOTEQUALS);
     }
 
     @Test
