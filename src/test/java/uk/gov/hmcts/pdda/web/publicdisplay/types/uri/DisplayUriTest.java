@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayUri;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.exceptions.InvalidUriFormatException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -44,8 +45,8 @@ class DisplayUriTest {
     void testDisplayUrlEquals() {
         DisplayUri anotherOne = new DisplayUri("anotherOne", COURTSITECODE, LOCATION, DISPLAY);
         assertFalse(classUnderTest.equals(anotherOne), "Result is not False");
-        assertNotNull(classUnderTest.hashCode(), "Result is Null");
         assertNotNull(classUnderTest.compareTo(anotherOne), "Result is Null");
+        assertNotEquals(classUnderTest.compareTo(anotherOne) * -1, classUnderTest.hashCode(), "Results are Equal");
     }
 
     @Test
