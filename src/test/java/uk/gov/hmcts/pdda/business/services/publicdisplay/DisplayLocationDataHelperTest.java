@@ -212,6 +212,6 @@ class DisplayLocationDataHelperTest {
     void testToSentenceCase() {
         String result = StringUtilities.toSentenceCase("test this now");
         assertNotNull(result, NULL);
-        assertEquals(result, "Test This Now", NOT_EQUAL);
+        assertEquals("Test This Now", result, NOT_EQUAL);
     }
 }
