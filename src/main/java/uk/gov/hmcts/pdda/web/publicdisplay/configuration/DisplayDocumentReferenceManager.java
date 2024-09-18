@@ -327,7 +327,7 @@ public class DisplayDocumentReferenceManager {
      * @author Bob Boothby
      * @version 1.0
      */
-    private class DisplayDocumentReferenceCounter {
+    private final class DisplayDocumentReferenceCounter {
         // Keep track of the reference count.
         private int count;
 
