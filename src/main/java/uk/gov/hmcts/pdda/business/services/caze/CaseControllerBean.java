@@ -93,7 +93,7 @@ public class CaseControllerBean extends AbstractControllerBean {
         List<ScheduledHearingValue> scheduledHearingValues = new ArrayList<>();
 
         List<XhbHearingDao> hearingBeans =
-            (ArrayList<XhbHearingDao>) getXhbHearingRepository().findByCaseId(caseID);
+            getXhbHearingRepository().findByCaseId(caseID);
         LOG.debug("found " + hearingBeans.size() + " hearings for caseId=" + caseID);
         Iterator<XhbHearingDao> hearingsIterator;
         hearingsIterator = hearingBeans.iterator();

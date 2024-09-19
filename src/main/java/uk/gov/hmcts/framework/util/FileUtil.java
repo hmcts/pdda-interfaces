@@ -158,7 +158,7 @@ public final class FileUtil {
                     File file1 = getFile(fname);
                     File file2 = getFile(fname);
 
-                    if (!mkdirs(file1) & !file2.exists()) {
+                    if (!mkdirs(file1) && !file2.exists()) {
                         makeErrors[id]++;
                     }
                 }

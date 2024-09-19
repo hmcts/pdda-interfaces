@@ -97,7 +97,7 @@ public class TranslationXmlTemplates implements Templates {
 
                 // If we have translation xml return it
                 if (translationXml != null) {
-                    return new StreamSource(new StringReader(translationXml), "translation.xml");
+                    return new StreamSource(new StringReader(translationXml), TRANSLATION_XML);
                 }
             } else if (delegate != null) {
                 // If we have a delegate allow it to try
