@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class LocaleServicesTest {
 
+    private static final String NOTNULL = "Result is Null";
     @Mock
     private LocaleServices mockLocaleServices;
 
@@ -32,7 +34,7 @@ class LocaleServicesTest {
 
     @BeforeEach
     public void setUp() {
-        // Do nothing
+     // Do nothing
     }
 
     @AfterEach
@@ -60,6 +62,16 @@ class LocaleServicesTest {
     @Test
     void testGetBaseName() {
         String result = classUnderTest.getBaseName(Locale.UK, "name.txt");
-        assertNotNull(result, "Result is Null");
+        assertNotNull(result, NOTNULL);
+        result = classUnderTest.getBaseName(Locale.UK, "name");
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetCandidates() {
+        Iterator<Object> result = classUnderTest.getCandidates(Locale.UK, "name.txt");
+        assertNotNull(result, NOTNULL);
+        result = classUnderTest.getCandidates(Locale.UK, "name");
+        assertNotNull(result, NOTNULL);
     }
 }
