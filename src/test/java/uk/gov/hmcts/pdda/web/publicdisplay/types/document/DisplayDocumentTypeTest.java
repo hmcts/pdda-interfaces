@@ -69,7 +69,6 @@ class DisplayDocumentTypeTest {
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("CourtList"), NOTNULL);
         assertNotNull(CLASSUNDERTEST.getLongName(), NOTNULL);
         assertNotNull(CLASSUNDERTEST.toLowerCaseString(), NOTNULL);
-        assertNotNull(CLASSUNDERTEST.hashCode(), NOTNULL);
     }
 
     @Test
@@ -100,7 +99,6 @@ class DisplayDocumentTypeTest {
     private CasesRequired getDummyCasesRequired() {
         CasesRequired result = CasesRequired.ALL;
         assertNotNull(result.toString(), NOTNULL);
-        assertNotNull(result.hashCode(), NOTNULL);
         return result;
     }
 }

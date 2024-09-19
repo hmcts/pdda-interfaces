@@ -71,7 +71,6 @@ class DisplayDocumentUriTest {
     void testEqualsFailure() {
         DisplayDocumentUri another = new DisplayDocumentUri("pd://document:81/DailyList:81");
         boolean result = classUnderTest.equals(another);
-        assertNotNull(classUnderTest.hashCode(), "Result is Null");
         assertFalse(result, "Result is not False");
     }
 

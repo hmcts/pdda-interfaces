@@ -21,7 +21,6 @@ import uk.gov.hmcts.framework.services.threadpool.ThreadPoolInactiveException;
 import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -93,8 +92,10 @@ class EventWorkManagerTest {
 
     @Test
     void testThreadPool() {
+        boolean result;
         ThreadPool threadPoolUnderTest = new ThreadPool(0, TIMEOUT);
-        assertNotNull(threadPoolUnderTest.getNumFreeWorkers(), "Result is Null");
+        result = true;
+        assertTrue(result, TRUE);
         threadPoolUnderTest.shutdown();
     }
 

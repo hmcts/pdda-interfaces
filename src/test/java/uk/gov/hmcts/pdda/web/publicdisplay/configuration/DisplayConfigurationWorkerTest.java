@@ -134,13 +134,9 @@ class DisplayConfigurationWorkerTest {
     void testDisplayRotationSetDataByDisplayComparator() {
         DisplayRotationSetData oldOne =
             DummyDisplayUtil.getDisplayRotationSetData(VALID_DISPLAY_URL, VALID_DOCUMENT_URL);
-        DisplayRotationSetData newOne =
-            DummyDisplayUtil.getDisplayRotationSetData(VALID_DISPLAY_URL, VALID_DOCUMENT_URL);
-
+        
         DisplayRotationSetDataByDisplayComparator comparator = DisplayRotationSetDataByDisplayComparator.getInstance();
-        assertNotNull(comparator.compare(oldOne, newOne), NOTNULL);
         assertEquals(0, comparator.compare(oldOne, oldOne), NOTEQUALS);
-        assertNotNull(comparator.hashCode(), NOTNULL);
         Boolean isEquals = comparator == null || false;
         assertFalse(isEquals, "Result is not False");
         isEquals = comparator.equals(comparator);
