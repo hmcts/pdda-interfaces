@@ -22,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class LocaleServicesTest {
 
     private static final String NOTNULL = "Result is Null";
+    private static final String FILENAME_WITH_EXT = "name.txt";
+    private static final String FILENAME_WITHOUT_EXT = "name";
+
     @Mock
     private LocaleServices mockLocaleServices;
 
@@ -34,7 +37,7 @@ class LocaleServicesTest {
 
     @BeforeEach
     public void setUp() {
-     // Do nothing
+        // Do nothing
     }
 
     @AfterEach
@@ -46,7 +49,7 @@ class LocaleServicesTest {
     void testGetResource() {
         Assertions.assertThrows(RuntimeException.class, () -> {
 
-            classUnderTest.getResource(Locale.UK, "name.txt");
+            classUnderTest.getResource(Locale.UK, FILENAME_WITH_EXT);
         });
     }
 
@@ -55,23 +58,23 @@ class LocaleServicesTest {
     void testOpenStream() {
         Assertions.assertThrows(RuntimeException.class, () -> {
 
-            classUnderTest.openStream(Locale.UK, "name.txt");
+            classUnderTest.openStream(Locale.UK, FILENAME_WITH_EXT);
         });
     }
 
     @Test
     void testGetBaseName() {
-        String result = classUnderTest.getBaseName(Locale.UK, "name.txt");
+        String result = classUnderTest.getBaseName(Locale.UK, FILENAME_WITH_EXT);
         assertNotNull(result, NOTNULL);
-        result = classUnderTest.getBaseName(Locale.UK, "name");
+        result = classUnderTest.getBaseName(Locale.UK, FILENAME_WITHOUT_EXT);
         assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testGetCandidates() {
-        Iterator<Object> result = classUnderTest.getCandidates(Locale.UK, "name.txt");
+        Iterator<Object> result = classUnderTest.getCandidates(Locale.UK, FILENAME_WITH_EXT);
         assertNotNull(result, NOTNULL);
-        result = classUnderTest.getCandidates(Locale.UK, "name");
+        result = classUnderTest.getCandidates(Locale.UK, FILENAME_WITHOUT_EXT);
         assertNotNull(result, NOTNULL);
     }
 }
