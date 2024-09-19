@@ -92,7 +92,7 @@ public final class EventType {
      * 
      * @param value This is one of the public static values
      */
-    private EventType(String value) {
+    protected EventType(String value) {
         this.value = value;
     }
 
