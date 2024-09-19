@@ -127,7 +127,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
         } else {
             return false;
         }
-        if (newCaseNumber && allDefendantsHidden.get(caseNumber)) {
+        if (newCaseNumber && Boolean.TRUE.equals(allDefendantsHidden.get(caseNumber))) {
             // If all the defendants on the case are hidden then we still
             // want to show one row for the case, so dont skip this item.
             // If the case itself is hidden then no rows for the case
@@ -157,7 +157,8 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
             boolean hideThisDefendantInPublicDisplay = RendererUtils.isHideInPublicDisplay(item);
 
             if (cases.containsKey(caseNumber)) {
-                if (cases.get(caseNumber) && !hideThisDefendantInPublicDisplay) {
+                if (Boolean.TRUE.equals(cases.get(caseNumber))
+                    && !hideThisDefendantInPublicDisplay) {
                     cases.put(caseNumber, Boolean.FALSE);
                 }
             } else {

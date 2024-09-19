@@ -22,9 +22,8 @@ import uk.gov.hmcts.pdda.web.publicdisplay.storage.pub.Storer;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -92,8 +91,8 @@ class DisplayDocumentTypeTest {
 
     @Test
     void testEquals() {
-        assertFalse(CLASSUNDERTEST.equals(DisplayDocumentType.DAILY_LIST_CY), "Result is not False");
-        assertTrue(CLASSUNDERTEST.equals(DisplayDocumentType.DAILY_LIST), "Result is not True");
+        assertNotEquals(DisplayDocumentType.DAILY_LIST_CY, CLASSUNDERTEST, "Result is Equal");
+        assertEquals(DisplayDocumentType.DAILY_LIST, CLASSUNDERTEST, "Result is not Equal");
         assertNotNull(CLASSUNDERTEST.toString(), NOTNULL);
         assertNotNull(CLASSUNDERTEST.getCountry(), NOTNULL);
     }

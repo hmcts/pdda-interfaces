@@ -355,7 +355,6 @@ class PdConfigurationControllerBeanRotationTest {
 
         RotationSetComplexValue rsComplex = new RotationSetComplexValue();
         XhbRotationSetDdDao rotationSetDdDao = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
-        // rotationSetDdDao.setRotationSetDdId(1);//TODO
         XhbDisplayDocumentDao displayDocumentDao =
             DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         RotationSetDdComplexValue rsddComplex =
@@ -387,8 +386,8 @@ class PdConfigurationControllerBeanRotationTest {
         classUnderTest.createRotationSets(rsComplex);
 
         XhbDisplayDao xhbDisplayDao = displayBasicValueSortAdapter.getDao();
-        assertFalse(displayBasicValueSortAdapter
-            .equals(new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2")), FALSE);
+        assertNotEquals(displayBasicValueSortAdapter,
+            new DisplayBasicValueSortAdapter(xhbDisplayDao, "Test2"), NOTEQUALS);
         assertNotNull(displayBasicValueSortAdapter.toString(), NOTNULL);
         assertEquals(rsddComplex.getDisplayDocumentBasicValue(), displayDocumentDao, EQUALS);
         assertEquals(rsddComplex.getDisplayDocumentId(), displayDocumentDao.getDisplayDocumentId(),
