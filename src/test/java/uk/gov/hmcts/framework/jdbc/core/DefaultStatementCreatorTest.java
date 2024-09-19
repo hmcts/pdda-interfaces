@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -46,6 +47,9 @@ class DefaultStatementCreatorTest {
     @Mock
     private PreparedStatement mockPreparedStatement;
 
+    @Mock
+    private CallableStatement mockCallableStatement;
+
     @TestSubject
     private final DefaultStatementCreator classUnderTest = new DefaultStatementCreator();
 
@@ -71,6 +75,27 @@ class DefaultStatementCreatorTest {
         } catch (SQLException ex) {
             fail(ex.getMessage());
         }
+    }
+
+    @Test
+    void testGetInstance() {
+        StatementCreator result = DefaultStatementCreator.getInstance();
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testCreateCallableStatement() {
+        String sql = "SELECT 1 FROM DUAL";
+        try {
+            Mockito.when(mockConnection.prepareCall(sql)).thenReturn(mockCallableStatement);
+            try (CallableStatement result = classUnderTest.createCallableStatement(mockConnection,
+                sql, Parameter.getInParameter(0, sql))) {
+                assertNotNull(result, NOTNULL);
+            }
+        } catch (SQLException ex) {
+            fail(ex.getMessage());
+        }
+
     }
 
 }
