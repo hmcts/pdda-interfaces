@@ -170,8 +170,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         try {
             docBuilder = MergeDocumentUtils.getDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            LOG.error(methodName + "ParserConfigurationException - Unable to retrieve CPP XML - "
-                + e.getMessage());
+            LOG.error("{} ParserConfigurationException - Unable to retrieve CPP XML - {}",
+                methodName, e.getMessage());
         }
 
         try {
