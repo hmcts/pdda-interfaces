@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-class LocaleServicesFailuresTest {
+class RemoteSessionTaskStrategyFailureTest {
 
     private static final String TESTSCHEDULENAME = "TestScheduleName";
     private static final String NULL = "Result is Null";
