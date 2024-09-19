@@ -31,8 +31,8 @@ class EventTypeTest {
     @Test
     void testEqualsTrue() {
         EventType eventType = new EventType("AddCaseEvent");
-        EventType AddCaseEventType = EventType.getEventType("AddCaseEvent"); 
-        assertEquals(true, eventType.equals(AddCaseEventType), TRUE);
+        EventType addCaseEventType = EventType.getEventType("AddCaseEvent"); 
+        assertEquals(true, eventType.equals(addCaseEventType), TRUE);
     }
     
     @Test
