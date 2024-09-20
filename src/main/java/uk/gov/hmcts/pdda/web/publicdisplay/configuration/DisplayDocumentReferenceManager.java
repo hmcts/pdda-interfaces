@@ -247,15 +247,8 @@ public class DisplayDocumentReferenceManager {
     private Set<DisplayDocumentUri> getDdUrisForCourtRoomAndDocumentType(
         DisplayDocumentType documentType, long courtRoomId) {
         String key = getCourtRoomAndDocumentTypeKey(documentType, courtRoomId);
-        Set<DisplayDocumentUri> displayDocumentUris = displayDocumentUrisByCourtRoomAndDocumentType.get(key);
-
-        // Does the set exist for this key?
-        if (displayDocumentUris == null) {
-            // No, remove and store it.
-            displayDocumentUris = new HashSet<>();
-            displayDocumentUrisByCourtRoomAndDocumentType.put(key, displayDocumentUris);
-        }
-        return displayDocumentUris;
+        return displayDocumentUrisByCourtRoomAndDocumentType.computeIfAbsent(key,
+            k -> new HashSet<>());
     }
 
     /**
