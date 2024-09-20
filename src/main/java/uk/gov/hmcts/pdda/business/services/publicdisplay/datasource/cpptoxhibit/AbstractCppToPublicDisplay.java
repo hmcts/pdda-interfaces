@@ -90,6 +90,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     }
 
     // Use only in unit test
+    @SuppressWarnings("java:S107")
     protected AbstractCppToPublicDisplay(final Date date, final int courtId,
         final int[] courtRoomIds, XhbCourtRepository xhbCourtRepository,
         XhbCourtSiteRepository xhbCourtSiteRepository,
