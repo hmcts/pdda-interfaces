@@ -44,7 +44,7 @@ class DisplayUriTest {
     void testDisplayUrlEquals() {
         DisplayUri anotherOne = new DisplayUri("anotherOne", COURTSITECODE, LOCATION, DISPLAY);
         assertNotEquals(classUnderTest, anotherOne, "Result is Equal");
-        assertEquals(classUnderTest.compareTo(anotherOne), 18, "Result is not Equal");
+        assertEquals(18, classUnderTest.compareTo(anotherOne), "Result is not Equal");
         assertNotEquals(classUnderTest.compareTo(anotherOne) * -1, classUnderTest.hashCode(), "Results are Equal");
     }
 
