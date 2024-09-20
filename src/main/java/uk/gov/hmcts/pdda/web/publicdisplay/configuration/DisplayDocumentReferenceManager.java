@@ -273,17 +273,8 @@ public class DisplayDocumentReferenceManager {
      */
     private DisplayDocumentReferenceCounter getDisplayDocumentReferenceCounter(
         DisplayDocumentUri displayDocumentUri) {
-        DisplayDocumentReferenceCounter counter = 
-            displayDocumentUriCounts.get(displayDocumentUri);
-
-        // Does the counter exist?
-        if (counter == null) {
-            // Then remove and store it.
-            counter = new DisplayDocumentReferenceCounter();
-            displayDocumentUriCounts.put(displayDocumentUri, counter);
-        }
-
-        return counter;
+        return displayDocumentUriCounts.computeIfAbsent(displayDocumentUri,
+            k -> new DisplayDocumentReferenceCounter());
     }
 
     private PdDataControllerBean getPdDataControllerBean() {
