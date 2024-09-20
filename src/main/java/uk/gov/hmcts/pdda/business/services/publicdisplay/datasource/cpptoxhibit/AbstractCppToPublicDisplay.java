@@ -193,6 +193,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return Collection of the relevant display objects.
      * @throws XPathExpressionException Exception
      */
+    @SuppressWarnings("java:S3740")
     public abstract Collection getCppData(EntityManager entityManager)
         throws XPathExpressionException;
 
