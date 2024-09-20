@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefinitivepublicnotice.XhbDefinitivePublicNoticeDao;
@@ -42,6 +43,7 @@ class PublicNoticeWorkFlowTest {
     @BeforeAll
     public static void setUp() {
         Mockito.mockStatic(PublicNoticeSelectionManipulator.class);
+        Mockito.mockStatic(PddaEntityHelper.class);
     }
 
     @AfterAll
@@ -53,7 +55,8 @@ class PublicNoticeWorkFlowTest {
     @Test
     void testSetPublicNoticeforCourtRoom() {
         boolean result;
-        CourtLogSubscriptionValue courtLogSubscriptionValue = DummyCourtUtil.getCourtLogSubscriptionValue();
+        CourtLogSubscriptionValue courtLogSubscriptionValue =
+            DummyCourtUtil.getCourtLogSubscriptionValue();
         classUnderTest.setPublicNoticeforCourtRoom(courtLogSubscriptionValue);
         result = true;
 
@@ -65,8 +68,8 @@ class PublicNoticeWorkFlowTest {
     void testSetAllPublicNoticesForCourtRoom() {
         boolean result = false;
         try {
-            classUnderTest.setAllPublicNoticesForCourtRoom(
-                new DisplayablePublicNoticeValue[] {}, COURT_ID);
+            classUnderTest.setAllPublicNoticesForCourtRoom(new DisplayablePublicNoticeValue[] {},
+                COURT_ID);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -77,8 +80,14 @@ class PublicNoticeWorkFlowTest {
     @SuppressWarnings("static-access")
     @Test
     void testGetAllPublicNoticesForCourtRoom() {
+        // Setup
+        Optional<XhbCourtRoomDao> courtRoomDao = Optional.of(getDummyXhbCourtRoomDao());
+        // Expects
+        Mockito.when(PddaEntityHelper.xcrtFindByPrimaryKey(courtRoomDao.get().getCourtRoomId()))
+            .thenReturn(courtRoomDao);
+        // Run
         DisplayablePublicNoticeValue[] result =
-            classUnderTest.getAllPublicNoticesForCourtRoom(COURT_ID, Optional.of(getDummyXhbCourtRoomDao()));
+            classUnderTest.getAllPublicNoticesForCourtRoom(courtRoomDao.get().getCourtRoomId());
         assertNotNull(result, "Result is Null");
     }
 
@@ -137,8 +146,9 @@ class PublicNoticeWorkFlowTest {
         String createdBy = TEST1;
         Integer version = 3;
 
-        XhbConfiguredPublicNoticeDao result = new XhbConfiguredPublicNoticeDao(configuredPublicNoticeId, isActiveYN,
-            courtRoomId, publicNoticeId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
+        XhbConfiguredPublicNoticeDao result =
+            new XhbConfiguredPublicNoticeDao(configuredPublicNoticeId, isActiveYN, courtRoomId,
+                publicNoticeId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         result.setXhbPublicNotice(getDummyXhbPublicNoticeDao());
         return result;
     }
@@ -153,8 +163,9 @@ class PublicNoticeWorkFlowTest {
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
         Integer version = 3;
-        XhbPublicNoticeDao result = new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
-            creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
+        XhbPublicNoticeDao result =
+            new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
+                creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
         result.setXhbDefinitivePublicNotice(getDummyXhbDefinitivePublicNoticeDao());
         return result;
     }
@@ -168,7 +179,7 @@ class PublicNoticeWorkFlowTest {
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
         Integer version = 3;
-        return new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc, priority, lastUpdateDate,
-            creationDate, lastUpdatedBy, createdBy, version);
+        return new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc, priority,
+            lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
     }
 }
