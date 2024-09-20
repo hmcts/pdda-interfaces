@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DisplayConfigurationWorkerTest {
 
     private static final String TRUE = "Result is not True";
-    private static final String NOTNULL = "Result is not Null";
     private static final String NOTEQUALS = "Result is not Equal";
 
     private static final Integer COURT_ID = 20;
