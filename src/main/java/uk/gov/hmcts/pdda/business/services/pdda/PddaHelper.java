@@ -271,6 +271,7 @@ public class PddaHelper extends XhibitPddaHelper {
             sftpConfig.port = Integer.valueOf(strPort);
         } catch (Exception ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + " contains invalid port number";
+            LOG.error("Stacktrace1:: {}", ex);
             return sftpConfig;
         }
 
@@ -282,6 +283,7 @@ public class PddaHelper extends XhibitPddaHelper {
             LOG.debug("A session has been established");
         } catch (Exception ex) {
             sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
+            LOG.error("Stacktrace2:: {}", ex);
             return sftpConfig;
         }
 
@@ -401,6 +403,7 @@ public class PddaHelper extends XhibitPddaHelper {
                 return true;
             } catch (Exception ex) {
                 LOG.error(SFTP_ERROR, ex);
+                LOG.error("Stacktrace3:: {}", ex);
             }
         }
         return false;

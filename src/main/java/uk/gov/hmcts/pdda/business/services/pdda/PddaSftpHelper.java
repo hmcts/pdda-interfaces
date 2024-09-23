@@ -63,6 +63,7 @@ public class PddaSftpHelper {
 
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace1:: {}", ex);
             throw ex;
         }
     }
@@ -109,6 +110,7 @@ public class PddaSftpHelper {
 
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace2:: {}", ex);
             throw ex;
         }
     }
@@ -135,6 +137,7 @@ public class PddaSftpHelper {
             return files;
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace3:: {}", ex);
             throw ex;
         }
     }
@@ -187,6 +190,7 @@ public class PddaSftpHelper {
             return files;
         } catch (SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace4:: {}", ex);
             throw ex;
         }
     }
