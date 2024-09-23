@@ -82,6 +82,11 @@ class PddaHelperValidationTest {
         assertFalse(cpValidationUnderTest.validateDateTime("01"), FALSE);
     }
     
+    @Test 
+    void testValidateDateTimeInvalidFormat() {
+        assertFalse(cpValidationUnderTest.validateDateTime("*%@*%@*%@*%@*%"), FALSE);
+    }
+    
     private boolean testValidationCrestCourt(boolean isSuccessTest) {
         // Setup
         List<FileResults> dummyFiles = getAllValidCpFiles(true);
