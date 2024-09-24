@@ -32,13 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings({"PMD.TooManyMethods"})
 class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
 
     @Test
     void testGetDataNoListSuccess() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
-            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, false);
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -46,7 +47,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
     void testGetDataCaseHidden() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
-            Optional.of(DummyHearingUtil.getXhbHearingDao()), true, false, false);
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), true, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -54,7 +55,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
     void testGetDataDefOnCasePublicDispHide() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
-            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, true, false);
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, true, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -62,7 +63,31 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
     void testGetDataDefPublicDispHide() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
-            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, true);
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, true, false, false, false);
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testGetDataDefOnCaseEmpty() {
+        boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
+            getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, false, true, false, false);
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testGetDataDefOnCaseObsInd() {
+        boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
+            getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, false, false, false, true);
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testGetDataDefEmpty() {
+        boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
+            getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
+            Optional.of(DummyHearingUtil.getXhbHearingDao()), false, false, false, false, true, false);
         assertTrue(result, TRUE);
     }
 

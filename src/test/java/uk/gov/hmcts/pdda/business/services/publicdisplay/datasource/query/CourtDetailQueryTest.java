@@ -73,7 +73,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.ExcessiveParameterList", "PMD.NcssCount", "PMD.CyclomaticComplexity"})
 class CourtDetailQueryTest extends AbstractQueryTest {
 
     protected static final String TRUE = "Result is not True";
@@ -174,7 +175,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
     @Test
     void testGetDataNoListEmpty() {
         boolean result = testGetDataNoList(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-            new ArrayList<>(), Optional.empty(), false, false, false);
+            new ArrayList<>(), Optional.empty(), false, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -182,8 +183,9 @@ class CourtDetailQueryTest extends AbstractQueryTest {
     void testGetDataNoListNoSittings() {
         List<XhbHearingListDao> xhbHearingListDaoList = new ArrayList<>();
         xhbHearingListDaoList.add(DummyHearingUtil.getXhbHearingListDao());
-        boolean result = testGetDataNoList(xhbHearingListDaoList, new ArrayList<>(),
-            new ArrayList<>(), new ArrayList<>(), Optional.empty(), false, false, false);
+        boolean result =
+            testGetDataNoList(xhbHearingListDaoList, new ArrayList<>(), new ArrayList<>(),
+                new ArrayList<>(), Optional.empty(), false, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -193,8 +195,9 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         xhbHearingListDaoList.add(DummyHearingUtil.getXhbHearingListDao());
         List<XhbSittingDao> xhbSittingDaoList = new ArrayList<>();
         xhbSittingDaoList.add(DummyHearingUtil.getXhbSittingDao());
-        boolean result = testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList,
-            new ArrayList<>(), new ArrayList<>(), Optional.empty(), false, false, false);
+        boolean result =
+            testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList, new ArrayList<>(),
+                new ArrayList<>(), Optional.empty(), false, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -209,8 +212,9 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         xhbSittingDaoList.add(invalidXhbSittingDao);
         List<XhbScheduledHearingDao> xhbScheduledHearingDaoList = new ArrayList<>();
         xhbScheduledHearingDaoList.add(DummyHearingUtil.getXhbScheduledHearingDao());
-        boolean result = testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList,
-            xhbScheduledHearingDaoList, new ArrayList<>(), Optional.empty(), false, false, false);
+        boolean result =
+            testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList, xhbScheduledHearingDaoList,
+                new ArrayList<>(), Optional.empty(), false, false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -224,9 +228,9 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         xhbScheduledHearingDaoList.add(DummyHearingUtil.getXhbScheduledHearingDao());
         List<XhbSchedHearingDefendantDao> xhbSchedHearingDefendantDaoList = new ArrayList<>();
         xhbSchedHearingDefendantDaoList.add(DummyHearingUtil.getXhbSchedHearingDefendantDao());
-        boolean result =
-            testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList, xhbScheduledHearingDaoList,
-                xhbSchedHearingDefendantDaoList, Optional.empty(), false, false, false);
+        boolean result = testGetDataNoList(xhbHearingListDaoList, xhbSittingDaoList,
+            xhbScheduledHearingDaoList, xhbSchedHearingDefendantDaoList, Optional.empty(), false,
+            false, false, false, false, false);
         assertTrue(result, TRUE);
     }
 
@@ -236,7 +240,8 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         List<XhbScheduledHearingDao> xhbScheduledHearingDaoList,
         List<XhbSchedHearingDefendantDao> xhbSchedHearingDefendantDaoList,
         Optional<XhbHearingDao> xhbHearingDao, boolean caseHidden,
-        boolean defOnCasePublicDisplayHide, boolean defPublicDisplayHide) {
+        boolean defOnCasePublicDisplayHide, boolean defPublicDisplayHide, boolean defOnCaseEmpty,
+        boolean defEmpty, boolean defOnCaseObsIndYes) {
         // Setup
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
@@ -258,7 +263,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
             for (XhbSittingDao xhbSittingDao : xhbSittingDaoList) {
                 expectSitting(xhbScheduledHearingDaoList, xhbSchedHearingDefendantDaoList,
                     xhbHearingDao, replayArray, caseHidden, defOnCasePublicDisplayHide,
-                    defPublicDisplayHide);
+                    defPublicDisplayHide, defOnCaseEmpty, defEmpty, defOnCaseObsIndYes);
             }
         }
 
@@ -280,7 +285,8 @@ class CourtDetailQueryTest extends AbstractQueryTest {
     private void expectSitting(List<XhbScheduledHearingDao> xhbScheduledHearingDaoList,
         List<XhbSchedHearingDefendantDao> xhbSchedHearingDefendantDaoList,
         Optional<XhbHearingDao> xhbHearingDao, List<AbstractRepository<?>> replayArray,
-        boolean caseHidden, boolean defOnCasePublicDisplayHide, boolean defPublicDisplayHide) {
+        boolean caseHidden, boolean defOnCasePublicDisplayHide, boolean defPublicDisplayHide,
+        boolean defOnCaseEmpty, boolean defEmpty, boolean defOnCaseObsIndYes) {
         EasyMock
             .expect(mockXhbScheduledHearingRepository.findBySittingId(EasyMock.isA(Integer.class)))
             .andReturn(xhbScheduledHearingDaoList);
@@ -343,16 +349,38 @@ class CourtDetailQueryTest extends AbstractQueryTest {
             XhbDefendantDao xhbDefendantDao = DummyDefendantUtil.getXhbDefendantDao();
             if (defOnCasePublicDisplayHide) {
                 xhbDefendantOnCaseDao.setPublicDisplayHide("Y");
+                EasyMock
+                    .expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.of(xhbDefendantOnCaseDao));
+            } else if (defOnCaseEmpty) {
+                EasyMock
+                    .expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.empty());
+            } else if (defOnCaseObsIndYes) {
+                xhbDefendantOnCaseDao.setObsInd("Y");
+                EasyMock
+                    .expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.of(xhbDefendantOnCaseDao));
+            } else {
+                EasyMock
+                    .expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.of(xhbDefendantOnCaseDao));
             }
-            EasyMock.expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
-                .andReturn(Optional.of(xhbDefendantOnCaseDao));
+
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantOnCaseRepository);
+
             if (defPublicDisplayHide) {
                 xhbDefendantDao.setPublicDisplayHide("Y");
+                EasyMock.expect(mockXhbDefendantRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.of(xhbDefendantDao));
+            } else if (defEmpty) {
+                EasyMock.expect(mockXhbDefendantRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.empty());
+            } else {
+                EasyMock.expect(mockXhbDefendantRepository.findById(EasyMock.isA(Integer.class)))
+                    .andReturn(Optional.of(xhbDefendantDao));
             }
-            EasyMock.expect(mockXhbDefendantRepository.findById(EasyMock.isA(Integer.class)))
-                .andReturn(Optional.of(xhbDefendantDao));
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantRepository);
         }
