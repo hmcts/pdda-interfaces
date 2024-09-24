@@ -45,6 +45,8 @@ class RendererUtilsTest {
         result = RendererUtils.isHideInPublicDisplay(defendantName.getDefendantOnCaseId() - 10,
             defendantNames);
         assertFalse(result, FALSE);
+        result = RendererUtils.isHideInPublicDisplay(null, defendantNames);
+        assertFalse(result, FALSE);
         result = RendererUtils.isHideInPublicDisplay(null, null);
         assertFalse(result, FALSE);
     }
