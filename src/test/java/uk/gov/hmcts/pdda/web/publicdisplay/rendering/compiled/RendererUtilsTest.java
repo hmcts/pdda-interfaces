@@ -8,7 +8,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyDefendantUtil;
+import uk.gov.hmcts.DummyPublicDisplayValueUtil;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtListValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.SummaryByNameValue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +53,28 @@ class RendererUtilsTest {
         assertFalse(result, FALSE);
         result = RendererUtils.isHideInPublicDisplay(null, null);
         assertFalse(result, FALSE);
+    }
+    
+    @Test
+    void testIsReportingRestricted() {
+        // Setup
+        SummaryByNameValue testSummaryByNameValue =
+            (SummaryByNameValue) DummyPublicDisplayValueUtil.getSummaryByNameValue(false, null);
+        CourtListValue testCourtListValue =
+            (CourtListValue) DummyPublicDisplayValueUtil.getCourtListValue(true, 0, null);
+        final AllCourtStatusValue testAllCourtStatusValue =
+            (AllCourtStatusValue) DummyPublicDisplayValueUtil.getAllCourtStatusValue(true, false,
+                null);
+        // Random object to make return false fire off
+        final DefendantName defendantName = DummyDefendantUtil.getDefendantName(true, false);
+        boolean result = RendererUtils.isReportingRestricted(testSummaryByNameValue);
+        assertTrue(result, TRUE);
+        result = RendererUtils.isReportingRestricted(testCourtListValue);
+        assertTrue(result, TRUE);
+        result = RendererUtils.isReportingRestricted(testAllCourtStatusValue);
+        assertTrue(result, TRUE);
+        result = RendererUtils.isReportingRestricted(defendantName);
+        assertFalse(result, TRUE);
     }
 
 }
