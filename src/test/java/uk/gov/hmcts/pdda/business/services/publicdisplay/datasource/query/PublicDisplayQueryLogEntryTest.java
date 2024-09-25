@@ -1,16 +1,28 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogeventdesc.XhbCourtLogEventDescDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogeventdesc.XhbCourtLogEventDescRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -31,14 +43,55 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 @ExtendWith(EasyMockExtension.class)
 class PublicDisplayQueryLogEntryTest {
 
+    private static final String TRUE = "Result is Not True";
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
+    private static final String TEST_XML =
+        "<testNode><testChildNode>courtroomname</testChildNode></testNode>";
 
     @Mock
-    private EntityManager mockEntityManager;
+    private PublicDisplayValue mockPublicDisplayValue;
+
+    @Mock
+    private XhbCourtLogEntryRepository mockXhbCourtLogEntryRepository;
+
+    @Mock
+    private XhbCourtLogEventDescRepository mockXhbCourtLogEventDescRepository;
 
     @TestSubject
     private final PublicDisplayQueryLogEntry classUnderTest =
-        new PublicDisplayQueryLogEntry(mockEntityManager);
+        new PublicDisplayQueryLogEntry(EasyMock.createMock(EntityManager.class));
+
+    @Test
+    void testPopulateEventData() {
+        // Setup
+        final boolean result = true;
+        XhbCourtLogEntryDao xhbCourtLogEntryDao = DummyCourtUtil.getXhbCourtLogEntryDao();
+        xhbCourtLogEntryDao.setLogEntryXml(TEST_XML);
+        List<XhbCourtLogEntryDao> xhbCourtLogEntryDaos = new ArrayList<>();
+        xhbCourtLogEntryDaos.add(xhbCourtLogEntryDao);
+        xhbCourtLogEntryDaos.add(xhbCourtLogEntryDao);
+
+        EasyMock.expect(mockXhbCourtLogEntryRepository.findByCaseId(EasyMock.isA(Integer.class)))
+            .andReturn(xhbCourtLogEntryDaos);
+
+        XhbCourtLogEventDescDao xhbCourtLogEventDescDao = new XhbCourtLogEventDescDao();
+        xhbCourtLogEventDescDao.setEventType(30_300);
+
+        EasyMock.expect(mockXhbCourtLogEventDescRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbCourtLogEventDescDao));
+        EasyMock.expectLastCall().times(2);
+
+        EasyMock.replay(mockXhbCourtLogEntryRepository);
+        EasyMock.replay(mockXhbCourtLogEventDescRepository);
+
+        // Run
+        classUnderTest.populateEventData(mockPublicDisplayValue, 1);
+
+        // Checks
+        EasyMock.verify(mockXhbCourtLogEntryRepository);
+        EasyMock.verify(mockXhbCourtLogEventDescRepository);
+        assertTrue(result, TRUE);
+    }
 
     @Test
     void testGetXhbCaseRepository() {

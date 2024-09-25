@@ -34,6 +34,7 @@ import javax.xml.transform.sax.SAXTransformerFactory;
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class TemplateServices {
 
     protected static final String RESOLVED_BY = "\" resolved by \"";
@@ -148,7 +149,7 @@ public class TemplateServices {
             return new UriResolverTemplatesAdapter(
                 getTransformerFactory(resolver).newTemplates(resolver.resolve(systemId, null)), resolver);
         } catch (TransformerException te) {
-            Message userMessage = new Message("xslservices.templateserror", new Object[] {systemId, resolver});
+            Message userMessage = new Message("xslservices.templateserror", systemId, resolver);
             String logMessage = "Could not create templates from xsl \"" + systemId + RESOLVED_BY + resolver + "\"";
             throw new CsUnrecoverableException(userMessage, te, logMessage);
         }

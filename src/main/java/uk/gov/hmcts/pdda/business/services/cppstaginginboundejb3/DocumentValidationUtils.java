@@ -151,7 +151,7 @@ public final class DocumentValidationUtils {
 
         // Check time component
         final String docTime = parts[2];
-        return DocumentValidationUtils.isValidDocumentTime(docTime, documentName);
+        return isValidDocumentTime(docTime, documentName);
     }
 
     /**

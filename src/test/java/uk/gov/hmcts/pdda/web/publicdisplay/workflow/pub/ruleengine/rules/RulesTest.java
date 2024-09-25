@@ -26,11 +26,11 @@ class RulesTest {
     private static final String TRUE = "Result is not True";
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
     }
 
     @Test
@@ -92,7 +92,7 @@ class RulesTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        return new CourtRoomIdentifier(-99, null);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

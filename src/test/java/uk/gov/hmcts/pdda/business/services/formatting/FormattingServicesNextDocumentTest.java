@@ -50,11 +50,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.LawOfDemeter"})
 class FormattingServicesNextDocumentTest {
 
     private static final String TRUE = "Result is not True";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
+    private static final String NEWDOCUMENT = "ND";
+    private static final String FORMATERROR = "FE";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -111,7 +114,7 @@ class FormattingServicesNextDocumentTest {
     private FormattingServices classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
         ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
             mockXhbConfigPropRepository);
@@ -135,7 +138,7 @@ class FormattingServicesNextDocumentTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 
@@ -164,13 +167,14 @@ class FormattingServicesNextDocumentTest {
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         xmlDocumentList.add(xhbXmlDocumentDao);
-        if ("ND".contentEquals(formatStatus)) {
+        if (NEWDOCUMENT.contentEquals(formatStatus)) {
             expectConfigProp(FORMATTING_LIST_DELAY, "3");
             Mockito.when(mockXhbXmlDocumentRepository.findListByClobId(Mockito.isA(Long.class),
                 Mockito.isA(LocalDateTime.class))).thenReturn(xmlDocumentList);
-        } else if ("FE".contentEquals(formatStatus)) {
-            Mockito.when(mockXhbFormattingRepository.findByFormatStatus("ND"))
-                .thenReturn(new ArrayList<XhbFormattingDao>());
+        } else if (FORMATERROR.contentEquals(formatStatus)) {
+            List<XhbFormattingDao> emptyList = new ArrayList<>();
+            Mockito.when(mockXhbFormattingRepository.findByFormatStatus(NEWDOCUMENT))
+                .thenReturn(emptyList);
         }
         Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus))
             .thenReturn(formattingDaoList);

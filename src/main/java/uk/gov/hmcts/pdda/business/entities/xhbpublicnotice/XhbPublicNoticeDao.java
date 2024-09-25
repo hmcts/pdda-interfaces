@@ -51,11 +51,11 @@ public class XhbPublicNoticeDao extends AbstractVersionedDao implements Serializ
         setPublicNoticeDesc(publicNoticeDesc);
         setCourtId(courtId);
         setDefinitivePnId(definitivePnId);
-        setLastUpdateDate(lastUpdateDate);
-        setCreationDate(creationDate);
-        setLastUpdatedBy(lastUpdatedBy);
-        setCreatedBy(createdBy);
-        setVersion(version);
+        super.setLastUpdateDate(lastUpdateDate);
+        super.setCreationDate(creationDate);
+        super.setLastUpdatedBy(lastUpdatedBy);
+        super.setCreatedBy(createdBy);
+        super.setVersion(version);
     }
 
     public XhbPublicNoticeDao(XhbPublicNoticeDao otherData) {
@@ -64,11 +64,11 @@ public class XhbPublicNoticeDao extends AbstractVersionedDao implements Serializ
         setPublicNoticeDesc(otherData.getPublicNoticeDesc());
         setCourtId(otherData.getCourtId());
         setDefinitivePnId(otherData.getDefinitivePnId());
-        setLastUpdateDate(otherData.getLastUpdateDate());
-        setCreationDate(otherData.getCreationDate());
-        setLastUpdatedBy(otherData.getLastUpdatedBy());
-        setCreatedBy(otherData.getCreatedBy());
-        setVersion(otherData.getVersion());
+        super.setLastUpdateDate(otherData.getLastUpdateDate());
+        super.setCreationDate(otherData.getCreationDate());
+        super.setLastUpdatedBy(otherData.getLastUpdatedBy());
+        super.setCreatedBy(otherData.getCreatedBy());
+        super.setVersion(otherData.getVersion());
     }
 
     public Integer getPrimaryKey() {

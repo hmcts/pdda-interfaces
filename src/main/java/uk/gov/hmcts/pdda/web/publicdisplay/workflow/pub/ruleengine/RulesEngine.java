@@ -23,10 +23,11 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.exceptions.Ru
  * @version $Id: RulesEngine.java,v 1.5 2006/06/05 12:32:37 bzjrnl Exp $
  */
 
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public final class RulesEngine {
     private static final Logger LOG = LoggerFactory.getLogger(RulesEngine.class);
 
-    private static RulesEngine instance;
+    private static final RulesEngine INSTANCE = new RulesEngine();
 
     /**
      * Link to the mapping of rules to documents.
@@ -34,12 +35,19 @@ public final class RulesEngine {
     private RulesConfiguration ruleConfig;
 
     private RulesEngine() {
-        try {
-            ruleConfig = RulesConfiguration.newConfiguration();
-        } catch (RulesConfigurationException ex) {
-            LOG.error("The rules configuration failed to load", ex);
-            throw ex;
+        // Do nothing
+    }
+
+    private RulesConfiguration getRulesConfig() {
+        if (ruleConfig == null) {
+            try {
+                ruleConfig = RulesConfiguration.newConfiguration();
+            } catch (RulesConfigurationException ex) {
+                LOG.error("The rules configuration failed to load", ex);
+                throw ex;
+            }
         }
+        return ruleConfig;
     }
 
     /**
@@ -49,8 +57,7 @@ public final class RulesEngine {
      */
     public static RulesEngine getInstance() {
         synchronized (RulesEngine.class) {
-            instance = new RulesEngine();
-            return instance;
+            return INSTANCE;
         }
     }
 
@@ -65,13 +72,14 @@ public final class RulesEngine {
      * @post return.getDisplayDocumentTypes() != null
      * 
      */
-    public DocumentsForEvent getDisplayDocumentTypesForEvent(PublicDisplayEvent publicDisplayEvent) {
+    public DocumentsForEvent getDisplayDocumentTypesForEvent(
+        PublicDisplayEvent publicDisplayEvent) {
         DocumentsForEvent docForEvent = new DocumentsForEvent();
         LOG.debug("getDisplayDocumentTypesForEvent({})", publicDisplayEvent);
-        
+
         // for event type look up documents
         ConditionalDocument[] conditionalDocuments =
-            ruleConfig.getConditionalDocumentsForEvent(publicDisplayEvent.getEventType());
+            getRulesConfig().getConditionalDocumentsForEvent(publicDisplayEvent.getEventType());
 
         // for each document check if it is requires refreshing
         for (ConditionalDocument conditionalDocument : conditionalDocuments) {

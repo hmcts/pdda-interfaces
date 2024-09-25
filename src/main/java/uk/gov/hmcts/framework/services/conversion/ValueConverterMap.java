@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,9 +21,9 @@ public class ValueConverterMap {
 
     protected static final String NULL_STRING = "null";
     protected static final String SEMI_COLON = ";";
-    
-    protected static final Integer ONE = Integer.valueOf(1);
-    
+
+    protected static final Integer ONE = 1;
+
     private final Map<String, Serializable> map = new ConcurrentHashMap<>();
 
     private final ValueConverter converter;
@@ -34,11 +35,11 @@ public class ValueConverterMap {
     protected ValueConverter getConverter() {
         return converter;
     }
-    
+
     protected Map<String, Serializable> getMap() {
         return map;
     }
-    
+
     /**
      * Synonym for getString().
      */
@@ -54,24 +55,24 @@ public class ValueConverterMap {
             return "";
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public void addInnerMap(String name, StringMap innerMap) {
         Object obj = getMap().get(name);
-        ArrayList<Object> inMaps;
+        List<Object> inMaps;
         if (obj == null) {
             inMaps = new ArrayList<>();
         } else {
             inMaps = (ArrayList) obj;
         }
         inMaps.add(innerMap);
-        getMap().put(name, inMaps);
+        getMap().put(name, (ArrayList) inMaps);
     }
-    
+
     protected void copyTypeToMap(Class<?> type, String propertyName, Method method, Object bean) {
         LOG.debug("Type not found");
     }
-    
+
     /*
      * Returns a ordered string in form of "field=value;.......;field=value"
      */
@@ -80,7 +81,7 @@ public class ValueConverterMap {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         Iterator<?> entries = getMap().entrySet().iterator();
-        TreeSet treeSet = new TreeSet();
+        Set<String> treeSet = new TreeSet<>();
 
         while (entries.hasNext()) {
             Map.Entry entry = (Map.Entry) entries.next();
@@ -89,13 +90,12 @@ public class ValueConverterMap {
 
         Iterator elements = treeSet.iterator();
         while (elements.hasNext()) {
-            String string = (String) elements.next();
-            buf.append(string + SEMI_COLON);
+            buf.append((String) elements.next()).append(SEMI_COLON);
         }
 
         return buf.toString();
     }
-    
+
     /**
      * Show all names and vos on the printer.
      */

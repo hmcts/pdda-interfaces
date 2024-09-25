@@ -27,7 +27,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.RotationSetCompl
 import java.util.Locale;
 
 
-@SuppressWarnings("PMD.ExcessiveParameterList")
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
 public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdConfigReposControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPdConfigDisplaysControllerBean.class);

@@ -4,7 +4,7 @@ public enum DocumentType {
 
     DL("DailyList"), WL("WarnedList"), FL("FirmList"), WP("WebPage"), PD("PublicDisplay");
 
-    private String docName;
+    private final String docName;
 
     DocumentType(String docName) {
         this.docName = docName;
@@ -15,7 +15,7 @@ public enum DocumentType {
     }
     
     public static DocumentType fromString(String value) {
-        for (DocumentType docType : DocumentType.values()) {
+        for (DocumentType docType : values()) {
             if (docType.getDocName().equalsIgnoreCase(value)) {
                 return docType;
             }

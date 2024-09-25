@@ -14,6 +14,7 @@ import java.util.Optional;
 
 
 @Repository
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> implements Serializable  {
 
     private static final long serialVersionUID = 1L;

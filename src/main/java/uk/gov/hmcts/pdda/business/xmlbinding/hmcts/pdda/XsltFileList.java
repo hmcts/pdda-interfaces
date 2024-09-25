@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Reader;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Class XsltFileList.
@@ -55,7 +56,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
             XsltFileList temp = (XsltFileList) obj;
             if (this.getList() != null) {
                 if (temp.getList() == null
-                    || !(this.getList().equals(temp.getList()))) {
+                    || !this.getList().equals(temp.getList())) {
                     return false;
                 }
             } else if (temp.getList() != null) {
@@ -162,9 +163,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
     public void setXsltFileName(String... xsltFileNameArray) {
         // -- copy array
         getList().clear();
-        for (String xsltObj : xsltFileNameArray) {
-            getList().add(xsltObj);
-        }
+        getList().addAll(Arrays.asList(xsltFileNameArray));
     }
 
     /**

@@ -28,6 +28,7 @@ import javax.security.auth.Subject;
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: SubjectManager.java,v 1.4 2014/06/20 18:03:08 atwells Exp $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public abstract class SubjectManager {
 
     /** Logger instance. */

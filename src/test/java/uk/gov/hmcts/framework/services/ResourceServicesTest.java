@@ -20,12 +20,12 @@ class ResourceServicesTest {
 
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // Do nothing
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

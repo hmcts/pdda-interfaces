@@ -15,10 +15,10 @@ import static io.restassured.RestAssured.given;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SetupControllerFunctionalTest {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(SetupControllerFunctionalTest.class);
     private static final String HEALTHPAGE = "/health";
-    
+
     @Value("${TEST_URL:http://localhost:8080}")
     private String testUrl;
 
@@ -31,17 +31,13 @@ class SetupControllerFunctionalTest {
     @Test
     void smokeTest() {
         LOG.info("testUrl={}", getTestUrl());
-        Response response = given()
-            .contentType(ContentType.JSON)
-            .when()
-            .get()
-            .then()
-            .extract().response();
-        
-        LOG.info("Functionaltest.status={}",response.statusCode());
-        Assertions.assertEquals(200, response.statusCode());
-    } 
-    
+        Response response =
+            given().contentType(ContentType.JSON).when().get().then().extract().response();
+
+        LOG.info("Functionaltest.status={}", response.statusCode());
+        Assertions.assertEquals(200, response.statusCode(), "Invalid status code");
+    }
+
     private String getTestUrl() {
         StringBuilder sb = new StringBuilder();
         sb.append(testUrl).append(HEALTHPAGE);

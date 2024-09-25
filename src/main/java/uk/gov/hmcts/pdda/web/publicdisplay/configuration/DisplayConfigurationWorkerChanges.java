@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public abstract class DisplayConfigurationWorkerChanges {
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationWorkerChanges.class);
@@ -113,7 +114,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     public RenderChanges getRenderChanges(DisplayDocumentType[] documentTypes,
         CourtRoomIdentifier courtRoom) {
-        if (courtRoom.getCourtId().intValue() != courtId) {
+        if (!courtRoom.getCourtId().equals(courtId)) {
             throw new PublicDisplayRuntimeException(
                 "Problem getting render changes for a court room and display documents: "
                     + "This instance is configured for court: " + courtId + " and not for court: "

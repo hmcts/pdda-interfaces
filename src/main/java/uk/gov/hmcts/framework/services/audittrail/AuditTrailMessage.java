@@ -63,7 +63,7 @@ public class AuditTrailMessage {
         String userId = evt.getUserId();
         String courtHouseId = evt.getCourtHouseId();
         String eventType = evt.getEvtType();
-        Boolean success = Boolean.valueOf(evt.isSuccess());
+        Boolean success = evt.isSuccess();
         Integer caseId = evt.getCaseId();
         String evtSpecificData = evt.getEventSpecificData();
 

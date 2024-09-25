@@ -63,6 +63,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final String ENTERED = " : entered";
     private static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
+    private static final String IWP = "IWP";
 
     public CppInitialProcessingControllerBean() {
         super();
@@ -362,7 +363,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             if (courtId > 0) {
                 String documentType = thisDoc.getDocumentType();
                 if (CppDocumentTypes.WP == CppDocumentTypes.fromString(documentType)) {
-                    documentType = "IWP";
+                    documentType = IWP;
                 }
                 XhbCppFormattingDao docToUpdate = getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
                     documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
@@ -392,7 +393,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     getXhbCppFormattingRepository().save(docToCreate);
                 }
 
-                if ("IWP".equalsIgnoreCase(documentType)) {
+                if (IWP.equalsIgnoreCase(documentType)) {
                     // Also need to add 2 new records to XHB_FORMATTING
                     // Create the "en" version
                     XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,

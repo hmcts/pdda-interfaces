@@ -40,12 +40,12 @@ class MoveCaseWorkFlowTest {
     private final MoveCaseWorkFlow classUnderTest = getClassUnderTest();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(RulesEngine.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -86,8 +86,8 @@ class MoveCaseWorkFlowTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        return new MoveCaseEvent(getDummyCourtRoomIdentifier(Integer.valueOf(-99)),
-            getDummyCourtRoomIdentifier(Integer.valueOf(-1)), getDummyCaseChangeInformation());
+        return new MoveCaseEvent(getDummyCourtRoomIdentifier(-99),
+            getDummyCourtRoomIdentifier(-1), getDummyCaseChangeInformation());
     }
 
     private DocumentsForEvent getDummyDocumentsForEvent() {

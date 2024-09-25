@@ -21,11 +21,11 @@ class WorkFlowContextTest {
     private final WorkFlowContext classUnderTest = WorkFlowContext.newInstance(mockDisplayConfigurationReader);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
     }
 
     @Test

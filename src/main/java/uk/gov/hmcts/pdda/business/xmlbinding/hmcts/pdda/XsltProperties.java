@@ -6,6 +6,8 @@ import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 /**
  * Class XsltProperties.
  * 
@@ -51,7 +53,7 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
             XsltProperties temp = (XsltProperties) obj;
             if (this.getList() != null) {
-                if (temp.getList() == null || !(this.getList().equals(temp.getList()))) {
+                if (temp.getList() == null || !this.getList().equals(temp.getList())) {
                     return false;
                 }
             } else if (temp.getList() != null) {
@@ -162,9 +164,7 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
     public void setXsltTransform(XsltTransform... xsltTransformArray) {
         // -- copy array
         getList().clear();
-        for (XsltTransform xsltObj : xsltTransformArray) {
-            getList().add(xsltObj);
-        }
+        getList().addAll(Arrays.asList(xsltTransformArray));
     }
 
     /**

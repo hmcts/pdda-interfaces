@@ -26,7 +26,7 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * FormattingServiceUtils.
  */
-
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public final class FormattingServiceUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServiceUtils.class);

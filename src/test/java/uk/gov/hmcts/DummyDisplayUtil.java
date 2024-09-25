@@ -22,7 +22,7 @@ public final class DummyDisplayUtil {
     
     private static final String NOTNULL = "Result is Null";
    
-    private static final long PAGE_DELAY = Long.valueOf(1).longValue();
+    private static final long PAGE_DELAY = 1L;
     
     private static final String DISPLAY_URL = "pd://display/snaresbrook/453/reception/mainscreen";
     
@@ -101,16 +101,16 @@ public final class DummyDisplayUtil {
     }
     
     public static XhbCrLiveDisplayDao getXhbCrLiveDisplayDao() {
-        Integer crLiveDisplayId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(-1);
-        Integer scheduledHearingId = Integer.valueOf(-1);
+        Integer crLiveDisplayId = -1;
+        Integer courtRoomId = -1;
+        Integer scheduledHearingId = -1;
         LocalDateTime timeStatusSet = LocalDateTime.now();
         String status = "status";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbCrLiveDisplayDao result = new XhbCrLiveDisplayDao();
         result.setCrLiveDisplayId(crLiveDisplayId);
         result.setCourtRoomId(courtRoomId);

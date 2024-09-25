@@ -43,19 +43,20 @@ import java.lang.reflect.Method;
  */
 public class ReflectionEqualsHelper {
     private static final Logger LOG = LoggerFactory.getLogger(ReflectionEqualsHelper.class);
+    
+    private static final String METHOD_NAME = "equals";
 
     protected ReflectionEqualsHelper() {
         // Protected constructor
     }
 
     public static boolean equalFields(Object obj, Object otherObj) {
-        Boolean res;
-        String methodName = "equals";
+        boolean res;
         // Obtain all the fields of the class to compare.
         Field[] fields = obj.getClass().getDeclaredFields();
         try {
             // Attempts to call .equals method on each field.
-            LOG.debug(methodName + "Number of fields to equate: " + fields.length);
+            LOG.debug("{}{}{}", METHOD_NAME, "Number of fields to equate: ", fields.length);
 
             for (Field field : fields) {
                 Method meth = getMethod(field, otherObj);
@@ -79,8 +80,8 @@ public class ReflectionEqualsHelper {
                 res = getResult(res1, res2);
 
                 // Abort comparison if the values of a field do not equal.
-                if (!res.booleanValue()) {
-                    LOG.debug(methodName + "Objects are NOT equal");
+                if (!res) {
+                    LOG.debug("{}{}", METHOD_NAME, "Objects are NOT equal");
 
                     return false;
                 }
@@ -88,7 +89,7 @@ public class ReflectionEqualsHelper {
             }
 
             // If gets here then all fields of the object are equal.
-            LOG.debug(methodName + "Objects are equal");
+            LOG.debug("{}{}", METHOD_NAME, "Objects are equal");
 
             return true;
         } catch (Exception ex) {
@@ -107,13 +108,12 @@ public class ReflectionEqualsHelper {
     }
 
     private static Method getMethod(Field field, Object otherObj) {
-        String methodName = "equals";
         String fieldName = null;
         try {
             // Get Method to read property...
             fieldName = field.getName();
 
-            LOG.debug(methodName + "Equating field: " + fieldName);
+            LOG.debug("{}{}{}", METHOD_NAME, "Equating field: ", fieldName);
 
             PropertyDescriptor pd = getPropertyDescriptor(fieldName, otherObj.getClass());
 
@@ -122,19 +122,18 @@ public class ReflectionEqualsHelper {
             // a private attribute
         } catch (IntrospectionException ie) {
             // Process next field
-            LOG.debug(methodName + "Field " + fieldName + " does not have getters/setters");
+            LOG.debug("{}{}{}{}", METHOD_NAME, "Field ", fieldName, " does not have getters/setters");
             return null;
         }
     }
 
     private static Boolean getResult(Object res1, Object res2)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        String methodName = "equals";
         Method comparisonMethod = ReflectionHelper.getMethodFromClassHierarchy(res1.getClass(),
-            methodName, getClassArray());
+            METHOD_NAME, getClassArray());
 
         if (comparisonMethod == null) {
-            throw new NoSuchMethodException(methodName);
+            throw new NoSuchMethodException(METHOD_NAME);
         }
         // Invoke comparison method on fields
         Object[] args = {res2};

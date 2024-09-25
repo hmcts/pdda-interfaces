@@ -22,9 +22,8 @@ import uk.gov.hmcts.pdda.web.publicdisplay.storage.pub.Storer;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -45,21 +44,21 @@ class DisplayDocumentTypeTest {
     private Logger mockLogger;
 
     @InjectMocks
-    private final DisplayDocumentType classUnderTest = DisplayDocumentType.DAILY_LIST;
+    private static final DisplayDocumentType CLASSUNDERTEST = DisplayDocumentType.DAILY_LIST;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
     @Test
     void testGetCasesRequired() {
-        CasesRequired result = classUnderTest.getCasesRequired();
+        CasesRequired result = CLASSUNDERTEST.getCasesRequired();
         assertNotNull(result, NOTNULL);
         assertEquals(getDummyCasesRequired(), result, "Results are not Equal");
     }
@@ -68,9 +67,8 @@ class DisplayDocumentTypeTest {
     void testGetDisplayDocumentTypes() {
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("DailyList"), NOTNULL);
         assertNotNull(DisplayDocumentType.getDisplayDocumentTypes("CourtList"), NOTNULL);
-        assertNotNull(classUnderTest.getLongName(), NOTNULL);
-        assertNotNull(classUnderTest.toLowerCaseString(), NOTNULL);
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.getLongName(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.toLowerCaseString(), NOTNULL);
     }
 
     @Test
@@ -92,16 +90,15 @@ class DisplayDocumentTypeTest {
 
     @Test
     void testEquals() {
-        assertFalse(Boolean.valueOf(classUnderTest.equals(DisplayDocumentType.DAILY_LIST_CY)), "Result is not False");
-        assertTrue(Boolean.valueOf(classUnderTest.equals(DisplayDocumentType.DAILY_LIST)), "Result is not True");
-        assertNotNull(classUnderTest.toString(), NOTNULL);
-        assertNotNull(classUnderTest.getCountry(), NOTNULL);
+        assertNotEquals(DisplayDocumentType.DAILY_LIST_CY, CLASSUNDERTEST, "Result is Equal");
+        assertEquals(DisplayDocumentType.DAILY_LIST, CLASSUNDERTEST, "Result is not Equal");
+        assertNotNull(CLASSUNDERTEST.toString(), NOTNULL);
+        assertNotNull(CLASSUNDERTEST.getCountry(), NOTNULL);
     }
 
     private CasesRequired getDummyCasesRequired() {
         CasesRequired result = CasesRequired.ALL;
         assertNotNull(result.toString(), NOTNULL);
-        assertNotNull(Integer.valueOf(result.hashCode()), NOTNULL);
         return result;
     }
 }

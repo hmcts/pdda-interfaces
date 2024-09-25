@@ -42,7 +42,7 @@ import java.util.TimerTask;
  * @see java.util.Timer
  * @see TaskStrategy
  */
-@SuppressWarnings("PMD.AvoidCalendarDateCreation")
+@SuppressWarnings({"PMD.AvoidCalendarDateCreation","PMD.AvoidSynchronizedStatement"})
 public class Schedulable {
     private static final String CLASS_DEFINED_IN = "Class defined in ";
     private static final Long ZERO = 0L;
@@ -395,7 +395,7 @@ public class Schedulable {
      * Private internal TimerTask descendant designed to pick up and execute the instance of
      * schedulable. NEVER to be exposed to the outside world.
      */
-    private class InternalTimerTask extends TimerTask {
+    private final class InternalTimerTask extends TimerTask {
         private final TaskStrategy taskStrategy;
 
         /**

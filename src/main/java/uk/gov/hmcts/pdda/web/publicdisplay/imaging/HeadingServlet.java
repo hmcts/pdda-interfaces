@@ -45,6 +45,7 @@ import javax.imageio.ImageIO;
  * @author Neil Ellis
  * @version $Revision: 1.10 $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class HeadingServlet extends AbstractGraphicsServlet {
     private static final long serialVersionUID = 1L;
     private static final int SHADOW_OFFSET = 2;

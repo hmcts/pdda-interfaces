@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class ClasspathEntityResolver implements EntityResolver {
     private static final ClasspathEntityResolver THIS = new ClasspathEntityResolver();
 

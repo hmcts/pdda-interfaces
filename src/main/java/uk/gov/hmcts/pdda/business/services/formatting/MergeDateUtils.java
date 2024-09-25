@@ -19,6 +19,11 @@ public final class MergeDateUtils {
     private static final String EMPTY_STRING = "";
     private static final String DATE = "date";
     private static final String TIME = "time";
+    private static final String DAYOFWEEK = "dayofweek";
+    private static final String MONTH = "month";
+    private static final String YEAR = "year";
+    private static final String HOUR = "hour";
+    private static final String MIN = "min";
 
     private MergeDateUtils() {
 
@@ -33,7 +38,7 @@ public final class MergeDateUtils {
      */
     public static Calendar setupCalendar(String time, String date) {
 
-        if (time != null && date != null && !time.equals(EMPTY_STRING) && !date.equals(EMPTY_STRING)) {
+        if (time != null && date != null && !EMPTY_STRING.equals(time) && !EMPTY_STRING.equals(date)) {
             String[] timeSplit = time.split(":");
             String[] dateSplit = date.split("/");
 
@@ -116,17 +121,17 @@ public final class MergeDateUtils {
         for (int j = 0; j < nodes.getLength(); j++) {
             NodeList childNodes = nodes.item(j).getChildNodes();
             for (int i = 0; i < childNodes.getLength(); i++) {
-                if ("dayofweek".equals(childNodes.item(i).getNodeName())) {
-                    childNodes.item(i).setTextContent(MergeDateUtils.returnDay(cal));
+                if (DAYOFWEEK.equals(childNodes.item(i).getNodeName())) {
+                    childNodes.item(i).setTextContent(returnDay(cal));
                 } else if (DATE.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(String.format("%02d", date));
-                } else if ("month".equals(childNodes.item(i).getNodeName())) {
-                    childNodes.item(i).setTextContent(MergeDateUtils.returnMonth(cal));
-                } else if ("year".equals(childNodes.item(i).getNodeName())) {
+                } else if (MONTH.equals(childNodes.item(i).getNodeName())) {
+                    childNodes.item(i).setTextContent(returnMonth(cal));
+                } else if (YEAR.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(Integer.toString(year));
-                } else if ("hour".equals(childNodes.item(i).getNodeName())) {
+                } else if (HOUR.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(String.format("%02d", hour));
-                } else if ("min".equals(childNodes.item(i).getNodeName())) {
+                } else if (MIN.equals(childNodes.item(i).getNodeName())) {
                     childNodes.item(i).setTextContent(String.format("%02d", min));
                 }
             }
@@ -145,11 +150,11 @@ public final class MergeDateUtils {
 
         String timeOnInsert = MergeNodeUtils.getNodeMapValues(Arrays.asList(TIME), childNodeToMerge).get(TIME);
         String dateOnInsert = MergeNodeUtils.getNodeMapValues(Arrays.asList(DATE), childNodeToMerge).get(DATE);
-        Calendar cppTime = MergeDateUtils.setupCalendar(timeOnInsert, dateOnInsert);
+        Calendar cppTime = setupCalendar(timeOnInsert, dateOnInsert);
 
         String timeOnOriginal = MergeNodeUtils.getNodeMapValues(Arrays.asList(TIME), insertBeforeNode).get(TIME);
         String dateOnOriginal = MergeNodeUtils.getNodeMapValues(Arrays.asList(DATE), insertBeforeNode).get(DATE);
-        Calendar xhibitTime = MergeDateUtils.setupCalendar(timeOnOriginal, dateOnOriginal);
+        Calendar xhibitTime = setupCalendar(timeOnOriginal, dateOnOriginal);
 
         if (xhibitTime != null && cppTime != null) {
             LOG.debug(xhibitTime.toString() + " after " + cppTime.toString() + " ?");

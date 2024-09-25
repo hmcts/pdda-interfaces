@@ -60,23 +60,17 @@ class InitServletTest {
     @Mock
     private ServletConfig config;
 
-    @Mock
-    private Environment mockEnvironment;
-
-    @Mock
-    private EntityManagerFactory mockEntityManagerFactory;
-
     @InjectMocks
     private final InitServlet classUnderTest =
-        new InitServlet(mockEntityManagerFactory, mockEnvironment);
+        new InitServlet(Mockito.mock(EntityManagerFactory.class), Mockito.mock(Environment.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

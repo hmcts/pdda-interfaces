@@ -27,28 +27,25 @@ class VipCourtRoomsQueryTest {
 
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
-    
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
     @InjectMocks
     private final VipCourtRoomsQuery classUnderTestMultiSite =
-        new VipCourtRoomsQuery(mockEntityManager, true, mockXhbCourtRoomRepository);
+        new VipCourtRoomsQuery(Mockito.mock(EntityManager.class), true, mockXhbCourtRoomRepository);
 
     @InjectMocks
-    private final VipCourtRoomsQuery classUnderTestSingleSite =
-        new VipCourtRoomsQuery(mockEntityManager, false, mockXhbCourtRoomRepository);
+    private final VipCourtRoomsQuery classUnderTestSingleSite = new VipCourtRoomsQuery(
+        Mockito.mock(EntityManager.class), false, mockXhbCourtRoomRepository);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -82,7 +79,7 @@ class VipCourtRoomsQueryTest {
 
     private boolean testGetData(List<XhbCourtRoomDao> xhbCourtRoomDaos, boolean isMultiSite) {
         // Setup
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
 
         // Expects
         if (isMultiSite) {

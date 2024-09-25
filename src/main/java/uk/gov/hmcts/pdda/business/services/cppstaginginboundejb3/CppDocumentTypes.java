@@ -3,7 +3,7 @@ package uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3;
 public enum CppDocumentTypes {
     WP("WP"), PD("PD"), DL("DL"), FL("FL"), WL("WL");
 
-    private String label;
+    private final String label;
 
     CppDocumentTypes(String label) {
         this.label = label;
@@ -14,7 +14,7 @@ public enum CppDocumentTypes {
     }
     
     public static CppDocumentTypes fromString(String value) {
-        for (CppDocumentTypes enumValue : CppDocumentTypes.values()) {
+        for (CppDocumentTypes enumValue : values()) {
             if (enumValue.getLabel().equalsIgnoreCase(value)) {
                 return enumValue;
             }

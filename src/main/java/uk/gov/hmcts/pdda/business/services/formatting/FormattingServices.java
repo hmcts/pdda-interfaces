@@ -50,7 +50,9 @@ public class FormattingServices extends FormattingServicesProcessing {
     private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
-
+    private static final String NEWDOCUMENT = "ND";
+    private static final String FORMATERROR = "FE";
+    
     public FormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
         super(entityManager, blobHelper);
     }
@@ -132,7 +134,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         if (!formattingDaoList.isEmpty()) {
             LocalDateTime timeDelay = null;
             // Get the timeDelay for new documents
-            if ("ND".equals(formatStatus)) {
+            if (NEWDOCUMENT.equals(formatStatus)) {
                 List<XhbConfigPropDao> configs = getXhbConfigPropRepository().findByPropertyName(FORMATTING_LIST_DELAY);
                 timeDelay = FormattingServiceUtils.getTimeDelay(configs);
             }
@@ -148,7 +150,7 @@ public class FormattingServices extends FormattingServicesProcessing {
 
     private boolean isNextDocumentValid(XhbFormattingDao formattingDao, LocalDateTime timeDelay) {
         // If this is a Formatting Error then try again
-        if ("FE".equals(formattingDao.getFormatStatus())) {
+        if (FORMATERROR.equals(formattingDao.getFormatStatus())) {
             return true;
         } else {
             // Get the lists by their xmlDocumentClobId

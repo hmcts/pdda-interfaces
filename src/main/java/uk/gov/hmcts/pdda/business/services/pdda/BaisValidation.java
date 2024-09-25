@@ -66,20 +66,9 @@ public abstract class BaisValidation extends SftpValidation {
             // First check is valid date
             LocalDateTime datePart = LocalDateTime.parse(part3DateToUse.trim(), BATCH_FILENAME_DATETIMEFORMAT);
 
-            // Convert to String
-            String dateAsString = BATCH_FILENAME_DATETIMEFORMAT.format(datePart);
-
-            // Check the converted date is the same as the passed in date
-            if (!dateAsString.equals(part3DateToUse)) {
-                LOG.debug("Original Date: " + part3DateToUse);
-                LOG.debug("Converted Date: " + dateAsString);
-                LOG.debug("Date does not match");
-                return false;
-            }
-
             // Checking Year
             String year = YEARFORMAT.format(datePart);
-            if (Integer.valueOf(year) < YEAR_MIN) {
+            if (Integer.parseInt(year) < YEAR_MIN) {
                 LOG.debug("Year less than 1900");
                 return false;
             }
@@ -87,7 +76,7 @@ public abstract class BaisValidation extends SftpValidation {
             return true;
 
         } catch (DateTimeException e) {
-            LOG.debug("Date in an incorrect format - " + e.getMessage());
+            LOG.debug("{}{}", "Date in an incorrect format - ", e.getMessage());
             return false;
         }
     }

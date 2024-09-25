@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowManager;
  * 
  * @author pznwc5
  */
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class EventWork implements Runnable {
 
     /** Logger. */

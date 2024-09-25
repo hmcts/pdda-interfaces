@@ -21,7 +21,7 @@ public enum CppDataType {
     }
     
     public static CppDataType fromString(String value) {
-        for (CppDataType dataType : CppDataType.values()) {
+        for (CppDataType dataType : values()) {
             if (dataType.getValue().equalsIgnoreCase(value)) {
                 return dataType;
             }

@@ -5,6 +5,6 @@ import javax.xml.xpath.XPathExpressionException;
 public class DailyListXmlMergeUtils extends AbstractListXmlMergeUtils {
 
     public DailyListXmlMergeUtils() throws XPathExpressionException {
-        super(new String[] {"DailyList/CourtLists/CourtList/Sittings"});
+        super("DailyList/CourtLists/CourtList/Sittings");
     }
 }

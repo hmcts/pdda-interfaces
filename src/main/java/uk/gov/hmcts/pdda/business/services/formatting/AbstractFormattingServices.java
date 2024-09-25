@@ -21,6 +21,8 @@ import java.util.Optional;
 public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormattingServices.class);
+    private static final String FD = "FD";
+    private static final String NF = "NF";
 
     protected final BlobHelper blobHelper;
     
@@ -158,10 +160,10 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
             if (success) {
                 LOG.debug("DR(Document Ready)");
                 formatStatus = "DR";
-            } else if ("FD".equals(formatting.getFormatStatus())) {
+            } else if (FD.equals(formatting.getFormatStatus())) {
                 LOG.debug("FD(Formatting Document) -> FE(Formatting Error)");
                 formatStatus = "FE";
-            } else if ("NF".equals(formatting.getFormatStatus())) {
+            } else if (NF.equals(formatting.getFormatStatus())) {
                 LOG.debug("NF(New Formatting) -> FF(Failed Formatting)");
                 formatStatus = "FF";
             } else {

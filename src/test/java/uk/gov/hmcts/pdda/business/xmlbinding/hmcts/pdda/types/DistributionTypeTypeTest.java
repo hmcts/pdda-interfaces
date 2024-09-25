@@ -22,12 +22,12 @@ class DistributionTypeTypeTest {
     private static final String NOTEQUALS = "Result is not Equals";
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         // Do nothing
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         // Do nothing
     }
 

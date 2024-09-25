@@ -57,7 +57,7 @@ public final class Parameter {
      * @return Parameter
      */
     public static Parameter getInParameter(int sqlType, Object value) {
-        return new Parameter(sqlType, Parameter.IN_PARAM, value);
+        return new Parameter(sqlType, IN_PARAM, value);
     }
 
     /**
@@ -67,7 +67,7 @@ public final class Parameter {
      * @return Parameter
      */
     public static Parameter getOutParameter(int sqlType) {
-        return new Parameter(sqlType, Parameter.OUT_PARAM, null);
+        return new Parameter(sqlType, OUT_PARAM, null);
     }
 
     /**
@@ -78,7 +78,7 @@ public final class Parameter {
      * @return Parameter
      */
     public static Parameter getInOutParameter(int sqlType, Object value) {
-        return new Parameter(sqlType, Parameter.IN_OUT_PARAM, value);
+        return new Parameter(sqlType, IN_OUT_PARAM, value);
     }
 
     /**

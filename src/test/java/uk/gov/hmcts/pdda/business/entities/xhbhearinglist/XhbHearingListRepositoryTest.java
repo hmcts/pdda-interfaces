@@ -63,7 +63,7 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbHearingListDao> result = (List<XhbHearingListDao>) getClassUnderTest()
+        List<XhbHearingListDao> result = getClassUnderTest()
             .findByCourtIdAndDate(getDummyDao().getCourtId(), LocalDateTime.now());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -81,16 +81,16 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = LocalDateTime.now();
         String status = "status";
-        Integer editionNo = Integer.valueOf(-1);
+        Integer editionNo = -1;
         LocalDateTime publishedTime = LocalDateTime.now();
         String printReference = "printReference";
-        Integer crestListId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer crestListId = -1;
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbHearingListDao result = new XhbHearingListDao();
         result.setListId(hearingListId);
         result.setListType(listType);

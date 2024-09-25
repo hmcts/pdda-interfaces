@@ -69,12 +69,12 @@ class VipDisplayDocumentQueryTest {
             mockXhbDisplayDocumentRepository, mockXhbRotationSetDdRepository);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -144,7 +144,7 @@ class VipDisplayDocumentQueryTest {
         List<XhbDisplayDao> xhbDisplayDaoList, List<XhbRotationSetDdDao> xhbRotationSetDdDaoList,
         Optional<XhbDisplayDocumentDao> xhbDisplayDocumentDao) {
         // Setup
-        final Integer courtSiteId = Integer.valueOf(81);
+        final Integer courtSiteId = 81;
         List<AbstractRepository<?>> replayArray = new ArrayList<>();
 
         // Expects

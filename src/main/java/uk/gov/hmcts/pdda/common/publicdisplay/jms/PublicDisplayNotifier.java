@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStoreFactory;
  * @author pznwc5
  * @version $Id: PublicDisplayNotifier.java,v 1.8 2006/06/05 12:28:24 bzjrnl Exp $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class PublicDisplayNotifier {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicDisplayNotifier.class);

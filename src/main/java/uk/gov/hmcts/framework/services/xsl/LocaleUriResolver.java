@@ -34,6 +34,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public final class LocaleUriResolver extends UriResolver implements URIResolver {
     private static Logger log = LoggerFactory.getLogger(LocaleUriResolver.class);
     private static final String EMPTY_STRING = "";

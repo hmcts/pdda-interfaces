@@ -25,6 +25,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl.DefaultWorkFlowMana
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
+@SuppressWarnings("PMD.SingularField")
 public abstract class WorkFlowManager {
     private static DefaultWorkFlowManager instance;
     private final WorkFlowContext context;

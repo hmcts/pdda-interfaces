@@ -35,6 +35,7 @@ import java.sql.Timestamp;
  * @author Meeraj Kunnumpurath
  * @version $Id: Row.java,v 1.19 2014/06/20 18:01:08 atwells Exp $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class PddaRow {
     /** Backing result set. */
     private final ResultSet rs;
@@ -60,7 +61,7 @@ public class PddaRow {
             if (decimal == null) {
                 return null;
             }
-            return Integer.valueOf(decimal.intValue());
+            return decimal.intValue();
         } catch (final SQLException ex) {
             throw translator.translate(ex, col);
         }
@@ -75,7 +76,7 @@ public class PddaRow {
             if (decimal == null) {
                 return null;
             }
-            return Long.valueOf(decimal.longValue());
+            return decimal.longValue();
         } catch (final SQLException ex) {
             throw translator.translate(ex, col);
         }

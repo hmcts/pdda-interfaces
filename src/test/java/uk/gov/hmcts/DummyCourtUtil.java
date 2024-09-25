@@ -7,7 +7,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtDetailValue;
-import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicNoticeValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.CourtSitePdComplexValue;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
@@ -41,15 +40,15 @@ public final class DummyCourtUtil {
     }
 
     public static XhbCourtSiteDao getXhbCourtSiteDao() {
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer courtSiteId = -1;
         String courtSiteName = "SWANSEA";
         String courtSiteCode = "courtSiteCode";
-        Integer courtId = Integer.valueOf(-1);
-        Integer addressId = Integer.valueOf(-1);
+        Integer courtId = -1;
+        Integer addressId = -1;
         String displayName = "displayName";
         String crestCourtId = "crestCourtId";
         String shortName = "shortName";
-        Integer siteGroup = Integer.valueOf(-1);
+        Integer siteGroup = -1;
         String floaterText = "floaterText";
         String listName = "listName";
         String tier = "tier";
@@ -57,7 +56,7 @@ public final class DummyCourtUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbCourtSiteDao result = new XhbCourtSiteDao();
         result.setCourtSiteId(courtSiteId);
@@ -82,11 +81,11 @@ public final class DummyCourtUtil {
     }
 
     public static XhbCourtRoomDao getXhbCourtRoomDao() {
-        Integer courtRoomId = Integer.valueOf(-1);
+        Integer courtRoomId = -1;
         String courtRoomName = "courtRoomName";
         String description = "description";
-        Integer crestCourtRoomNo = Integer.valueOf(-1);
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer crestCourtRoomNo = -1;
+        Integer courtSiteId = -1;
         String displayName = "displayName";
         String securityInd = "securityInd";
         String videoInd = "videoInd";
@@ -94,7 +93,7 @@ public final class DummyCourtUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbCourtRoomDao result = new XhbCourtRoomDao();
         result.setCourtRoomId(courtRoomId);
@@ -119,19 +118,19 @@ public final class DummyCourtUtil {
     }
 
     public static XhbCourtLogEntryDao getXhbCourtLogEntryDao() {
-        Integer entryId = Integer.valueOf(-1);
-        Integer caseId = Integer.valueOf(-1);
-        Integer defendantOnCaseId = Integer.valueOf(-2);
-        Integer defendantOnOffenceId = Integer.valueOf(-3);
-        Integer scheduledHearingId = Integer.valueOf(-4);
-        Integer eventDescId = Integer.valueOf(-5);
+        Integer entryId = -1;
+        Integer caseId = -1;
+        Integer defendantOnCaseId = -2;
+        Integer defendantOnOffenceId = -3;
+        Integer scheduledHearingId = -4;
+        Integer eventDescId = -5;
         String logEntryXml = "logEntryXml";
         LocalDateTime dateTime = LocalDateTime.now();
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbCourtLogEntryDao result = new XhbCourtLogEntryDao();
         result.setEntryId(entryId);
         result.setCaseId(caseId);
@@ -215,12 +214,12 @@ public final class DummyCourtUtil {
         assertFalse(result.isBwHistoryEndWarrantEvent(), FALSE);
         assertFalse(result.isCrackedIneffectiveEvent(), FALSE);
         assertNull(result.getId(), "Result is not Null");
-        assertNotNull(Integer.valueOf(result.hashCode()), NOTNULL);
         CourtLogViewValue compareTo = new CourtLogViewValue(2);
         compareTo.setEntryDate(result.getEntryDate());
         assertEquals(0, result.compareTo(compareTo), EQUALS);
         Boolean isEqual = result.equals(compareTo);
         assertFalse(isEqual, FALSE);
+        assertNotEquals(compareTo.hashCode() * -1, result.hashCode(), NOTEQUALS);
         return result;
     }
 
@@ -233,7 +232,7 @@ public final class DummyCourtUtil {
     }
 
     public static CourtRoomIdentifier getCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(Integer.valueOf(-99), Integer.valueOf(81));
+        return new CourtRoomIdentifier(-99, 81);
     }
 
     public static CourtDetailValue getCourtDetailValue(boolean isHidden, String event) {
@@ -247,7 +246,7 @@ public final class DummyCourtUtil {
         assertTrue(result.hasDefendants(), TRUE);
         assertFalse(result.hasPublicNotices(), FALSE);
         result
-            .setPublicNotices(new PublicNoticeValue[] {DummyPdNotifierUtil.getPublicNoticeValue()});
+            .setPublicNotices(DummyPdNotifierUtil.getPublicNoticeValue());
         assertTrue(result.hasPublicNotices(), TRUE);
         assertFalse(result.hasCaseTitle(), FALSE);
         assertFalse(result.hasInformationForDisplay(), FALSE);

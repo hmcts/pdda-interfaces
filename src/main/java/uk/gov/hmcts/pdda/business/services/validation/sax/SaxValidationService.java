@@ -26,7 +26,7 @@ import javax.xml.validation.SchemaFactory;
  * 
  * @author William Fardell
  */
-@SuppressWarnings("squid:S2755")
+@SuppressWarnings({"squid:S2755", "PMD.LawOfDemeter"})
 public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);

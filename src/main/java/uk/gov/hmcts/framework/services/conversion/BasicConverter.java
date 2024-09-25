@@ -21,6 +21,8 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     private static final long serialVersionUID = 1L;
     private static final String DDMMYYYY = "dd/MM/yyyy";
+    private static final String FALSE_STRING = "false";
+    private static final String TRUE_STRING = "true";
 
     protected final DateFormat dateFormat;
 
@@ -48,10 +50,10 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
      */
     @Override
     public boolean parseBoolean(String value) {
-        if ("true".equals(value)) {
+        if (TRUE_STRING.equals(value)) {
             return true;
         }
-        if ("false".equals(value)) {
+        if (FALSE_STRING.equals(value)) {
             return false;
         }
         throw new ValueConvertException(value);
@@ -96,7 +98,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
      */
     @Override
     public String formatBoolean(boolean value) {
-        return value ? "true" : "false";
+        return value ? TRUE_STRING : FALSE_STRING;
     }
 
     /**

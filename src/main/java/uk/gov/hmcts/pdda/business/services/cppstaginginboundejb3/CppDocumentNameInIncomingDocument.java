@@ -8,7 +8,7 @@ public enum CppDocumentNameInIncomingDocument {
     WEBPAGE("WEBPAGE"), PUBLICDISPLAY("PUBLICDISPLAY"), DAILYLIST("DAILYLIST"), FIRMLIST("FIRMLIST"), WARNEDLIST(
         "WARNEDLIST");
 
-    private String label;
+    private final String label;
 
     CppDocumentNameInIncomingDocument(String label) {
         this.label = label;

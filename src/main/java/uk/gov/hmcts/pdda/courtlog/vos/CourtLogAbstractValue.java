@@ -175,7 +175,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     // Override the getId
     @Override
     public Integer getId() {
-        return logEntryId != null ? Integer.valueOf(logEntryId.intValue()) : null;
+        return logEntryId != null ? logEntryId.intValue() : null;
     }
 
     // Get the update date

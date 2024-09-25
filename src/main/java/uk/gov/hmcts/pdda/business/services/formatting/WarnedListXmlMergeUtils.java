@@ -11,8 +11,8 @@ import javax.xml.xpath.XPathExpressionException;
 public class WarnedListXmlMergeUtils extends AbstractListXmlMergeUtils {
 
     public WarnedListXmlMergeUtils() throws XPathExpressionException {
-        super(new String[] {"WarnedList/CourtLists/CourtList/WithFixedDate",
-            "WarnedList/CourtLists/CourtList/WithoutFixedDate"});
+        super("WarnedList/CourtLists/CourtList/WithFixedDate",
+            "WarnedList/CourtLists/CourtList/WithoutFixedDate");
     }
 
     @Override

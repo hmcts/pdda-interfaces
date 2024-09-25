@@ -29,7 +29,7 @@ public abstract class CsAbstractValue implements CsValueObject {
         // 1 to mimic the fact that the "before insert" trigger does the same.
         // (Joseph Babad).
         if (version != null) {
-            this.updateCount = version.intValue();
+            this.updateCount = version;
         } else {
             // Set to one - this is likely to happen wh
             this.updateCount = 1;
@@ -47,7 +47,7 @@ public abstract class CsAbstractValue implements CsValueObject {
         // 1 to mimic the fact that the "before insert" trigger does the same.
         // (Joseph Babad).
         if (version != null) {
-            this.updateCount = version.intValue();
+            this.updateCount = version;
         } else {
             this.updateCount = 1;
         }
@@ -59,7 +59,7 @@ public abstract class CsAbstractValue implements CsValueObject {
      */
     @Override
     public Integer getVersion() {
-        return Integer.valueOf(updateCount);
+        return updateCount;
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class CsAbstractValue implements CsValueObject {
      */
     public void setVersion(Integer val) {
         if (val != null) {
-            updateCount = val.intValue();
+            updateCount = val;
         }
     }
 

@@ -44,23 +44,21 @@ class CppListControllerBeanTest {
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String SAME = "Results are not Same";
-    
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private XhbCppListRepository mockcppListRepo;
 
     @TestSubject
-    private final CppListControllerBean classUnderTest = new CppListControllerBean(mockEntityManager);
+    private final CppListControllerBean classUnderTest =
+        new CppListControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -70,8 +68,11 @@ class CppListControllerBeanTest {
         XhbCppListDao xhbCppListDao = getDummyXhbCppListDao();
         List<XhbCppListDao> xhbCppListDaoList = new ArrayList<>();
         xhbCppListDaoList.add(xhbCppListDao);
-        EasyMock.expect(mockcppListRepo.findByCourtCodeAndListTypeAndListDate(xhbCppListDao.getCourtCode(),
-            xhbCppListDao.getListType(), xhbCppListDao.getListStartDate())).andReturn(xhbCppListDaoList);
+        EasyMock
+            .expect(
+                mockcppListRepo.findByCourtCodeAndListTypeAndListDate(xhbCppListDao.getCourtCode(),
+                    xhbCppListDao.getListType(), xhbCppListDao.getListStartDate()))
+            .andReturn(xhbCppListDaoList);
         EasyMock.replay(mockcppListRepo);
         // Run
         XhbCppListDao actualResult = classUnderTest.getLatestCppList(xhbCppListDao.getCourtCode(),
@@ -86,7 +87,8 @@ class CppListControllerBeanTest {
     void testUpdateCppList() {
         // Setup
         XhbCppListDao xhbCppListDao = getDummyXhbCppListDao();
-        EasyMock.expect(mockcppListRepo.update(xhbCppListDao)).andReturn(Optional.of(xhbCppListDao));
+        EasyMock.expect(mockcppListRepo.update(xhbCppListDao))
+            .andReturn(Optional.of(xhbCppListDao));
         EasyMock.replay(mockcppListRepo);
         // Run
         boolean result = false;
@@ -108,14 +110,15 @@ class CppListControllerBeanTest {
         List<XhbCppListDao> xhbCppListDaoList = new ArrayList<>();
         xhbCppListDaoList.add(xhbCppListDao);
         EasyMock
-            .expect(
-                mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDate(xhbCppListDao.getCourtCode(),
-                    xhbCppListDao.getListType(), xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate()))
+            .expect(mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDate(
+                xhbCppListDao.getCourtCode(), xhbCppListDao.getListType(),
+                xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate()))
             .andReturn(xhbCppListDaoList);
         EasyMock.replay(mockcppListRepo);
         // Run
-        XhbCppListDao actualResult = classUnderTest.checkForExistingCppListRecord(xhbCppListDao.getCourtCode(),
-            xhbCppListDao.getListType(), xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate());
+        XhbCppListDao actualResult = classUnderTest.checkForExistingCppListRecord(
+            xhbCppListDao.getCourtCode(), xhbCppListDao.getListType(),
+            xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate());
         // Checks
         EasyMock.verify(mockcppListRepo);
         assertNotNull(actualResult, NOTNULL);
@@ -138,7 +141,7 @@ class CppListControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
 
         XhbCppListDao result = new XhbCppListDao();

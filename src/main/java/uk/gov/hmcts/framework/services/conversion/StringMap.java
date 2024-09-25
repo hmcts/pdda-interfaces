@@ -20,6 +20,7 @@ import java.util.List;
  *         and ammended by Pete Raymond
  * 
  */
+@SuppressWarnings("PMD.LooseCoupling")
 public class StringMap extends ByteMap {
 
     public StringMap(ValueConverter converter) {

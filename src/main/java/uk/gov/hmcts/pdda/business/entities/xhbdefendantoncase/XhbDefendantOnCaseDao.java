@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.TooManyFields", "PMD.ExcessivePublicCount", "PMD.LinguisticNaming","PMD.CyclomaticComplexity",
-                   "PMD.ConstructorCallsOverridableMethod"})
+                   "PMD.ConstructorCallsOverridableMethod", "PMD.GodClass"})
 @Entity(name = "XHB_DEFENDANT_ON_CASE")
 @NamedQuery(name = "XHB_DEFENDANT_ON_CASE.findByDefendantAndCase",
     query = "SELECT o from XHB_DEFENDANT_ON_CASE o WHERE o.defendantId = :defendantId AND "

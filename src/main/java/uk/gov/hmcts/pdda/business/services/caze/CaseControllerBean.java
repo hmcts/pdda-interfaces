@@ -90,10 +90,10 @@ public class CaseControllerBean extends AbstractControllerBean {
      */
     private List<ScheduledHearingValue> getScheduledHearings(Integer caseID) {
         LOG.debug("START: getScheduledHearings(caseID=" + caseID + ")");
-        ArrayList<ScheduledHearingValue> scheduledHearingValues = new ArrayList<>();
+        List<ScheduledHearingValue> scheduledHearingValues = new ArrayList<>();
 
-        ArrayList<XhbHearingDao> hearingBeans =
-            (ArrayList<XhbHearingDao>) getXhbHearingRepository().findByCaseId(caseID);
+        List<XhbHearingDao> hearingBeans =
+            getXhbHearingRepository().findByCaseId(caseID);
         LOG.debug("found " + hearingBeans.size() + " hearings for caseId=" + caseID);
         Iterator<XhbHearingDao> hearingsIterator;
         hearingsIterator = hearingBeans.iterator();
@@ -101,8 +101,8 @@ public class CaseControllerBean extends AbstractControllerBean {
         // get scheduled hearings for each hearing
         while (hearingsIterator.hasNext()) {
             XhbHearingDao hearing = hearingsIterator.next();
-            ArrayList<XhbScheduledHearingDao> scheduledHearingBeans =
-                (ArrayList<XhbScheduledHearingDao>) hearing.getScheduledHearings();
+            List<XhbScheduledHearingDao> scheduledHearingBeans =
+                (List<XhbScheduledHearingDao>) hearing.getScheduledHearings();
             LOG.debug("found " + scheduledHearingBeans.size() + " scheduled hearings for hearing="
                 + hearing);
 

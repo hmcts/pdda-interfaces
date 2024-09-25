@@ -59,13 +59,13 @@ class FileServletTest {
     private final FileServlet classUnderTest = new FileServlet();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(StorerFactory.class);
         Mockito.mockStatic(UriFactory.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -147,7 +147,7 @@ class FileServletTest {
 
     private boolean testgetLastModified(String url, AbstractUri uri) {
         // Setup
-        long lastModified = url != null ? Long.valueOf(1).longValue() : Long.MAX_VALUE;
+        long lastModified = url != null ? 1L : Long.MAX_VALUE;
         // Expects
         Mockito.when(mockHttpServletRequest.getParameter(Mockito.isA(String.class)))
             .thenReturn(url);

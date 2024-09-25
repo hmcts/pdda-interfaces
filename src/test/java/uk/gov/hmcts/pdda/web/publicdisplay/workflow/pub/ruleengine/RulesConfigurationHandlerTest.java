@@ -36,14 +36,14 @@ class RulesConfigurationHandlerTest {
     private RulesConfigurationHandler handlerUnderTest = new RulesConfigurationHandler();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(RuleFlyweightPool.class);
         Mockito.mockStatic(EventType.class);
         Mockito.mockStatic(DisplayDocumentType.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 

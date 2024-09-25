@@ -45,21 +45,19 @@ class PddaHelperConfigTest {
 
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @TestSubject
-    private final PddaHelper classUnderTest = new PddaHelper(mockEntityManager);
+    private final PddaHelper classUnderTest =
+        new PddaHelper(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -67,8 +65,8 @@ class PddaHelperConfigTest {
     void testGetMandatoryConfigValueSuccess() {
         // Setup
         String propertyName = PDDA_BAIS_SFTP_USERNAME;
-        XhbConfigPropDao dummyXhbConfigPropDao =
-            DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyName.toLowerCase(Locale.getDefault()));
+        XhbConfigPropDao dummyXhbConfigPropDao = DummyServicesUtil.getXhbConfigPropDao(propertyName,
+            propertyName.toLowerCase(Locale.getDefault()));
         String expectedResult = dummyXhbConfigPropDao.getPropertyValue();
         // Run
         String actualResult = testGetMandatoryConfigValue(dummyXhbConfigPropDao, expectedResult);
@@ -82,15 +80,16 @@ class PddaHelperConfigTest {
         Assertions.assertThrows(PddaHelper.InvalidConfigException.class, () -> {
             // Setup
             String propertyName = PDDA_BAIS_SFTP_USERNAME;
-            XhbConfigPropDao dummyXhbConfigPropDao =
-                DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyName.toLowerCase(Locale.getDefault()));
+            XhbConfigPropDao dummyXhbConfigPropDao = DummyServicesUtil
+                .getXhbConfigPropDao(propertyName, propertyName.toLowerCase(Locale.getDefault()));
             String expectedResult = null;
             // Run
             testGetMandatoryConfigValue(dummyXhbConfigPropDao, expectedResult);
         });
     }
-    
-    private String testGetMandatoryConfigValue(XhbConfigPropDao dummyXhbConfigPropDao, String expectedResult) {
+
+    private String testGetMandatoryConfigValue(XhbConfigPropDao dummyXhbConfigPropDao,
+        String expectedResult) {
         // Setup
         List<XhbConfigPropDao> dummyXhbConfigPropDaoList = new ArrayList<>();
         if (expectedResult != null) {
@@ -100,7 +99,8 @@ class PddaHelperConfigTest {
             .andReturn(dummyXhbConfigPropDaoList);
         EasyMock.replay(mockXhbConfigPropRepository);
         // Run
-        String actualResult = classUnderTest.getMandatoryConfigValue(dummyXhbConfigPropDao.getPropertyName());
+        String actualResult =
+            classUnderTest.getMandatoryConfigValue(dummyXhbConfigPropDao.getPropertyName());
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
         return actualResult;
@@ -122,10 +122,11 @@ class PddaHelperConfigTest {
         assertNotNull(actualResult, NOTNULL);
         assertEquals(expectedResult, actualResult, EQUALS);
     }
-    
+
     private List<XhbConfigPropDao> getXhbConfigPropDaoList(String propertyName) {
         List<XhbConfigPropDao> result = new ArrayList<>();
-        result.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyName.toLowerCase(Locale.getDefault())));
+        result.add(DummyServicesUtil.getXhbConfigPropDao(propertyName,
+            propertyName.toLowerCase(Locale.getDefault())));
         return result;
     }
 

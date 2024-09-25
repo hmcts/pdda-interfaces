@@ -15,6 +15,7 @@ import java.util.Arrays;
  * 
  * @author pznwc5
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public abstract class AbstractValue implements Serializable {
 
     static final long serialVersionUID = 4294442881965374830L;

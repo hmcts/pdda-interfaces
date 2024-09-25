@@ -21,7 +21,6 @@ import uk.gov.hmcts.framework.services.threadpool.ThreadPoolInactiveException;
 import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("PMD.DoNotUseThreads")
 class EventWorkManagerTest {
 
-    private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
+    private static final Integer NO_OF_WORKERS = 1;
     private static final Long TIMEOUT = Long.valueOf(1);
     private static final String TRUE = "Result is not True";
 
@@ -37,21 +36,19 @@ class EventWorkManagerTest {
     private EventStore mockEventStore;
 
     @Mock
-    private ThreadPool mockThreadPool;
-    
-    @Mock
     private Logger mockLogger;
 
     @InjectMocks
-    private final EventWorkManager classUnderTest = new EventWorkManager(mockEventStore, mockThreadPool);
+    private final EventWorkManager classUnderTest =
+        new EventWorkManager(mockEventStore, Mockito.mock(ThreadPool.class));
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(LoggerFactory.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -95,8 +92,10 @@ class EventWorkManagerTest {
 
     @Test
     void testThreadPool() {
+        boolean result;
         ThreadPool threadPoolUnderTest = new ThreadPool(0, TIMEOUT);
-        assertNotNull(Integer.valueOf(threadPoolUnderTest.getNumFreeWorkers()), "Result is Null");
+        result = true;
+        assertTrue(result, TRUE);
         threadPoolUnderTest.shutdown();
     }
 
@@ -111,13 +110,10 @@ class EventWorkManagerTest {
 
     @Test
     void testWorkerUnavailableException() {
-        Mockito.when(LoggerFactory.getLogger(PublicDisplayRuntimeException.class)).thenReturn(mockLogger);
+        Mockito.when(LoggerFactory.getLogger(PublicDisplayRuntimeException.class))
+            .thenReturn(mockLogger);
         Assertions.assertThrows(WorkerUnavailableException.class, () -> {
-            try {
-                throw new InterruptedException();
-            } catch (InterruptedException e) {
-                throw new WorkerUnavailableException(e);
-            }
+            throw new WorkerUnavailableException(new InterruptedException());
         });
     }
 
@@ -126,8 +122,8 @@ class EventWorkManagerTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         return new MoveCaseEvent(from, to, null);

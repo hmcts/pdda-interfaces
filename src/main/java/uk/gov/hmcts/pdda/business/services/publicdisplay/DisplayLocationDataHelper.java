@@ -48,6 +48,7 @@ import java.util.ResourceBundle;
  * @version $Id: DisplayLocationDataHelper.java,v 1.9 2005/11/17 10:55:46 bzjrnl Exp $
  */
 
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DisplayLocationDataHelper {
     private static final String PRE_DISPLAY = "pd.displaydescription.";
 
@@ -74,7 +75,7 @@ public class DisplayLocationDataHelper {
     public static CourtSitePdComplexValue[] getDisplaysForCourt(final Integer courtId,
         final XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("getDisplaysForCourt called for courtId {}", courtId);
-        ArrayList<CourtSitePdComplexValue> results = new ArrayList<>();
+        List<CourtSitePdComplexValue> results = new ArrayList<>();
 
         CourtSitePdComplexValue sitePdComplex;
         List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtId(courtId);

@@ -62,7 +62,7 @@ class XhbConfigPropRepositoryTest extends AbstractRepositoryTest<XhbConfigPropDa
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbConfigPropDao> result =
-            (List<XhbConfigPropDao>) getClassUnderTest().findByPropertyName(getDummyDao().getPropertyName());
+            getClassUnderTest().findByPropertyName(getDummyDao().getPropertyName());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");

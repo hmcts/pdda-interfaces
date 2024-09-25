@@ -43,11 +43,11 @@ public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements
         setSchedHearingDefendantId(schedHearingDefendantId);
         setScheduledHearingId(scheduledHearingId);
         setDefendantOnCaseId(defendantOnCaseId);
-        setLastUpdateDate(lastUpdateDate);
-        setCreationDate(creationDate);
-        setLastUpdatedBy(lastUpdatedBy);
-        setCreatedBy(createdBy);
-        setVersion(version);
+        super.setLastUpdateDate(lastUpdateDate);
+        super.setCreationDate(creationDate);
+        super.setLastUpdatedBy(lastUpdatedBy);
+        super.setCreatedBy(createdBy);
+        super.setVersion(version);
     }
 
     public XhbSchedHearingDefendantDao(XhbSchedHearingDefendantDao otherData) {
@@ -55,11 +55,11 @@ public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements
         setSchedHearingDefendantId(otherData.getSchedHearingDefendantId());
         setScheduledHearingId(otherData.getScheduledHearingId());
         setDefendantOnCaseId(otherData.getDefendantOnCaseId());
-        setLastUpdateDate(otherData.getLastUpdateDate());
-        setCreationDate(otherData.getCreationDate());
-        setLastUpdatedBy(otherData.getLastUpdatedBy());
-        setCreatedBy(otherData.getCreatedBy());
-        setVersion(otherData.getVersion());
+        super.setLastUpdateDate(otherData.getLastUpdateDate());
+        super.setCreationDate(otherData.getCreationDate());
+        super.setLastUpdatedBy(otherData.getLastUpdatedBy());
+        super.setCreatedBy(otherData.getCreatedBy());
+        super.setVersion(otherData.getVersion());
     }
 
     public Integer getPrimaryKey() {

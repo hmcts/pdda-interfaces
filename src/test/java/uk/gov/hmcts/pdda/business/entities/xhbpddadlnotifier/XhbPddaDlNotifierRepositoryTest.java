@@ -62,7 +62,7 @@ class XhbPddaDlNotifierRepositoryTest extends AbstractRepositoryTest<XhbPddaDlNo
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbPddaDlNotifierDao> result = (List<XhbPddaDlNotifierDao>) getClassUnderTest()
+        List<XhbPddaDlNotifierDao> result = getClassUnderTest()
             .findByCourtAndLastRunDate(getDummyDao().getCourtId(), LocalDateTime.now());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -76,7 +76,7 @@ class XhbPddaDlNotifierRepositoryTest extends AbstractRepositoryTest<XhbPddaDlNo
     @Override
     protected XhbPddaDlNotifierDao getDummyDao() {
         Integer pddaDlNotifierId = getDummyId();
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         LocalDateTime lastRunDate = LocalDateTime.now();
         String status = "status";
         String errorMessage = "errorMessage";
@@ -84,7 +84,7 @@ class XhbPddaDlNotifierRepositoryTest extends AbstractRepositoryTest<XhbPddaDlNo
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbPddaDlNotifierDao result = new XhbPddaDlNotifierDao();
         result.setPddaDlNotifierId(pddaDlNotifierId);

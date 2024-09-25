@@ -62,7 +62,7 @@ class XhbDisplayCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbDispla
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayCourtRoomDao> result =
-            (List<XhbDisplayCourtRoomDao>) getClassUnderTest().findByDisplayId(getDummyDao().getDisplayId());
+            getClassUnderTest().findByDisplayId(getDummyDao().getDisplayId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");

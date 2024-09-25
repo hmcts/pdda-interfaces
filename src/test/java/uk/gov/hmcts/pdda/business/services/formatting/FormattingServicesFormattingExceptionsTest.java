@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.formatting;
 
 import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.LawOfDemeter"})
 class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestHelper {
 
     private static final String COURTSITE_END_TAG = "      </courtsite>\r\n";
@@ -282,12 +284,10 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
 
     @Mock
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
-    
-    @Mock
-    private BlobHelper mockBlobHelper;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper);
+    private final FormattingServices classUnderTest =
+        new FormattingServices(mockEntityManager, EasyMock.createMock(BlobHelper.class));
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";
@@ -295,13 +295,13 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(TransformerFactory.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 

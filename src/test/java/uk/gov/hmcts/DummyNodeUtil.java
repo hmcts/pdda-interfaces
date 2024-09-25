@@ -4,8 +4,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNod
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.LeafEventXmlNode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -55,7 +56,8 @@ public final class DummyNodeUtil {
         result.get(LIST);
         result.add(new LeafEventXmlNode(LIST, "new value"));
         // Test non-list type
-        result.getMap().put("HashMap", new HashMap<String, String>());
+        Map<String, String> emptyMap = new ConcurrentHashMap<>();
+        result.getMap().put("HashMap", emptyMap);
         result.getList("HashMap");
         result.add(new LeafEventXmlNode("HashMap", "new value"));
         return result;
@@ -87,46 +89,46 @@ public final class DummyNodeUtil {
     
     public static BranchEventXmlNode getE20603WitnessSwornOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E20603_Witness_Sworn_Options", "E20603_WS_List", laoType);
+            addBranch("E20603_Witness_Sworn_Options", "E20603_WS_List", laoType);
         result.add(new LeafEventXmlNode("E20603_Witness_No", ONETWOTHREE));
         return result;
     }
 
     public static BranchEventXmlNode getE20935WitnessReadOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E20935_Witness_Read_Options", "E20935_WR_Type", laoType);
+            addBranch("E20935_Witness_Read_Options", "E20935_WR_Type", laoType);
         result.add(new LeafEventXmlNode("E20935_WR_Number", ONETWOTHREE));
         return result;
     }
 
     public static BranchEventXmlNode getE20904WitnessSwornOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E20904_Witness_Sworn_Options", "E20904_WSO_Type", laoType);
+            addBranch("E20904_Witness_Sworn_Options", "E20904_WSO_Type", laoType);
         result.add(new LeafEventXmlNode("E20904_WSO_Number", ONETWOTHREE));
         return result;
     }
 
     public static BranchEventXmlNode getE20903ProsecutionCaseOptions(String laoType) {
-        return DummyNodeUtil.addBranch("E20903_Prosecution_Case_Options", "E20903_PCO_Type", laoType);
+        return addBranch("E20903_Prosecution_Case_Options", "E20903_PCO_Type", laoType);
     }
 
     public static BranchEventXmlNode getE20901TimeEstimateOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E20901_Time_Estimate_Options", "E20901_TEO_units", laoType);
+            addBranch("E20901_Time_Estimate_Options", "E20901_TEO_units", laoType);
         result.add(new LeafEventXmlNode("E20901_TEO_time", "14:21"));
         return result;
     }
 
     public static BranchEventXmlNode getE30100ShortAdjournOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E30100_Short_Adjourn_Options", "E30100_SAO_Type", laoType);
+            addBranch("E30100_Short_Adjourn_Options", "E30100_SAO_Type", laoType);
         result.add(new LeafEventXmlNode("E30100_SAO_Time", "14:21"));
         return result;
     }
 
     public static BranchEventXmlNode getE30200LongAdjournOptions(String laoType) {
         BranchEventXmlNode result =
-            DummyNodeUtil.addBranch("E30200_Long_Adjourn_Options", "E30200_LAO_Type", laoType);
+            addBranch("E30200_Long_Adjourn_Options", "E30200_LAO_Type", laoType);
         result.add(new LeafEventXmlNode("E30200_LAO_Date", "01-01-2023"));
         result.add(new LeafEventXmlNode("E30200_LAO_PSR_Required", "true"));
         result.add(new LeafEventXmlNode("E30200_LAO_Not_Reserved", "true"));

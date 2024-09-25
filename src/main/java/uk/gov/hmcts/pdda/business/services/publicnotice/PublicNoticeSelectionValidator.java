@@ -64,7 +64,7 @@ public final class PublicNoticeSelectionValidator {
             Integer.parseInt(configProperties.getProperty(MAX_NUMBER_ALLOWED_ACTIVE));
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("10 : Entering validateSelection  " + displayablePublicNoticeValues.length);
+            LOG.debug("{}{}", "10 : Entering validateSelection  ", displayablePublicNoticeValues.length);
         }
 
         int numberSelectedAsAcive = 0;
@@ -82,7 +82,7 @@ public final class PublicNoticeSelectionValidator {
 
             PublicNoticeInvalidSelectionException publicNoticeInvalidSelectionException =
                 new PublicNoticeInvalidSelectionException(
-                    Integer.valueOf(maximumNoticesAllowedActive),
+                    maximumNoticesAllowedActive,
                     "Too Many PublicNotices Selected" + numberSelectedAsAcive);
 
             CsServices.getDefaultErrorHandler().handleError(publicNoticeInvalidSelectionException,
@@ -91,7 +91,7 @@ public final class PublicNoticeSelectionValidator {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("50 : Exiting validateSelection number selected" + numberSelectedAsAcive);
+            LOG.debug("{}{}", "50 : Exiting validateSelection number selected", numberSelectedAsAcive);
         }
     }
 

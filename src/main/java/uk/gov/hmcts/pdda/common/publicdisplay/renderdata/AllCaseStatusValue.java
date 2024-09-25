@@ -26,6 +26,8 @@ public class AllCaseStatusValue extends SummaryByNameValue {
     static final long serialVersionUID = -5528116868430750798L;
     
     private static final Logger LOG = LoggerFactory.getLogger(AllCaseStatusValue.class);
+    
+    private static final String EMPTY_STRING = "";
 
     /**
      * Case title.
@@ -134,7 +136,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
     }
 
     public boolean hasCaseTitle() {
-        return caseTitle != null && caseTitle.trim().length() > 0;
+        return caseTitle != null && !EMPTY_STRING.equals(caseTitle);
     }
 
     /**

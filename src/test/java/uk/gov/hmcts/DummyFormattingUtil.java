@@ -67,18 +67,18 @@ public final class DummyFormattingUtil {
         String distributionType = "distributionType";
         String mimType = "pdf";
         String documentType = "IWP";
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         Long formattedDocumentBlobId = null;
         Long xmlDocumentClobId = null;
         String language = "en";
         String country = "gb";
-        Integer majorSchemaVersion = Integer.valueOf(1);
-        Integer minorSchemaVersion = Integer.valueOf(1);
+        Integer majorSchemaVersion = 1;
+        Integer minorSchemaVersion = 1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbFormattingDao result = new XhbFormattingDao();
         result.setFormattingId(formattingId);
@@ -120,7 +120,7 @@ public final class DummyFormattingUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(2);
+        Integer version = 2;
         XhbBlobDao result =
             new XhbBlobDao(blobId, blobData, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         return new XhbBlobDao(result);
@@ -141,7 +141,7 @@ public final class DummyFormattingUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
 
         XhbCppListDao result = new XhbCppListDao();
@@ -172,12 +172,12 @@ public final class DummyFormattingUtil {
         String status = "";
         LocalDateTime expiryDate = LocalDateTime.now().plusDays(30);
         String documentType = "";
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbXmlDocumentDao result = new XhbXmlDocumentDao();
         result.setXmlDocumentId(xmlDocumentId);
@@ -199,13 +199,13 @@ public final class DummyFormattingUtil {
     public static FormattingValue getFormattingValue(String xml, String documentTypeIn, String mimeTypeIn,
         XhbCppListDao cppList) {
         String distributionTypeIn = "distributionTypeIn";
-        Integer majorVersion = Integer.valueOf(1);
-        Integer minorVersion = Integer.valueOf(1);
+        Integer majorVersion = 1;
+        Integer minorVersion = 1;
         String language = "language";
         String country = "country";
         try (Reader readerIn = new StringReader(xml)) {
             OutputStream outputStreamIn = new ByteArrayOutputStream(1024);
-            Integer courtId = Integer.valueOf(81);
+            Integer courtId = 81;
 
             FormattingValue result = new FormattingValue(distributionTypeIn, mimeTypeIn, documentTypeIn, majorVersion,
                 minorVersion, language, country, readerIn, outputStreamIn, courtId, cppList);

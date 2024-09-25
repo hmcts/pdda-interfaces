@@ -41,6 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  */
+@SuppressWarnings({"PMD.AvoidSynchronizedStatement","PMD.DoNotUseThreads"})
 public class ImageLoader implements ImageObserver {
     private static final Logger LOG = LoggerFactory.getLogger(ImageLoader.class);
 
@@ -53,7 +54,7 @@ public class ImageLoader implements ImageObserver {
     // Our internal image cache that is potentially subject to garbage
     // collection.
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static Map imageCache = Collections.synchronizedMap(new ConcurrentHashMap());
+    private static Map imageCache = Collections.synchronizedMap(new ConcurrentHashMap<>());
 
     private Image image;
 
@@ -111,7 +112,7 @@ public class ImageLoader implements ImageObserver {
             }
             if (imageCache.size() < MAX_IMAGES_IN_CACHE && useCaching) {
                 LOG.debug("Image placed in cache.");
-                imageCache.put(url, new SoftReference(resultImage));
+                imageCache.put(url, new SoftReference<>(resultImage));
             }
         } else {
             LOG.debug("Using cached image for '{}'.", url);

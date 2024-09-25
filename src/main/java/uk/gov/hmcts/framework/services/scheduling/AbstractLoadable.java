@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @see AsynchronousLoader
  * 
  */
+@SuppressWarnings({"PMD.AvoidSynchronizedStatement","PMD.DoNotUseThreads"})
 public abstract class AbstractLoadable implements Loadable {
     private boolean loaded; // Never loaded in the first instance.
 

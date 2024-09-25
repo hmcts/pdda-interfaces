@@ -62,7 +62,7 @@ public class NameHelper {
      *        not null then a space will be appended before the name is appended.
      */
     private static void appendName(StringBuilder sb, String candidateName) {
-        if (candidateName != null && !candidateName.equals("")) {
+        if (candidateName != null && !"".equals(candidateName)) {
             if (sb.length() > 0) {
                 sb.append(' ');
             }

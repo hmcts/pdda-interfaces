@@ -28,6 +28,8 @@ public final class DummyEventUtil {
     private static final String NO20904 = "20904";
     private static final String NO20935 = "20935";
     private static final String NO30200 = "30200";
+    private static final String NO20903 = "20903";
+    private static final String NO30100 = "30100";
     private static final String NOTNULL = "Result is Null";
     private static final String NULL = "Result is not Null";
     private static final String FALSE = "Result is not False";
@@ -49,8 +51,8 @@ public final class DummyEventUtil {
     }
 
     public static MoveCaseEvent getMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(true);
@@ -62,7 +64,7 @@ public final class DummyEventUtil {
     }
 
     public static UpdateCaseEvent getUpdateCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseUpdatedInfo = new CaseChangeInformation(false);
         caseUpdatedInfo.setCaseActive(caseUpdatedInfo.isCaseActive());
         UpdateCaseEvent result = new UpdateCaseEvent(courtRoom, caseUpdatedInfo);
@@ -71,7 +73,7 @@ public final class DummyEventUtil {
     }
 
     public static AddCaseEvent getAddCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseUpdatedInfo = new CaseChangeInformation(false);
         caseUpdatedInfo.setCaseActive(caseUpdatedInfo.isCaseActive());
         AddCaseEvent result = new AddCaseEvent(courtRoom, caseUpdatedInfo);
@@ -81,7 +83,7 @@ public final class DummyEventUtil {
     }
 
     public static PublicNoticeEvent getPublicNoticeEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         PublicNoticeEvent result = new PublicNoticeEvent(courtRoom, false);
         assertNotNull(result.getEventType(), NOTNULL);
         assertFalse(result.isReportingRestrictionsChanged(), FALSE);
@@ -89,7 +91,7 @@ public final class DummyEventUtil {
     }
 
     public static ActivateCaseEvent getActivateCaseEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(false);
         ActivateCaseEvent result = new ActivateCaseEvent(courtRoom, caseChangeInformation);
         assertNotNull(result.getEventType(), NOTNULL);
@@ -98,7 +100,7 @@ public final class DummyEventUtil {
 
     public static ConfigurationChangeEvent getConfigurationChangeEvent() {
         CourtConfigurationChange courtConfigurationChange =
-            new CourtConfigurationChange(Integer.valueOf(-99));
+            new CourtConfigurationChange(-99);
         ConfigurationChangeEvent result = new ConfigurationChangeEvent(courtConfigurationChange);
         assertNotNull(result.getEventType(), NOTNULL);
         assertNotNull(result.getChange(), NOTNULL);
@@ -106,7 +108,7 @@ public final class DummyEventUtil {
     }
 
     public static HearingStatusEvent getHearingStatusEvent() {
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(false);
         HearingStatusEvent result = new HearingStatusEvent(courtRoom, caseChangeInformation);
         assertNotNull(result.getEventType(), NOTNULL);
@@ -142,7 +144,7 @@ public final class DummyEventUtil {
             new CaseCourtLogInformation(courtLogSubscriptionValue, false);
         caseCourtLogInformation
             .setCourtLogSubscriptionValue(caseCourtLogInformation.getCourtLogSubscriptionValue());
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(-99, null);
         CaseStatusEvent result = new CaseStatusEvent(courtRoom, caseCourtLogInformation);
         assertNotNull(result.getEventType(), NOTNULL);
         assertNotNull(result.getCaseCourtLogInformation(), NOTNULL);
@@ -152,21 +154,21 @@ public final class DummyEventUtil {
 
     public static PublicDisplayEvent getEvent(String messageType) {
         if (MOVE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getMoveCaseEvent();
+            return getMoveCaseEvent();
         } else if (ADD_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getAddCaseEvent();
+            return getAddCaseEvent();
         } else if (UPDATE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getUpdateCaseEvent();
+            return getUpdateCaseEvent();
         } else if (CASE_STATUS_EVENT.equals(messageType)) {
-            return DummyEventUtil.getCaseStatusEvent();
+            return getCaseStatusEvent();
         } else if (HEARING_STATUS_EVENT.equals(messageType)) {
-            return DummyEventUtil.getHearingStatusEvent();
+            return getHearingStatusEvent();
         } else if (ACTIVATE_CASE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getActivateCaseEvent();
+            return getActivateCaseEvent();
         } else if (CONFIG_CHANGE_EVENT.equals(messageType)) {
-            return DummyEventUtil.getConfigurationChangeEvent();
+            return getConfigurationChangeEvent();
         } else {
-            return DummyEventUtil.getPublicNoticeEvent();
+            return getPublicNoticeEvent();
         }
     }
 
@@ -180,11 +182,11 @@ public final class DummyEventUtil {
             node.add(DummyNodeUtil.getE20901TimeEstimateOptions(laoType));
         } else if (NO20904.equals(event)) {
             node.add(DummyNodeUtil.getE20904WitnessSwornOptions(laoType));
-        } else if ("20903".equals(event)) {
+        } else if (NO20903.equals(event)) {
             node.add(DummyNodeUtil.getE20903ProsecutionCaseOptions(laoType));
         } else if (NO20935.equals(event)) {
             node.add(DummyNodeUtil.getE20935WitnessReadOptions(laoType));
-        } else if ("30100".equals(event)) {
+        } else if (NO30100.equals(event)) {
             node.add(DummyNodeUtil.getE30100ShortAdjournOptions(laoType));
         }
         return node;

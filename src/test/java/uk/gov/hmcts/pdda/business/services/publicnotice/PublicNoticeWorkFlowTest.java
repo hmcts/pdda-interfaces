@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefinitivepublicnotice.XhbDefinitivePublicNoticeDao;
@@ -40,12 +41,13 @@ class PublicNoticeWorkFlowTest {
     private final PublicNoticeWorkFlow classUnderTest = new PublicNoticeWorkFlow();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(PublicNoticeSelectionManipulator.class);
+        Mockito.mockStatic(PddaEntityHelper.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -53,7 +55,8 @@ class PublicNoticeWorkFlowTest {
     @Test
     void testSetPublicNoticeforCourtRoom() {
         boolean result;
-        CourtLogSubscriptionValue courtLogSubscriptionValue = DummyCourtUtil.getCourtLogSubscriptionValue();
+        CourtLogSubscriptionValue courtLogSubscriptionValue =
+            DummyCourtUtil.getCourtLogSubscriptionValue();
         classUnderTest.setPublicNoticeforCourtRoom(courtLogSubscriptionValue);
         result = true;
 
@@ -65,8 +68,8 @@ class PublicNoticeWorkFlowTest {
     void testSetAllPublicNoticesForCourtRoom() {
         boolean result = false;
         try {
-            classUnderTest.setAllPublicNoticesForCourtRoom(
-                new DisplayablePublicNoticeValue[] {}, COURT_ID);
+            classUnderTest.setAllPublicNoticesForCourtRoom(new DisplayablePublicNoticeValue[] {},
+                COURT_ID);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -77,8 +80,14 @@ class PublicNoticeWorkFlowTest {
     @SuppressWarnings("static-access")
     @Test
     void testGetAllPublicNoticesForCourtRoom() {
+        // Setup
+        Optional<XhbCourtRoomDao> courtRoomDao = Optional.of(getDummyXhbCourtRoomDao());
+        // Expects
+        Mockito.when(PddaEntityHelper.xcrtFindByPrimaryKey(courtRoomDao.get().getCourtRoomId()))
+            .thenReturn(courtRoomDao);
+        // Run
         DisplayablePublicNoticeValue[] result =
-            classUnderTest.getAllPublicNoticesForCourtRoom(COURT_ID, Optional.of(getDummyXhbCourtRoomDao()));
+            classUnderTest.getAllPublicNoticesForCourtRoom(courtRoomDao.get().getCourtRoomId());
         assertNotNull(result, "Result is Null");
     }
 
@@ -90,11 +99,11 @@ class PublicNoticeWorkFlowTest {
     }
 
     private XhbCourtRoomDao getDummyXhbCourtRoomDao() {
-        Integer courtRoomId = Integer.valueOf(-1);
+        Integer courtRoomId = -1;
         String courtRoomName = "courtRoomName";
         String description = "description";
-        Integer crestCourtRoomNo = Integer.valueOf(-1);
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer crestCourtRoomNo = -1;
+        Integer courtSiteId = -1;
         String displayName = "displayName";
         String securityInd = "securityInd";
         String videoInd = "videoInd";
@@ -102,7 +111,7 @@ class PublicNoticeWorkFlowTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbCourtRoomDao result = new XhbCourtRoomDao();
         result.setCourtRoomId(courtRoomId);
@@ -128,47 +137,49 @@ class PublicNoticeWorkFlowTest {
     }
 
     private XhbConfiguredPublicNoticeDao getDummyXhbConfiguredPublicNoticeDao(String isActiveYN) {
-        Integer configuredPublicNoticeId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(-1);
-        Integer publicNoticeId = Integer.valueOf(-1);
+        Integer configuredPublicNoticeId = -1;
+        Integer courtRoomId = -1;
+        Integer publicNoticeId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
-        XhbConfiguredPublicNoticeDao result = new XhbConfiguredPublicNoticeDao(configuredPublicNoticeId, isActiveYN,
-            courtRoomId, publicNoticeId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
+        XhbConfiguredPublicNoticeDao result =
+            new XhbConfiguredPublicNoticeDao(configuredPublicNoticeId, isActiveYN, courtRoomId,
+                publicNoticeId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         result.setXhbPublicNotice(getDummyXhbPublicNoticeDao());
         return result;
     }
 
     private XhbPublicNoticeDao getDummyXhbPublicNoticeDao() {
-        Integer publicNoticeId = Integer.valueOf(-1);
+        Integer publicNoticeId = -1;
         String publicNoticeDesc = "publicNoticeDesc";
-        Integer courtId = Integer.valueOf(-1);
-        Integer definitivePnId = Integer.valueOf(-1);
+        Integer courtId = -1;
+        Integer definitivePnId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
-        XhbPublicNoticeDao result = new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
-            creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
+        Integer version = 3;
+        XhbPublicNoticeDao result =
+            new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
+                creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
         result.setXhbDefinitivePublicNotice(getDummyXhbDefinitivePublicNoticeDao());
         return result;
     }
 
     private XhbDefinitivePublicNoticeDao getDummyXhbDefinitivePublicNoticeDao() {
-        Integer definitivePnId = Integer.valueOf(-1);
+        Integer definitivePnId = -1;
         String definitivePnDesc = "definitivePnDesc";
-        Integer priority = Integer.valueOf(-1);
+        Integer priority = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
-        return new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc, priority, lastUpdateDate,
-            creationDate, lastUpdatedBy, createdBy, version);
+        Integer version = 3;
+        return new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc, priority,
+            lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
     }
 }

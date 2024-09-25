@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -46,11 +47,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(EasyMockExtension.class)
 class FormattingControllerBeanTest {
 
+    private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String XML_TAG = "<xml/>";
-
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private FormattingServices mockFormattingServices;
@@ -59,15 +58,16 @@ class FormattingControllerBeanTest {
     private XhbCppListRepository mockXhbCppListRepository;
 
     @TestSubject
-    private final FormattingControllerBean classUnderTest = new FormattingControllerBean(mockEntityManager);
+    private final FormattingControllerBean classUnderTest =
+        new FormattingControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -79,12 +79,17 @@ class FormattingControllerBeanTest {
         formattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         final FormattingValue formattingValue = getDummyFormattingValue(formattingDao);
         final boolean success = true;
-        EasyMock.expect(mockFormattingServices.getNextFormattingDocument()).andReturn(formattingDao);
-        EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class))).andReturn(Optional.of(xhbClobDao));
-        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class), EasyMock.isA(EntityManager.class));
+        EasyMock.expect(mockFormattingServices.getNextFormattingDocument())
+            .andReturn(formattingDao);
+        EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class)))
+            .andReturn(Optional.of(xhbClobDao));
+        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class),
+            EasyMock.isA(EntityManager.class));
         mockFormattingServices.updateFormattingStatus(formattingDao.getFormattingId(), success);
-        EasyMock.expect(mockFormattingServices.getFormattingValue(EasyMock.isA(XhbFormattingDao.class),
-            EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class))).andReturn(formattingValue);
+        EasyMock
+            .expect(mockFormattingServices.getFormattingValue(EasyMock.isA(XhbFormattingDao.class),
+                EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class)))
+            .andReturn(formattingValue);
         EasyMock.replay(mockFormattingServices);
 
         // Run
@@ -128,10 +133,14 @@ class FormattingControllerBeanTest {
         final XhbFormattingDao formattingDao = getDummyXhbFormattingDao();
         formattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         final FormattingValue formattingValue = getDummyFormattingValue(formattingDao);
-        EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class))).andReturn(Optional.of(xhbClobDao));
-        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class), EasyMock.isA(EntityManager.class));
-        EasyMock.expect(mockFormattingServices.getFormattingValue(EasyMock.isA(XhbFormattingDao.class),
-            EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class))).andReturn(formattingValue);
+        EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class)))
+            .andReturn(Optional.of(xhbClobDao));
+        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class),
+            EasyMock.isA(EntityManager.class));
+        EasyMock
+            .expect(mockFormattingServices.getFormattingValue(EasyMock.isA(XhbFormattingDao.class),
+                EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class)))
+            .andReturn(formattingValue);
         EasyMock.replay(mockFormattingServices);
 
         // Run
@@ -209,34 +218,30 @@ class FormattingControllerBeanTest {
         List<XhbCppListDao> dummyList = new ArrayList<>();
         dummyList.add(xhbCppListDao);
 
-        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(EasyMock.isA(Integer.class),
-            EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
-        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class), EasyMock.isA(EntityManager.class));
+        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class),
+            EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
+        mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class),
+            EasyMock.isA(EntityManager.class));
 
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockFormattingServices);
 
         // Run
-        FormattingValue formattingValue = new FormattingValue(distributionTypeIn, mimeTypeIn, documentTypeIn,
-            majorVersion, majorVersion, language, country, null, new ByteArrayOutputStream(1024), courtId, null);
-        @SuppressWarnings("unused")
-        boolean result = false;
-        try {
-            byte[] byteArray = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
+        FormattingValue formattingValue = new FormattingValue(distributionTypeIn, mimeTypeIn,
+            documentTypeIn, majorVersion, majorVersion, language, country, null,
+            new ByteArrayOutputStream(1024), courtId, null);
+        byte[] result = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
 
         // Checks
         EasyMock.verify(mockFormattingServices);
         EasyMock.verify(mockXhbCppListRepository);
-        assertTrue(result, TRUE);
+        assertNotNull(result, NOTNULL);
     }
 
     private XhbCppListDao getDummyCppList(final XhbClobDao listClob) {
-        Integer cppListId = Integer.valueOf(1);
-        Integer courtCode = Integer.valueOf(81);
+        Integer cppListId = 1;
+        Integer courtCode = 81;
         LocalDateTime timeLoaded = null;
         LocalDateTime listStartDate = LocalDateTime.now().minusDays(5);
         LocalDateTime listEndDate = LocalDateTime.now().plusDays(1);
@@ -247,7 +252,7 @@ class FormattingControllerBeanTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         String listType = "DL";
         XhbCppListDao result = new XhbCppListDao();
@@ -278,18 +283,18 @@ class FormattingControllerBeanTest {
         String distributionType = "distributionType";
         String mimType = "pdf";
         String documentType = "IWP";
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         Long formattedDocumentBlobId = null;
         Long xmlDocumentClobId = null;
         String language = "en";
         String country = "gb";
-        Integer majorSchemaVersion = Integer.valueOf(1);
-        Integer minorSchemaVersion = Integer.valueOf(1);
+        Integer majorSchemaVersion = 1;
+        Integer minorSchemaVersion = 1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbFormattingDao result = new XhbFormattingDao();
         result.setFormattingId(formattingId);
@@ -315,10 +320,11 @@ class FormattingControllerBeanTest {
 
     private FormattingValue getDummyFormattingValue(final XhbFormattingDao formattingDao) {
         OutputStream outputStream = new ByteArrayOutputStream();
-        FormattingValue result = new FormattingValue(formattingDao.getDistributionType(), formattingDao.getMimeType(),
-            formattingDao.getDocumentType(), formattingDao.getMajorSchemaVersion(),
-            formattingDao.getMinorSchemaVersion(), formattingDao.getLanguage(), formattingDao.getCountry(), null,
-            outputStream, formattingDao.getCourtId(), null);
+        FormattingValue result =
+            new FormattingValue(formattingDao.getDistributionType(), formattingDao.getMimeType(),
+                formattingDao.getDocumentType(), formattingDao.getMajorSchemaVersion(),
+                formattingDao.getMinorSchemaVersion(), formattingDao.getLanguage(),
+                formattingDao.getCountry(), null, outputStream, formattingDao.getCourtId(), null);
         result.setXmlDocumentClobId(formattingDao.getXmlDocumentClobId());
         result.setFormattingId(formattingDao.getFormattingId());
         return result;

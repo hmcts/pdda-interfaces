@@ -27,8 +27,7 @@ public class CourtLogViewValue extends CourtLogAbstractValue {
     
 
     public enum EventTypes {
-        BW_HISTORY_ISSUE_WARRANT_EVENT(Integer.valueOf(20_100)), BW_HISTORY_END_WARRANT_EVENT(
-            Integer.valueOf(20_101)), CRACKED_INEFFECTIVE_EVENT(Integer.valueOf(20_918));
+        BW_HISTORY_ISSUE_WARRANT_EVENT(20_100), BW_HISTORY_END_WARRANT_EVENT(20_101), CRACKED_INEFFECTIVE_EVENT(20_918);
 
         Integer value;
 
@@ -41,7 +40,7 @@ public class CourtLogViewValue extends CourtLogAbstractValue {
         }
         
         public static EventTypes fromInteger(Integer value) {
-            for (EventTypes type : EventTypes.values()) {
+            for (EventTypes type : values()) {
                 if (type.getValue().equals(value)) {
                     return type;
                 }

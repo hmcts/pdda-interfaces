@@ -50,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -211,7 +211,7 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             return getSftpHelper().sftpFetch(config.session, config.remoteFolder, validation);
         } catch (Exception ex) {
-            LOG.error(SFTP_ERROR, ex.getMessage());
+            LOG.error(SFTP_ERROR, ex);
             return Collections.emptyMap();
         }
     }
@@ -346,7 +346,7 @@ public class PddaHelper extends XhibitPddaHelper {
         LOG.debug("respondToPddaMessage({})", messages);
         for (XhbPddaMessageDao message : messages) {
             // Set Filename
-            String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
@@ -373,7 +373,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         for (XhbCppStagingInboundDao cppMessage : cppMessages) {
             // Set Filename
-            String fileName = (cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
@@ -418,7 +418,7 @@ public class PddaHelper extends XhibitPddaHelper {
         private static final String PDDA = "PDDA";
 
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, Integer.valueOf(4));
+            super(courtRepository, false, 4);
         }
 
         @Override
@@ -473,7 +473,7 @@ public class PddaHelper extends XhibitPddaHelper {
         @Override
         public boolean validateTitle(String filename) {
             return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
-                new String[] {PDDA});
+                PDDA);
         }
 
         @Override
@@ -508,7 +508,7 @@ public class PddaHelper extends XhibitPddaHelper {
             {"DailyList", "FirmList", "WarnedList", "WebPage", "PublicDisplay"};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
-            super(courtRespository, false, Integer.valueOf(3));
+            super(courtRespository, false, 3);
         }
 
         @Override

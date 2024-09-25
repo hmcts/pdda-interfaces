@@ -41,7 +41,7 @@ class XhbDisplayDocumentRepositoryTest extends AbstractRepositoryTest<XhbDisplay
     protected XhbDisplayDocumentDao getDummyDao() {
         Integer displayDocumentId = getDummyId();
         String descriptionCode = "descriptionCode";
-        Integer defaultPageDelay = Integer.valueOf(-1);
+        Integer defaultPageDelay = -1;
         String multipleCourtYn = "multipleCourtYn";
         String country = "country";
         String language = "language";
@@ -49,7 +49,7 @@ class XhbDisplayDocumentRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDisplayDocumentDao result = new XhbDisplayDocumentDao();
         result.setDisplayDocumentId(displayDocumentId);
         result.setDescriptionCode(descriptionCode);

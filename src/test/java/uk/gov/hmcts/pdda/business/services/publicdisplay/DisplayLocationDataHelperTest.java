@@ -33,18 +33,21 @@ import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD.ExcessiveImports")
 class DisplayLocationDataHelperTest {
 
     private static final String NOT_TRUE = "Result is not True";
     private static final String NULL = "Result is Null";
+    private static final String NOT_EQUAL = "Result is not Equal";
 
-    private static final Integer COURT_ID = Integer.valueOf(-1);
+    private static final Integer COURT_ID = -1;
 
     @Mock
     private ResourceBundle mockResourceBundle;
@@ -90,7 +93,8 @@ class DisplayLocationDataHelperTest {
         // Setup
         List<XhbCourtSiteDao> xhbCourtSiteDaoList = new ArrayList<>();
         List<XhbDisplayLocationDao> xhbDisplayLocationDaoList = new ArrayList<>();
-        XhbDisplayLocationDao xhbDisplayLocationDao = DummyPublicDisplayUtil.getXhbDisplayLocationDao();
+        XhbDisplayLocationDao xhbDisplayLocationDao =
+            DummyPublicDisplayUtil.getXhbDisplayLocationDao();
         xhbDisplayLocationDaoList.add(xhbDisplayLocationDao);
         XhbCourtSiteDao xhbCourtSiteDao = DummyCourtUtil.getXhbCourtSiteDao();
         xhbCourtSiteDao.setXhbDisplayLocations(xhbDisplayLocationDaoList);
@@ -123,7 +127,8 @@ class DisplayLocationDataHelperTest {
             .thenReturn(xhbRotationSetsDaoList);
         Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDaoList);
-        Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class))).thenReturn("TranslatedText");
+        Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class)))
+            .thenReturn("TranslatedText");
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(new ArrayList<>());
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
@@ -132,8 +137,8 @@ class DisplayLocationDataHelperTest {
         boolean result = false;
         try {
             DisplayLocationDataHelper.getRotationSetsDetailForCourt(COURT_ID, mockResourceBundle,
-                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbDisplayRepository,
-                mockXhbDisplayDocumentRepository);
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository,
+                mockXhbDisplayRepository, mockXhbDisplayDocumentRepository);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -179,19 +184,23 @@ class DisplayLocationDataHelperTest {
 
     @Test
     void testGetDisplaysForCourtWrapper() {
-        Integer courtId = Integer.valueOf(81);
-        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
-        CourtSitePdComplexValue[] results = DisplayLocationDataHelper.getDisplaysForCourt(courtId, mockEntityManager);
+        Integer courtId = 81;
+        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class)))
+            .thenReturn(mockQuery);
+        CourtSitePdComplexValue[] results =
+            DisplayLocationDataHelper.getDisplaysForCourt(courtId, mockEntityManager);
         assertNotNull(results, NULL);
     }
 
     @Test
     void testGetRotationSetsDetailForCourtWrapper() {
-        Integer courtId = Integer.valueOf(81);
-        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class))).thenReturn(mockQuery);
+        Integer courtId = 81;
+        Mockito.when(mockEntityManager.createNamedQuery(Mockito.isA(String.class)))
+            .thenReturn(mockQuery);
         boolean result = false;
         try {
-            DisplayLocationDataHelper.getRotationSetsDetailForCourt(courtId, Locale.UK, mockEntityManager);
+            DisplayLocationDataHelper.getRotationSetsDetailForCourt(courtId, Locale.UK,
+                mockEntityManager);
             result = true;
         } catch (Exception exception) {
             fail(exception);
@@ -201,13 +210,8 @@ class DisplayLocationDataHelperTest {
 
     @Test
     void testToSentenceCase() {
-        boolean result = false;
-        try {
-            StringUtilities.toSentenceCase("test This");
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        assertTrue(result, NOT_TRUE);
+        String result = StringUtilities.toSentenceCase("test this now");
+        assertNotNull(result, NULL);
+        assertEquals("Test This Now", result, NOT_EQUAL);
     }
 }

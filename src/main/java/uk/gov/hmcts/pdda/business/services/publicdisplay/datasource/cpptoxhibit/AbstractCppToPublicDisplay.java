@@ -41,7 +41,7 @@ import javax.xml.xpath.XPathExpressionException;
  * @author groenm
  *
  */
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({"PMD.GodClass", "PMD.CouplingBetweenObjects", "PMD.NullAssignment"})
 public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisplayRepos {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractCppToPublicDisplay.class);
@@ -81,7 +81,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     protected XhbClobDao cppClob;
     protected XhbCppFormattingDao cppFormattBV;
 
-    protected AbstractCppToPublicDisplay(final Date date, final int courtId, final int... courtRoomIds) {
+    protected AbstractCppToPublicDisplay(final Date date, final int courtId,
+        final int... courtRoomIds) {
         super();
         this.date = date;
         this.courtId = courtId;
@@ -89,8 +90,10 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     }
 
     // Use only in unit test
-    protected AbstractCppToPublicDisplay(final Date date, final int courtId, final int[] courtRoomIds,
-        XhbCourtRepository xhbCourtRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
+    @SuppressWarnings("java:S107")
+    protected AbstractCppToPublicDisplay(final Date date, final int courtId,
+        final int[] courtRoomIds, XhbCourtRepository xhbCourtRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository, XhbClobRepository xhbClobRepository,
         CppFormattingHelper cppFormattingHelper) {
         super(xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository, xhbClobRepository,
@@ -129,7 +132,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception
      */
-    protected void populateData(PublicDisplayValue value, Element caseNode) throws XPathExpressionException {
+    protected void populateData(PublicDisplayValue value, Element caseNode)
+        throws XPathExpressionException {
         LOG.debug("populateData({},{})", value, caseNode);
         String movedFromCourtRoomName = getXPath().evaluate(XPATH_MOVEDFROMCOURTROOM, caseNode);
         if (!EMPTY_STRING.equals(movedFromCourtRoomName)) {
@@ -167,7 +171,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         try {
             docBuilder = MergeDocumentUtils.getDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            LOG.error(methodName + "ParserConfigurationException - Unable to retrieve CPP XML - " + e.getMessage());
+            LOG.error("{} ParserConfigurationException - Unable to retrieve CPP XML - {}",
+                methodName, e.getMessage());
         }
 
         try {
@@ -189,7 +194,9 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return Collection of the relevant display objects.
      * @throws XPathExpressionException Exception
      */
-    public abstract Collection getCppData(EntityManager entityManager) throws XPathExpressionException;
+    @SuppressWarnings("java:S3740")
+    public abstract Collection getCppData(EntityManager entityManager)
+        throws XPathExpressionException;
 
     /**
      * getDate.
@@ -246,9 +253,11 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         Optional<XhbClobDao> xhbClobDao = Optional.empty();
         if (cppClob == null) {
             // retrieve from the database
-            cppFormattBV = getCppFormattingHelper().getLatestPublicDisplayDocument(courtId, entityManager);
+            cppFormattBV =
+                getCppFormattingHelper().getLatestPublicDisplayDocument(courtId, entityManager);
             if (null != cppFormattBV && null != cppFormattBV.getXmlDocumentClobId()) {
-                xhbClobDao = getXhbClobRepository(entityManager).findById(cppFormattBV.getXmlDocumentClobId());
+                xhbClobDao = getXhbClobRepository(entityManager)
+                    .findById(cppFormattBV.getXmlDocumentClobId());
             }
         }
         if (xhbClobDao.isPresent()) {
@@ -316,12 +325,11 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
         return siteValue;
     }
 
-    protected NodeList getCourtSiteNodeList(XhbCourtRoomDao courtRoomValue, XhbCourtSiteDao courtSiteValue,
-        Document doc) throws XPathExpressionException {
-        return (NodeList) getXPath().evaluate(
-            "//courtsite[courtsitename='" + courtSiteValue.getCourtSiteName()
-                + "']/courtrooms/courtroom[courtroomname='" + courtRoomValue.getCourtRoomName() + "']",
-            doc, XPathConstants.NODESET);
+    protected NodeList getCourtSiteNodeList(XhbCourtRoomDao courtRoomValue,
+        XhbCourtSiteDao courtSiteValue, Document doc) throws XPathExpressionException {
+        return (NodeList) getXPath().evaluate("//courtsite[courtsitename='"
+            + courtSiteValue.getCourtSiteName() + "']/courtrooms/courtroom[courtroomname='"
+            + courtRoomValue.getCourtRoomName() + "']", doc, XPathConstants.NODESET);
     }
 
     protected NodeList getCasesNodeList(Node node) throws XPathExpressionException {
@@ -329,7 +337,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     }
 
     protected NodeList getFloatingCaseNodeList(Node node) throws XPathExpressionException {
-        return (NodeList) getXPath().evaluate(XPATH_FLOATINGCASEDETAILS, node, XPathConstants.NODESET);
+        return (NodeList) getXPath().evaluate(XPATH_FLOATINGCASEDETAILS, node,
+            XPathConstants.NODESET);
     }
 
     protected NodeList getDefendantNodeList(Node node) throws XPathExpressionException {
@@ -364,7 +373,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @param room XhbCourtRoomDao
      * @param site XhbCourtSiteDao
      */
-    protected void populateCourtSiteRoomData(PublicDisplayValue value, XhbCourtRoomDao room, XhbCourtSiteDao site) {
+    protected void populateCourtSiteRoomData(PublicDisplayValue value, XhbCourtRoomDao room,
+        XhbCourtSiteDao site) {
         // Court room data
         if (null == room) {
             value.setCourtRoomName(EMPTY_STRING);
@@ -396,7 +406,8 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
      * @return true if the reporting is restricted else false.
      * @throws XPathExpressionException Exception
      */
-    protected boolean getDefendantReportRestriction(Element defNode) throws XPathExpressionException {
+    protected boolean getDefendantReportRestriction(Element defNode)
+        throws XPathExpressionException {
         String methodName = "getDefendantReportRestriction(defNode=>" + defNode + ") ";
         boolean reportingRestricted = false;
         String nodeValue = getXPath().evaluate(XPATH_DEF_RESTRICTIONS, defNode);
