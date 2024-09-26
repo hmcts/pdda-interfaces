@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Locale;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathExpressionException;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -122,12 +123,16 @@ class DailyListXmlMergeUtilsTest {
     private static DailyListXmlMergeUtils classUnderTest;
 
     @BeforeAll
-    public static void setUp() throws Exception {
-        classUnderTest = new DailyListXmlMergeUtils();
+    public static void setUp() {
+        try {
+            classUnderTest = new DailyListXmlMergeUtils();
+        } catch (XPathExpressionException ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

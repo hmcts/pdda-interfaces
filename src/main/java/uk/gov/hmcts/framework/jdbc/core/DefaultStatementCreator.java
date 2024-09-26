@@ -35,6 +35,7 @@ import javax.sql.rowset.serial.SerialClob;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class DefaultStatementCreator implements StatementCreator {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultStatementCreator.class);
@@ -281,7 +282,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
         LOG.debug("<< isClobProcessingEnabled: {} >>", clobProcessingEnabled);
 
-        return clobProcessingEnabled != null && clobProcessingEnabled.equalsIgnoreCase("TRUE");
+        return clobProcessingEnabled != null && "TRUE".equalsIgnoreCase(clobProcessingEnabled);
     }
 
     /**
@@ -303,6 +304,6 @@ public class DefaultStatementCreator implements StatementCreator {
 
         LOG.debug("<< isBlobProcessingEnabled: {} >>", blobProcessingEnabled);
 
-        return blobProcessingEnabled != null && blobProcessingEnabled.equalsIgnoreCase("TRUE");
+        return blobProcessingEnabled != null && "TRUE".equalsIgnoreCase(blobProcessingEnabled);
     }
 }

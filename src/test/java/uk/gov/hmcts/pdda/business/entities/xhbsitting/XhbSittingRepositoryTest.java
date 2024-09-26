@@ -63,7 +63,7 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbSittingDao> result =
-            (List<XhbSittingDao>) getClassUnderTest().findByNonFloatingHearingList(getDummyDao().getListId());
+            getClassUnderTest().findByNonFloatingHearingList(getDummyDao().getListId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -92,7 +92,7 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbSittingDao> result = (List<XhbSittingDao>) getClassUnderTest().findByListId(getDummyDao().getListId());
+        List<XhbSittingDao> result = getClassUnderTest().findByListId(getDummyDao().getListId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -104,25 +104,25 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
 
     @Override
     protected XhbSittingDao getDummyDao() {
-        Integer sittingId = Integer.valueOf(-1);
-        Integer sittingSequenceNo = Integer.valueOf(-1);
+        Integer sittingId = -1;
+        Integer sittingSequenceNo = -1;
         String sittingJudge = "isSittingJudge";
         LocalDateTime sittingTime = LocalDateTime.now();
         String sittingNote = "sittingNote";
-        Integer refJustice1Id = Integer.valueOf(-1);
-        Integer refJustice2Id = Integer.valueOf(-1);
-        Integer refJustice3Id = Integer.valueOf(-1);
-        Integer refJustice4Id = Integer.valueOf(-1);
+        Integer refJustice1Id = -1;
+        Integer refJustice2Id = -1;
+        Integer refJustice3Id = -1;
+        Integer refJustice4Id = -1;
         String floating = "isFloating";
-        Integer listId = Integer.valueOf(-1);
-        Integer refJudgeId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(-1);
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer listId = -1;
+        Integer refJudgeId = -1;
+        Integer courtRoomId = -1;
+        Integer courtSiteId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbSittingDao result = new XhbSittingDao();
         result.setSittingId(sittingId);
         result.setSittingSequenceNo(sittingSequenceNo);

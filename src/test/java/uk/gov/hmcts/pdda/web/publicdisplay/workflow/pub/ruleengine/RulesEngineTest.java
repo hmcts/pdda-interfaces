@@ -33,12 +33,12 @@ class RulesEngineTest {
     private final RulesEngine classUnderTest = getClassUnderTest();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(RulesConfiguration.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -61,8 +61,8 @@ class RulesEngineTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         CaseChangeInformation caseChangeInformation = new CaseChangeInformation(true);

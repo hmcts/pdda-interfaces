@@ -92,7 +92,7 @@ public final class EventType {
      * 
      * @param value This is one of the public static values
      */
-    private EventType(String value) {
+    protected EventType(String value) {
         this.value = value;
     }
 
@@ -120,11 +120,7 @@ public final class EventType {
      */
     @Override
     public boolean equals(Object anObject) {
-        if (anObject instanceof EventType) {
-            return value.equals(((EventType) anObject).value);
-        } else {
-            return false;
-        }
+        return anObject instanceof EventType eventType && value.equals(eventType.value);
     }
 
     /**

@@ -44,6 +44,8 @@ import java.util.Optional;
 public class RotationSetMaintainHelper {
     private static final Logger LOG = LoggerFactory.getLogger(RotationSetMaintainHelper.class);
 
+    private static final String YES = "Y";
+    
     protected RotationSetMaintainHelper() {
         // Protected constructor
     }
@@ -112,7 +114,7 @@ public class RotationSetMaintainHelper {
         }
 
         // Check that we are not editing a system RS.
-        if ("Y".equals(rotationSetLocal.get().getDefaultYn())) {
+        if (YES.equals(rotationSetLocal.get().getDefaultYn())) {
             throw new PublicDisplayCheckedException("pubdisp.rotationset.editsystem",
                 new String[] {rotationSetLocal.get().getDescription()}, "Can not edit a system rotation set");
         }
@@ -164,7 +166,7 @@ public class RotationSetMaintainHelper {
         }
 
         // Check that we are not deleting a system RS.
-        if ("Y".equals(rotationSetLocal.get().getDefaultYn())) {
+        if (YES.equals(rotationSetLocal.get().getDefaultYn())) {
             throw new PublicDisplayCheckedException("pubdisp.rotationset.deletesystem",
                 new String[] {rotationSetLocal.get().getDescription()}, "Can not delete a system rotation set");
         }
@@ -234,8 +236,9 @@ public class RotationSetMaintainHelper {
             Integer rotationSetDdId = rotationSetDdLocal.getRotationSetDdId();
             if (rotationSet.hasRotationSetDd(rotationSetDdId)) {
                 XhbRotationSetDdDao rotationSetDd = rotationSet.getRotationSetDd(rotationSetDdId);
-                LOG.debug("Rotation Set DD for id " + rotationSetDd.getPrimaryKey() + " found.");
-                LOG.debug("Page order = " + rotationSetDd.getOrdering() + ", delay = " + rotationSetDd.getPageDelay());
+                LOG.debug("{}{}{}", "Rotation Set DD for id ", rotationSetDd.getPrimaryKey(), " found.");
+                LOG.debug("{}{}{}{}", "Page order = ", rotationSetDd.getOrdering(),
+                    ", delay = ", rotationSetDd.getPageDelay());
                 repo.update(rotationSetDd);
                 hasUpdatedOrDeleted = true;
             } else {
@@ -255,8 +258,8 @@ public class RotationSetMaintainHelper {
     private static void sendNotification(RotationSetComplexValue rotationSet, PublicDisplayNotifier notifier) {
         LOG.debug("sendNotification({},{})", rotationSet, notifier);
         CourtConfigurationChange ccc =
-            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId().intValue(),
-                rotationSet.getRotationSetsDao().getPrimaryKey().intValue());
+            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId(),
+                rotationSet.getRotationSetsDao().getPrimaryKey());
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }

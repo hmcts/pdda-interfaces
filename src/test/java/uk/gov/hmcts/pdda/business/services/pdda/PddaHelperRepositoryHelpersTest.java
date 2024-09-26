@@ -1,8 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
-import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +33,9 @@ class PddaHelperRepositoryHelpersTest {
 
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
 
-    @Mock
-    private EntityManager mockEntityManager;
-
     @TestSubject
-    private final PddaHelper classUnderTest = new PddaHelper(mockEntityManager);
+    private final PddaHelper classUnderTest =
+        new PddaHelper(EasyMock.createMock(EntityManager.class));
 
     @Test
     void testGetClobRepository() {

@@ -14,6 +14,7 @@ import java.util.List;
  * 
  * @author Fardellwi
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class ErrorHandlerValidationResult implements ErrorHandler, ValidationResult {
 
     private final List<Error> errorList = new ArrayList<>();

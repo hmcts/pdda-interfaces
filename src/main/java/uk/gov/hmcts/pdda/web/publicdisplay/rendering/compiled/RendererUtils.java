@@ -35,17 +35,11 @@ public final class RendererUtils {
     }
 
     public static boolean hasEvent(Object item) {
-        if (item instanceof PublicDisplayValue) {
-            return ((PublicDisplayValue) item).getEvent() != null;
-        }
-        return false;
+        return item instanceof PublicDisplayValue publicDisplayValue && publicDisplayValue.getEvent() != null;
     }
 
     public static boolean hasDefendants(Object item) {
-        if (item instanceof CourtListValue) {
-            return ((CourtListValue) item).hasDefendants();
-        }
-        return false;
+        return item instanceof CourtListValue courtListValue && courtListValue.hasDefendants();
     }
 
     /**
@@ -79,12 +73,12 @@ public final class RendererUtils {
      * @return true if reporting is restricted for this item
      */
     public static boolean isReportingRestricted(Object item) {
-        if (item instanceof SummaryByNameValue) {
-            return ((SummaryByNameValue) item).isReportingRestricted();
-        } else if (item instanceof CourtListValue) {
-            return ((CourtListValue) item).isReportingRestricted();
-        } else if (item instanceof AllCourtStatusValue) {
-            return ((AllCourtStatusValue) item).isReportingRestricted();
+        if (item instanceof SummaryByNameValue summaryByNameValue) {
+            return summaryByNameValue.isReportingRestricted();
+        } else if (item instanceof CourtListValue courtListValue) {
+            return courtListValue.isReportingRestricted();
+        } else if (item instanceof AllCourtStatusValue allCourtStatusValue) {
+            return allCourtStatusValue.isReportingRestricted();
         }
         return false;
     }
@@ -96,22 +90,22 @@ public final class RendererUtils {
      * @return true if this item is floating
      */
     public static boolean isFloating(Object item) {
-        if (item instanceof SummaryByNameValue) {
-            return ((SummaryByNameValue) item).isFloating();
-        } else if (item instanceof JuryStatusDailyListValue) {
-            return ((JuryStatusDailyListValue) item).isFloating();
+        if (item instanceof SummaryByNameValue summaryByNameValue) {
+            return summaryByNameValue.isFloating();
+        } else if (item instanceof JuryStatusDailyListValue juryStatusDailyListValue) {
+            return juryStatusDailyListValue.isFloating();
         }
         return false;
     }
 
     public static boolean isHideInPublicDisplay(Object item) {
-        if (item instanceof SummaryByNameValue) {
-            DefendantName defendantName = ((SummaryByNameValue) item).getDefendantName();
+        if (item instanceof SummaryByNameValue summaryByNameValue) {
+            DefendantName defendantName = summaryByNameValue.getDefendantName();
             if (defendantName != null) {
                 return defendantName.isHideInPublicDisplay();
             }
-        } else if (item instanceof DefendantName) {
-            return ((DefendantName) item).isHideInPublicDisplay();
+        } else if (item instanceof DefendantName defendantName) {
+            return defendantName.isHideInPublicDisplay();
         }
 
         return false;
@@ -121,7 +115,7 @@ public final class RendererUtils {
         Collection<DefendantName> names) {
         if (names != null && defOnCaseId != null) {
             for (DefendantName name : names) {
-                if (defOnCaseId.intValue() == name.getDefendantOnCaseId()) {
+                if (defOnCaseId == name.getDefendantOnCaseId()) {
                     return name.isHideInPublicDisplay();
                 }
             }

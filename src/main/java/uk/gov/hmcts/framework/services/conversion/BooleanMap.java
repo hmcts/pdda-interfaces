@@ -43,7 +43,7 @@ public class BooleanMap extends DateMap {
         String stringValue;
         Boolean boolValue = (Boolean) method.invoke(bean, args);
         if (boolValue != null) {
-            stringValue = getConverter().formatBoolean(boolValue.booleanValue());
+            stringValue = getConverter().formatBoolean(boolValue);
         } else {
             stringValue = NULL_STRING;
         }

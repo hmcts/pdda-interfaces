@@ -20,14 +20,14 @@ public final class MergeIwpUtils {
         String courtroomnumber2 =
             MergeNodeUtils.getNodeMapValues(Arrays.asList(COURT_ROOM_NAME), insertBeforeNode).get(COURT_ROOM_NAME);
 
-        if (courtroomnumber1 != null && courtroomnumber2 != null && courtroomnumber1.equals(courtroomnumber2)) {
+        if (courtroomnumber1 != null && courtroomnumber1.equals(courtroomnumber2)) {
             // if there is no cases information in the original xml then we replace with the newer
             // xml
             // otherwise we do nothing and keep the xml as is.
             String cases = MergeNodeUtils.getNodeMapValues(Arrays.asList(CASES), insertBeforeNode).get(CASES);
 
             // or if the time in cpp is after
-            if (cases == null || cases.equals(EMPTY_STRING)
+            if (cases == null || EMPTY_STRING.equals(cases)
                 || MergeDateUtils.isCppAfterXhibit(insertBeforeNode, childNodeToMerge)) {
                 node.replaceChild(childNodeToMerge, insertBeforeNode);
             }

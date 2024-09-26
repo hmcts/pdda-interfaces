@@ -16,7 +16,7 @@ public final class XsltTransformUtils {
 
     public static boolean equalsMimeType(MimeTypeType mimeType1, MimeTypeType mimeType2) {
         if (mimeType2 != null) {
-            if (!(mimeType2.equals(mimeType1))) {
+            if (!mimeType2.equals(mimeType1)) {
                 return false;
             }
         } else if (mimeType1 != null) {
@@ -28,7 +28,7 @@ public final class XsltTransformUtils {
     public static boolean equalsDistributionType(DistributionTypeType distributionType1,
         DistributionTypeType distributionType2) {
         if (distributionType2 != null) {
-            if (!(distributionType2.equals(distributionType1))) {
+            if (!distributionType2.equals(distributionType1)) {
                 return false;
             }
         } else if (distributionType1 != null) {
@@ -40,7 +40,7 @@ public final class XsltTransformUtils {
     public static boolean equalsDocumentType(DocumentTypeType documentType1,
         DocumentTypeType documentType2) {
         if (documentType2 != null) {
-            if (!(documentType2.equals(documentType1))) {
+            if (!documentType2.equals(documentType1)) {
                 return false;
             }
         } else if (documentType1 != null) {
@@ -51,7 +51,7 @@ public final class XsltTransformUtils {
 
     public static boolean equalsFileList(XsltFileList xsltFileList1, XsltFileList xsltFileList2) {
         if (xsltFileList2 != null) {
-            if (!(xsltFileList2.equals(xsltFileList1))) {
+            if (!xsltFileList2.equals(xsltFileList1)) {
                 return false;
             }
         } else if (xsltFileList1 != null) {

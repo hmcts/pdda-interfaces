@@ -9,13 +9,16 @@ public enum ListType {
     MAGS_PUBLIC_LIST, MAGS_STANDARD_LIST, 
     CIVIL_DAILY_CAUSE_LIST, FAMILY_DAILY_CAUSE_LIST;
 
+    private static final String DAILY_LIST = "DL";
+    private static final String FIRM_LIST = "FL";
+    private static final String WARN_LIST = "WL";
 
     public static ListType fromString(String value) {
-        if ("DL".equals(value)) {
+        if (DAILY_LIST.equals(value)) {
             return CROWN_DAILY_LIST;
-        } else if ("FL".equals(value)) {
+        } else if (FIRM_LIST.equals(value)) {
             return CROWN_FIRM_LIST;
-        } else if ("WL".equals(value)) {
+        } else if (WARN_LIST.equals(value)) {
             return CROWN_WARNED_LIST;
         }
         return null;

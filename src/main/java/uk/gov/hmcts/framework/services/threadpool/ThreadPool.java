@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Stack;
 
 
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement", "PMD.LooseCoupling"})
 public final class ThreadPool {
 
     /** Pool size. */
@@ -79,10 +79,10 @@ public final class ThreadPool {
     public void shutdown() {
         synchronized (this) {
             active = false;
-    
+
             // Wait till or the workers are returned
             waitForPoolFull();
-    
+
             while (!workers.isEmpty()) {
                 Worker worker = workers.pop();
                 LOG.debug("Worker shutting down: {}", worker.getId());
@@ -111,7 +111,7 @@ public final class ThreadPool {
     private Worker getWorker(int rowNo) {
         return new Worker(this, rowNo);
     }
-    
+
     /**
      * Gets the worker.
      * 
@@ -231,7 +231,7 @@ public final class ThreadPool {
                             this.wait(); // NOSONAR
                         } catch (InterruptedException ex) {
                             LOG.error(ex.getMessage(), ex);
-                            Thread.currentThread().interrupt();
+                            currentThread().interrupt();
                         }
                     }
                     // Do the work
@@ -266,7 +266,7 @@ public final class ThreadPool {
             }
 
         }
-        
+
         private void setWork(Runnable work) {
             this.work = work;
         }

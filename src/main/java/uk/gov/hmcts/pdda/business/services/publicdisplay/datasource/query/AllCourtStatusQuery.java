@@ -36,7 +36,7 @@ import java.util.Optional;
  * 
  * @author pznwc5
  */
-@SuppressWarnings("PMD.ExcessiveParameterList")
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
 public class AllCourtStatusQuery extends PublicDisplayQuery {
 
     /**

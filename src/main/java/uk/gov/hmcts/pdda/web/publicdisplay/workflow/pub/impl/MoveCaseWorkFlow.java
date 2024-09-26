@@ -44,9 +44,9 @@ public class MoveCaseWorkFlow extends AbstractEventWorkFlow {
      * @param context WorkFlowContext
      * @param event MoveCaseEvent
      */
-    public MoveCaseWorkFlow(WorkFlowContext context, MoveCaseEvent event) {
+    public MoveCaseWorkFlow(final WorkFlowContext context, final MoveCaseEvent event) {
         this(context);
-        this.documents = processRules(event);
+        this.documents = super.processRules(event);
         this.moveEvent = event;
     }
 

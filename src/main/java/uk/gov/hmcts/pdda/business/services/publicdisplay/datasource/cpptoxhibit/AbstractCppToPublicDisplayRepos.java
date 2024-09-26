@@ -35,8 +35,9 @@ public class AbstractCppToPublicDisplayRepos {
         LoggerFactory.getLogger(AbstractCppToPublicDisplayRepos.class);
     private static final Integer ONE = 1;
     private static final String DATE_MASK = "dd/MM/yy HH:mm";
+    private static final String YES = "Y";
     protected static final String EMPTY_STRING = "";
-
+    
     private XhbCourtRepository xhbCourtRepository;
     private XhbCourtSiteRepository xhbCourtSiteRepository;
     private XhbCourtRoomRepository xhbCourtRoomRepository;
@@ -77,7 +78,7 @@ public class AbstractCppToPublicDisplayRepos {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern(DATE_MASK);
             timestamp = LocalDateTime.parse(dateTime, dateFormat);
         } catch (Exception e) {
-            LOG.error(methodName + "Exception - " + e.getMessage());
+            LOG.error("{}{}{}", methodName, "Exception - ", e.getMessage());
         }
         return timestamp;
     }
@@ -117,7 +118,7 @@ public class AbstractCppToPublicDisplayRepos {
         List<XhbCourtSiteDao> allCourtSitesForCourt =
             getXhbCourtSiteRepository(entityManager).findByCourtId(court.getCourtId());
         for (XhbCourtSiteDao courtSite : allCourtSitesForCourt) {
-            if ("Y".equals(courtSite.getObsInd())) {
+            if (YES.equals(courtSite.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtSite");
             } else {
                 courtSitesList.add(courtSite);
@@ -141,7 +142,7 @@ public class AbstractCppToPublicDisplayRepos {
         List<XhbCourtRoomDao> allCourtRooms =
             getXhbCourtRoomRepository(entityManager).findByCourtSiteId(courtSite.getCourtSiteId());
         for (XhbCourtRoomDao courtRoom : allCourtRooms) {
-            if ("Y".equals(courtRoom.getObsInd())) {
+            if (YES.equals(courtRoom.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtRoom");
             } else {
                 if (xhbCourtSites.size() > ONE) {

@@ -29,7 +29,7 @@ public class FirmListXmlMergeUtils extends AbstractListXmlMergeUtils {
     }
 
     public FirmListXmlMergeUtils() throws XPathExpressionException {
-        super(new String[] {"FirmList/CourtLists/CourtList/Sittings", "FirmList/ReserveList/Hearing"});
+        super("FirmList/CourtLists/CourtList/Sittings", "FirmList/ReserveList/Hearing");
     }
 
     @Override

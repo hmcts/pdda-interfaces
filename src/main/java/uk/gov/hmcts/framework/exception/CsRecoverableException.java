@@ -10,6 +10,7 @@ package uk.gov.hmcts.framework.exception;
  * @author: Kevin Buckthorpe
  * @author: Bal Bhamra
  */
+@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class CsRecoverableException extends AbstractCsException {
     private static final long serialVersionUID = 1L;
 

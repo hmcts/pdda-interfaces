@@ -20,6 +20,7 @@ import javax.xml.transform.stream.StreamSource;
 public class TranslationXmlTemplates implements Templates {
 
     private static final Logger LOG = LoggerFactory.getLogger(TranslationXmlTemplates.class);
+    private static final String TRANSLATION_XML = "translation.xml";
     private final String translationXml;
 
     private final Templates delegate;
@@ -89,14 +90,14 @@ public class TranslationXmlTemplates implements Templates {
          */
         @Override
         public Source resolve(String href, String base) throws TransformerException {
-            if ("translation.xml".equals(href)) {
+            if (TRANSLATION_XML.equals(href)) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Resolved url \"translation.xml\" to cached translation xml.");
                 }
 
                 // If we have translation xml return it
                 if (translationXml != null) {
-                    return new StreamSource(new StringReader(translationXml), "translation.xml");
+                    return new StreamSource(new StringReader(translationXml), TRANSLATION_XML);
                 }
             } else if (delegate != null) {
                 // If we have a delegate allow it to try

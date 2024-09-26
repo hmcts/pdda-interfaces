@@ -68,12 +68,12 @@ class HeaderImageServletTest {
     };
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(ImageIO.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -119,6 +119,6 @@ class HeaderImageServletTest {
         for (int i = 0; i < paramNames.length; i++) {
             Mockito.when(mockHttpServletRequest.getParameter(paramNames[i])).thenReturn(paramValues[i]);
         }
-        Mockito.when(mockImage.getHeight(null)).thenReturn(Integer.valueOf(100));
+        Mockito.when(mockImage.getHeight(null)).thenReturn(100);
     }
 }

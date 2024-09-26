@@ -24,6 +24,7 @@ import java.util.List;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.LawOfDemeter")
 public class CppFormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(CppFormattingControllerBean.class);
@@ -146,12 +147,12 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {
         LOG.debug("refreshPublicDisplaysForCourt({})", courtId);
-        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId.intValue(), true);
+        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         getPublicDisplayNotifier().sendMessage(ccEvent);
     }
 
-    private PublicDisplayNotifier getPublicDisplayNotifier() {
+    protected PublicDisplayNotifier getPublicDisplayNotifier() {
         if (publicDisplayNotifier == null) {
             publicDisplayNotifier = new PublicDisplayNotifier();
         }

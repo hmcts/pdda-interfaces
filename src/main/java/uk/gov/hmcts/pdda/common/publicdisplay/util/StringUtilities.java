@@ -35,18 +35,19 @@ public final class StringUtilities {
             String displayName = value.toLowerCase(Locale.getDefault()).trim();
             boolean nextLetterUpperCase = true;
 
-            char[] displayChars = displayName.toCharArray();
-            char[] tempChars = displayName.toCharArray();
+            char[] tempChars = new char[displayName.length()];
+            int chrNumber = 0;
 
-            for (int i = 0; i < displayName.length(); i++) {
+            for (char displayChar : displayName.toCharArray()) {
                 if (nextLetterUpperCase) {
-                    tempChars[i] = Character.toUpperCase(displayChars[i]);
+                    tempChars[chrNumber] = Character.toUpperCase(displayChar);
                 } else {
-                    tempChars[i] = displayChars[i];
+                    tempChars[chrNumber] = displayChar;
                 }
-                nextLetterUpperCase = !Character.isLetter(displayChars[i]);
+                nextLetterUpperCase = !Character.isLetter(displayChar);
+                chrNumber++;    
             }
-            return new String(tempChars);
+            return String.copyValueOf(tempChars);
         }
         return null;
     }

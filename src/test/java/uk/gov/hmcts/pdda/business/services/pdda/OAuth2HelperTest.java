@@ -73,7 +73,7 @@ class OAuth2HelperTest {
     private OAuth2Helper classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(HttpRequest.class);
         Mockito.mockStatic(HttpClient.class);
 
@@ -86,7 +86,7 @@ class OAuth2HelperTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Clear down statics
         Mockito.clearAllCaches();
     }

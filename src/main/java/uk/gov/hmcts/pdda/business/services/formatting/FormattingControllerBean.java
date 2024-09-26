@@ -31,7 +31,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 public class FormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     @SuppressWarnings("unused")
@@ -212,14 +212,14 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
         return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 
-    private FormattingServices getFormattingServices() {
+    private FormattingServices getFormattingServices() { 
         if (formattingServices == null) {
             formattingServices =
                 new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
         }
         return formattingServices;
     }
-
+    
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),

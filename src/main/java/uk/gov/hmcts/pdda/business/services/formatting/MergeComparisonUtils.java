@@ -68,9 +68,9 @@ public final class MergeComparisonUtils {
         if (CompareXmlNodes.compareNumeric(node1Value, node2Value)) {
             return Integer.valueOf(node2Value).compareTo(Integer.valueOf(node1Value));
         } else if (CompareXmlNodes.compareToEmpty(node1Value, node2Value)) {
-            return MergeComparisonUtils.compareNode2Null(nodeName, isFirmList, isWarnedList);
+            return compareNode2Null(nodeName, isFirmList, isWarnedList);
         } else if (CompareXmlNodes.compareToEmpty(node2Value, node1Value)) {
-            return MergeComparisonUtils.compareNode1Null(nodeName, isFirmList, isWarnedList);
+            return compareNode1Null(nodeName, isFirmList, isWarnedList);
         } else if (CompareXmlNodes.isEmpty(node1Value) && CompareXmlNodes.isEmpty(node2Value)) {
             return EQUAL_TO;
         } else if (node1Value != null && node2Value != null) {
@@ -81,6 +81,6 @@ public final class MergeComparisonUtils {
 
     public static int getNodePositionForSorting(final Node node1, final Node node2, String[] nodePositionArray,
         String mergeType, boolean isFirmList, boolean isWarnedList) {
-        return MergeComparisonUtils.compareNodes(nodePositionArray, node1, node2, mergeType, isFirmList, isWarnedList);
+        return compareNodes(nodePositionArray, node1, node2, mergeType, isFirmList, isWarnedList);
     }
 }

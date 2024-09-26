@@ -50,12 +50,12 @@ class BlobHelperTest {
     private BlobHelper classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         classUnderTest = new BlobHelper(mockXhbBlobRepository);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 

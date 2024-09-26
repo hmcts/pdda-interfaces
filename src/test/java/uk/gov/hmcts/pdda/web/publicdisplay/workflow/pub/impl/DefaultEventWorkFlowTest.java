@@ -40,12 +40,12 @@ class DefaultEventWorkFlowTest {
     private final DefaultEventWorkFlow classUnderTest = getClassUnderTest();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(RulesEngine.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -77,7 +77,7 @@ class DefaultEventWorkFlowTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(Integer.valueOf(-99), null);
+        return new CourtRoomIdentifier(-99, null);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

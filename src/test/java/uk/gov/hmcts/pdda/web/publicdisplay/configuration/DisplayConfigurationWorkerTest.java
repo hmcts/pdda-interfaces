@@ -33,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DisplayConfigurationWorkerTest {
 
     private static final String TRUE = "Result is not True";
-    private static final String NOTNULL = "Result is not Null";
     private static final String NOTEQUALS = "Result is not Equal";
 
     private static final Integer COURT_ID = 20;
@@ -50,12 +49,12 @@ class DisplayConfigurationWorkerTest {
     private final DisplayConfigurationWorker classUnderTest = getClassUnderTest();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -134,13 +133,9 @@ class DisplayConfigurationWorkerTest {
     void testDisplayRotationSetDataByDisplayComparator() {
         DisplayRotationSetData oldOne =
             DummyDisplayUtil.getDisplayRotationSetData(VALID_DISPLAY_URL, VALID_DOCUMENT_URL);
-        DisplayRotationSetData newOne =
-            DummyDisplayUtil.getDisplayRotationSetData(VALID_DISPLAY_URL, VALID_DOCUMENT_URL);
-
+        
         DisplayRotationSetDataByDisplayComparator comparator = DisplayRotationSetDataByDisplayComparator.getInstance();
-        assertNotNull(Integer.valueOf(comparator.compare(oldOne, newOne)), NOTNULL);
         assertEquals(0, comparator.compare(oldOne, oldOne), NOTEQUALS);
-        assertNotNull(Integer.valueOf(comparator.hashCode()), NOTNULL);
         Boolean isEquals = comparator == null || false;
         assertFalse(isEquals, "Result is not False");
         isEquals = comparator.equals(comparator);

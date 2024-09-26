@@ -15,7 +15,7 @@ import java.util.Locale;
  * 
  * @author pznwc5
  */
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement"})
 public final class InitializationService {
     /**
      * One second.
@@ -235,7 +235,7 @@ public final class InitializationService {
     public Environment getEnvironment() {
         return env;
     }
-    
+
     public void setEnvironment(Environment env) {
         this.env = env;
     }

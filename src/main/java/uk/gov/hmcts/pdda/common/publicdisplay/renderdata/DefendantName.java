@@ -58,7 +58,7 @@ public class DefendantName implements Serializable, Comparable<DefendantName> {
         middleName = row.getString(DEFENDANT_MIDDLE_NAME);
         surname = row.getString(DEFENDANT_SURNAME);
         String hips = row.getString(HIDE_IN_PUBLIC_DISPLAY);
-        hideInPublicDisplay = hips != null && hips.equals("Y");
+        hideInPublicDisplay = hips != null && "Y".equals(hips);
         defendantOnCaseId = row.getInt(DEFENDANT_ON_CASE_ID);
     }
 

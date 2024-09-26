@@ -15,6 +15,7 @@ import javax.xml.transform.URIResolver;
  * 
  * @author Will Fardell
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class UriResolverTemplatesAdapter extends TemplatesAdapter {
     private static Logger log = LoggerFactory.getLogger(UriResolverTemplatesAdapter.class);
 

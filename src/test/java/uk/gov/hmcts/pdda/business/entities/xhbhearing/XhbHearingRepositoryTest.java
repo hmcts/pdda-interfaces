@@ -62,7 +62,7 @@ class XhbHearingRepositoryTest extends AbstractRepositoryTest<XhbHearingDao> {
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbHearingDao> result = (List<XhbHearingDao>) getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
+        List<XhbHearingDao> result = getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");
@@ -75,19 +75,19 @@ class XhbHearingRepositoryTest extends AbstractRepositoryTest<XhbHearingDao> {
     @Override
     protected XhbHearingDao getDummyDao() {
         Integer hearingId = getDummyId();
-        Integer caseId = Integer.valueOf(-1);
-        Integer refHearingTypeId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer caseId = -1;
+        Integer refHearingTypeId = -1;
+        Integer courtId = -1;
         String mpHearingType = "mpHearingType";
         Double lastCalculatedDuration = Double.valueOf(-1);
         LocalDateTime hearingStartDate = LocalDateTime.now();
         LocalDateTime hearingEndDate = LocalDateTime.now();
-        Integer linkedHearingId = Integer.valueOf(-1);
+        Integer linkedHearingId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbHearingDao result = new XhbHearingDao();
         result.setHearingId(hearingId);
         result.setCaseId(caseId);

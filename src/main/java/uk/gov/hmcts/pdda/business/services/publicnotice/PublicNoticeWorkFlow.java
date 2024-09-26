@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -40,8 +41,10 @@ public class PublicNoticeWorkFlow {
      */
     private static final Logger LOG = LoggerFactory.getLogger(PublicNoticeWorkFlow.class);
 
-    private static final Integer REPORTING_RESTRICTIONS_LIFTED = Integer.valueOf(700);
-    private static final Integer REPORTING_RESTRICTIONS = Integer.valueOf(100);
+    private static final Integer REPORTING_RESTRICTIONS_LIFTED = 700;
+    private static final Integer REPORTING_RESTRICTIONS = 100;
+    
+    private static final String ONE = "1";
 
     protected PublicNoticeWorkFlow() {
         // Protected constructor
@@ -57,7 +60,7 @@ public class PublicNoticeWorkFlow {
 
         LOG.debug(" 01 Enter the getAllPublicNoticesForCourtRoom method for {}", xhbCourtRoomId);
 
-        Optional<XhbCourtRoomDao> courtRoom = PddaEntityHelper.xcrtFindByPrimaryKey(Integer.valueOf(xhbCourtRoomId));
+        Optional<XhbCourtRoomDao> courtRoom = PddaEntityHelper.xcrtFindByPrimaryKey(xhbCourtRoomId);
         return getAllPublicNoticesForCourtRoom(xhbCourtRoomId, courtRoom);
     }
 
@@ -66,7 +69,7 @@ public class PublicNoticeWorkFlow {
         // construct the array given a collection of ConfigurePublicNotices
 
         DisplayablePublicNoticeValue[] displayablePublicNoticeValues =
-            constructDisplayablePublicNoticeValuesForCourtRoom(Integer.valueOf(xhbCourtRoomId), courtRoom);
+            constructDisplayablePublicNoticeValuesForCourtRoom(xhbCourtRoomId, courtRoom);
 
         LOG.debug(" 49 Sorting the Array into Priority");
 
@@ -138,12 +141,12 @@ public class PublicNoticeWorkFlow {
 
     public static void setPublicNoticeforCourtRoom(CourtLogSubscriptionValue courtLogSubscriptionValue) {
 
-        LOG.debug(
-            " 01 Enter the setPublicNoticeforCourtRoom xhbCourtRoomID" + courtLogSubscriptionValue.getCourtRoomId());
+        LOG.debug("{}{}",
+            " 01 Enter the setPublicNoticeforCourtRoom xhbCourtRoomID", courtLogSubscriptionValue.getCourtRoomId());
 
         // updates are carried out need to send a notification
         if (updateConfiguredPublicNoticeActivationState(courtLogSubscriptionValue)) {
-            LOG.debug(" 0 updated sending Event" + courtLogSubscriptionValue.getCourtRoomId());
+            LOG.debug("{}{}", " 0 updated sending Event", courtLogSubscriptionValue.getCourtRoomId());
             sendNotification(courtLogSubscriptionValue);
         }
     }
@@ -206,7 +209,7 @@ public class PublicNoticeWorkFlow {
 
         Collection<?> configuredPublicNotices = courtRoom.get().getXhbConfiguredPublicNotices();
 
-        ArrayList<Object> displayablePublicNotices = new ArrayList<>();
+        List<Object> displayablePublicNotices = new ArrayList<>();
         Iterator<?> iterator = configuredPublicNotices.iterator();
         while (iterator.hasNext()) {
             displayablePublicNotices.add(createDisplayablePublicNotice((XhbConfiguredPublicNoticeDao) iterator.next()));
@@ -218,21 +221,21 @@ public class PublicNoticeWorkFlow {
     private static DisplayablePublicNoticeValue createDisplayablePublicNotice(
         XhbConfiguredPublicNoticeDao configuredPublicNotice) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(" creating a displayablePublicNoticeValue for configredPN "
-                + configuredPublicNotice.getConfiguredPublicNoticeId());
+            LOG.debug("{}{}", " creating a displayablePublicNoticeValue for configredPN ",
+                configuredPublicNotice.getConfiguredPublicNoticeId());
         }
 
         XhbPublicNoticeDao publicNotice = configuredPublicNotice.getXhbPublicNotice();
         XhbDefinitivePublicNoticeDao definitivePublicNotice = publicNotice.getXhbDefinitivePublicNotice();
 
         boolean isActive = false;
-        if (configuredPublicNotice.getIsActive() != null && configuredPublicNotice.getIsActive().equals("1")) {
+        if (configuredPublicNotice.getIsActive() != null && ONE.equals(configuredPublicNotice.getIsActive())) {
             isActive = true;
         }
 
         return new DisplayablePublicNoticeValue(configuredPublicNotice.getConfiguredPublicNoticeId(),
             publicNotice.getPublicNoticeDesc(), isActive, configuredPublicNotice.getVersion(),
-            definitivePublicNotice.getDefinitivePnId(), definitivePublicNotice.getPriority().intValue());
+            definitivePublicNotice.getDefinitivePnId(), definitivePublicNotice.getPriority());
     }
 
 }

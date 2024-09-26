@@ -22,6 +22,11 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
     private static final String DEFENDANT_NAME = "defendant_name";
     private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String E30200_LAO_JUDGE_NAME = "E30200_LAO_Reserved_To_Judge_Name";
+    private static final String E30100_CASE_RELEASED_UNTIL = "E30100_Case_released_until";
+    private static final String E30100_CASE_ADJOURNED_UNTIL = "E30100_Case_adjourned_until";
+    private static final String E30200_LAO_PSR_REQUIRED = "E30200_LAO_PSR_Required";
+    private static final String E30200_LAO_NOT_RESERVED = "E30200_LAO_Not_Reserved";
+    private static final String TRUE = "true";
 
     private AppendEventsTwentyOneHundredToThirtyUtils() {
     }
@@ -50,13 +55,13 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
             (BranchEventXmlNode) node.get("E30100_Short_Adjourn_Options");
         String saoType = ((LeafEventXmlNode) saOptions.get("E30100_SAO_Type")).getValue();
 
-        if ("E30100_Case_released_until".equals(saoType)) {
+        if (E30100_CASE_RELEASED_UNTIL.equals(saoType)) {
             AppendUtils.append(buffer,
                 TranslationUtils.translate(documentI18n, "Case_released_until"));
             AppendUtils.append(buffer, SPACE);
             AppendUtils.append(buffer,
                 ((LeafEventXmlNode) saOptions.get("E30100_SAO_Time")).getValue());
-        } else if ("E30100_Case_adjourned_until".equals(saoType)) {
+        } else if (E30100_CASE_ADJOURNED_UNTIL.equals(saoType)) {
             AppendUtils.append(buffer,
                 TranslationUtils.translate(documentI18n, "Case_adjourned_until"));
             AppendUtils.append(buffer, SPACE);
@@ -81,9 +86,9 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
 
         BranchEventXmlNode laoOptions =
             (BranchEventXmlNode) node.get("E30200_Long_Adjourn_Options");
-        String laoType = ((LeafEventXmlNode) (laoOptions.get("E30200_LAO_Type"))).getValue();
+        String laoType = ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Type")).getValue();
 
-        LOG.debug("laoType: " + laoType);
+        LOG.debug("{}{}", "laoType: ", laoType);
 
         // Add LAO Type text
         AppendEventsThirtyTwoHundredLaoUtils.appendLaoTypeText(laoType, documentI18n, buffer,
@@ -94,18 +99,16 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
         AppendUtils.append(buffer, SPACE);
 
         // PSR Required
-        if (laoOptions.get("E30200_LAO_PSR_Required") != null
-            && ((LeafEventXmlNode) laoOptions.get("E30200_LAO_PSR_Required")).getValue()
-                .equalsIgnoreCase("true")) {
+        if (laoOptions.get(E30200_LAO_PSR_REQUIRED) != null
+            && TRUE.equalsIgnoreCase(((LeafEventXmlNode) laoOptions.get(E30200_LAO_PSR_REQUIRED)).getValue())) {
             AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "PSR_Required"));
             AppendUtils.append(buffer, SEMI_COLON);
             AppendUtils.append(buffer, SPACE);
         }
 
         // Reserved?
-        if (laoOptions.get("E30200_LAO_Not_Reserved") != null
-            && ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Not_Reserved")).getValue()
-                .equalsIgnoreCase("true")) {
+        if (laoOptions.get(E30200_LAO_NOT_RESERVED) != null
+            && TRUE.equalsIgnoreCase(((LeafEventXmlNode) laoOptions.get(E30200_LAO_NOT_RESERVED)).getValue())) {
             AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Not_Reserved"));
             AppendUtils.append(buffer, SEMI_COLON);
             AppendUtils.append(buffer, SPACE);

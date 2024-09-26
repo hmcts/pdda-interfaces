@@ -43,7 +43,7 @@ class XhbClobRepositoryTest extends AbstractRepositoryTest<XhbClobDao> {
     @Override
     protected boolean testfindById(XhbClobDao dao) {
         Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId())).thenReturn(dao);
-        Optional<XhbClobDao> result = (Optional<XhbClobDao>) getClassUnderTest().findById(getDummyLongId());
+        Optional<XhbClobDao> result = getClassUnderTest().findById(getDummyLongId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(), SAME);
@@ -61,7 +61,7 @@ class XhbClobRepositoryTest extends AbstractRepositoryTest<XhbClobDao> {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbClobDao result =
             new XhbClobDao(clobId, clobData, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);

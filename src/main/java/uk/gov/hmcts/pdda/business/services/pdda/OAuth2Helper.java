@@ -110,7 +110,7 @@ public class OAuth2Helper {
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
 
-            Integer statusCode = Integer.valueOf(httpResponse.statusCode());
+            Integer statusCode = httpResponse.statusCode();
             LOG.debug("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
             LOG.debug("Response: {}", response);

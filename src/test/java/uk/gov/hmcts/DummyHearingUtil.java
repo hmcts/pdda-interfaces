@@ -22,18 +22,18 @@ public final class DummyHearingUtil {
     }
     
     public static XhbRefHearingTypeDao getXhbRefHearingTypeDao() {
-        Integer refHearingTypeId = Integer.valueOf(-1);
+        Integer refHearingTypeId = -1;
         String hearingTypeCode = "hearingTypeCode";
         String hearingTypeDesc = "hearingTypeDesc";
         String category = "category";
-        Integer seqNo = Integer.valueOf(-1);
-        Integer listSequence = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer seqNo = -1;
+        Integer listSequence = -1;
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbRefHearingTypeDao result = new XhbRefHearingTypeDao();
         result.setRefHearingTypeId(refHearingTypeId);
@@ -55,20 +55,20 @@ public final class DummyHearingUtil {
     }
 
     public static XhbHearingDao getXhbHearingDao() {
-        Integer hearingId = Integer.valueOf(-1);
-        Integer caseId = Integer.valueOf(-1);
-        Integer refHearingTypeId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer hearingId = -1;
+        Integer caseId = -1;
+        Integer refHearingTypeId = -1;
+        Integer courtId = -1;
         String mpHearingType = "mpHearingType";
         Double lastCalculatedDuration = Double.valueOf(-1);
         LocalDateTime hearingStartDate = LocalDateTime.now();
         LocalDateTime hearingEndDate = LocalDateTime.now();
-        Integer linkedHearingId = Integer.valueOf(-1);
+        Integer linkedHearingId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbHearingDao result = new XhbHearingDao();
         result.setHearingId(hearingId);
         result.setCaseId(caseId);
@@ -90,21 +90,21 @@ public final class DummyHearingUtil {
     }
     
     public static XhbHearingListDao getXhbHearingListDao() {
-        Integer hearingListId = Integer.valueOf(-1);
+        Integer hearingListId = -1;
         String listType = "listType";
         LocalDateTime startDate = LocalDateTime.now();
         LocalDateTime endDate = LocalDateTime.now();
         String status = "status";
-        Integer editionNo = Integer.valueOf(-1);
+        Integer editionNo = -1;
         LocalDateTime publishedTime = LocalDateTime.now();
         String printReference = "printReference";
-        Integer crestListId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer crestListId = -1;
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbHearingListDao result = new XhbHearingListDao();
         result.setListId(hearingListId);
         result.setListType(listType);
@@ -127,25 +127,25 @@ public final class DummyHearingUtil {
     }
     
     public static XhbSittingDao getXhbSittingDao() {
-        Integer sittingId = Integer.valueOf(-1);
-        Integer sittingSequenceNo = Integer.valueOf(-1);
+        Integer sittingId = -1;
+        Integer sittingSequenceNo = -1;
         String sittingJudge = "isSittingJudge";
         LocalDateTime sittingTime = LocalDateTime.now();
         String sittingNote = "sittingNote";
-        Integer refJustice1Id = Integer.valueOf(-1);
-        Integer refJustice2Id = Integer.valueOf(-1);
-        Integer refJustice3Id = Integer.valueOf(-1);
-        Integer refJustice4Id = Integer.valueOf(-1);
+        Integer refJustice1Id = -1;
+        Integer refJustice2Id = -1;
+        Integer refJustice3Id = -1;
+        Integer refJustice4Id = -1;
         String floating = "isFloating";
-        Integer listId = Integer.valueOf(-1);
-        Integer refJudgeId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(8112);
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer listId = -1;
+        Integer refJudgeId = -1;
+        Integer courtRoomId = 8112;
+        Integer courtSiteId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbSittingDao result = new XhbSittingDao();
         result.setSittingId(sittingId);
         result.setSittingSequenceNo(sittingSequenceNo);
@@ -174,22 +174,22 @@ public final class DummyHearingUtil {
     }
 
     public static XhbScheduledHearingDao getXhbScheduledHearingDao() {
-        Integer scheduledHearingId = Integer.valueOf(-1);
-        Integer sequenceNo = Integer.valueOf(-1);
+        Integer scheduledHearingId = -1;
+        Integer sequenceNo = -1;
         LocalDateTime notBeforeTime = LocalDateTime.now();
         LocalDateTime originalTime = LocalDateTime.now();
         String listingNote = "listingNote";
-        Integer hearingProgress = Integer.valueOf(-1);
-        Integer sittingId = Integer.valueOf(-1);
-        Integer hearingId = Integer.valueOf(-1);
+        Integer hearingProgress = -1;
+        Integer sittingId = -1;
+        Integer hearingId = -1;
         String caseActive = "Y";
         String movedFrom = "movedFrom";
-        Integer movedFromCourtRoomId = Integer.valueOf(-1);
+        Integer movedFromCourtRoomId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbScheduledHearingDao result = new XhbScheduledHearingDao();
         result.setScheduledHearingId(scheduledHearingId);
         result.setSequenceNo(sequenceNo);
@@ -215,14 +215,14 @@ public final class DummyHearingUtil {
     }
     
     public static XhbSchedHearingDefendantDao getXhbSchedHearingDefendantDao() {
-        Integer schedHearingDefendantId = Integer.valueOf(-1);
-        Integer scheduledHearingId = Integer.valueOf(-1);
-        Integer defendantOnCaseId = Integer.valueOf(-1);
+        Integer schedHearingDefendantId = -1;
+        Integer scheduledHearingId = -1;
+        Integer defendantOnCaseId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbSchedHearingDefendantDao result =
             new XhbSchedHearingDefendantDao(schedHearingDefendantId, scheduledHearingId,
                 defendantOnCaseId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);

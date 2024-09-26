@@ -95,7 +95,7 @@ public class CathHelper {
         try {
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(httpRequest, BodyHandlers.ofString());
-            Integer statusCode = Integer.valueOf(httpResponse.statusCode());
+            Integer statusCode = httpResponse.statusCode();
             LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
             LOG.debug("Response: {}", response);

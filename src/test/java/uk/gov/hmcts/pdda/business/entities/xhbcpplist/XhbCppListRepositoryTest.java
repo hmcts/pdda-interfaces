@@ -93,12 +93,12 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         if (BYLISTDATE.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList = (List<XhbCppListDao>) getClassUnderTest().findByCourtCodeAndListTypeAndListDate(
+            resultList = getClassUnderTest().findByCourtCodeAndListTypeAndListDate(
                 getDummyDao().getCourtCode(), getDummyDao().getListType(), LocalDateTime.now());
         } else if (BYSTARTDATE.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList = (List<XhbCppListDao>) getClassUnderTest()
+            resultList = getClassUnderTest()
                 .findByCourtCodeAndListTypeAndListStartDateAndListEndDate(getDummyDao().getCourtCode(),
                     getDummyDao().getListType(), LocalDateTime.now(), LocalDateTime.now());
         } else if (BYCLOBID.equals(whichTest)) {
@@ -138,7 +138,7 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
 
         XhbCppListDao result = new XhbCppListDao();

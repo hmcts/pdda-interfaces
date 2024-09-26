@@ -69,7 +69,7 @@ class CathHelperTest {
     private CathHelper classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(CathUtils.class);
         Mockito.mockStatic(HttpClient.class);
 
@@ -77,7 +77,7 @@ class CathHelperTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Test default constructor
         classUnderTest = new CathHelper();
         // Clear down statics
@@ -112,7 +112,7 @@ class CathHelperTest {
             Mockito.when(HttpClient.newHttpClient()).thenReturn(mockHttpClient);
             Mockito.when(mockHttpClient.send(Mockito.isA(HttpRequest.class),
                 Mockito.isA(BodyHandlers.ofString().getClass()))).thenReturn(mockHttpResponse);
-            Mockito.when(mockHttpResponse.statusCode()).thenReturn(Integer.valueOf(200));
+            Mockito.when(mockHttpResponse.statusCode()).thenReturn(200);
             Mockito.when(mockHttpResponse.body()).thenReturn("Body");
 
             // Run

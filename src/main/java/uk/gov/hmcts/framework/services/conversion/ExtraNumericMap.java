@@ -37,7 +37,7 @@ public class ExtraNumericMap extends ValueConverterMap {
         String stringValue;
         Double doubleValue = (Double) method.invoke(bean, args);
         if (doubleValue != null) {
-            stringValue = getConverter().formatDouble(doubleValue.doubleValue());
+            stringValue = getConverter().formatDouble(doubleValue);
         } else {
             stringValue = NULL_STRING;
         }
@@ -56,7 +56,7 @@ public class ExtraNumericMap extends ValueConverterMap {
         String stringValue;
         Float floatValue = (Float) method.invoke(bean, args);
         if (floatValue != null) {
-            stringValue = getConverter().formatFloat(floatValue.floatValue());
+            stringValue = getConverter().formatFloat(floatValue);
         } else {
             stringValue = NULL_STRING;
         }

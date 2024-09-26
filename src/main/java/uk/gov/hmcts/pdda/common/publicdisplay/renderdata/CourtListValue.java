@@ -16,6 +16,8 @@ public class CourtListValue extends PublicDisplayValue {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(CourtListValue.class);
+    
+    private static final String EMPTY_STRING = "";
 
     /**
      * Defendant names.
@@ -170,7 +172,7 @@ public class CourtListValue extends PublicDisplayValue {
     }
 
     public boolean hasCaseTitle() {
-        return caseTitle != null && caseTitle.trim().length() > 0;
+        return caseTitle != null && !EMPTY_STRING.equals(caseTitle);
     }
 
     /**

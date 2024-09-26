@@ -30,6 +30,7 @@ import javax.xml.transform.sax.SAXResult;
  * TransformerUtils.
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class TransformerUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransformerUtils.class);

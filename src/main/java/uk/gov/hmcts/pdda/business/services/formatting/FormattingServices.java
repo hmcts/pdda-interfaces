@@ -45,12 +45,14 @@ public class FormattingServices extends FormattingServicesProcessing {
     // Logging
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServices.class);
     private final CourtelHelper courtelHelper;
-    
-    
+
+
     // Date Format for java date
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
-
+    private static final String NEWDOCUMENT = "ND";
+    private static final String FORMATERROR = "FE";
+    
     public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper, BlobHelper blobHelper) {
         super(entityManager, blobHelper);
         this.courtelHelper = courtelHelper;
@@ -75,7 +77,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         try {
             // Get the xmlUtils type
             setXmlUtils(getXmlUtils(formattingValue.getDocumentType()));
-
+ 
             if (IWP.equals(formattingValue.getDocumentType())) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
@@ -88,7 +90,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         } catch (TransformerException | ParserConfigurationException | TransformerFactoryConfigurationError
             | SAXException | IOException e) {
             throw new FormattingException(TRANSFORMATION_ERROR, e);
-        }
+        } 
         
         if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
@@ -136,7 +138,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         if (!formattingDaoList.isEmpty()) {
             LocalDateTime timeDelay = null;
             // Get the timeDelay for new documents
-            if ("ND".equals(formatStatus)) {
+            if (NEWDOCUMENT.equals(formatStatus)) {
                 List<XhbConfigPropDao> configs = getXhbConfigPropRepository().findByPropertyName(FORMATTING_LIST_DELAY);
                 timeDelay = FormattingServiceUtils.getTimeDelay(configs);
             }
@@ -152,7 +154,7 @@ public class FormattingServices extends FormattingServicesProcessing {
 
     private boolean isNextDocumentValid(XhbFormattingDao formattingDao, LocalDateTime timeDelay) {
         // If this is a Formatting Error then try again
-        if ("FE".equals(formattingDao.getFormatStatus())) {
+        if (FORMATERROR.equals(formattingDao.getFormatStatus())) {
             return true;
         } else {
             // Get the lists by their xmlDocumentClobId

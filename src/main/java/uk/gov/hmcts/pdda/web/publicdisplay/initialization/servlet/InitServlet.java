@@ -37,10 +37,10 @@ public class InitServlet extends HttpServlet {
     private final EntityManagerFactory entityManagerFactory;
     private final Environment env;
     
-    public InitServlet(EntityManagerFactory entityManagerFactory, Environment env) {
+    public InitServlet(EntityManagerFactory entityManagerFactory, Environment environment) {
         super();
         this.entityManagerFactory = entityManagerFactory;
-        this.env = env;
+        this.env = environment;
     }
 
     /**

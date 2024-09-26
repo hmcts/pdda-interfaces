@@ -24,16 +24,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class PublicNoticeMaintainerTest {
 
-    private static final Integer COURT_ROOM_ID = Integer.valueOf(81);
+    private static final Integer COURT_ROOM_ID = 81;
     private static final String TRUE = "Result is not True";
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // No setup required
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // No teardown required
     }
 

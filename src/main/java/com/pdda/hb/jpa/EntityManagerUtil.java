@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.FlushModeType;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class EntityManagerUtil {
     private static final EntityManagerFactory ENTITYMANAGERFACTORY;
 

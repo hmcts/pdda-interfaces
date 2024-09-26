@@ -46,6 +46,7 @@ import java.util.Properties;
  * @see Scheduler
  * @author Bob Boothby, Will Fardell
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class SchedulerInitServlet extends HttpServlet implements ServletContextListener {
     private static final long serialVersionUID = 1L;
 
@@ -177,7 +178,7 @@ public class SchedulerInitServlet extends HttpServlet implements ServletContextL
      */
     private boolean schedulerServletDisabled() {
         String property = System.getProperty(DISABLE_SCHEDULER_SERVLET_KEY);
-        return property != null && property.equalsIgnoreCase("TRUE");
+        return property != null && "TRUE".equalsIgnoreCase(property);
     }
 
 }

@@ -28,12 +28,12 @@ class DocumentTypeTypeTest {
     private static final String TRUE = "Result is not True";
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         // Do nothing
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         // Do nothing
     }
 

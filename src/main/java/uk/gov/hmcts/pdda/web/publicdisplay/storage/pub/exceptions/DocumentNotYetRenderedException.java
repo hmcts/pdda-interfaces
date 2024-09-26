@@ -23,6 +23,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.storage.pub.Storeable;
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class DocumentNotYetRenderedException extends StoreException implements Fatal {
 
     private static final long serialVersionUID = 1L;

@@ -12,8 +12,8 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayUri;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.exceptions.InvalidUriFormatException;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,21 +31,21 @@ class DisplayUriTest {
     private final DisplayUri classUnderTest = new DisplayUri(COURTHOUSENAME, COURTSITECODE, LOCATION, DISPLAY);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
     @Test
     void testDisplayUrlEquals() {
         DisplayUri anotherOne = new DisplayUri("anotherOne", COURTSITECODE, LOCATION, DISPLAY);
-        assertFalse(Boolean.valueOf(classUnderTest.equals(anotherOne)), "Result is not False");
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), "Result is Null");
-        assertNotNull(Integer.valueOf(classUnderTest.compareTo(anotherOne)), "Result is Null");
+        assertNotEquals(classUnderTest, anotherOne, "Result is Equal");
+        assertEquals(18, classUnderTest.compareTo(anotherOne), "Result is not Equal");
+        assertNotEquals(classUnderTest.compareTo(anotherOne) * -1, classUnderTest.hashCode(), "Results are Equal");
     }
 
     @Test

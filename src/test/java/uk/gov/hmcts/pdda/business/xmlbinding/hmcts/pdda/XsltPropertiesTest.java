@@ -15,7 +15,6 @@ import uk.gov.hmcts.pdda.business.xmlbinding.hmcts.pdda.types.DocumentTypeType;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class XsltPropertiesTest {
 
     private static final String EQUALS = "Results are not Equal";
-    private static final String NOTNULL = "Result is Null";
     private static final String FALSE = "Result is not False";
     private static final String TRUE = "Result is not True";
     private static final String EMPTY_STRING = "";
@@ -32,12 +30,12 @@ class XsltPropertiesTest {
     private final XsltProperties classUnderTest = getClassUnderTest();
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         // Do nothing
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         // Do nothing
     }
 
@@ -54,7 +52,6 @@ class XsltPropertiesTest {
     void testTypeSettersGetters() {
         int arrayNo = classUnderTest.getXsltTransformCount();
         classUnderTest.setXsltTransform(classUnderTest.getXsltTransform());
-        assertNotNull(Integer.valueOf(classUnderTest.hashCode()), NOTNULL);
         assertEquals(arrayNo, classUnderTest.getXsltTransform().length, EQUALS);
         classUnderTest.addXsltTransform(getXsltTransform(DocumentTypeType.FL));
         classUnderTest.setXsltTransform(arrayNo - 1, getXsltTransform(DocumentTypeType.WL));

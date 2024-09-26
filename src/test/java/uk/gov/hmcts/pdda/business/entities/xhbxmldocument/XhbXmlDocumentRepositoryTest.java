@@ -14,7 +14,6 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -24,9 +23,6 @@ import static org.mockito.ArgumentMatchers.isA;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocumentDao> {
-
-    private static final String QUERY_CLOBID = "clobId";
-    private static final String QUERY_XMLDOCUMENTCLOBID = "xmlDocumentClobId";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -48,46 +44,31 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
     }
 
     @Test
-    void testFindDocumentByClobId() {
-        boolean result = testDocumentListBy(QUERY_CLOBID, getDummyDao());
-        assertTrue(result, NOT_TRUE);
-        result = testDocumentListBy(QUERY_CLOBID, null);
+    void testFindListByClobIdSuccess() {
+        boolean result = testFindListByClobId(getDummyDao());
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
-    void testFindListByXmlDocumentClobId() {
-        boolean result = testDocumentListBy(QUERY_XMLDOCUMENTCLOBID, getDummyDao());
-        assertTrue(result, NOT_TRUE);
-        result = testDocumentListBy(QUERY_XMLDOCUMENTCLOBID, null);
+    void testFindListByClobIdFailure() {
+        boolean result = testFindListByClobId(null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testDocumentListBy(String query, XhbXmlDocumentDao dao) {
+    private boolean testFindListByClobId(XhbXmlDocumentDao dao) {
         List<XhbXmlDocumentDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        Optional<XhbXmlDocumentDao> result = Optional.empty();
-        if (QUERY_CLOBID.equals(query)) {
-            List<XhbXmlDocumentDao> resultList = (List<XhbXmlDocumentDao>) getClassUnderTest()
-                .findDocumentByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
-            assertNotNull(resultList, NOTNULL);
-            result = resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
-        } else if (QUERY_XMLDOCUMENTCLOBID.equals(query)) {
-            Mockito
-                .when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyDao().getXmlDocumentClobId()))
-                .thenReturn(dao);
-            result = (Optional<XhbXmlDocumentDao>) getClassUnderTest()
-                .findByXmlDocumentClobId(getDummyDao().getXmlDocumentClobId());
-        }
-        assertNotNull(result, NOTNULL);
+        List<XhbXmlDocumentDao> result = getClassUnderTest()
+            .findDocumentByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
+        assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(), SAME);
+            assertSame(dao, result.get(0), "Result is not Same");
         } else {
-            assertSame(Optional.empty(), result, SAME);
+            assertSame(0, result.size(), "Result is not Same");
         }
         return true;
     }
@@ -101,12 +82,12 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         String status = "status";
         LocalDateTime expiryDate = LocalDateTime.now();
         String documentType = "documentType";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbXmlDocumentDao result = new XhbXmlDocumentDao();
         result.setXmlDocumentId(xmlDocumentId);
         result.setDateCreated(dateCreated);

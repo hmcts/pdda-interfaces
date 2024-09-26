@@ -22,6 +22,7 @@ import java.util.Locale;
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: TranslationBundlesFactory.java,v 1.1 2005/12/01 15:19:56 bzjrnl Exp $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public abstract class TranslationBundlesFactory {
     private static TranslationBundlesFactory instance;
 

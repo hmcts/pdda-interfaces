@@ -10,6 +10,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class CathUtils {
 
     private static final String APIM_ENABLED = "apim.enabled";
@@ -34,8 +35,8 @@ public final class CathUtils {
     public static HttpRequest getHttpPostRequest(String url,
         CourtelJson courtelJson) {
         // Get the times
-        String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
-        String nextMonth = CathUtils.getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
+        String now = getDateTimeAsString(courtelJson.getContentDate());
+        String nextMonth = getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
         // Get the bearer token
         String bearerToken = String.format(BEARER, courtelJson.getToken());
         // Return the HttpRequest for the post

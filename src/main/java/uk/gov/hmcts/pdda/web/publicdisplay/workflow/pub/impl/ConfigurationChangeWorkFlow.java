@@ -26,6 +26,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class ConfigurationChangeWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Creates a new ConfigurationChangeWorkFlow object.
@@ -41,9 +42,9 @@ public class ConfigurationChangeWorkFlow extends AbstractBasicWorkFlow {
         // Pass the event to the configuration to establish the exact
         // display documents and rotation sets to be re-rendered.
         DisplayConfigurationReader configurationReader =
-            getContext().getDisplayConfigurationReader();
+            super.getContext().getDisplayConfigurationReader();
         RenderChanges renderChanges = configurationReader.getRenderChanges(change);
-        setRenderChanges(renderChanges);
+        super.setRenderChanges(renderChanges);
     }
 
     /**

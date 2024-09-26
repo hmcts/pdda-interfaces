@@ -7,6 +7,7 @@ import uk.gov.hmcts.framework.exception.Message;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import java.util.Locale;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class LocaleServices {
 
     /**
@@ -100,7 +102,7 @@ public final class LocaleServices {
             }
         }
         throw new CsUnrecoverableException(
-            new Message(LOOKUP_RESOURCE_ERROR_KEY, new Object[] {name, locale}),
+            new Message(LOOKUP_RESOURCE_ERROR_KEY, name, locale),
             "Could not open resource \"" + name + "\" in locale \"" + locale + "\"");
     }
 
@@ -124,15 +126,19 @@ public final class LocaleServices {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Opening stream for candidate: {}", candidate);
                 }
-                return new URL(candidate).openStream();
+                return createNewUrl(candidate).openStream();
             } catch (IOException ex) {
                 // Could not open stream try next
                 LOG.debug("Ignored - IOException");
             }
         }
         throw new CsUnrecoverableException(
-            new Message(LOOKUP_URL_ERROR_KEY, new Object[] {url, locale}),
+            new Message(LOOKUP_URL_ERROR_KEY, url, locale),
             "Could not open url \"" + url + "\" in locale \"" + locale + "\"");
+    }
+    
+    private URL createNewUrl(String candidate) throws MalformedURLException {
+        return new URL(candidate);
     }
 
     /**

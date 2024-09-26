@@ -26,15 +26,15 @@ public final class DummyPublicDisplayUtil {
     }
 
     public static XhbPublicNoticeDao getXhbPublicNoticeDao() {
-        Integer publicNoticeId = Integer.valueOf(-1);
+        Integer publicNoticeId = -1;
         String publicNoticeDesc = "publicNoticeDesc";
-        Integer courtId = Integer.valueOf(-1);
-        Integer definitivePnId = Integer.valueOf(-1);
+        Integer courtId = -1;
+        Integer definitivePnId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbPublicNoticeDao result = new XhbPublicNoticeDao(publicNoticeId, publicNoticeDesc, courtId, lastUpdateDate,
             creationDate, lastUpdatedBy, createdBy, version, definitivePnId);
         publicNoticeId = result.getPrimaryKey();
@@ -44,14 +44,14 @@ public final class DummyPublicDisplayUtil {
     }
 
     public static XhbDefinitivePublicNoticeDao getXhbDefinitivePublicNoticeDao() {
-        Integer definitivePnId = Integer.valueOf(-1);
+        Integer definitivePnId = -1;
         String definitivePnDesc = "definitivePnDesc";
-        Integer priority = Integer.valueOf(-1);
+        Integer priority = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDefinitivePublicNoticeDao result = new XhbDefinitivePublicNoticeDao(definitivePnId, definitivePnDesc,
             priority, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         definitivePnId = result.getPrimaryKey();
@@ -60,14 +60,14 @@ public final class DummyPublicDisplayUtil {
     }
     
     public static XhbDisplayLocationDao getXhbDisplayLocationDao() {
-        Integer displayLocationId = Integer.valueOf(-1);
+        Integer displayLocationId = -1;
         String descriptionCode = DESCRIPTIONCODE;
-        Integer courtSiteId = Integer.valueOf(-1);
+        Integer courtSiteId = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDisplayLocationDao result = new XhbDisplayLocationDao(displayLocationId, descriptionCode, courtSiteId,
             lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         displayLocationId = result.getPrimaryKey();
@@ -76,17 +76,17 @@ public final class DummyPublicDisplayUtil {
     }
 
     public static XhbDisplayDao getXhbDisplayDao() {
-        Integer displayId = Integer.valueOf(-1);
-        Integer displayTypeId = Integer.valueOf(-1);
-        Integer displayLocationId = Integer.valueOf(-1);
-        Integer rotationSetId = Integer.valueOf(-1);
+        Integer displayId = -1;
+        Integer displayTypeId = -1;
+        Integer displayLocationId = -1;
+        Integer rotationSetId = -1;
         String descriptionCode = DESCRIPTIONCODE;
         String locale = "GB_en";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String showUnassignedYN = "N";
         XhbDisplayDao result = new XhbDisplayDao();
         result.setDisplayId(displayId);
@@ -109,20 +109,20 @@ public final class DummyPublicDisplayUtil {
     }
 
     public static XhbDisplayTypeDao getXhbDisplayTypeDao() {
-        Integer displayTypeId = Integer.valueOf(-1);
+        Integer displayTypeId = -1;
         String descriptionCode = DESCRIPTIONCODE;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDisplayTypeDao result = new XhbDisplayTypeDao(displayTypeId, descriptionCode, lastUpdateDate, creationDate,
             lastUpdatedBy, createdBy, version);
         return new XhbDisplayTypeDao(result);
     }
     
     public static XhbDisplayDocumentDao getXhbDisplayDocumentDao() {
-        Integer displayDocumentId = Integer.valueOf(-1);
+        Integer displayDocumentId = -1;
         Integer defaultPageDelay = 10;
         String descriptionCode = DESCRIPTIONCODE;
         String multipleCourtYn = "N";
@@ -132,7 +132,7 @@ public final class DummyPublicDisplayUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(15);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(2);
+        Integer version = 2;
 
         XhbDisplayDocumentDao result = new XhbDisplayDocumentDao();
         result.setDisplayDocumentId(displayDocumentId);
@@ -150,16 +150,16 @@ public final class DummyPublicDisplayUtil {
     }
 
     public static XhbRotationSetDdDao getXhbRotationSetDdDao() {
-        Integer rotationSetDdId = Integer.valueOf(-1);
-        Integer rotationSetId = Integer.valueOf(-1);
-        Integer displayDocumentId = Integer.valueOf(-1);
-        Integer pageDelay = Integer.valueOf(-1);
-        Integer ordering = Integer.valueOf(-1);
+        Integer rotationSetDdId = -1;
+        Integer rotationSetId = -1;
+        Integer displayDocumentId = -1;
+        Integer pageDelay = -1;
+        Integer ordering = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbRotationSetDdDao result = new XhbRotationSetDdDao();
         result.setRotationSetDdId(rotationSetDdId);
         result.setRotationSetId(rotationSetId);
@@ -179,21 +179,21 @@ public final class DummyPublicDisplayUtil {
     
     public static XhbDisplayCourtRoomDao getXhbDisplayCourtRoomDao() {
         XhbDisplayCourtRoomDao result = new XhbDisplayCourtRoomDao();
-        result.setDisplayId(Integer.valueOf(-1));
-        result.setCourtRoomId(Integer.valueOf(-1));
+        result.setDisplayId(-1);
+        result.setCourtRoomId(-1);
         return new XhbDisplayCourtRoomDao(result);
     }
     
     public static XhbRotationSetsDao getXhbRotationSetsDao() {
-        Integer rotationSetsId = Integer.valueOf(-1);
-        Integer courtId = Integer.valueOf(-1);
+        Integer rotationSetsId = -1;
+        Integer courtId = -1;
         String description = "description";
         String defaultYn = "defaultYn";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbRotationSetsDao result = new XhbRotationSetsDao();
         result.setRotationSetId(rotationSetsId);
         result.setCourtId(courtId);

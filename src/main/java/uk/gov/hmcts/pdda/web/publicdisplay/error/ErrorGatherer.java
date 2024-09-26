@@ -11,6 +11,7 @@ import java.util.List;
  * 
  * @author pznwc5
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public final class ErrorGatherer implements Serializable {
 
     private static final long serialVersionUID = 1L;

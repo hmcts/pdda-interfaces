@@ -39,7 +39,7 @@ public final class DateUtils {
     }
 
     public static String get2digits(int valueIn) {
-        Integer value = Integer.valueOf(100 + valueIn);
+        Integer value = 100 + valueIn;
         String result = value.toString().substring(1, 3);
         LOG.debug("getMinutes = {}", result);
         return result;

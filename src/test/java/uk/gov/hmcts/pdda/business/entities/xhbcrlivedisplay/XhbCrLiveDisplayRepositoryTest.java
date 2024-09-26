@@ -40,15 +40,15 @@ class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDis
     @Override
     protected XhbCrLiveDisplayDao getDummyDao() {
         Integer crLiveDisplayId = getDummyId();
-        Integer courtRoomId = Integer.valueOf(-1);
-        Integer scheduledHearingId = Integer.valueOf(-1);
+        Integer courtRoomId = -1;
+        Integer scheduledHearingId = -1;
         LocalDateTime timeStatusSet = LocalDateTime.now();
         String status = "status";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbCrLiveDisplayDao result = new XhbCrLiveDisplayDao();
         result.setCrLiveDisplayId(crLiveDisplayId);
         result.setCourtRoomId(courtRoomId);

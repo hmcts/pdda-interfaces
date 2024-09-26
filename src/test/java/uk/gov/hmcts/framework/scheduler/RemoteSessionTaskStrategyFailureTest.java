@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-class LocaleServicesFailuresTest {
+class RemoteSessionTaskStrategyFailureTest {
 
     private static final String TESTSCHEDULENAME = "TestScheduleName";
     private static final String NULL = "Result is Null";
@@ -46,12 +46,12 @@ class LocaleServicesFailuresTest {
     private final RemoteSessionTaskStrategy classUnderTest = new RemoteSessionTaskStrategy(mockEntityManager);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

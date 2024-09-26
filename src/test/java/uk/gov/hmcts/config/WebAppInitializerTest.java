@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.framework.scheduler.web.SchedulerInitServlet;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitServlet;
 
@@ -33,6 +34,9 @@ class WebAppInitializerTest {
 
     @Mock
     private ServletRegistration.Dynamic mockSchedulerInitServlet;
+    
+    @Mock
+    private Environment mockEnvironment;
 
     @Test
     void testDefaultConstructor() {
@@ -44,7 +48,7 @@ class WebAppInitializerTest {
         Mockito.atMostOnce();
         boolean result = false;
         try {
-            new WebAppInitializer(mockEntityManagerFactory).onStartup(mockServletContext);
+            new WebAppInitializer(mockEntityManagerFactory, mockEnvironment).onStartup(mockServletContext);
             result = true;
         } catch (Exception exception) {
             fail(exception);

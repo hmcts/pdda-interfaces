@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
+@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class ListJson extends CourtelJson {
 
     private ListType listType;

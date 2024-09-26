@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.formatting;
 
 import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
+import org.easymock.EasyMock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.xml.sax.ContentHandler;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -79,7 +79,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.LawOfDemeter"})
 class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestHelper {
 
     private static final String COURTSITE_END_TAG = "      </courtsite>\r\n";
@@ -286,14 +287,9 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     @Mock
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
 
-    @Mock
-    private CourtelHelper mockCourtelHelper;
-
-    @Mock
-    private BlobHelper mockBlobHelper;
-
     @InjectMocks
-    private FormattingServices classUnderTest;
+    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager,
+        EasyMock.createMock(CourtelHelper.class), EasyMock.createMock(BlobHelper.class));
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";
@@ -301,31 +297,13 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(CsServices.class);
         Mockito.mockStatic(TransformerFactory.class);
-        classUnderTest =
-            new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
-            mockXhbConfigPropRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
-            mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
-        ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
-        ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
-        ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
-            mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
-            mockXhbCppFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
-            mockXhbFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
-            mockXhbCppFormattingMergeRepository);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -395,7 +373,8 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     }
 
     @Test
-    void testProcessIwpDocumentFormattingException() throws IOException, TransformerException {
+    void testProcessIwpDocumentFormattingException()
+        throws IOException, TransformerException {
         // Setup
         XhbClobDao xhbClobDao =
             DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), INTERNET_WEBPAGE);

@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
@@ -41,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class PddaHelperValidationTest {
     
     private static final String SAME = "Result is not Same";
+    private static final String FALSE = "Result is not False";
     private static final String[] VALID_CP_MESSAGE_TYPE = {"DailyList", "WarnList"};
     private static final String FILE_CONTENTS = " file contents";
 
@@ -73,6 +75,16 @@ class PddaHelperValidationTest {
         boolean actualResult = testValidationCrestCourt(false);
         // Checks
         assertSame(expectedResult, actualResult, SAME);
+    }
+    
+    @Test 
+    void testValidateDateTimeInvalidLength() {
+        assertFalse(cpValidationUnderTest.validateDateTime("01"), FALSE);
+    }
+    
+    @Test 
+    void testValidateDateTimeInvalidFormat() {
+        assertFalse(cpValidationUnderTest.validateDateTime("*%@*%@*%@*%@*%"), FALSE);
     }
     
     private boolean testValidationCrestCourt(boolean isSuccessTest) {

@@ -25,7 +25,7 @@ public final class DummyDefendantUtil {
     }
 
     public static XhbDefendantDao getXhbDefendantDao() {
-        Integer defendantId = Integer.valueOf(-1);
+        Integer defendantId = -1;
         String firstName = "firstName";
         String middleName = "middleName";
         String surname = "surname";
@@ -34,7 +34,7 @@ public final class DummyDefendantUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbDefendantDao result = new XhbDefendantDao();
         result.setDefendantId(defendantId);
         result.setFirstName(firstName);
@@ -53,20 +53,20 @@ public final class DummyDefendantUtil {
     
     public static XhbDefendantOnCaseDao getXhbDefendantOnCaseDao() {
         XhbDefendantOnCaseDao result = new XhbDefendantOnCaseDao();
-        result.setDefendantOnCaseId(Integer.valueOf(-1));
-        result.setNoOfTics(Integer.valueOf(-1));
-        result.setFinalDrivingLicenceStatus(Integer.valueOf(-1));
+        result.setDefendantOnCaseId(-1);
+        result.setNoOfTics(-1);
+        result.setFinalDrivingLicenceStatus(-1);
         result.setPtiurn("ptiurn");
         result.setIsJuvenile("juvenile");
         result.setIsMasked("masked");
         result.setMaskedName("maskedName");
-        result.setCaseId(Integer.valueOf(-1));
-        result.setDefendantId(Integer.valueOf(-1));
+        result.setCaseId(-1);
+        result.setDefendantId(-1);
         result.setResultsVerified("resultsVerified");
-        result.setDefendantNumber(Integer.valueOf(-1));
+        result.setDefendantNumber(-1);
         result.setDateOfCommittal(LocalDateTime.now());
         result.setPncId("pncId");
-        result.setCollectMagistrateCourtId(Integer.valueOf(-1));
+        result.setCollectMagistrateCourtId(-1);
         result.setCurrentBcStatus("currentBcStatus");
         result.setAsn("asn");
         result.setBenchWarrantExecDate(LocalDateTime.now());
@@ -106,13 +106,13 @@ public final class DummyDefendantUtil {
         result.setCacdAppealResult(LocalDateTime.now());
         result.setCoaStatus("coaStatus");
         result.setCtlApplies("ctlApplies");
-        result.setDarRetentionPolicyId(Integer.valueOf(-1));
+        result.setDarRetentionPolicyId(-1);
         result.setObsInd("N");
         result.setLastUpdateDate(LocalDateTime.now());
         result.setCreationDate(LocalDateTime.now().minusMinutes(1));
         result.setLastUpdatedBy(TEST2);
         result.setCreatedBy(TEST1);
-        result.setVersion(Integer.valueOf(3));
+        result.setVersion(3);
         Integer defendantOnCaseId = result.getPrimaryKey();
         assertNotNull(defendantOnCaseId, NOTNULL);
     }

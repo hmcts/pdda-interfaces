@@ -200,7 +200,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         boolean result = false;
         List<XhbCaseReferenceDao> caseReferenceDaos =
             getXhbCaseReferenceRepository().findByCaseId(caseId);
-        Integer trueInt = Integer.valueOf(1);
+        Integer trueInt = 1;
         if (!caseReferenceDaos.isEmpty()) {
             for (XhbCaseReferenceDao caseReferenceDao : caseReferenceDaos) {
                 if (trueInt.equals(caseReferenceDao.getReportingRestrictions())) {

@@ -45,7 +45,7 @@ public final class DisplayDocumentUriUtils  {
     public static int[] getCourtRoomIdsArray(List<Integer> courtIdList) {
         int[] courtRoomIds = new int[courtIdList.size()];
         for (int i = 0; i < courtRoomIds.length; i++) {
-            courtRoomIds[i] = courtIdList.get(i).intValue();
+            courtRoomIds[i] = courtIdList.get(i);
         }
         Arrays.sort(courtRoomIds);
         return courtRoomIds;

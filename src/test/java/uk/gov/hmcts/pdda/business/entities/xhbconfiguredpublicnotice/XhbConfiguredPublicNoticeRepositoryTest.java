@@ -63,7 +63,7 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbConfiguredPublicNoticeDao> result = (List<XhbConfiguredPublicNoticeDao>) getClassUnderTest()
+        List<XhbConfiguredPublicNoticeDao> result = getClassUnderTest()
             .findByDefinitivePnCourtRoomValue(getDummyDao().getCourtRoomId(), getDummyDao().getPublicNoticeId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -93,7 +93,7 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbConfiguredPublicNoticeDao> result = (List<XhbConfiguredPublicNoticeDao>) getClassUnderTest()
+        List<XhbConfiguredPublicNoticeDao> result = getClassUnderTest()
             .findActiveCourtRoomNotices(getDummyDao().getCourtRoomId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -114,7 +114,7 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
 
         XhbConfiguredPublicNoticeDao result = new XhbConfiguredPublicNoticeDao(configuredPublicNoticeId, activeString,
             courtRoomId, publicNoticeId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);

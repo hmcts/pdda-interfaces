@@ -84,7 +84,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {
         LOG.debug("refreshPublicDisplaysForCourt({})", courtId);
-        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId.intValue(), true);
+        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         getPublicDisplayNotifier().sendMessage(ccEvent);
     }

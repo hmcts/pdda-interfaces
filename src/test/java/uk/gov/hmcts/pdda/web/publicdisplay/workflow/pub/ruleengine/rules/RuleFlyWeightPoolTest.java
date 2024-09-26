@@ -27,11 +27,11 @@ class RuleFlyWeightPoolTest {
     private final RuleFlyweightPool classUnderTest = RuleFlyweightPool.getInstance();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
     }
 
     @Test

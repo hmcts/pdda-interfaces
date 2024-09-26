@@ -25,6 +25,16 @@ java:
           alias: AZURE_CLIENT_SECRET
         - name: public-display-data-aggregator-authentication-tenantID
           alias: AZURE_TENANT_ID
+        - name: public-display-data-aggregator-BAIS-SFTP-HOSTNAME
+          alias: PDDA_BAIS_SFTP_HOSTNAME
+        - name: public-display-data-aggregator-BAIS-CP-SFTP-USERNAME
+          alias: PDDA_BAIS_CP_SFTP_USERNAME
+        - name: public-display-data-aggregator-BAIS-CP-SFTP-PASSWORD
+          alias: PDDA_BAIS_CP_SFTP_PASSWORD
+        - name: public-display-data-aggregator-BAIS-SFTP-USERNAME
+          alias: PDDA_BAIS_SFTP_USERNAME
+        - name: public-display-data-aggregator-BAIS-SFTP-PASSWORD
+          alias: PDDA_BAIS_SFTP_PASSWORD
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: false
     APIM_URI: https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management

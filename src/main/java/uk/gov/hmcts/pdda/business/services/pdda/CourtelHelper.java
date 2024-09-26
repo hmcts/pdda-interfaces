@@ -85,7 +85,7 @@ public class CourtelHelper {
                 xhbCourtelListDao.setXmlDocumentClobId(xmlDocumentClobId);
                 xhbCourtelListDao.setBlobId(blobId);
                 xhbCourtelListDao.setSentToCourtel(NO);
-                xhbCourtelListDao.setNumSendAttempts(Integer.valueOf(0));
+                xhbCourtelListDao.setNumSendAttempts(0);
                 // Write to Courtel
                 xhbCourtelListRepository.save(xhbCourtelListDao);
             }

@@ -61,7 +61,7 @@ class CourtelHelperTest {
     private CourtelHelper classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
@@ -203,9 +203,9 @@ class CourtelHelperTest {
     void testGetCourtelList() {
         // Setup
         List<XhbCourtelListDao> xhbCourtelListDaoList = new ArrayList<>();
-        final Integer courtelMaxRetry = Integer.valueOf(5);
-        final Integer courtelLookupDelay = Integer.valueOf(2);
-        final Integer courtelLisAmount = Integer.valueOf(20);
+        final Integer courtelMaxRetry = 5;
+        final Integer courtelLookupDelay = 2;
+        final Integer courtelLisAmount = 20;
         // Expects
         EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
             .andReturn(courtelMaxRetry.toString());

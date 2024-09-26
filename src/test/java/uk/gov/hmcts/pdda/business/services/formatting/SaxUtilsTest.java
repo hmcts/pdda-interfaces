@@ -59,7 +59,7 @@ class SaxUtilsTest {
     void testCreateSource()
         throws TransformerException, SAXException, ParserConfigurationException, IOException {
         // Setup
-        XMLFilter[] filters = {(XMLFilter) mockXmlFilterImpl, (XMLFilter) mockXmlFilterImpl};
+        XMLFilter[] filters = {mockXmlFilterImpl, mockXmlFilterImpl};
         TemplatesAdapter[] templates = {mockTemplatesAdapter, mockTemplatesAdapter};
         Mockito.when(mockXslServices.getFilters(templates))
             .thenReturn(filters);

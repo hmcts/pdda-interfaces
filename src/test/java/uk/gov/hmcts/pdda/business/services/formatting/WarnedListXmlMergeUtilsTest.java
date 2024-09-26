@@ -7,10 +7,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import javax.xml.xpath.XPathExpressionException;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * <p>
@@ -38,12 +41,16 @@ class WarnedListXmlMergeUtilsTest {
     private static WarnedListXmlMergeUtils classUnderTest;
 
     @BeforeAll
-    public static void setUp() throws Exception {
-        classUnderTest = new WarnedListXmlMergeUtils();
+    public static void setUp() {
+        try {
+            classUnderTest = new WarnedListXmlMergeUtils();
+        } catch (XPathExpressionException ex) {
+            fail(ex.getMessage());
+        }
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

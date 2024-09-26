@@ -51,12 +51,12 @@ class ActiveCasesInRoomQueryTest {
         new ActiveCasesInRoomQuery(mockEntityManager, mockXhbScheduledHearingRepository);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -90,9 +90,9 @@ class ActiveCasesInRoomQueryTest {
 
     private boolean testGetDataNoList(List<XhbScheduledHearingDao> xhbScheduledHearingDaoList) {
         // Setup
-        Integer listId = Integer.valueOf(-1);
-        Integer courtRoomId = Integer.valueOf(81);
-        Integer scheduledHearingId = Integer.valueOf(-1);
+        Integer listId = -1;
+        Integer courtRoomId = 81;
+        Integer scheduledHearingId = -1;
 
         // Expects
         EasyMock.expect(mockXhbScheduledHearingRepository.findActiveCasesInRoom(EasyMock.isA(Integer.class),

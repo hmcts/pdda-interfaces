@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
  * @editors Frederik Vandendriessche - changed BUNDLE_BASENAME accessibility to public so other
  *          components may read from the bundle root.
  */
+@SuppressWarnings({"PMD.AvoidSynchronizedStatement","PMD.DoNotUseThreads"})
 public final class ConfigServicesImpl implements ConfigServices {
 
     private static ConfigServicesImpl instance = new ConfigServicesImpl();
@@ -195,7 +196,7 @@ public final class ConfigServicesImpl implements ConfigServices {
     @Override
     public ResourceBundle getBundle(String baseName) {
 
-        return ResourceBundle.getBundle(ConfigServicesImpl.BUNDLE_BASENAME + baseName);
+        return ResourceBundle.getBundle(BUNDLE_BASENAME + baseName);
     }
 
     /**
@@ -215,9 +216,9 @@ public final class ConfigServicesImpl implements ConfigServices {
 
         String errMsg;
         try {
-            return ResourceBundle.getBundle(ConfigServicesImpl.BUNDLE_BASENAME + baseName, locale);
+            return ResourceBundle.getBundle(BUNDLE_BASENAME + baseName, locale);
         } catch (MissingResourceException e) {
-            errMsg = "Resource bundle " + ConfigServicesImpl.BUNDLE_BASENAME + baseName 
+            errMsg = "Resource bundle " + BUNDLE_BASENAME + baseName 
                 + "_" + locale + " not available";
             CsConfigurationException ex = new CsConfigurationException(errMsg, e);
             CsServices.getDefaultErrorHandler().handleError(ex, ConfigServicesImpl.class, errMsg);
@@ -239,7 +240,7 @@ public final class ConfigServicesImpl implements ConfigServices {
      */
     @Override
     public ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader) {
-        return ResourceBundle.getBundle(ConfigServicesImpl.BUNDLE_BASENAME + baseName, locale, loader);
+        return ResourceBundle.getBundle(BUNDLE_BASENAME + baseName, locale, loader);
     }
 
 }

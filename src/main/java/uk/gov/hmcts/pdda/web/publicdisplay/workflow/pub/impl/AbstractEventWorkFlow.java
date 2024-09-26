@@ -28,6 +28,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.RulesEngine;
  * @author Rakesh Lakhani
  * @version $Id: AbstractEventWorkFlow.java,v 1.3 2006/06/05 12:32:36 bzjrnl Exp $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public abstract class AbstractEventWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Creates a new AbstractEventWorkFlow object.

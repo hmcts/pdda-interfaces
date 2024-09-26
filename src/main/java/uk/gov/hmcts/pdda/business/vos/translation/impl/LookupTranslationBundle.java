@@ -258,7 +258,7 @@ public class LookupTranslationBundle extends AbstractTranslationBundle {
     }
 
     private static boolean equalTo(Object o1, Object o2) {
-        return o1 == null ? o2 == null : o2 != null && o1.equals(o2);
+        return o1 == null ? o2 == null : o1.equals(o2);
     }
 
     //

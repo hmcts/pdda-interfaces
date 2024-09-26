@@ -1,5 +1,6 @@
 package uk.gov.hmcts.framework.exception;
 
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public abstract class AbstractCsException extends RuntimeException implements CsException {
 
     private static final long serialVersionUID = 1L;

@@ -33,6 +33,7 @@ import javax.xml.parsers.SAXParserFactory;
  * @version $Id: RulesConfiguration.java,v 1.4 2006/06/05 12:32:37 bzjrnl Exp $
  */
 
+@SuppressWarnings("PMD.LawOfDemeter")
 public class RulesConfiguration {
 
     /**

@@ -64,7 +64,7 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayDao> result =
-            (List<XhbDisplayDao>) getClassUnderTest().findByRotationSetId(getDummyDao().getRotationSetId());
+            getClassUnderTest().findByRotationSetId(getDummyDao().getRotationSetId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -93,8 +93,8 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbDisplayDao> result =
-            (List<XhbDisplayDao>) getClassUnderTest().findByDisplayLocationId(getDummyDao().getDisplayLocationId());
+        List<XhbDisplayDao> result = getClassUnderTest()
+            .findByDisplayLocationId(getDummyDao().getDisplayLocationId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -107,16 +107,16 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
     @Override
     protected XhbDisplayDao getDummyDao() {
         Integer displayId = getDummyId();
-        Integer displayTypeId = Integer.valueOf(-1);
-        Integer displayLocationId = Integer.valueOf(-1);
-        Integer rotationSetId = Integer.valueOf(-1);
+        Integer displayTypeId = -1;
+        Integer displayLocationId = -1;
+        Integer rotationSetId = -1;
         String descriptionCode = "descriptionCode";
         String locale = "GB_en";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String showUnassignedYN = "N";
         XhbDisplayDao result = new XhbDisplayDao();
         result.setDisplayId(displayId);

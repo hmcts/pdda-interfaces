@@ -13,6 +13,7 @@ import java.net.URL;
  * Resolves the entities name to a file in the entities dir. This uses the last part of the url
  * following a / or a space! The later is to support the current names of schemas.
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public class FileEntityResolver implements EntityResolver {
     /**
      * The class's logger.

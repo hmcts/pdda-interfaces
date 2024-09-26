@@ -48,7 +48,7 @@ import java.util.Optional;
  * @author Rakesh Lakhani
  * @version $Id: DisplayConfigurationHelper.java,v 1.6 2005/11/17 10:55:46 bzjrnl Exp $
  */
-
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class DisplayConfigurationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DisplayConfigurationHelper.class);
@@ -259,7 +259,7 @@ public class DisplayConfigurationHelper {
     private static void sendNotification(final Integer displayId, final XhbDisplayDao displayLocal,
         final Integer courtId, PublicDisplayNotifier notifier) {
         LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
-        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId.intValue(), displayId.intValue());
+        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId, displayId);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }

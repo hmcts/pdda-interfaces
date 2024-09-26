@@ -10,6 +10,8 @@ public final class AppendEventsTwentyNineHundredExcessUtils {
     private static final String SPACE = " ";
     private static final String EMPTY_STRING = "";
     private static final String WITNESS_NUMBER = "Witness_Number";
+    private static final String E20935_DEFENDANT_READ = "E20935_Defendant_Read";
+    private static final String E20904_INTERPRETER_SWORN = "E20904_Interpreter_sworn";
 
     private AppendEventsTwentyNineHundredExcessUtils() {
     }
@@ -53,9 +55,9 @@ public final class AppendEventsTwentyNineHundredExcessUtils {
         BranchEventXmlNode wsOptions = (BranchEventXmlNode) node.get("E20935_Witness_Read_Options");
         String wsoType = ((LeafEventXmlNode) wsOptions.get("E20935_WR_Type")).getValue();
 
-        if ("E20935_Defendant_Read".equals(wsoType)) {
+        if (E20935_DEFENDANT_READ.equals(wsoType)) {
             AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Defendant_Read"));
-        } else if ("E20904_Interpreter_sworn".equals(wsoType)) {
+        } else if (E20904_INTERPRETER_SWORN.equals(wsoType)) {
             AppendUtils.append(buffer,
                 TranslationUtils.translate(documentI18n, "Interpreter_Read"));
         } else {

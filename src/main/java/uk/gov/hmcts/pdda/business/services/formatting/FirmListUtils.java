@@ -55,11 +55,11 @@ public final class FirmListUtils {
     
     public static Node getCourtNodeNodeBeforeInsert(Node courtListsNode, Node courtNodeToMerge) {
         Node result = null;
-        String sittingDateToMerge = FirmListUtils.getSittingDateFromCourtNode(courtNodeToMerge);
+        String sittingDateToMerge = getSittingDateFromCourtNode(courtNodeToMerge);
         if (sittingDateToMerge != null) {
             for (int nodeNo = 0; nodeNo < courtListsNode.getChildNodes().getLength(); nodeNo++) {
                 Node courtListNode = courtListsNode.getChildNodes().item(nodeNo);
-                String sittingDate = FirmListUtils.getSittingDateFromCourtNode(courtListNode);
+                String sittingDate = getSittingDateFromCourtNode(courtListNode);
                 if (sittingDate != null && sittingDateToMerge.compareTo(sittingDate) < 0) {
                     result = courtListNode;
                     break;
@@ -98,11 +98,11 @@ public final class FirmListUtils {
      */
     public static List<Node> sortCourtLists(List<Node> results) {
 
-        Comparator<Node> courtListComparator = new Comparator<Node>() {
+        Comparator<Node> courtListComparator = new Comparator<>() {
             @Override
             public int compare(Node o1, Node o2) {
-                String o1Date = FirmListUtils.getSittingAttribute(o1);
-                String o2Date = FirmListUtils.getSittingAttribute(o2);
+                String o1Date = getSittingAttribute(o1);
+                String o2Date = getSittingAttribute(o2);
                 if (o1Date != null && o2Date != null) {
                     return o1Date.compareTo(o2Date);
                 } else if (o2Date == null) {

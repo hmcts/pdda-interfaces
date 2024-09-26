@@ -26,7 +26,7 @@ import javax.xml.transform.TransformerException;
  * FormattingServicesProcessing.
  */
 
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 public abstract class FormattingServicesProcessing extends AbstractFormattingServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServicesProcessing.class);
@@ -75,7 +75,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         try {
             XhbCppListDao cppList =
                 getXhbCppListRepository().findByClobId(formattingValue.getXmlDocumentClobId());
-
+ 
             // Set In progress (if it isn't already at IP - ie a crash)
             if (!IP.equals(cppList.getStatus())) {
                 // Clear the previous merge attempts and set in progress

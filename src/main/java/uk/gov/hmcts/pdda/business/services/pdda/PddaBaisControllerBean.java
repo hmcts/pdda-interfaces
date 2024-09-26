@@ -36,8 +36,8 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
 
     private static final Logger LOG = LoggerFactory.getLogger(PddaBaisControllerBean.class);
     private static final String LOG_CALLED = " called";
+    private static final String TWO_PARAMS = "{}{}";
 
-    private String methodName;
     private PddaHelper pddaHelper;
 
     public PddaBaisControllerBean(EntityManager entityManager) {
@@ -65,8 +65,8 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
      * </p>
      */
     public void retrieveFromBaisCP() {
-        methodName = "retrieveFromBaisCP()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "retrieveFromBaisCP()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         getPddaHelper().retrieveFromBaisCp();
     }
 
@@ -76,8 +76,8 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
      * </p>
      */
     public void retrieveFromBaisXhibit() {
-        methodName = "retrieveFromBaisXhibit()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "retrieveFromBaisXhibit()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         getPddaHelper().retrieveFromBaisXhibit();
     }
 

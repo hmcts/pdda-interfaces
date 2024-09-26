@@ -30,12 +30,12 @@ class XslServicesTest {
     private final XslServices classUnderTest = XslServices.getInstance();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(TransformerFactory.class);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 

@@ -35,6 +35,8 @@ public final class PublicNoticeSelectionManipulator {
 
     private static final Logger LOG =
         LoggerFactory.getLogger(PublicNoticeSelectionManipulator.class);
+    
+    private static final String LOG_BRACKETS = "{}{}{}";
 
     private static PublicNoticeXmlHelper publicNoticeXmlHelper =
         PublicNoticeXmlHelper.getInstance();
@@ -98,9 +100,9 @@ public final class PublicNoticeSelectionManipulator {
     public static boolean manipulateSelection(CourtLogSubscriptionValue courtLogSubscriptionValue) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(
-                "10 : Entering manipulateSelection courtLogSubscriptionValue.getCourtRoomId() "
-                    + courtLogSubscriptionValue.getCourtRoomId());
+            LOG.debug("{}{}",
+                "10 : Entering manipulateSelection courtLogSubscriptionValue.getCourtRoomId() ",
+                    courtLogSubscriptionValue.getCourtRoomId());
         }
 
         // get the court court room Id
@@ -111,7 +113,7 @@ public final class PublicNoticeSelectionManipulator {
 
         // get which definitive notice to update
         if (LOG.isDebugEnabled()) {
-            LOG.debug(" 20 : l_xhbCourtRoomId = " + courtRoomId + " l_xhbEventType =" + eventType);
+            LOG.debug("{}{}{}{}", " 20 : l_xhbCourtRoomId = ", courtRoomId, " l_xhbEventType =", eventType);
         }
 
         boolean isUpdateCarriedOut = manipulateSelection(courtRoomId, eventType);
@@ -135,7 +137,7 @@ public final class PublicNoticeSelectionManipulator {
      */
     private static boolean manipulateSelection(Integer courtRoomId, Integer eventType) {
 
-        LOG.debug("10 : Entering manipulateSelection l_xhbCourtRoomId " + courtRoomId.intValue());
+        LOG.debug("{}{}", "10 : Entering manipulateSelection l_xhbCourtRoomId ", courtRoomId);
 
         // get the HashMap that contains all the status changes for the
         // courtlogEventType
@@ -192,10 +194,10 @@ public final class PublicNoticeSelectionManipulator {
      */
     private static Integer getCourtLogEventType(CourtLogSubscriptionValue clsValue) {
         String methodName = "getCourtLogEventType - ";
-        LOG.debug(methodName + "entry");
+        LOG.debug("{}{}", methodName, "entry");
 
-        int eventType = clsValue.getCourtLogViewValue().getEventType().intValue();
-        LOG.debug(methodName + "eventType: " + eventType);
+        int eventType = clsValue.getCourtLogViewValue().getEventType();
+        LOG.debug(LOG_BRACKETS, methodName, "eventType: ", eventType);
 
         // Manipulate any events that have more than one possible option type
         if (eventType == EVENT_ID_TRIAL_PROSECUTION_CASE) {
@@ -206,14 +208,14 @@ public final class PublicNoticeSelectionManipulator {
             // framework
             String optionType = xmlServices.getXpathValueFromXmlString(
                 clsValue.getCourtLogViewValue().getLogEntry(), XPATH_EVENT_ID_20903);
-            LOG.debug(methodName + "optionType: " + optionType);
+            LOG.debug(LOG_BRACKETS, methodName, "optionType: ", optionType);
 
             if (XPATH_EVENT_ID_20903_OPTION_VIDEO_LINK.equals(optionType)) {
                 eventType = EVENT_ID_TRIAL_PROSECUTION_CASE_VIDEO_LINK;
             } else if (XPATH_EVENT_ID_20903_OPTION_TV_LINK.equals(optionType)) {
                 eventType = EVENT_ID_TRIAL_PROSECUTION_CASE_TV_LINK;
             } else {
-                LOG.warn(methodName + " Unexpected option type returned : " + optionType);
+                LOG.warn(LOG_BRACKETS, methodName, " Unexpected option type returned : ", optionType);
             }
         }
         // Bug 54926 & 54987
@@ -225,7 +227,7 @@ public final class PublicNoticeSelectionManipulator {
             // framework
             String optionType = xmlServices.getXpathValueFromXmlString(
                 clsValue.getCourtLogViewValue().getLogEntry(), XPATH_EVENT_ID_20602);
-            LOG.debug(methodName + "optionType: " + optionType);
+            LOG.debug(LOG_BRACKETS, methodName, "optionType: ", optionType);
 
             if (XPATH_EVENT_ID_20602_OPTION_VIDEO_LINK.equals(optionType)) {
                 eventType = EVENT_ID_APPEAL_RESPONDENT_CASE_VIDEO_LINK;
@@ -234,11 +236,11 @@ public final class PublicNoticeSelectionManipulator {
             } else if (XPATH_EVENT_ID_20602_OPTION_NONE.equals(optionType)) {
                 LOG.debug("No public notice is required in this case");
             } else {
-                LOG.warn(methodName + " Unexpected option type returned : " + optionType);
+                LOG.warn(LOG_BRACKETS, methodName, " Unexpected option type returned : ", optionType);
             }
         }
 
-        LOG.debug(methodName + "exit - eventType: " + eventType);
-        return Integer.valueOf(eventType);
+        LOG.debug(LOG_BRACKETS, methodName, "exit - eventType: ", eventType);
+        return eventType;
     }
 }

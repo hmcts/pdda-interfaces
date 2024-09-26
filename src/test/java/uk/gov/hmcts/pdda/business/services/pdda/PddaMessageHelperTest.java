@@ -42,13 +42,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(EasyMockExtension.class)
 class PddaMessageHelperTest {
-    
+
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String SAME = "Result is not Same";
-
-    @Mock
-    private EntityManager mockEntityManager;
 
     @Mock
     private XhbPddaMessageRepository mockXhbPddaMessageRepository;
@@ -57,15 +54,16 @@ class PddaMessageHelperTest {
     private XhbRefPddaMessageTypeRepository mockXhbRefPddaMessageTypeRepository;
 
     @TestSubject
-    private final PddaMessageHelper classUnderTest = new PddaMessageHelper(mockEntityManager);
+    private final PddaMessageHelper classUnderTest =
+        new PddaMessageHelper(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -156,8 +154,7 @@ class PddaMessageHelperTest {
         EasyMock.verify(mockXhbPddaMessageRepository);
         assertNotNull(actualResult, NOTNULL);
         assertTrue(actualResult.isPresent(), TRUE);
-        assertSame(xhbPddaMessageDao.getPrimaryKey(), actualResult.get().getPrimaryKey(),
-            SAME);
+        assertSame(xhbPddaMessageDao.getPrimaryKey(), actualResult.get().getPrimaryKey(), SAME);
     }
 
     @Test
@@ -174,14 +171,14 @@ class PddaMessageHelperTest {
         EasyMock.verify(mockXhbPddaMessageRepository);
         assertNotNull(actualResult, NOTNULL);
         assertTrue(actualResult.isPresent(), TRUE);
-        assertSame(xhbPddaMessageDao.getPrimaryKey(), actualResult.get().getPrimaryKey(),
-            SAME);
+        assertSame(xhbPddaMessageDao.getPrimaryKey(), actualResult.get().getPrimaryKey(), SAME);
     }
 
     @Test
     void testSavePddaMessageType() {
         // Setup
-        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao = DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
+        XhbRefPddaMessageTypeDao xhbRefPddaMessageTypeDao =
+            DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
         EasyMock.expect(mockXhbRefPddaMessageTypeRepository.update(xhbRefPddaMessageTypeDao))
             .andReturn(Optional.of(xhbRefPddaMessageTypeDao));
         EasyMock.replay(mockXhbRefPddaMessageTypeRepository);

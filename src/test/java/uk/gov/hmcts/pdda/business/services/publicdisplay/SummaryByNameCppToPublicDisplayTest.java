@@ -70,12 +70,12 @@ class SummaryByNameCppToPublicDisplayTest {
             mockXhbCourtSiteRepository, mockXhbCourtRoomRepository, mockXhbClobRepository, mockCppFormattingHelper);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -94,7 +94,7 @@ class SummaryByNameCppToPublicDisplayTest {
     @Test
     void testGetCppData() {
         // Setup
-        ArrayList<XhbCppFormattingDao> xcfList = new ArrayList<>();
+        List<XhbCppFormattingDao> xcfList = new ArrayList<>();
         XhbCppFormattingDao xhbCppFormattingDao = DummyFormattingUtil.getXhbCppFormattingDao();
         xcfList.add(xhbCppFormattingDao);
         List<XhbCourtRoomDao> courtRoomDaos = new ArrayList<>();
@@ -126,7 +126,7 @@ class SummaryByNameCppToPublicDisplayTest {
         // Checks
         assertArrayEquals(ROOM_ARRAY, classUnderTest.getCourtRoomIds(), EQUALS);
         assertEquals(COURT_NAME, classUnderTest.getCourtName(), EQUALS);
-        assertEquals(COURT_ID, Integer.valueOf(classUnderTest.getCourtId()), EQUALS);
+        assertEquals(COURT_ID, classUnderTest.getCourtId(), EQUALS);
         assertEquals(LIST_DATE, classUnderTest.getDate(), EQUALS);
 
         EasyMock.verify(mockXhbCourtRepository);

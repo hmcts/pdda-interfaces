@@ -52,12 +52,12 @@ class PdDataControllerBeanTest {
     private final PdDataControllerBean classUnderTest = new PdDataControllerBean(mockEntityManager, mockDataSource);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -89,7 +89,7 @@ class PdDataControllerBeanTest {
     }
 
     private DisplayDocumentUri getDummyDisplayDocumentUri(DisplayDocumentType displayDocumentType) {
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         int[] courtRoomIds = {8112, 8113, 8114};
         return new DisplayDocumentUri(dummyLocale, courtId, displayDocumentType, courtRoomIds);
     }

@@ -39,14 +39,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PddaSftpHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaSftpHelper.class);
     private static final String LOG_CALLED = " called";
+    private static final String TWO_PARAMS = "{}{}";
 
-    private String methodName;
     private JSch jsch;
 
     public void sftpFiles(Session session, String remoteFolder, Map<String, InputStream> files)
         throws JSchException, SftpException {
-        methodName = "sftpFiles()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "sftpFiles()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         try {
             // Create a channel
@@ -63,6 +63,7 @@ public class PddaSftpHelper {
 
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace1:: {}", ex);
             throw ex;
         }
     }
@@ -76,8 +77,8 @@ public class PddaSftpHelper {
 
     public Session createSession(String username, String password, String host, Integer port)
         throws JSchException {
-        methodName = "createSession()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "createSession()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         Session session = getJSch().getSession(username, host, port);
         LOG.debug("We now have a session but is it null: {}", session == null);
@@ -91,8 +92,8 @@ public class PddaSftpHelper {
 
     public void sftpDeleteFile(Session session, String remoteFolder, String filename)
         throws JSchException, SftpException {
-        methodName = "sftpDeleteFile()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "sftpDeleteFile()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         try {
             // Create a channel
@@ -109,14 +110,15 @@ public class PddaSftpHelper {
 
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace2:: {}", ex);
             throw ex;
         }
     }
 
     public Map<String, String> sftpFetch(Session session, String remoteFolder,
         SftpValidation validation) throws JSchException, SftpException {
-        methodName = "sftpFetch()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "sftpFetch()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         try {
             // Create a channel
@@ -135,14 +137,15 @@ public class PddaSftpHelper {
             return files;
         } catch (JSchException | SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace3:: {}", ex);
             throw ex;
         }
     }
 
     private List<String> listFilesInFolder(ChannelSftp sftpChannel, String folder,
         SftpValidation validation) throws SftpException {
-        methodName = "listFilesInFolder()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "listFilesInFolder()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         // Get the directory contents from the OS
         @SuppressWarnings("unchecked")
         List<String> filesInFolder = new ArrayList<>(sftpChannel.ls(folder));
@@ -159,8 +162,8 @@ public class PddaSftpHelper {
 
     private Map<String, String> fetchFiles(ChannelSftp sftpChannel, String remoteFolder,
         SftpValidation validation) throws SftpException {
-        methodName = "fetchFiles()";
-        LOG.debug(methodName, LOG_CALLED);
+        String methodName = "fetchFiles()";
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         Map<String, String> files = new ConcurrentHashMap<>();
         try {
@@ -187,14 +190,15 @@ public class PddaSftpHelper {
             return files;
         } catch (SftpException ex) {
             LOG.error(ex.getMessage());
+            LOG.error("Stacktrace4:: {}", ex);
             throw ex;
         }
     }
 
     private String getFileContents(String filename, InputStream inputStream) {
         String fileContents = null;
-        methodName = "getFileContents(" + filename + ")";
-        LOG.info(methodName, LOG_CALLED);
+        String methodName = "getFileContents(" + filename + ")";
+        LOG.info(TWO_PARAMS, methodName, LOG_CALLED);
         try (InputStreamReader fileReader = new InputStreamReader(inputStream)) {
             try (BufferedReader reader = new BufferedReader(fileReader)) {
                 StringBuilder stringBuilder = new StringBuilder();

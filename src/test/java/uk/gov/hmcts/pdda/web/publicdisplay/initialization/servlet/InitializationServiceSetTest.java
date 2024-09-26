@@ -21,19 +21,19 @@ class InitializationServiceSetTest {
     private static final String EQUALS = "Results are not Equal";
     private static final String TRUE = "Result is not True";
     private static final Long DELAY = Long.valueOf(1);
-    private static final Integer NO_OF_WORKERS = Integer.valueOf(1);
+    private static final Integer NO_OF_WORKERS = 1;
     private static final Long RETRY = Long.valueOf(1);
 
     @InjectMocks
     private final InitializationService classUnderTest = InitializationService.getInstance();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         Mockito.mockStatic(DisplayConfigurationReader.class);
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         Mockito.clearAllCaches();
     }
 

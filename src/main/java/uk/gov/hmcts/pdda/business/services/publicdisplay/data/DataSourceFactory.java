@@ -43,6 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Neil Ellis
  * @version $Revision: 1.11 $
  */
+@SuppressWarnings("PMD.LawOfDemeter")
 public final class DataSourceFactory {
     /**
      * This is the hashmap we use to perform our query class lookups from. It is initialized from
@@ -111,7 +112,7 @@ public final class DataSourceFactory {
 
     private static String getKeyFromUri(DisplayDocumentUri uri) {
         StringBuilder sb = new StringBuilder();
-        sb.append(uri.getSimpleDocumentType()).append(Boolean.valueOf(uri.isUnassignedRequired()));
+        sb.append(uri.getSimpleDocumentType()).append(uri.isUnassignedRequired());
         return sb.toString();
     }
     

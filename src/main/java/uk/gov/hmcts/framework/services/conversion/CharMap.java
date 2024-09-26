@@ -26,7 +26,7 @@ public class CharMap extends BooleanMap {
     public char getChar(String name) {
         String stringValue = (String) getMap().get(name);
         if (stringValue != null) {
-            if (ONE.equals(Integer.valueOf(stringValue.length()))) {
+            if (ONE.equals(stringValue.length())) {
                 return stringValue.charAt(0);
             }
             throw new ValueConvertException(name, Character.TYPE, stringValue);

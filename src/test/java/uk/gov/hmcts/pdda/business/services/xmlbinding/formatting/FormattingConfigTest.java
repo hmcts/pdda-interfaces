@@ -64,15 +64,15 @@ class FormattingConfigTest {
 
 
     @TestSubject
-    private final FormattingConfig classUnderTest = FormattingConfig.Singleton.INSTANCE;
+    private static final FormattingConfig CLASSUNDERTEST = FormattingConfig.Singleton.INSTANCE;
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -80,7 +80,7 @@ class FormattingConfigTest {
     void testGetXslTransformsFailure() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             // Run
-            classUnderTest.getXslTransforms(null);
+            CLASSUNDERTEST.getXslTransforms(null);
         });
     }
 
@@ -103,7 +103,7 @@ class FormattingConfigTest {
         FormattingValue formattingValue =
             getDummyFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, HTM, EMAIL, xhbCppListDao);
         // Run
-        classUnderTest.getXslTransforms(formattingValue);
+        CLASSUNDERTEST.getXslTransforms(formattingValue);
         result = true;
 
         assertTrue(result, TRUE);
@@ -115,7 +115,7 @@ class FormattingConfigTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbClobDao result =
             new XhbClobDao(clobId, clobData, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         return new XhbClobDao(result);
@@ -123,7 +123,7 @@ class FormattingConfigTest {
 
     private XhbCppListDao getDummyCppList(XhbClobDao listClob, String listType) {
         Integer cppListId = getRandomInt();
-        Integer courtCode = Integer.valueOf(81);
+        Integer courtCode = 81;
         LocalDateTime timeLoaded = null;
         LocalDateTime listStartDate = LocalDateTime.now().minusDays(5);
         LocalDateTime listEndDate = LocalDateTime.now().plusDays(1);
@@ -134,7 +134,7 @@ class FormattingConfigTest {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         String obsInd = "N";
         XhbCppListDao result = new XhbCppListDao();
         result.setCppListId(cppListId);
@@ -159,13 +159,13 @@ class FormattingConfigTest {
 
     private FormattingValue getDummyFormattingValue(String xml, String documentTypeIn, String mimeTypeIn,
         String distributionTypeIn, XhbCppListDao cppList) {
-        Integer majorVersion = Integer.valueOf(1);
-        Integer minorVersion = Integer.valueOf(1);
+        Integer majorVersion = 1;
+        Integer minorVersion = 1;
         String language = "language";
         String country = "country";
         try (Reader readerIn = new StringReader(xml)) {
             OutputStream outputStreamIn = new ByteArrayOutputStream(1024);
-            Integer courtId = Integer.valueOf(81);
+            Integer courtId = 81;
 
             FormattingValue result = new FormattingValue(distributionTypeIn, mimeTypeIn, documentTypeIn, majorVersion,
                 minorVersion, language, country, readerIn, outputStreamIn, courtId, cppList);

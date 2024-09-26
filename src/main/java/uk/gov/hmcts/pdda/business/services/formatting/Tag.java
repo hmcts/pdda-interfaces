@@ -19,7 +19,7 @@ public enum Tag {
     }
     
     public static Tag fromString(String value) {
-        for (Tag tag : Tag.values()) {
+        for (Tag tag : values()) {
             if (tag.getValue().equalsIgnoreCase(value)) {
                 return tag;
             }

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
+import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -65,13 +67,13 @@ public class PddaHelper extends XhibitPddaHelper {
     private static final String NOT_FOUND = " not found";
 
     public PddaHelper(EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, InitializationService.getInstance().getEnvironment());
     }
 
     // Junit constructor
     public PddaHelper(EntityManager entityManager,
-        XhbConfigPropRepository xhbConfigPropRepository) {
-        super(entityManager, xhbConfigPropRepository);
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment) {
+        super(entityManager, xhbConfigPropRepository, environment);
     }
 
     /**
@@ -209,7 +211,7 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             return getSftpHelper().sftpFetch(config.session, config.remoteFolder, validation);
         } catch (Exception ex) {
-            LOG.error(SFTP_ERROR, ex.getMessage());
+            LOG.error(SFTP_ERROR, ex);
             return Collections.emptyMap();
         }
     }
@@ -227,14 +229,14 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Fetch and validate the properties
         try {
-            sftpConfig.username = getMandatoryConfigValue(configUsername);
+            sftpConfig.username = getMandatoryEnvValue(configUsername);
             LOG.debug("SFTP Username: {}", sftpConfig.username);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configUsername + NOT_FOUND;
             return sftpConfig;
         }
         try {
-            sftpConfig.password = getMandatoryConfigValue(configPassword);
+            sftpConfig.password = getMandatoryEnvValue(configPassword);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = configPassword + NOT_FOUND;
             return sftpConfig;
@@ -248,7 +250,7 @@ public class PddaHelper extends XhibitPddaHelper {
         }
         String hostAndPort;
         try {
-            hostAndPort = getMandatoryConfigValue(Config.SFTP_HOST);
+            hostAndPort = getMandatoryEnvValue(Config.SFTP_HOST);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
@@ -269,6 +271,7 @@ public class PddaHelper extends XhibitPddaHelper {
             sftpConfig.port = Integer.valueOf(strPort);
         } catch (Exception ex) {
             sftpConfig.errorMsg = Config.SFTP_HOST + " contains invalid port number";
+            LOG.error("Stacktrace1:: {}", ex);
             return sftpConfig;
         }
 
@@ -280,6 +283,7 @@ public class PddaHelper extends XhibitPddaHelper {
             LOG.debug("A session has been established");
         } catch (Exception ex) {
             sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
+            LOG.error("Stacktrace2:: {}", ex);
             return sftpConfig;
         }
 
@@ -342,7 +346,7 @@ public class PddaHelper extends XhibitPddaHelper {
         LOG.debug("respondToPddaMessage({})", messages);
         for (XhbPddaMessageDao message : messages) {
             // Set Filename
-            String fileName = (message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = message.getCpDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
@@ -369,7 +373,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         for (XhbCppStagingInboundDao cppMessage : cppMessages) {
             // Set Filename
-            String fileName = (cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, ""))
+            String fileName = cppMessage.getDocumentName().replaceAll(CP_FILE_EXTENSION, "")
                 + "_Response_" + cpResponseFileDateFormat.format(getNow()) + CP_FILE_EXTENSION;
 
             // Set File contents
@@ -399,6 +403,7 @@ public class PddaHelper extends XhibitPddaHelper {
                 return true;
             } catch (Exception ex) {
                 LOG.error(SFTP_ERROR, ex);
+                LOG.error("Stacktrace3:: {}", ex);
             }
         }
         return false;
@@ -413,7 +418,7 @@ public class PddaHelper extends XhibitPddaHelper {
         private static final String PDDA = "PDDA";
 
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, Integer.valueOf(4));
+            super(courtRepository, false, 4);
         }
 
         @Override
@@ -468,7 +473,7 @@ public class PddaHelper extends XhibitPddaHelper {
         @Override
         public boolean validateTitle(String filename) {
             return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
-                new String[] {PDDA});
+                PDDA);
         }
 
         @Override
@@ -503,7 +508,7 @@ public class PddaHelper extends XhibitPddaHelper {
             {"DailyList", "FirmList", "WarnedList", "WebPage", "PublicDisplay"};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
-            super(courtRespository, false, Integer.valueOf(3));
+            super(courtRespository, false, 3);
         }
 
         @Override

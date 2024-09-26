@@ -1,6 +1,7 @@
 package uk.gov.hmcts.framework.scheduler;
 
 import jakarta.servlet.ServletContextEvent;
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
@@ -36,21 +37,19 @@ class SchedulerInitServletTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private CppStagingInboundControllerBean mockCppStagingInboundControllerBean;
-
-    @Mock
     private ServletContextEvent mockServletContextEvent;
 
     @TestSubject
-    private final SchedulerInitServlet classUnderTest = new SchedulerInitServlet(mockCppStagingInboundControllerBean);
+    private final SchedulerInitServlet classUnderTest =
+        new SchedulerInitServlet(EasyMock.createMock(CppStagingInboundControllerBean.class));
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 

@@ -27,12 +27,12 @@ class UriFactoryTest {
     private final UriFactory classUnderTest = new TestUriFactory();
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Nothing to do
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Nothing to do
     }
 

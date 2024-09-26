@@ -42,20 +42,14 @@ class AbstractFormattingServicesTest {
     private static final String NOT_NULL = "Result is Not Null";
 
     @Mock
-    private EntityManager mockEntityManager;
-
-    @Mock
     private XhbFormattingRepository mockXhbFormattingRepository;
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
-    @Mock
-    private BlobHelper mockBlobHelper;
 
     @TestSubject
-    private final AbstractFormattingServices classUnderTest =
-        new AbstractFormattingServices(mockEntityManager, mockBlobHelper);
+    private final AbstractFormattingServices classUnderTest = new AbstractFormattingServices(
+        EasyMock.createMock(EntityManager.class), EasyMock.createMock(BlobHelper.class));
 
     @Test
     void testCreateClob() {

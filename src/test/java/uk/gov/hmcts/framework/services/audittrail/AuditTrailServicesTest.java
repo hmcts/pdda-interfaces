@@ -39,12 +39,12 @@ class AuditTrailServicesTest {
 
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -57,7 +57,7 @@ class AuditTrailServicesTest {
         EasyMock.expect(mockAuditTrailEvent.getCourtHouseId()).andReturn("courtHouseId");
         EasyMock.expect(mockAuditTrailEvent.getEvtType()).andReturn("eventType");
         EasyMock.expect(mockAuditTrailEvent.isSuccess()).andReturn(true);
-        EasyMock.expect(mockAuditTrailEvent.getCaseId()).andReturn(Integer.valueOf(345_678));
+        EasyMock.expect(mockAuditTrailEvent.getCaseId()).andReturn(345_678);
         EasyMock.expect(mockAuditTrailEvent.getEventSpecificData()).andReturn("evtSpecificData");
         EasyMock.replay(mockAuditTrailEvent);
         // Run

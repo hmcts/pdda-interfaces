@@ -58,14 +58,14 @@ class EventWorkTest {
     private final EventWork classUnderTest = new EventWork(getDummyPublicDisplayEvent());
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.mockStatic(WorkFlowContext.class);
         Mockito.mockStatic(WorkFlowManager.class);
         ReflectionTestUtils.setField(classUnderTest, "log", mockLogger);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mockito.clearAllCaches();
     }
 
@@ -107,7 +107,6 @@ class EventWorkTest {
 
     @Test
     void testErrorGatherer() {
-        // Mockito.when(ErrorGatherer.getInstance()).thenReturn(mockErrorGatherer);
         ErrorGatherer errorGathererUnderTest = ErrorGatherer.getInstance();
         errorGathererUnderTest.setSize(1);
         errorGathererUnderTest.addError(getDummyProcessingError());
@@ -124,8 +123,8 @@ class EventWorkTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(Integer.valueOf(-99), null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(Integer.valueOf(-1), null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         from.setCourtId(from.getCourtId());
         from.setCourtRoomId(from.getCourtRoomId());
         return new MoveCaseEvent(from, to, null);

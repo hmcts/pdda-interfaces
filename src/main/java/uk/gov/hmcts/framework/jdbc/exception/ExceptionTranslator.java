@@ -64,7 +64,7 @@ public abstract class ExceptionTranslator {
     }
 
     // Default implementation with nesting
-    private static class DefaultExceptionTranslatorImpl extends ExceptionTranslator {
+    private static final class DefaultExceptionTranslatorImpl extends ExceptionTranslator {
         @Override
         public DataAccessException translate(Exception ex) {
             return new DataAccessException(ex.getMessage(), ex);

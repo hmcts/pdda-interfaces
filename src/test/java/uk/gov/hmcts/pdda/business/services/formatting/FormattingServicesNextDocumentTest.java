@@ -51,11 +51,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.LawOfDemeter"})
 class FormattingServicesNextDocumentTest {
 
     private static final String TRUE = "Result is not True";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
+    private static final String NEWDOCUMENT = "ND";
+    private static final String FORMATERROR = "FE";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -104,10 +107,10 @@ class FormattingServicesNextDocumentTest {
 
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
-
+    
     @Mock
     private CourtelHelper mockCourtelHelper;
-    
+
     @Mock
     private BlobHelper mockBlobHelper;
 
@@ -115,25 +118,31 @@ class FormattingServicesNextDocumentTest {
     private FormattingServices classUnderTest;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository", mockXhbConfigPropRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
+            mockXhbConfigPropRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
         ReflectionTestUtils.setField(classUnderTest, "translationBundles", mockTranslationBundles);
         ReflectionTestUtils.setField(classUnderTest, "xslServices", mockXslServices);
         ReflectionTestUtils.setField(classUnderTest, "formattingConfig", mockFormattingConfig);
         ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository", mockXhbBlobRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository", mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository", mockXhbCppListRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository", mockXhbCppFormattingRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository", mockXhbFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppListRepository",
+            mockXhbCppListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingRepository",
+            mockXhbCppFormattingRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbFormattingRepository",
+            mockXhbFormattingRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbCppFormattingMergeRepository",
             mockXhbCppFormattingMergeRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository", mockXhbXmlDocumentRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
+            mockXhbXmlDocumentRepository);
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         // Do nothing
     }
 
@@ -151,7 +160,8 @@ class FormattingServicesNextDocumentTest {
 
     private boolean testNextDocument(String formatStatus, String expectedFormatStatus) {
         // Setup
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
+        XhbClobDao xhbClobDao =
+            DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), FormattingServicesTest.CPP_LIST);
         List<XhbFormattingDao> formattingDaoList = new ArrayList<>();
         XhbFormattingDao formattingDao = DummyFormattingUtil.getXhbFormattingDao();
         formattingDao.setFormatStatus(formatStatus);
@@ -161,15 +171,17 @@ class FormattingServicesNextDocumentTest {
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         xmlDocumentList.add(xhbXmlDocumentDao);
-        if ("ND".contentEquals(formatStatus)) {
+        if (NEWDOCUMENT.contentEquals(formatStatus)) {
             expectConfigProp(FORMATTING_LIST_DELAY, "3");
             Mockito.when(mockXhbXmlDocumentRepository.findDocumentByClobId(Mockito.isA(Long.class),
                 Mockito.isA(LocalDateTime.class))).thenReturn(xmlDocumentList);
-        } else if ("FE".contentEquals(formatStatus)) {
-            Mockito.when(mockXhbFormattingRepository.findByFormatStatus("ND"))
-                .thenReturn(new ArrayList<XhbFormattingDao>());
+        } else if (FORMATERROR.contentEquals(formatStatus)) {
+            List<XhbFormattingDao> emptyList = new ArrayList<>();
+            Mockito.when(mockXhbFormattingRepository.findByFormatStatus(NEWDOCUMENT))
+                .thenReturn(emptyList);
         }
-        Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus)).thenReturn(formattingDaoList);
+        Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus))
+            .thenReturn(formattingDaoList);
         Mockito.when(mockXhbBlobRepository.update(Mockito.isA(XhbBlobDao.class)))
             .thenReturn(Optional.of(DummyFormattingUtil.getXhbBlobDao(new byte[0])));
         Mockito.when(mockXhbFormattingRepository.update(Mockito.isA(XhbFormattingDao.class)))
@@ -184,6 +196,7 @@ class FormattingServicesNextDocumentTest {
     private void expectConfigProp(String propertyName, String propertyValue) {
         List<XhbConfigPropDao> daoList = new ArrayList<>();
         daoList.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName)).thenReturn(daoList);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+            .thenReturn(daoList);
     }
 }

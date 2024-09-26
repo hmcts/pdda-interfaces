@@ -63,7 +63,7 @@ public class BasicNumericMap extends ExtraNumericMap {
         String stringValue;
         Integer intValue = (Integer) method.invoke(bean, args);
         if (intValue != null) {
-            stringValue = getConverter().formatInt(intValue.intValue());
+            stringValue = getConverter().formatInt(intValue);
         } else {
             stringValue = NULL_STRING;
         }
@@ -106,7 +106,7 @@ public class BasicNumericMap extends ExtraNumericMap {
         String stringValue;
         Short shortValue = (Short) method.invoke(bean, args);
         if (shortValue != null) {
-            stringValue = getConverter().formatShort(shortValue.shortValue());
+            stringValue = getConverter().formatShort(shortValue);
         } else {
             stringValue = NULL_STRING;
         }
@@ -125,7 +125,7 @@ public class BasicNumericMap extends ExtraNumericMap {
         String stringValue;
         Long longValue = (Long) method.invoke(bean, args);
         if (longValue != null) {
-            stringValue = getConverter().formatLong(longValue.longValue());
+            stringValue = getConverter().formatLong(longValue);
         } else {
             stringValue = NULL_STRING;
         }

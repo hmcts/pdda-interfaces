@@ -74,29 +74,22 @@ class CppStagingInboundControllerBeanTest {
     private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
-    private XhbClobRepository mockXhbClobRepository;
-    
-    @Mock
-    private XhbBlobRepository mockXhbBlobRepository;
-
-    @Mock
     private ValidationResult mockValidationResult;
 
-    @Mock
-    private ValidationService mockValidationService;
-
     @TestSubject
-    private CppStagingInboundControllerBean classUnderTest =
-        new CppStagingInboundControllerBean(mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
-            mockXhbCourtRepository, mockXhbClobRepository, mockXhbBlobRepository, mockValidationService);
+    private CppStagingInboundControllerBean classUnderTest = new CppStagingInboundControllerBean(
+        mockEntityManager, mockXhbConfigPropRepository, mockCppStagingInboundHelper,
+        mockXhbCourtRepository, EasyMock.createMock(XhbClobRepository.class),
+        EasyMock.createMock(XhbBlobRepository.class),
+        EasyMock.createMock(ValidationService.class));
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         // Do nothing
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         classUnderTest = new CppStagingInboundControllerBean();
     }
 
@@ -104,9 +97,8 @@ class CppStagingInboundControllerBeanTest {
     void testGetLatestUnprocessedDocument() {
         // Setup
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
-        EasyMock
-            .expect(mockCppStagingInboundHelper
-                .findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED, null))
+        EasyMock.expect(mockCppStagingInboundHelper
+            .findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED, null))
             .andReturn(toReturn);
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
@@ -125,8 +117,8 @@ class CppStagingInboundControllerBeanTest {
     @Test
     void testGetLatestUnprocessedDocumentFail() throws Exception {
         // Setup
-        mockCppStagingInboundHelper.findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED,
-            null);
+        mockCppStagingInboundHelper
+            .findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED, null);
         EasyMock.expectLastCall().andThrow(new CppStagingInboundControllerException());
         EasyMock.replay(mockCppStagingInboundHelper);
         Assertions.assertThrows(CppStagingInboundControllerException.class, () -> {
@@ -142,8 +134,8 @@ class CppStagingInboundControllerBeanTest {
         // Setup
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
         EasyMock
-            .expect(mockCppStagingInboundHelper
-                .findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_INPROCESS, EMPTY_STRING))
+            .expect(mockCppStagingInboundHelper.findNextDocumentByStatus(
+                CppStagingInboundHelper.VALIDATION_STATUS_INPROCESS, EMPTY_STRING))
             .andReturn(toReturn);
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
@@ -162,8 +154,8 @@ class CppStagingInboundControllerBeanTest {
     @Test
     void testGetNextDocumentToValidateFail() throws Exception {
         // Setup
-        mockCppStagingInboundHelper.findNextDocumentByStatus(CppStagingInboundHelper.VALIDATION_STATUS_INPROCESS,
-            EMPTY_STRING);
+        mockCppStagingInboundHelper.findNextDocumentByStatus(
+            CppStagingInboundHelper.VALIDATION_STATUS_INPROCESS, EMPTY_STRING);
         EasyMock.expectLastCall().andThrow(new CppStagingInboundControllerException());
         EasyMock.replay(mockCppStagingInboundHelper);
         Assertions.assertThrows(CppStagingInboundControllerException.class, () -> {
@@ -219,8 +211,10 @@ class CppStagingInboundControllerBeanTest {
         // Setup
         String documentType = "PD";
         List<XhbConfigPropDao> returnList = new ArrayList<>();
-        returnList.add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
+        returnList
+            .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
+        EasyMock
+            .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
             .andReturn(returnList);
         EasyMock.replay(mockXhbConfigPropRepository);
         // Run
@@ -237,7 +231,8 @@ class CppStagingInboundControllerBeanTest {
         List<XhbCourtDao> data = new ArrayList<>();
         data.add(DummyCourtUtil.getXhbCourtDao(courtCode, "TestCourt1"));
 
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString())).andReturn(data);
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+            .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
@@ -252,7 +247,8 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
 
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString())).andReturn(data);
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+            .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);

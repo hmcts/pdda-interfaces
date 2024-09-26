@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: TranslationBundles.java,v 1.4 2006/06/05 12:28:29 bzjrnl Exp $
  */
+@SuppressWarnings("PMD.AvoidSynchronizedStatement")
 public class TranslationBundles implements Serializable {
     private static final long serialVersionUID = 1L;
 

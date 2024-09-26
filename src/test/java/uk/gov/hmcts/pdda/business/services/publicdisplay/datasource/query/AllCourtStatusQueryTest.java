@@ -63,7 +63,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
 class AllCourtStatusQueryTest extends AbstractQueryTest {
 
     private static final String TRUE = "Result is not True";
@@ -125,12 +125,12 @@ class AllCourtStatusQueryTest extends AbstractQueryTest {
         mockXhbDefendantRepository, mockXhbCourtLogEntryRepository);
 
     @BeforeAll
-    public static void setUp() throws Exception {
+    public static void setUp() {
         // Do nothing
     }
 
     @AfterAll
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         // Do nothing
     }
 
@@ -181,7 +181,7 @@ class AllCourtStatusQueryTest extends AbstractQueryTest {
         List<XhbSittingDao> xhbSittingDaoList = new ArrayList<>();
         xhbSittingDaoList.add(DummyHearingUtil.getXhbSittingDao());
         XhbSittingDao invalidXhbSittingDao = DummyHearingUtil.getXhbSittingDao();
-        invalidXhbSittingDao.setCourtRoomId(Integer.valueOf(-1));
+        invalidXhbSittingDao.setCourtRoomId(-1);
         xhbSittingDaoList.add(invalidXhbSittingDao);
         List<XhbScheduledHearingDao> xhbScheduledHearingDaoList = new ArrayList<>();
         xhbScheduledHearingDaoList.add(DummyHearingUtil.getXhbScheduledHearingDao());
@@ -226,7 +226,7 @@ class AllCourtStatusQueryTest extends AbstractQueryTest {
         // Setup
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-        Integer courtId = Integer.valueOf(81);
+        Integer courtId = 81;
         final int[] courtRoomIds = {8112, 8113, 8114};
         List<AbstractRepository<?>> replayArray = new ArrayList<>();
 

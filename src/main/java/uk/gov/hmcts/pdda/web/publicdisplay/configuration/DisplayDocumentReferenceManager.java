@@ -61,11 +61,13 @@ public class DisplayDocumentReferenceManager {
     private final DisplayStoreControllerBean displayStoreControllerBean;
 
     // Store the Display Documents by court room and document type.
-    private final Map displayDocumentUrisByCourtRoomAndDocumentType = new ConcurrentHashMap();
+    private final Map<String, Set<DisplayDocumentUri>> displayDocumentUrisByCourtRoomAndDocumentType =
+        new ConcurrentHashMap<>();
 
     // Store reference (usage) counts for the given Display Document.
-    private final Map displayDocumentUriCounts = new ConcurrentHashMap();
-    
+    private final Map<DisplayDocumentUri, DisplayDocumentReferenceCounter> displayDocumentUriCounts =
+        new ConcurrentHashMap<>();
+
     private static final String UNCHECKED = "unchecked";
 
     /**
@@ -93,10 +95,10 @@ public class DisplayDocumentReferenceManager {
         RenderChanges returnRenderChanges = new RenderChanges();
 
         // Get all the display documents stored against this key.
-        List displayDocumentUris = new ArrayList();
+        List<DisplayDocumentUri> displayDocumentUris = new ArrayList<>();
         for (int i = documentTypes.length - 1; i >= 0; i--) {
-            displayDocumentUris.addAll(getDdUrisForCourtRoomAndDocumentType(documentTypes[i],
-                courtRoom.getCourtRoomId().longValue()));
+            displayDocumentUris.addAll(
+                getDdUrisForCourtRoomAndDocumentType(documentTypes[i], courtRoom.getCourtRoomId()));
         }
 
         // Add the documents to the RenderChanges object.
@@ -160,18 +162,16 @@ public class DisplayDocumentReferenceManager {
      * 
      * @param renderChanges RenderChanges
      */
-    @SuppressWarnings(UNCHECKED)
     public void fillInRenderChanges(RenderChanges renderChanges) {
         // Accumulate dead Display Documents in this set.
         // We are doing this so we dont change the displayDocumentURICounts
         // map while iterating over it (fail-fast iterators.).
-        LOG.debug("fillInRenderChanges({})", renderChanges);
-        HashSet deadDisplayDocumentUris = new HashSet();
+        Set<DisplayDocumentUri> deadDisplayDocumentUris = new HashSet<>();
 
         // Iterate over all the display documents finding those that now
         // have a reference count of zero for stop rendering, and those
         // that are newly created in order to start rendering.
-        Set displayDocumentUris = displayDocumentUriCounts.keySet();
+        Set<DisplayDocumentUri> displayDocumentUris = displayDocumentUriCounts.keySet();
         Iterator ddUriIterator = displayDocumentUris.iterator();
         while (ddUriIterator.hasNext()) {
             DisplayDocumentUri displayDocumentUri = (DisplayDocumentUri) ddUriIterator.next();
@@ -229,7 +229,7 @@ public class DisplayDocumentReferenceManager {
     private void removeDocumentByTypeAndCourts(DisplayDocumentUri displayDocumentUri) {
         int[] courtRoomIDs = displayDocumentUri.getCourtRoomIds();
         for (int i = courtRoomIDs.length - 1; i >= 0; i--) {
-            Set displayDocumentUris = getDdUrisForCourtRoomAndDocumentType(
+            Set<DisplayDocumentUri> displayDocumentUris = getDdUrisForCourtRoomAndDocumentType(
                 displayDocumentUri.getDocumentType(), courtRoomIDs[i]);
             displayDocumentUris.remove(displayDocumentUri);
         }
@@ -244,19 +244,11 @@ public class DisplayDocumentReferenceManager {
      * @return A Set containing <code>DisplayDocumentURI</code>s representing the Display Documents
      *         relevant to the type and court room.
      */
-    @SuppressWarnings(UNCHECKED)
-    private Set getDdUrisForCourtRoomAndDocumentType(DisplayDocumentType documentType,
-        long courtRoomId) {
+    private Set<DisplayDocumentUri> getDdUrisForCourtRoomAndDocumentType(
+        DisplayDocumentType documentType, long courtRoomId) {
         String key = getCourtRoomAndDocumentTypeKey(documentType, courtRoomId);
-        Set displayDocumentUris = (Set) displayDocumentUrisByCourtRoomAndDocumentType.get(key);
-
-        // Does the set exist for this key?
-        if (displayDocumentUris == null) {
-            // No, remove and store it.
-            displayDocumentUris = new HashSet();
-            displayDocumentUrisByCourtRoomAndDocumentType.put(key, displayDocumentUris);
-        }
-        return displayDocumentUris;
+        return displayDocumentUrisByCourtRoomAndDocumentType.computeIfAbsent(key,
+            k -> new HashSet<>());
     }
 
     /**
@@ -279,20 +271,10 @@ public class DisplayDocumentReferenceManager {
      * @param displayDocumentUri The Display Document for which to retrieve the counter.
      * @return the relevant reference counter.
      */
-    @SuppressWarnings(UNCHECKED)
     private DisplayDocumentReferenceCounter getDisplayDocumentReferenceCounter(
         DisplayDocumentUri displayDocumentUri) {
-        DisplayDocumentReferenceCounter counter =
-            (DisplayDocumentReferenceCounter) displayDocumentUriCounts.get(displayDocumentUri);
-
-        // Does the counter exist?
-        if (counter == null) {
-            // Then remove and store it.
-            counter = new DisplayDocumentReferenceCounter();
-            displayDocumentUriCounts.put(displayDocumentUri, counter);
-        }
-
-        return counter;
+        return displayDocumentUriCounts.computeIfAbsent(displayDocumentUri,
+            k -> new DisplayDocumentReferenceCounter());
     }
 
     private PdDataControllerBean getPdDataControllerBean() {
@@ -329,7 +311,7 @@ public class DisplayDocumentReferenceManager {
      * @author Bob Boothby
      * @version 1.0
      */
-    private class DisplayDocumentReferenceCounter {
+    private final class DisplayDocumentReferenceCounter {
         // Keep track of the reference count.
         private int count;
 

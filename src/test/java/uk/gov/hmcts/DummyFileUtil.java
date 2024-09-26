@@ -81,7 +81,7 @@ public final class DummyFileUtil {
         FileResults fileResult;
         for (String messageType : DummyEventUtil.VALID_XHIBIT_MESSAGE_TYPE) {
             PublicDisplayEvent event = DummyEventUtil.getEvent(messageType);
-            fileResult = DummyFileUtil.getFileResults();
+            fileResult = getFileResults();
             fileResult.filename = messageType + "_111_" + nowAsString + ".xml";
             if (event instanceof HearingStatusEvent) {
                 fileResult.fileContents = SERIALIZED_HEARINGSTATUSEVENT;

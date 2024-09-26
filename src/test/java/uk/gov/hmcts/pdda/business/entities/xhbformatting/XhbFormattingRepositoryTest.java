@@ -65,7 +65,7 @@ class XhbFormattingRepositoryTest extends AbstractRepositoryTest<XhbFormattingDa
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbFormattingDao> result =
-            (List<XhbFormattingDao>) getClassUnderTest().findByFormatStatus(getDummyDao().getFormatStatus());
+            getClassUnderTest().findByFormatStatus(getDummyDao().getFormatStatus());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), SAME);
@@ -95,7 +95,7 @@ class XhbFormattingRepositoryTest extends AbstractRepositoryTest<XhbFormattingDa
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbFormattingDao> result =
-            (List<XhbFormattingDao>) getClassUnderTest().findByDocumentAndClob(getDummyDao().getCourtId(),
+            getClassUnderTest().findByDocumentAndClob(getDummyDao().getCourtId(),
                 getDummyDao().getDocumentType(), getDummyDao().getLanguage(), "courtSiteName");
         assertNotNull(result, "Result is Null");
         if (dao != null) {
@@ -114,18 +114,18 @@ class XhbFormattingRepositoryTest extends AbstractRepositoryTest<XhbFormattingDa
         String distributionType = "distributionType";
         String mimType = "mimType";
         String documentType = "documentType";
-        Integer courtId = Integer.valueOf(-1);
+        Integer courtId = -1;
         Long formattedDocumentBlobId = getDummyLongId();
         Long xmlDocumentClobId = getDummyLongId();
         String language = "language";
         String country = "country";
-        Integer majorSchemaVersion = Integer.valueOf(-1);
-        Integer minorSchemaVersion = Integer.valueOf(-1);
+        Integer majorSchemaVersion = -1;
+        Integer minorSchemaVersion = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = "Test2";
         String createdBy = "Test1";
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbFormattingDao result = new XhbFormattingDao();
         result.setFormattingId(formattingId);
         result.setDateIn(dateIn);

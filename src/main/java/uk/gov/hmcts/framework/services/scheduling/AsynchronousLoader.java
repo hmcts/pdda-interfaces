@@ -18,7 +18,7 @@ import java.util.StringTokenizer;
  * 
  * <p>To have your data scheduled the class must extend AbstractLoadable.</p>
  */
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement"})
 public final class AsynchronousLoader implements Runnable {
     private final List<Loadable> jobStack = new ArrayList<>();
 

@@ -25,8 +25,8 @@ public final class DummyCourtelUtil {
     }
 
     public static XhbCourtelListDao getXhbCourtelListDao() {
-        Integer courtelListId = Integer.valueOf(-1);
-        Integer xmlDocumentId = Integer.valueOf(-2);
+        Integer courtelListId = -1;
+        Integer xmlDocumentId = -2;
         Long clobId = Long.valueOf(-3);
         Long blobId = Long.valueOf(-3);
         String messageText = "messageText";
@@ -34,7 +34,7 @@ public final class DummyCourtelUtil {
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
-        Integer version = Integer.valueOf(3);
+        Integer version = 3;
         XhbCourtelListDao result = new XhbCourtelListDao();
         result.setCourtelListId(courtelListId);
         result.setXmlDocumentId(xmlDocumentId);
@@ -55,7 +55,7 @@ public final class DummyCourtelUtil {
         ListJson result = new ListJson();
         result.setListType(ListType.CROWN_DAILY_LIST);
         result.setLanguage(Language.ENGLISH);
-        result.setCourtId(Integer.valueOf(1));
+        result.setCourtId(1);
         result.setContentDate(LocalDateTime.now());
         result.setJson("");
         return result;

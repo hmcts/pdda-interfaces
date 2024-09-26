@@ -119,7 +119,7 @@ public class Scheduler {
 
         String scheduledTaskDelimitedList = System.getProperty(SYSTEM_SCHEDULED_TASKS);
         if (scheduledTaskDelimitedList != null
-            && !scheduledTaskDelimitedList.equals(SYSTEM_SCHEDULED_USE_FILE)) {
+            && !SYSTEM_SCHEDULED_USE_FILE.equals(scheduledTaskDelimitedList)) {
             return scheduledTaskDelimitedList;
         }
 

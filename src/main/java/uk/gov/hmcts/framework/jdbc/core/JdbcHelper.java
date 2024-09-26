@@ -32,6 +32,7 @@ import javax.sql.DataSource;
  * @author Meeraj Kunnumpurath
  * @version $Id: JdbcHelper.java,v 1.13 2013/11/15 16:19:53 hingstb Exp $
  */
+@SuppressWarnings("PMD.CheckResultSet")
 public class JdbcHelper {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(JdbcHelper.class);

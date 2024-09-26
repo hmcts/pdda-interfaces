@@ -45,12 +45,12 @@ class CrLiveStatusHelperTest {
     private EntityManagerFactory mockEntityManagerFactory;
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         mockPddaEntityHelper();
     }
 
     @AfterEach
-    public void teardown() throws Exception {
+    public void teardown() {
         Mockito.clearAllCaches();
     }
 

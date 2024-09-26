@@ -57,7 +57,7 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
     protected boolean testfindById(XhbCourtelListDao dao) {
         Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId())).thenReturn(dao);
         Optional<XhbCourtelListDao> result =
-            (Optional<XhbCourtelListDao>) getClassUnderTest().findById(getDummyLongId());
+            getClassUnderTest().findById(getDummyLongId());
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(), SAME);
@@ -98,7 +98,7 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
         Optional<XhbCourtelListDao> result = Optional.empty();
         if (QUERY_XMLDOCUMENTID.equals(query)) {
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId())).thenReturn(dao);
-            result = (Optional<XhbCourtelListDao>) getClassUnderTest().findByXmlDocumentId(getDummyId());
+            result = getClassUnderTest().findByXmlDocumentId(getDummyId());
         } else if (QUERY_FINDCOURTELLIST.equals(query)) {
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
                 .thenReturn(dao);

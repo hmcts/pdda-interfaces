@@ -42,7 +42,8 @@ import java.util.Optional;
  * 
  * @author
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ExcessiveImports",
+    "PMD.CouplingBetweenObjects"})
 public class CourtDetailQuery extends PublicDisplayQuery {
 
     private PublicNoticeQuery mockPublicNoticeQuery;
@@ -57,18 +58,24 @@ public class CourtDetailQuery extends PublicDisplayQuery {
     }
 
     public CourtDetailQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
-        XhbCaseReferenceRepository xhbCaseReferenceRepository, XhbHearingListRepository xhbHearingListRepository,
-        XhbSittingRepository xhbSittingRepository, XhbScheduledHearingRepository xhbScheduledHearingRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+        XhbCaseReferenceRepository xhbCaseReferenceRepository,
+        XhbHearingListRepository xhbHearingListRepository,
+        XhbSittingRepository xhbSittingRepository,
+        XhbScheduledHearingRepository xhbScheduledHearingRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRoomRepository xhbCourtRoomRepository,
         XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository,
-        XhbHearingRepository xhbHearingRepository, XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
-        XhbDefendantRepository xhbDefendantRepository, XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
-        XhbRefHearingTypeRepository xhbRefHearingTypeRepository, XhbRefJudgeRepository xhbRefJudgeRepository,
-        PublicNoticeQuery mockPublicNoticeQuery) {
-        super(entityManager, xhbCaseRepository, xhbCaseReferenceRepository, xhbHearingListRepository,
-            xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
-            xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
-            xhbDefendantRepository, xhbCourtLogEntryRepository, xhbRefHearingTypeRepository, xhbRefJudgeRepository);
+        XhbHearingRepository xhbHearingRepository,
+        XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
+        XhbDefendantRepository xhbDefendantRepository,
+        XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
+        XhbRefHearingTypeRepository xhbRefHearingTypeRepository,
+        XhbRefJudgeRepository xhbRefJudgeRepository, PublicNoticeQuery mockPublicNoticeQuery) {
+        super(entityManager, xhbCaseRepository, xhbCaseReferenceRepository,
+            xhbHearingListRepository, xhbSittingRepository, xhbScheduledHearingRepository,
+            xhbCourtSiteRepository, xhbCourtRoomRepository, xhbSchedHearingDefendantRepository,
+            xhbHearingRepository, xhbDefendantOnCaseRepository, xhbDefendantRepository,
+            xhbCourtLogEntryRepository, xhbRefHearingTypeRepository, xhbRefJudgeRepository);
         this.mockPublicNoticeQuery = mockPublicNoticeQuery;
     }
 
@@ -76,7 +83,8 @@ public class CourtDetailQuery extends PublicDisplayQuery {
      * Common interface.
      */
     @Override
-    public Collection<CourtDetailValue> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
+    public Collection<CourtDetailValue> getData(LocalDateTime date, int courtId,
+        int... courtRoomIds) {
 
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
 
@@ -93,7 +101,8 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtDetailValue> getHearingData(List<XhbHearingListDao> hearingListDaos, int... courtRoomIds) {
+    private List<CourtDetailValue> getHearingData(List<XhbHearingListDao> hearingListDaos,
+        int... courtRoomIds) {
         List<CourtDetailValue> results = new ArrayList<>();
         for (XhbHearingListDao hearingListDao : hearingListDaos) {
             // Loop the sittings (floating and non-floating)
@@ -105,12 +114,14 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtDetailValue> getSittingData(List<XhbSittingDao> sittingDaos, int... courtRoomIds) {
+    private List<CourtDetailValue> getSittingData(List<XhbSittingDao> sittingDaos,
+        int... courtRoomIds) {
         List<CourtDetailValue> results = new ArrayList<>();
         for (XhbSittingDao sittingDao : sittingDaos) {
 
             // Loop the scheduledHearings
-            List<XhbScheduledHearingDao> scheduledHearingDaos = getScheduledHearingDaos(sittingDao.getSittingId());
+            List<XhbScheduledHearingDao> scheduledHearingDaos =
+                getScheduledHearingDaos(sittingDao.getSittingId());
             if (!scheduledHearingDaos.isEmpty()) {
                 for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
 
@@ -133,14 +144,19 @@ public class CourtDetailQuery extends PublicDisplayQuery {
     private boolean isDefendantHidden(Optional<XhbDefendantDao> defendantDao,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isCaseHidden) {
         return isCaseHidden
-            || defendantOnCaseDao.isPresent() && YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
-            || defendantDao.isPresent() && YES.contentEquals(defendantDao.get().getPublicDisplayHide());
+            || defendantOnCaseDao.isPresent()
+                && YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
+            || defendantDao.isPresent()
+                && YES.contentEquals(defendantDao.get().getPublicDisplayHide());
     }
 
-    private void populateJudgeData(CourtDetailValue result, XhbScheduledHearingDao scheduledHearingDao) {
-        Optional<XhbRefJudgeDao> refJudgeDao = getXhbRefJudgeDao(scheduledHearingDao.getScheduledHearingId());
+    private void populateJudgeData(CourtDetailValue result,
+        XhbScheduledHearingDao scheduledHearingDao) {
+        Optional<XhbRefJudgeDao> refJudgeDao =
+            getXhbRefJudgeDao(scheduledHearingDao.getScheduledHearingId());
         if (refJudgeDao.isPresent()) {
-            JudgeName judgeName = new JudgeName(refJudgeDao.get().getFullListTitle1(), refJudgeDao.get().getSurname());
+            JudgeName judgeName = new JudgeName(refJudgeDao.get().getFullListTitle1(),
+                refJudgeDao.get().getSurname());
             result.setJudgeName(judgeName);
         }
     }
@@ -163,7 +179,8 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         return mockPublicNoticeQuery;
     }
 
-    private CourtDetailValue getCourtDetailValue(XhbSittingDao sittingDao, XhbScheduledHearingDao scheduledHearingDao) {
+    private CourtDetailValue getCourtDetailValue(XhbSittingDao sittingDao,
+        XhbScheduledHearingDao scheduledHearingDao) {
         CourtDetailValue result = new CourtDetailValue();
         boolean isCaseHidden = false;
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
@@ -175,7 +192,8 @@ public class CourtDetailQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findById(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                 result.setCaseTitle(caseDao.get().getCaseTitle());
@@ -197,16 +215,19 @@ public class CourtDetailQuery extends PublicDisplayQuery {
 
                 // Get the defendant on case
                 Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-                    getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
-                if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
+                    getXhbDefendantOnCaseRepository()
+                        .findById(schedHearingDefendantDao.getDefendantOnCaseId());
+                if (defendantOnCaseDao.isPresent()
+                    && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
                     // Get the defendant
-                    Optional<XhbDefendantDao> defendantDao =
-                        getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                    Optional<XhbDefendantDao> defendantDao = getXhbDefendantRepository()
+                        .findById(defendantOnCaseDao.get().getDefendantId());
                     if (defendantDao.isPresent()) {
-                        DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
-                            defendantDao.get().getMiddleName(), defendantDao.get().getSurname(),
-                            isDefendantHidden(defendantDao, defendantOnCaseDao, isCaseHidden));
+                        DefendantName defendantName =
+                            getDefendantName(defendantDao.get().getFirstName(),
+                                defendantDao.get().getMiddleName(), defendantDao.get().getSurname(),
+                                isDefendantHidden(defendantDao, defendantOnCaseDao, isCaseHidden));
                         result.addDefendantName(defendantName);
                     }
                 }
@@ -223,7 +244,8 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         return result;
     }
 
-    private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
+    private DefendantName getDefendantName(String firstName, String middleName, String surname,
+        boolean hide) {
         return new DefendantName(firstName, middleName, surname, hide);
     }
 }
