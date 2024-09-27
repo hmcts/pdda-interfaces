@@ -21,9 +21,7 @@ import java.time.LocalDateTime;
         + "ORDER BY o.xmlDocumentId DESC")
 @NamedQuery(name = "XHB_COURTEL_LIST.findCourtelList",
     query = "SELECT o from XHB_COURTEL_LIST o WHERE o.sentToCourtel = 'N'"
-        + "and o.numSendAttempts < :courtelMaxRetry and "
-        + "(o.lastAttemptDatetime is null or "
-        + "(o.lastAttemptDatetime + make_interval(0,0,0,0,0,0,:intervalValue) < :courtelListAmount))")
+        + "and o.numSendAttempts < :courtelMaxRetry")
 public class XhbCourtelListDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
@@ -132,7 +130,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         this.numSendAttempts = numSendAttempts;
     }
 
-    private LocalDateTime getLastAttemptDatetime() {
+    public LocalDateTime getLastAttemptDatetime() {
         return lastAttemptDatetime;
     }
 

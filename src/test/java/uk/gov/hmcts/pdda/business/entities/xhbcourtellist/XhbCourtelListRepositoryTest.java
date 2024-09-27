@@ -31,9 +31,9 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
     private static final String QUERY_XMLDOCUMENTID = "xmlDocumentId";
     private static final String QUERY_FINDCOURTELLIST = "findCourtelList";
     private static final Integer DUMMY_COURTEL_LIST_AMOUNT = 5;
-    private static final Integer DUMMY_INTERVAL = 0;
+    private static final Integer DUMMY_INTERVAL = 5;
     private static final Integer DUMMY_COURTEL_MAX_RETRY = 5;
-    
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -55,9 +55,9 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
 
     @Override
     protected boolean testfindById(XhbCourtelListDao dao) {
-        Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId())).thenReturn(dao);
-        Optional<XhbCourtelListDao> result =
-            getClassUnderTest().findById(getDummyLongId());
+        Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId()))
+            .thenReturn(dao);
+        Optional<XhbCourtelListDao> result = getClassUnderTest().findById(getDummyLongId());
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(), SAME);
@@ -74,50 +74,65 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
 
     @Test
     void testFindByXmlDocumentId() {
-        boolean result = testFindBy(QUERY_XMLDOCUMENTID, getDummyDao());
+        List<XhbCourtelListDao> list = new ArrayList<>();
+        // test empty list
+        boolean result = testFindBy(QUERY_XMLDOCUMENTID, list);
         assertTrue(result, NOT_TRUE);
-        result = testFindBy(QUERY_XMLDOCUMENTID, null);
-        assertTrue(result, NOT_TRUE);
-    }
-    
-    @Test
-    void testFindCourtelList() {
-        boolean result = testFindBy(QUERY_FINDCOURTELLIST, getDummyDao());
-        assertTrue(result, NOT_TRUE);
-        result = testFindBy(QUERY_FINDCOURTELLIST, null);
+        // test populated list
+        list.add(getDummyDao());
+        result = testFindBy(QUERY_XMLDOCUMENTID, list);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testFindBy(String query, XhbCourtelListDao dao) {
+    @Test
+    void testFindCourtelList() {
         List<XhbCourtelListDao> list = new ArrayList<>();
-        if (dao != null) {
-            list.add(dao);
-        }
+        // test empty list
+        boolean result = testFindBy(QUERY_FINDCOURTELLIST, list);
+        assertTrue(result, NOT_TRUE);
+        // test populated list
+        XhbCourtelListDao now = getDummyDao();
+        now.setLastAttemptDatetime(LocalDateTime.now());
+        list.add(now);
+        XhbCourtelListDao sixMinutesAgo = getDummyDao();
+        sixMinutesAgo.setLastAttemptDatetime(LocalDateTime.now().minusMinutes(6));
+        list.add(sixMinutesAgo);
+        XhbCourtelListDao never = getDummyDao();
+        list.add(never);
+        never.setLastAttemptDatetime(null);
+        result = testFindBy(QUERY_FINDCOURTELLIST, list);
+        assertTrue(result, NOT_TRUE);
+    }
+
+    private boolean testFindBy(String query, List<XhbCourtelListDao> list) {
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         Optional<XhbCourtelListDao> result = Optional.empty();
         if (QUERY_XMLDOCUMENTID.equals(query)) {
-            Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId())).thenReturn(dao);
-            result = getClassUnderTest().findByXmlDocumentId(getDummyId());
-        } else if (QUERY_FINDCOURTELLIST.equals(query)) {
+            XhbCourtelListDao dao = list.isEmpty() ? null : list.get(0);
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
                 .thenReturn(dao);
-            List<XhbCourtelListDao> resultList =
-                getClassUnderTest().findCourtelList(DUMMY_COURTEL_MAX_RETRY, DUMMY_INTERVAL,
-                    LocalDateTime.now().plusMinutes(DUMMY_COURTEL_LIST_AMOUNT));
+            result = getClassUnderTest().findByXmlDocumentId(getDummyId());
+        } else if (QUERY_FINDCOURTELLIST.equals(query)) {
+            XhbCourtelListDao dao = list.isEmpty() ? null : list.get(0);
+            Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
+                .thenReturn(dao);
+            List<XhbCourtelListDao> resultList = getClassUnderTest().findCourtelList(
+                DUMMY_COURTEL_MAX_RETRY, DUMMY_INTERVAL, DUMMY_COURTEL_LIST_AMOUNT);
             assertNotNull(resultList, "Result is Null");
-            if (dao != null) {
-                assertSame(dao, resultList.get(0), SAME);
-            } else {
+            if (list.isEmpty()) {
                 assertSame(0, resultList.size(), SAME);
+            } else {
+                // Should only return 'never' and 'sixMinutesAgo'
+                assertSame(list.size() - 1, resultList.size(), SAME);
             }
             return true;
         }
         assertNotNull(result, NOTNULL);
-        if (dao != null) {
-            assertSame(dao, result.get(), SAME);
-        } else {
+        if (list.isEmpty()) {
             assertSame(Optional.empty(), result, SAME);
+        } else {
+            assertSame(list.get(0), result.get(), SAME);
         }
         return true;
     }
