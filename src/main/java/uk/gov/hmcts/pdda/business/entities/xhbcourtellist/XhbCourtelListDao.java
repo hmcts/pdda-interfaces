@@ -130,7 +130,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         this.numSendAttempts = numSendAttempts;
     }
 
-    private LocalDateTime getLastAttemptDatetime() {
+    public LocalDateTime getLastAttemptDatetime() {
         return lastAttemptDatetime;
     }
 
