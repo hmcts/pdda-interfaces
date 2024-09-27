@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
     private static final String QUERY_XMLDOCUMENTID = "xmlDocumentId";
     private static final String QUERY_FINDCOURTELLIST = "findCourtelList";
     private static final Integer DUMMY_COURTEL_LIST_AMOUNT = 5;
-    private static final Integer DUMMY_INTERVAL = 0;
+    private static final Integer DUMMY_INTERVAL = 5;
     private static final Integer DUMMY_COURTEL_MAX_RETRY = 5;
 
     @Mock
@@ -108,31 +109,30 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         Optional<XhbCourtelListDao> result = Optional.empty();
         if (QUERY_XMLDOCUMENTID.equals(query)) {
-            XhbCourtelListDao dao = list.size() > 0 ? list.get(0) : null;
+            XhbCourtelListDao dao = list.isEmpty() ? null : list.get(0);
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
                 .thenReturn(dao);
             result = getClassUnderTest().findByXmlDocumentId(getDummyId());
         } else if (QUERY_FINDCOURTELLIST.equals(query)) {
-            XhbCourtelListDao dao = list.size() > 0 ? list.get(0) : null;
+            XhbCourtelListDao dao = list.isEmpty() ? null : list.get(0);
             Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyId()))
                 .thenReturn(dao);
             List<XhbCourtelListDao> resultList = getClassUnderTest().findCourtelList(
                 DUMMY_COURTEL_MAX_RETRY, DUMMY_INTERVAL, DUMMY_COURTEL_LIST_AMOUNT);
             assertNotNull(resultList, "Result is Null");
-            if (list.size() > 0) {
-                // Should only return 'never' and 'sixMinutesAgo'
-                assertSame(list.size()-2, resultList.size(), SAME); // TODO delete me
-                //assertSame(list.size() - 1, resultList.size(), SAME); // TODO reinstate me
-            } else {
+            if (list.isEmpty()) {
                 assertSame(0, resultList.size(), SAME);
+            } else {
+                // Should only return 'never' and 'sixMinutesAgo'
+                assertSame(list.size() - 1, resultList.size(), SAME);
             }
             return true;
         }
         assertNotNull(result, NOTNULL);
-        if (list.size() > 0) {
-            assertSame(list.get(0), result.get(), SAME);
-        } else {
+        if (list.isEmpty()) {
             assertSame(Optional.empty(), result, SAME);
+        } else {
+            assertSame(list.get(0), result.get(), SAME);
         }
         return true;
     }
