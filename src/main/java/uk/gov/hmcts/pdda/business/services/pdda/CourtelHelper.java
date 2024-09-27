@@ -115,7 +115,7 @@ public class CourtelHelper {
         return xhbCourtelListRepository.findCourtelList(
             getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
-            LocalDateTime.now().plusMinutes(getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT)));
+            getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT));
     }
 
     private Integer getConfigPropValue(String value) {
@@ -126,7 +126,7 @@ public class CourtelHelper {
                 LOG.error("{} = {}", value, propertyValue);
                 return maxRetry;
             } else {
-                LOG.error("{} is null", value);
+                LOG.error("{} is null", value); 
             }
         } catch (Exception ex) {
             LOG.error("{} contains non-numeric data", value);
