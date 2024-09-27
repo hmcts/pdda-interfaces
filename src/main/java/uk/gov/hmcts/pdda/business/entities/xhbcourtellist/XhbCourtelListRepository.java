@@ -42,16 +42,17 @@ public class XhbCourtelListRepository extends AbstractRepository<XhbCourtelListD
 
     @SuppressWarnings("unchecked")
     public List<XhbCourtelListDao> findCourtelList(final Integer courtelMaxRetry,
-        final Integer intervalValue, final LocalDateTime courtelListAmount) {
+        final Integer intervalValue, final Integer courtelListAmount) {
         LOG.debug("findCourtelList()");
         Query query = getEntityManager().createNamedQuery("XHB_COURTEL_LIST.findCourtelList");
         query.setParameter("courtelMaxRetry", courtelMaxRetry);
         List<XhbCourtelListDao> courtelList = query.getResultList();
         List<XhbCourtelListDao> sortedCourtelList = new ArrayList<>();
 
+        LocalDateTime courtelListTime = LocalDateTime.now().plusMinutes(courtelListAmount);
         for (XhbCourtelListDao result : courtelList) {
             if (result.getLastAttemptDatetime() == null || result.getLastAttemptDatetime()
-                .plusSeconds(intervalValue).isAfter(courtelListAmount)) {
+                .plusSeconds(intervalValue).isAfter(courtelListTime)) {
                 sortedCourtelList.add(result);
             }
         }

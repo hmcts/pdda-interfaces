@@ -18,7 +18,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -215,7 +214,7 @@ class CourtelHelperTest {
             .andReturn(courtelLisAmount.toString());
         EasyMock
             .expect(mockXhbCourtelListRepository.findCourtelList(EasyMock.isA(Integer.class),
-                EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelListDaoList);
         EasyMock.replay(mockConfigPropMaintainer);
         EasyMock.replay(mockXhbCourtelListRepository);

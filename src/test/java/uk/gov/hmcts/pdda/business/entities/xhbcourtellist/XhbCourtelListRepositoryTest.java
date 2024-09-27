@@ -13,7 +13,6 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +103,7 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
                 .thenReturn(dao);
             List<XhbCourtelListDao> resultList =
                 getClassUnderTest().findCourtelList(DUMMY_COURTEL_MAX_RETRY, DUMMY_INTERVAL,
-                    LocalDateTime.now().plusMinutes(DUMMY_COURTEL_LIST_AMOUNT));
+                    DUMMY_COURTEL_LIST_AMOUNT);
             assertNotNull(resultList, "Result is Null");
             if (dao != null) {
                 assertSame(dao, resultList.get(0), SAME);
