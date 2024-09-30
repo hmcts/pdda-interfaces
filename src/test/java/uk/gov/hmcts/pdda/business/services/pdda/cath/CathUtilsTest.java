@@ -255,7 +255,7 @@ class CathUtilsTest {
     @Test
     void testGenerateJsonFromString() {
         JSONObject result = CathUtils.generateJsonFromString(DAILY_LIST_XML);
-        String jsonAsString = result.toString(4);
+        String jsonAsString = result.toString(4); // This indentation value of 4 matches the indentation of the xml
         assertNotNull(jsonAsString, NOTNULL);
     }
 }
