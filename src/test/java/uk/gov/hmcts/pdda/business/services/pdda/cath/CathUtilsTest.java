@@ -184,7 +184,7 @@ class CathUtilsTest {
         + "                                            <cs:BreachMultiple>TEST</cs:BreachMultiple>\r\n"
         + "                                        </cs:Charge>\r\n"
         + "                                    </cs:Charges>\r\n"
-        + "                                    <cs:OrigionalCharges></cs:OrigionalCharges>\r\n"
+        + "                                    <cs:OriginalCharges></cs:OriginalCharges>\r\n"
         + "                                </cs:Defendant>\r\n"
         + "                            </cs:Defendants>\r\n"
         + "                            <cs:Respondent></cs:Respondent>\r\n"
