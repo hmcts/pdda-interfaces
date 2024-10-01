@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
+import org.json.JSONObject;
+import org.json.XML;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
@@ -61,5 +63,9 @@ public final class CathUtils {
     public static String getApimUri() {
         String apimUri = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
         return String.format(POST_URL, apimUri);
+    }
+    
+    public static JSONObject generateJsonFromString(String stringToConvert) {
+        return XML.toJSONObject(stringToConvert);
     }
 }
