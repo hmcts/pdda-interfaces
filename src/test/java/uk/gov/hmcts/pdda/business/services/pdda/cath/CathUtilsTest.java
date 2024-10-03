@@ -10,11 +10,20 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -40,267 +49,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidFileStream", "PMD.AssignmentInOperand"})
 class CathUtilsTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
+    
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
-
-    private static final String DAILY_LIST_XML = "<cs:DailyList\r\n"
-        + "    xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"\r\n"
-        + "    xmlns:apd=\"http://www.govtalk.gov.uk/people/AddressAndPersonalDetails\"\r\n"
-        + "    xmlns=\"http://www.govtalk.gov.uk/people/AddressAndPersonalDetails\"\r\n"
-        + "    xmlns:p2=\"http://www.govtalk.gov.uk/people/bs7666\"\r\n"
-        + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
-        + "    xsi:schemaLocation=\"http://www.courtservice.gov.uk/schemas/courtservice DailyList-v5-9.xsd\">\r\n"
-        + "    <cs:DocumentID>\r\n"
-        + "        <cs:UniqueID>0149051e-9db2-4b47-999e-fef76909ee73</cs:UniqueID>\r\n"
-        + "        <cs:DocumentType>TEST</cs:DocumentType>\r\n" + "    </cs:DocumentID>\r\n"
-        + "    <cs:ListHeader>\r\n" + "        <cs:ListCategory>Criminal</cs:ListCategory>\r\n"
-        + "        <cs:StartDate>2020-01-21</cs:StartDate>\r\n"
-        + "        <cs:EndDate>2020-01-21</cs:EndDate>\r\n"
-        + "        <cs:Version>NOT VERSIONED</cs:Version>\r\n"
-        + "        <cs:PublishedTime>2020-01-07T18:45:03.000</cs:PublishedTime>\r\n"
-        + "    </cs:ListHeader>\r\n" + "    <cs:CrownCourt>\r\n"
-        + "        <cs:CourtHouseType>TEST</cs:CourtHouseType>\r\n"
-        + "        <cs:CourtHouseCode>TEST</cs:CourtHouseCode>\r\n"
-        + "        <cs:CourtHouseName>SNARESBROOK</cs:CourtHouseName>\r\n"
-        + "        <cs:CourtHouseAddress>\r\n" + "            <cs:Line>TEST</cs:Line>\r\n"
-        + "            <cs:Postcode>TEST</cs:Postcode>\r\n" + "        </cs:CourtHouseAddress>\r\n"
-        + "        <cs:CourtHouseTelephone>TEST</cs:CourtHouseTelephone>\r\n"
-        + "        <cs:Description>TEST</cs:Description>\r\n" + "    </cs:CrownCourt>\r\n"
-        + "    <cs:CourtLists>\r\n" + "        <cs:CourtList>\r\n"
-        + "            <cs:CourtHouse>\r\n"
-        + "                <cs:Description>TEST</cs:Description>\r\n"
-        + "            </cs:CourtHouse>\r\n" + "            <cs:Sittings>\r\n"
-        + "                <cs:Sitting>\r\n"
-        + "                    <cs:CourtRoomNumber>235</cs:CourtRoomNumber>\r\n"
-        + "                    <cs:SittingAt>TEST</cs:SittingAt>\r\n"
-        + "                    <cs:SittingPriority>T</cs:SittingPriority>\r\n"
-        + "                    <cs:SittingNote>TEST</cs:SittingNote>\r\n"
-        + "                    <cs:Judiciary>\r\n" + "                        <cs:Judge>\r\n"
-        + "                            <apd:CitizenNameTitle>TEST</apd:CitizenNameTitle>\r\n"
-        + "                            <apd:CitizenNameForename>TEST</apd:CitizenNameForename>\r\n"
-        + "                            <apd:CitizenNameSurname>Van-JUDGE</apd:CitizenNameSurname>\r\n"
-        + "                            <apd:CitizenNameSuffix>TEST</apd:CitizenNameSuffix>\r\n"
-        + "                            <apd:CitizenNameRequestedName>Freddy</apd:CitizenNameRequestedName>\r\n"
-        + "                            <apd:CRESTjudgeID>TEST</apd:CRESTjudgeID>\r\n"
-        + "                        </cs:Judge>\r\n" + "                        <cs:Justice>\r\n"
-        + "                            <cs:CitizenNameTitle>TEST</cs:CitizenNameTitle>\r\n"
-        + "                            <cs:CitizenNameForename>TEST</cs:CitizenNameForename>\r\n"
-        + "                            <cs:CitizenNameSurname>TEST</cs:CitizenNameSurname>\r\n"
-        + "                            <cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>\r\n"
-        + "                            <cs:CitizenNameRequestedName>TEST</cs:CitizenNameRequestedName>\r\n"
-        + "                            <cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>\r\n"
-        + "                        </cs:Justice>\r\n" + "                    </cs:Judiciary>\r\n"
-        + "                    <cs:Hearings>\r\n" + "                        <cs:Hearing>\r\n"
-        + "                            <cs:HearingDetails HearingType=\"TRL\">\r\n"
-        + "                                <cs:ListNote>TEST</cs:ListNote>\r\n"
-        + "                                <cs:HearingType>TEST</cs:HearingType>\r\n"
-        + "                            </cs:HearingDetails>\r\n"
-        + "                            <cs:TimeMakingNote>TEST</cs:TimeMakingNote>\r\n"
-        + "                            <cs:CaseNumber>92AD685737</cs:CaseNumber>\r\n"
-        + "                            <cs:Prosecution\r\n"
-        + "                                ProsecutingAuthority=\"Crown Prosecution Service\">\r\n"
-        + "                                <cs:ProsecutingReference>92AD685737</cs:ProsecutingReference>\r\n"
-        + "                                <cs:ProsecutingOrganisation>\r\n"
-        + "                                    <cs:OrganisationCode>TEST</cs:OrganisationCode>\r\n"
-        + "                                    <cs:OrganisationName>TEST</cs:OrganisationName>\r\n"
-        + "                                    <cs:OrganisationAddress>\r\n"
-        + "                                        <cs:Line>TEST</cs:Line>\r\n"
-        + "                                        <cs:Postcode>TEST</cs:Postcode>\r\n"
-        + "                                    </cs:OrganisationAddress>\r\n"
-        + "                                    <cs:OrganisationDX>TEST</cs:OrganisationDX>\r\n"
-        + "                                    <cs:ContactDetails>\r\n"
-        + "                                        <cs:Email>TEST</cs:Email>\r\n"
-        + "                                        <cs:Telephone>TEST</cs:Telephone>\r\n"
-        + "                                        <cs:Fax>TEST</cs:Fax>\r\n"
-        + "                                    </cs:ContactDetails>\r\n"
-        + "                                </cs:ProsecutingOrganisation>\r\n"
-        + "                                <cs:ProsecutionAuthority>TEST</cs:ProsecutionAuthority>\r\n"
-        + "                            </cs:Prosecution>\r\n"
-        + "                            <cs:ComittingCourt>\r\n"
-        + "                                <cs:CourtHouseType>TEST</cs:CourtHouseType>\r\n"
-        + "                                <cs:CourtHouseCode>TEST</cs:CourtHouseCode>\r\n"
-        + "                                <cs:CourtHouseCodeType>TEST</cs:CourtHouseCodeType>\r\n"
-        + "                                <cs:CourtHouseShortName>TEST</cs:CourtHouseShortName>\r\n"
-        + "                                <cs:CourtHouseName>TEST</cs:CourtHouseName>\r\n"
-        + "                                <cs:CourtHouseAddress>\r\n"
-        + "                                    <cs:Line>TEST</cs:Line>\r\n"
-        + "                                    <cs:Postcode>TEST</cs:Postcode>\r\n"
-        + "                                </cs:CourtHouseAddress>\r\n"
-        + "                                <cs:CourtHouseDX>TEST</cs:CourtHouseDX>\r\n"
-        + "                                <cs:CourtHouseTelephone>TEST</cs:CourtHouseTelephone>\r\n"
-        + "                                <cs:CourtHouseFax>TEST</cs:CourtHouseFax>\r\n"
-        + "                                <cs:Description>TEST</cs:Description>\r\n"
-        + "                            </cs:ComittingCourt>\r\n"
-        + "                            <cs:ListNote>TEST</cs:ListNote>\r\n"
-        + "                            <cs:Defendants>\r\n"
-        + "                                <cs:Defendant>\r\n"
-        + "                                    <cs:PersonalDetails>\r\n"
-        + "                                        <apd:CitizenNameForename>TEST</apd:CitizenNameForename>\r\n"
-        + "                                        <apd:CitizenNameSurname>Van</apd:CitizenNameSurname>\r\n"
-        + "                                        <apd:CitizenNameRequestedName>Sri</apd:CitizenNameRequestedName>\r\n"
-        + "                                        <cs:IsMasked>no</cs:IsMasked>\r\n"
-        + "                                    </cs:PersonalDetails>\r\n"
-        + "                                    <cs:ContactDetails>\r\n"
-        + "                                        <cs:Email>TEST</cs:Email>\r\n"
-        + "                                        <cs:Telephone>TEST</cs:Telephone>\r\n"
-        + "                                        <cs:Fax>TEST</cs:Fax>\r\n"
-        + "                                    </cs:ContactDetails>\r\n"
-        + "                                    <cs:Charges>\r\n"
-        + "                                        <cs:Charge CJSoffenceCode=\"TH68001A\"\r\n"
-        + "                                            IndictmentCountNumber=\"0\">\r\n"
-        + "                                            <cs:CRN>TEST</cs:CRN>\r\n"
-        + "                                            <cs:OffenceStatement>Attempted theft</cs:OffenceStatement>\r\n"
-        + "                                            <cs:OffenceLocation>\r\n"
-        + "                                                <cs:Line>TEST</cs:Line>\r\n"
-        + "                                                <cs:Postcode>TEST</cs:Postcode>\r\n"
-        + "                                            </cs:OffenceLocation>\r\n"
-        + "                                            <cs:ArrestingPoliceForceCode>TEST"
-        + "                                            </cs:ArrestingPoliceForceCode>\r\n"
-        + "                                            <cs:ComittedOnBail>TEST</cs:ComittedOnBail>\r\n"
-        + "                                            <cs:OffenceStartDateTime>TEST</cs:OffenceStartDateTime>\r\n"
-        + "                                            <cs:OffenceEndDateTime>TEST</cs:OffenceEndDateTime>\r\n"
-        + "                                            <cs:ArraingmentDate>TEST</cs:ArraingmentDate>\r\n"
-        + "                                            <cs:ConvictionDate>TEST</cs:ConvictionDate>\r\n"
-        + "                                            <cs:OffenceParticulars>TEST</cs:OffenceParticulars>\r\n"
-        + "                                            <cs:CRESToffenceNumber>TEST</cs:CRESToffenceNumber>\r\n"
-        + "                                            <cs:Plea>TEST</cs:Plea>\r\n"
-        + "                                            <cs:Verdict>TEST</cs:Verdict>\r\n"
-        + "                                            <cs:Disposals>\r\n"
-        + "                                                <cs:Disposal>TEST</cs:Disposal>\r\n"
-        + "                                                <cs:CRESTDisposalData>TEST</cs:CRESTDisposalData>\r\n"
-        + "                                            </cs:Disposals>\r\n"
-        + "                                            <cs:SentenceTerm>TEST</cs:SentenceTerm>\r\n"
-        + "                                            <cs:TermType>TEST</cs:TermType>\r\n"
-        + "                                            <cs:ForLife>TEST</cs:ForLife>\r\n"
-        + "                                            <cs:ChargeType>TEST</cs:ChargeType>\r\n"
-        + "                                            <cs:IndictmentNumber>TEST</cs:IndictmentNumber>\r\n"
-        + "                                            <cs:IndictmentCountNumber>TEST</cs:IndictmentCountNumber>\r\n"
-        + "                                            <cs:CJSoffenceCode>TEST</cs:CJSoffenceCode>\r\n"
-        + "                                            <cs:PNCoffencecode>TEST</cs:PNCoffencecode>\r\n"
-        + "                                            <cs:HOoffencecode>TEST</cs:HOoffencecode>\r\n"
-        + "                                            <cs:Life>TEST</cs:Life>\r\n"
-        + "                                            <cs:BreachMultiple>TEST</cs:BreachMultiple>\r\n"
-        + "                                        </cs:Charge>\r\n"
-        + "                                    </cs:Charges>\r\n"
-        + "                                    <cs:OriginalCharges></cs:OriginalCharges>\r\n"
-        + "                                </cs:Defendant>\r\n"
-        + "                            </cs:Defendants>\r\n"
-        + "                            <cs:Respondent></cs:Respondent>\r\n"
-        + "                        </cs:Hearing>\r\n" + "                    </cs:Hearings>\r\n"
-        + "                </cs:Sitting>\r\n" + "            </cs:Sittings>\r\n"
-        + "        </cs:CourtList>\r\n" + "    </cs:CourtLists>\r\n" + "</cs:DailyList>";
-    
-    private static final String FIRM_LIST_XML = "<cs:FirmList\r\n"
-        + "    xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"\r\n"
-        + "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n"
-        + "    xmlns:apd=\"http://www.govtalk.gov.uk/people/AddressAndPersonalDetails\" xsi:schemaLocation=\"http://www.courtservice.gov.uk/schemas/courtservice FirmList-v5-2.xsd\">\r\n"
-        + "    <cs:DocumentID>\r\n" + "        <cs:DocumentName></cs:DocumentName>\r\n"
-        + "        <cs:UniqueID>CSDFL000000000040425</cs:UniqueID>\r\n"
-        + "        <cs:DocumentType>FL</cs:DocumentType>\r\n"
-        + "        <cs:TimeStamp>2024-08-02T12:11:38.034</cs:TimeStamp>\r\n"
-        + "    </cs:DocumentID>\r\n" + "    <cs:ListHeader>\r\n"
-        + "        <cs:ListCategory>Criminal</cs:ListCategory>\r\n"
-        + "        <cs:StartDate>2009-08-26</cs:StartDate>\r\n"
-        + "        <cs:EndDate>2009-09-01</cs:EndDate>\r\n"
-        + "        <cs:PublishedTime>2009-08-26T13:43:31.988</cs:PublishedTime>\r\n"
-        + "        <cs:CRESTlistID>12279</cs:CRESTlistID>\r\n" + "    </cs:ListHeader>\r\n"
-        + "    <cs:CrownCourt>\r\n"
-        + "        <cs:CourtHouseType>Crown Court</cs:CourtHouseType>\r\n"
-        + "        <cs:CourtHouseName>SNARESBROOK</cs:CourtHouseName>\r\n"
-        + "        <cs:CourtHouseAddress>\r\n"
-        + "            <apd:Line>THE CROWN COURT AT SNARESBROOK</apd:Line>\r\n"
-        + "            <apd:Line>75 HOLLYBUSH HILL</apd:Line>\r\n"
-        + "            <apd:Line>SNARESBROOK, LONDON</apd:Line>\r\n"
-        + "            <apd:PostCode>E11 1QW</apd:PostCode>\r\n"
-        + "        </cs:CourtHouseAddress>\r\n"
-        + "        <cs:CourtHouseTelephone>02085300000</cs:CourtHouseTelephone>\r\n"
-        + "        <cs:Description>CROWN COURT</cs:Description>\r\n"
-        + "    </cs:CrownCourt>    \r\n" + "    <cs:CourtLists>\r\n"
-        + "        <cs:CourtList SittingDate=\"2009-08-26\">\r\n"
-        + "            <cs:CourtHouse>\r\n"
-        + "                <cs:CourtHouseName>SNARESBROOK CROWN COURT</cs:CourtHouseName>\r\n"
-        + "                <cs:Description>CROWN COURT</cs:Description>\r\n"
-        + "            </cs:CourtHouse>\r\n" + "            <cs:Sittings>\r\n"
-        + "                <cs:Sitting>\r\n"
-        + "                    <cs:CourtRoomNumber>1</cs:CourtRoomNumber>\r\n"
-        + "                    <cs:SittingSequenceNo>1</cs:SittingSequenceNo>\r\n"
-        + "                    <cs:SittingAt>10:00:00</cs:SittingAt>\r\n"
-        + "                    <cs:SittingPriority>T</cs:SittingPriority>\r\n"
-        + "                    <cs:SittingNote>TEST</cs:SittingNote>\r\n"
-        + "                    <cs:Judiciary>\r\n" + "                        <cs:Judge>\r\n"
-        + "                            <apd:CitizenNameTitle>N&#47;A</apd:CitizenNameTitle>\r\n"
-        + "                            <apd:CitizenNameForename>N&#47;A</apd:CitizenNameForename>\r\n"
-        + "                            <apd:CitizenNameSurname>N&#47;A</apd:CitizenNameSurname>\r\n"
-        + "                            <apd:CitizenNameRequestedName>N&#47;A</apd:CitizenNameRequestedName>\r\n"
-        + "                            <cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>\r\n"
-        + "                            <cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>\r\n"
-        + "                        </cs:Judge>\r\n" + "                        <cs:Justice>\r\n"
-        + "                            <cs:CitizenNameTitle>TEST</cs:CitizenNameTitle>\r\n"
-        + "                            <cs:CitizenNameForename>TEST</cs:CitizenNameForename>\r\n"
-        + "                            <cs:CitizenNameSurname>TEST</cs:CitizenNameSurname>\r\n"
-        + "                            <cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>\r\n"
-        + "                            <cs:CitizenNameRequestedName>TEST</cs:CitizenNameRequestedName>\r\n"
-        + "                            <cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>\r\n"
-        + "                        </cs:Justice>\r\n"
-        + "                        <cs:StartDate>2021-06-08</cs:StartDate>\r\n"
-        + "                        <cs:EndDate>2021-06-18</cs:EndDate>\r\n"
-        + "                    </cs:Judiciary>\r\n" + "                    <cs:Hearings>\r\n"
-        + "                        <cs:Hearing>\r\n"
-        + "                            <cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>\r\n"
-        + "                            <cs:HearingDetails HearingType=\"TRL\">\r\n"
-        + "                                <cs:HearingDescription>For Trial</cs:HearingDescription>\r\n"
-        + "                                <cs:HearingDate>2009-08-26</cs:HearingDate>\r\n"
-        + "                                <cs:HearingEndDate>2021-06-18</cs:HearingEndDate>\r\n"
-        + "                                <cs:ListNote>TEST</cs:ListNote>\r\n"
-        + "                                <cs:HearingType>TEST</cs:HearingType>\r\n"
-        + "                            </cs:HearingDetails>\r\n"
-        + "                            <cs:CRESThearingID>126377</cs:CRESThearingID>\r\n"
-        + "                            <cs:TimeMakingNote>TEST</cs:TimeMakingNote>\r\n"
-        + "                            <cs:CaseNumber>T20080205</cs:CaseNumber>\r\n"
-        + "                            <cs:Prosecution ProsecutingAuthority=\"Crown Prosecution Service\">\r\n"
-        + "                                <cs:Advocate></cs:Advocate>\r\n"
-        + "                                <cs:ProsecutingReference>Crown Prosecution Service"
-        + "                                 </cs:ProsecutingReference>\r\n"
-        + "                                <cs:ProsecutingOrganisation>\r\n"
-        + "                                    <cs:OrganisationCode>5</cs:OrganisationCode>\r\n"
-        + "                                    <cs:OrganisationName>Crown Prosecution Service</cs:OrganisationName>\r\n"
-        + "                                    <cs:OrganisationAddress>\r\n"
-        + "                                        <apd:Line>WREXHAM</apd:Line>\r\n"
-        + "                                        <apd:PostCode>WX1 2NE</apd:PostCode>\r\n"
-        + "                                    </cs:OrganisationAddress>\r\n"
-        + "                                    <cs:OrganisationDX>5</cs:OrganisationDX>\r\n"
-        + "                                    <cs:ContactDetails>\r\n"
-        + "                                        <apd:Email>test@test.com</apd:Email>\r\n"
-        + "                                        <apd:Telephone>01978346000</apd:Telephone>\r\n"
-        + "                                        <apd:Fax>01979346060</apd:Fax>\r\n"
-        + "                                    </cs:ContactDetails>\r\n"
-        + "                                </cs:ProsecutingOrganisation>\r\n"
-        + "                            </cs:Prosecution>\r\n"
-        + "                            <cs:CommittingCourt>\r\n"
-        + "                                <cs:CourtHouseType>Magistrates Court</cs:CourtHouseType>\r\n"
-        + "                            </cs:CommittingCourt>\r\n"
-        + "                            <cs:ListNote>Order made under Contempt of Court Act 1981</cs:ListNote>\r\n"
-        + "                            <cs:Defendants>\r\n"
-        + "                                <cs:Defendant>\r\n"
-        + "                                    <cs:PersonalDetails>\r\n"
-        + "                                        <cs:Name>\r\n"
-        + "                                            <apd:CitizenNameForename>Bill Uma</apd:CitizenNameForename>\r\n"
-        + "                                            <apd:CitizenNameSurname>BABEDGE UMA</apd:CitizenNameSurname>\r\n"
-        + "                                            <apd:CitizenNameRequestedName>CPS"
-        + "                                             </apd:CitizenNameRequestedName>\r\n"
-        + "                                        </cs:Name>\r\n"
-        + "                                        <cs:IsMasked>no</cs:IsMasked>\r\n"
-        + "                                    </cs:PersonalDetails>\r\n"
-        + "                                    <cs:ContactDetails></cs:ContactDetails>\r\n"
-        + "                                </cs:Defendant>\r\n"
-        + "                            </cs:Defendants>\r\n"
-        + "                            <cs:Respondent></cs:Respondent>\r\n"
-        + "                        </cs:Hearing>\r\n" + "                    </cs:Hearings>\r\n"
-        + "                </cs:Sitting>\r\n" + "            </cs:Sittings>\r\n"
-        + "        </cs:CourtList>\r\n" + "    </cs:CourtLists>\r\n"
-        + "    <cs:ReserveList></cs:ReserveList>\r\n" + "</cs:FirmList>";
 
     @Mock
     private Environment mockEnvironment;
@@ -362,12 +117,39 @@ class CathUtilsTest {
     }
 
     @Test
-    void testGenerateJsonFromString() {
-        JSONObject result = CathUtils.generateJsonFromString(DAILY_LIST_XML);
-        String jsonAsString = result.toString(4); // This indentation value of 4 matches the indentation of the xml
+    void testGenerateDailyListJsonFromString() throws IOException {
+        JSONObject result =
+            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleDailyList_V3.xml"));
+        // Indentation value 4 matches the indentation of the xml before json conversion
+        String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
-        result = CathUtils.generateJsonFromString(FIRM_LIST_XML);
-        jsonAsString = result.toString(4);
+    }
+
+    @Test
+    void testGenerateWarnedListJsonFromString() throws IOException {
+        JSONObject result =
+            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleWarnedList_V1.xml"));
+        // Indentation value 4 matches the indentation of the xml before json conversion
+        String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
+    }
+
+    private String fetchAndReadFile(String fileName) throws FileNotFoundException {
+        // Fetch File
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        File file = new File(classLoader
+            .getResource("database/test-data/example_list_xml_docs/" + fileName).getFile());
+        InputStream inputStream = new FileInputStream(file);
+        // Read File
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            LOG.debug("Failed to read file: {}", e);
+        }
+        return resultStringBuilder.toString();
     }
 }
