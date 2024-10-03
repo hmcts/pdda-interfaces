@@ -1,0 +1,119 @@
+<cs:FirmList
+	xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xsi:schemaLocation="http://www.courtservice.gov.uk/schemas/courtservice FirmList-v5-2.xsd">
+	<cs:DocumentID>
+		<cs:DocumentName></cs:DocumentName>
+		<cs:UniqueID>CSDFL000000000040425</cs:UniqueID>
+		<cs:DocumentType>FL</cs:DocumentType>
+		<cs:TimeStamp>2024-08-02T12:11:38.034</cs:TimeStamp>
+	</cs:DocumentID>
+	<cs:ListHeader>
+		<cs:ListCategory>Criminal</cs:ListCategory>
+		<cs:StartDate>2009-08-26</cs:StartDate>
+		<cs:EndDate>2009-09-01</cs:EndDate>
+		<cs:PublishedTime>2009-08-26T13:43:31.988</cs:PublishedTime>
+		<cs:CRESTlistID>12279</cs:CRESTlistID>
+	</cs:ListHeader>
+	<cs:CrownCourt>
+		<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+		<cs:CourtHouseName>SNARESBROOK</cs:CourtHouseName>
+		<cs:CourtHouseAddress>
+			<apd:Line>THE CROWN COURT AT SNARESBROOK</apd:Line>
+			<apd:Line>75 HOLLYBUSH HILL</apd:Line>
+			<apd:Line>SNARESBROOK, LONDON</apd:Line>
+			<apd:PostCode>E11 1QW</apd:PostCode>
+		</cs:CourtHouseAddress>
+		<cs:CourtHouseTelephone>02085300000</cs:CourtHouseTelephone>
+		<cs:Description>CROWN COURT</cs:Description>
+	</cs:CrownCourt>	
+	<cs:CourtLists>
+		<cs:CourtList SittingDate="2009-08-26">
+			<cs:CourtHouse>
+				<cs:CourtHouseName>SNARESBROOK CROWN COURT</cs:CourtHouseName>
+				<cs:Description>CROWN COURT</cs:Description>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:SittingNote>TEST</cs:SittingNote>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameTitle>N&#47;A</apd:CitizenNameTitle>
+							<apd:CitizenNameForename>N&#47;A</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>N&#47;A</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>N&#47;A</apd:CitizenNameRequestedName>
+							<cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>
+							<cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>
+						</cs:Judge>
+						<cs:Justice>
+							<cs:CitizenNameTitle>TEST</cs:CitizenNameTitle>
+							<cs:CitizenNameForename>TEST</cs:CitizenNameForename>
+							<cs:CitizenNameSurname>TEST</cs:CitizenNameSurname>
+							<cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>
+							<cs:CitizenNameRequestedName>TEST</cs:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>
+						</cs:Justice>
+						<cs:StartDate>2021-06-08</cs:StartDate>
+						<cs:EndDate>2021-06-18</cs:EndDate>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2009-08-26</cs:HearingDate>
+								<cs:HearingEndDate>2021-06-18</cs:HearingEndDate>
+								<cs:ListNote>TEST</cs:ListNote>
+								<cs:HearingType>TEST</cs:HearingType>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>126377</cs:CRESThearingID>
+							<cs:TimeMakingNote>TEST</cs:TimeMakingNote>
+							<cs:CaseNumber>T20080205</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:Advocate></cs:Advocate>
+								<cs:ProsecutingReference>Crown Prosecution Service</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationCode>5</cs:OrganisationCode>
+									<cs:OrganisationName>Crown Prosecution Service</cs:OrganisationName>
+									<cs:OrganisationAddress>
+										<apd:Line>WREXHAM</apd:Line>
+										<apd:PostCode>WX1 2NE</apd:PostCode>
+									</cs:OrganisationAddress>
+									<cs:OrganisationDX>5</cs:OrganisationDX>
+									<cs:ContactDetails>
+										<apd:Email>test@test.com</apd:Email>
+										<apd:Telephone>01978346000</apd:Telephone>
+										<apd:Fax>01979346060</apd:Fax>
+									</cs:ContactDetails>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:CommittingCourt>
+								<cs:CourtHouseType>Magistrates Court</cs:CourtHouseType>
+							</cs:CommittingCourt>
+							<cs:ListNote>Order made under Contempt of Court Act 1981</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>Bill Uma</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>BABEDGE UMA</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>CPS</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:ContactDetails></cs:ContactDetails>
+								</cs:Defendant>
+							</cs:Defendants>
+							<cs:Respondent></cs:Respondent>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+	</cs:CourtLists>
+	<cs:ReserveList></cs:ReserveList>
+</cs:FirmList>
