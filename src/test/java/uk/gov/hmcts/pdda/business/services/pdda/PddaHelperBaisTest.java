@@ -92,7 +92,9 @@ class PddaHelperBaisTest {
     @Mock
     private Environment mockEnvironment;
 
-    private PddaHelper classUnderTest;
+    @TestSubject
+    private final PddaHelper classUnderTest = new PddaHelper(
+        EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository, mockEnvironment);
 
     private static final class Config {
 
@@ -103,13 +105,6 @@ class PddaHelperBaisTest {
         public static final String CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
         public static final String CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
         public static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
-    }
-
-    @BeforeEach
-    public void setup() {
-        classUnderTest = new PddaHelper(EasyMock.createMock(EntityManager.class),
-            mockXhbConfigPropRepository, mockEnvironment);
-        ReflectionTestUtils.setField(classUnderTest, "sftpConfigHelper", mockPddaSftpHelper);
     }
 
     @Test
@@ -316,23 +311,24 @@ class PddaHelperBaisTest {
         // Username
         String propertyName = Config.CP_SFTP_USERNAME;
         EasyMock.expect(mockEnvironment.getProperty(propertyName))
-            .andReturn(propertyName.toLowerCase(Locale.getDefault()));
+            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
         // Password
         propertyName = Config.CP_SFTP_PASSWORD;
         EasyMock.expect(mockEnvironment.getProperty(propertyName))
-            .andReturn(propertyName.toLowerCase(Locale.getDefault()));
+            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
         // Location
         propertyName = Config.CP_SFTP_UPLOAD_LOCATION;
         List<XhbConfigPropDao> locationList = getXhbConfigPropDaoList(propertyName);
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
-            .andReturn(locationList);
+            .andReturn(locationList).anyTimes();
         // Host
         propertyName = Config.SFTP_HOST;
         String hostAndPort = propertyName.toLowerCase(Locale.getDefault());
         if (failOn == null || !propertyName.equals(failOn)) {
             hostAndPort = hostAndPort + ":22";
         }
-        EasyMock.expect(mockEnvironment.getProperty(propertyName)).andReturn(hostAndPort);
+        EasyMock.expect(mockEnvironment.getProperty(propertyName)).andReturn(hostAndPort)
+            .anyTimes();
     }
 
 
