@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class SftpHelper extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpHelper.class);
@@ -77,8 +78,10 @@ public class SftpHelper extends XhibitPddaHelper {
      * @param sftpHelper PddaSftpHelper
      */
     public SftpHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment, PddaSftpHelper sftpHelper) {
-        super(entityManager, xhbConfigPropRepository, environment, sftpHelper);
+        Environment environment, PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper,
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
+        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
+            clobRepository, courtRepository);
     }
 
 
@@ -168,7 +171,7 @@ public class SftpHelper extends XhibitPddaHelper {
      * @return True if using Key Vault, false otherwise
      */
     private boolean checkWhetherToUseKeyVault() {
-        
+
         methodName = "retrieveFromBaisCp()";
         LOG.debug(methodName, LOG_CALLED);
 
@@ -196,7 +199,7 @@ public class SftpHelper extends XhibitPddaHelper {
      */
     private void retrieveFromBais(SftpConfig config, BaisValidation baisXhibitValidation)
         throws IOException {
-        
+
         methodName = "retrieveFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
@@ -245,8 +248,7 @@ public class SftpHelper extends XhibitPddaHelper {
      * @param validation The validation class
      * @return The list of files
      */
-    private Map<String, String> getBaisFileList(SftpConfig config,
-        BaisValidation validation) {
+    private Map<String, String> getBaisFileList(SftpConfig config, BaisValidation validation) {
         methodName = "getBaisFileList()";
         LOG.debug(methodName, LOG_CALLED);
 
@@ -270,8 +272,8 @@ public class SftpHelper extends XhibitPddaHelper {
      * @param clobData The CLOB data
      * @throws IOException The IOException
      */
-    private void processBaisFile(SftpConfig config, BaisValidation validation,
-        String filename, String clobData) throws IOException {
+    private void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
+        String clobData) throws IOException {
 
         methodName = "processBaisFile()";
         LOG.debug(methodName, LOG_CALLED);

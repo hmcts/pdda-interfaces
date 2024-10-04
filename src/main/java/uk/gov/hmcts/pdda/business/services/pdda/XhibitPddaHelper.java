@@ -45,10 +45,13 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     // Junit constructor
     protected XhibitPddaHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
-        PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper) {
+        PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper,
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
         super(entityManager, xhbConfigPropRepository, environment);
         this.sftpHelper = sftpHelper;
         this.pddaMessageHelper = pddaMessageHelper;
+        this.clobRepository = clobRepository;
+        this.courtRepository = courtRepository;
     }
 
     /**

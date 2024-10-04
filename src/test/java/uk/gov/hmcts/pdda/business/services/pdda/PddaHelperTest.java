@@ -104,7 +104,8 @@ class PddaHelperTest {
     void testDefaultConstructor() {
         boolean result = true;
         new PddaHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
-            mockPddaSftpHelper, null, mockPddaMessageHelper);
+            mockPddaSftpHelper, null, mockPddaMessageHelper, mockXhbClobRepository,
+            mockXhbCourtRepository);
         assertTrue(result, NOT_TRUE);
     }
 

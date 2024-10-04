@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
@@ -53,7 +54,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.ExcessiveImports",
+    "PMD.CouplingBetweenObjects"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -79,8 +81,10 @@ public class PddaHelper extends XhibitPddaHelper {
     // Junit constructor
     public PddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
         Environment environment, PddaSftpHelper sftpHelper, SftpConfigHelper sftpConfigHelper,
-        PddaMessageHelper pddaMessageHelper) {
-        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper);
+        PddaMessageHelper pddaMessageHelper, XhbClobRepository xhbClobRepository,
+        XhbCourtRepository xhbCourtRepository) {
+        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
+            xhbClobRepository, xhbCourtRepository);
         this.sftpConfigHelper = sftpConfigHelper;
     }
 
