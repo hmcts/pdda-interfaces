@@ -9,11 +9,13 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFileUtil;
 import uk.gov.hmcts.DummyFileUtil.FileResults;
@@ -90,18 +92,24 @@ class PddaHelperBaisTest {
     @Mock
     private Environment mockEnvironment;
 
-    @TestSubject
-    private final PddaHelper classUnderTest = new PddaHelper(
-        EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository, mockEnvironment);
+    private PddaHelper classUnderTest;
 
     private static final class Config {
-        static final String SFTP_HOST = "pdda.bais_sftp_hostname";
-        static final String SFTP_PASSWORD = "pdda.bais_sftp_password";
-        static final String SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
-        static final String SFTP_USERNAME = "pdda.bais_sftp_username";
-        static final String CP_SFTP_USERNAME = "pdda.bais_cp_sftp_username";
-        static final String CP_SFTP_PASSWORD = "pdda.bais_cp_sftp_password";
-        static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+
+        public static final String SFTP_HOST = "PDDA_BAIS_SFTP_HOSTNAME";
+        public static final String SFTP_PASSWORD = "PDDA_BAIS_SFTP_PASSWORD";
+        public static final String SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
+        public static final String SFTP_USERNAME = "PDDA_BAIS_SFTP_USERNAME";
+        public static final String CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
+        public static final String CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
+        public static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+    }
+
+    @BeforeEach
+    public void setup() {
+        classUnderTest = new PddaHelper(EasyMock.createMock(EntityManager.class),
+            mockXhbConfigPropRepository, mockEnvironment);
+        ReflectionTestUtils.setField(classUnderTest, "sftpConfigHelper", mockPddaSftpHelper);
     }
 
     @Test
