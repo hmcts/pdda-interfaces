@@ -30,7 +30,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
  */
 public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(XhibitPddaHelper.class);
-    
+
     private PublicDisplayNotifier publicDisplayNotifier;
     private XhbCourtRepository courtRepository;
     private XhbClobRepository clobRepository;
@@ -41,11 +41,14 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
     }
-    
+
     // Junit constructor
-    protected XhibitPddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment) {
+    protected XhibitPddaHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
+        PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper) {
         super(entityManager, xhbConfigPropRepository, environment);
+        this.sftpHelper = sftpHelper;
+        this.pddaMessageHelper = pddaMessageHelper;
     }
 
     /**
@@ -64,21 +67,21 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return publicDisplayNotifier;
     }
-    
+
     protected XhbClobRepository getClobRepository() {
         if (clobRepository == null) {
             clobRepository = new XhbClobRepository(entityManager);
         }
         return clobRepository;
     }
-    
+
     protected XhbCourtRepository getCourtRepository() {
         if (courtRepository == null) {
             courtRepository = new XhbCourtRepository(entityManager);
         }
         return courtRepository;
     }
-    
+
     protected PddaMessageHelper getPddaMessageHelper() {
         if (pddaMessageHelper == null) {
             pddaMessageHelper = new PddaMessageHelper(entityManager);

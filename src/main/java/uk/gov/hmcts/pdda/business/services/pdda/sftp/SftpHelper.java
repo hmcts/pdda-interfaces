@@ -21,6 +21,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpValidationUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.XhibitPddaHelper;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
@@ -73,10 +74,11 @@ public class SftpHelper extends XhibitPddaHelper {
      * @param entityManager The EntityManager
      * @param xhbConfigPropRepository The XhbConfigPropRepository
      * @param environment The Environment
+     * @param sftpHelper PddaSftpHelper
      */
     public SftpHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment) {
-        super(entityManager, xhbConfigPropRepository, environment);
+        Environment environment, PddaSftpHelper sftpHelper) {
+        super(entityManager, xhbConfigPropRepository, environment, sftpHelper);
     }
 
 

@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 import java.io.ByteArrayInputStream;
@@ -82,11 +83,14 @@ class PddaHelperTest {
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
+    private SftpConfigHelper mockSftpConfigHelper;
+
+    @Mock
     private Session mockSession;
 
     @Mock
     private SftpConfig mockSftpConfig;
-    
+
     @Mock
     private Environment mockEnvironment;
 
@@ -99,10 +103,11 @@ class PddaHelperTest {
     @Test
     void testDefaultConstructor() {
         boolean result = true;
-        new PddaHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment);
+        new PddaHelper(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaSftpHelper, null, mockPddaMessageHelper);
         assertTrue(result, NOT_TRUE);
     }
-    
+
     @Test
     void testCheckForCpMessages() throws IOException {
         // Setup
@@ -111,18 +116,21 @@ class PddaHelperTest {
         List<XhbCppStagingInboundDao> xhbCppStagingInboundDaoList = new ArrayList<>();
         xhbCppStagingInboundDaoList.add(DummyPdNotifierUtil.getXhbCppStagingInboundDao());
 
-        EasyMock.expect(mockPddaMessageHelper.findUnrespondedCpMessages()).andReturn(xhbPddaMessageDaoList);
+        EasyMock.expect(mockPddaMessageHelper.findUnrespondedCpMessages())
+            .andReturn(xhbPddaMessageDaoList);
         EasyMock.expect(mockCppStagingInboundHelper.findUnrespondedCppMessages())
             .andReturn(xhbCppStagingInboundDaoList);
 
         Map<String, InputStream> filesMap = new ConcurrentHashMap<>();
 
         if (!xhbPddaMessageDaoList.isEmpty()) {
-            EasyMock.expect(mockPddaHelper.respondToPddaMessage(xhbPddaMessageDaoList)).andReturn(filesMap);
+            EasyMock.expect(mockPddaHelper.respondToPddaMessage(xhbPddaMessageDaoList))
+                .andReturn(filesMap);
         }
 
         if (!xhbCppStagingInboundDaoList.isEmpty()) {
-            EasyMock.expect(mockPddaHelper.respondToCppStagingInbound(xhbCppStagingInboundDaoList)).andReturn(filesMap);
+            EasyMock.expect(mockPddaHelper.respondToCppStagingInbound(xhbCppStagingInboundDaoList))
+                .andReturn(filesMap);
         }
 
         InputStream msgContents = new ByteArrayInputStream("Test Message".getBytes());
@@ -136,8 +144,8 @@ class PddaHelperTest {
         }
 
         for (XhbCppStagingInboundDao xhbCppStagingInboundDao : xhbCppStagingInboundDaoList) {
-            EasyMock
-                .expect(mockCppStagingInboundHelper.updateCppStagingInbound(xhbCppStagingInboundDao, userDisplayName))
+            EasyMock.expect(mockCppStagingInboundHelper
+                .updateCppStagingInbound(xhbCppStagingInboundDao, userDisplayName))
                 .andReturn(Optional.of(xhbCppStagingInboundDao));
         }
 
@@ -164,10 +172,12 @@ class PddaHelperTest {
         List<XhbCppStagingInboundDao> cppStagingInboundDaoList = new ArrayList<>();
         cppStagingInboundDaoList.add(DummyPdNotifierUtil.getXhbCppStagingInboundDao());
         Map<String, InputStream> filesMap = new ConcurrentHashMap<>();
-        EasyMock.expect(mockPddaHelper.respondToCppStagingInbound(cppStagingInboundDaoList)).andReturn(filesMap);
+        EasyMock.expect(mockPddaHelper.respondToCppStagingInbound(cppStagingInboundDaoList))
+            .andReturn(filesMap);
         EasyMock.replay(mockPddaHelper);
         // Run
-        Map<String, InputStream> actualResult = classUnderTest.respondToCppStagingInbound(cppStagingInboundDaoList);
+        Map<String, InputStream> actualResult =
+            classUnderTest.respondToCppStagingInbound(cppStagingInboundDaoList);
         // Checks
         assertNotNull(actualResult, NOT_NULL);
     }
@@ -199,20 +209,22 @@ class PddaHelperTest {
     @Test
     void testUpdateCppStagingInboundRecords() {
         // Setup
-        XhbCppStagingInboundDao xhbCppStagingInboundDao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
+        XhbCppStagingInboundDao xhbCppStagingInboundDao =
+            DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         List<XhbCppStagingInboundDao> cppStagingInboundList = new ArrayList<>();
         cppStagingInboundList.add(xhbCppStagingInboundDao);
         String userDisplayName = TESTUSER;
         for (XhbCppStagingInboundDao dao : cppStagingInboundList) {
-            EasyMock.expect(mockCppStagingInboundHelper.updateCppStagingInbound(dao, userDisplayName))
+            EasyMock
+                .expect(mockCppStagingInboundHelper.updateCppStagingInbound(dao, userDisplayName))
                 .andReturn(Optional.of(xhbCppStagingInboundDao));
         }
         EasyMock.replay(mockCppStagingInboundHelper);
         // Run
         boolean result = false;
         try {
-            PddaMessageUtil.updateCppStagingInboundRecords(mockCppStagingInboundHelper, cppStagingInboundList,
-                userDisplayName);
+            PddaMessageUtil.updateCppStagingInboundRecords(mockCppStagingInboundHelper,
+                cppStagingInboundList, userDisplayName);
             result = true;
         } catch (Exception exception) {
             fail(exception);

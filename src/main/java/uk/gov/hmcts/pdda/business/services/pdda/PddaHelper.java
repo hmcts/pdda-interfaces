@@ -77,9 +77,11 @@ public class PddaHelper extends XhibitPddaHelper {
     }
 
     // Junit constructor
-    public PddaHelper(EntityManager entityManager,
-        XhbConfigPropRepository xhbConfigPropRepository, Environment environment) {
-        super(entityManager, xhbConfigPropRepository, environment);
+    public PddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
+        Environment environment, PddaSftpHelper sftpHelper, SftpConfigHelper sftpConfigHelper,
+        PddaMessageHelper pddaMessageHelper) {
+        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper);
+        this.sftpConfigHelper = sftpConfigHelper;
     }
 
     /**
@@ -119,7 +121,8 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             LOG.debug("retrieveFromBais({},{})", config, validation);
             Map<String, String> files = getBaisFileList(config, validation);
-            LOG.debug("Total of {}{}", files.size()," files, before processing, in this transaction.");
+            LOG.debug("Total of {}{}", files.size(),
+                " files, before processing, in this transaction.");
             if (!files.isEmpty()) {
                 // Process the files we have retrieved.
                 for (Map.Entry<String, String> entry : files.entrySet()) {
@@ -401,8 +404,7 @@ public class PddaHelper extends XhibitPddaHelper {
         if (!responses.isEmpty()) {
             try {
                 getSftpHelper().sftpFiles(sftpConfig.getSession(),
-                    sftpConfig.getActiveRemoteFolder(),
-                    responses);
+                    sftpConfig.getActiveRemoteFolder(), responses);
                 return true;
             } catch (Exception ex) {
                 LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
@@ -482,8 +484,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
         @Override
         public boolean validateTitle(String filename) {
-            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
-                PDDA);
+            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0), PDDA);
         }
 
         @Override

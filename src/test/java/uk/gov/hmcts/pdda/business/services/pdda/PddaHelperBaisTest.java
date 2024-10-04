@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFileUtil;
 import uk.gov.hmcts.DummyFileUtil.FileResults;
@@ -30,7 +29,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
-
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -78,6 +78,12 @@ class PddaHelperBaisTest {
     private PddaSftpHelper mockPddaSftpHelper;
 
     @Mock
+    private SftpConfigHelper mockSftpConfigHelper;
+
+    @Mock
+    private SftpConfig mockSftpConfig;
+
+    @Mock
     private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @Mock
@@ -92,9 +98,7 @@ class PddaHelperBaisTest {
     @Mock
     private Environment mockEnvironment;
 
-    @TestSubject
-    private final PddaHelper classUnderTest = new PddaHelper(
-        EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository, mockEnvironment);
+    private PddaHelper classUnderTest;
 
     private static final class Config {
 
@@ -105,6 +109,13 @@ class PddaHelperBaisTest {
         public static final String CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
         public static final String CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
         public static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+    }
+
+    @BeforeEach
+    private void setup() {
+        classUnderTest =
+            new PddaHelper(EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository,
+                mockEnvironment, mockPddaSftpHelper, mockSftpConfigHelper, mockPddaMessageHelper);
     }
 
     @Test
@@ -146,6 +157,16 @@ class PddaHelperBaisTest {
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
         try {
+            EasyMock
+                .expect(mockSftpConfigHelper.validateAndSetHostAndPort(
+                    EasyMock.isA(SftpConfig.class), EasyMock.isA(String.class)))
+                .andReturn(mockSftpConfig);
+            EasyMock.expect(mockSftpConfigHelper.getJschSession(EasyMock.isA(SftpConfig.class)))
+                .andReturn(mockSftpConfig);
+            EasyMock.expect(mockSftpConfig.getErrorMsg()).andReturn(null);
+            EasyMock.expect(mockSftpConfig.getSession()).andReturn(mockSession).anyTimes();
+            EasyMock.expect(mockSftpConfig.getActiveRemoteFolder()).andReturn("").anyTimes();
+            mockSftpConfig.setSession(null);
             EasyMock.expect(mockPddaSftpHelper.createSession(EasyMock.isA(String.class),
                 EasyMock.isA(String.class), EasyMock.isA(String.class),
                 EasyMock.isA(Integer.class))).andReturn(mockSession);
@@ -188,6 +209,8 @@ class PddaHelperBaisTest {
         } catch (JSchException | SftpException e) {
             fail("Failed in pddaSFTPHelper.sftpFetch");
         }
+        EasyMock.replay(mockSftpConfigHelper);
+        EasyMock.replay(mockSftpConfig);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockPddaSftpHelper);
         EasyMock.replay(mockSession);
@@ -199,6 +222,8 @@ class PddaHelperBaisTest {
         classUnderTest.retrieveFromBaisCp();
 
         // Checks
+        EasyMock.verify(mockSftpConfigHelper);
+        EasyMock.verify(mockSftpConfig);
         EasyMock.verify(mockXhbConfigPropRepository);
         EasyMock.verify(mockPddaSftpHelper);
         EasyMock.verify(mockSession);
