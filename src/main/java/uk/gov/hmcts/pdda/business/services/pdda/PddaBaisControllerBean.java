@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper;
 
 /**
  * <p>
@@ -38,7 +39,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     private static final String LOG_CALLED = " called";
     private static final String TWO_PARAMS = "{}{}";
 
-    private PddaHelper pddaHelper;
+    private SftpHelper sftpHelper;
 
     public PddaBaisControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -50,41 +51,22 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
 
     /**
      * <p>
-     * Scheduler task wrapper to retrieve Bais events.
+     * Scheduler task wrapper to retrieve Bais messages.
      * </p>
      */
     @Override
     public void doTask() {
-        retrieveFromBaisCP();
-        retrieveFromBaisXhibit();
-    }
-
-    /**
-     * <p>
-     * Retrieve Bais events from CP.
-     * </p>
-     */
-    public void retrieveFromBaisCP() {
-        String methodName = "retrieveFromBaisCP()";
+        String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-        getPddaHelper().retrieveFromBaisCp();
+
+        getSftpHelper().processBaisMessages();
     }
 
-    /**
-     * <p>
-     * Retrieve Bais events from Xhibit.
-     * </p>
-     */
-    public void retrieveFromBaisXhibit() {
-        String methodName = "retrieveFromBaisXhibit()";
-        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-        getPddaHelper().retrieveFromBaisXhibit();
-    }
 
-    private PddaHelper getPddaHelper() {
-        if (pddaHelper == null) {
-            pddaHelper = new PddaHelper(getEntityManager());
+    private SftpHelper getSftpHelper() {
+        if (sftpHelper == null) {
+            sftpHelper = new SftpHelper(getEntityManager());
         }
-        return pddaHelper;
+        return sftpHelper;
     }
 }

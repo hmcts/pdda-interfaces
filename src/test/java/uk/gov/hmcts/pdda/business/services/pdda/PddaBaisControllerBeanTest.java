@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -35,7 +36,7 @@ class PddaBaisControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private PddaHelper mockPddaHelper;
+    private SftpHelper mockSftpHelper;
 
     @TestSubject
     private final PddaBaisControllerBean classUnderTest =
@@ -54,9 +55,8 @@ class PddaBaisControllerBeanTest {
     @Test
     void testDoTask() {
         // Setup
-        mockPddaHelper.retrieveFromBaisCp();
-        mockPddaHelper.retrieveFromBaisXhibit();
-        EasyMock.replay(mockPddaHelper);
+        mockSftpHelper.processBaisMessages();
+        EasyMock.replay(mockSftpHelper);
         // Run
         boolean result = false;
         try {
@@ -66,42 +66,8 @@ class PddaBaisControllerBeanTest {
             fail(exception);
         }
         // Checks
-        EasyMock.verify(mockPddaHelper);
+        EasyMock.verify(mockSftpHelper);
         assertTrue(result, TRUE);
     }
 
-    @Test
-    void testRetrieveFromBaisCP() {
-        // Setup
-        mockPddaHelper.retrieveFromBaisCp();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisCP();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
-    }
-
-    @Test
-    void testRetrieveFromBaisXhibit() {
-        mockPddaHelper.retrieveFromBaisXhibit();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisXhibit();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
-    }
 }

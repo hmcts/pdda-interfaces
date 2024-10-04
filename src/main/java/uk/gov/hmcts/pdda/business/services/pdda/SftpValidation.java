@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import com.jcraft.jsch.ChannelSftp.LsEntry;
+import net.schmizz.sshj.sftp.RemoteResourceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +21,24 @@ public class SftpValidation {
     }
 
     /* Filter the directories (if required) */
-    public List<String> validateFilesInFolder(List<String> filesInFolder) {
+    public List<String> validateFilesInFolder(List filesInFolder) {
         List<String> results = new ArrayList<>();
+
         if (filesInFolder != null) {
             for (Object obj : filesInFolder) {
-                String filename = getFilename(obj);
-                if (filename != null) {
+                if (obj instanceof RemoteResourceInfo) {
+                    RemoteResourceInfo remoteResourceInfo = (RemoteResourceInfo) obj;
+                    String filename = remoteResourceInfo.getName();
                     results.add(filename);
+                } else {
+                    String filename = getFilename(obj);
+                    if (filename != null) {
+                        results.add(filename);
+                    }
                 }
             }
         }
+
         return results;
     }
 
