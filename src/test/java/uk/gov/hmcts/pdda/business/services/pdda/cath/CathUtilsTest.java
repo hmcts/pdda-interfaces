@@ -120,7 +120,7 @@ class CathUtilsTest {
     @Test
     void testGenerateDailyListJsonFromString() throws IOException {
         JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleDailyList_V3.xml"));
+            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleDailyList_V4.xml"));
         // Indentation value 4 matches the indentation of the xml before json conversion
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
@@ -129,7 +129,7 @@ class CathUtilsTest {
     @Test
     void testGenerateWarnedListJsonFromString() throws IOException {
         JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleWarnedList_V1.xml"));
+            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleWarnedList_V2.xml"));
         // Indentation value 4 matches the indentation of the xml before json conversion
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
