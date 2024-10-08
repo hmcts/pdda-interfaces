@@ -6,11 +6,20 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.File;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public final class CathUtils {
@@ -34,8 +43,7 @@ public final class CathUtils {
         return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
     }
 
-    public static HttpRequest getHttpPostRequest(String url,
-        CourtelJson courtelJson) {
+    public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
         // Get the times
         String now = getDateTimeAsString(courtelJson.getContentDate());
         String nextMonth = getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
@@ -64,8 +72,27 @@ public final class CathUtils {
         String apimUri = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
         return String.format(POST_URL, apimUri);
     }
-    
+
     public static JSONObject generateJsonFromString(String stringToConvert) {
         return XML.toJSONObject(stringToConvert);
+    }
+
+    public static String transformXmlUsingTemplate(String inputXmlPath, String xsltPath)
+        throws TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        // Get the predefined xslt schema
+        Source xsltSource = new StreamSource(new File(classLoader.getResource(xsltPath).getFile()));
+        Templates templates = transformerFactory.newTemplates(xsltSource);
+        Transformer transformer = templates.newTransformer();
+        // Get the xml
+        Source xmlSource =
+            new StreamSource(new File(classLoader.getResource(inputXmlPath).getFile()));
+        // Output the result as a string
+        StringWriter outWriter = new StringWriter();
+        StreamResult result = new StreamResult(outWriter);
+        transformer.transform(xmlSource, result);
+        StringBuffer sb = outWriter.getBuffer();
+        return sb.toString();
     }
 }

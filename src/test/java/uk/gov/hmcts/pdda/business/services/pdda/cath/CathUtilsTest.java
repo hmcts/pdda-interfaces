@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
-    
+
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
 
@@ -132,6 +133,17 @@ class CathUtilsTest {
         // Indentation value 4 matches the indentation of the xml before json conversion
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
+    }
+
+    @Test
+    void testTransformXmlUsingTemplate() throws TransformerException {
+        // Using the example xml and xsl files defined in resources
+        String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        String inputXslt = "xslt_schemas/Example.xslt";
+        // Output the xml result as string
+        String stringResult = CathUtils.transformXmlUsingTemplate(inputXml, inputXslt);
+        // Verify
+        assertNotNull(stringResult, NOTNULL);
     }
 
     private String fetchAndReadFile(String fileName) throws FileNotFoundException {
