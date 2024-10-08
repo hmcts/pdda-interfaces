@@ -7,12 +7,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfigurati
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -77,17 +77,22 @@ public final class CathUtils {
         return XML.toJSONObject(stringToConvert);
     }
 
-    public static void transformXmlUsingTemplate(String inputXmlPath, String xsltPath,
-        String outputHtmlPath) throws TransformerException {
+    public static String transformXmlUsingTemplate(String inputXmlPath, String xsltPath)
+        throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Source xsltSource = new StreamSource(new File(xsltPath));
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        // Get the predefined xslt schema
+        Source xsltSource = new StreamSource(new File(classLoader.getResource(xsltPath).getFile()));
         Templates templates = transformerFactory.newTemplates(xsltSource);
-
         Transformer transformer = templates.newTransformer();
-
-        Source xmlSource = new StreamSource(new File(inputXmlPath));
-        Result outputResult = new StreamResult(new File(outputHtmlPath));
-
-        transformer.transform(xmlSource, outputResult);
+        // Get the xml
+        Source xmlSource =
+            new StreamSource(new File(classLoader.getResource(inputXmlPath).getFile()));
+        // Output the result as a string
+        StringWriter outWriter = new StringWriter();
+        StreamResult result = new StreamResult(outWriter);
+        transformer.transform(xmlSource, result);
+        StringBuffer sb = outWriter.getBuffer();
+        return sb.toString();
     }
 }
