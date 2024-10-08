@@ -10,7 +10,6 @@
 		<cs:DocumentType>TEST</cs:DocumentType>
 	</cs:DocumentID>
 	<cs:ListHeader>
-		<cs:ListCategory>Criminal</cs:ListCategory>
 		<cs:StartDate>2020-01-21</cs:StartDate>
 		<cs:EndDate>2020-01-21</cs:EndDate>
 		<cs:Version>NOT VERSIONED</cs:Version>
@@ -25,16 +24,24 @@
 			<cs:Postcode>TEST</cs:Postcode>
 		</cs:CourtHouseAddress>
 		<cs:CourtHouseTelephone>TEST</cs:CourtHouseTelephone>
-		<cs:Description>TEST</cs:Description>
 	</cs:CrownCourt>
 	<cs:CourtLists>
 		<cs:CourtList>
 			<cs:CourtHouse>
-				<cs:Description>TEST</cs:Description>
+				<cs:CourtHouseType>TEST</cs:CourtHouseType>
+				<cs:CourtHouseCode>TEST</cs:CourtHouseCode>
+				<cs:CourtHouseShortName>TEST</cs:CourtHouseShortName>
+				<cs:CourtHouseName>TEST</cs:CourtHouseName>
+				<cs:CourtHouseAddress>
+					<cs:Line>TEST</cs:Line>
+					<cs:Postcode>TEST</cs:Postcode>
+				</cs:CourtHouseAddress>
+				<cs:CourtHouseTelephone>TEST</cs:CourtHouseTelephone>
 			</cs:CourtHouse>
 			<cs:Sittings>
 				<cs:Sitting>
 					<cs:CourtRoomNumber>235</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>TEST</cs:SittingSequenceNo>
 					<cs:SittingAt>TEST</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:SittingNote>TEST</cs:SittingNote>
@@ -45,7 +52,6 @@
 							<apd:CitizenNameSurname>Van-JUDGE</apd:CitizenNameSurname>
 							<apd:CitizenNameSuffix>TEST</apd:CitizenNameSuffix>
 							<apd:CitizenNameRequestedName>Freddy</apd:CitizenNameRequestedName>
-							<apd:CRESTjudgeID>TEST</apd:CRESTjudgeID>
 						</cs:Judge>
 						<cs:Justice>
 							<cs:CitizenNameTitle>TEST</cs:CitizenNameTitle>
@@ -53,13 +59,13 @@
 							<cs:CitizenNameSurname>TEST</cs:CitizenNameSurname>
 							<cs:CitizenNameSuffix>TEST</cs:CitizenNameSuffix>
 							<cs:CitizenNameRequestedName>TEST</cs:CitizenNameRequestedName>
-							<cs:CRESTjudgeID>TEST</cs:CRESTjudgeID>
 						</cs:Justice>
 					</cs:Judiciary>
 					<cs:Hearings>
 						<cs:Hearing>
+							<cs:HearingSequenceNumber>TEST</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="TRL">
-								<cs:ListNote>TEST</cs:ListNote>
+								<cs:HearingDescription>TEST</cs:HearingDescription>
 								<cs:HearingType>TEST</cs:HearingType>
 							</cs:HearingDetails>
 							<cs:TimeMakingNote>TEST</cs:TimeMakingNote>
@@ -68,35 +74,15 @@
 								ProsecutingAuthority="Crown Prosecution Service">
 								<cs:ProsecutingReference>92AD685737</cs:ProsecutingReference>
 								<cs:ProsecutingOrganisation>
-									<cs:OrganisationCode>TEST</cs:OrganisationCode>
 									<cs:OrganisationName>TEST</cs:OrganisationName>
-									<cs:OrganisationAddress>
-										<cs:Line>TEST</cs:Line>
-										<cs:Postcode>TEST</cs:Postcode>
-									</cs:OrganisationAddress>
-									<cs:OrganisationDX>TEST</cs:OrganisationDX>
-									<cs:ContactDetails>
-										<cs:Email>TEST</cs:Email>
-										<cs:Telephone>TEST</cs:Telephone>
-										<cs:Fax>TEST</cs:Fax>
-									</cs:ContactDetails>
 								</cs:ProsecutingOrganisation>
 								<cs:ProsecutionAuthority>TEST</cs:ProsecutionAuthority>
 							</cs:Prosecution>
 							<cs:ComittingCourt>
 								<cs:CourtHouseType>TEST</cs:CourtHouseType>
 								<cs:CourtHouseCode>TEST</cs:CourtHouseCode>
-								<cs:CourtHouseCodeType>TEST</cs:CourtHouseCodeType>
 								<cs:CourtHouseShortName>TEST</cs:CourtHouseShortName>
 								<cs:CourtHouseName>TEST</cs:CourtHouseName>
-								<cs:CourtHouseAddress>
-									<cs:Line>TEST</cs:Line>
-									<cs:Postcode>TEST</cs:Postcode>
-								</cs:CourtHouseAddress>
-								<cs:CourtHouseDX>TEST</cs:CourtHouseDX>
-								<cs:CourtHouseTelephone>TEST</cs:CourtHouseTelephone>
-								<cs:CourtHouseFax>TEST</cs:CourtHouseFax>
-								<cs:Description>TEST</cs:Description>
 							</cs:ComittingCourt>
 							<cs:ListNote>TEST</cs:ListNote>
 							<cs:Defendants>
@@ -107,48 +93,19 @@
 										<apd:CitizenNameRequestedName>Sri</apd:CitizenNameRequestedName>
 										<cs:IsMasked>no</cs:IsMasked>
 									</cs:PersonalDetails>
-									<cs:ContactDetails>
-										<cs:Email>TEST</cs:Email>
-										<cs:Telephone>TEST</cs:Telephone>
-										<cs:Fax>TEST</cs:Fax>
-									</cs:ContactDetails>
+									<cs:URN>TEST</cs:URN>
+									<cs:PrisonerID>TEST</cs:PrisonerID>
+									<cs:PrisonLocation>
+										<cs:Location>TEST</cs:Location>
+									</cs:PrisonLocation>
 									<cs:Charges>
 										<cs:Charge CJSoffenceCode="TH68001A"
 											IndictmentCountNumber="0">
-											<cs:CRN>TEST</cs:CRN>
 											<cs:OffenceStatement>Attempted theft</cs:OffenceStatement>
-											<cs:OffenceLocation>
-												<cs:Line>TEST</cs:Line>
-												<cs:Postcode>TEST</cs:Postcode>
-											</cs:OffenceLocation>
-											<cs:ArrestingPoliceForceCode>TEST</cs:ArrestingPoliceForceCode>
-											<cs:ComittedOnBail>TEST</cs:ComittedOnBail>
-											<cs:OffenceStartDateTime>TEST</cs:OffenceStartDateTime>
-											<cs:OffenceEndDateTime>TEST</cs:OffenceEndDateTime>
-											<cs:ArraingmentDate>TEST</cs:ArraingmentDate>
-											<cs:ConvictionDate>TEST</cs:ConvictionDate>
-											<cs:OffenceParticulars>TEST</cs:OffenceParticulars>
-											<cs:CRESToffenceNumber>TEST</cs:CRESToffenceNumber>
-											<cs:Plea>TEST</cs:Plea>
-											<cs:Verdict>TEST</cs:Verdict>
-											<cs:Disposals>
-												<cs:Disposal>TEST</cs:Disposal>
-												<cs:CRESTDisposalData>TEST</cs:CRESTDisposalData>
-											</cs:Disposals>
-											<cs:SentenceTerm>TEST</cs:SentenceTerm>
-											<cs:TermType>TEST</cs:TermType>
-											<cs:ForLife>TEST</cs:ForLife>
-											<cs:ChargeType>TEST</cs:ChargeType>
-											<cs:IndictmentNumber>TEST</cs:IndictmentNumber>
 											<cs:IndictmentCountNumber>TEST</cs:IndictmentCountNumber>
 											<cs:CJSoffenceCode>TEST</cs:CJSoffenceCode>
-											<cs:PNCoffencecode>TEST</cs:PNCoffencecode>
-											<cs:HOoffencecode>TEST</cs:HOoffencecode>
-											<cs:Life>TEST</cs:Life>
-											<cs:BreachMultiple>TEST</cs:BreachMultiple>
 										</cs:Charge>
 									</cs:Charges>
-									<cs:OriginalCharges></cs:OriginalCharges>
 								</cs:Defendant>
 							</cs:Defendants>
 							<cs:Respondent></cs:Respondent>
