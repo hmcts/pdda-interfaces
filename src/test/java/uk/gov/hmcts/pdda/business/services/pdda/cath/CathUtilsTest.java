@@ -25,12 +25,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.http.HttpRequest;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import javax.sql.rowset.serial.SerialException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -136,14 +139,30 @@ class CathUtilsTest {
     }
 
     @Test
-    void testTransformXmlUsingTemplate() throws TransformerException {
-        // Using the example xml and xsl files defined in resources
+    void testTransformXmlUsingTemplate()
+        throws TransformerException, SerialException, SQLException {
+        // Setup using the example xml and xsl files defined in resources, output result into resources
         String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         String inputXslt = "xslt_schemas/Example.xslt";
-        // Output the xml result as string
-        String stringResult = CathUtils.transformXmlUsingTemplate(inputXml, inputXslt);
+        String outputXmlPath =
+            "src/main/resources/database/test-data/example_list_xml_docs/TestResult.xml";
+        boolean result = true;
+        // Run
+        CathUtils.transformXmlUsingTemplate(inputXml, inputXslt, outputXmlPath);
         // Verify
-        assertNotNull(stringResult, NOTNULL);
+        assertTrue(result, NOTNULL);
+    }
+
+    @Test
+    void testTransformXmlUsingTemplateFailedFileWrite()
+        throws TransformerException, SerialException, SQLException {
+        String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        String inputXslt = "xslt_schemas/Example.xslt";
+        String outputXmlPath = "Testing/Invalid.xml";
+        boolean result = true;
+        // Run
+        CathUtils.transformXmlUsingTemplate(inputXml, inputXslt, outputXmlPath);
+        assertTrue(result, NOTNULL);
     }
 
     private String fetchAndReadFile(String fileName) throws FileNotFoundException {

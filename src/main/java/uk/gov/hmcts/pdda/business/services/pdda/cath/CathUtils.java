@@ -2,15 +2,21 @@ package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.xml.transform.Source;
@@ -23,6 +29,8 @@ import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public final class CathUtils {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
 
     private static final String APIM_ENABLED = "apim.enabled";
     private static final String APIM_URL = "apim.uri";
@@ -77,22 +85,30 @@ public final class CathUtils {
         return XML.toJSONObject(stringToConvert);
     }
 
-    public static String transformXmlUsingTemplate(String inputXmlPath, String xsltPath)
+    public static void transformXmlUsingTemplate(String inputXmlPath, String xsltPath, String outputXmlPath)
         throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        
         // Get the predefined xslt schema
         Source xsltSource = new StreamSource(new File(classLoader.getResource(xsltPath).getFile()));
         Templates templates = transformerFactory.newTemplates(xsltSource);
         Transformer transformer = templates.newTransformer();
+        
         // Get the xml
         Source xmlSource =
             new StreamSource(new File(classLoader.getResource(inputXmlPath).getFile()));
-        // Output the result as a string
+        
+        // Transform the xml
         StringWriter outWriter = new StringWriter();
         StreamResult result = new StreamResult(outWriter);
         transformer.transform(xmlSource, result);
-        StringBuffer sb = outWriter.getBuffer();
-        return sb.toString();
+        
+        // Write out the transformed xml in a file
+        try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputXmlPath))) {
+            wr.write(outWriter.toString());
+        } catch (IOException e) {
+            LOG.debug("Failed to write file, with exception: ", e);
+        }
     }
 }
