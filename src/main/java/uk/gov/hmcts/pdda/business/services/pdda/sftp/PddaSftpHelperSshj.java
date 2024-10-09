@@ -7,7 +7,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
-import uk.gov.hmcts.pdda.business.services.pdda.PddaHelper.BaisXhibitValidation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,25 +25,6 @@ public class PddaSftpHelperSshj {
     protected static final String LOG_CALLED = " called";
     private static final String TWO_PARAMS = "{}{}";
 
-    /**
-     * Fetch files from a remote folder.
-     * 
-     * @param remoteFolder The remote folder
-     * @param validation The validation
-     * @return The files
-     * @throws IOException The IO Exception
-     */
-    public Map<String, String> sftpFetch(SFTPClient sftpClient, String remoteFolder,
-        BaisXhibitValidation validation) throws IOException {
-        String methodName = "sftpFetch()";
-        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        // Fetch Files
-        Map<String, String> files = fetchFiles(sftpClient, remoteFolder, validation);
-        LOG.debug("No Of Files Fetched: {}", files.size());
-
-        return files;
-    }
 
     /**
      * Fetch files from a remote folder.
@@ -58,10 +38,6 @@ public class PddaSftpHelperSshj {
         BaisValidation validation) throws IOException {
         String methodName = "sftpFetch()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        testNull(sftpClient);
-        testNull(remoteFolder);
-        testNull(sftpClient.ls(remoteFolder));
 
         // Fetch Files
         Map<String, String> files = fetchFiles(sftpClient, remoteFolder, validation);
@@ -82,10 +58,6 @@ public class PddaSftpHelperSshj {
         throws IOException {
         String methodName = "sftpDeleteFile()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        testNull(sftpClient);
-        testNull(remoteFolder);
-        testNull(sftpClient.ls(remoteFolder));
 
         try {
             sftpClient.rm(remoteFolder + filename);
@@ -161,12 +133,15 @@ public class PddaSftpHelperSshj {
         String methodName = "listFilesInFolder()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
-        // Get the directory contents from the OS
-        testNull(sftpClient);
-        testNull(folder);
-        testNull(sftpClient.ls(folder));
+        List<RemoteResourceInfo> filesInFolder = new ArrayList<>();
+        LOG.debug("No Of Files In Folder: {}", filesInFolder.size());
+        try {
+            filesInFolder = new ArrayList<>(sftpClient.ls(folder));
+        } catch (Exception e) {
+            // Empty folder
+            return new ArrayList<>();
+        }
 
-        List<RemoteResourceInfo> filesInFolder = new ArrayList<>(sftpClient.ls(folder));
         LOG.debug("No Of Files In Folder: {}", filesInFolder.size());
 
         // Validate whether to include directories, etc
@@ -223,7 +198,7 @@ public class PddaSftpHelperSshj {
     }
 
 
-    private void testNull(Object obj) throws IOException {
+    public void testNull(Object obj) throws IOException {
         if (obj == null) {
             LOG.error("{} is null", obj);
             throw new IOException("Folder is null");

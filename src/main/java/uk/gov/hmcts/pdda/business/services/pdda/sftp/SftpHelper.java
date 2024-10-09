@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.sftp;
 
-import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
 import net.schmizz.sshj.SSHClient;
@@ -39,25 +38,22 @@ public class SftpHelper extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpHelper.class);
 
-    private static final String TWO_PARAMS = "{}{}";
-
     private static final String NO = "N";
     private static final String INVALID_MESSAGE_TYPE = "Invalid";
-    private static final String SFTP_ERROR = "SFTP Error:";
+    protected static final String SFTP_ERROR = "SFTP Error:";
+
 
     protected static final String LOG_CALLED = " called";
     protected static final String CP_CONNECTION_TYPE = "CP";
     protected static final String XHIBIT_CONNECTION_TYPE = "XHIBIT";
     protected static final String TEST_CONNECTION_TYPE = "TEST";
 
-    private static final String USE_KEY_VAULT_PROPERTIES = "USE_KEY_VAULT_PROPERTIES";
-
 
     // Instance of the PddaSftpHelper
     private PddaSftpHelperSshj pddaSftpHelperSshj;
 
     // Instance of the SftpConfigHelper
-    private SftpConfigHelper sftpConfigHelper;
+    protected SftpConfigHelper sftpConfigHelper;
 
 
     /**
@@ -68,6 +64,7 @@ public class SftpHelper extends XhibitPddaHelper {
     public SftpHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
     }
+
 
     /**
      * JUnit constructor.
@@ -94,42 +91,32 @@ public class SftpHelper extends XhibitPddaHelper {
         methodName = "processBaisMessages()";
         LOG.debug(methodName, LOG_CALLED);
 
-        SftpConfig sftpConfig = populateSftpConfig();
+        SftpConfig sftpConfig = getSftpHelperUtil().populateSftpConfig();
 
-        try (SSHClient ssh = sftpConfigHelper.getNewSshClient()) {
+        try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
             ssh.authPassword(sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
+
             sftpConfig.setSshClient(ssh);
-            try (SFTPClient sftpClient = ssh.newSFTPClient()) {
-                try {
-                    sftpConfig.setActiveRemoteFolder(sftpConfig.getCpRemoteFolder());
-                    sftpConfig.setSshjSftpClient(sftpClient);
-                    retrieveFromBais(sftpConfig, new BaisCpValidation(getCourtRepository()));
-                } catch (IOException e) {
-                    LOG.error("Error processing file: {}", ExceptionUtils.getStackTrace(e));
-                }
-            }
+            sftpConfig.setActiveRemoteFolder(sftpConfig.getCpRemoteFolder());
+
+            setupSftpClientAndProcessBaisData(sftpConfig, ssh, true);
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS CP: {}", ExceptionUtils.getStackTrace(e));
         }
 
-        try (SSHClient ssh = sftpConfigHelper.getNewSshClient()) {
+        try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
             ssh.authPassword(sftpConfig.getXhibitUsername(), sftpConfig.getXhibitPassword());
+
             sftpConfig.setSshClient(ssh);
-            try (SFTPClient sftpClient = ssh.newSFTPClient()) {
-                try {
-                    sftpConfig.setActiveRemoteFolder(sftpConfig.getXhibitRemoteFolder());
-                    sftpConfig.setSshjSftpClient(sftpClient);
-                    retrieveFromBais(sftpConfig, new BaisXhibitValidation(getCourtRepository()));
-                } catch (IOException e) {
-                    LOG.error("Error processing file: {}", ExceptionUtils.getStackTrace(e));
-                }
-            }
+            sftpConfig.setActiveRemoteFolder(sftpConfig.getXhibitRemoteFolder());
+
+            setupSftpClientAndProcessBaisData(sftpConfig, ssh, false);
 
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS XHIBIT: {}",
@@ -139,55 +126,48 @@ public class SftpHelper extends XhibitPddaHelper {
 
 
     /**
-     * Populate the SFTP configuration.
+     * Setup the SFTP client. The call to get the data from BAIS is made here too as it must happen
+     * within the try with resources call.
      * 
-     * @return The SFTP configuration
+     * @param config The SFTP configuration
      */
-    private SftpConfig populateSftpConfig() {
-
-        methodName = "populateSftpConfig()";
+    private void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
+        boolean isCpConnection) {
+        methodName = "setupSftpClient()";
         LOG.debug(methodName, LOG_CALLED);
 
-        SftpConfig sftpConfig = new SftpConfig();
-
-        // Firstly, are we using Database or Key Vault to lookup credentials?
-        // This will be a database lookup. If it is indeterminate, we will use the Database.
-        if (checkWhetherToUseKeyVault()) {
-            sftpConfig.setUseKeyVault(true);
-        } else {
-            sftpConfig.setUseKeyVault(false);
+        try (SFTPClient sftpClient = ssh.newSFTPClient()) {
+            config.setSshjSftpClient(sftpClient);
+            processDataFromBais(config, isCpConnection);
+        } catch (IOException e) {
+            LOG.error("Error setting up SFTP client: {}", ExceptionUtils.getStackTrace(e));
         }
-
-        // Set the rest of the params
-        sftpConfig = getSftpConfigHelper().getConfigParams(sftpConfig);
-
-        return sftpConfig;
     }
+
 
 
     /**
-     * Check whether to use Key Vault.
+     * Get the data from BAIS, and do the processing.
      * 
-     * @return True if using Key Vault, false otherwise
+     * @param config The SFTP configuration
      */
-    private boolean checkWhetherToUseKeyVault() {
-
-        methodName = "retrieveFromBaisCp()";
+    private void processDataFromBais(SftpConfig config, boolean isCpConnection) {
+        methodName = "getDataFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
-        String methodName = "checkWhetherToUseKeyVault()";
-        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        // Fetch and validate the properties
         try {
-            String useKeyVault = getMandatoryConfigValue(USE_KEY_VAULT_PROPERTIES);
-            LOG.debug("Use key Vault?: {}", useKeyVault);
-            return Boolean.parseBoolean(useKeyVault);
-        } catch (InvalidConfigException ex) {
-            LOG.error("Error fetching properties: {}", ExceptionUtils.getStackTrace(ex));
-            return false;
+            if (isCpConnection) {
+                retrieveFromBais(config, new BaisCpValidation(getCourtRepository()));
+            } else {
+                retrieveFromBais(config, new BaisXhibitValidation(getCourtRepository()));
+            }
+        } catch (IOException e) {
+            LOG.error("Error processing file: {}", ExceptionUtils.getStackTrace(e));
         }
     }
+
+
+
 
 
     /**
@@ -229,16 +209,6 @@ public class SftpHelper extends XhibitPddaHelper {
             }
         }
     }
-
-
-    // This method is used for reference to SftpConfig in the unit tests
-    /*
-     * public SftpConfig getSftpConfigsForTest(SftpConfig sftpConfig) { methodName =
-     * "getSftpConfigsForTest()"; LOG.debug(methodName, LOG_CALLED);
-     * 
-     * SftpConfigHelper sftpConfigHelper = new SftpConfigHelper(entityManager); return
-     * sftpConfigHelper.setSftpConfigData(TEST_CONNECTION_TYPE, sftpConfig); }
-     */
 
 
     /**
@@ -314,7 +284,6 @@ public class SftpHelper extends XhibitPddaHelper {
         } catch (IOException | NotFoundException ex) {
             LOG.error("Error processing BAIS file {} ", ExceptionUtils.getStackTrace(ex));
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
-            throw new EJBException(ex);
         }
     }
 
@@ -368,13 +337,6 @@ public class SftpHelper extends XhibitPddaHelper {
             pddaSftpHelperSshj = new PddaSftpHelperSshj();
         }
         return pddaSftpHelperSshj;
-    }
-
-    private SftpConfigHelper getSftpConfigHelper() {
-        if (sftpConfigHelper == null) {
-            sftpConfigHelper = new SftpConfigHelper(entityManager);
-        }
-        return sftpConfigHelper;
     }
 
 

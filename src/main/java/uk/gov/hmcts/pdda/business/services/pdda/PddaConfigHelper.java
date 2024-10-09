@@ -107,7 +107,7 @@ public class PddaConfigHelper {
     public String getEnvValue(final String propertyName) {
         methodName = "getConfigValue(" + propertyName + ")";
         LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
-        String result = environment.getProperty(propertyName);
+        String result = getEnvironment().getProperty(propertyName);
         LOG.debug("{}{}{}", propertyName, " = ", result);
         return result;
     }
@@ -133,6 +133,14 @@ public class PddaConfigHelper {
         return configPropMaintainer;
     }
     
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
     public class InvalidConfigException extends RuntimeException {
         private static final long serialVersionUID = 1L;
     }

@@ -16,8 +16,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 import java.io.ByteArrayInputStream;
@@ -83,13 +81,7 @@ class PddaHelperTest {
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
-    private SftpConfigHelper mockSftpConfigHelper;
-
-    @Mock
     private Session mockSession;
-
-    @Mock
-    private SftpConfig mockSftpConfig;
 
     @Mock
     private Environment mockEnvironment;
@@ -183,29 +175,6 @@ class PddaHelperTest {
         assertNotNull(actualResult, NOT_NULL);
     }
 
-    // TODO Test needs to be revisited
-    // @Test
-    // void testSendMessageRepsonses() {
-    // // Setup
-    // Map<String, InputStream> fileResponses = new HashMap<>();
-    // InputStream msgContents = new ByteArrayInputStream("Test Message".getBytes());
-    // fileResponses.put("TestEntry", msgContents);
-    // try {
-    // EasyMock.expect(mockPddaHelper.getSftpConfigsForTest()).andReturn(mockSftpConfig);
-    // mockPddaSFTPHelper.sftpFiles(mockSftpConfig.session, mockSftpConfig.remoteFolder,
-    // fileResponses);
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // EasyMock.replay(mockPddaHelper);
-    // EasyMock.replay(mockSftpConfig);
-    // EasyMock.replay(mockPddaSFTPHelper);
-    // // Run
-    // classUnderTest.sendMessageRepsonses(fileResponses);
-    // // Checks
-    // EasyMock.verify(mockSftpConfig);
-    // EasyMock.verify(mockPddaSFTPHelper);
-    // }
 
     @Test
     void testUpdateCppStagingInboundRecords() {

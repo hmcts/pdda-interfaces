@@ -63,7 +63,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     }
 
 
-    private SftpHelper getSftpHelper() {
+    SftpHelper getSftpHelper() {
         if (sftpHelper == null) {
             sftpHelper = new SftpHelper(getEntityManager());
         }

@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -42,6 +44,9 @@ class PddaBaisControllerBeanTest {
     private final PddaBaisControllerBean classUnderTest =
         new PddaBaisControllerBean(EasyMock.createMock(EntityManager.class));
 
+    @TestSubject
+    private final PddaBaisControllerBean classUnderTest2 = new PddaBaisControllerBean();
+
     @BeforeAll
     public static void setUp() {
         // Do nothing
@@ -68,6 +73,34 @@ class PddaBaisControllerBeanTest {
         // Checks
         EasyMock.verify(mockSftpHelper);
         assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testDoTask2() {
+        // Setup
+        mockSftpHelper.processBaisMessages();
+        EasyMock.replay(mockSftpHelper);
+        // Run
+        boolean result = false;
+        try {
+            classUnderTest2.doTask();
+            result = true;
+        } catch (Exception exception) {
+            fail(exception);
+        }
+        // Checks
+        EasyMock.verify(mockSftpHelper);
+        assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testGetSftpHelper() {
+        // Setup
+        SftpHelper result = classUnderTest.getSftpHelper();
+        SftpHelper result2 = null;
+        // Checks
+        assertNotNull(result, "Result is not null");
+        assertNull(result2, "Result is null");
     }
 
 }

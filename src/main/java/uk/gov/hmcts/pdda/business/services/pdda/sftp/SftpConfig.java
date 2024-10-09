@@ -93,13 +93,6 @@ public class SftpConfig {
         this.sshClient = sshClient;
     }
 
-    public SSHClient getSshClient() {
-        if (this.sshClient == null) {
-            return null;
-        }
-        return this.sshClient;
-    }
-
     public Session getSession() {
         return session;
     }
@@ -154,6 +147,10 @@ public class SftpConfig {
 
     public void setActiveRemoteFolder(String activeRemoteFolder) {
         this.activeRemoteFolder = activeRemoteFolder;
+    }
+
+    public SSHClient getSshClient() {
+        return sshClient;
     }
 
 }

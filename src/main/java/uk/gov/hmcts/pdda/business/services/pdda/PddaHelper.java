@@ -422,12 +422,6 @@ public class PddaHelper extends XhibitPddaHelper {
         return new Date();
     }
 
-    private SftpConfigHelper getSftpConfigHelper() {
-        if (sftpConfigHelper == null) {
-            sftpConfigHelper = new SftpConfigHelper(entityManager);
-        }
-        return sftpConfigHelper;
-    }
 
     public static class BaisXhibitValidation extends BaisValidation {
 

@@ -9,6 +9,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 /**
@@ -37,6 +39,8 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private PddaMessageHelper pddaMessageHelper;
     private CppStagingInboundHelper cppStagingInboundHelper;
     private PddaSftpHelper sftpHelper;
+    private SftpConfigHelper sftpConfigHelper;
+    private SftpHelperUtil sftpHelperUtil;
 
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
@@ -104,5 +108,19 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
             sftpHelper = new PddaSftpHelper();
         }
         return sftpHelper;
+    }
+
+    protected SftpConfigHelper getSftpConfigHelper() {
+        if (sftpConfigHelper == null) {
+            sftpConfigHelper = new SftpConfigHelper(entityManager);
+        }
+        return sftpConfigHelper;
+    }
+
+    protected SftpHelperUtil getSftpHelperUtil() {
+        if (sftpHelperUtil == null) {
+            sftpHelperUtil = new SftpHelperUtil(entityManager);
+        }
+        return sftpHelperUtil;
     }
 }
