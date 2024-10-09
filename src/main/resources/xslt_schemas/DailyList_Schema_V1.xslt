@@ -21,5 +21,15 @@
     <xsl:template match="cs:DocumentID/cs:XSLstylesheetURL" />
     <xsl:template match="cs:DocumentID/cs:WelshTranslation" />
     <xsl:template match="cs:DocumentID/cs:DocumentInformation" />
+    
+    <xsl:template match="cs:ListHeader/cs:ListCategory" />
+    <xsl:template match="cs:ListHeader/cs:CRESTprintRef" />
+    <xsl:template match="cs:ListHeader/cs:CRESTlistID" />
 
+	<xsl:template match="cs:CrownCourt/cs:CourtHouseCodeType" />
+	<xsl:template match="cs:CrownCourt/cs:CourtHouseCode/@CourtHouseShortName" />
+	<xsl:template match="cs:CrownCourt/cs:CourtHouseDX" />
+	<xsl:template match="cs:CrownCourt/cs:CourtHouseFax" />
+	<xsl:template match="cs:CrownCourt/cs:Description" />
+	
 </xsl:stylesheet>
