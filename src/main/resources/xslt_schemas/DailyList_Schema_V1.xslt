@@ -32,4 +32,25 @@
 	<xsl:template match="cs:CrownCourt/cs:CourtHouseFax" />
 	<xsl:template match="cs:CrownCourt/cs:Description" />
 	
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:CourtHouseCodeType" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:CourtHouseDX" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:CourtHouseFax" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:Description" />
+	
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Judge/cs:CRESTjudgeID" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Justice/cs:CRESTjudgeID" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:StartDate" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:EndDate" />
+	
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:HearingDetails/cs:HearingDate" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:HearingDetails/cs:HearingEndDate" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:HearingDetails/cs:ListNote" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CRESThearingID" />
+	
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:Advocate" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationCode" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationAddress" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationDX" />
+	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:ProsecutingOrganisation/cs:ContactDetails" />
+	
 </xsl:stylesheet>
