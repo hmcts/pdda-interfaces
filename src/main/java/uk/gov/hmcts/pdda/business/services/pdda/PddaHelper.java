@@ -5,6 +5,7 @@ import com.jcraft.jsch.SftpException;
 import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -18,6 +19,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
@@ -66,6 +69,9 @@ public class PddaHelper extends XhibitPddaHelper {
     private static final String SFTP_ERROR = "SFTP Error:";
     private static final String NOT_FOUND = " not found";
 
+    // Instance of the SftpConfigHelper
+    private SftpConfigHelper sftpConfigHelper;
+
     public PddaHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
     }
@@ -82,14 +88,10 @@ public class PddaHelper extends XhibitPddaHelper {
     public void retrieveFromBaisCp() {
         methodName = "retrieveFromBaisCp()";
         LOG.debug(methodName, LOG_CALLED);
-        LOG.info(methodName, LOG_CALLED);
-        LOG.error(methodName, LOG_CALLED);
 
         SftpConfig config = getBaisCpConfigs();
-        if (config.errorMsg != null) {
-            LOG.error(config.errorMsg);
-            LOG.info(config.errorMsg);
-            LOG.debug(config.errorMsg);
+        if (config.getErrorMsg() != null) {
+            LOG.debug(config.getErrorMsg());
             return;
         }
 
@@ -104,8 +106,8 @@ public class PddaHelper extends XhibitPddaHelper {
         LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getSftpConfigs();
-        if (config.errorMsg != null) {
-            LOG.error(config.errorMsg);
+        if (config.getErrorMsg() != null) {
+            LOG.error(config.getErrorMsg());
             return;
         }
 
@@ -127,14 +129,14 @@ public class PddaHelper extends XhibitPddaHelper {
                 }
             }
         } finally {
-            if (config.session != null) {
+            if (config.getSession() != null) {
                 // Check the contents of Bais to verify all processed files are deleted
                 LOG.debug("Checking contents of Bais prior to closing the connection");
                 Map<String, String> files = getBaisFileList(config, validation);
                 if (files.isEmpty()) {
                     LOG.debug("Contents of Bais is now empty");
                 }
-                PddaSftpUtil.disconnectSession(config.session);
+                PddaSftpUtil.disconnectSession(config.getSession());
                 config.setSession(null);
             }
         }
@@ -171,7 +173,8 @@ public class PddaHelper extends XhibitPddaHelper {
             // Write the pddaMessage
             createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
 
-            getSftpHelper().sftpDeleteFile(config.session, config.remoteFolder, filename);
+            getSftpHelper().sftpDeleteFile(config.getSession(), config.getActiveRemoteFolder(),
+                filename);
             LOG.debug("Removed file from bais after processing: {}", filename);
         } catch (JSchException | SftpException | NotFoundException ex) {
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
@@ -209,16 +212,17 @@ public class PddaHelper extends XhibitPddaHelper {
 
     private Map<String, String> getBaisFileList(SftpConfig config, BaisValidation validation) {
         try {
-            return getSftpHelper().sftpFetch(config.session, config.remoteFolder, validation);
+            return getSftpHelper().sftpFetch(config.getSession(), config.getActiveRemoteFolder(),
+                validation);
         } catch (Exception ex) {
-            LOG.error(SFTP_ERROR, ex);
+            LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
             return Collections.emptyMap();
         }
     }
 
     private SftpConfig getSftpConfigs() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
-            Config.SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.DB_SFTP_USERNAME, Config.DB_SFTP_PASSWORD,
+            Config.DB_SFTP_UPLOAD_LOCATION);
     }
 
     private SftpConfig getSftpConfigs(String configUsername, String configPassword,
@@ -229,80 +233,77 @@ public class PddaHelper extends XhibitPddaHelper {
 
         // Fetch and validate the properties
         try {
-            sftpConfig.username = getMandatoryEnvValue(configUsername);
-            LOG.debug("SFTP Username: {}", sftpConfig.username);
+            sftpConfig.setCpUsername(getMandatoryEnvValue(configUsername));
+            LOG.debug("SFTP Username: {}", sftpConfig.getCpUsername());
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configUsername + NOT_FOUND;
+            sftpConfig.setErrorMsg(configUsername + NOT_FOUND);
             return sftpConfig;
         }
         try {
-            sftpConfig.password = getMandatoryEnvValue(configPassword);
+            sftpConfig.setCpPassword(getMandatoryEnvValue(configPassword));
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configPassword + NOT_FOUND;
+            sftpConfig.setErrorMsg(configPassword + NOT_FOUND);
             return sftpConfig;
         }
         try {
-            sftpConfig.remoteFolder = getMandatoryConfigValue(configLocation);
-            LOG.debug("SFTP Remote Folder: {}", sftpConfig.remoteFolder);
+            sftpConfig.setCpRemoteFolder(getMandatoryConfigValue(configLocation));
+            LOG.debug("SFTP Remote Folder: {}", sftpConfig.getCpRemoteFolder());
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configLocation + NOT_FOUND;
+            sftpConfig.setErrorMsg(configLocation + NOT_FOUND);
+            return sftpConfig;
+        }
+        try {
+            sftpConfig.setXhibitUsername(getMandatoryEnvValue(configUsername));
+            LOG.debug("SFTP Username: {}", sftpConfig.getXhibitUsername());
+        } catch (InvalidConfigException ex) {
+            sftpConfig.setErrorMsg(configUsername + NOT_FOUND);
+            return sftpConfig;
+        }
+        try {
+            sftpConfig.setXhibitPassword(getMandatoryEnvValue(configPassword));
+        } catch (InvalidConfigException ex) {
+            sftpConfig.setErrorMsg(configPassword + NOT_FOUND);
+            return sftpConfig;
+        }
+        try {
+            sftpConfig.setXhibitRemoteFolder(getMandatoryConfigValue(configLocation));
+            LOG.debug("SFTP Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
+        } catch (InvalidConfigException ex) {
+            sftpConfig.setErrorMsg(configLocation + NOT_FOUND);
             return sftpConfig;
         }
         String hostAndPort;
         try {
-            hostAndPort = getMandatoryEnvValue(Config.SFTP_HOST);
+            hostAndPort = getMandatoryEnvValue(Config.DB_SFTP_HOST);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
+            sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
             return sftpConfig;
         }
 
-        // Validate the host and port
         LOG.debug("Validating host and port");
-        String portDelimiter = ":";
-        Integer pos = hostAndPort.indexOf(portDelimiter);
-        if (pos <= 0) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + " syntax is <Host>" + portDelimiter + "<Port>";
-            return sftpConfig;
-        }
-        sftpConfig.host = hostAndPort.substring(0, pos);
-        try {
-            String strPort = hostAndPort.substring(pos + 1, hostAndPort.length());
-            sftpConfig.port = Integer.valueOf(strPort);
-        } catch (Exception ex) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + " contains invalid port number";
-            LOG.error("Stacktrace1:: {}", ex);
-            return sftpConfig;
-        }
-
-        // Create a session
-        try {
-            LOG.debug("Connection validated successfully");
-            sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
-                sftpConfig.password, sftpConfig.host, sftpConfig.port));
-            LOG.debug("A session has been established");
-        } catch (Exception ex) {
-            sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
-            LOG.error("Stacktrace2:: {}", ex);
-            return sftpConfig;
-        }
+        sftpConfig = getSftpConfigHelper().validateAndSetHostAndPort(sftpConfig, hostAndPort);
+        sftpConfig = getSftpConfigHelper().getJschSession(sftpConfig);
 
         LOG.debug("Connected successfully");
         return sftpConfig;
     }
 
+
     // This method is used for reference to SftpConfig in the unit tests
     public SftpConfig getSftpConfigsForTest() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
-            Config.SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.DB_SFTP_USERNAME, Config.DB_SFTP_PASSWORD,
+            Config.DB_SFTP_UPLOAD_LOCATION);
     }
+
 
     private SftpConfig getBaisCpConfigs() {
         methodName = "getBaisCpConfigs()";
         LOG.debug(methodName, LOG_CALLED);
-        return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD,
-            Config.CP_SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.DB_CP_SFTP_USERNAME, Config.DB_CP_SFTP_PASSWORD,
+            Config.DB_CP_SFTP_UPLOAD_LOCATION);
     }
+
 
     public void checkForCpMessages(String userDisplayName) throws IOException {
         // Find Messages
@@ -399,11 +400,13 @@ public class PddaHelper extends XhibitPddaHelper {
         SftpConfig sftpConfig = getSftpConfigs();
         if (!responses.isEmpty()) {
             try {
-                getSftpHelper().sftpFiles(sftpConfig.session, sftpConfig.remoteFolder, responses);
+                getSftpHelper().sftpFiles(sftpConfig.getSession(),
+                    sftpConfig.getActiveRemoteFolder(),
+                    responses);
                 return true;
             } catch (Exception ex) {
-                LOG.error(SFTP_ERROR, ex);
-                LOG.error("Stacktrace3:: {}", ex);
+                LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
+                LOG.error("Stacktrace3:: {}", ExceptionUtils.getStackTrace(ex));
             }
         }
         return false;
@@ -411,6 +414,13 @@ public class PddaHelper extends XhibitPddaHelper {
 
     private Date getNow() {
         return new Date();
+    }
+
+    private SftpConfigHelper getSftpConfigHelper() {
+        if (sftpConfigHelper == null) {
+            sftpConfigHelper = new SftpConfigHelper(entityManager);
+        }
+        return sftpConfigHelper;
     }
 
     public static class BaisXhibitValidation extends BaisValidation {

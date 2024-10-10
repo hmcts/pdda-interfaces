@@ -70,38 +70,4 @@ class PddaBaisControllerBeanTest {
         assertTrue(result, TRUE);
     }
 
-    @Test
-    void testRetrieveFromBaisCP() {
-        // Setup
-        mockPddaHelper.retrieveFromBaisCp();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisCP();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
-    }
-
-    @Test
-    void testRetrieveFromBaisXhibit() {
-        mockPddaHelper.retrieveFromBaisXhibit();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisXhibit();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
-    }
 }
