@@ -91,6 +91,15 @@
 	
 	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:Advocate" />
 	
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:ProsecutingReference" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationCode" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationAddress" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationDX" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:Prosecution/cs:ProsecutingOrganisation/cs:ContactDetails" />
 	
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:AppealCaseDescription" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:MethodOfInstigation" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:DateOfInstigation" />
+	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseClassNumber" />
 	
 </xsl:stylesheet>
