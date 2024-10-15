@@ -230,60 +230,56 @@ public class PddaHelper extends XhibitPddaHelper {
             Config.DB_SFTP_UPLOAD_LOCATION);
     }
 
+    @SuppressWarnings("PMD.InefficientStringBuffering")
     private SftpConfig getSftpConfigs(String cpConfigUsername, String cpConfigPassword,
         String cpConfigLocation, String xhibitConfigUsername, String xhibitConfigPassword,
         String xhibitConfigLocation) {
         methodName = "getSftpConfigs()";
         LOG.debug(methodName, LOG_CALLED);
         SftpConfig sftpConfig = new SftpConfig();
+        StringBuilder errorMessage = new StringBuilder();
 
         // Fetch and validate the properties
         try {
             sftpConfig.setCpUsername(getMandatoryEnvValue(cpConfigUsername));
             LOG.debug("SFTP Username: {}", sftpConfig.getCpUsername());
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(cpConfigUsername + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append(cpConfigUsername + NOT_FOUND);
         }
         try {
             sftpConfig.setCpPassword(getMandatoryEnvValue(cpConfigPassword));
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(cpConfigPassword + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append("\n" + cpConfigPassword + NOT_FOUND);
         }
         try {
             sftpConfig.setCpRemoteFolder(getMandatoryConfigValue(cpConfigLocation));
             LOG.debug("SFTP Remote Folder: {}", sftpConfig.getCpRemoteFolder());
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(cpConfigLocation + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append("\n" + cpConfigLocation + NOT_FOUND);
         }
         try {
             sftpConfig.setXhibitUsername(getMandatoryEnvValue(xhibitConfigUsername));
             LOG.debug("SFTP Username: {}", sftpConfig.getXhibitUsername());
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(xhibitConfigUsername + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append("\n" + xhibitConfigUsername + NOT_FOUND);
         }
         try {
             sftpConfig.setXhibitPassword(getMandatoryEnvValue(xhibitConfigPassword));
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(xhibitConfigPassword + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append("\n" + xhibitConfigPassword + NOT_FOUND);
         }
         try {
             sftpConfig.setXhibitRemoteFolder(getMandatoryConfigValue(xhibitConfigLocation));
             LOG.debug("SFTP Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(xhibitConfigLocation + NOT_FOUND);
-            return sftpConfig;
+            errorMessage.append("\n" + xhibitConfigLocation + NOT_FOUND);
         }
         String hostAndPort;
         try {
             hostAndPort = getMandatoryEnvValue(Config.DB_SFTP_HOST);
             LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
+            sftpConfig.setErrorMsg(errorMessage + Config.DB_SFTP_HOST + NOT_FOUND);
             return sftpConfig;
         }
 
