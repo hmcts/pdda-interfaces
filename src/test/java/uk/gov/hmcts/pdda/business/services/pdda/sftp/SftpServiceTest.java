@@ -32,6 +32,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
@@ -82,6 +83,7 @@ class SftpServiceTest {
     private static final String ALL_GOOD = "All good";
 
     private static final String TEST_SFTP_DIRECTORY = "/directory/";
+    private static final String COURT1 = "Court1";
 
 
     @Mock
@@ -108,8 +110,8 @@ class SftpServiceTest {
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
-    @Mock
-    private SftpConfigHelper mockSftpConfigHelper;
+    // @Mock
+    // private SftpConfigHelper mockSftpConfigHelper;
 
     @Mock
     private SFTPClient mockSftpClient;
@@ -118,7 +120,16 @@ class SftpServiceTest {
     private SftpConfig mockSftpConfig;
 
     @Mock
+    private SSHClient mockSshClient;
+
+    @Mock
     private Environment mockEnvironment;
+
+    @Mock
+    private SftpService mockSftpService;
+
+    @Mock
+    private BaisValidation mockBaisValidation;
 
     @TestSubject
     private final SftpService classUnderTest =
@@ -130,9 +141,6 @@ class SftpServiceTest {
 
     private final SftpConfig sftpConfig = new SftpConfig();
 
-
-    @Mock
-    private SSHClient mockSshClient;
 
     @Test
     void testDefaultConstructor() {
@@ -167,7 +175,7 @@ class SftpServiceTest {
             .andReturn(pddaRefMessageTypeDao);
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
-        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andReturn(courtDaos);
 
@@ -213,7 +221,7 @@ class SftpServiceTest {
             .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao()));
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
-        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 
@@ -286,58 +294,28 @@ class SftpServiceTest {
     @SuppressWarnings("PMD")
     void testProcessBaisMessages() {
 
+        List<XhbCourtDao> courtDaos = new ArrayList<>();
+        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .andStubReturn(courtDaos);
+
         EasyMock
             .expect(mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class)))
             .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao()));
 
-        EasyMock.expect(mockSftpConfigHelper.getNewSshClient())
-            .andReturn(EasyMock.createMock(SSHClient.class)).anyTimes();
+        EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockPddaMessageHelper);
 
-        try {
-            EasyMock.expect(mockSshClient.newSFTPClient())
-                .andStubReturn(EasyMock.createMock(SFTPClient.class));
+        boolean result = classUnderTest.processBaisMessages(sftpServer.getPort());
 
-            mockSshClient.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        EasyMock.replay(mockSftpConfigHelper);
-        EasyMock.replay(mockSshClient);
-        EasyMock.replay(mockSftpClient);
-
-        sftpConfig.setHost("localhost");
-        sftpConfig.setPort(sftpServer.getPort());
-        sftpConfig.setCpUsername("cpUsername");
-        sftpConfig.setCpPassword("cpPassword");
-        sftpConfig.setCpRemoteFolder(TEST_SFTP_DIRECTORY);
-        sftpConfig.setXhibitUsername("xhibitUsername");
-        sftpConfig.setXhibitPassword("xhibitPassword");
-        sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
-        sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
-
-        try {
-            SSHClient ssh = new SftpConfigHelper(mockEntityManager).getNewSshClient();
-            ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
-            ssh.authPassword(sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
-            sftpConfig.setSshClient(ssh);
-
-            SFTPClient sftpClient = new SFTPClient(ssh);
-            sftpConfig.setSshjSftpClient(sftpClient);
-
-            // when(classUnderTest.processBaisMessages(sftpServer.getPort())).thenReturn(false);
-            boolean result = false; // classUnderTest.processBaisMessages(sftpServer.getPort());
-
-            assertFalse(result, "Expected processBaisMessages to return false");
-        } catch (IOException e) {
-            LOG.error("Error setting up SFTP config", e);
-        }
+        assertFalse(result, "Expected processBaisMessages to return false");
     }
 
     @Test
     void testProcessDataFromBais() {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
-        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 

@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.pdda.sftp;
 
 import jakarta.persistence.EntityManager;
+import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.sftp.SFTPClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 
+import java.io.IOException;
 
 public class SftpHelperUtil extends SftpService {
 
@@ -70,6 +73,7 @@ public class SftpHelperUtil extends SftpService {
      * @param sftpConfig The SFTP Config
      * @return Updated SFTP Config
      */
+    @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CloseResource"})
     private SftpConfig getTestSftpConfig(SftpConfig sftpConfig) {
         sftpConfig.setHost("localhost");
         sftpConfig.setCpUsername("cpUsername");
@@ -79,6 +83,19 @@ public class SftpHelperUtil extends SftpService {
         sftpConfig.setXhibitPassword("xhibitPassword");
         sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
         sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
+
+        try {
+            SSHClient ssh = new SftpConfigHelper(entityManager).getNewSshClient();
+            ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
+            ssh.authPassword(sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
+            sftpConfig.setSshClient(ssh);
+
+            SFTPClient sftpClient = new SFTPClient(ssh);
+            sftpConfig.setSshjSftpClient(sftpClient);
+
+        } catch (IOException e) {
+            LOG.error("Error setting up SFTP config", e);
+        }
 
         return sftpConfig;
     }

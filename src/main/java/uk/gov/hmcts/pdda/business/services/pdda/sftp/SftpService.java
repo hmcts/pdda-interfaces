@@ -48,10 +48,6 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String TEST_CONNECTION_TYPE = "TEST";
 
 
-    // Instance of the SftpConfigHelper
-    protected SftpConfigHelper sftpConfigHelper;
-
-
     /**
      * JUnit constructor.
      * 
@@ -88,6 +84,7 @@ public class SftpService extends XhibitPddaHelper {
 
         SftpConfig sftpConfig = getSftpHelperUtil().populateSftpConfig(sftpPort);
 
+        // First get the CP data from BAIS
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
@@ -103,6 +100,7 @@ public class SftpService extends XhibitPddaHelper {
             error = true;
         }
 
+        // Second get the XHIBIT data from BAIS
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
@@ -176,7 +174,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param baisXhibitValidation The validation class
      * @throws IOException The IOException
      */
-    private void retrieveFromBais(SftpConfig config, BaisValidation baisXhibitValidation)
+    void retrieveFromBais(SftpConfig config, BaisValidation baisXhibitValidation)
         throws IOException {
 
         methodName = "retrieveFromBais()";

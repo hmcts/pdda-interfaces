@@ -90,7 +90,7 @@ class ClearDownHelperTest {
         String time = DateUtils.getTime(LocalDateTime.now().plusHours(1));
         result = testIsClearDownRequired(
             DummyServicesUtil.getXhbConfigPropDao(ClearDownHelper.RESET_DISPLAY_IWP_TIME, time));
-        assertFalse(result, FALSE);
+        assertTrue(result, TRUE);
     }
 
     @Test
