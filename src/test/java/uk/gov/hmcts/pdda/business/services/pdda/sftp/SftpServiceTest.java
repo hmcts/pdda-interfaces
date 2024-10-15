@@ -81,6 +81,8 @@ class SftpServiceTest {
     private static final String TESTUSER = "TestUser";
     private static final String ALL_GOOD = "All good";
 
+    private static final String TEST_SFTP_DIRECTORY = "/directory/";
+
 
     @Mock
     private EntityManager mockEntityManager;
@@ -307,11 +309,11 @@ class SftpServiceTest {
         sftpConfig.setPort(sftpServer.getPort());
         sftpConfig.setCpUsername("cpUsername");
         sftpConfig.setCpPassword("cpPassword");
-        sftpConfig.setCpRemoteFolder("/directory/");
+        sftpConfig.setCpRemoteFolder(TEST_SFTP_DIRECTORY);
         sftpConfig.setXhibitUsername("xhibitUsername");
         sftpConfig.setXhibitPassword("xhibitPassword");
-        sftpConfig.setXhibitRemoteFolder("/directory/");
-        sftpConfig.setActiveRemoteFolder("/directory/");
+        sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
+        sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
 
         try {
             SSHClient ssh = new SftpConfigHelper(mockEntityManager).getNewSshClient();
@@ -437,11 +439,11 @@ class SftpServiceTest {
         sftpConfig.setPort(sftpServer.getPort());
         sftpConfig.setCpUsername("cpUsername");
         sftpConfig.setCpPassword("cpPassword");
-        sftpConfig.setCpRemoteFolder("/directory/");
+        sftpConfig.setCpRemoteFolder(TEST_SFTP_DIRECTORY);
         sftpConfig.setXhibitUsername("xhibitUsername");
         sftpConfig.setXhibitPassword("xhibitPassword");
-        sftpConfig.setXhibitRemoteFolder("/directory/");
-        sftpConfig.setActiveRemoteFolder("/directory/");
+        sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
+        sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
 
         try {
             SSHClient ssh = new SftpConfigHelper(mockEntityManager).getNewSshClient();

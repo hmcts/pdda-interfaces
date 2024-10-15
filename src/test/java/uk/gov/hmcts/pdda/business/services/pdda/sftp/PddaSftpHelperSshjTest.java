@@ -28,6 +28,8 @@ class PddaSftpHelperSshjTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(PddaSftpHelperSshjTest.class);
 
+    private static final String TEST_SFTP_DIRECTORY = "/directory/";
+
     @RegisterExtension
     public final FakeSftpServerExtension sftpServer = new FakeSftpServerExtension();
 
@@ -107,11 +109,11 @@ class PddaSftpHelperSshjTest {
         sftpConfig2.setPort(sftpServer.getPort());
         sftpConfig2.setCpUsername("cpUsername");
         sftpConfig2.setCpPassword("cpPassword");
-        sftpConfig2.setCpRemoteFolder("/directory/");
-        sftpConfig2.setXhibitUsername("xhibitUsername");
-        sftpConfig2.setXhibitPassword("xhibitPassword");
-        sftpConfig2.setXhibitRemoteFolder("/directory/");
-        sftpConfig2.setActiveRemoteFolder("/directory/");
+        sftpConfig.setCpRemoteFolder(TEST_SFTP_DIRECTORY);
+        sftpConfig.setXhibitUsername("xhibitUsername");
+        sftpConfig.setXhibitPassword("xhibitPassword");
+        sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
+        sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
 
         try {
             SSHClient ssh = new SftpConfigHelper(mockEntityManager).getNewSshClient();

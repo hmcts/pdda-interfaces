@@ -26,8 +26,7 @@ public class SftpValidation {
 
         if (filesInFolder != null) {
             for (Object obj : filesInFolder) {
-                if (obj instanceof RemoteResourceInfo) {
-                    RemoteResourceInfo remoteResourceInfo = (RemoteResourceInfo) obj;
+                if (obj instanceof RemoteResourceInfo remoteResourceInfo) {
                     String filename = remoteResourceInfo.getName();
                     results.add(filename);
                 } else {
@@ -43,11 +42,8 @@ public class SftpValidation {
     }
 
     public String getFilename(Object obj) {
-        if (obj instanceof LsEntry) {
-            LsEntry lsEntry = (LsEntry) obj;
-            if (!lsEntry.getAttrs().isDir() || includeDirs) {
-                return lsEntry.getFilename();
-            }
+        if (obj instanceof LsEntry lsEntry && (!lsEntry.getAttrs().isDir() || includeDirs)) {
+            return lsEntry.getFilename();
         }
         return null;
     }

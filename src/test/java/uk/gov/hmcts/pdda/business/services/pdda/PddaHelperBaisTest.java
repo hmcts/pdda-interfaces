@@ -30,6 +30,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 class PddaHelperBaisTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelperBaisTest.class);
@@ -80,6 +81,9 @@ class PddaHelperBaisTest {
 
     @Mock
     private SftpConfigHelper mockSftpConfigHelper;
+
+    @Mock
+    private SftpHelperUtil mockSftpHelperUtil;
 
     @Mock
     private SftpConfig mockSftpConfig;
@@ -139,7 +143,7 @@ class PddaHelperBaisTest {
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
         try {
             EasyMock
-                .expect(mockSftpConfigHelper.validateAndSetHostAndPort(
+                .expect(mockSftpHelperUtil.validateAndSetHostAndPort(
                     EasyMock.isA(SftpConfig.class), EasyMock.isA(String.class)))
                 .andReturn(mockSftpConfig);
             EasyMock.expect(mockSftpConfigHelper.getJschSession(EasyMock.isA(SftpConfig.class)))
@@ -233,7 +237,7 @@ class PddaHelperBaisTest {
         testGetBaisXhibitConfigs();
         try {
             EasyMock
-                .expect(mockSftpConfigHelper.validateAndSetHostAndPort(
+                .expect(mockSftpHelperUtil.validateAndSetHostAndPort(
                     EasyMock.isA(SftpConfig.class), EasyMock.isA(String.class)))
                 .andReturn(mockSftpConfig);
             EasyMock.expect(mockSftpConfigHelper.getJschSession(EasyMock.isA(SftpConfig.class)))
