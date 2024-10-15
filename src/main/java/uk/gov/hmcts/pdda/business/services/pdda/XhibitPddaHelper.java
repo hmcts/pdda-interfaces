@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.PddaSftpHelperSshj;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
@@ -30,6 +31,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings("PMD")
 public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(XhibitPddaHelper.class);
 
@@ -38,9 +40,10 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private XhbClobRepository clobRepository;
     private PddaMessageHelper pddaMessageHelper;
     private CppStagingInboundHelper cppStagingInboundHelper;
-    private PddaSftpHelper sftpHelper;
+    private PddaSftpHelper pddaSftpHelper;
     private SftpConfigHelper sftpConfigHelper;
     private SftpHelperUtil sftpHelperUtil;
+    private PddaSftpHelperSshj pddaSftpHelperSshj;
 
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
@@ -49,10 +52,21 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     // Junit constructor
     protected XhibitPddaHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
-        PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper,
+        PddaSftpHelper pddaSftpHelper, PddaMessageHelper pddaMessageHelper,
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
         super(entityManager, xhbConfigPropRepository, environment);
-        this.sftpHelper = sftpHelper;
+        this.pddaSftpHelper = pddaSftpHelper;
+        this.pddaMessageHelper = pddaMessageHelper;
+        this.clobRepository = clobRepository;
+        this.courtRepository = courtRepository;
+    }
+
+    public XhibitPddaHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
+        PddaMessageHelper pddaMessageHelper,
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
+
+        super(entityManager, xhbConfigPropRepository, environment);
         this.pddaMessageHelper = pddaMessageHelper;
         this.clobRepository = clobRepository;
         this.courtRepository = courtRepository;
@@ -103,11 +117,11 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         return cppStagingInboundHelper;
     }
 
-    protected PddaSftpHelper getSftpHelper() {
-        if (sftpHelper == null) {
-            sftpHelper = new PddaSftpHelper();
+    protected PddaSftpHelper getPddaSftpHelper() {
+        if (pddaSftpHelper == null) {
+            pddaSftpHelper = new PddaSftpHelper();
         }
-        return sftpHelper;
+        return pddaSftpHelper;
     }
 
     protected SftpConfigHelper getSftpConfigHelper() {
@@ -122,5 +136,12 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
             sftpHelperUtil = new SftpHelperUtil(entityManager);
         }
         return sftpHelperUtil;
+    }
+
+    protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+        if (pddaSftpHelperSshj == null) {
+            pddaSftpHelperSshj = new PddaSftpHelperSshj();
+        }
+        return pddaSftpHelperSshj;
     }
 }

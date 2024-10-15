@@ -62,6 +62,7 @@ class PddaHelperRepositoryHelpersTest {
 
     @Test
     void testGetSftpHelper() {
-        assertInstanceOf(PddaSftpHelper.class, classUnderTest.getSftpHelper(), NOT_INSTANCE);
+        assertInstanceOf(PddaSftpHelper.class, classUnderTest.getPddaSftpHelper(), NOT_INSTANCE);
     }
+
 }

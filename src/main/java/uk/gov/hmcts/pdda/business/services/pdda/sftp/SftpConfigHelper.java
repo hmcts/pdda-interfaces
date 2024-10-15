@@ -11,13 +11,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
-import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
 
 /**
  * SFTP Configuration Helper class to handle getting the SFTP configuration.
  */
-public class SftpConfigHelper extends SftpHelper {
+public class SftpConfigHelper extends SftpService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpConfigHelper.class);
 
@@ -27,11 +26,6 @@ public class SftpConfigHelper extends SftpHelper {
 
     private static final String SFTP_ERROR = "SFTP Error:";
 
-    // private Environment environment;
-
-    public SftpConfigHelper(EntityManager entityManager) {
-        super(entityManager);
-    }
 
     /**
      * JUnit constructor.
@@ -39,27 +33,24 @@ public class SftpConfigHelper extends SftpHelper {
      * @param entityManager The EntityManager
      * @param xhbConfigPropRepository The XhbConfigPropRepository
      * @param environment The Environment
-     * @param sftpHelper PddaSftpHelper
      */
     public SftpConfigHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
-        PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper,
-        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
-        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
-            clobRepository, courtRepository);
+        PddaMessageHelper pddaMessageHelper, XhbClobRepository clobRepository,
+        XhbCourtRepository courtRepository) {
+        super(entityManager, xhbConfigPropRepository, environment,
+            pddaMessageHelper, clobRepository, courtRepository);
     }
 
     /**
      * JUnit constructor.
      * 
      * @param entityManager The EntityManager
-     * @param environment The Environment
      */
     @SuppressWarnings("PMD.UnusedFormalParameter")
-    public SftpConfigHelper(EntityManager entityManager, Environment environment) {
+    public SftpConfigHelper(EntityManager entityManager) {
         super(entityManager);
         this.entityManager = entityManager;
-        // this.environment = environment;
     }
 
 
@@ -84,58 +75,47 @@ public class SftpConfigHelper extends SftpHelper {
      * 
      * @return The SFTP configuration
      */
+    @SuppressWarnings("PMD.UnusedAssignment")
     private SftpConfig getDbConfigParams(SftpConfig sftpConfig) {
         
         methodName = "setDBConfigParams()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         // Firstly CP BAIS properties
-        try {
-            sftpConfig.setCpUsername(getMandatoryConfigValue(Config.DB_CP_SFTP_USERNAME));
-            LOG.debug("SFTP Cp Username: {}", sftpConfig.getCpUsername());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_USERNAME + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
-        }
-        try {
-            sftpConfig
-                .setCpRemoteFolder(getMandatoryConfigValue(Config.DB_CP_SFTP_UPLOAD_LOCATION));
-            LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_UPLOAD_LOCATION + NOT_FOUND);
-        }
-
-        // Next the XHIBIT BAIS properties
-        try {
-            sftpConfig.setXhibitUsername(getMandatoryConfigValue(Config.DB_SFTP_USERNAME));
-            LOG.debug("SFTP XHIBIT Username: {}", sftpConfig.getCpUsername());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_USERNAME + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setXhibitPassword(getMandatoryConfigValue(Config.DB_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_PASSWORD + NOT_FOUND);
-        }
-        try {
-            sftpConfig
-                .setXhibitRemoteFolder(getMandatoryConfigValue(Config.DB_SFTP_UPLOAD_LOCATION));
-            LOG.debug("SFTP XHIBIT Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_UPLOAD_LOCATION + NOT_FOUND);
-        }
-
-        // Now get the host and port
+        String currentProperty = "";
         String hostAndPort = "";
         try {
-            hostAndPort = getMandatoryConfigValue(Config.DB_SFTP_HOST);
+            currentProperty = Config.DB_CP_SFTP_USERNAME;
+            sftpConfig.setCpUsername(getMandatoryConfigValue(currentProperty));
+            LOG.debug("SFTP Cp Username: {}", sftpConfig.getCpUsername());
+
+            currentProperty = Config.DB_CP_SFTP_PASSWORD;
+            sftpConfig.setCpPassword(getMandatoryConfigValue(currentProperty));
+
+            currentProperty = Config.DB_CP_SFTP_UPLOAD_LOCATION;
+            sftpConfig
+                .setCpRemoteFolder(getMandatoryConfigValue(currentProperty));
+            LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
+
+            // Next the XHIBIT BAIS properties
+            currentProperty = Config.DB_SFTP_USERNAME;
+            sftpConfig.setXhibitUsername(getMandatoryConfigValue(currentProperty));
+            LOG.debug("SFTP XHIBIT Username: {}", sftpConfig.getCpUsername());
+
+            currentProperty = Config.DB_SFTP_PASSWORD;
+            sftpConfig.setXhibitPassword(getMandatoryConfigValue(currentProperty));
+
+            currentProperty = Config.DB_SFTP_UPLOAD_LOCATION;
+            sftpConfig
+                .setXhibitRemoteFolder(getMandatoryConfigValue(currentProperty));
+            LOG.debug("SFTP XHIBIT Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
+
+            // Now get the host and port
+            currentProperty = Config.DB_SFTP_HOST;
+            hostAndPort = getMandatoryConfigValue(currentProperty);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
+            sftpConfig.setErrorMsg(currentProperty + NOT_FOUND);
         }
 
         // Validate the host and port
@@ -148,56 +128,45 @@ public class SftpConfigHelper extends SftpHelper {
      * 
      * @return The SFTP configuration
      */
+    @SuppressWarnings("PMD.UnusedAssignment")
     private SftpConfig getKvConfigParams(SftpConfig sftpConfig) {
 
         methodName = "setKVConfigParams()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         // Firstly CP BAIS properties
-        try {
-            sftpConfig.setCpUsername(getMandatoryEnvValue(Config.KV_CP_SFTP_USERNAME));
-            LOG.debug("SFTP Cp Username: {}", sftpConfig.getCpUsername());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_CP_SFTP_USERNAME + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setCpPassword(getMandatoryEnvValue(Config.KV_CP_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_CP_SFTP_PASSWORD + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setCpRemoteFolder(getMandatoryEnvValue(Config.KV_CP_SFTP_UPLOAD_LOCATION));
-            LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_CP_SFTP_UPLOAD_LOCATION + NOT_FOUND);
-        }
-
-        // Next the XHIBIT BAIS properties
-        try {
-            sftpConfig.setCpUsername(getMandatoryEnvValue(Config.KV_SFTP_USERNAME));
-            LOG.debug("SFTP XHIBIT Username: {}", sftpConfig.getCpUsername());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_SFTP_USERNAME + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setCpPassword(getMandatoryEnvValue(Config.KV_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_SFTP_PASSWORD + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setXhibitRemoteFolder(getMandatoryEnvValue(Config.KV_SFTP_UPLOAD_LOCATION));
-            LOG.debug("SFTP XHIBIT Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_SFTP_UPLOAD_LOCATION + NOT_FOUND);
-        }
-
-        // Now get the host and port
+        String currentProperty = "";
         String hostAndPort = "";
         try {
-            hostAndPort = getMandatoryEnvValue(Config.KV_SFTP_HOST);
+            currentProperty = Config.KV_CP_SFTP_USERNAME;
+            sftpConfig.setCpUsername(getMandatoryEnvValue(currentProperty));
+            LOG.debug("SFTP Cp Username: {}", sftpConfig.getCpUsername());
+
+            currentProperty = Config.KV_CP_SFTP_PASSWORD;
+            sftpConfig.setCpPassword(getMandatoryEnvValue(currentProperty));
+
+            currentProperty = Config.KV_CP_SFTP_UPLOAD_LOCATION;
+            sftpConfig.setCpRemoteFolder(getMandatoryEnvValue(currentProperty));
+            LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
+
+            // Next the XHIBIT BAIS properties
+            currentProperty = Config.KV_SFTP_USERNAME;
+            sftpConfig.setCpUsername(getMandatoryEnvValue(currentProperty));
+            LOG.debug("SFTP XHIBIT Username: {}", sftpConfig.getCpUsername());
+
+            currentProperty = Config.KV_SFTP_PASSWORD;
+            sftpConfig.setCpPassword(getMandatoryEnvValue(currentProperty));
+
+            currentProperty = Config.KV_SFTP_UPLOAD_LOCATION;
+            sftpConfig.setXhibitRemoteFolder(getMandatoryEnvValue(currentProperty));
+            LOG.debug("SFTP XHIBIT Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
+
+            // Now get the host and port
+            currentProperty = Config.KV_SFTP_HOST;
+            hostAndPort = getMandatoryEnvValue(currentProperty);
             LOG.debug("SFTP Host and port: {}", hostAndPort);
         } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.KV_SFTP_HOST + NOT_FOUND);
+            sftpConfig.setErrorMsg(currentProperty + NOT_FOUND);
         }
 
         // Validate the host and port
@@ -249,7 +218,7 @@ public class SftpConfigHelper extends SftpHelper {
         // Create a session
         try {
             LOG.debug("Connection validated successfully");
-            sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.getXhibitUsername(),
+            sftpConfig.setSession(getPddaSftpHelper().createSession(sftpConfig.getXhibitUsername(),
                 sftpConfig.getXhibitPassword(), sftpConfig.getHost(), sftpConfig.getPort()));
             LOG.debug("A session has been established");
         } catch (Exception ex) {

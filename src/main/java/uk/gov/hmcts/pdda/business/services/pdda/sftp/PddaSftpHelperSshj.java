@@ -106,8 +106,8 @@ public class PddaSftpHelperSshj {
                             LOG.debug("File closed: {}", filename);
                         }
                     } catch (IOException e) {
-                        LOG.error("Error reading: {}", filename);
-                        LOG.error("Stacktrace1:: {}", ExceptionUtils.getStackTrace(e));
+                        LOG.error("Error Reading filename {} :: Stacktrace1:: {}", filename,
+                            ExceptionUtils.getStackTrace(e));
                     }
                 }
             }

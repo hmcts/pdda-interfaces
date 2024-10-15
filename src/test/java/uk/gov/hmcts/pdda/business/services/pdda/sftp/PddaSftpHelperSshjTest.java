@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper.BaisCpValidation;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper.BaisXhibitValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisCpValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisXhibitValidation;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

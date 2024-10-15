@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
 /**
  * <p>
@@ -39,7 +39,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     private static final String LOG_CALLED = " called";
     private static final String TWO_PARAMS = "{}{}";
 
-    private SftpHelper sftpHelper;
+    private SftpService sftpService;
 
     public PddaBaisControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -59,14 +59,14 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
-        getSftpHelper().processBaisMessages();
+        getSftpService().processBaisMessages(0);
     }
 
 
-    SftpHelper getSftpHelper() {
-        if (sftpHelper == null) {
-            sftpHelper = new SftpHelper(getEntityManager());
+    SftpService getSftpService() {
+        if (sftpService == null) {
+            sftpService = new SftpService(getEntityManager());
         }
-        return sftpHelper;
+        return sftpService;
     }
 }

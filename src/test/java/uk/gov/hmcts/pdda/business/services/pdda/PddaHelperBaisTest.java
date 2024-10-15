@@ -30,6 +30,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,9 @@ class PddaHelperBaisTest {
     @Mock
     private Environment mockEnvironment;
 
+    @Mock
+    private SftpService mockSftpService;
+
     @TestSubject
     private final PddaHelper classUnderTest = new PddaHelper(EasyMock.createMock(EntityManager.class),
         mockXhbConfigPropRepository, mockEnvironment, mockPddaSftpHelper, mockSftpConfigHelper,
@@ -151,6 +155,7 @@ class PddaHelperBaisTest {
             expectedStatusMap.put(dummyFile.filename, expectedStatus);
         }
         testGetBaisCpConfigs(null);
+        testGetBaisXhibitConfigs();
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
         try {
@@ -246,7 +251,8 @@ class PddaHelperBaisTest {
                 : CpDocumentStatus.INVALID).status;
             expectedStatusMap.put(dummyFile.filename, expectedStatus);
         }
-        testGetBaisConfigs(null);
+        testGetBaisCpConfigs(null);
+        testGetBaisXhibitConfigs();
         try {
             EasyMock
                 .expect(mockSftpConfigHelper.validateAndSetHostAndPort(
@@ -368,6 +374,23 @@ class PddaHelperBaisTest {
     }
 
 
+    private void testGetBaisXhibitConfigs() {
+        // Username
+        String propertyName = Config.SFTP_USERNAME;
+        EasyMock.expect(mockEnvironment.getProperty(propertyName))
+            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
+        // Password
+        propertyName = Config.SFTP_PASSWORD;
+        EasyMock.expect(mockEnvironment.getProperty(propertyName))
+            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
+        // Location
+        propertyName = Config.SFTP_UPLOAD_LOCATION;
+        List<XhbConfigPropDao> locationList = getXhbConfigPropDaoList(propertyName);
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+            .andReturn(locationList).anyTimes();
+    }
+
+
     private void validateSavedValues(List<Capture<XhbPddaMessageDao>> capturedSaves,
         Map<String, String> expectedStatusMap) {
         for (Capture<XhbPddaMessageDao> capturedSave : capturedSaves) {
@@ -429,30 +452,6 @@ class PddaHelperBaisTest {
             result.add(fileResult);
         }
         return result;
-    }
-
-    private void testGetBaisConfigs(String failOn) {
-        // Username
-        String propertyName = Config.SFTP_USERNAME;
-        EasyMock.expect(mockEnvironment.getProperty(propertyName))
-            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
-        // Password
-        propertyName = Config.SFTP_PASSWORD;
-        EasyMock.expect(mockEnvironment.getProperty(propertyName))
-            .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
-        // Location
-        propertyName = Config.SFTP_UPLOAD_LOCATION;
-        List<XhbConfigPropDao> locationList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
-            .andReturn(locationList).anyTimes();
-        // Host
-        propertyName = Config.SFTP_HOST;
-        String hostAndPort = propertyName.toLowerCase(Locale.getDefault());
-        if (failOn == null || !propertyName.equals(failOn)) {
-            hostAndPort = hostAndPort + ":22";
-        }
-        EasyMock.expect(mockEnvironment.getProperty(propertyName)).andReturn(hostAndPort)
-            .anyTimes();
     }
 
 

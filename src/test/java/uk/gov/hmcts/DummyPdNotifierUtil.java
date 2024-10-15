@@ -101,6 +101,29 @@ public final class DummyPdNotifierUtil {
         return new XhbPddaMessageDao(result);
     }
 
+    public static XhbRefPddaMessageTypeDao getXhbPddaMessageTypeDao() {
+
+        String pddaMessageTypeDescription = "Message Type Desc";
+        String pddaMessageType = "PublicDisplay";
+        LocalDateTime lastUpdateDate = LocalDateTime.now();
+        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
+        String lastUpdatedBy = TEST2;
+        String createdBy = TEST1;
+        Integer version = 3;
+
+        XhbRefPddaMessageTypeDao result = new XhbRefPddaMessageTypeDao();
+        result.setPddaMessageDescription(pddaMessageTypeDescription);
+        result.setPddaMessageType(pddaMessageType);
+        result.setLastUpdateDate(lastUpdateDate);
+        result.setCreationDate(creationDate);
+        result.setLastUpdatedBy(lastUpdatedBy);
+        result.setCreatedBy(createdBy);
+        result.setVersion(version);
+
+        return new XhbRefPddaMessageTypeDao(result);
+
+    }
+
     public static XhbRefPddaMessageTypeDao getXhbRefPddaMessageTypeDao() {
         Integer refPddaMessageTypeId = -299;
         String pddaMessageType = "messageType";

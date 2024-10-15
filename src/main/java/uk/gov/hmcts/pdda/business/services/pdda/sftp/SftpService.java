@@ -21,7 +21,6 @@ import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
-import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpValidationUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.XhibitPddaHelper;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
@@ -34,9 +33,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class SftpHelper extends XhibitPddaHelper {
+public class SftpService extends XhibitPddaHelper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SftpHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
 
     private static final String NO = "N";
     private static final String INVALID_MESSAGE_TYPE = "Invalid";
@@ -49,21 +48,8 @@ public class SftpHelper extends XhibitPddaHelper {
     protected static final String TEST_CONNECTION_TYPE = "TEST";
 
 
-    // Instance of the PddaSftpHelper
-    private PddaSftpHelperSshj pddaSftpHelperSshj;
-
     // Instance of the SftpConfigHelper
     protected SftpConfigHelper sftpConfigHelper;
-
-
-    /**
-     * Constructor.
-     * 
-     * @param entityManager The EntityManager
-     */
-    public SftpHelper(EntityManager entityManager) {
-        super(entityManager, InitializationService.getInstance().getEnvironment());
-    }
 
 
     /**
@@ -72,26 +58,35 @@ public class SftpHelper extends XhibitPddaHelper {
      * @param entityManager The EntityManager
      * @param xhbConfigPropRepository The XhbConfigPropRepository
      * @param environment The Environment
-     * @param sftpHelper PddaSftpHelper
      */
-    public SftpHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment, PddaSftpHelper sftpHelper, PddaMessageHelper pddaMessageHelper,
+    public SftpService(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
+        Environment environment, PddaMessageHelper pddaMessageHelper,
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
-        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
-            clobRepository, courtRepository);
+        super(entityManager, xhbConfigPropRepository, environment,
+            pddaMessageHelper, clobRepository, courtRepository);
     }
+
+    public SftpService(EntityManager entityManager) {
+        super(entityManager, InitializationService.getInstance().getEnvironment());
+    }
+
 
 
     /**
      * Retrieve messages from BAIS.
+     * 
+     * @param sftpPort The SFTP port - will be 0 unless we are testing
+     * @return True if there was an error
      */
     @SuppressWarnings("PMD")
-    public void processBaisMessages() {
+    public boolean processBaisMessages(int sftpPort) {
+
+        boolean error = false;
 
         methodName = "processBaisMessages()";
         LOG.debug(methodName, LOG_CALLED);
 
-        SftpConfig sftpConfig = getSftpHelperUtil().populateSftpConfig();
+        SftpConfig sftpConfig = getSftpHelperUtil().populateSftpConfig(sftpPort);
 
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
@@ -105,6 +100,7 @@ public class SftpHelper extends XhibitPddaHelper {
             setupSftpClientAndProcessBaisData(sftpConfig, ssh, true);
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS CP: {}", ExceptionUtils.getStackTrace(e));
+            error = true;
         }
 
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
@@ -121,7 +117,10 @@ public class SftpHelper extends XhibitPddaHelper {
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS XHIBIT: {}",
                 ExceptionUtils.getStackTrace(e));
+            error = true;
         }
+
+        return error;
     }
 
 
@@ -131,7 +130,7 @@ public class SftpHelper extends XhibitPddaHelper {
      * 
      * @param config The SFTP configuration
      */
-    private void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
+    void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
         boolean isCpConnection) {
         methodName = "setupSftpClient()";
         LOG.debug(methodName, LOG_CALLED);
@@ -254,7 +253,7 @@ public class SftpHelper extends XhibitPddaHelper {
             // Validate this filename hasn't been processed previously
             Optional<XhbPddaMessageDao> pddaMessageDao =
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
-            if (pddaMessageDao.isPresent()) {
+            if ((pddaMessageDao != null) && pddaMessageDao.isPresent()) {
                 LOG.debug("Filename {}{}", filename, " already processed");
                 return;
             }
@@ -324,19 +323,6 @@ public class SftpHelper extends XhibitPddaHelper {
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
             messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, filename, NO,
             errorMessage);
-    }
-
-
-    /**
-     * Get a new instance of PddaSftpHelperSshj.
-     * 
-     * @return The PddaSftpHelperSshj
-     */
-    private PddaSftpHelperSshj getPddaSftpHelperSshj() {
-        if (pddaSftpHelperSshj == null) {
-            pddaSftpHelperSshj = new PddaSftpHelperSshj();
-        }
-        return pddaSftpHelperSshj;
     }
 
 
@@ -415,7 +401,7 @@ public class SftpHelper extends XhibitPddaHelper {
 
         @Override
         public Integer getCourtId(String filename, PublicDisplayEvent event) {
-            if (event != null) {
+            if (event != null && event.getCourtId() != null) {
                 return event.getCourtId();
             }
             return null;
