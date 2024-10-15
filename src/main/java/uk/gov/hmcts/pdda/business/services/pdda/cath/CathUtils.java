@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -27,7 +29,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
 public final class CathUtils {
     
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -83,6 +85,20 @@ public final class CathUtils {
 
     public static JSONObject generateJsonFromString(String stringToConvert) {
         return XML.toJSONObject(stringToConvert);
+    }
+    
+    public static String fetchAndReadFile(String filePath) {
+        // Fetch and Read File
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            LOG.debug("Failed to read file: ", e);
+        }
+        return resultStringBuilder.toString();
     }
 
     public static void transformXmlUsingTemplate(String inputXmlPath, String xsltPath, String outputXmlPath)

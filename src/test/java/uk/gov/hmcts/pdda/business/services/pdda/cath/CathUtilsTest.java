@@ -17,13 +17,7 @@ import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -53,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidFileStream", "PMD.AssignmentInOperand"})
+@SuppressWarnings({"PMD.LawOfDemeter"})
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
@@ -122,8 +116,8 @@ class CathUtilsTest {
 
     @Test
     void testGenerateDailyListJsonFromString() throws IOException {
-        JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleDailyList_V4.xml"));
+        JSONObject result = CathUtils.generateJsonFromString(CathUtils.fetchAndReadFile(
+            "src/main/resources/database/test-data/example_list_xml_docs/ExampleDailyList_V4.xml"));
         // Indentation value 4 matches the indentation of the xml before json conversion
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
@@ -131,8 +125,8 @@ class CathUtilsTest {
 
     @Test
     void testGenerateWarnedListJsonFromString() throws IOException {
-        JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleWarnedList_V2.xml"));
+        JSONObject result = CathUtils.generateJsonFromString(CathUtils.fetchAndReadFile(
+            "src/main/resources/database/test-data/example_list_xml_docs/ExampleWarnedList_V2.xml"));
         // Indentation value 4 matches the indentation of the xml before json conversion
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
@@ -141,7 +135,7 @@ class CathUtilsTest {
     @Test
     void testTransformXmlUsingTemplate()
         throws TransformerException, SerialException, SQLException {
-        // Setup using the example xml and xsl files defined in resources, output result into resources
+        // Setup using the example xml and xsl files in resources, output result into resources
         String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         String inputXslt = "xslt_schemas/Example.xslt";
         String outputXmlPath =
@@ -163,24 +157,5 @@ class CathUtilsTest {
         // Run
         CathUtils.transformXmlUsingTemplate(inputXml, inputXslt, outputXmlPath);
         assertTrue(result, NOTNULL);
-    }
-
-    private String fetchAndReadFile(String fileName) throws FileNotFoundException {
-        // Fetch File
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File file = new File(classLoader
-            .getResource("database/test-data/example_list_xml_docs/" + fileName).getFile());
-        InputStream inputStream = new FileInputStream(file);
-        // Read File
-        StringBuilder resultStringBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            LOG.debug("Failed to read file: {}", e);
-        }
-        return resultStringBuilder.toString();
     }
 }
