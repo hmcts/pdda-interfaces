@@ -39,6 +39,9 @@ class PddaBaisControllerBeanTest {
     @Mock
     private SftpService mockSftpService;
 
+    @Mock
+    private EntityManager mockEntityManager;
+
     @TestSubject
     private final PddaBaisControllerBean classUnderTest =
         new PddaBaisControllerBean(EasyMock.createMock(EntityManager.class));
@@ -57,13 +60,18 @@ class PddaBaisControllerBeanTest {
     }
 
     @Test
-    void testGetSftpService1() {
+    void testDoTask() {
         // Setup
-        SftpService result = classUnderTest.getSftpService();
-        SftpService result2 = null;
+        EasyMock.expect(mockSftpService.processBaisMessages(0)).andReturn(true);
+
+        EasyMock.replay(mockSftpService);
+
+        // Run the test
+        classUnderTest.doTask();
+
         // Checks
-        assertNotNull(result, NOT_NULL);
-        assertNull(result2, NULL);
+        assertNotNull(mockSftpService, NOT_NULL);
+
     }
 
     @Test
