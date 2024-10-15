@@ -113,8 +113,7 @@ public class PddaSftpHelperSshj {
             }
             return files;
         } catch (IOException e1) {
-            LOG.error("Stacktrace4:: {}", ExceptionUtils.getStackTrace(e1));
-            throw e1;
+            throw new IOException("Error fetching files", e1);
         }
     }
 
@@ -191,8 +190,7 @@ public class PddaSftpHelperSshj {
                 LOG.debug("File contents read");
             }
         } catch (IOException e) {
-            LOG.error("Error reading: {}", filename);
-            LOG.error("Stacktrace3:: {}", ExceptionUtils.getStackTrace(e));
+            LOG.error("Stacktrace reading file: {}: {}", filename, ExceptionUtils.getStackTrace(e));
         }
         return fileContents;
     }
@@ -200,7 +198,6 @@ public class PddaSftpHelperSshj {
 
     public void testNull(Object obj) throws IOException {
         if (obj == null) {
-            LOG.error("{} is null", obj);
             throw new IOException("Folder is null");
         }
     }

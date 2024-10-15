@@ -198,7 +198,6 @@ public class SftpService extends XhibitPddaHelper {
         } finally {
             if (config.getSshjSftpClient() == null) {
                 // Check the contents of BAIS to verify all processed files are deleted
-                LOG.debug("Checking contents of Bais prior to closing the connection");
                 Map<String, String> files = getBaisFileList(config, baisXhibitValidation);
                 if (files.isEmpty()) {
                     LOG.debug("Contents of Bais is now empty");
@@ -253,7 +252,7 @@ public class SftpService extends XhibitPddaHelper {
             // Validate this filename hasn't been processed previously
             Optional<XhbPddaMessageDao> pddaMessageDao =
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
-            if ((pddaMessageDao != null) && pddaMessageDao.isPresent()) {
+            if (pddaMessageDao.isPresent()) {
                 LOG.debug("Filename {}{}", filename, " already processed");
                 return;
             }
@@ -375,7 +374,6 @@ public class SftpService extends XhibitPddaHelper {
                 LOG.debug(debugErrorPrefix, errorMessage);
                 return errorMessage;
             }
-
 
             return null;
         }

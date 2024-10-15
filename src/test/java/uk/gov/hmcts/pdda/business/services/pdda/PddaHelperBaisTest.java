@@ -104,7 +104,7 @@ class PddaHelperBaisTest {
 
     @TestSubject
     private final PddaHelper classUnderTest = new PddaHelper(EasyMock.createMock(EntityManager.class),
-        mockXhbConfigPropRepository, mockEnvironment, mockPddaSftpHelper, mockSftpConfigHelper,
+        mockXhbConfigPropRepository, mockEnvironment, mockPddaSftpHelper,
         mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository);
 
     private static final class Config {

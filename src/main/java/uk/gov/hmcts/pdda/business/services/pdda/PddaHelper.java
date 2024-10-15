@@ -21,7 +21,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
-import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
@@ -70,9 +69,7 @@ public class PddaHelper extends XhibitPddaHelper {
 
     private static final String SFTP_ERROR = "SFTP Error:";
     private static final String NOT_FOUND = " not found";
-
-    // Instance of the SftpConfigHelper
-    private SftpConfigHelper sftpConfigHelper;
+    private static final String SFTP_LOG_STRING = "SFTP Host and port: {}";
 
     public PddaHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
@@ -80,12 +77,11 @@ public class PddaHelper extends XhibitPddaHelper {
 
     // Junit constructor
     public PddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment, PddaSftpHelper sftpHelper, SftpConfigHelper sftpConfigHelper,
+        Environment environment, PddaSftpHelper sftpHelper,
         PddaMessageHelper pddaMessageHelper, XhbClobRepository xhbClobRepository,
         XhbCourtRepository xhbCourtRepository) {
         super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
             xhbClobRepository, xhbCourtRepository);
-        this.sftpConfigHelper = sftpConfigHelper;
     }
 
     /**
@@ -285,7 +281,7 @@ public class PddaHelper extends XhibitPddaHelper {
         String hostAndPort;
         try {
             hostAndPort = getMandatoryEnvValue(Config.DB_SFTP_HOST);
-            LOG.debug("SFTP Host and port: {}", hostAndPort);
+            LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
             return sftpConfig;
@@ -501,7 +497,7 @@ public class PddaHelper extends XhibitPddaHelper {
         String hostAndPort = "";
         try {
             hostAndPort = getMandatoryConfigValue(Config.DB_SFTP_HOST);
-            LOG.debug("SFTP Host and port: {}", hostAndPort);
+            LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
         }
@@ -584,7 +580,7 @@ public class PddaHelper extends XhibitPddaHelper {
             // Now get the host and port
             currentProperty = Config.KV_SFTP_HOST;
             hostAndPort = getMandatoryEnvValue(currentProperty);
-            LOG.debug("SFTP Host and port: {}", hostAndPort);
+            LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(currentProperty + NOT_FOUND);
         }

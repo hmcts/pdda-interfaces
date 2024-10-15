@@ -18,6 +18,7 @@ public class SftpHelperUtil extends SftpService {
     private static final String TWO_PARAMS = "{}{}";
 
     private static final String USE_KEY_VAULT_PROPERTIES = "USE_KEY_VAULT_PROPERTIES";
+    private static final String TEST_SFTP_DIRECTORY = "/directory/";
 
     public SftpHelperUtil(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
@@ -70,11 +71,11 @@ public class SftpHelperUtil extends SftpService {
         sftpConfig.setHost("localhost");
         sftpConfig.setCpUsername("cpUsername");
         sftpConfig.setCpPassword("cpPassword");
-        sftpConfig.setCpRemoteFolder("/directory/");
+        sftpConfig.setCpRemoteFolder(TEST_SFTP_DIRECTORY);
         sftpConfig.setXhibitUsername("xhibitUsername");
         sftpConfig.setXhibitPassword("xhibitPassword");
-        sftpConfig.setXhibitRemoteFolder("/directory/");
-        sftpConfig.setActiveRemoteFolder("/directory/");
+        sftpConfig.setXhibitRemoteFolder(TEST_SFTP_DIRECTORY);
+        sftpConfig.setActiveRemoteFolder(TEST_SFTP_DIRECTORY);
 
         return sftpConfig;
     }
