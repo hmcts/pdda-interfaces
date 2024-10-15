@@ -62,8 +62,7 @@ public class PddaSftpHelperSshj {
         try {
             sftpClient.rm(remoteFolder + filename);
         } catch (IOException e) {
-            LOG.error("Stacktrace2:: {}", ExceptionUtils.getStackTrace(e));
-            throw e;
+            throw new IOException("Error deleting file", e);
         }
     }
 

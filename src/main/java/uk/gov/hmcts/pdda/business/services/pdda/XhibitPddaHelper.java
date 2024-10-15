@@ -61,7 +61,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         this.courtRepository = courtRepository;
     }
 
-    public XhibitPddaHelper(EntityManager entityManager,
+    protected XhibitPddaHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
         PddaMessageHelper pddaMessageHelper,
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {

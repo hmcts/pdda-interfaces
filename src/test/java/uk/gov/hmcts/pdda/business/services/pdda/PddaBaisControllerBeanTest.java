@@ -46,11 +46,6 @@ class PddaBaisControllerBeanTest {
     @TestSubject
     private final PddaBaisControllerBean classUnderTest2 = new PddaBaisControllerBean();
 
-    /*
-     * @SuppressWarnings("PMD.UseUnderscoresInNumericLiterals") private static final int TEST_PORT =
-     * 65182;
-     */
-
     @BeforeAll
     public static void setUp() {
         // Do nothing
@@ -60,21 +55,6 @@ class PddaBaisControllerBeanTest {
     public static void tearDown() {
         // Do nothing
     }
-
-    /*
-     * @Test void testDoTask() { // Setup mockSftpService.processBaisMessages(TEST_PORT); //
-     * EasyMock.replay(mockSftpHelper); // Run boolean result = false; try {
-     * classUnderTest.doTask(); result = true; } catch (Exception exception) { fail(exception); } //
-     * Checks // EasyMock.verify(mockSftpHelper); assertTrue(result, TRUE); }
-     * 
-     * @Test
-     * 
-     * void testDoTask2() { // Setup
-     * EasyMock.expect(mockSftpService.processBaisMessages(TEST_PORT)).andReturn(false);
-     * EasyMock.replay(mockSftpService); // Run boolean result = false; try {
-     * classUnderTest2.doTask(); result = true; } catch (Exception exception) { fail(exception); }
-     * // Checks EasyMock.verify(mockSftpService); assertTrue(result, TRUE); }
-     */
 
     @Test
     void testGetSftpService1() {

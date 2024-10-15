@@ -118,27 +118,6 @@ class PddaHelperBaisTest {
         public static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
     }
 
-    // @Test
-    // void testRetrieveFromBaisCpFailure() {
-    // // Setup
-    // testGetBaisCpConfigs(Config.SFTP_HOST);
-    // EasyMock.replay(mockXhbConfigPropRepository);
-    // EasyMock.replay(mockEnvironment);
-    //
-    // // Run
-    // boolean result = false;
-    // try {
-    // classUnderTest.retrieveFromBaisCp();
-    // result = true;
-    // } catch (Exception exception) {
-    // fail(exception);
-    // }
-    //
-    // // Checks
-    // EasyMock.verify(mockXhbConfigPropRepository);
-    // EasyMock.verify(mockEnvironment);
-    // assertTrue(result, TRUE);
-    // }
 
     @Test
     void testRetrieveFromBaisCpSuccess() {
@@ -227,7 +206,6 @@ class PddaHelperBaisTest {
         EasyMock.verify(mockSftpConfigHelper);
         EasyMock.verify(mockSftpConfig);
         EasyMock.verify(mockXhbConfigPropRepository);
-        // EasyMock.verify(mockPddaSftpHelper);
         EasyMock.verify(mockSession);
         EasyMock.verify(mockPddaMessageHelper);
         EasyMock.verify(mockXhbCourtRepository);
@@ -318,7 +296,6 @@ class PddaHelperBaisTest {
         EasyMock.verify(mockSftpConfigHelper);
         EasyMock.verify(mockSftpConfig);
         EasyMock.verify(mockXhbConfigPropRepository);
-        //EasyMock.verify(mockPddaSftpHelper);
         EasyMock.verify(mockSession);
         EasyMock.verify(mockPddaMessageHelper);
         EasyMock.verify(mockXhbCourtRepository);
@@ -327,27 +304,6 @@ class PddaHelperBaisTest {
         assertTrue(result, TRUE);
         validateSavedValues(capturedSaves, expectedStatusMap);
     }
-
-    // @Test
-    // void testRetrieveFromBaisXhibitFailure() {
-    // // Setup
-    // testGetBaisConfigs(Config.SFTP_HOST);
-    // EasyMock.replay(mockXhbConfigPropRepository);
-    // EasyMock.replay(mockEnvironment);
-    // // Run
-    // boolean result = false;
-    // try {
-    // classUnderTest.retrieveFromBaisXhibit();
-    // result = true;
-    // } catch (Exception exception) {
-    // fail(exception);
-    // }
-    //
-    // // Checks
-    // EasyMock.verify(mockXhbConfigPropRepository);
-    // EasyMock.verify(mockEnvironment);
-    // assertTrue(result, TRUE);
-    // }
 
     private void testGetBaisCpConfigs(String failOn) {
         // Username

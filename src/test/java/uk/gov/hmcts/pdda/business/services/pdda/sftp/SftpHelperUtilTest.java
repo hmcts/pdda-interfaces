@@ -10,8 +10,6 @@ import org.easymock.TestSubject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -40,8 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(EasyMockExtension.class)
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.SingularField"})
 class SftpHelperUtilTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SftpHelperUtilTest.class);
 
     @RegisterExtension
     public final FakeSftpServerExtension sftpServer = new FakeSftpServerExtension();

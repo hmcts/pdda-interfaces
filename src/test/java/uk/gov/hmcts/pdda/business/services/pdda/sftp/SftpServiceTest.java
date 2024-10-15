@@ -354,18 +354,18 @@ class SftpServiceTest {
         String xhibitFilename = "PDDA_34_2024101409000.xml";
 
         String result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
-        assertEquals(result, "Invalid filename - No. Of Parts", ALL_GOOD);
+        assertEquals("Invalid filename - No. Of Parts", result, ALL_GOOD);
         result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertEquals(result, "Invalid filename - No. Of Parts", ALL_GOOD);
+        assertEquals("Invalid filename - No. Of Parts", result, ALL_GOOD);
 
 
         // Test 2 - valid number of parts but invalid filename
         cpFilename = "NotWorkingFilenamePublicDisplay_453_20241009130506.xml";
         xhibitFilename = "NotWorkingFilenamePDDA_34_1_2024101409000.xml";
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
-        assertEquals(result, "Invalid filename - Title", ALL_GOOD);
+        assertEquals("Invalid filename - Title", result, ALL_GOOD);
         result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertEquals(result, "Invalid filename - Title", ALL_GOOD);
+        assertEquals("Invalid filename - Title", result, ALL_GOOD);
 
 
         // Test 3 - valid number of parts and valid filename and valid event
@@ -382,13 +382,10 @@ class SftpServiceTest {
         cpFilename = "PublicDisplay_453_20241009130506.txt";
 
         result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertEquals(result, "Invalid filename - Extension", ALL_GOOD);
+        assertEquals("Invalid filename - Extension", result, ALL_GOOD);
 
 
         // Test 5 - Event is an error
-        // CourtRoomIdentifier courtRoomIdentifier = new CourtRoomIdentifier(1, 1);
-        // HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(courtRoomIdentifier,
-        // null);
         cpFilename = "PublicDisplay_453_20241009130506.xml";
         xhibitFilename = "PDDA_34_1_2024101409000.xml";
         HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(null, null);
@@ -426,13 +423,8 @@ class SftpServiceTest {
                 PddaSerializationUtils.serializePublicEvent(hearingStatusEvent);
             String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
 
-            // String fileContents = "content of file";
-            // byte[] fileContentsBytes = fileContents.getBytes();
-            // String encodedFile = PddaSerializationUtils.encodePublicEvent(fileContentsBytes);
             sftpServer.putFile("/directory/PDDA_34_1_2024101409000.xml", encoded,
                 Charset.defaultCharset());
-            // sftpServer.putFile("/directory/PDDA_34_1_2024101409000.xml", "content of file",
-            // Charset.defaultCharset());
         } catch (IOException e) {
             LOG.error("Error putting file", e);
         }

@@ -93,8 +93,7 @@ class SftpConfigTest {
 
     @Test
     void testSetAndGetSession() {
-        Session session = null; // sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.getXhibitUsername(),
-        // sftpConfig.getXhibitPassword(), sftpConfig.getHost(), sftpConfig.getPort()));
+        Session session = null;
         Session session2 = sftpConfig.getSession();
         sftpConfig.setSession(session);
         assertNull(session, "Session is null");
@@ -122,7 +121,7 @@ class SftpConfigTest {
         try {
             String fileContent = "content of file";
             String port = Integer.toString(sftpServer.getPort());
-            LOG.debug("Port: " + port);
+            LOG.debug("Port: {}", port);
             sftpServer.putFile("/directory/file.txt", fileContent, Charset.defaultCharset());
             byte[] retrievedContent = sftpServer.getFileContent("/directory/file.txt");
             assertEquals(fileContent, new String(retrievedContent), RESULT_EQUAL);
@@ -133,19 +132,4 @@ class SftpConfigTest {
         // code that downloads the file
     }
 
-
-    /*
-     * @Test void testSetAndGetSshClient() { try { SSHClient ssh = new
-     * SftpConfigHelper(mockEntityManager).getNewSshClient(); ssh.connect("localhost",
-     * sftpServer.getPort()); ssh.authPassword("user", "password"); sftpConfig.setSshClient(ssh);
-     * assertEquals(ssh, sftpConfig.getSshClient(), RESULT_EQUAL);
-     * 
-     * SFTPClient sftpClient = new SFTPClient(ssh); sftpConfig.setSshjSftpClient(sftpClient);
-     * 
-     * assertNotNull(ssh, "SSHClient is not null"); assertEquals(sftpClient,
-     * sftpConfig.getSshjSftpClient(), RESULT_EQUAL); ssh.disconnect(); } catch (IOException e) {
-     * LOG.error("Error disconnecting SSHClient", e); } }
-     */
-
-    // Add more tests for other methods in SftpConfig class
 }
