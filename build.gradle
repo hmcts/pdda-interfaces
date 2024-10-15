@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.18.2")
+    classpath("org.flywaydb:flyway-database-postgresql:10.19.0")
   }
 }
 
@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.18.2'
+  id 'org.flywaydb.flyway' version '10.19.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -177,9 +177,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.30'
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.24.0'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.31'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.24.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.openjpa:openjpa-persistence-jdbc:4.0.1'
@@ -198,7 +198,7 @@ dependencies {
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.postgresql:postgresql:42.7.4'
-    implementation 'net.bytebuddy:byte-buddy:1.15.3'
+    implementation 'net.bytebuddy:byte-buddy:1.15.4'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'jakarta.el:jakarta.el-api:6.0.1'
@@ -213,22 +213,22 @@ dependencies {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
-    implementation 'ch.qos.logback:logback-core:1.5.8'
-    implementation 'ch.qos.logback:logback-classic:1.5.8'
+    implementation 'ch.qos.logback:logback-core:1.5.10'
+    implementation 'ch.qos.logback:logback-classic:1.5.10'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.0'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.30'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.31'
     implementation 'com.squareup.okio:okio:3.9.1'
-    implementation 'org.flywaydb:flyway-core:10.18.2'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.18.2'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.18.2'
+    implementation 'org.flywaydb:flyway-core:10.19.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.19.0'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.19.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
       exclude group: 'junit', module: 'junit'
       exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 	testImplementation group: 'com.github.stefanbirkner', name: 'fake-sftp-server-rule', version: 'fake-sftp-server-rule-2.0.0'
 	implementation group: 'de.ppi', name: 'fake-sftp-server-extension', version: '1.0.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
     testImplementation 'org.easymock:easymock:5.4.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
