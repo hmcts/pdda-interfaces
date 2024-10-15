@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
-import com.jcraft.jsch.ChannelSftp.LsEntry;
 import net.schmizz.sshj.sftp.RemoteResourceInfo;
 
 import java.util.ArrayList;
@@ -42,14 +41,11 @@ public class SftpValidation {
     }
 
     public String getFilename(Object obj) {
-        if (obj instanceof LsEntry lsEntry && (!lsEntry.getAttrs().isDir() || includeDirs)) {
-            return lsEntry.getFilename();
-        }
         return null;
     }
 
     /* Apply user defined string patterns (overridden in the calling class) */
-    protected String validateFilename(String filename) {
+    public String validateFilename(String filename) {
         if (EMPTY_STRING.equals(filename)) {
             return "Filename is Empty";
         }

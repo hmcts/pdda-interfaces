@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.services.pdda.SftpValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisCpValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisXhibitValidation;
 
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 class PddaSftpHelperSshjTest {
@@ -41,6 +42,9 @@ class PddaSftpHelperSshjTest {
 
     @Mock
     private EntityManager mockEntityManager;
+
+    @Mock
+    private SftpValidation mockSftpValidation;
 
     private final SftpConfig sftpConfig2 = new SftpConfig();
 
@@ -92,6 +96,16 @@ class PddaSftpHelperSshjTest {
         } catch (IOException e) {
             LOG.error("Error deleting file", e);
         }
+    }
+
+    @Test
+    void testValidateFilename() {
+        SftpValidation sv = new SftpValidation(false);
+        String result = sv.validateFilename("test.txt");
+        assertNull(result, "Result should be null");
+
+        result = sv.validateFilename(""); // Empty string
+        assertNotNull(result, "Result should not be null");
     }
 
     private void setupFiles() {
