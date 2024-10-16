@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-import java.io.IOException;
+import java.io.File;
 import java.net.http.HttpRequest;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -54,6 +53,7 @@ class CathUtilsTest {
 
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
+    private static final String TRUE = "Result is not True";
 
     @Mock
     private Environment mockEnvironment;
@@ -115,47 +115,36 @@ class CathUtilsTest {
     }
 
     @Test
-    void testGenerateDailyListJsonFromString() throws IOException {
-        JSONObject result = CathUtils.generateJsonFromString(CathUtils.fetchAndReadFile(
-            "src/main/resources/database/test-data/example_list_xml_docs/ExampleDailyList_V4.xml"));
-        // Indentation value 4 matches the indentation of the xml before json conversion
-        String jsonAsString = result.toString(4);
-        assertNotNull(jsonAsString, NOTNULL);
-    }
-
-    @Test
-    void testGenerateWarnedListJsonFromString() throws IOException {
-        JSONObject result = CathUtils.generateJsonFromString(CathUtils.fetchAndReadFile(
-            "src/main/resources/database/test-data/example_list_xml_docs/ExampleWarnedList_V2.xml"));
-        // Indentation value 4 matches the indentation of the xml before json conversion
-        String jsonAsString = result.toString(4);
-        assertNotNull(jsonAsString, NOTNULL);
-    }
-
-    @Test
-    void testTransformXmlUsingTemplate()
-        throws TransformerException, SerialException, SQLException {
+    void testTransformAndGenerateListJsonFromString() throws TransformerException {
         // Setup using the example xml and xsl files in resources, output result into resources
-        String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        String inputXslt = "xslt_schemas/Example.xslt";
+        String inputXmlPath =
+            "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        String xsltSchemaPath = "xslt_schemas/Example.xslt";
         String outputXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/TestResult.xml";
-        boolean result = true;
-        // Run
-        CathUtils.transformXmlUsingTemplate(inputXml, inputXslt, outputXmlPath);
-        // Verify
-        assertTrue(result, NOTNULL);
+            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Schema_Edit.xml";
+        String outputJsonPath =
+            "src/main/resources/database/test-data/example_json_results/DailyList_999_200108141220_JSON.txt";
+
+        // Run the Schema Transform
+        CathUtils.transformXmlUsingSchema(inputXmlPath, xsltSchemaPath, outputXmlPath);
+
+        // Run the Generate Json process
+        CathUtils.fetchXmlAndGenerateJson(outputXmlPath, outputJsonPath);
+
+        // Verify Json File has been Generated
+        File jsonResult = new File(outputJsonPath);
+        assertTrue(jsonResult.exists(), TRUE);
     }
 
     @Test
-    void testTransformXmlUsingTemplateFailedFileWrite()
+    void testTransformXmlUsingSchemaFailedFileWrite()
         throws TransformerException, SerialException, SQLException {
         String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         String inputXslt = "xslt_schemas/Example.xslt";
         String outputXmlPath = "Testing/Invalid.xml";
         boolean result = true;
         // Run
-        CathUtils.transformXmlUsingTemplate(inputXml, inputXslt, outputXmlPath);
+        CathUtils.transformXmlUsingSchema(inputXml, inputXslt, outputXmlPath);
         assertTrue(result, NOTNULL);
     }
 }
