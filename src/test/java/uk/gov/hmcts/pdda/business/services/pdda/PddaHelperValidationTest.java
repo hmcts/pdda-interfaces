@@ -12,7 +12,7 @@ import uk.gov.hmcts.DummyFileUtil;
 import uk.gov.hmcts.DummyFileUtil.FileResults;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
-import uk.gov.hmcts.pdda.business.services.pdda.PddaHelper.BaisCpValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisCpValidation;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
