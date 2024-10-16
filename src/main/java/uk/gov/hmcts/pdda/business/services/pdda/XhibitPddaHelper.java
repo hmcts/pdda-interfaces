@@ -9,6 +9,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.PddaSftpHelperSshj;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 /**
@@ -28,24 +31,45 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings("PMD")
 public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(XhibitPddaHelper.class);
-    
+
     private PublicDisplayNotifier publicDisplayNotifier;
     private XhbCourtRepository courtRepository;
     private XhbClobRepository clobRepository;
     private PddaMessageHelper pddaMessageHelper;
     private CppStagingInboundHelper cppStagingInboundHelper;
-    private PddaSftpHelper sftpHelper;
+    private PddaSftpHelper pddaSftpHelper;
+    private SftpConfigHelper sftpConfigHelper;
+    private SftpHelperUtil sftpHelperUtil;
+    private PddaSftpHelperSshj pddaSftpHelperSshj;
 
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
     }
-    
+
     // Junit constructor
-    protected XhibitPddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
-        Environment environment) {
+    protected XhibitPddaHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
+        PddaSftpHelper pddaSftpHelper, PddaMessageHelper pddaMessageHelper,
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
         super(entityManager, xhbConfigPropRepository, environment);
+        this.pddaSftpHelper = pddaSftpHelper;
+        this.pddaMessageHelper = pddaMessageHelper;
+        this.clobRepository = clobRepository;
+        this.courtRepository = courtRepository;
+    }
+
+    protected XhibitPddaHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
+        PddaMessageHelper pddaMessageHelper,
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
+
+        super(entityManager, xhbConfigPropRepository, environment);
+        this.pddaMessageHelper = pddaMessageHelper;
+        this.clobRepository = clobRepository;
+        this.courtRepository = courtRepository;
     }
 
     /**
@@ -64,21 +88,21 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return publicDisplayNotifier;
     }
-    
+
     protected XhbClobRepository getClobRepository() {
         if (clobRepository == null) {
             clobRepository = new XhbClobRepository(entityManager);
         }
         return clobRepository;
     }
-    
+
     protected XhbCourtRepository getCourtRepository() {
         if (courtRepository == null) {
             courtRepository = new XhbCourtRepository(entityManager);
         }
         return courtRepository;
     }
-    
+
     protected PddaMessageHelper getPddaMessageHelper() {
         if (pddaMessageHelper == null) {
             pddaMessageHelper = new PddaMessageHelper(entityManager);
@@ -93,10 +117,31 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         return cppStagingInboundHelper;
     }
 
-    protected PddaSftpHelper getSftpHelper() {
-        if (sftpHelper == null) {
-            sftpHelper = new PddaSftpHelper();
+    protected PddaSftpHelper getPddaSftpHelper() {
+        if (pddaSftpHelper == null) {
+            pddaSftpHelper = new PddaSftpHelper();
         }
-        return sftpHelper;
+        return pddaSftpHelper;
+    }
+
+    protected SftpConfigHelper getSftpConfigHelper() {
+        if (sftpConfigHelper == null) {
+            sftpConfigHelper = new SftpConfigHelper(entityManager);
+        }
+        return sftpConfigHelper;
+    }
+
+    protected SftpHelperUtil getSftpHelperUtil() {
+        if (sftpHelperUtil == null) {
+            sftpHelperUtil = new SftpHelperUtil(entityManager);
+        }
+        return sftpHelperUtil;
+    }
+
+    protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+        if (pddaSftpHelperSshj == null) {
+            pddaSftpHelperSshj = new PddaSftpHelperSshj();
+        }
+        return pddaSftpHelperSshj;
     }
 }

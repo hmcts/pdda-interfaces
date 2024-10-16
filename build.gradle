@@ -194,6 +194,10 @@ dependencies {
     implementation 'org.springframework:spring-tx:6.1.13'
     implementation 'org.springframework:spring-web:6.1.13'
     implementation files('lib/jsch-0.1.54.jar')
+    implementation 'com.hierynomus:sshj:0.38.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-common', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-sftp', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-core', version: '2.14.0'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.postgresql:postgresql:42.7.4'
@@ -222,9 +226,11 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-postgresql:10.19.0'
     implementation 'org.flywaydb:flyway-database-hsqldb:10.19.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
-    exclude group: 'junit', module: 'junit'
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
+      exclude group: 'junit', module: 'junit'
+      exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+	testImplementation group: 'com.github.stefanbirkner', name: 'fake-sftp-server-rule', version: 'fake-sftp-server-rule-2.0.0'
+	implementation group: 'de.ppi', name: 'fake-sftp-server-extension', version: '1.0.3'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
     testImplementation 'org.easymock:easymock:5.4.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
@@ -234,6 +240,7 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:4.0.0'
     implementation group: 'io.rest-assured', name: 'rest-assured'
+	implementation 'org.bouncycastle:bcprov-jdk18on:1.78'
 }
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'

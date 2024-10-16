@@ -5,19 +5,24 @@ import com.jcraft.jsch.SftpException;
 import jakarta.ejb.EJBException;
 import jakarta.persistence.EntityManager;
 import javassist.NotFoundException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisCpValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisXhibitValidation;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
@@ -50,7 +55,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.GodClass", "PMD.TooManyMethods", "PMD.ExcessiveImports",
+    "PMD.CouplingBetweenObjects"})
 public class PddaHelper extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaHelper.class);
 
@@ -59,21 +65,24 @@ public class PddaHelper extends XhibitPddaHelper {
     private static final String NO = "N";
     private static final String INVALID_MESSAGE_TYPE = "Invalid";
     private static final String CP_FILE_EXTENSION = ".xml";
-
     private static final String INVALID = "INV";
     private static final String VALIDATION_FAIL = "VF";
 
     private static final String SFTP_ERROR = "SFTP Error:";
     private static final String NOT_FOUND = " not found";
+    private static final String SFTP_LOG_STRING = "SFTP Host and port: {}";
 
     public PddaHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
     }
 
     // Junit constructor
-    public PddaHelper(EntityManager entityManager,
-        XhbConfigPropRepository xhbConfigPropRepository, Environment environment) {
-        super(entityManager, xhbConfigPropRepository, environment);
+    public PddaHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
+        Environment environment, PddaSftpHelper sftpHelper,
+        PddaMessageHelper pddaMessageHelper, XhbClobRepository xhbClobRepository,
+        XhbCourtRepository xhbCourtRepository) {
+        super(entityManager, xhbConfigPropRepository, environment, sftpHelper, pddaMessageHelper,
+            xhbClobRepository, xhbCourtRepository);
     }
 
     /**
@@ -82,14 +91,10 @@ public class PddaHelper extends XhibitPddaHelper {
     public void retrieveFromBaisCp() {
         methodName = "retrieveFromBaisCp()";
         LOG.debug(methodName, LOG_CALLED);
-        LOG.info(methodName, LOG_CALLED);
-        LOG.error(methodName, LOG_CALLED);
 
         SftpConfig config = getBaisCpConfigs();
-        if (config.errorMsg != null) {
-            LOG.error(config.errorMsg);
-            LOG.info(config.errorMsg);
-            LOG.debug(config.errorMsg);
+        if (config.getErrorMsg() != null) {
+            LOG.debug(config.getErrorMsg());
             return;
         }
 
@@ -104,8 +109,8 @@ public class PddaHelper extends XhibitPddaHelper {
         LOG.debug(methodName, LOG_CALLED);
 
         SftpConfig config = getSftpConfigs();
-        if (config.errorMsg != null) {
-            LOG.error(config.errorMsg);
+        if (config.getErrorMsg() != null) {
+            LOG.error(config.getErrorMsg());
             return;
         }
 
@@ -117,7 +122,8 @@ public class PddaHelper extends XhibitPddaHelper {
         try {
             LOG.debug("retrieveFromBais({},{})", config, validation);
             Map<String, String> files = getBaisFileList(config, validation);
-            LOG.debug("Total of {}{}", files.size()," files, before processing, in this transaction.");
+            LOG.debug("Total of {}{}", files.size(),
+                " files, before processing, in this transaction.");
             if (!files.isEmpty()) {
                 // Process the files we have retrieved.
                 for (Map.Entry<String, String> entry : files.entrySet()) {
@@ -127,14 +133,14 @@ public class PddaHelper extends XhibitPddaHelper {
                 }
             }
         } finally {
-            if (config.session != null) {
+            if (config.getSession() != null) {
                 // Check the contents of Bais to verify all processed files are deleted
                 LOG.debug("Checking contents of Bais prior to closing the connection");
                 Map<String, String> files = getBaisFileList(config, validation);
                 if (files.isEmpty()) {
                     LOG.debug("Contents of Bais is now empty");
                 }
-                PddaSftpUtil.disconnectSession(config.session);
+                PddaSftpUtil.disconnectSession(config.getSession());
                 config.setSession(null);
             }
         }
@@ -171,7 +177,8 @@ public class PddaHelper extends XhibitPddaHelper {
             // Write the pddaMessage
             createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
 
-            getSftpHelper().sftpDeleteFile(config.session, config.remoteFolder, filename);
+            getPddaSftpHelper().sftpDeleteFile(config.getSession(), config.getActiveRemoteFolder(),
+                filename);
             LOG.debug("Removed file from bais after processing: {}", filename);
         } catch (JSchException | SftpException | NotFoundException ex) {
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
@@ -209,100 +216,92 @@ public class PddaHelper extends XhibitPddaHelper {
 
     private Map<String, String> getBaisFileList(SftpConfig config, BaisValidation validation) {
         try {
-            return getSftpHelper().sftpFetch(config.session, config.remoteFolder, validation);
+            return getPddaSftpHelper().sftpFetch(config.getSession(),
+                config.getActiveRemoteFolder(),
+                validation);
         } catch (Exception ex) {
-            LOG.error(SFTP_ERROR, ex);
+            LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
             return Collections.emptyMap();
         }
     }
 
     private SftpConfig getSftpConfigs() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
-            Config.SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.DB_CP_SFTP_USERNAME, Config.DB_CP_SFTP_PASSWORD,
+            Config.DB_CP_SFTP_UPLOAD_LOCATION, Config.DB_SFTP_USERNAME, Config.DB_SFTP_PASSWORD,
+            Config.DB_SFTP_UPLOAD_LOCATION);
     }
 
-    private SftpConfig getSftpConfigs(String configUsername, String configPassword,
-        String configLocation) {
+    @SuppressWarnings("PMD.InefficientStringBuffering")
+    private SftpConfig getSftpConfigs(String cpConfigUsername, String cpConfigPassword,
+        String cpConfigLocation, String xhibitConfigUsername, String xhibitConfigPassword,
+        String xhibitConfigLocation) {
         methodName = "getSftpConfigs()";
         LOG.debug(methodName, LOG_CALLED);
         SftpConfig sftpConfig = new SftpConfig();
+        StringBuilder errorMessage = new StringBuilder();
 
         // Fetch and validate the properties
         try {
-            sftpConfig.username = getMandatoryEnvValue(configUsername);
-            LOG.debug("SFTP Username: {}", sftpConfig.username);
+            sftpConfig.setCpUsername(getMandatoryEnvValue(cpConfigUsername));
+            LOG.debug("SFTP Username: {}", sftpConfig.getCpUsername());
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configUsername + NOT_FOUND;
-            return sftpConfig;
+            errorMessage.append(cpConfigUsername + NOT_FOUND);
         }
         try {
-            sftpConfig.password = getMandatoryEnvValue(configPassword);
+            sftpConfig.setCpPassword(getMandatoryEnvValue(cpConfigPassword));
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configPassword + NOT_FOUND;
-            return sftpConfig;
+            errorMessage.append("\n" + cpConfigPassword + NOT_FOUND);
         }
         try {
-            sftpConfig.remoteFolder = getMandatoryConfigValue(configLocation);
-            LOG.debug("SFTP Remote Folder: {}", sftpConfig.remoteFolder);
+            sftpConfig.setCpRemoteFolder(getMandatoryConfigValue(cpConfigLocation));
+            LOG.debug("SFTP Remote Folder: {}", sftpConfig.getCpRemoteFolder());
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = configLocation + NOT_FOUND;
-            return sftpConfig;
+            errorMessage.append("\n" + cpConfigLocation + NOT_FOUND);
+        }
+        try {
+            sftpConfig.setXhibitUsername(getMandatoryEnvValue(xhibitConfigUsername));
+            LOG.debug("SFTP Username: {}", sftpConfig.getXhibitUsername());
+        } catch (InvalidConfigException ex) {
+            errorMessage.append("\n" + xhibitConfigUsername + NOT_FOUND);
+        }
+        try {
+            sftpConfig.setXhibitPassword(getMandatoryEnvValue(xhibitConfigPassword));
+        } catch (InvalidConfigException ex) {
+            errorMessage.append("\n" + xhibitConfigPassword + NOT_FOUND);
+        }
+        try {
+            sftpConfig.setXhibitRemoteFolder(getMandatoryConfigValue(xhibitConfigLocation));
+            LOG.debug("SFTP Remote Folder: {}", sftpConfig.getXhibitRemoteFolder());
+        } catch (InvalidConfigException ex) {
+            errorMessage.append("\n" + xhibitConfigLocation + NOT_FOUND);
         }
         String hostAndPort;
         try {
-            hostAndPort = getMandatoryEnvValue(Config.SFTP_HOST);
-            LOG.debug("SFTP Host and port: {}", hostAndPort);
+            hostAndPort = getMandatoryEnvValue(Config.DB_SFTP_HOST);
+            LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + NOT_FOUND;
+            sftpConfig.setErrorMsg(errorMessage + Config.DB_SFTP_HOST + NOT_FOUND);
             return sftpConfig;
         }
 
-        // Validate the host and port
         LOG.debug("Validating host and port");
-        String portDelimiter = ":";
-        Integer pos = hostAndPort.indexOf(portDelimiter);
-        if (pos <= 0) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + " syntax is <Host>" + portDelimiter + "<Port>";
-            return sftpConfig;
-        }
-        sftpConfig.host = hostAndPort.substring(0, pos);
-        try {
-            String strPort = hostAndPort.substring(pos + 1, hostAndPort.length());
-            sftpConfig.port = Integer.valueOf(strPort);
-        } catch (Exception ex) {
-            sftpConfig.errorMsg = Config.SFTP_HOST + " contains invalid port number";
-            LOG.error("Stacktrace1:: {}", ex);
-            return sftpConfig;
-        }
-
-        // Create a session
-        try {
-            LOG.debug("Connection validated successfully");
-            sftpConfig.setSession(getSftpHelper().createSession(sftpConfig.username,
-                sftpConfig.password, sftpConfig.host, sftpConfig.port));
-            LOG.debug("A session has been established");
-        } catch (Exception ex) {
-            sftpConfig.errorMsg = SFTP_ERROR + ex.getMessage();
-            LOG.error("Stacktrace2:: {}", ex);
-            return sftpConfig;
-        }
+        sftpConfig =
+            new SftpHelperUtil(entityManager).validateAndSetHostAndPort(sftpConfig, hostAndPort);
+        sftpConfig = getSftpConfigHelper().getJschSession(sftpConfig);
 
         LOG.debug("Connected successfully");
         return sftpConfig;
     }
 
-    // This method is used for reference to SftpConfig in the unit tests
-    public SftpConfig getSftpConfigsForTest() {
-        return getSftpConfigs(Config.SFTP_USERNAME, Config.SFTP_PASSWORD,
-            Config.SFTP_UPLOAD_LOCATION);
-    }
 
     private SftpConfig getBaisCpConfigs() {
         methodName = "getBaisCpConfigs()";
         LOG.debug(methodName, LOG_CALLED);
-        return getSftpConfigs(Config.CP_SFTP_USERNAME, Config.CP_SFTP_PASSWORD,
-            Config.CP_SFTP_UPLOAD_LOCATION);
+        return getSftpConfigs(Config.DB_CP_SFTP_USERNAME, Config.DB_CP_SFTP_PASSWORD,
+            Config.DB_CP_SFTP_UPLOAD_LOCATION, Config.DB_SFTP_USERNAME, Config.DB_SFTP_PASSWORD,
+            Config.DB_SFTP_UPLOAD_LOCATION);
     }
+
 
     public void checkForCpMessages(String userDisplayName) throws IOException {
         // Find Messages
@@ -399,11 +398,12 @@ public class PddaHelper extends XhibitPddaHelper {
         SftpConfig sftpConfig = getSftpConfigs();
         if (!responses.isEmpty()) {
             try {
-                getSftpHelper().sftpFiles(sftpConfig.session, sftpConfig.remoteFolder, responses);
+                getPddaSftpHelper().sftpFiles(sftpConfig.getSession(),
+                    sftpConfig.getActiveRemoteFolder(), responses);
                 return true;
             } catch (Exception ex) {
-                LOG.error(SFTP_ERROR, ex);
-                LOG.error("Stacktrace3:: {}", ex);
+                LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
+                LOG.error("Stacktrace3:: {}", ExceptionUtils.getStackTrace(ex));
             }
         }
         return false;
@@ -413,192 +413,4 @@ public class PddaHelper extends XhibitPddaHelper {
         return new Date();
     }
 
-    public static class BaisXhibitValidation extends BaisValidation {
-
-        private static final String PDDA = "PDDA";
-
-        public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, 4);
-        }
-
-        @Override
-        public String validateFilename(String filename, PublicDisplayEvent event) {
-            String debugErrorPrefix = filename + " error: {}";
-            String errorMessage = super.validateFilename(filename);
-            if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check the file has the right overall format of 4 parts
-            if (isValidNoOfParts(filename)) {
-                LOG.debug("Valid filename - No. Of Parts");
-            } else {
-                errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-            // Check Title is right format
-            if (PDDA.equalsIgnoreCase(getFilenamePart(filename, 0))) {
-                LOG.debug("Valid filename - Title");
-            } else {
-                errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check we have the event from the file contents
-            if (event == null) {
-                errorMessage = "Invalid filename - Invalid event in filecontents";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-
-                // Check the crest court Id
-            } else if (getCourtId(filename, event) == null) {
-                errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-
-            return null;
-        }
-
-        @Override
-        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper,
-            String filename) {
-            return Optional.empty();
-        }
-
-        @Override
-        public boolean validateTitle(String filename) {
-            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
-                PDDA);
-        }
-
-        @Override
-        public String getMessageType(String filename, PublicDisplayEvent event) {
-            if (event != null) {
-                return event.getClass().getSimpleName().replace("Event", "");
-            }
-            return EMPTY_STRING;
-        }
-
-        @Override
-        public Integer getCourtId(String filename, PublicDisplayEvent event) {
-            if (event != null) {
-                return event.getCourtId();
-            }
-            return null;
-        }
-
-        @Override
-        public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
-            if (isValidNoOfParts(filename) && validateTitle(filename)) {
-                byte[] decodedEvent = PddaSerializationUtils.decodePublicEvent(fileContents);
-                return PddaSerializationUtils.deserializePublicEvent(decodedEvent);
-            }
-            return null;
-        }
-    }
-
-    public static class BaisCpValidation extends BaisValidation {
-
-        private static final String[] POSSIBLETITLES =
-            {"DailyList", "FirmList", "WarnedList", "WebPage", "PublicDisplay"};
-
-        public BaisCpValidation(XhbCourtRepository courtRespository) {
-            super(courtRespository, false, 3);
-        }
-
-        @Override
-        public String validateFilename(String filename, PublicDisplayEvent event) {
-            String debugErrorPrefix = filename + " error: {}";
-            String errorMessage = super.validateFilename(filename);
-            if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // First check file extension is an xml file
-            if (!PddaSftpValidationUtil.validateExtension(filename)) {
-                errorMessage = "Invalid filename - Extension";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check the file has the right overall format of 3 parts
-            if (!isValidNoOfParts(filename)) {
-                errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check Title is right format
-            if (!validateTitle(filename)) {
-                errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check CrestCourtID is valid and exists in the database
-            if (getCourtId(filename, event) == null) {
-                errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-
-            // Check dateTime is valid format
-            if (!validateDateTime(getFilenamePart(filename, 2))) {
-                errorMessage = "Invalid filename - DateTime";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
-            }
-            return null;
-        }
-
-        @Override
-        public boolean validateTitle(String filename) {
-            return PddaSftpValidationUtil.validateTitle(getFilenamePart(filename, 0),
-                POSSIBLETITLES);
-        }
-
-        @Override
-        public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper,
-            String filename) {
-            return pddaMessageHelper.findByCpDocumentName(filename);
-        }
-
-        @Override
-        public String getMessageType(String filename, PublicDisplayEvent event) {
-            return getFilenamePart(filename, 0);
-        }
-
-        public String getCrestCourtId(String filename) {
-            return getFilenamePart(filename, 1);
-        }
-
-        @Override
-        public Integer getCourtId(String filename, PublicDisplayEvent event) {
-            LOG.debug("getCourtId({},{})", filename, event);
-            Integer courtId = null;
-            String crestCourtId = getCrestCourtId(filename);
-            if (!EMPTY_STRING.equals(crestCourtId)) {
-                List<XhbCourtDao> courtDao =
-                    xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
-                if (courtDao.isEmpty()) {
-                    LOG.debug("No court exists for crestCourtId {}", crestCourtId);
-                } else {
-                    courtId = courtDao.get(0).getCourtId();
-                }
-            }
-            return courtId;
-        }
-
-        @Override
-        public PublicDisplayEvent getPublicDisplayEvent(String filename, String fileContents) {
-            // Not required
-            return null;
-        }
-    }
 }
