@@ -349,15 +349,11 @@ public class SftpService extends XhibitPddaHelper {
             }
 
             // Check the file has the right overall format of 4 parts
-            if (isValidNoOfParts(filename)) {
-                LOG.debug("Valid filename - No. Of Parts");
-            } else {
+            if (!isValidNoOfParts(filename)) {
                 errorMessages.append("Invalid filename - No. Of Parts\n");
             }
             // Check Title is right format
-            if (PDDA.equalsIgnoreCase(getFilenamePart(filename, 0))) {
-                LOG.debug("Valid filename - Title");
-            } else {
+            if (!PDDA.equalsIgnoreCase(getFilenamePart(filename, 0))) {
                 errorMessages.append("Invalid filename - Title\n");
             }
 
@@ -429,48 +425,47 @@ public class SftpService extends XhibitPddaHelper {
         }
 
         @Override
+        @SuppressWarnings("PMD.InefficientStringBuffering")
         public String validateFilename(String filename, PublicDisplayEvent event) {
             String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
+            int expectedMaxErrorMessageSize = 150;
+            StringBuilder errorMessages = new StringBuilder(expectedMaxErrorMessageSize);
+
             if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append(errorMessage + NEWLINE);
             }
 
             // First check file extension is an xml file
             if (!PddaSftpValidationUtil.validateExtension(filename)) {
-                errorMessage = "Invalid filename - Extension";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - Extension\n");
             }
 
             // Check the file has the right overall format of 3 parts
             if (!isValidNoOfParts(filename)) {
-                errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - No. Of Parts\n");
             }
 
             // Check Title is right format
             if (!validateTitle(filename)) {
-                errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - Title\n");
             }
 
             // Check CrestCourtID is valid and exists in the database
             if (getCourtId(filename, event) == null) {
-                errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - CrestCourtId\n");
             }
 
             // Check dateTime is valid format
             if (!validateDateTime(getFilenamePart(filename, 2))) {
-                errorMessage = "Invalid filename - DateTime";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - DateTime\n");
             }
+
+            if (errorMessages.length() > 0) {
+                LOG.debug(debugErrorPrefix, errorMessages.toString());
+                return errorMessages.toString();
+            }
+
             return null;
         }
 
