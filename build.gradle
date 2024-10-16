@@ -195,6 +195,9 @@ dependencies {
     implementation 'org.springframework:spring-web:6.1.13'
     implementation files('lib/jsch-0.1.54.jar')
     implementation 'com.hierynomus:sshj:0.38.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-common', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-sftp', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-core', version: '2.14.0'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.postgresql:postgresql:42.7.4'
