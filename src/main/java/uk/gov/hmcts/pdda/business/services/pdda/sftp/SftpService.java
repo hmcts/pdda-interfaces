@@ -47,6 +47,8 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String XHIBIT_CONNECTION_TYPE = "XHIBIT";
     protected static final String TEST_CONNECTION_TYPE = "TEST";
 
+    public static final String NEWLINE = "\n";
+
 
     /**
      * JUnit constructor.
@@ -335,42 +337,42 @@ public class SftpService extends XhibitPddaHelper {
         }
 
         @Override
+        @SuppressWarnings("PMD.InefficientStringBuffering")
         public String validateFilename(String filename, PublicDisplayEvent event) {
             String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
+            int expectedMaxErrorMessageSize = 150;
+            StringBuilder errorMessages = new StringBuilder(expectedMaxErrorMessageSize);
+
             if (errorMessage != null) {
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append(errorMessage + NEWLINE);
             }
 
             // Check the file has the right overall format of 4 parts
             if (isValidNoOfParts(filename)) {
                 LOG.debug("Valid filename - No. Of Parts");
             } else {
-                errorMessage = "Invalid filename - No. Of Parts";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - No. Of Parts\n");
             }
             // Check Title is right format
             if (PDDA.equalsIgnoreCase(getFilenamePart(filename, 0))) {
                 LOG.debug("Valid filename - Title");
             } else {
-                errorMessage = "Invalid filename - Title";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - Title\n");
             }
 
-            // Check we have the event from the file contents
+            // Check we have the event from the file contents, and if not null check the crest court
+            // Id
             if (event == null) {
-                errorMessage = "Invalid filename - Invalid event in filecontents";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - Invalid event in filecontents\n");
 
-                // Check the crest court Id
             } else if (getCourtId(filename, event) == null) {
-                errorMessage = "Invalid filename - CrestCourtId";
-                LOG.debug(debugErrorPrefix, errorMessage);
-                return errorMessage;
+                errorMessages.append("Invalid filename - CrestCourtId\n");
+            }
+
+            if (errorMessages.length() > 0) {
+                LOG.debug(debugErrorPrefix, errorMessages.toString());
+                return errorMessages.toString();
             }
 
             return null;
