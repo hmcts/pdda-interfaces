@@ -14,10 +14,14 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_XML_DOCUMENT")
-@NamedQuery(name = "XHB_XML_DOCUMENT.findListByClobId",
+@NamedQuery(name = "XHB_XML_DOCUMENT.findDocumentByClobId",
     query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.xmlDocumentClobId = "
-        + ":xmlDocumentClobId AND SUBSTR(o.documentType,1,2) IN ('DL','FL','WL') "
+        + ":xmlDocumentClobId AND (SUBSTR(o.documentType,1,2) IN ('DL','FL','WL') "
+        + "OR SUBSTR(o.documentType,1,3) IN ('IWP') ) "
         + "AND (cast(:timeDelay as timestamp) IS NULL OR o.creationDate <= :timeDelay) "
+        + "ORDER BY o.xmlDocumentId DESC")
+@NamedQuery(name = "XHB_XML_DOCUMENT.findByXmlDocumentClobId",
+    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.xmlDocumentClobId = :xmlDocumentClobId "
         + "ORDER BY o.xmlDocumentId DESC")
 public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
@@ -25,8 +29,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
     @Id
     @GeneratedValue(generator = "xhb_xml_document_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "xhb_xml_document_seq", sequenceName = "xhb_xml_document_seq",
-        allocationSize = 1)
+    @SequenceGenerator(name = "xhb_xml_document_seq", sequenceName = "xhb_xml_document_seq", allocationSize = 1)
 
     @Column(name = "XML_DOCUMENT_ID")
     private Integer xmlDocumentId;
