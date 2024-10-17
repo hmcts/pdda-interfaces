@@ -1,0 +1,100 @@
+{"cs:DailyList": {
+  "xmlns": "http://www.govtalk.gov.uk/people/AddressAndPersonalDetails",
+  "xmlns:p2": "http://www.govtalk.gov.uk/people/bs7666",
+  "cs:CrownCourt": {
+    "cs:CourtHouseCode": {
+      "CourtHouseShortName": "SNARE",
+      "content": 453
+    },
+    "cs:CourtHouseType": "Crown Court",
+    "cs:CourtHouseName": "SNARESBROOK"
+  },
+  "cs:CourtLists": {"cs:CourtList": {
+    "cs:CourtHouse": {
+      "cs:CourtHouseCode": 453,
+      "cs:CourtHouseType": "Crown Court",
+      "cs:CourtHouseName": "SNARESBROOK"
+    },
+    "cs:Sittings": {"cs:Sitting": {
+      "cs:CourtRoomNumber": 235,
+      "cs:Hearings": {"cs:Hearing": {
+        "cs:HearingDetails": {
+          "cs:HearingDate": "2020-01-21",
+          "HearingType": "TRL",
+          "cs:HearingDescription": "For Trial"
+        },
+        "cs:Defendants": {"cs:Defendant": [
+          {
+            "cs:Charges": {"cs:Charge": [
+              {
+                "CJSoffenceCode": "TH68001A",
+                "IndictmentCountNumber": 0,
+                "cs:OffenceStatement": "Attempted theft"
+              },
+              {
+                "cs:CRESTchargeID": "453S00649408",
+                "CJSoffenceCode": "HC57001",
+                "IndictmentCountNumber": 0,
+                "cs:OffenceStatement": "Manslaughter on grounds of diminished responsibility"
+              }
+            ]},
+            "cs:PersonalDetails": {
+              "cs:Name": {
+                "apd:CitizenNameRequestedName": "Sri",
+                "apd:CitizenNameSurname": "Van"
+              },
+              "cs:IsMasked": "no"
+            }
+          },
+          {
+            "cs:Charges": {"cs:Charge": [
+              {
+                "CJSoffenceCode": "TH68001A",
+                "IndictmentCountNumber": 0,
+                "cs:OffenceStatement": "Attempted theft"
+              },
+              {
+                "cs:CRESTchargeID": "453S00649408",
+                "CJSoffenceCode": "HC57001",
+                "IndictmentCountNumber": 0,
+                "cs:OffenceStatement": "Manslaughter on grounds of diminished responsibility"
+              }
+            ]},
+            "cs:PersonalDetails": {
+              "cs:Name": {
+                "apd:CitizenNameRequestedName": "Another",
+                "apd:CitizenNameSurname": "CPPSECOND"
+              },
+              "cs:IsMasked": "no"
+            }
+          }
+        ]},
+        "cs:HearingSequenceNumber": 1,
+        "cs:Prosecution": {
+          "ProsecutingAuthority": "Crown Prosecution Service",
+          "cs:ProsecutingReference": "92AD685737"
+        },
+        "cs:CaseNumber": "92AD685737"
+      }},
+      "cs:SittingPriority": "T",
+      "cs:Judiciary": {"cs:Judge": {
+        "apd:CitizenNameRequestedName": "Freddy",
+        "apd:CitizenNameSurname": "Van-JUDGE"
+      }},
+      "cs:SittingSequenceNo": 1
+    }}
+  }},
+  "xsi:schemaLocation": "http://www.courtservice.gov.uk/schemas/courtservice DailyList-v5-9.xsd",
+  "cs:DocumentID": {"cs:DocumentName": "DailyList_999_200108141220.xml"},
+  "cs:ListHeader": {
+    "cs:EndDate": "2020-01-21",
+    "cs:ListCategory": "Criminal",
+    "cs:StartDate": "2020-01-21",
+    "cs:PublishedTime": "2020-01-07T18:45:03.000",
+    "cs:Version": "NOT VERSIONED",
+    "cs:CRESTlistID": 510
+  },
+  "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+  "xmlns:cs": "http://www.courtservice.gov.uk/schemas/courtservice",
+  "xmlns:apd": "http://www.govtalk.gov.uk/people/AddressAndPersonalDetails"
+}}
