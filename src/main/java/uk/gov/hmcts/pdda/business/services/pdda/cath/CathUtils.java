@@ -2,15 +2,23 @@ package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.xml.transform.Source;
@@ -21,8 +29,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
 public final class CathUtils {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
 
     private static final String APIM_ENABLED = "apim.enabled";
     private static final String APIM_URL = "apim.uri";
@@ -73,26 +83,63 @@ public final class CathUtils {
         return String.format(POST_URL, apimUri);
     }
 
-    public static JSONObject generateJsonFromString(String stringToConvert) {
-        return XML.toJSONObject(stringToConvert);
-    }
-
-    public static String transformXmlUsingTemplate(String inputXmlPath, String xsltPath)
-        throws TransformerException {
+    public static void transformXmlUsingSchema(String inputXmlPath, String xsltSchemaPath,
+        String outputXmlPath) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
         // Get the predefined xslt schema
-        Source xsltSource = new StreamSource(new File(classLoader.getResource(xsltPath).getFile()));
+        Source xsltSource =
+            new StreamSource(new File(classLoader.getResource(xsltSchemaPath).getFile()));
         Templates templates = transformerFactory.newTemplates(xsltSource);
         Transformer transformer = templates.newTransformer();
+
         // Get the xml
         Source xmlSource =
             new StreamSource(new File(classLoader.getResource(inputXmlPath).getFile()));
-        // Output the result as a string
+
+        // Transform the xml
         StringWriter outWriter = new StringWriter();
         StreamResult result = new StreamResult(outWriter);
         transformer.transform(xmlSource, result);
-        StringBuffer sb = outWriter.getBuffer();
-        return sb.toString();
+
+        // Write out the transformed xml in a file
+        try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputXmlPath))) {
+            wr.write(outWriter.toString());
+        } catch (IOException e) {
+            LOG.debug("Failed to write file, with exception: ", e);
+        }
     }
+
+    public static void fetchXmlAndGenerateJson(String inputXmlPath, String outputJsonPath) {
+        // Fetch and Read Transformed Xml File
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br =
+            Files.newBufferedReader(Paths.get(inputXmlPath), StandardCharsets.UTF_8)) {
+            // Loop through all the lines in the transformed Xml
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append('\n');
+            }
+            // Generate the Json File
+            createJsonFile(resultStringBuilder, outputJsonPath);
+        } catch (IOException e) {
+            LOG.debug("Failed to read file: ", e);
+        }
+    }
+
+    private static void createJsonFile(StringBuilder resultStringBuilder, String outputJsonPath) {
+        // Create the file if it doesn't already exist
+        try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputJsonPath))) {
+            // Write out the Json into the file
+            wr.write(generateJsonFromString(resultStringBuilder.toString()).toString(2));
+        } catch (IOException e) {
+            LOG.debug("Failed to write file, with exception: ", e);
+        }
+    }
+
+    private static JSONObject generateJsonFromString(String stringToConvert) {
+        return XML.toJSONObject(stringToConvert);
+    }
+
 }

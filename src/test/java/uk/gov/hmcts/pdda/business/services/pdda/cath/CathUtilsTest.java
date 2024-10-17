@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
-import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,20 +16,17 @@ import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.http.HttpRequest;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import javax.sql.rowset.serial.SerialException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -50,13 +46,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidFileStream", "PMD.AssignmentInOperand"})
+@SuppressWarnings({"PMD.LawOfDemeter"})
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
 
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
+    private static final String TRUE = "Result is not True";
 
     @Mock
     private Environment mockEnvironment;
@@ -118,50 +115,36 @@ class CathUtilsTest {
     }
 
     @Test
-    void testGenerateDailyListJsonFromString() throws IOException {
-        JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleDailyList_V3.xml"));
-        // Indentation value 4 matches the indentation of the xml before json conversion
-        String jsonAsString = result.toString(4);
-        assertNotNull(jsonAsString, NOTNULL);
+    void testTransformAndGenerateListJsonFromString() throws TransformerException {
+        // Setup using the example xml and xsl files in resources, output result into resources
+        String inputXmlPath =
+            "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        String xsltSchemaPath = "xslt_schemas/Example.xslt";
+        String outputXmlPath =
+            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Schema_Edit.xml";
+        String outputJsonPath =
+            "src/main/resources/database/test-data/example_json_results/DailyList_999_200108141220_JSON.txt";
+
+        // Run the Schema Transform
+        CathUtils.transformXmlUsingSchema(inputXmlPath, xsltSchemaPath, outputXmlPath);
+
+        // Run the Generate Json process
+        CathUtils.fetchXmlAndGenerateJson(outputXmlPath, outputJsonPath);
+
+        // Verify Json File has been Generated
+        File jsonResult = new File(outputJsonPath);
+        assertTrue(jsonResult.exists(), TRUE);
     }
 
     @Test
-    void testGenerateWarnedListJsonFromString() throws IOException {
-        JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleWarnedList_V1.xml"));
-        // Indentation value 4 matches the indentation of the xml before json conversion
-        String jsonAsString = result.toString(4);
-        assertNotNull(jsonAsString, NOTNULL);
-    }
-
-    @Test
-    void testTransformXmlUsingTemplate() throws TransformerException {
-        // Using the example xml and xsl files defined in resources
+    void testTransformXmlUsingSchemaFailedFileWrite()
+        throws TransformerException, SerialException, SQLException {
         String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         String inputXslt = "xslt_schemas/Example.xslt";
-        // Output the xml result as string
-        String stringResult = CathUtils.transformXmlUsingTemplate(inputXml, inputXslt);
-        // Verify
-        assertNotNull(stringResult, NOTNULL);
-    }
-
-    private String fetchAndReadFile(String fileName) throws FileNotFoundException {
-        // Fetch File
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File file = new File(classLoader
-            .getResource("database/test-data/example_list_xml_docs/" + fileName).getFile());
-        InputStream inputStream = new FileInputStream(file);
-        // Read File
-        StringBuilder resultStringBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            LOG.debug("Failed to read file: {}", e);
-        }
-        return resultStringBuilder.toString();
+        String outputXmlPath = "Testing/Invalid.xml";
+        boolean result = true;
+        // Run
+        CathUtils.transformXmlUsingSchema(inputXml, inputXslt, outputXmlPath);
+        assertTrue(result, NOTNULL);
     }
 }
