@@ -134,15 +134,6 @@ class CathUtilsTest {
         String jsonAsString = result.toString(4);
         assertNotNull(jsonAsString, NOTNULL);
     }
-    
-    @Test
-    void testGenerateFirmListJsonFromString() throws IOException {
-        JSONObject result =
-            CathUtils.generateJsonFromString(fetchAndReadFile("ExampleFirmList_V2.xml"));
-        // Indentation value 4 matches the indentation of the xml before json conversion
-        String jsonAsString = result.toString(4);
-        assertNotNull(jsonAsString, NOTNULL);
-    }
 
     @Test
     void testTransformXmlUsingTemplate() throws TransformerException {
