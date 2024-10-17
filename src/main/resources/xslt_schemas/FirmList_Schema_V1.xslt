@@ -162,8 +162,6 @@
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:Charges"/>
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:NumberOfCharges"/>
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:OriginalCharges"/>
-    <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:OriginalChargeSequenceNumber"/>
-    <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:OriginalChargeDescription"/>
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:AdditionalNotes"/>
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:DeportationReason"/>
     <xsl:template match="cs:ReserveList/cs:Defendants/cs:Defendant/cs:HateCrime"/>
