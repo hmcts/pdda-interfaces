@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.18.0")
+    classpath("org.flywaydb:flyway-database-postgresql:10.19.0")
   }
 }
 
@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.18.0'
+  id 'org.flywaydb.flyway' version '10.19.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -131,7 +131,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "7.5.0"
+  toolVersion = "7.6.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.smokeTest, sourceSets.functionalTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -173,31 +173,35 @@ ext {
 ext['snakeyaml.version'] = '2.0'
 
 dependencies {
-    implementation 'org.springframework:spring-expression:6.1.13'
+    implementation 'org.springframework:spring-expression:6.1.14'
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.30'
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.24.0'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.31'
+    implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.24.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.openjpa:openjpa-persistence-jdbc:4.0.1'
     implementation 'org.codehaus.castor:castor-codegen:1.4.1'
     implementation 'xalan:serializer:2.7.3'
     implementation 'org.jboss.spec.javax.rmi:jboss-rmi-api_1.0_spec:1.0.6.Final'
-    implementation 'org.springframework:spring-core:6.1.13'
-    implementation 'org.springframework:spring-beans:6.1.13'
-    implementation 'org.springframework:spring-context:6.1.13'
+    implementation 'org.springframework:spring-core:6.1.14'
+    implementation 'org.springframework:spring-beans:6.1.14'
+    implementation 'org.springframework:spring-context:6.1.14'
     implementation 'org.springframework.data:spring-data-commons:3.3.4'
     implementation 'org.springframework.data:spring-data-jpa:3.3.4'
-    implementation 'org.springframework:spring-tx:6.1.13'
-    implementation 'org.springframework:spring-web:6.1.13'
+    implementation 'org.springframework:spring-tx:6.1.14'
+    implementation 'org.springframework:spring-web:6.1.14'
     implementation files('lib/jsch-0.1.54.jar')
+    implementation 'com.hierynomus:sshj:0.39.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-common', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-sftp', version: '2.14.0'
+    implementation group: 'org.apache.sshd', name: 'sshd-core', version: '2.14.0'
     implementation 'org.apache.commons:commons-vfs2:2.9.0'
     implementation 'org.apache.commons:commons-configuration2:2.11.0'
     implementation 'org.postgresql:postgresql:42.7.4'
-    implementation 'net.bytebuddy:byte-buddy:1.15.2'
+    implementation 'net.bytebuddy:byte-buddy:1.15.5'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'org.json:json:20240303'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
@@ -213,20 +217,22 @@ dependencies {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
-    implementation 'ch.qos.logback:logback-core:1.5.8'
-    implementation 'ch.qos.logback:logback-classic:1.5.8'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.30'
+    implementation 'ch.qos.logback:logback-core:1.5.11'
+    implementation 'ch.qos.logback:logback-classic:1.5.11'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.0'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.31'
     implementation 'com.squareup.okio:okio:3.9.1'
-    implementation 'org.flywaydb:flyway-core:10.18.0'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.18.0'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.18.0'
+    implementation 'org.flywaydb:flyway-core:10.19.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.19.0'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.19.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
-    exclude group: 'junit', module: 'junit'
-    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-  }
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.1'
+      exclude group: 'junit', module: 'junit'
+      exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+	testImplementation group: 'com.github.stefanbirkner', name: 'fake-sftp-server-rule', version: 'fake-sftp-server-rule-2.0.0'
+	implementation group: 'de.ppi', name: 'fake-sftp-server-extension', version: '1.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.2'
     testImplementation 'org.easymock:easymock:5.4.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
@@ -235,6 +241,7 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:4.0.0'
     implementation group: 'io.rest-assured', name: 'rest-assured'
+	implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
 }
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
@@ -298,4 +305,4 @@ tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrate
 }
 
 // set flyway cleanDisabled to true above and uncomment if we require a fresh migration from scratch across all DBs
-migratePostgresDatabase.dependsOn cleanPostgresDatabase
+//migratePostgresDatabase.dependsOn cleanPostgresDatabase

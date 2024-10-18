@@ -39,14 +39,24 @@ public class PddaConfigHelper {
     private XhbConfigPropRepository xhbConfigPropRepository;
     private Environment environment;
 
-    protected static class Config {
-        static final String SFTP_HOST = "pdda.bais_sftp_hostname";
-        static final String SFTP_PASSWORD = "pdda.bais_sftp_password";
-        static final String SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
-        static final String SFTP_USERNAME = "pdda.bais_sftp_username";
-        static final String CP_SFTP_USERNAME = "pdda.bais_cp_sftp_username";
-        static final String CP_SFTP_PASSWORD = "pdda.bais_cp_sftp_password";
-        static final String CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+    public static class Config {
+        // Database values
+        public static final String DB_SFTP_HOST = "PDDA_BAIS_SFTP_HOSTNAME";
+        public static final String DB_SFTP_PASSWORD = "PDDA_BAIS_SFTP_PASSWORD";
+        public static final String DB_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
+        public static final String DB_SFTP_USERNAME = "PDDA_BAIS_SFTP_USERNAME";
+        public static final String DB_CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
+        public static final String DB_CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
+        public static final String DB_CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+
+        // Key vault values
+        public static final String KV_SFTP_HOST = "pdda.bais_sftp_hostname";
+        public static final String KV_SFTP_PASSWORD = "pdda.bais_sftp_password";
+        public static final String KV_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
+        public static final String KV_SFTP_USERNAME = "pdda.bais_sftp_username";
+        public static final String KV_CP_SFTP_USERNAME = "pdda.bais_cp_sftp_username";
+        public static final String KV_CP_SFTP_PASSWORD = "pdda.bais_cp_sftp_password";
+        public static final String KV_CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
     }
     
     protected PddaConfigHelper(EntityManager entityManager, Environment environment) {
@@ -97,7 +107,7 @@ public class PddaConfigHelper {
     public String getEnvValue(final String propertyName) {
         methodName = "getConfigValue(" + propertyName + ")";
         LOG.debug(LOG_BRACKETS, methodName, LOG_CALLED);
-        String result = environment.getProperty(propertyName);
+        String result = getEnvironment().getProperty(propertyName);
         LOG.debug("{}{}{}", propertyName, " = ", result);
         return result;
     }
@@ -123,6 +133,14 @@ public class PddaConfigHelper {
         return configPropMaintainer;
     }
     
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
     public class InvalidConfigException extends RuntimeException {
         private static final long serialVersionUID = 1L;
     }

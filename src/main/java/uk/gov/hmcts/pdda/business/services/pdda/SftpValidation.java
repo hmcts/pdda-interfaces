@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
-import com.jcraft.jsch.ChannelSftp.LsEntry;
+import net.schmizz.sshj.sftp.RemoteResourceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,31 +20,32 @@ public class SftpValidation {
     }
 
     /* Filter the directories (if required) */
-    public List<String> validateFilesInFolder(List<String> filesInFolder) {
+    public List<String> validateFilesInFolder(List filesInFolder) {
         List<String> results = new ArrayList<>();
+
         if (filesInFolder != null) {
             for (Object obj : filesInFolder) {
-                String filename = getFilename(obj);
-                if (filename != null) {
+                if (obj instanceof RemoteResourceInfo remoteResourceInfo) {
+                    String filename = remoteResourceInfo.getName();
                     results.add(filename);
+                } else {
+                    String filename = getFilename(obj);
+                    if (filename != null) {
+                        results.add(filename);
+                    }
                 }
             }
         }
+
         return results;
     }
 
     public String getFilename(Object obj) {
-        if (obj instanceof LsEntry) {
-            LsEntry lsEntry = (LsEntry) obj;
-            if (!lsEntry.getAttrs().isDir() || includeDirs) {
-                return lsEntry.getFilename();
-            }
-        }
         return null;
     }
 
     /* Apply user defined string patterns (overridden in the calling class) */
-    protected String validateFilename(String filename) {
+    public String validateFilename(String filename) {
         if (EMPTY_STRING.equals(filename)) {
             return "Filename is Empty";
         }
