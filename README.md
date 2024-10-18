@@ -14,3 +14,13 @@ DB_PORT - Database Port
 DB_NAME - Database Schema name
 
 DB_OPTIONS - (Optional) Addtional parameters
+
+APIM_ENABLED - true or false
+
+APIM_URI - Connection uri for azure pip data management (ie https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management)
+
+PDDA_AZURE_TENANT_ID - Specifies the Active Directory ID
+
+PDDA_AZURE_CLIENT_ID - Specifies the App Registration's Application ID
+
+PDDA_AZURE_CLIENT_SECRET - Specifies the App Registration's secret key
