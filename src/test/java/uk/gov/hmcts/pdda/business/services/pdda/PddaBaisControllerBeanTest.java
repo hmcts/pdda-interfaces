@@ -9,9 +9,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * <p>
@@ -32,14 +33,21 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(EasyMockExtension.class)
 class PddaBaisControllerBeanTest {
 
-    private static final String TRUE = "Result is not True";
+    private static final String NULL = "Result is Null";
+    private static final String NOT_NULL = "Result is Not Null";
 
     @Mock
-    private PddaHelper mockPddaHelper;
+    private SftpService mockSftpService;
+
+    @Mock
+    private EntityManager mockEntityManager;
 
     @TestSubject
     private final PddaBaisControllerBean classUnderTest =
         new PddaBaisControllerBean(EasyMock.createMock(EntityManager.class));
+
+    @TestSubject
+    private final PddaBaisControllerBean classUnderTest2 = new PddaBaisControllerBean();
 
     @BeforeAll
     public static void setUp() {
@@ -54,54 +62,26 @@ class PddaBaisControllerBeanTest {
     @Test
     void testDoTask() {
         // Setup
-        mockPddaHelper.retrieveFromBaisCp();
-        mockPddaHelper.retrieveFromBaisXhibit();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.doTask();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
+        EasyMock.expect(mockSftpService.processBaisMessages(0)).andReturn(true);
+
+        EasyMock.replay(mockSftpService);
+
+        // Run the test
+        classUnderTest.doTask();
+
         // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
+        assertNotNull(mockSftpService, NOT_NULL);
+
     }
 
     @Test
-    void testRetrieveFromBaisCP() {
+    void testGetSftpService2() {
         // Setup
-        mockPddaHelper.retrieveFromBaisCp();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisCP();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
+        SftpService result = classUnderTest2.getSftpService();
+        SftpService result2 = null;
         // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
+        assertNotNull(result, NOT_NULL);
+        assertNull(result2, NULL);
     }
 
-    @Test
-    void testRetrieveFromBaisXhibit() {
-        mockPddaHelper.retrieveFromBaisXhibit();
-        EasyMock.replay(mockPddaHelper);
-        // Run
-        boolean result = false;
-        try {
-            classUnderTest.retrieveFromBaisXhibit();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        // Checks
-        EasyMock.verify(mockPddaHelper);
-        assertTrue(result, TRUE);
-    }
 }

@@ -44,6 +44,9 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
      */
     @Override
     public Integer getCourtId() {
+        if (courtRoomIdentifier == null) {
+            return null;
+        }
         return courtRoomIdentifier.getCourtId();
     }
 
