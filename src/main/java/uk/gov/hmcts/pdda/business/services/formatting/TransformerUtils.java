@@ -25,6 +25,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * TransformerUtils.
@@ -115,6 +116,13 @@ public final class TransformerUtils {
 
         formattingValue.getOutputStream().flush();
         return bufferToUse;
+    }
+    
+    public static StringWriter transformList(Transformer transformer, Source xmlSource) throws TransformerException {
+        StringWriter outWriter = new StringWriter();
+        StreamResult result = new StreamResult(outWriter);
+        transformer.transform(xmlSource, result);
+        return outWriter;
     }
 
     public static Result createResult(OutputStream out, String mimeType, Writer buffer)

@@ -4,14 +4,20 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.services.formatting.TransformerUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -21,12 +27,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
@@ -83,8 +89,8 @@ public final class CathUtils {
         return String.format(POST_URL, apimUri);
     }
 
-    public static void transformXmlUsingSchema(String inputXmlPath, String xsltSchemaPath,
-        String outputXmlPath) throws TransformerException {
+    public static void transformXmlUsingSchema(Long clobId, XhbCourtelListRepository xhbCourtelListRepository, 
+        XhbClobRepository xhbClobRepository, String xsltSchemaPath, String outputXmlPath) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -94,20 +100,22 @@ public final class CathUtils {
         Templates templates = transformerFactory.newTemplates(xsltSource);
         Transformer transformer = templates.newTransformer();
 
-        // Get the xml
-        Source xmlSource =
-            new StreamSource(new File(classLoader.getResource(inputXmlPath).getFile()));
-
-        // Transform the xml
-        StringWriter outWriter = new StringWriter();
-        StreamResult result = new StreamResult(outWriter);
-        transformer.transform(xmlSource, result);
-
-        // Write out the transformed xml in a file
-        try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputXmlPath))) {
-            wr.write(outWriter.toString());
-        } catch (IOException e) {
-            LOG.debug("Failed to write file, with exception: ", e);
+        // Check if there is an entry in the xhb_courtel_list table with the documentClobId
+        Optional<XhbCourtelListDao> xhbCourtelListDao = xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
+        
+        if (xhbCourtelListDao.isPresent()) {
+            // Get the xhb_clob entry and its clob data if there is a corresponding xhb_courtel_list entry
+            Optional<XhbClobDao> xhbClobDao = xhbClobRepository.findById(clobId);
+            if (xhbClobDao.isPresent()) {
+                Source xmlSource = new StreamSource(new StringReader(xhbClobDao.get().getClobData()));
+                StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
+                // Write out the transformed xml
+                try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputXmlPath))) {
+                    wr.write(outWriter.toString());
+                } catch (IOException e) {
+                    LOG.debug("Failed to write file, with exception: ", e);
+                }
+            }
         }
     }
 

@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.ExcessiveParameterList","PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURTEL_LIST")
 @NamedQuery(name = "XHB_COURTEL_LIST.findByXmlDocumentId",
     query = "SELECT o from XHB_COURTEL_LIST o WHERE o.xmlDocumentId = :xmlDocumentId "
@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "XHB_COURTEL_LIST.findCourtelList",
     query = "SELECT o from XHB_COURTEL_LIST o WHERE o.sentToCourtel = 'N'"
         + "and o.numSendAttempts < :courtelMaxRetry")
+@NamedQuery(name = "XHB_COURTEL_LIST.findByXmlDocumentClobId",
+    query = "SELECT o from XHB_COURTEL_LIST o WHERE o.xmlDocumentClobId = :xmlDocumentClobId")
 public class XhbCourtelListDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851398L;
@@ -52,11 +54,11 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
 
     @Column(name = "MESSAGE_TEXT")
     private String messageText;
-    
+
     // Non-columns
     @Transient
     private XhbBlobDao blob;
-
+    
     public XhbCourtelListDao() {
         super();
     }
@@ -145,7 +147,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
     public void setMessageText(String messageText) {
         this.messageText = messageText;
     }
-    
+
     public XhbBlobDao getBlob() {
         return blob;
     }

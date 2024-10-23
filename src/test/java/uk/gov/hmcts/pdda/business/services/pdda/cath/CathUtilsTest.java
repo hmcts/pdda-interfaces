@@ -13,15 +13,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyCourtelUtil;
+import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.net.http.HttpRequest;
-import java.sql.SQLException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Locale;
-import javax.sql.rowset.serial.SerialException;
+import java.util.Optional;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
@@ -57,6 +66,12 @@ class CathUtilsTest {
 
     @Mock
     private Environment mockEnvironment;
+
+    @Mock
+    private XhbCourtelListRepository mockXhbCourtelListRepository;
+
+    @Mock
+    private XhbClobRepository mockXhbClobRepository;
 
     @BeforeEach
     public void setup() {
@@ -116,17 +131,28 @@ class CathUtilsTest {
 
     @Test
     void testTransformAndGenerateListJsonFromString() throws TransformerException {
-        // Setup using the example xml and xsl files in resources, output result into resources
-        String inputXmlPath =
-            "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        String xsltSchemaPath = "xslt_schemas/Example.xslt";
-        String outputXmlPath =
+        // Setup using the example xml
+        final String exampleXmlPath =
+            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        final String xsltSchemaPath = "xslt_schemas/Example.xslt";
+        final String outputXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Schema_Edit.xml";
-        String outputJsonPath =
+        final String outputJsonPath =
             "src/main/resources/database/test-data/example_json_results/DailyList_999_200108141220_JSON.txt";
 
+        Optional<XhbCourtelListDao> xhbCourtelListDao =
+            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
+        Optional<XhbClobDao> xhbClobDao = Optional
+            .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
+
+        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbCourtelListDao);
+        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+            .thenReturn(xhbClobDao);
+
         // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(inputXmlPath, xsltSchemaPath, outputXmlPath);
+        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
+            xsltSchemaPath, outputXmlPath);
 
         // Run the Generate Json process
         CathUtils.fetchXmlAndGenerateJson(outputXmlPath, outputJsonPath);
@@ -137,14 +163,45 @@ class CathUtilsTest {
     }
 
     @Test
-    void testTransformXmlUsingSchemaFailedFileWrite()
-        throws TransformerException, SerialException, SQLException {
-        String inputXml = "database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        String inputXslt = "xslt_schemas/Example.xslt";
-        String outputXmlPath = "Testing/Invalid.xml";
+    void testTransformXmlUsingSchemaFailedFileWrite() throws TransformerException {
+        // Setup with and invalid output Path
+        final String exampleXmlPath =
+            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
+        final String xsltSchemaPath = "xslt_schemas/Example.xslt";
+        final String outputXmlPath = "INVALID/Invalid.xml";
+
+        Optional<XhbCourtelListDao> xhbCourtelListDao =
+            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
+        Optional<XhbClobDao> xhbClobDao = Optional
+            .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
+
+        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbCourtelListDao);
+        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+            .thenReturn(xhbClobDao);
+
         boolean result = true;
-        // Run
-        CathUtils.transformXmlUsingSchema(inputXml, inputXslt, outputXmlPath);
+
+        // Run the Schema Transform
+        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
+            xsltSchemaPath, outputXmlPath);
+        // Verify
         assertTrue(result, NOTNULL);
+    }
+
+    private String fetchExampleListClobData(String exampleXmlPath) {
+        // Fetch example Xml File held on resources/database/test-data
+        StringBuilder resultStringBuilder = new StringBuilder();
+        try (BufferedReader br =
+            Files.newBufferedReader(Paths.get(exampleXmlPath), StandardCharsets.UTF_8)) {
+            // Loop through all the lines in the Xml
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            LOG.debug("Failed to read file: ", e);
+        }
+        return resultStringBuilder.toString();
     }
 }

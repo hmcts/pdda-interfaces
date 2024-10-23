@@ -58,4 +58,13 @@ public class XhbCourtelListRepository extends AbstractRepository<XhbCourtelListD
         }
         return sortedCourtelList;
     }
+    
+    public Optional<XhbCourtelListDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
+        LOG.debug("findByXmlDocumentClobId()");
+        Query query = getEntityManager().createNamedQuery("XHB_COURTEL_LIST.findByXmlDocumentClobId");
+        query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+        @SuppressWarnings("unchecked")
+        List<XhbCourtelListDao> resultList = query.getResultList();
+        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+    }
 }
