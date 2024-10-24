@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 
 import java.rmi.RemoteException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.restassured.RestAssured.given;
 
@@ -30,6 +32,14 @@ public class CathConnectionServiceBean implements RemoteTask {
 
     private static final int STATUS_CODE_401 = 401;
     private static final int STATUS_CODE_404 = 404;
+
+    Map<String, Integer> urls = new ConcurrentHashMap<>() {
+        private static final long serialVersionUID = -8822781970166180320L;
+        {
+            put(CATH_HEALTH_ENDPOINT, STATUS_CODE_401);
+            put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404);
+        }
+    };
 
 
     /**
@@ -58,25 +68,15 @@ public class CathConnectionServiceBean implements RemoteTask {
         //  Check the status of the CaTH URLs
         LOG.debug("Checking the status of the CaTH URLs");
 
-        if (checkUrl(CATH_HEALTH_ENDPOINT, STATUS_CODE_401)) {
-            LOG.info(LOG_OUTPUT_SERVICE_UP, CATH_HEALTH_ENDPOINT, STATUS_CODE_401);
-        } else {
-            LOG.error(LOG_OUTPUT_SERVICE_DOWN, CATH_HEALTH_ENDPOINT, STATUS_CODE_401);
+        // Check each url in the table
+        for (Map.Entry<String, Integer> entry : urls.entrySet()) {
+            String url = entry.getKey();
+            int expectedStatusCode = entry.getValue();
+            if (checkUrl(url, expectedStatusCode)) {
+                LOG.info(LOG_OUTPUT_SERVICE_UP, url, expectedStatusCode);
+            } else {
+                LOG.error(LOG_OUTPUT_SERVICE_DOWN, url, expectedStatusCode);
+            }
         }
-
-        LOG.debug("Checking the 2nd url....");
-        if (checkUrl(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404)) {
-            LOG.info(LOG_OUTPUT_SERVICE_UP, CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404);
-        } else {
-            LOG.error(LOG_OUTPUT_SERVICE_DOWN, CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404);
-        }
-
-        LOG.debug("Checking the 2nd url and changing status code....");
-        if (checkUrl(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401)) {
-            LOG.info(LOG_OUTPUT_SERVICE_UP, CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401);
-        } else {
-            LOG.error(LOG_OUTPUT_SERVICE_DOWN, CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401);
-        }
-        
     }
 }

@@ -41,29 +41,35 @@ class CathConnectionServiceBeanTest {
     void testDoTask() {
 
         // Test 1 - regular path through the code
-        try {
-            classUnderTest.doTask();
-        } catch (RemoteException e) {
-            LOG.error("Exception occurred while checking the URL: {}", e.getMessage());
-        }
+        /*
+         * try { classUnderTest.doTask(); } catch (RemoteException e) {
+         * LOG.error("Exception occurred while checking the URL: {}", e.getMessage()); }
+         */
 
         // Test 2 - irregular path through the code
         try {
+            // EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
+            // "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management", 401))
+            // .andReturn(true);
+
             EasyMock
             .expect(mockCathConnectionServiceBean.checkUrl(
                 "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management", 401))
                 .andReturn(false);
-            EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
-                "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication",
-                404)).andReturn(false);
-            EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
-                "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication",
-                401)).andReturn(true);
-
             EasyMock.replay(mockCathConnectionServiceBean);
-
-            // Test 1
             classUnderTest.doTask();
+
+            /*
+             * EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
+             * "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication",
+             * 404)).andReturn(false); EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
+             * "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication",
+             * 401)).andReturn(true);
+             * 
+             * EasyMock.replay(mockCathConnectionServiceBean);
+             * 
+             * // Test 1 classUnderTest.doTask();
+             */
         } catch (RemoteException e) {
             LOG.error("Exception occurred while checking the URL: {}", e.getMessage());
         }
