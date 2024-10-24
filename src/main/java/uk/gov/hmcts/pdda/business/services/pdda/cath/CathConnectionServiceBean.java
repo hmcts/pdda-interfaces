@@ -39,12 +39,15 @@ public class CathConnectionServiceBean implements RemoteTask {
      * @param expectedStatusCode The expected http response code
      * @return True if the response code matches the expected code, false
      */
+    @SuppressWarnings("PMD.AvoidCatchingThrowable")
     public boolean checkUrl(String url, int expectedStatusCode) {
+        // May get an AssertionError if the status code is not as expected
+        // and we want to catch that
         try {
             given().when().get(url).then().statusCode(expectedStatusCode);
             return true;
-        } catch (Exception e) {
-            LOG.error("Exception occurred while checking the URL: {}", e.getMessage());
+        } catch (Throwable t) {
+            LOG.error("Exception occurred while checking the URL: {}", t.getMessage());
             return false;
         }
     }
