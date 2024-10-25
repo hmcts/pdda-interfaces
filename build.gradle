@@ -174,6 +174,12 @@ ext['snakeyaml.version'] = '2.0'
 
 dependencies {
     implementation 'org.springframework:spring-expression:6.1.14'
+    implementation 'org.springframework:spring-aop:6.1.14'
+    implementation 'org.springframework:spring-aspects:6.1.14'
+    implementation 'org.springframework:spring-jcl:6.1.14'
+    implementation 'org.springframework:spring-jdbc:6.1.14'
+    implementation 'org.springframework:spring-orm:6.1.14'
+    implementation 'org.springframework:spring-webmvc:6.1.14'
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.4'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
