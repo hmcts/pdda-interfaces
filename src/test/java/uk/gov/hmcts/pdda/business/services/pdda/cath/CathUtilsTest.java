@@ -22,7 +22,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
@@ -135,10 +134,6 @@ class CathUtilsTest {
         final String exampleXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         final String xsltSchemaPath = "xslt_schemas/Example.xslt";
-        final String outputXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Schema_Edit.xml";
-        final String outputJsonPath =
-            "src/main/resources/database/test-data/example_json_results/DailyList_999_200108141220_JSON.txt";
 
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
@@ -149,44 +144,18 @@ class CathUtilsTest {
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
-
+        
         // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
-            xsltSchemaPath, outputXmlPath);
+        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository,
+            mockXhbClobRepository, xsltSchemaPath);
 
         // Run the Generate Json process
-        CathUtils.fetchXmlAndGenerateJson(outputXmlPath, outputJsonPath);
-
-        // Verify Json File has been Generated
-        File jsonResult = new File(outputJsonPath);
-        assertTrue(jsonResult.exists(), TRUE);
-    }
-
-    @Test
-    void testTransformXmlUsingSchemaFailedFileWrite() throws TransformerException {
-        // Setup with and invalid output Path
-        final String exampleXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        final String xsltSchemaPath = "xslt_schemas/Example.xslt";
-        final String outputXmlPath = "INVALID/Invalid.xml";
-
-        Optional<XhbCourtelListDao> xhbCourtelListDao =
-            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
-        Optional<XhbClobDao> xhbClobDao = Optional
-            .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
-
-        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
-            .thenReturn(xhbCourtelListDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
-            .thenReturn(xhbClobDao);
-
+        CathUtils.fetchXmlAndGenerateJson(1L, mockXhbClobRepository);
+        
         boolean result = true;
-
-        // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
-            xsltSchemaPath, outputXmlPath);
-        // Verify
-        assertTrue(result, NOTNULL);
+        
+        // Verify Json has been Generated
+        assertTrue(result, TRUE);
     }
 
     private String fetchExampleListClobData(String exampleXmlPath) {

@@ -13,18 +13,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.services.formatting.TransformerUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -89,8 +83,9 @@ public final class CathUtils {
         return String.format(POST_URL, apimUri);
     }
 
-    public static void transformXmlUsingSchema(Long clobId, XhbCourtelListRepository xhbCourtelListRepository, 
-        XhbClobRepository xhbClobRepository, String xsltSchemaPath, String outputXmlPath) throws TransformerException {
+    public static Long transformXmlUsingSchema(Long clobId,
+        XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
+        String xsltSchemaPath) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -101,49 +96,44 @@ public final class CathUtils {
         Transformer transformer = templates.newTransformer();
 
         // Check if there is an entry in the xhb_courtel_list table with the documentClobId
-        Optional<XhbCourtelListDao> xhbCourtelListDao = xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
-        
+        Optional<XhbCourtelListDao> xhbCourtelListDao =
+            xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
+
         if (xhbCourtelListDao.isPresent()) {
-            // Get the xhb_clob entry and its clob data if there is a corresponding xhb_courtel_list entry
-            Optional<XhbClobDao> xhbClobDao = xhbClobRepository.findById(clobId);
-            if (xhbClobDao.isPresent()) {
-                Source xmlSource = new StreamSource(new StringReader(xhbClobDao.get().getClobData()));
+            // Get the original xml clob
+            Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findById(clobId);
+            if (xhbClobDaoOriginalXml.isPresent()) {
+                // Transform the xml
+                Source xmlSource =
+                    new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
                 StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
-                // Write out the transformed xml
-                try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputXmlPath))) {
-                    wr.write(outWriter.toString());
-                } catch (IOException e) {
-                    LOG.debug("Failed to write file, with exception: ", e);
-                }
+
+                // Save the transformed Xml to the xhb_clob table
+                XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
+                xhbClobDaoTransformedXml.setClobData(outWriter.toString());
+                xhbClobRepository.save(xhbClobDaoTransformedXml);
+
+                // Return the Translated Xml Clob Id
+                return xhbClobDaoTransformedXml.getClobId();
             }
         }
+        return null;
     }
 
-    public static void fetchXmlAndGenerateJson(String inputXmlPath, String outputJsonPath) {
-        // Fetch and Read Transformed Xml File
-        StringBuilder resultStringBuilder = new StringBuilder();
-        try (BufferedReader br =
-            Files.newBufferedReader(Paths.get(inputXmlPath), StandardCharsets.UTF_8)) {
-            // Loop through all the lines in the transformed Xml
-            String line;
-            while ((line = br.readLine()) != null) {
-                resultStringBuilder.append(line).append('\n');
-            }
-            // Generate the Json File
-            createJsonFile(resultStringBuilder, outputJsonPath);
-        } catch (IOException e) {
-            LOG.debug("Failed to read file: ", e);
-        }
-    }
+    public static Long fetchXmlAndGenerateJson(Long clobId, XhbClobRepository xhbClobRepository) {
+        // Fetch the Xml
+        Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository.findById(clobId);
 
-    private static void createJsonFile(StringBuilder resultStringBuilder, String outputJsonPath) {
-        // Create the file if it doesn't already exist
-        try (BufferedWriter wr = Files.newBufferedWriter(Paths.get(outputJsonPath))) {
-            // Write out the Json into the file
-            wr.write(generateJsonFromString(resultStringBuilder.toString()).toString(2));
-        } catch (IOException e) {
-            LOG.debug("Failed to write file, with exception: ", e);
+        if (xhbClobDaoTransformedXml.isPresent()) {
+            // Save the Json to the xhb_clob_table
+            XhbClobDao xhbClobDaoJson = new XhbClobDao();
+            xhbClobDaoJson.setClobData(generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData()).toString());
+            xhbClobRepository.save(xhbClobDaoJson);
+            
+            // Return the Json Clob Id
+            return xhbClobDaoJson.getClobId();
         }
+        return null;
     }
 
     private static JSONObject generateJsonFromString(String stringToConvert) {
