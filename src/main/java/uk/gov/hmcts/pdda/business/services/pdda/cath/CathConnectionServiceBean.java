@@ -38,6 +38,7 @@ public class CathConnectionServiceBean implements RemoteTask {
         {
             put(CATH_HEALTH_ENDPOINT, STATUS_CODE_401);
             put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404);
+            put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401);
         }
     };
 
