@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
 import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,8 @@ public class CathConnectionServiceBean implements RemoteTask {
     private static final int STATUS_CODE_401 = 401;
     private static final int STATUS_CODE_404 = 404;
 
+    protected EntityManager entityManager;
+
     Map<String, Integer> urls = new ConcurrentHashMap<>() {
         private static final long serialVersionUID = -8822781970166180320L;
         {
@@ -41,6 +44,16 @@ public class CathConnectionServiceBean implements RemoteTask {
             put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401);
         }
     };
+
+
+    public CathConnectionServiceBean(EntityManager entityManager) {
+        super();
+        this.entityManager = entityManager;
+    }
+
+    public CathConnectionServiceBean() {
+        super();
+    }
 
 
     /**
