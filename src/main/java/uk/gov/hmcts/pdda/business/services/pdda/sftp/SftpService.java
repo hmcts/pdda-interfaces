@@ -173,18 +173,18 @@ public class SftpService extends XhibitPddaHelper {
      * Retrieve events from BAIS.
      * 
      * @param config The SFTP configuration
-     * @param baisXhibitValidation The validation class
+     * @param baisValidation The validation class
      * @throws IOException The IOException
      */
-    void retrieveFromBais(SftpConfig config, BaisValidation baisXhibitValidation)
+    void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
         throws IOException {
 
         methodName = "retrieveFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
         try {
-            LOG.debug("retrieveFromBais({},{})", config, baisXhibitValidation);
-            Map<String, String> files = getBaisFileList(config, baisXhibitValidation);
+            LOG.debug("retrieveFromBais({},{})", config, baisValidation);
+            Map<String, String> files = getBaisFileList(config, baisValidation);
             LOG.debug("Total of {}{}", files.size(),
                 " files, before processing, in this transaction.");
             if (!files.isEmpty()) {
@@ -192,13 +192,13 @@ public class SftpService extends XhibitPddaHelper {
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     String filename = entry.getKey();
                     String clobData = entry.getValue();
-                    processBaisFile(config, baisXhibitValidation, filename, clobData);
+                    processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
         } finally {
             if (config.getSshjSftpClient() == null) {
                 // Check the contents of BAIS to verify all processed files are deleted
-                Map<String, String> files = getBaisFileList(config, baisXhibitValidation);
+                Map<String, String> files = getBaisFileList(config, baisValidation);
                 if (files.isEmpty()) {
                     LOG.debug("Contents of Bais is now empty");
                 } else {
