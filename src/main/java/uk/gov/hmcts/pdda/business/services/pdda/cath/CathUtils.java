@@ -10,6 +10,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.formatting.TransformerUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
@@ -85,7 +87,8 @@ public final class CathUtils {
 
     public static Long transformXmlUsingSchema(Long clobId,
         XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
-        String xsltSchemaPath) throws TransformerException {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, String xsltSchemaPath)
+        throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -100,9 +103,11 @@ public final class CathUtils {
             xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
 
         if (xhbCourtelListDao.isPresent()) {
-            // Get the original xml clob
+            // Get the original xml clob and xml document records 
             Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findById(clobId);
-            if (xhbClobDaoOriginalXml.isPresent()) {
+            Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
+                xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
+            if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
                 // Transform the xml
                 Source xmlSource =
                     new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
@@ -113,6 +118,17 @@ public final class CathUtils {
                 xhbClobDaoTransformedXml.setClobData(outWriter.toString());
                 xhbClobRepository.save(xhbClobDaoTransformedXml);
 
+                // Write the new transformed xml to xhb_xml_document table
+                XhbXmlDocumentDao xhbXmlDocumentDaoTransformedXml = new XhbXmlDocumentDao();
+                xhbXmlDocumentDaoTransformedXml.setDateCreated(xhbXmlDocumentDaoOriginalXml.get().getDateCreated());
+                xhbXmlDocumentDaoTransformedXml.setDocumentTitle(xhbXmlDocumentDaoOriginalXml.get().getDocumentTitle());
+                xhbXmlDocumentDaoTransformedXml.setXmlDocumentClobId(xhbClobDaoTransformedXml.getClobId());
+                xhbXmlDocumentDaoTransformedXml.setStatus("IO");
+                xhbXmlDocumentDaoTransformedXml.setDocumentType(xhbXmlDocumentDaoOriginalXml.get().getDocumentType());
+                xhbXmlDocumentDaoTransformedXml.setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
+                xhbXmlDocumentDaoTransformedXml.setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
+                xhbXmlDocumentRepository.save(xhbXmlDocumentDaoTransformedXml);
+                
                 // Return the Translated Xml Clob Id
                 return xhbClobDaoTransformedXml.getClobId();
             }
@@ -127,9 +143,10 @@ public final class CathUtils {
         if (xhbClobDaoTransformedXml.isPresent()) {
             // Save the Json to the xhb_clob_table
             XhbClobDao xhbClobDaoJson = new XhbClobDao();
-            xhbClobDaoJson.setClobData(generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData()).toString());
+            xhbClobDaoJson.setClobData(
+                generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData()).toString());
             xhbClobRepository.save(xhbClobDaoJson);
-            
+
             // Return the Json Clob Id
             return xhbClobDaoJson.getClobId();
         }

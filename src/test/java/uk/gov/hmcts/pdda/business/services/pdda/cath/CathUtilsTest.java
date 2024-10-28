@@ -19,6 +19,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.BufferedReader;
@@ -54,7 +56,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.ExcessiveImports"})
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
@@ -71,6 +73,9 @@ class CathUtilsTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @BeforeEach
     public void setup() {
@@ -139,15 +144,18 @@ class CathUtilsTest {
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
         Optional<XhbClobDao> xhbClobDao = Optional
             .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao = Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
 
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
+        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbXmlDocumentDao);
         
         // Run the Schema Transform
         CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository,
-            mockXhbClobRepository, xsltSchemaPath);
+            mockXhbClobRepository, mockXhbXmlDocumentRepository, xsltSchemaPath);
 
         // Run the Generate Json process
         CathUtils.fetchXmlAndGenerateJson(1L, mockXhbClobRepository);
