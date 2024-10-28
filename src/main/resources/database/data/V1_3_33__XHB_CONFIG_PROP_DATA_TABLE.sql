@@ -265,6 +265,10 @@ Insert into XHB_CONFIG_PROP
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
+   (68, 'scheduledtasks.PREPRODmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
+Insert into XHB_CONFIG_PROP
+   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+ Values
    (74, 'PDDA_BAIS_SFTP_BATCH_MAX_SIZE', '30');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
@@ -317,10 +321,6 @@ Insert into XHB_CONFIG_PROP
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (68, 'scheduledtasks.PREPRODmidM1', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddabaistask,dlnotifiertask,lighthousetask,cleardowntask,cathconnectiontask');
-Insert into XHB_CONFIG_PROP
-   (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
- Values
    (69, 'scheduledtasks.PREPRODmidM2', 'messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddatask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
@@ -337,7 +337,7 @@ Insert into XHB_CONFIG_PROP
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values
-   (87, 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask,cleardowntask,cathconnectiontask');
+   (87, 'scheduledtasks.pdda', 'transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask, cleardowntask');
 Insert into XHB_CONFIG_PROP
    (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
  Values

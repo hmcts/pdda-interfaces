@@ -1,0 +1,5 @@
+﻿UPDATE XHB_CONFIG_PROP SET PROPERTY_VALUE='messagegeneratortask,transformtask,listdistributiontask,ahmpollertask,courtlogtask,dartsmessagetask1,dartsmessagetask2,dartsmessagetask3,dartsprioritymessagetask,courtellisttask,cppstagingtask,cppformattingtask,pddabaistask,dlnotifiertask,lighthousetask,cleardowntask,cathconnectiontask' WHERE config_prop_id=68;
+
+UPDATE XHB_CONFIG_PROP SET PROPERTY_VALUE='transformtask,cppformattingtask,cppstagingtask,pddabaistask,dlnotifiertask,lighthousetask,cleardowntask,cathconnectiontask' WHERE config_prop_id=87;
+
+COMMIT;
