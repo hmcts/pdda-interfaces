@@ -293,6 +293,9 @@ tasks.register('functional', Test) {
   locations = ["database", "database/data", "database/packages"]
   // change to false to allow flyway clean to be run
   cleanDisabled = false
+  //outOfOrder = true
+  //validateOnMigrate = false
+  //ignoreMigrationPatterns = ['*:ignored']
 }
 
 // this can be run to clean the DB down allowing from a fresh migration from scratch
@@ -304,6 +307,7 @@ tasks.register('cleanPostgresDatabase', org.flywaydb.gradle.task.FlywayCleanTask
 
 tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrateTask) {
     baselineOnMigrate = true
+    outOfOrder = true
     if (project.hasProperty("dburl")) {
     url = "jdbc:postgresql://${dburl}"
     }
