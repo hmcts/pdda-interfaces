@@ -225,7 +225,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-core:1.5.12'
     implementation 'ch.qos.logback:logback-classic:1.5.12'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.1'
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.31'
     implementation 'com.squareup.okio:okio:3.9.1'
     implementation 'org.flywaydb:flyway-core:10.20.1'
