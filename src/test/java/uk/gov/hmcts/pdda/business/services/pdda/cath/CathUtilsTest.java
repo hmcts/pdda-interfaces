@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
@@ -36,7 +38,6 @@ import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -63,7 +64,6 @@ class CathUtilsTest {
 
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
-    private static final String TRUE = "Result is not True";
 
     @Mock
     private Environment mockEnvironment;
@@ -73,9 +73,13 @@ class CathUtilsTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
+
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+
+    @Mock
+
+    private XhbCathDocumentLinkRepository mockXhbCathDocumentLinkRepository;
 
     @BeforeEach
     public void setup() {
@@ -140,11 +144,17 @@ class CathUtilsTest {
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         final String xsltSchemaPath = "xslt_schemas/Example.xslt";
 
+        XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
+        xhbCathDocumentLinkDao.setCathXmlId(1);
+        xhbCathDocumentLinkDao.setCathDocumentLinkId(1);
+
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
         Optional<XhbClobDao> xhbClobDao = Optional
             .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
-        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao = Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
+            Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
+        xhbXmlDocumentDao.get().setXmlDocumentClobId(1L);
 
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
@@ -152,18 +162,22 @@ class CathUtilsTest {
             .thenReturn(xhbClobDao);
         Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbXmlDocumentDao);
-        
+        Mockito.when(mockXhbXmlDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(xhbXmlDocumentDao);
+        Mockito.when(mockXhbCathDocumentLinkRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbCathDocumentLinkDao));
+
         // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository,
-            mockXhbClobRepository, mockXhbXmlDocumentRepository, xsltSchemaPath);
+        XhbCathDocumentLinkDao result = CathUtils.transformXmlUsingSchema(1L,
+            mockXhbCourtelListRepository, mockXhbClobRepository, mockXhbXmlDocumentRepository,
+            mockXhbCathDocumentLinkRepository, xsltSchemaPath);
 
         // Run the Generate Json process
-        CathUtils.fetchXmlAndGenerateJson(1L, mockXhbClobRepository);
-        
-        boolean result = true;
-        
+        CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao, mockXhbCathDocumentLinkRepository,
+            mockXhbXmlDocumentRepository, mockXhbClobRepository);
+
         // Verify Json has been Generated
-        assertTrue(result, TRUE);
+        assertNotNull(result, NOTNULL);
     }
 
     private String fetchExampleListClobData(String exampleXmlPath) {

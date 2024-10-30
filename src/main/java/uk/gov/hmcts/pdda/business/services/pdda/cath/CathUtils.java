@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
@@ -31,7 +33,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.CouplingBetweenObjects",})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -85,9 +87,10 @@ public final class CathUtils {
         return String.format(POST_URL, apimUri);
     }
 
-    public static Long transformXmlUsingSchema(Long clobId,
+    public static XhbCathDocumentLinkDao transformXmlUsingSchema(Long clobId,
         XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository, String xsltSchemaPath)
+        XhbXmlDocumentRepository xhbXmlDocumentRepository,
+        XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
         throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -98,12 +101,12 @@ public final class CathUtils {
         Templates templates = transformerFactory.newTemplates(xsltSource);
         Transformer transformer = templates.newTransformer();
 
-        // Check if there is an entry in the xhb_courtel_list table with the documentClobId
+        // Check if there is an entry in the courtel_list table with the documentClobId
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
 
         if (xhbCourtelListDao.isPresent()) {
-            // Get the original xml clob and xml document records 
+            // Fetch the original xml clob and xml document records
             Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findById(clobId);
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
                 xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
@@ -113,44 +116,99 @@ public final class CathUtils {
                     new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
                 StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
 
-                // Save the transformed Xml to the xhb_clob table
+                // Save the transformed Xml to the clob table
                 XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
                 xhbClobDaoTransformedXml.setClobData(outWriter.toString());
                 xhbClobRepository.save(xhbClobDaoTransformedXml);
 
-                // Write the new transformed xml to xhb_xml_document table
+                // Save the transformed xml to xml_document table
                 XhbXmlDocumentDao xhbXmlDocumentDaoTransformedXml = new XhbXmlDocumentDao();
-                xhbXmlDocumentDaoTransformedXml.setDateCreated(xhbXmlDocumentDaoOriginalXml.get().getDateCreated());
-                xhbXmlDocumentDaoTransformedXml.setDocumentTitle(xhbXmlDocumentDaoOriginalXml.get().getDocumentTitle());
-                xhbXmlDocumentDaoTransformedXml.setXmlDocumentClobId(xhbClobDaoTransformedXml.getClobId());
+                xhbXmlDocumentDaoTransformedXml
+                    .setDateCreated(xhbXmlDocumentDaoOriginalXml.get().getDateCreated());
+                xhbXmlDocumentDaoTransformedXml
+                    .setDocumentTitle(xhbXmlDocumentDaoOriginalXml.get().getDocumentTitle());
+                xhbXmlDocumentDaoTransformedXml
+                    .setXmlDocumentClobId(xhbClobDaoTransformedXml.getClobId());
                 xhbXmlDocumentDaoTransformedXml.setStatus("IO");
-                xhbXmlDocumentDaoTransformedXml.setDocumentType(xhbXmlDocumentDaoOriginalXml.get().getDocumentType());
-                xhbXmlDocumentDaoTransformedXml.setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
-                xhbXmlDocumentDaoTransformedXml.setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
+                xhbXmlDocumentDaoTransformedXml
+                    .setDocumentType(xhbXmlDocumentDaoOriginalXml.get().getDocumentType());
+                xhbXmlDocumentDaoTransformedXml
+                    .setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
+                xhbXmlDocumentDaoTransformedXml
+                    .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
                 xhbXmlDocumentRepository.save(xhbXmlDocumentDaoTransformedXml);
-                
-                // Return the Translated Xml Clob Id
-                return xhbClobDaoTransformedXml.getClobId();
+
+                // Save a record in the cath_document_link table with the original and transformed xml id's
+                XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
+                xhbCathDocumentLinkDao
+                    .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
+                xhbCathDocumentLinkDao
+                    .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
+                xhbCathDocumentLinkRepository.save(xhbCathDocumentLinkDao);
+
+                // Return the cath_document_link record
+                return xhbCathDocumentLinkDao;
             }
         }
         return null;
     }
 
-    public static Long fetchXmlAndGenerateJson(Long clobId, XhbClobRepository xhbClobRepository) {
-        // Fetch the Xml
-        Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository.findById(clobId);
+    public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
+        XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository) {
 
-        if (xhbClobDaoTransformedXml.isPresent()) {
-            // Save the Json to the xhb_clob_table
-            XhbClobDao xhbClobDaoJson = new XhbClobDao();
-            xhbClobDaoJson.setClobData(
-                generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData()).toString());
-            xhbClobRepository.save(xhbClobDaoJson);
+        // Fetch the xml_document record
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
+            xhbXmlDocumentRepository.findById(xhbCathDocumentLinkDao.getCathXmlId());
 
-            // Return the Json Clob Id
-            return xhbClobDaoJson.getClobId();
+        if (xhbXmlDocumentDaoTransformedXml.isPresent()) {
+            // Fetch the clob record
+            Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository
+                .findById(xhbXmlDocumentDaoTransformedXml.get().getXmlDocumentClobId());
+
+            if (xhbClobDaoTransformedXml.isPresent()) {
+                // Generate the Json and save it to the clob_table
+                XhbClobDao xhbClobDaoJson = new XhbClobDao();
+                xhbClobDaoJson.setClobData(
+                    generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData())
+                        .toString());
+                xhbClobRepository.save(xhbClobDaoJson);
+
+                // Save the json record to the xml_document table
+                XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
+                xhbXmlDocumentDaoJson
+                    .setDateCreated(xhbXmlDocumentDaoTransformedXml.get().getDateCreated());
+                // TODO Check Doc Type and generate Document Title
+                xhbXmlDocumentDaoJson.setDocumentTitle("TO BE COMPLETED");
+                xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
+                xhbXmlDocumentDaoJson.setStatus("ND");
+                xhbXmlDocumentDaoJson.setDocumentType("JSN");
+                xhbXmlDocumentDaoJson
+                    .setExpiryDate(xhbXmlDocumentDaoTransformedXml.get().getExpiryDate());
+                xhbXmlDocumentDaoJson
+                    .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
+                xhbXmlDocumentRepository.save(xhbXmlDocumentDaoJson);
+
+                // Update the cath_document_link record with the cathJsonId
+                updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
+                    xhbCathDocumentLinkDao, xhbXmlDocumentDaoJson);
+            }
         }
-        return null;
+    }
+
+    private static void updateCathDocumentlinkWithJsonId(
+        XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+        XhbCathDocumentLinkDao xhbCathDocumentLinkDao, XhbXmlDocumentDao xhbXmlDocumentDaoJson) {
+        // Fetch the existing cath_document_link record
+        Optional<XhbCathDocumentLinkDao> xhbCathDocumentLinkDaoNoJsonId =
+            xhbCathDcoumentLlinkRepository.findById(xhbCathDocumentLinkDao.getCathDocumentLinkId());
+
+        if (xhbCathDocumentLinkDaoNoJsonId.isPresent()) {
+            // Update the existing record with the cathJsonId
+            xhbCathDocumentLinkDaoNoJsonId.get()
+                .setCathJsonId(xhbXmlDocumentDaoJson.getXmlDocumentId());
+            xhbCathDcoumentLlinkRepository.update(xhbCathDocumentLinkDaoNoJsonId.get());
+        }
     }
 
     private static JSONObject generateJsonFromString(String stringToConvert) {
