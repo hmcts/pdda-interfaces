@@ -1,8 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.pdda.hb.jpa.EntityManagerUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -8,9 +9,9 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import com.pdda.hb.jpa.EntityManagerUtil;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
+
 /**
  * <p>
  * Title: Cath Controller Bean.
