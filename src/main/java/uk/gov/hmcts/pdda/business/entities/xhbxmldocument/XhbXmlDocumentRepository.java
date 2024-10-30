@@ -55,4 +55,16 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
         List<XhbXmlDocumentDao> resultList = query.getResultList();
         return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
     }
+    
+    /**
+     * findJsonDocuments.
+     * 
+     * @return XhbXmlDocumentDao
+     */
+    @SuppressWarnings("unchecked")
+    public List<XhbXmlDocumentDao> findJsonDocuments() {
+        LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
+        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
+        return query.getResultList();
+    }
 }

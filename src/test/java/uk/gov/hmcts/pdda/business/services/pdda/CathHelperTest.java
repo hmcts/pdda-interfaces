@@ -10,9 +10,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.net.http.HttpClient;
@@ -55,6 +57,12 @@ class CathHelperTest {
 
     @Mock
     private OAuth2Helper mockOAuth2Helper;
+    
+    @Mock
+    private EntityManager mockEntityManager;
+    
+    @Mock
+    private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @Mock
     private HttpRequest mockHttpRequest;
@@ -73,13 +81,13 @@ class CathHelperTest {
         Mockito.mockStatic(CathUtils.class);
         Mockito.mockStatic(HttpClient.class);
 
-        classUnderTest = new CathHelper(mockOAuth2Helper);
+        classUnderTest = new CathHelper(mockOAuth2Helper, mockEntityManager, mockXhbXmlDocumentRepository);
     }
 
     @AfterEach
     public void tearDown() {
         // Test default constructor
-        classUnderTest = new CathHelper();
+        classUnderTest = new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository);
         // Clear down statics
         Mockito.clearAllCaches();
     }

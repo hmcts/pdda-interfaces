@@ -3,10 +3,15 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.io.IOException;
@@ -15,6 +20,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -38,16 +45,26 @@ public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
     private static final String EMPTY_STRING = "";
+    
+    private final EntityManager entityManager;
+    private XhbXmlDocumentRepository xhbXmlDocumentRepository;
+    private XhbClobRepository xhbClobRepository;
 
     private OAuth2Helper oauth2Helper;
 
-    public CathHelper() {
+    public CathHelper(EntityManager entityManager,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository) {
         super();
+        this.entityManager = entityManager;
+        this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
     }
 
     // JUnit
-    public CathHelper(OAuth2Helper oauth2Helper) {
+    public CathHelper(OAuth2Helper oauth2Helper, EntityManager entityManager,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository) {
         this.oauth2Helper = oauth2Helper;
+        this.entityManager = entityManager;
+        this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
     }
 
 
@@ -105,11 +122,37 @@ public class CathHelper {
         }
         return EMPTY_STRING;
     }
+    
+    protected Optional<XhbClobDao> getDocuments() {
+        Optional<XhbClobDao> documents = null;
+        List<XhbXmlDocumentDao> xmlDocumentDaoList =
+            getXhbXmlDocumentRepository().findJsonDocuments();
+
+        for (XhbXmlDocumentDao document : xmlDocumentDaoList) {
+            documents = getXhbClobRepository().findById(document.getXmlDocumentClobId());
+        }
+
+        return documents;
+    }
 
     private OAuth2Helper getOAuth2Helper() {
         if (oauth2Helper == null) {
             this.oauth2Helper = new OAuth2Helper();
         }
         return oauth2Helper;
+    }
+    
+    private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
+        if (xhbXmlDocumentRepository == null) {
+            xhbXmlDocumentRepository = new XhbXmlDocumentRepository(entityManager);
+        }
+        return xhbXmlDocumentRepository;
+    }
+    
+    private XhbClobRepository getXhbClobRepository() {
+        if (xhbClobRepository == null) {
+            xhbClobRepository = new XhbClobRepository(entityManager);
+        }
+        return xhbClobRepository;
     }
 }

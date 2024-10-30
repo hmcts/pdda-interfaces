@@ -8,9 +8,9 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import com.pdda.hb.jpa.EntityManagerUtil;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
-
 /**
  * <p>
  * Title: Cath Controller Bean.
@@ -37,6 +37,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     private static final Logger LOG = LoggerFactory.getLogger(CathControllerBean.class);
     private static final String LOG_CALLED = " called";
     private static final String TWO_PARAMS = "{}{}";
+    
+    private CathHelper cathHelper;
 
     public CathControllerBean(EntityManager entityManager) {
         super(entityManager);
@@ -56,7 +58,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
-        // Look for any records in XHB_XML_DOCUMENT where DOCUMENT_TYPE='JSON' and STATUS='ND'
+        // Look for any records in XHB_XML_DOCUMENT where DOCUMENT_TYPE='JSN' and STATUS='ND'
+        getCathHelper().getDocuments();      
 
         // Send to CaTH
 
@@ -74,5 +77,17 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
 
         // Failed messages will be resent up to 3 times automatically
 
+    }
+    
+    /**
+     * Returns a reference to the cathHelper object.
+     * 
+     * @return cathHelper
+     */
+    private CathHelper getCathHelper() {
+        if (cathHelper == null) {
+            cathHelper = new CathHelper(EntityManagerUtil.getEntityManager(), getXhbXmlDocumentRepository());
+        }
+        return cathHelper;
     }
 }
