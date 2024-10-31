@@ -203,7 +203,8 @@ class SftpServiceTest {
         setupXhibitFiles();
         Optional<XhbPddaMessageDao> pddaMessageDao =
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
-        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName("PDDA_34_1_2024101409000.xml"))
+        EasyMock
+            .expect(mockPddaMessageHelper.findByCpDocumentName("PDDA_34_1_457_2024101409000.xml"))
             .andReturn(pddaMessageDao);
 
         EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.isA(XhbPddaMessageDao.class)))
@@ -340,7 +341,7 @@ class SftpServiceTest {
 
         // Test 2 - valid number of parts but invalid filename
         cpFilename = "NotWorkingFilenamePublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "NotWorkingFilenamePDDA_34_1_2024101409000.xml";
+        xhibitFilename = "NotWorkingFilenamePDDA_34_1_453_2024101409000.xml";
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertTrue(result.length() > 0, ALL_GOOD); // There is an error
         result = bcv.validateFilename(cpFilename, publicDisplayEvent);
@@ -349,7 +350,7 @@ class SftpServiceTest {
 
         // Test 3 - valid number of parts and valid filename and valid event
         cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_34_1_2024101409000.xml";
+        xhibitFilename = "PDDA_34_1_457_2024101409000.xml";
 
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertNull(result, ALL_GOOD);
@@ -366,10 +367,10 @@ class SftpServiceTest {
 
         // Test 5 - Event is an error
         cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_34_1_2024101409000.xml";
+        xhibitFilename = "PDDA_34_1_453_2024101409000.xml";
         HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(null, null);
         result = bxv.validateFilename(xhibitFilename, hearingStatusEvent);
-        assertNotNull(result, ALL_GOOD);
+        assertNull(result, ALL_GOOD);
         result = bcv.validateFilename(cpFilename, hearingStatusEvent);
         assertNull(result, ALL_GOOD);
     }
@@ -402,7 +403,7 @@ class SftpServiceTest {
                 PddaSerializationUtils.serializePublicEvent(hearingStatusEvent);
             String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
 
-            sftpServer.putFile("/directory/PDDA_34_1_2024101409000.xml", encoded,
+            sftpServer.putFile("/directory/PDDA_34_1_457_2024101409000.xml", encoded,
                 Charset.defaultCharset());
         } catch (IOException e) {
             LOG.error("Error putting file", e);
