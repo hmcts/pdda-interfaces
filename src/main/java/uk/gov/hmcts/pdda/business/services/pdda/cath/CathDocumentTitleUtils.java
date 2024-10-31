@@ -128,8 +128,8 @@ public final class CathDocumentTitleUtils {
         }
 
         // Part 2 - DRAFT/FINAL + Version
-        String version = cathDocumentTitleBuilder.getVersion() + " ";
-
+        String version = reformatVersion(cathDocumentTitleBuilder.getVersion());
+        
         // Part 3 - Publish Date Time
         String publishedDateTime = cathDocumentTitleBuilder.getPublishedDateTime() + " ";
 
@@ -141,5 +141,16 @@ public final class CathDocumentTitleUtils {
         documentTitle.append(version).append(publishedDateTime).append(cppStagingInboundId);
 
         return documentTitle.toString();
+    }
+    
+    private static String reformatVersion(String version) {
+        // This will take the version i.e DRAFT 1 and turn it into DRAFT v1
+        if (!"NOT VERSIONED".equals(version)) {
+            String[] splitVersion = version.split(" "); // i.e = 1
+            String versionNumber = "v" + splitVersion[1] + " "; // i.e = v1
+            return splitVersion[0] + " " + versionNumber;
+        }
+        // NOT VERSIONED will be just returned
+        return version;
     }
 }
