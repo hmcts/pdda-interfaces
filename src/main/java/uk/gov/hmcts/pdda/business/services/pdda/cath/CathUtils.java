@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -12,12 +13,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.formatting.TransformerUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
@@ -26,6 +29,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -33,7 +37,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.CouplingBetweenObjects",})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.CouplingBetweenObjects",
+    "PMD.ExcessiveImports"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -138,7 +143,7 @@ public final class CathUtils {
                     .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
                 xhbXmlDocumentRepository.save(xhbXmlDocumentDaoTransformedXml);
 
-                // Save a record in the cath_document_link table with the original and transformed xml id's
+                // Save to the cath_document_link table with the original and transformed xml id's
                 XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
                 xhbCathDocumentLinkDao
                     .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
@@ -155,7 +160,10 @@ public final class CathUtils {
 
     public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
         XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
+        XhbCourtelListRepository xhbCourtelListRepository,
+        XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
+        throws ParserConfigurationException, SAXException, IOException {
 
         // Fetch the xml_document record
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
@@ -178,8 +186,9 @@ public final class CathUtils {
                 XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
                 xhbXmlDocumentDaoJson
                     .setDateCreated(xhbXmlDocumentDaoTransformedXml.get().getDateCreated());
-                // TODO Check Doc Type and generate Document Title
-                xhbXmlDocumentDaoJson.setDocumentTitle("TO BE COMPLETED");
+                xhbXmlDocumentDaoJson.setDocumentTitle(CathDocumentTitleUtils.generateDocumentTitle(
+                    xhbCathDocumentLinkDao, xhbCourtelListRepository,
+                    xhbCppStagingInboundRepository, xhbXmlDocumentRepository, xhbClobRepository));
                 xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
                 xhbXmlDocumentDaoJson.setStatus("ND");
                 xhbXmlDocumentDaoJson.setDocumentType("JSN");

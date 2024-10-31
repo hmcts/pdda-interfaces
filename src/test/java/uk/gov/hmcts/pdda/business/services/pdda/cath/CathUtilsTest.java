@@ -12,6 +12,7 @@ import org.mockito.quality.Strictness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
@@ -34,6 +36,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,8 +81,10 @@ class CathUtilsTest {
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @Mock
-
     private XhbCathDocumentLinkRepository mockXhbCathDocumentLinkRepository;
+
+    @Mock
+    private XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository;
 
     @BeforeEach
     public void setup() {
@@ -138,7 +143,8 @@ class CathUtilsTest {
     }
 
     @Test
-    void testTransformAndGenerateListJsonFromString() throws TransformerException {
+    void testTransformAndGenerateListJsonFromString()
+        throws TransformerException, ParserConfigurationException, SAXException, IOException {
         // Setup using the example xml
         final String exampleXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
@@ -174,7 +180,8 @@ class CathUtilsTest {
 
         // Run the Generate Json process
         CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao, mockXhbCathDocumentLinkRepository,
-            mockXhbXmlDocumentRepository, mockXhbClobRepository);
+            mockXhbXmlDocumentRepository, mockXhbClobRepository, mockXhbCourtelListRepository,
+            mockXhbCppStagingInboundRepository);
 
         // Verify Json has been Generated
         assertNotNull(result, NOTNULL);
