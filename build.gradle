@@ -246,7 +246,7 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:4.0.0'
     implementation group: 'io.rest-assured', name: 'rest-assured'
-	implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+	implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
 }
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
