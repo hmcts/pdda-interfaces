@@ -66,7 +66,7 @@ public final class CathDocumentTitleUtils {
         return null;
     }
 
-    private static CathDocumentTitleBuilder generateCathDocumentTitleBuilderFromClob(
+    public static CathDocumentTitleBuilder generateCathDocumentTitleBuilderFromClob(
         XhbClobDao xhbClobDao) throws ParserConfigurationException, SAXException, IOException {
 
         // Create a Document Builder to get the clob data
@@ -85,10 +85,10 @@ public final class CathDocumentTitleUtils {
             Node node = listHeaderChildNodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE
                 && Objects.equals("cs:StartDate", node.getNodeName())) {
-                cathDocumentTitleBuilder.setFromDate(node.getTextContent());
+                cathDocumentTitleBuilder.setStartDate(node.getTextContent());
             } else if (node.getNodeType() == Node.ELEMENT_NODE
                 && Objects.equals("cs:EndDate", node.getNodeName())) {
-                cathDocumentTitleBuilder.setToDate(node.getTextContent());
+                cathDocumentTitleBuilder.setEndDate(node.getTextContent());
             } else if (node.getNodeType() == Node.ELEMENT_NODE
                 && Objects.equals("cs:Version", node.getNodeName())) {
                 cathDocumentTitleBuilder.setVersion(node.getTextContent());
@@ -122,8 +122,8 @@ public final class CathDocumentTitleUtils {
 
         // Part 1.5 - From & To Date (Firm Lists and Warned Lists Only)
         if ("Firm List ".equals(listType) || "Warned List ".equals(listType)) {
-            String fromAndToDate = "from " + cathDocumentTitleBuilder.getFromDate() + " to "
-                + cathDocumentTitleBuilder.getToDate() + " ";
+            String fromAndToDate = "from " + cathDocumentTitleBuilder.getStartDate() + " to "
+                + cathDocumentTitleBuilder.getEndDate() + " ";
             documentTitle.append(fromAndToDate);
         }
 

@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -184,8 +185,9 @@ public final class CathUtils {
 
                 // Save the json record to the xml_document table
                 XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
-                xhbXmlDocumentDaoJson
-                    .setDateCreated(xhbXmlDocumentDaoTransformedXml.get().getDateCreated());
+                xhbXmlDocumentDaoJson.setDateCreated(LocalDate.parse(CathDocumentTitleUtils
+                    .generateCathDocumentTitleBuilderFromClob(xhbClobDaoTransformedXml.get())
+                    .getStartDate()).atStartOfDay());
                 xhbXmlDocumentDaoJson.setDocumentTitle(CathDocumentTitleUtils.generateDocumentTitle(
                     xhbCathDocumentLinkDao, xhbCourtelListRepository,
                     xhbCppStagingInboundRepository, xhbXmlDocumentRepository, xhbClobRepository));

@@ -2,25 +2,25 @@ package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
 public final class CathDocumentTitleBuilder {
 
-    private String fromDate;
-    private String toDate;
+    private String startDate;
+    private String endDate;
     private String version;
     private String publishedDateTime;
     
-    public String getFromDate() {
-        return fromDate;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setFromDate(String fromDate) {
-        this.fromDate = fromDate;
+    public void setStartDate(String fromDate) {
+        this.startDate = fromDate;
     }
 
-    public String getToDate() {
-        return toDate;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setToDate(String toDate) {
-        this.toDate = toDate;
+    public void setEndDate(String toDate) {
+        this.endDate = toDate;
     }
 
     public String getVersion() {
