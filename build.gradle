@@ -292,7 +292,7 @@ tasks.register('functional', Test) {
   schemas = ['pdda']
   locations = ["database", "database/data", "database/packages"]
   // change to false to allow flyway clean to be run
-  cleanDisabled = true
+  cleanDisabled = false
   //outOfOrder = true
   //validateOnMigrate = false
   //ignoreMigrationPatterns = ['*:ignored']
@@ -314,4 +314,4 @@ tasks.register('migratePostgresDatabase', org.flywaydb.gradle.task.FlywayMigrate
 }
 
 // set flyway cleanDisabled to true above and uncomment if we require a fresh migration from scratch across all DBs
-migratePostgresDatabase.dependsOn cleanPostgresDatabase
+// migratePostgresDatabase.dependsOn cleanPostgresDatabase
