@@ -15,6 +15,7 @@ import org.springframework.core.env.Environment;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -22,6 +23,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
@@ -153,6 +155,7 @@ class CathUtilsTest {
         XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
         xhbCathDocumentLinkDao.setCathXmlId(1);
         xhbCathDocumentLinkDao.setCathDocumentLinkId(1);
+        xhbCathDocumentLinkDao.setOrigCourtelListDocId(1);
 
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
@@ -161,6 +164,9 @@ class CathUtilsTest {
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
         xhbXmlDocumentDao.get().setXmlDocumentClobId(1L);
+        xhbXmlDocumentDao.get().setDocumentType("FL");
+        Optional<XhbCppStagingInboundDao> xhbCppStagingInboundDao =
+            Optional.of(DummyPdNotifierUtil.getXhbCppStagingInboundDao());
 
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
@@ -172,6 +178,10 @@ class CathUtilsTest {
             .thenReturn(xhbXmlDocumentDao);
         Mockito.when(mockXhbCathDocumentLinkRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCathDocumentLinkDao));
+        Mockito.when(mockXhbCourtelListRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(xhbCourtelListDao);
+        Mockito.when(mockXhbCppStagingInboundRepository.findByClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbCppStagingInboundDao);
 
         // Run the Schema Transform
         XhbCathDocumentLinkDao result = CathUtils.transformXmlUsingSchema(1L,
