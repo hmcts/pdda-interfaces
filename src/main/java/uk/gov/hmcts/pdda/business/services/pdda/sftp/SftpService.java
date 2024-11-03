@@ -253,15 +253,24 @@ public class SftpService extends XhibitPddaHelper {
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
             if (pddaMessageDao.isPresent()) {
                 LOG.debug("Filename {}{}", filename, " already processed");
+
+                // Now delete this file
+                getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
+                    config.getActiveRemoteFolder(), filename);
                 return;
             }
 
             // Get the event (if from XHIBIT and it is not a list. CP will be null)
             boolean isList = true;
+            String listType = EMPTY_STRING;
             PublicDisplayEvent event = null;
             if (filename.startsWith(PDDA_FILENAME_PREFIX) && !clobData.startsWith("<?xml")) {
                 isList = false;
                 event = validation.getPublicDisplayEvent(filename, clobData);
+            } else {
+                // What type of list is this?
+                LOG.debug("Getting the list type.");
+                listType = getListType(clobData);
             }
 
             // Validate the filename
@@ -277,7 +286,7 @@ public class SftpService extends XhibitPddaHelper {
             Integer courtId = validation.getCourtId(filename, event);
 
             // Write the pddaMessage
-            createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
+            createBaisMessage(courtId, messageType, filename, clobData, errorMessage, listType);
 
             getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
                 config.getActiveRemoteFolder(), filename);
@@ -301,7 +310,7 @@ public class SftpService extends XhibitPddaHelper {
      * @throws NotFoundException The NotFoundException
      */
     private void createBaisMessage(final Integer courtId, final String messageType,
-        final String filename, final String clobData, String errorMessage)
+        final String filename, final String clobData, String errorMessage, String listType)
         throws NotFoundException {
 
         methodName = "createBaisMessage(" + filename + ")";
@@ -319,13 +328,60 @@ public class SftpService extends XhibitPddaHelper {
             throw new NotFoundException("Message Type");
         }
 
+        // For lists only, the filename will need to be updated to ensure lists can
+        // be picked up in XHB_PDDA_MESSAGE
+        String updatedFilename = filename;
+        if (listType != null && !listType.isEmpty()) {
+            updatedFilename = getUpdatedFilename(filename, listType);
+        }
+
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
         // Call createMessage
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
-            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, filename, NO,
-            errorMessage);
+            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
+            NO, errorMessage);
+    }
+
+
+    /**
+     * Applies to lists sent from XHIBIT, update the filename as follows: - Append the text
+     * "list_filename = " to the filename - Further append what would be the name of the file were
+     * it originating from CPP.
+     * 
+     * @param filename The orignal filename
+     * @return The updated filename
+     */
+    protected String getUpdatedFilename(String filename, String listType) {
+        String cppFilename = filename + " list_filename = " + listType;
+
+        // We want to retain the last 18 chars of original filename
+        int startingPosition = filename.length() - 18;
+
+        cppFilename =
+            cppFilename + "_" + filename.substring(startingPosition, filename.length()) + ".xml";
+        return cppFilename;
+    }
+
+
+    /**
+     * We know this is a list so determine if it is a daily, firm or warned list.
+     * 
+     * @param clobData The CLOB data
+     * @return The list type
+     */
+    protected String getListType(String clobData) {
+        if (clobData.contains("<cs:DailyList")) {
+            return "DailyList";
+        } else if (clobData.contains("<cs:FirmList")) {
+            return "FirmList";
+        } else if (clobData.contains("<cs:WarnedList")) {
+            return "WarnedList";
+        } else {
+            LOG.debug("Unknown list type");
+            return "Unknown";
+        }
     }
 
 

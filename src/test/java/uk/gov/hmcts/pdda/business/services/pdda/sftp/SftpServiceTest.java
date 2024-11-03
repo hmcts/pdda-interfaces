@@ -84,6 +84,11 @@ class SftpServiceTest {
     private static final String TEST_SFTP_DIRECTORY = "/directory/";
     private static final String COURT1 = "Court1";
 
+    private static final String DAILY_LIST = "DailyList";
+    private static final String FIRM_LIST = "FirmList";
+    private static final String WARNED_LIST = "WarnedList";
+    private static final String UNKNOWN = "Unknown";
+
 
     @Mock
     private EntityManager mockEntityManager;
@@ -373,6 +378,43 @@ class SftpServiceTest {
         assertNull(result, ALL_GOOD);
         result = bcv.validateFilename(cpFilename, hearingStatusEvent);
         assertNull(result, ALL_GOOD);
+    }
+
+    @Test
+    void testGetUpdatedFilename() {
+        // Setup
+        String filename = "PDDA_34_1_453_2024101409000";
+        String listType = "DailyList";
+        String result = classUnderTest.getUpdatedFilename(filename, listType);
+        assertTrue(
+            result.equals(
+                "PDDA_34_1_453_2024101409000 list_filename = DailyList_453_2024101409000.xml"),
+            ALL_GOOD);
+    }
+
+
+    @Test
+    void testGetListType() {
+        // Setup
+        String clobData1 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:DailyList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        String result = classUnderTest.getListType(clobData1);
+        assertTrue(DAILY_LIST.equals(result), ALL_GOOD);
+
+        String clobData2 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:FirmList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData2);
+        assertTrue(FIRM_LIST.equals(result), ALL_GOOD);
+
+        String clobData3 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:WarnedList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData3);
+        assertTrue(WARNED_LIST.equals(result), ALL_GOOD);
+
+        String clobData4 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:AnotherList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData4);
+        assertTrue(UNKNOWN.equals(result), ALL_GOOD);
     }
 
 
