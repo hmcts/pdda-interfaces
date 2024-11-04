@@ -81,7 +81,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
             if (documentName.length() == 0) {
                 // This is a public display event so will be processed separately
-                handlePublicDisplayEvent(dao);
+                handlePublicDisplayEvent();
             } else {
                 // Now add the data into the XHB_CPP_STAGING_INBOUND table
 
@@ -120,12 +120,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         }
     }
 
-    private void handlePublicDisplayEvent(XhbPddaMessageDao dao) {
+    private void handlePublicDisplayEvent() {
         LOG.debug("handlePublicDisplayEvent");
-        if (dao != null) {
-            LOG.debug("handlePublicDisplayEvent");
-        }
-
     }
 
     /**
