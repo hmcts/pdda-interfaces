@@ -907,7 +907,7 @@ CREATE TABLE xhb_pdda_message (
 	pdda_message_data_id bigint,
 	pdda_batch_id integer,
 	time_sent timestamp,
-  cp_document_name varchar(50),
+  	cp_document_name varchar(100),
 	cp_document_status varchar(8),
 	cp_response_generated varchar(1),
 	cpp_staging_inbound_id integer,

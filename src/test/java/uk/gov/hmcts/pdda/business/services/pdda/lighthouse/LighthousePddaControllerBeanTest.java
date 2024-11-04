@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -34,6 +35,8 @@ class LighthousePddaControllerBeanTest {
     private static final String MESSAGE_STATUS_INVALID = "INV";
     private static final String UNDERSCORE = "_";
     private static final Integer PART_NO = 3;
+
+    private static final String DAILY_LIST_EXAMPLE = "DailyList_453_20220811235559.xml";
 
     @Mock
     private XhbPddaMessageRepository mockXhbPddaMessageRepository;
@@ -95,6 +98,47 @@ class LighthousePddaControllerBeanTest {
                 classUnderTest.getEntityManager(), NOT_INSTANCE);
     }
 
+    @Test
+    void testGetDocumentNameToProcess() {
+
+        String documentName1 = DAILY_LIST_EXAMPLE;
+        String result = classUnderTest.getDocumentNameToProcess(documentName1);
+        assertEquals(DAILY_LIST_EXAMPLE, result, SAME);
+
+        String documentName2 =
+            "PDDA_34_1_453_2024101409000 list_filename = " + DAILY_LIST_EXAMPLE;
+        result = classUnderTest.getDocumentNameToProcess(documentName2);
+        assertEquals(DAILY_LIST_EXAMPLE, result, SAME);
+
+        String documentName3 =
+            "PDDA_34_1_453_2024101409000 list_filename= " + DAILY_LIST_EXAMPLE;
+        result = classUnderTest.getDocumentNameToProcess(documentName3);
+        assertEquals("", result, SAME);
+
+        String documentName4 =
+            "PDDA_34_1_453_2024101409000 list_filenam = " + DAILY_LIST_EXAMPLE;
+        result = classUnderTest.getDocumentNameToProcess(documentName4);
+        assertEquals("", result, SAME);
+
+        String documentName5 =
+            "PDDA_34_1_453_2024101409000 list_filename = FirmList_453_20220811235559.xml";
+        result = classUnderTest.getDocumentNameToProcess(documentName5);
+        assertEquals("FirmList_453_20220811235559.xml", result, SAME);
+
+        String documentName6 =
+            "PDDA_34_1_453_2024101409000 list_filename = WarnedList_453_20220811235559.xml";
+        result = classUnderTest.getDocumentNameToProcess(documentName6);
+        assertEquals("WarnedList_453_20220811235559.xml", result, SAME);
+
+        String documentName7 = "PDDA_34_1_453_2024101409000";
+        result = classUnderTest.getDocumentNameToProcess(documentName7);
+        assertEquals("", result, SAME);
+
+        String documentName8 = "PDDA_34_1_453_2024101409000.xml";
+        result = classUnderTest.getDocumentNameToProcess(documentName8);
+        assertEquals("", result, SAME);
+    }
+
     private boolean testProcessFiles(String expectedSavedStatus) {
         // Add Captured Values
         Capture<XhbPddaMessageDao> xhbPddaMessageDaoCapture = EasyMock.newCapture();
@@ -147,7 +191,7 @@ class LighthousePddaControllerBeanTest {
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
         List<XhbPddaMessageDao> result = new ArrayList<>();
         String[] cpDocumentNames =
-            {"DailyList_453_20220811235559.xml", "WarnedList_111_20220810010433.xml",
+            {DAILY_LIST_EXAMPLE, "WarnedList_111_20220810010433.xml",
             "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
             "WebPage_122_20220804031423.xml", "Invalid_File.csv", "NotAFile_100_20220802030423.xml"};
         for (String cpDocumentName : cpDocumentNames) {

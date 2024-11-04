@@ -3,12 +3,14 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -81,9 +83,31 @@ public abstract class BaisValidation extends SftpValidation {
         }
     }
 
+    /**
+     * Given a 3 digit crest court id, return the court id.
+     * 
+     * @param crestCourtId crest court id
+     * @return court id
+     */
+    protected int getCourtIdFromCrestCourtId(String crestCourtId) {
+        int courtId = 0;
+        if (!EMPTY_STRING.equals(crestCourtId)) {
+            List<XhbCourtDao> courtDao = xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
+            if (courtDao.isEmpty()) {
+                LOG.debug("No court exists for crestCourtId {}", crestCourtId);
+            } else {
+                courtId = courtDao.get(0).getCourtId();
+            }
+        }
+        return courtId;
+    }
+
     public abstract boolean validateTitle(String filenamePart);
 
     public abstract String validateFilename(String filename, PublicDisplayEvent event);
+
+    public abstract String validateFilename(String filename, PublicDisplayEvent event,
+        boolean isList);
 
     public abstract Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper pddaMessageHelper,
         String filename);
