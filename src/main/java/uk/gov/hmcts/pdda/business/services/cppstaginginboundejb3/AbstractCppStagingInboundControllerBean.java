@@ -112,9 +112,15 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
 
         List<XhbConfigPropDao> configPropReturnList =
             getXhbConfigPropRepository().findByPropertyName("CPPX_Schema" + documentType);
+        
+        for (XhbConfigPropDao configPropReturn : configPropReturnList) {
+            LOG.debug("Config prop return: {} {} {}", configPropReturn.getConfigPropId(),
+                configPropReturn.getPropertyName(), configPropReturn.getPropertyValue());
+        }
 
         // No schema defined to validate against
         if (configPropReturnList.isEmpty()) {
+            LOG.debug("Config prop returned no schema");
             return EMPTY_STRING;
         }
         XhbConfigPropDao tempConfigProp = configPropReturnList.get(0);
