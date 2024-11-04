@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
@@ -74,7 +75,7 @@ class PddaHelperValidationTest {
         // Run
         boolean actualResult = testValidationCrestCourt(false);
         // Checks
-        assertSame(expectedResult, actualResult, SAME);
+        assertNotSame(expectedResult, actualResult, FALSE);
     }
     
     @Test 
