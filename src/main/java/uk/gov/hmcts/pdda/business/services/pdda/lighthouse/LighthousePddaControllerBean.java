@@ -74,27 +74,42 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         writeToLog("About to process file " + dao.getCpDocumentName());
 
         try {
-            // split up the filename into its 3 parts : type_courtCode_dateTime
-            String[] fileParts = dao.getCpDocumentName().split("_");
-            if (fileParts.length == FILE_PARTS) {
-                // Update the status to indicate it is being processed
-                updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
+            // First we need to do a further filter on XHIBIT data to:
+            // 1. not process public display events from XHIBIT
+            // 2. ensure lists from XHIBIT get processed
+            String documentName = getDocumentNameToProcess(dao.getCpDocumentName());
 
-                String strTimeLoaded = fileParts[2].replaceAll(".xml", "");
-                LocalDateTime timeLoaded = LocalDateTime.parse(strTimeLoaded.trim(), DATETIMEFORMAT);
-
-                // Insert XHB_CPP_STAGING_INBOUND row, returning PK
-                writeToLog("About to add " + dao.getPddaMessageDataId() + " to the cpp staging inbound table");
-                Integer stagingInboundId = insertStaging(dao.getCpDocumentName(), fileParts[1],
-                        getDocType(fileParts[0]), timeLoaded, dao.getPddaMessageDataId());
-                writeToLog("Successfully added  " + stagingInboundId + " to the cpp staging inbound table");
-
-                // Update XHB_PDDA_MESSAGE record to indicate success
-                updatePddaMessage(stagingInboundId, dao);
-
-                writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
+            if (documentName.length() == 0) {
+                // This is a public display event so will be processed separately
+                handlePublicDisplayEvent();
             } else {
-                LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
+                // Now add the data into the XHB_CPP_STAGING_INBOUND table
+
+                // split up the filename into its 3 parts : type_courtCode_dateTime
+                String[] fileParts = documentName.split("_");
+                if (fileParts.length == FILE_PARTS) {
+                    // Update the status to indicate it is being processed
+                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
+
+                    String strTimeLoaded = fileParts[2].replaceAll(".xml", "");
+                    LocalDateTime timeLoaded =
+                        LocalDateTime.parse(strTimeLoaded.trim(), DATETIMEFORMAT);
+
+                    // Insert XHB_CPP_STAGING_INBOUND row, returning PK
+                    writeToLog("About to add " + dao.getPddaMessageDataId()
+                        + " to the cpp staging inbound table");
+                    Integer stagingInboundId = insertStaging(documentName, fileParts[1],
+                        getDocType(fileParts[0]), timeLoaded, dao.getPddaMessageDataId());
+                    writeToLog("Successfully added  " + stagingInboundId
+                        + " to the cpp staging inbound table");
+
+                    // Update XHB_PDDA_MESSAGE record to indicate success
+                    updatePddaMessage(stagingInboundId, dao);
+
+                    writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
+                } else {
+                    LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
+                }
             }
         } catch (RuntimeException e) {
             LOG.error(
@@ -103,6 +118,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
             updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
         }
+    }
+
+    private void handlePublicDisplayEvent() {
+        LOG.debug("handlePublicDisplayEvent");
     }
 
     /**
@@ -194,6 +213,29 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         } else {
             return docType.name();
         }
+    }
+
+
+    /**
+     * Get the document name to process.
+     * 
+     * @param documentName document name
+     * @return the document name to process
+     */
+    protected String getDocumentNameToProcess(String documentName) {
+        writeToLog("METHOD ENTRY: getDocumentNameToProcess");
+        String tempDocumentName = documentName;
+        if (tempDocumentName.contains("PDDA_")) {
+            if (tempDocumentName.indexOf("list_filename = ") == -1) {
+                return ""; // This is a public display event so will be processed separately
+            } else {
+                // We only want the text after the first "list_filename = " in the document name
+                tempDocumentName =
+                    tempDocumentName.substring(tempDocumentName.indexOf("list_filename = ") + 16);
+                return tempDocumentName;
+            }
+        }
+        return tempDocumentName;
     }
 
 }
