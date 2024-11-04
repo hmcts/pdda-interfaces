@@ -81,7 +81,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
             if (documentName.length() == 0) {
                 // This is a public display event so will be processed separately
-                return;
+                handlePublicDisplayEvent(dao);
             } else {
                 // Now add the data into the XHB_CPP_STAGING_INBOUND table
 
@@ -118,6 +118,14 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
             updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
         }
+    }
+
+    private void handlePublicDisplayEvent(XhbPddaMessageDao dao) {
+        LOG.debug("handlePublicDisplayEvent");
+        if (dao != null) {
+            LOG.debug("handlePublicDisplayEvent");
+        }
+
     }
 
     /**

@@ -384,12 +384,11 @@ class SftpServiceTest {
     void testGetUpdatedFilename() {
         // Setup
         String filename = "PDDA_34_1_453_2024101409000";
+        String updatedFilename =
+            "PDDA_34_1_453_2024101409000 list_filename = DailyList_453_2024101409000.xml";
         String listType = "DailyList";
         String result = classUnderTest.getUpdatedFilename(filename, listType);
-        assertTrue(
-            result.equals(
-                "PDDA_34_1_453_2024101409000 list_filename = DailyList_453_2024101409000.xml"),
-            ALL_GOOD);
+        assertTrue(updatedFilename.equals(result), ALL_GOOD);
     }
 
 
