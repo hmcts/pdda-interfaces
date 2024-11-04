@@ -360,7 +360,7 @@ public class SftpService extends XhibitPddaHelper {
         int startingPosition = filename.length() - 18;
 
         cppFilename =
-            cppFilename + filename.substring(startingPosition, filename.length()) + ".xml";
+            cppFilename + "_" + filename.substring(startingPosition, filename.length()) + ".xml";
         return cppFilename;
     }
 
