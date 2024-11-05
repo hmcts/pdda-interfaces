@@ -267,6 +267,7 @@ public class SftpService extends XhibitPddaHelper {
             if (filename.startsWith(PDDA_FILENAME_PREFIX) && !clobData.startsWith("<?xml")) {
                 isList = false;
                 event = validation.getPublicDisplayEvent(filename, clobData);
+                sendMessage(event);
             } else {
                 // What type of list is this?
                 LOG.debug("Getting the list type.");
