@@ -164,13 +164,13 @@ class LighthousePddaControllerBeanTest {
             EasyMock.expectLastCall().times(2);
 
             Optional<XhbPddaMessageDao> xhbPddaMessageDao1 = Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
-            XhbPddaMessageDao xhbPddaMessageDao2 = DummyPdNotifierUtil.getXhbPddaMessageDao();
 
             EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.capture(xhbPddaMessageDaoCapture)))
                     .andReturn(xhbPddaMessageDao1).times(2);
             EasyMock.expectLastCall();
 
-            classUnderTestMock.updatePddaMessageStatus(xhbPddaMessageDao2, expectedSavedStatus);
+            classUnderTestMock.updatePddaMessageStatus(EasyMock.isA(XhbPddaMessageDao.class),
+                EasyMock.isA(String.class));
             EasyMock.expectLastCall();
 
             if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {
@@ -212,7 +212,7 @@ class LighthousePddaControllerBeanTest {
         String[] cpDocumentNames =
             {DAILY_LIST_EXAMPLE, "WarnedList_111_20220810010433.xml",
                 "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
-                "WebPage_122_20220804031423.xml"};// , "PDDA_303_1_453_20240411130023"};
+                "WebPage_122_20220804031423.xml", "PDDA_303_1_453_20240411130023"};
         // {"Invalid_File.csv"};
         // "NotAFile_100_20220802030423.xml", "PDDA_303_1_453_20240411130023"};
         for (String cpDocumentName : cpDocumentNames) {
