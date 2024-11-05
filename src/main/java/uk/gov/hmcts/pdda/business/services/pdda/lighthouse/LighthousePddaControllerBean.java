@@ -38,10 +38,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final Integer FILE_PARTS = 3;
-    private static final String NEW_STAGING_INBOUND_STATUS = "NP";
-    private static final String MESSAGE_STATUS_INPROGRESS = "IP";
-    private static final String MESSAGE_STATUS_PROCESSED = "VP";
-    private static final String MESSAGE_STATUS_INVALID = "INV";
+    private static final String NEW_STAGING_INBOUND_STATUS = "NP"; // Not (yet) Processed
+    private static final String MESSAGE_STATUS_INPROGRESS = "IP"; // In Progress
+    private static final String MESSAGE_STATUS_PROCESSED = "VP"; // Validated and Processed
+    private static final String MESSAGE_STATUS_INVALID = "INV"; // Invalid
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
 
     @Autowired
@@ -74,15 +74,20 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         writeToLog("About to process file " + dao.getCpDocumentName());
 
         try {
+            // First check the filename is valid
+            if (!isDocumentNameValid(dao.getCpDocumentName())) {
+                LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
+                // Change the status of the XHB_PDDA_MESSAGE record to invalid
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+                return;
+            }
+
             // First we need to do a further filter on XHIBIT data to:
             // 1. not process public display events from XHIBIT
             // 2. ensure lists from XHIBIT get processed
             String documentName = getDocumentNameToProcess(dao.getCpDocumentName());
 
-            if (documentName.length() == 0) {
-                // This is a public display event so will be processed separately
-                handlePublicDisplayEvent();
-            } else {
+            if (documentName.length() > 0) {
                 // Now add the data into the XHB_CPP_STAGING_INBOUND table
 
                 // split up the filename into its 3 parts : type_courtCode_dateTime
@@ -109,7 +114,13 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                     writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
                 } else {
                     LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
+                    // Change the status of the XHB_PDDA_MESSAGE record to invalid
+                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
                 }
+            } else {
+                // Otherwise this is a public display event so is processed separately
+                // All we need to do is to set the message as processed already
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSED);
             }
         } catch (RuntimeException e) {
             LOG.error(
@@ -118,10 +129,6 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
             updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
         }
-    }
-
-    private void handlePublicDisplayEvent() {
-        LOG.debug("handlePublicDisplayEvent");
     }
 
     /**
@@ -191,7 +198,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     /**
      * Updates the XHB_PDDA_MESSAGE record.
      */
-    private void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
+    void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
         LOG.debug("updatePddaMessageStatus");
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
         latest.setCpDocumentStatus(messageStatus);
@@ -217,7 +224,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
 
     /**
-     * Get the document name to process.
+     * Get the document name to process. If the document name is invalid then return an empty
+     * string.
      * 
      * @param documentName document name
      * @return the document name to process
@@ -225,6 +233,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     protected String getDocumentNameToProcess(String documentName) {
         writeToLog("METHOD ENTRY: getDocumentNameToProcess");
         String tempDocumentName = documentName;
+
         if (tempDocumentName.contains("PDDA_")) {
             if (tempDocumentName.indexOf("list_filename = ") == -1) {
                 return ""; // This is a public display event so will be processed separately
@@ -236,6 +245,23 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             }
         }
         return tempDocumentName;
+    }
+
+
+    /**
+     * Use a regular expression to check if the document name is valid.
+     * 
+     * @param documentName The document name to check
+     * @return true if the document name is valid
+     */
+    boolean isDocumentNameValid(String documentName) {
+        writeToLog("METHOD ENTRY: checkDocumentNameIsValid");
+
+        String regexPdda = "^PDDA_.*\\d{14}$";
+        String regexOther =
+            "^(DailyList_|FirmList_|WarnedList_|PublicDisplay_|WebPage_).+\\d{14}.xml$";
+
+        return documentName.matches(regexPdda) || documentName.matches(regexOther);
     }
 
 }
