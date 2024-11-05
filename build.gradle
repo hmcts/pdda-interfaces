@@ -219,7 +219,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.16'
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
     implementation 'org.yaml:snakeyaml:2.3'
-    implementation group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0-M2', {
+    implementation group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }

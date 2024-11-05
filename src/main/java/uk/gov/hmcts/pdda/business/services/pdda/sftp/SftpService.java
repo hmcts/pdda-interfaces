@@ -331,7 +331,7 @@ public class SftpService extends XhibitPddaHelper {
         // For lists only, the filename will need to be updated to ensure lists can
         // be picked up in XHB_PDDA_MESSAGE
         String updatedFilename = filename;
-        if (listType != null && !listType.isEmpty()) {
+        if (listType != null && !listType.isEmpty() && filename.startsWith(PDDA_FILENAME_PREFIX)) {
             updatedFilename = getUpdatedFilename(filename, listType);
         }
 
