@@ -96,6 +96,9 @@ public class FormattingServices extends FormattingServicesProcessing {
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
                 formattingValue.getFormattedDocumentBlobId());
         }
+        
+        // Add call to the cath Transform and JSON generation here
+        
     }
 
    
