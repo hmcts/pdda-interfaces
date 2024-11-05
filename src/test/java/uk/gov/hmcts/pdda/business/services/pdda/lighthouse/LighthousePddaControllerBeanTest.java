@@ -41,6 +41,8 @@ class LighthousePddaControllerBeanTest {
     private static final Integer PART_NO = 3;
 
     private static final String DAILY_LIST_EXAMPLE = "DailyList_453_20220811235559.xml";
+    private static final String INVALIDNAME_EXAMPLE = "NotAFile_100_20220802030423.xml";
+    private static final String INVALIDPARTS_EXAMPLE = "DailyList_453_2_20220811235559.xml";
 
 
     @Mock
@@ -155,7 +157,9 @@ class LighthousePddaControllerBeanTest {
             .andReturn(xhbPddaMessageDaoList);
         for (XhbPddaMessageDao xhbPddaMessageDao : xhbPddaMessageDaoList) {
             String[] fileParts = xhbPddaMessageDao.getCpDocumentName().split(UNDERSCORE);
-            if (fileParts.length == PART_NO) {
+            if (fileParts.length == PART_NO
+                && !INVALIDNAME_EXAMPLE.equals(xhbPddaMessageDao.getCpDocumentName())
+                && !INVALIDPARTS_EXAMPLE.equals(xhbPddaMessageDao.getCpDocumentName())) {
                 processMessage(xhbPddaMessageDao, xhbPddaMessageDaoCapture, expectedSavedStatus, 2);
             } else {
                 processMessage(xhbPddaMessageDao, xhbPddaMessageDaoCapture, expectedSavedStatus, 1);
@@ -225,9 +229,8 @@ class LighthousePddaControllerBeanTest {
         List<XhbPddaMessageDao> result = new ArrayList<>();
         String[] cpDocumentNames = {DAILY_LIST_EXAMPLE, "WarnedList_111_20220810010433.xml",
             "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
-            "PDDA_303_1_453_20240411130023", "WebPage_122_20220804031423.xml"};
-        // {"Invalid_File.csv"};
-        // "NotAFile_100_20220802030423.xml", "PDDA_303_1_453_20240411130023"};
+            INVALIDNAME_EXAMPLE, INVALIDPARTS_EXAMPLE, "PDDA_303_1_453_20240411130023",
+            "WebPage_122_20220804031423.xml"};
         for (String cpDocumentName : cpDocumentNames) {
             XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
             xhbPddaMessageDao.setCpDocumentName(cpDocumentName);
