@@ -28,12 +28,12 @@ class CathConnectionServiceBeanTest {
     void testCheckUrls() {
         String url = "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management";
         int expectedStatusCode = 401;
-        assertTrue(classUnderTest.checkUrl(url, expectedStatusCode),
+        assertTrue(classUnderTest.checkUrl(url, expectedStatusCode, true),
             "checkUrl should return 'true'");
 
         url = "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication";
         expectedStatusCode = 404;
-        assertTrue(classUnderTest.checkUrl(url, expectedStatusCode),
+        assertTrue(classUnderTest.checkUrl(url, expectedStatusCode, true),
             "checkUrl should return 'true'");
     }
 
@@ -54,7 +54,8 @@ class CathConnectionServiceBeanTest {
 
             EasyMock
             .expect(mockCathConnectionServiceBean.checkUrl(
-                "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management", 401))
+                    "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management", 401,
+                    true))
                 .andReturn(false);
             EasyMock.replay(mockCathConnectionServiceBean);
             classUnderTest.doTask();

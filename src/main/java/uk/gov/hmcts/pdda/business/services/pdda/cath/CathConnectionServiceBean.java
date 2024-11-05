@@ -64,11 +64,15 @@ public class CathConnectionServiceBean implements RemoteTask {
      * @return True if the response code matches the expected code, false
      */
     @SuppressWarnings("PMD.AvoidCatchingThrowable")
-    public boolean checkUrl(String url, int expectedStatusCode) {
+    public boolean checkUrl(String url, int expectedStatusCode, boolean useGet) {
         // May get an AssertionError if the status code is not as expected
         // and we want to catch that
         try {
-            given().when().get(url).then().statusCode(expectedStatusCode);
+            if (useGet) {
+                given().when().get(url).then().statusCode(expectedStatusCode);
+            } else {
+                given().when().post(url).then().statusCode(expectedStatusCode);
+            }
             return true;
         } catch (Throwable t) {
             LOG.error("Exception occurred while checking the URL: {}", t.getMessage());
@@ -86,7 +90,10 @@ public class CathConnectionServiceBean implements RemoteTask {
         for (Map.Entry<String, Integer> entry : urls.entrySet()) {
             String url = entry.getKey();
             int expectedStatusCode = entry.getValue();
-            if (checkUrl(url, expectedStatusCode)) {
+
+            // Get for health Url, Post for others
+            boolean useGet = CATH_HEALTH_ENDPOINT.equals(url);
+            if (checkUrl(url, expectedStatusCode, useGet)) {
                 LOG.info(LOG_OUTPUT_SERVICE_UP, url, expectedStatusCode);
             } else {
                 LOG.error(LOG_OUTPUT_SERVICE_DOWN, url, expectedStatusCode);

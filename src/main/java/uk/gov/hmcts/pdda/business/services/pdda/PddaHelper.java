@@ -23,6 +23,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfig;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisCpValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService.BaisXhibitValidation;
+import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
@@ -176,6 +177,13 @@ public class PddaHelper extends XhibitPddaHelper {
 
             // Write the pddaMessage
             createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
+
+            // If this is a PublicDisplayEvent from XHIBIT...
+            if (event != null) {
+                // Send the event to the EventStore for processing
+                PublicDisplayNotifier publicDisplayNotifier = new PublicDisplayNotifier();
+                publicDisplayNotifier.sendMessage(event);
+            }
 
             getPddaSftpHelper().sftpDeleteFile(config.getSession(), config.getActiveRemoteFolder(),
                 filename);

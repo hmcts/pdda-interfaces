@@ -19,17 +19,21 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class LighthousePddaControllerBeanTest {
 
     private static final String NOTNULL = "Result is Null";
-    private static final String TRUE = "Result is not True";
+    private static final String TRUE = "Result is True";
     private static final String SAME = "Result is not Same";
+    private static final String FALSE = "Result is False";
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String MESSAGE_STATUS_PROCESSED = "VP";
     private static final String MESSAGE_STATUS_INVALID = "INV";
@@ -37,6 +41,7 @@ class LighthousePddaControllerBeanTest {
     private static final Integer PART_NO = 3;
 
     private static final String DAILY_LIST_EXAMPLE = "DailyList_453_20220811235559.xml";
+
 
     @Mock
     private XhbPddaMessageRepository mockXhbPddaMessageRepository;
@@ -46,6 +51,9 @@ class LighthousePddaControllerBeanTest {
 
     @Mock
     private EntityManager mockEntityManager;
+
+    @Mock
+    private LighthousePddaControllerBean classUnderTestMock;
 
     @TestSubject
     private final LighthousePddaControllerBean classUnderTest = new LighthousePddaControllerBean(mockEntityManager);
@@ -156,10 +164,13 @@ class LighthousePddaControllerBeanTest {
             EasyMock.expectLastCall().times(2);
 
             Optional<XhbPddaMessageDao> xhbPddaMessageDao1 = Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
+            XhbPddaMessageDao xhbPddaMessageDao2 = DummyPdNotifierUtil.getXhbPddaMessageDao();
 
             EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.capture(xhbPddaMessageDaoCapture)))
                     .andReturn(xhbPddaMessageDao1).times(2);
+            EasyMock.expectLastCall();
 
+            classUnderTestMock.updatePddaMessageStatus(xhbPddaMessageDao2, expectedSavedStatus);
             EasyMock.expectLastCall();
 
             if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {
@@ -174,6 +185,7 @@ class LighthousePddaControllerBeanTest {
                         .andReturn(Optional.of(stagingInboundDao));
             }
         }
+        EasyMock.replay(classUnderTestMock);
         EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbPddaMessageRepository);
         EasyMock.replay(mockXhbCppStagingInboundRepository);
@@ -188,12 +200,21 @@ class LighthousePddaControllerBeanTest {
         return true;
     }
 
+    @Test
+    void testIsDocumentNameValid() {
+        assertTrue(classUnderTest.isDocumentNameValid(DAILY_LIST_EXAMPLE), TRUE);
+        assertFalse(classUnderTest.isDocumentNameValid("Invalid_File.csv"), FALSE);
+        assertFalse(classUnderTest.isDocumentNameValid("NotAFile_100_20220802030423.xml"), FALSE);
+    }
+
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
         List<XhbPddaMessageDao> result = new ArrayList<>();
         String[] cpDocumentNames =
             {DAILY_LIST_EXAMPLE, "WarnedList_111_20220810010433.xml",
-            "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
-            "WebPage_122_20220804031423.xml", "Invalid_File.csv", "NotAFile_100_20220802030423.xml"};
+                "FirmList_101_20220807010423.xml", "PublicDisplay_100_20220802030423.xml",
+                "WebPage_122_20220804031423.xml"};// , "PDDA_303_1_453_20240411130023"};
+        // {"Invalid_File.csv"};
+        // "NotAFile_100_20220802030423.xml", "PDDA_303_1_453_20240411130023"};
         for (String cpDocumentName : cpDocumentNames) {
             XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
             xhbPddaMessageDao.setCpDocumentName(cpDocumentName);
