@@ -5,17 +5,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.services.CsServices;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -52,15 +55,20 @@ public class FormattingServices extends FormattingServicesProcessing {
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
     private static final String NEWDOCUMENT = "ND";
     private static final String FORMATERROR = "FE";
-    
+
+    // Matching list types from CourtelHelper.VALID_LISTS
+    private static final Map<String, String> DOC_TYPES =
+        Map.of("DL", "DailyList_Schema.xslt", "DLP", "DailyList_Schema.xslt", "FL",
+            "FirmList_Schema.xslt", "WL", "WarnedList_Schema.xslt");
+
     public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper, BlobHelper blobHelper) {
         super(entityManager, blobHelper);
         this.courtelHelper = courtelHelper;
     }
-    
+
     /**
-     * This method is responsible for transforming the information from the reader using xslts dependant
-     * on the FormattingParameters and writes the result to Output stream.
+     * This method is responsible for transforming the information from the reader using xslts
+     * dependant on the FormattingParameters and writes the result to Output stream.
      * 
      * @param formattingValue FormattingValue
      * @throws FormattingException Exception
@@ -77,7 +85,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         try {
             // Get the xmlUtils type
             setXmlUtils(getXmlUtils(formattingValue.getDocumentType()));
- 
+
             if (IWP.equals(formattingValue.getDocumentType())) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
@@ -90,18 +98,45 @@ public class FormattingServices extends FormattingServicesProcessing {
         } catch (TransformerException | ParserConfigurationException | TransformerFactoryConfigurationError
             | SAXException | IOException e) {
             throw new FormattingException(TRANSFORMATION_ERROR, e);
-        } 
+        }
         
         if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
                 formattingValue.getFormattedDocumentBlobId());
+            transfromXmlAndGenerateJson(formattingValue);
         }
-        
-        // Add call to the cath Transform and JSON generation here
-        
     }
+    
+    private void transfromXmlAndGenerateJson(FormattingValue formattingValue) {
+        // Get the Path for the xslt schema to use
+        StringBuilder xsltSchemaPath = new StringBuilder();
+        xsltSchemaPath.append("xslt_schemas/");
 
-   
+        for (Map.Entry<String, String> entry : DOC_TYPES.entrySet()) {
+            if (formattingValue.getDocumentType().equals(entry.getKey())) {
+                xsltSchemaPath.append(entry.getValue());
+                try {
+                    // Transform the xml and return the cath_document_link record
+                    XhbCathDocumentLinkDao xhbCathDocumentLinkDao = CathUtils.transformXmlUsingSchema(
+                        formattingValue.getXmlDocumentClobId(), getXhbCourtelListRepository(),
+                        getXhbClobRepository(), getXhbXmlDocumentRepository(),
+                        getXhbCathDocumentLinkRepository(), xsltSchemaPath.toString());
+
+                    // Generate the json from the transformed xml
+                    CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao,
+                        getXhbCathDocumentLinkRepository(), getXhbXmlDocumentRepository(),
+                        getXhbClobRepository(), getXhbCourtelListRepository(),
+                        getXhbCppStagingInboundRepository());
+
+                } catch (ParserConfigurationException | SAXException | IOException
+                    | TransformerException e) {
+                    LOG.debug("Error Transforming and generating Json for document: ", e);
+                }
+                break;
+            }
+        }
+    }
+    
     /**
      * Get the next document for processing.
      * 

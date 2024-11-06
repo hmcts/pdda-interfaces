@@ -13,16 +13,21 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.xml.sax.ContentHandler;
+import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyServicesUtil;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.XmlServices;
 import uk.gov.hmcts.framework.services.XslServices;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformattingmerge.XhbCppFormattingMergeDao;
@@ -31,6 +36,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
@@ -52,6 +58,7 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -249,7 +256,7 @@ class FormattingServicesTest {
 
     @Mock
     private EntityManager mockEntityManager;
-
+    
     @Mock
     private TranslationBundles mockTranslationBundles;
 
@@ -267,6 +274,9 @@ class FormattingServicesTest {
 
     @Mock
     private Transformer mockTransformer;
+    
+    @Mock
+    private Templates mockTemplates;
 
     @Mock
     private ContentHandler mockContentHandler;
@@ -294,6 +304,12 @@ class FormattingServicesTest {
 
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock
+    private XhbCourtelListRepository mockXhbCourtelListRepository;
+    
+    @Mock
+    private XhbCathDocumentLinkRepository mockXhbCathDocumentLinkRepository;
 
     @Mock
     private CourtelHelper mockCourtelHelper;
@@ -336,6 +352,10 @@ class FormattingServicesTest {
             mockXhbCppFormattingMergeRepository);
         ReflectionTestUtils.setField(classUnderTest, "xhbXmlDocumentRepository",
             mockXhbXmlDocumentRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtelListRepository",
+            mockXhbCourtelListRepository);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCathDocumentLinkRepository",
+            mockXhbCathDocumentLinkRepository);
     }
 
     @AfterEach
@@ -411,10 +431,36 @@ class FormattingServicesTest {
         Mockito.when(mockCourtelHelper.isCourtelSendableDocument(Mockito.isA(String.class)))
             .thenReturn(true);
         mockCourtelHelper.writeToCourtel(Mockito.isA(Long.class), Mockito.isA(Long.class));
+        
+        transformXmlMocks(formattingValue, listType);
+        
         // Run
         return testProcessDocuments(FormattingServices.getXmlUtils(listType), formattingValue);
     }
 
+    void transformXmlMocks(FormattingValue formattingValue, String listType) {
+        XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
+        xhbCathDocumentLinkDao.setCathXmlId(1);
+        xhbCathDocumentLinkDao.setCathDocumentLinkId(1);
+        xhbCathDocumentLinkDao.setOrigCourtelListDocId(1);
+
+        Optional<XhbCourtelListDao> xhbCourtelListDao =
+            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
+        Optional<XhbClobDao> xhbClobDao = Optional
+            .of(DummyFormattingUtil.getXhbClobDao(1L, CPP_LIST));
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
+            Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
+        xhbXmlDocumentDao.get().setXmlDocumentClobId(1L);
+        xhbXmlDocumentDao.get().setDocumentType(listType);
+
+        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbCourtelListDao);
+        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+            .thenReturn(xhbClobDao);
+        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbXmlDocumentDao);
+    }
+    
     @Test
     void testProcessIwpDocument() throws IOException, TransformerConfigurationException {
         // Setup
@@ -481,6 +527,8 @@ class FormattingServicesTest {
         Mockito.when(CsServices.getXslServices()).thenReturn(mockXslServices);
         Mockito.when(CsServices.getXmlServices()).thenReturn(mockXmlServices);
         Mockito.when(TransformerFactory.newInstance()).thenReturn(mockTransformerFactory);
+        Mockito.when(mockTransformerFactory.newTemplates(Mockito.isA(StreamSource.class))).thenReturn(mockTemplates);
+        Mockito.when(mockTemplates.newTransformer()).thenReturn(mockTransformer);
         Mockito.when(mockTransformerFactory.newTransformer()).thenReturn(mockTransformer);
         Mockito
             .when(mockXslServices.getTransformer(Mockito.isA(Locale.class), Mockito.isA(Map.class)))
