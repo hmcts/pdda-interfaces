@@ -70,7 +70,7 @@ public final class CathDocumentTitleUtils {
         XhbClobDao xhbClobDao) throws ParserConfigurationException, SAXException, IOException {
 
         // Create a Document Builder to get the clob data
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         InputSource inputSource = new InputSource(new StringReader(xhbClobDao.getClobData()));
         Document document = documentBuilder.parse(inputSource);
