@@ -12,17 +12,24 @@ import org.mockito.quality.Strictness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
@@ -31,11 +38,11 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -55,14 +62,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.ExcessiveImports"})
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
 
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
-    private static final String TRUE = "Result is not True";
 
     @Mock
     private Environment mockEnvironment;
@@ -72,6 +78,15 @@ class CathUtilsTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+
+    @Mock
+    private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+
+    @Mock
+    private XhbCathDocumentLinkRepository mockXhbCathDocumentLinkRepository;
+
+    @Mock
+    private XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository;
 
     @BeforeEach
     public void setup() {
@@ -130,63 +145,56 @@ class CathUtilsTest {
     }
 
     @Test
-    void testTransformAndGenerateListJsonFromString() throws TransformerException {
+    void testTransformAndGenerateListJsonFromString()
+        throws TransformerException, ParserConfigurationException, SAXException, IOException {
         // Setup using the example xml
         final String exampleXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
         final String xsltSchemaPath = "xslt_schemas/Example.xslt";
-        final String outputXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Schema_Edit.xml";
-        final String outputJsonPath =
-            "src/main/resources/database/test-data/example_json_results/DailyList_999_200108141220_JSON.txt";
+
+        XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
+        xhbCathDocumentLinkDao.setCathXmlId(1);
+        xhbCathDocumentLinkDao.setCathDocumentLinkId(1);
+        xhbCathDocumentLinkDao.setOrigCourtelListDocId(1);
 
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
         Optional<XhbClobDao> xhbClobDao = Optional
             .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
+            Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
+        xhbXmlDocumentDao.get().setXmlDocumentClobId(1L);
+        xhbXmlDocumentDao.get().setDocumentType("FL");
+        Optional<XhbCppStagingInboundDao> xhbCppStagingInboundDao =
+            Optional.of(DummyPdNotifierUtil.getXhbCppStagingInboundDao());
 
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
+        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbXmlDocumentDao);
+        Mockito.when(mockXhbXmlDocumentRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(xhbXmlDocumentDao);
+        Mockito.when(mockXhbCathDocumentLinkRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbCathDocumentLinkDao));
+        Mockito.when(mockXhbCourtelListRepository.findById(Mockito.isA(Integer.class)))
+            .thenReturn(xhbCourtelListDao);
+        Mockito.when(mockXhbCppStagingInboundRepository.findByClobId(Mockito.isA(Long.class)))
+            .thenReturn(xhbCppStagingInboundDao);
 
         // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
-            xsltSchemaPath, outputXmlPath);
+        XhbCathDocumentLinkDao result = CathUtils.transformXmlUsingSchema(1L,
+            mockXhbCourtelListRepository, mockXhbClobRepository, mockXhbXmlDocumentRepository,
+            mockXhbCathDocumentLinkRepository, xsltSchemaPath);
 
         // Run the Generate Json process
-        CathUtils.fetchXmlAndGenerateJson(outputXmlPath, outputJsonPath);
+        CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao, mockXhbCathDocumentLinkRepository,
+            mockXhbXmlDocumentRepository, mockXhbClobRepository, mockXhbCourtelListRepository,
+            mockXhbCppStagingInboundRepository);
 
-        // Verify Json File has been Generated
-        File jsonResult = new File(outputJsonPath);
-        assertTrue(jsonResult.exists(), TRUE);
-    }
-
-    @Test
-    void testTransformXmlUsingSchemaFailedFileWrite() throws TransformerException {
-        // Setup with and invalid output Path
-        final String exampleXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        final String xsltSchemaPath = "xslt_schemas/Example.xslt";
-        final String outputXmlPath = "INVALID/Invalid.xml";
-
-        Optional<XhbCourtelListDao> xhbCourtelListDao =
-            Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
-        Optional<XhbClobDao> xhbClobDao = Optional
-            .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
-
-        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
-            .thenReturn(xhbCourtelListDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
-            .thenReturn(xhbClobDao);
-
-        boolean result = true;
-
-        // Run the Schema Transform
-        CathUtils.transformXmlUsingSchema(1L, mockXhbCourtelListRepository, mockXhbClobRepository,
-            xsltSchemaPath, outputXmlPath);
-        // Verify
-        assertTrue(result, NOTNULL);
+        // Verify Json has been Generated
+        assertNotNull(result, NOTNULL);
     }
 
     private String fetchExampleListClobData(String exampleXmlPath) {

@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerException;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
@@ -96,7 +97,8 @@ class CppInitialProcessingControllerBeanTest
                 .expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
                 .andReturn(xhbCourtDaoList);
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
-
+            mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
+            
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
 
@@ -412,6 +414,7 @@ class CppInitialProcessingControllerBeanTest
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
+        mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
 
         replayMocks();

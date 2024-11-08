@@ -13,7 +13,6 @@ import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
@@ -28,7 +27,6 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,6 +44,7 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String CP_CONNECTION_TYPE = "CP";
     protected static final String XHIBIT_CONNECTION_TYPE = "XHIBIT";
     protected static final String TEST_CONNECTION_TYPE = "TEST";
+    protected static final String PDDA_FILENAME_PREFIX = "PDDA";
 
     public static final String NEWLINE = "\n";
 
@@ -173,18 +172,18 @@ public class SftpService extends XhibitPddaHelper {
      * Retrieve events from BAIS.
      * 
      * @param config The SFTP configuration
-     * @param baisXhibitValidation The validation class
+     * @param baisValidation The validation class
      * @throws IOException The IOException
      */
-    void retrieveFromBais(SftpConfig config, BaisValidation baisXhibitValidation)
+    void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
         throws IOException {
 
         methodName = "retrieveFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
         try {
-            LOG.debug("retrieveFromBais({},{})", config, baisXhibitValidation);
-            Map<String, String> files = getBaisFileList(config, baisXhibitValidation);
+            LOG.debug("retrieveFromBais({},{})", config, baisValidation);
+            Map<String, String> files = getBaisFileList(config, baisValidation);
             LOG.debug("Total of {}{}", files.size(),
                 " files, before processing, in this transaction.");
             if (!files.isEmpty()) {
@@ -192,13 +191,13 @@ public class SftpService extends XhibitPddaHelper {
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     String filename = entry.getKey();
                     String clobData = entry.getValue();
-                    processBaisFile(config, baisXhibitValidation, filename, clobData);
+                    processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
         } finally {
             if (config.getSshjSftpClient() == null) {
                 // Check the contents of BAIS to verify all processed files are deleted
-                Map<String, String> files = getBaisFileList(config, baisXhibitValidation);
+                Map<String, String> files = getBaisFileList(config, baisValidation);
                 if (files.isEmpty()) {
                     LOG.debug("Contents of Bais is now empty");
                 } else {
@@ -254,14 +253,28 @@ public class SftpService extends XhibitPddaHelper {
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
             if (pddaMessageDao.isPresent()) {
                 LOG.debug("Filename {}{}", filename, " already processed");
+
+                // Now delete this file
+                getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
+                    config.getActiveRemoteFolder(), filename);
                 return;
             }
 
-            // Get the event (if from Xhibit. CP will be null)
-            PublicDisplayEvent event = validation.getPublicDisplayEvent(filename, clobData);
+            // Get the event (if from XHIBIT and it is not a list. CP will be null)
+            boolean isList = true;
+            String listType = EMPTY_STRING;
+            PublicDisplayEvent event = null;
+            if (filename.startsWith(PDDA_FILENAME_PREFIX) && !clobData.startsWith("<?xml")) {
+                isList = false;
+                event = validation.getPublicDisplayEvent(filename, clobData);
+            } else {
+                // What type of list is this?
+                LOG.debug("Getting the list type.");
+                listType = getListType(clobData);
+            }
 
             // Validate the filename
-            String errorMessage = validation.validateFilename(filename, event);
+            String errorMessage = validation.validateFilename(filename, event, isList);
 
             // Validate messageType
             String messageType = validation.getMessageType(filename, event);
@@ -273,7 +286,7 @@ public class SftpService extends XhibitPddaHelper {
             Integer courtId = validation.getCourtId(filename, event);
 
             // Write the pddaMessage
-            createBaisMessage(courtId, messageType, filename, clobData, errorMessage);
+            createBaisMessage(courtId, messageType, filename, clobData, errorMessage, listType);
 
             getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
                 config.getActiveRemoteFolder(), filename);
@@ -297,7 +310,7 @@ public class SftpService extends XhibitPddaHelper {
      * @throws NotFoundException The NotFoundException
      */
     private void createBaisMessage(final Integer courtId, final String messageType,
-        final String filename, final String clobData, String errorMessage)
+        final String filename, final String clobData, String errorMessage, String listType)
         throws NotFoundException {
 
         methodName = "createBaisMessage(" + filename + ")";
@@ -315,30 +328,91 @@ public class SftpService extends XhibitPddaHelper {
             throw new NotFoundException("Message Type");
         }
 
+        // For lists only, the filename will need to be updated to ensure lists can
+        // be picked up in XHB_PDDA_MESSAGE
+        String updatedFilename = filename;
+        if (listType != null && !listType.isEmpty() && filename.startsWith(PDDA_FILENAME_PREFIX)) {
+            updatedFilename = getUpdatedFilename(filename, listType);
+        }
+
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
         // Call createMessage
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
-            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, filename, NO,
-            errorMessage);
+            messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
+            NO, errorMessage);
+    }
+
+
+    /**
+     * Applies to lists sent from XHIBIT, update the filename as follows: - Append the text
+     * "list_filename = " to the filename - Further append what would be the name of the file were
+     * it originating from CPP.
+     * 
+     * @param filename The orignal filename
+     * @return The updated filename
+     */
+    protected String getUpdatedFilename(String filename, String listType) {
+        String cppFilename = filename + " list_filename = " + listType;
+
+        // We want to retain the last 18 chars of original filename
+        int startingPosition = filename.length() - 18;
+
+        cppFilename =
+            cppFilename + "_" + filename.substring(startingPosition, filename.length()) + ".xml";
+        return cppFilename;
+    }
+
+
+    /**
+     * We know this is a list so determine if it is a daily, firm or warned list.
+     * 
+     * @param clobData The CLOB data
+     * @return The list type
+     */
+    protected String getListType(String clobData) {
+        if (clobData.contains("<cs:DailyList")) {
+            return "DailyList";
+        } else if (clobData.contains("<cs:FirmList")) {
+            return "FirmList";
+        } else if (clobData.contains("<cs:WarnedList")) {
+            return "WarnedList";
+        } else {
+            LOG.debug("Unknown list type");
+            return "Unknown";
+        }
     }
 
 
     /**
      * A class to validate XHIBIT messages retrieved from BAIS.
+     * There should be 5 parts to a valid file from BAIS originating from XHIBIT. 1. PDDA 2. Batch
+     * id 3. Message number in this batch 4. Court ID (crestCourtId) 5. Date and time
+     * 
      */
     public static class BaisXhibitValidation extends BaisValidation {
 
         private static final String PDDA = "PDDA";
 
+        /**
+         * There should be 5 parts to a valid file from BAIS originating from XHIBIT. 1. PDDA 2.
+         * Batch id 3. Message number in this batch 4. Court ID (crestCourtId) 5. Date and time
+         * 
+         * @param courtRepository The court repository
+         */
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, 4);
+            super(courtRepository, false, 5);
+        }
+
+        @Override
+        public String validateFilename(String filename, PublicDisplayEvent event) {
+            return validateFilename(filename, event, false);
         }
 
         @Override
         @SuppressWarnings("PMD.InefficientStringBuffering")
-        public String validateFilename(String filename, PublicDisplayEvent event) {
+        public String validateFilename(String filename, PublicDisplayEvent event, boolean isList) {
             String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
             int expectedMaxErrorMessageSize = 150;
@@ -348,7 +422,7 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append(errorMessage + NEWLINE);
             }
 
-            // Check the file has the right overall format of 4 parts
+            // Check the file has the right overall format of 5 parts
             if (!isValidNoOfParts(filename)) {
                 errorMessages.append("Invalid filename - No. Of Parts\n");
             }
@@ -357,13 +431,16 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append("Invalid filename - Title\n");
             }
 
-            // Check we have the event from the file contents, and if not null check the crest court
-            // Id
-            if (event == null) {
-                errorMessages.append("Invalid filename - Invalid event in filecontents\n");
+            // Check we have the event from the file contents, and if not null check the
+            // crestcourtId
+            // Only applies to lists
+            if (!isList) {
+                if (event == null) {
+                    errorMessages.append("Invalid filename - Invalid event in filecontents\n");
 
-            } else if (getCourtId(filename, event) == null) {
-                errorMessages.append("Invalid filename - CrestCourtId\n");
+                } else if (getCourtId(filename, event) == null) {
+                    errorMessages.append("Invalid filename - CrestCourtId\n");
+                }
             }
 
             if (errorMessages.length() > 0) {
@@ -397,6 +474,14 @@ public class SftpService extends XhibitPddaHelper {
         public Integer getCourtId(String filename, PublicDisplayEvent event) {
             if (event != null && event.getCourtId() != null) {
                 return event.getCourtId();
+            } else { // must be a list
+                try {
+                    String crestCourtId = getFilenamePart(filename, 3);
+                    LOG.debug("getCourtId({},{})", filename, event);
+                    return getCourtIdFromCrestCourtId(crestCourtId);
+                } catch (NumberFormatException e) {
+                    LOG.debug("Invalid crestCourtId in filename {}", filename);
+                }
             }
             return null;
         }
@@ -422,6 +507,11 @@ public class SftpService extends XhibitPddaHelper {
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
             super(courtRespository, false, 3);
+        }
+
+        @Override
+        public String validateFilename(String filename, PublicDisplayEvent event, boolean isList) {
+            return validateFilename(filename, event);
         }
 
         @Override
@@ -493,18 +583,8 @@ public class SftpService extends XhibitPddaHelper {
         @Override
         public Integer getCourtId(String filename, PublicDisplayEvent event) {
             LOG.debug("getCourtId({},{})", filename, event);
-            Integer courtId = null;
             String crestCourtId = getCrestCourtId(filename);
-            if (!EMPTY_STRING.equals(crestCourtId)) {
-                List<XhbCourtDao> courtDao =
-                    xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
-                if (courtDao.isEmpty()) {
-                    LOG.debug("No court exists for crestCourtId {}", crestCourtId);
-                } else {
-                    courtId = courtDao.get(0).getCourtId();
-                }
-            }
-            return courtId;
+            return getCourtIdFromCrestCourtId(crestCourtId);
         }
 
         @Override

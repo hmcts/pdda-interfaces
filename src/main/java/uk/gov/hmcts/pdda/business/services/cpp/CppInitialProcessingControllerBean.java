@@ -20,6 +20,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListHelper;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppDocumentTypes;
@@ -121,8 +122,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
             // Set the status to IN_PROCESS so that no other incoming process can pick up
             // this document
-            Optional<XhbCppStagingInboundDao> savedXcsi =
-                getCppStagingInboundControllerBean().updateStatusInProcess(updatedXcsi, BATCH_USERNAME);
+            Optional<XhbCppStagingInboundDao> savedXcsi = getCppStagingInboundControllerBean()
+                .updateStatusInProcess(updatedXcsi, BATCH_USERNAME);
             if (savedXcsi.isPresent()) {
                 updatedXcsi = savedXcsi.get();
             }
@@ -176,7 +177,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 + "Turn debugging on for more info. Error: " + cppsie.getMessage());
         }
 
-        if (docs != null) { 
+        if (docs != null) {
             for (XhbCppStagingInboundDao doc : docs) {
                 handleStuckDocuments(doc);
             }
@@ -201,10 +202,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.debug(methodName + ENTERED);
         }
 
-        String clobXml = getCppStagingInboundControllerBean().getClobXmlAsString(thisDoc.getClobId());
+        String clobXml =
+            getCppStagingInboundControllerBean().getClobXmlAsString(thisDoc.getClobId());
         if (clobXml == null) {
-            LOG.error(
-                "There was a problem obtaining the clob data: clob_id={}", thisDoc.getClobId());
+            LOG.error("There was a problem obtaining the clob data: clob_id={}",
+                thisDoc.getClobId());
             return false;
         }
 
@@ -365,8 +367,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 if (CppDocumentTypes.WP == CppDocumentTypes.fromString(documentType)) {
                     documentType = IWP;
                 }
-                XhbCppFormattingDao docToUpdate = getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
-                    documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
+                XhbCppFormattingDao docToUpdate =
+                    getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
+                        documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
 
                 if (docToUpdate != null) {
                     // Update - directly rather through maintainer as that
@@ -397,12 +400,12 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     // Also need to add 2 new records to XHB_FORMATTING
                     // Create the "en" version
                     XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc.getTimeLoaded(), documentType, "en");
+                        thisDoc, documentType, "en");
                     getXhbFormattingRepository().save(xfbv);
-                    
+
                     // Create the "cy" version
                     xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc.getTimeLoaded(), documentType, "cy");
+                        thisDoc, documentType, "cy");
                     getXhbFormattingRepository().save(xfbv);
                 }
 
@@ -458,20 +461,25 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 docToCreate.setCourtCode(Integer.valueOf(thisDoc.getCourtCode()));
                 docToCreate.setStatus(CppListHelper.NOT_PROCESSED);
                 docToCreate.setTimeLoaded(thisDoc.getTimeLoaded());
-                docToCreate.setListType(listType); 
+                docToCreate.setListType(listType);
                 docToCreate.setListStartDate(listStartDate);
                 docToCreate.setListEndDate(listEndDate);
                 docToCreate.setListClobId(thisDoc.getClobId());
                 docToCreate.setObsInd("N");
                 getXhbCppListRepository().save(docToCreate);
-                
+
                 // Create the xhbFormatting record
                 List<XhbCourtDao> xhbCourtDaoList =
                     getXhbCourtRepository().findByCrestCourtIdValue(thisDoc.getCourtCode());
                 Integer courtId = xhbCourtDaoList.get(0).getCourtId();
                 XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                    thisDoc.getTimeLoaded(), documentType, "en");
+                    thisDoc, documentType, "en");
                 getXhbFormattingRepository().save(xfbv);
+
+                // Create the xhbXmlDocument record
+                XhbXmlDocumentDao xhbXmlDocumentDao =
+                    CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, docToCreate, thisDoc);
+                getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
             }
 
             // If all successful then we need to set record in XHB_STAGING_INBOUND to

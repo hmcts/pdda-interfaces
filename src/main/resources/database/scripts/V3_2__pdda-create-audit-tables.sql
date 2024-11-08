@@ -18,4 +18,3 @@ CREATE TABLE aud_courtel_list (
 	insert_event varchar(1) NOT NULL
 );
 ALTER TABLE aud_courtel_list ADD CONSTRAINT aud_courtel_list_pk PRIMARY KEY (courtel_list_id, last_update_date);
-

@@ -84,6 +84,11 @@ class SftpServiceTest {
     private static final String TEST_SFTP_DIRECTORY = "/directory/";
     private static final String COURT1 = "Court1";
 
+    private static final String DAILY_LIST = "DailyList";
+    private static final String FIRM_LIST = "FirmList";
+    private static final String WARNED_LIST = "WarnedList";
+    private static final String UNKNOWN = "Unknown";
+
 
     @Mock
     private EntityManager mockEntityManager;
@@ -203,7 +208,8 @@ class SftpServiceTest {
         setupXhibitFiles();
         Optional<XhbPddaMessageDao> pddaMessageDao =
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
-        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName("PDDA_34_1_2024101409000.xml"))
+        EasyMock
+            .expect(mockPddaMessageHelper.findByCpDocumentName("PDDA_34_1_457_2024101409000.xml"))
             .andReturn(pddaMessageDao);
 
         EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.isA(XhbPddaMessageDao.class)))
@@ -340,7 +346,7 @@ class SftpServiceTest {
 
         // Test 2 - valid number of parts but invalid filename
         cpFilename = "NotWorkingFilenamePublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "NotWorkingFilenamePDDA_34_1_2024101409000.xml";
+        xhibitFilename = "NotWorkingFilenamePDDA_34_1_453_2024101409000.xml";
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertTrue(result.length() > 0, ALL_GOOD); // There is an error
         result = bcv.validateFilename(cpFilename, publicDisplayEvent);
@@ -349,7 +355,7 @@ class SftpServiceTest {
 
         // Test 3 - valid number of parts and valid filename and valid event
         cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_34_1_2024101409000.xml";
+        xhibitFilename = "PDDA_34_1_457_2024101409000.xml";
 
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertNull(result, ALL_GOOD);
@@ -366,12 +372,48 @@ class SftpServiceTest {
 
         // Test 5 - Event is an error
         cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_34_1_2024101409000.xml";
+        xhibitFilename = "PDDA_34_1_453_2024101409000.xml";
         HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(null, null);
         result = bxv.validateFilename(xhibitFilename, hearingStatusEvent);
-        assertNotNull(result, ALL_GOOD);
+        assertNull(result, ALL_GOOD);
         result = bcv.validateFilename(cpFilename, hearingStatusEvent);
         assertNull(result, ALL_GOOD);
+    }
+
+    @Test
+    void testGetUpdatedFilename() {
+        // Setup
+        String filename = "PDDA_34_1_453_20241014090000";
+        String updatedFilename =
+            "PDDA_34_1_453_20241014090000 list_filename = DailyList_453_20241014090000.xml";
+        String listType = "DailyList";
+        String result = classUnderTest.getUpdatedFilename(filename, listType);
+        assertTrue(updatedFilename.equals(result), ALL_GOOD);
+    }
+
+
+    @Test
+    void testGetListType() {
+        // Setup
+        String clobData1 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:DailyList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        String result = classUnderTest.getListType(clobData1);
+        assertTrue(DAILY_LIST.equals(result), ALL_GOOD);
+
+        String clobData2 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:FirmList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData2);
+        assertTrue(FIRM_LIST.equals(result), ALL_GOOD);
+
+        String clobData3 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:WarnedList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData3);
+        assertTrue(WARNED_LIST.equals(result), ALL_GOOD);
+
+        String clobData4 =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><cs:AnotherList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"";
+        result = classUnderTest.getListType(clobData4);
+        assertTrue(UNKNOWN.equals(result), ALL_GOOD);
     }
 
 
@@ -402,7 +444,7 @@ class SftpServiceTest {
                 PddaSerializationUtils.serializePublicEvent(hearingStatusEvent);
             String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
 
-            sftpServer.putFile("/directory/PDDA_34_1_2024101409000.xml", encoded,
+            sftpServer.putFile("/directory/PDDA_34_1_457_2024101409000.xml", encoded,
                 Charset.defaultCharset());
         } catch (IOException e) {
             LOG.error("Error putting file", e);

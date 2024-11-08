@@ -125,4 +125,3 @@ $BODY$
 CREATE TRIGGER xhb_courtel_list_bur_tr
 	BEFORE UPDATE OR DELETE ON xhb_courtel_list FOR EACH ROW
 	EXECUTE PROCEDURE trigger_fct_xhb_courtel_list_bur_tr();
-    
