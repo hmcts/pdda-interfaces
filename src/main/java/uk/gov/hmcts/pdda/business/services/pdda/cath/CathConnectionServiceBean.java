@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 
 import java.rmi.RemoteException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -36,12 +37,12 @@ public class CathConnectionServiceBean implements RemoteTask {
 
     protected EntityManager entityManager;
 
-    Map<String, Integer> urls = new ConcurrentHashMap<>() {
+    List<UrlPair> urls = new ArrayList<>() {
         private static final long serialVersionUID = -8822781970166180320L;
         {
-            put(CATH_HEALTH_ENDPOINT, STATUS_CODE_401);
-            put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404);
-            put(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401);
+            add(new UrlPair(CATH_HEALTH_ENDPOINT, STATUS_CODE_401));
+            add(new UrlPair(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_404));
+            add(new UrlPair(CATH_MAIN_PUBLICATION_ENDPOINT, STATUS_CODE_401));
         }
     };
 
@@ -69,8 +70,10 @@ public class CathConnectionServiceBean implements RemoteTask {
         // and we want to catch that
         try {
             if (useGet) {
+                LOG.debug("Using GET for URL: {}", url);
                 given().when().get(url).then().statusCode(expectedStatusCode);
             } else {
+                LOG.debug("Using POST for URL: {}", url);
                 given().when().post(url).then().statusCode(expectedStatusCode);
             }
             return true;
@@ -87,9 +90,11 @@ public class CathConnectionServiceBean implements RemoteTask {
         LOG.debug("Checking the status of the CaTH URLs");
 
         // Check each url in the table
-        for (Map.Entry<String, Integer> entry : urls.entrySet()) {
-            String url = entry.getKey();
-            int expectedStatusCode = entry.getValue();
+        Iterator<UrlPair> it = urls.iterator();
+        while (it.hasNext()) {
+            UrlPair entry = it.next();
+            String url = entry.getUrl();
+            int expectedStatusCode = entry.getExpectedStatusCode();
 
             // Get for health Url, Post for others
             boolean useGet = CATH_HEALTH_ENDPOINT.equals(url);
@@ -99,5 +104,24 @@ public class CathConnectionServiceBean implements RemoteTask {
                 LOG.error(LOG_OUTPUT_SERVICE_DOWN, url, expectedStatusCode);
             }
         }
+    }
+
+    class UrlPair {
+        String url;
+        int expectedStatusCode;
+
+        UrlPair(String url, int expectedStatusCode) {
+            this.url = url;
+            this.expectedStatusCode = expectedStatusCode;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public int getExpectedStatusCode() {
+            return expectedStatusCode;
+        }
+
     }
 }
