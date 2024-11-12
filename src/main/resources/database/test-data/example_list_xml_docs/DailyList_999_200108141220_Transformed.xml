@@ -1,0 +1,99 @@
+<DailyList>
+    http://www.courtservice.gov.uk/schemas/courtservice DailyList-v5-9.xsd
+    <DocumentID>
+        <UniqueID>0149051e-9db2-4b47-999e-fef76909ee73</UniqueID>
+        <DocumentType>DL</DocumentType>
+    </DocumentID>
+    <ListHeader>
+        <ListCategory>Criminal</ListCategory>
+        <StartDate>2020-01-21</StartDate>
+        <EndDate>2020-01-21</EndDate>
+        <Version>DRAFT 1</Version>
+        <PublishedTime>2020-01-07T18:45:03.000</PublishedTime>
+        <CRESTlistID>510</CRESTlistID>
+    </ListHeader>
+    <CrownCourt>
+        <CourtHouseType>Crown Court</CourtHouseType>
+        <CourtHouseCode>SNARE453</CourtHouseCode>
+        <CourtHouseName>SNARESBROOK</CourtHouseName>
+    </CrownCourt>
+    <CourtLists>
+        <CourtList>
+            <CourtHouse>
+                <CourtHouseType>Crown Court</CourtHouseType>
+                <CourtHouseCode>453</CourtHouseCode>
+                <CourtHouseName>SNARESBROOK</CourtHouseName>
+            </CourtHouse>
+            <Sittings>
+                <Sitting>
+                    <CourtRoomNumber>235</CourtRoomNumber>
+                    <SittingSequenceNo>1</SittingSequenceNo>
+                    <SittingPriority>T</SittingPriority>
+                    <Judiciary>
+                        <Judge>
+                            <CitizenNameSurname>Van-JUDGE</CitizenNameSurname>
+                            <CitizenNameRequestedName>Freddy</CitizenNameRequestedName>
+                        </Judge>
+                    </Judiciary>
+                    <Hearings>
+                        <Hearing>
+                            <HearingSequenceNumber>1</HearingSequenceNumber>
+                            <HearingDetails>
+                                TRL
+                                <HearingDescription>For Trial</HearingDescription>
+                                <HearingDate>2020-01-21</HearingDate>
+                            </HearingDetails>
+                            <CaseNumber>92AD685737</CaseNumber>
+                            <Prosecution>
+                                Crown Prosecution Service
+                                <ProsecutingReference>92AD685737</ProsecutingReference>
+                            </Prosecution>
+                            <Defendants>
+                                <Defendant>
+                                    <PersonalDetails>
+                                        <Name>
+                                            <CitizenNameSurname>Van</CitizenNameSurname>
+                                            <CitizenNameRequestedName>Sri</CitizenNameRequestedName>
+                                        </Name>
+                                        <IsMasked>no</IsMasked>
+                                    </PersonalDetails>
+                                    <Charges>
+                                        <Charge>
+                                            TH68001A0
+                                            <OffenceStatement>Attempted theft</OffenceStatement>
+                                        </Charge>
+                                        <Charge>
+                                            HC570010
+                                            <CRESTchargeID>453S00649408</CRESTchargeID>
+                                            <OffenceStatement>Manslaughter on grounds of diminished responsibility</OffenceStatement>
+                                        </Charge>
+                                    </Charges>
+                                </Defendant>
+                                <Defendant>
+                                    <PersonalDetails>
+                                        <Name>
+                                            <CitizenNameSurname>CPPSECOND</CitizenNameSurname>
+                                            <CitizenNameRequestedName>Another</CitizenNameRequestedName>
+                                        </Name>
+                                        <IsMasked>no</IsMasked>
+                                    </PersonalDetails>
+                                    <Charges>
+                                        <Charge>
+                                            TH68001A0
+                                            <OffenceStatement>Attempted theft</OffenceStatement>
+                                        </Charge>
+                                        <Charge>
+                                            HC570010
+                                            <CRESTchargeID>453S00649408</CRESTchargeID>
+                                            <OffenceStatement>Manslaughter on grounds of diminished responsibility</OffenceStatement>
+                                        </Charge>
+                                    </Charges>
+                                </Defendant>
+                            </Defendants>
+                        </Hearing>
+                    </Hearings>
+                </Sitting>
+            </Sittings>
+        </CourtList>
+    </CourtLists>
+</DailyList>
