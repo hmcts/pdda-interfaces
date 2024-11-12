@@ -2,7 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice"
-    version="2.0">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="1.0">
     <xsl:output indent="yes" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
 
@@ -14,6 +15,8 @@
     </xsl:template>
 
     <!-- Remove these fields -->
+    <xsl:template match="@xsi:schemaLocation"/>
+
     <xsl:template match="cs:DocumentID/cs:DocumentName"/>
     <xsl:template match="cs:DocumentID/cs:TimeStamp"/>
     <xsl:template match="cs:DocumentID/cs:Version"/>
