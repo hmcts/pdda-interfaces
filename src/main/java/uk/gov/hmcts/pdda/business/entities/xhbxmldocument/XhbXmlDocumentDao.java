@@ -25,6 +25,10 @@ import java.time.LocalDateTime;
         + "ORDER BY o.xmlDocumentId DESC")
 @NamedQuery(name = "XHB_XML_DOCUMENT.findJsonDocuments",
     query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType = 'JSN' AND o.status='ND'")
+@NamedQuery(name = "XHB_XML_DOCUMENT.findJsonDocumentsF1",
+    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType = 'JSN' AND o.status='F1'")
+@NamedQuery(name = "XHB_XML_DOCUMENT.findJsonDocumentsF2",
+    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType = 'JSN' AND o.status='F2'")
 public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;

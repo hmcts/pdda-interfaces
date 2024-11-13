@@ -41,10 +41,17 @@ import java.util.Optional;
  * @author Luke Gittins
  * @version 1.0
  */
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
     private static final String EMPTY_STRING = "";
+    private static final Boolean SUCCESS = true;
+    private static final String IN_PROGRESS_STATUS = "IP";
+    private static final String SUCCESSFUL_STATUS = "SC";
+    private static final String FAILED_STATUS_ONE = "F1";
+    private static final String FAILED_STATUS_TWO = "F2";
+    private static final String FAILED_STATUS_THREE = "F3";
     
     private final EntityManager entityManager;
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
@@ -123,16 +130,63 @@ public class CathHelper {
         return EMPTY_STRING;
     }
     
-    protected Optional<XhbClobDao> getDocuments() {
-        Optional<XhbClobDao> documents = null;
-        List<XhbXmlDocumentDao> xmlDocumentDaoList =
-            getXhbXmlDocumentRepository().findJsonDocuments();
+    protected void processDocuments() {
+        List<XhbXmlDocumentDao> documents = getDocuments();
+        updateAndSend(documents, FAILED_STATUS_ONE);
+    }
 
-        for (XhbXmlDocumentDao document : xmlDocumentDaoList) {
-            documents = getXhbClobRepository().findById(document.getXmlDocumentClobId());
+    protected void processFailedDocuments() {
+        List<XhbXmlDocumentDao> documents = getFailedDocumentsF1();
+        updateAndSend(documents, FAILED_STATUS_TWO);
+        documents = getFailedDocumentsF2();
+        updateAndSend(documents, FAILED_STATUS_THREE);
+    }
+
+    private void updateAndSend(List<XhbXmlDocumentDao> documents, String failedStatus) {
+        for (XhbXmlDocumentDao document : documents) {
+            updateDocumentStatus(document, IN_PROGRESS_STATUS);
+            if (sendToCath(document)) {
+                LOG.debug("Sent successfully");
+                updateDocumentStatus(document, SUCCESSFUL_STATUS);
+            } else {
+                LOG.debug("Sent failed");
+                updateDocumentStatus(document, failedStatus);
+            }
         }
+    }
 
-        return documents;
+    private void updateDocumentStatus(XhbXmlDocumentDao document, String status) {
+        Integer version = document.getVersion();
+        document.setStatus(status);
+        getXhbXmlDocumentRepository().update(document);
+        version++;
+        document.setVersion(version);
+    }
+
+    private List<XhbXmlDocumentDao> getDocuments() {
+        return getXhbXmlDocumentRepository().findJsonDocuments();
+    }
+
+    private List<XhbXmlDocumentDao> getFailedDocumentsF1() {
+        return getXhbXmlDocumentRepository().findJsonDocumentsF1();
+    }
+
+    private List<XhbXmlDocumentDao> getFailedDocumentsF2() {
+        return getXhbXmlDocumentRepository().findJsonDocumentsF2();
+    }
+
+    private Boolean sendToCath(XhbXmlDocumentDao document) {
+        Boolean response = SUCCESS;
+        String clobData = getDocumentClob(document);
+        LOG.debug("sendToCath");
+        LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
+        return response;
+    }
+
+    private String getDocumentClob(XhbXmlDocumentDao document) {
+        Optional<XhbClobDao> clob =
+            getXhbClobRepository().findById(document.getXmlDocumentClobId());
+        return clob.get().getClobData();
     }
 
     private OAuth2Helper getOAuth2Helper() {
@@ -141,14 +195,14 @@ public class CathHelper {
         }
         return oauth2Helper;
     }
-    
+
     private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
         if (xhbXmlDocumentRepository == null) {
             xhbXmlDocumentRepository = new XhbXmlDocumentRepository(entityManager);
         }
         return xhbXmlDocumentRepository;
     }
-    
+
     private XhbClobRepository getXhbClobRepository() {
         if (xhbClobRepository == null) {
             xhbClobRepository = new XhbClobRepository(entityManager);

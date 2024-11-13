@@ -58,26 +58,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     public void doTask() {
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        // Look for any records in XHB_XML_DOCUMENT where DOCUMENT_TYPE='JSN' and STATUS='ND'
-        getCathHelper().getDocuments();      
-
-        // Send to CaTH
-
-        // Set XHB_XML_DOCUMENT.STATUS='IP' for this record
-
-        // Receive response from CaTH
-        // If sent successfully then update XHB_XML_DOCUMENT.STATUS='SC'
-        // If sent unsuccessfully then update XHB_XML_DOCUMENT.STATUS='F1'
-
-        // Repeat above
-        // If sent unsuccessfully then update the XHB_XML_DOCUMENT.STATUS='F2'
-
-        // Repeat
-        // If sent unsuccessfully then update the XHB_XML_DOCUMENT.STATUS='F3'
-
-        // Failed messages will be resent up to 3 times automatically
-
+        getCathHelper().processDocuments();
+        getCathHelper().processFailedDocuments();
     }
     
     /**
