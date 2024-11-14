@@ -9,9 +9,14 @@
 
     <!-- Copy everything -->
     <xsl:template match="*">
-        <xsl:element name="{local-name()}">
+        <xsl:element name="{local-name(.)}">
             <xsl:apply-templates select="@* | node()"/>
         </xsl:element>
+    </xsl:template>
+    <xsl:template match="@*">
+        <xsl:attribute name="{local-name(.)}">
+            <xsl:value-of select="."/>
+        </xsl:attribute>
     </xsl:template>
 
     <!-- Remove these fields -->

@@ -1,5 +1,4 @@
 <DailyList>
-    http://www.courtservice.gov.uk/schemas/courtservice DailyList-v5-9.xsd
     <DocumentID>
         <UniqueID>0149051e-9db2-4b47-999e-fef76909ee73</UniqueID>
         <DocumentType>DL</DocumentType>
@@ -14,7 +13,7 @@
     </ListHeader>
     <CrownCourt>
         <CourtHouseType>Crown Court</CourtHouseType>
-        <CourtHouseCode>SNARE453</CourtHouseCode>
+        <CourtHouseCode CourtHouseShortName="SNARE">453</CourtHouseCode>
         <CourtHouseName>SNARESBROOK</CourtHouseName>
     </CrownCourt>
     <CourtLists>
@@ -38,14 +37,12 @@
                     <Hearings>
                         <Hearing>
                             <HearingSequenceNumber>1</HearingSequenceNumber>
-                            <HearingDetails>
-                                TRL
+                            <HearingDetails HearingType="TRL">
                                 <HearingDescription>For Trial</HearingDescription>
                                 <HearingDate>2020-01-21</HearingDate>
                             </HearingDetails>
                             <CaseNumber>92AD685737</CaseNumber>
-                            <Prosecution>
-                                Crown Prosecution Service
+                            <Prosecution ProsecutingAuthority="Crown Prosecution Service">
                                 <ProsecutingReference>92AD685737</ProsecutingReference>
                             </Prosecution>
                             <Defendants>
@@ -58,12 +55,10 @@
                                         <IsMasked>no</IsMasked>
                                     </PersonalDetails>
                                     <Charges>
-                                        <Charge>
-                                            TH68001A0
+                                        <Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="0">
                                             <OffenceStatement>Attempted theft</OffenceStatement>
                                         </Charge>
-                                        <Charge>
-                                            HC570010
+                                        <Charge CJSoffenceCode="HC57001" IndictmentCountNumber="0">
                                             <CRESTchargeID>453S00649408</CRESTchargeID>
                                             <OffenceStatement>Manslaughter on grounds of diminished responsibility</OffenceStatement>
                                         </Charge>
@@ -78,12 +73,10 @@
                                         <IsMasked>no</IsMasked>
                                     </PersonalDetails>
                                     <Charges>
-                                        <Charge>
-                                            TH68001A0
+                                        <Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="0">
                                             <OffenceStatement>Attempted theft</OffenceStatement>
                                         </Charge>
-                                        <Charge>
-                                            HC570010
+                                        <Charge CJSoffenceCode="HC57001" IndictmentCountNumber="0">
                                             <CRESTchargeID>453S00649408</CRESTchargeID>
                                             <OffenceStatement>Manslaughter on grounds of diminished responsibility</OffenceStatement>
                                         </Charge>
