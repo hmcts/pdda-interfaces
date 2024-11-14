@@ -142,7 +142,7 @@ public class CathHelper {
         updateAndSend(documents, FAILED_STATUS_THREE);
     }
 
-    private void updateAndSend(List<XhbXmlDocumentDao> documents, String failedStatus) {
+    public void updateAndSend(List<XhbXmlDocumentDao> documents, String failedStatus) {
         for (XhbXmlDocumentDao document : documents) {
             updateDocumentStatus(document, IN_PROGRESS_STATUS);
             if (sendToCath(document)) {
@@ -175,7 +175,7 @@ public class CathHelper {
         return getXhbXmlDocumentRepository().findJsonDocumentsF2();
     }
 
-    private Boolean sendToCath(XhbXmlDocumentDao document) {
+    public Boolean sendToCath(XhbXmlDocumentDao document) {
         Boolean response = SUCCESS;
         String clobData = getDocumentClob(document);
         LOG.debug("sendToCath");

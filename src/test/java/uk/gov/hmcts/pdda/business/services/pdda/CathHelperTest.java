@@ -12,8 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtelUtil;
+import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
@@ -21,7 +25,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,6 +69,9 @@ class CathHelperTest {
     
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock
+    private XhbClobRepository mockXhbClobRepository;
 
     @Mock
     private HttpRequest mockHttpRequest;
@@ -141,4 +150,68 @@ class CathHelperTest {
         // Checks
         assertEquals(EMPTY_STRING, result, EQUALS);
     }
+    
+    @Test
+    void testProcessDocumentsSuccess() {
+        // Run
+        boolean result = testProcessDocuments();
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testProcessDocuments() {
+        // Run
+        try {
+            classUnderTest.processDocuments();
+            return true;
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+            return false;
+        }
+    }
+    
+    private boolean testProcessFailedDocuments() {
+        // Run
+        try {
+            classUnderTest.processFailedDocuments();
+            return true;
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+            return false;
+        }
+    }
+    
+    @Test
+    void testProcessFailedDocumentsSuccess() {
+        // Run
+        boolean result = testProcessFailedDocuments();
+        assertTrue(result, TRUE);
+    }
+    
+    /*private boolean testUpdateAndSend(List<XhbXmlDocumentDao> xmlDocumentDaoList) {
+        // Run
+        try {
+            classUnderTest.updateAndSend(xmlDocumentDaoList, "F1");
+            return true;
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+            return false;
+        }
+    }
+    
+    @Test
+    void testUpdateAndSendSuccess() {
+        // Setup
+        List<XhbXmlDocumentDao> xmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao mockXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        mockXmlDocumentDao.setXmlDocumentClobId(1L);
+        xmlDocumentDaoList.add(mockXmlDocumentDao);
+        Optional<XhbClobDao> mockClobDao =
+            Optional.of(DummyFormattingUtil.getXhbClobDao(1L, "test"));
+
+        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+            .thenReturn(mockClobDao);
+        // Run
+        boolean result = testUpdateAndSend(xmlDocumentDaoList);
+        assertTrue(result, TRUE);
+    }*/
 }
