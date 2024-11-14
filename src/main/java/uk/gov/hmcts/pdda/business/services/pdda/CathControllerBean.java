@@ -38,7 +38,7 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     private static final Logger LOG = LoggerFactory.getLogger(CathControllerBean.class);
     private static final String LOG_CALLED = " called";
     private static final String TWO_PARAMS = "{}{}";
-    
+
     private CathHelper cathHelper;
 
     public CathControllerBean(EntityManager entityManager) {
@@ -50,8 +50,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     }
 
     /**
-     * Implementation of RemoteTask so that this process is called by the timer process. This scheduled
-     * job sends documents to CaTH.
+     * Implementation of RemoteTask so that this process is called by the timer process. This
+     * scheduled job sends documents to CaTH.
      * 
      */
     @Override
@@ -61,7 +61,7 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
         getCathHelper().processDocuments();
         getCathHelper().processFailedDocuments();
     }
-    
+
     /**
      * Returns a reference to the cathHelper object.
      * 
@@ -69,7 +69,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
      */
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
-            cathHelper = new CathHelper(EntityManagerUtil.getEntityManager(), getXhbXmlDocumentRepository());
+            cathHelper = new CathHelper(EntityManagerUtil.getEntityManager(),
+                getXhbXmlDocumentRepository(), getXhbClobRepository());
         }
         return cathHelper;
     }

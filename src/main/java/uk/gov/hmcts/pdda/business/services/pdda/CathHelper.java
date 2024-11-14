@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 /**
  * <p>
  * Title: CathHelper.
@@ -60,18 +59,22 @@ public class CathHelper {
     private OAuth2Helper oauth2Helper;
 
     public CathHelper(EntityManager entityManager,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository,
+        XhbClobRepository xhbClobRepository) {
         super();
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
+        this.xhbClobRepository = xhbClobRepository;
     }
 
     // JUnit
     public CathHelper(OAuth2Helper oauth2Helper, EntityManager entityManager,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository) {
+        XhbXmlDocumentRepository xhbXmlDocumentRepository,
+        XhbClobRepository xhbClobRepository) {
         this.oauth2Helper = oauth2Helper;
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
+        this.xhbClobRepository = xhbClobRepository;
     }
 
 
@@ -184,9 +187,12 @@ public class CathHelper {
     }
 
     private String getDocumentClob(XhbXmlDocumentDao document) {
-        Optional<XhbClobDao> clob =
+        Optional<XhbClobDao> xhbClobDao =
             getXhbClobRepository().findById(document.getXmlDocumentClobId());
-        return clob.get().getClobData();
+        if (xhbClobDao.isPresent()) {
+            return xhbClobDao.get().getClobData();
+        }
+        return null;
     }
 
     private OAuth2Helper getOAuth2Helper() {

@@ -28,6 +28,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -51,6 +52,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD.TooManyMethods"})
 class CathHelperTest {
 
     private static final String EMPTY_STRING = "";
@@ -63,13 +65,13 @@ class CathHelperTest {
 
     @Mock
     private OAuth2Helper mockOAuth2Helper;
-    
+
     @Mock
     private EntityManager mockEntityManager;
-    
+
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
-    
+
     @Mock
     private XhbClobRepository mockXhbClobRepository;
 
@@ -90,13 +92,15 @@ class CathHelperTest {
         Mockito.mockStatic(CathUtils.class);
         Mockito.mockStatic(HttpClient.class);
 
-        classUnderTest = new CathHelper(mockOAuth2Helper, mockEntityManager, mockXhbXmlDocumentRepository);
+        classUnderTest = new CathHelper(mockOAuth2Helper, mockEntityManager,
+            mockXhbXmlDocumentRepository, mockXhbClobRepository);
     }
 
     @AfterEach
     public void tearDown() {
         // Test default constructor
-        classUnderTest = new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository);
+        classUnderTest =
+            new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository, mockXhbClobRepository);
         // Clear down statics
         Mockito.clearAllCaches();
     }
@@ -150,7 +154,7 @@ class CathHelperTest {
         // Checks
         assertEquals(EMPTY_STRING, result, EQUALS);
     }
-    
+
     @Test
     void testProcessDocumentsSuccess() {
         // Run
@@ -168,7 +172,7 @@ class CathHelperTest {
             return false;
         }
     }
-    
+
     private boolean testProcessFailedDocuments() {
         // Run
         try {
@@ -179,39 +183,41 @@ class CathHelperTest {
             return false;
         }
     }
-    
+
     @Test
     void testProcessFailedDocumentsSuccess() {
         // Run
         boolean result = testProcessFailedDocuments();
         assertTrue(result, TRUE);
     }
-    
-    /*private boolean testUpdateAndSend(List<XhbXmlDocumentDao> xmlDocumentDaoList) {
+
+    @Test
+    void testUpdateAndSendSuccess() {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setXmlDocumentClobId(1L);
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+
+        Optional<XhbClobDao> xhbClobDao =
+            Optional.of(DummyFormattingUtil.getXhbClobDao(1L, "test"));
+
+        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+            .thenReturn(xhbClobDao);
+        // Run
+        boolean result = testUpdateAndSend(xhbXmlDocumentDaoList);
+        // Verify
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testUpdateAndSend(List<XhbXmlDocumentDao> xhbXmlDocumentDaoList) {
         // Run
         try {
-            classUnderTest.updateAndSend(xmlDocumentDaoList, "F1");
+            classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
             return true;
         } catch (Exception ex) {
             fail(ex.getMessage());
             return false;
         }
     }
-    
-    @Test
-    void testUpdateAndSendSuccess() {
-        // Setup
-        List<XhbXmlDocumentDao> xmlDocumentDaoList = new ArrayList<>();
-        XhbXmlDocumentDao mockXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
-        mockXmlDocumentDao.setXmlDocumentClobId(1L);
-        xmlDocumentDaoList.add(mockXmlDocumentDao);
-        Optional<XhbClobDao> mockClobDao =
-            Optional.of(DummyFormattingUtil.getXhbClobDao(1L, "test"));
-
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
-            .thenReturn(mockClobDao);
-        // Run
-        boolean result = testUpdateAndSend(xmlDocumentDaoList);
-        assertTrue(result, TRUE);
-    }*/
 }

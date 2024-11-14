@@ -192,7 +192,8 @@ public class CourtelHelper {
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
             this.cathHelper =
-                new CathHelper(EntityManagerUtil.getEntityManager(), xhbXmlDocumentRepository);
+                new CathHelper(EntityManagerUtil.getEntityManager(), xhbXmlDocumentRepository,
+                    xhbClobRepository);
         }
         return cathHelper;
     }
