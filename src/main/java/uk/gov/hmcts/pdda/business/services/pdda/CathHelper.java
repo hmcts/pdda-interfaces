@@ -183,13 +183,12 @@ public class CathHelper {
 
     public Boolean sendToCath(XhbXmlDocumentDao document) {
         String clobData = getDocumentClob(document);
-        if (clobData != null) {
+        if (clobData != null && !"".equals(clobData)) {
             LOG.debug("sendToCath");
             LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
             return SUCCESS;
-        } else {
-            return FAILED;
         }
+        return FAILED;
     }
 
     private String getDocumentClob(XhbXmlDocumentDao document) {
