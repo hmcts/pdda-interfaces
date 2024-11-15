@@ -103,11 +103,11 @@ public class FormattingServices extends FormattingServicesProcessing {
         if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
                 formattingValue.getFormattedDocumentBlobId());
-            transfromXmlAndGenerateJson(formattingValue);
+            transformXmlAndGenerateJson(formattingValue);
         }
     }
     
-    private void transfromXmlAndGenerateJson(FormattingValue formattingValue) {
+    private void transformXmlAndGenerateJson(FormattingValue formattingValue) {
         // Get the Path for the xslt schema to use
         StringBuilder xsltSchemaPath = new StringBuilder();
         xsltSchemaPath.append("xslt_schemas/");
