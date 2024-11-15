@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -190,7 +191,9 @@ public class CourtelHelper {
 
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
-            this.cathHelper = new CathHelper();
+            this.cathHelper =
+                new CathHelper(EntityManagerUtil.getEntityManager(), xhbXmlDocumentRepository,
+                    xhbClobRepository);
         }
         return cathHelper;
     }

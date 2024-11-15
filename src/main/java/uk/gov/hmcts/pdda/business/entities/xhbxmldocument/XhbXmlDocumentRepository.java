@@ -17,6 +17,7 @@ import java.util.Optional;
 public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbXmlDocumentRepository.class);
+    private static final String UNCHECKED = "unchecked";
 
     public XhbXmlDocumentRepository(EntityManager em) {
         super(em);
@@ -32,10 +33,10 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
      * 
      * @return list
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public List<XhbXmlDocumentDao> findDocumentByClobId(Long xmlDocumentClobId,
         LocalDateTime timeDelay) {
-        LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
+        LOG.debug("In XhbXmlDocumentRepository.findDocumentByClobId");
         Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findDocumentByClobId");
         query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
         query.setParameter("timeDelay", timeDelay);
@@ -48,11 +49,24 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
      * @return XhbXmlDocumentDao
      */
     public Optional<XhbXmlDocumentDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
-        LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
+        LOG.debug("In XhbXmlDocumentRepository.findByXmlDocumentClobId");
         Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
         query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
         @SuppressWarnings("unchecked")
         List<XhbXmlDocumentDao> resultList = query.getResultList();
         return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+    }
+    
+    /**
+     * findJsonDocuments.
+     * 
+     * @return XhbXmlDocumentDao
+     */
+    @SuppressWarnings(UNCHECKED)
+    public List<XhbXmlDocumentDao> findJsonDocuments(String status) {
+        LOG.debug("In XhbXmlDocumentRepository.findJsonDocuments");
+        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
+        query.setParameter("status", status);
+        return query.getResultList();
     }
 }
