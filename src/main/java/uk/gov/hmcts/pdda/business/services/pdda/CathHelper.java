@@ -136,20 +136,29 @@ public class CathHelper {
     
     protected void processDocuments() {
         List<XhbXmlDocumentDao> documents = getDocuments();
-        updateAndSend(documents, FAILED_STATUS_ONE);
+        // Check if documents are null to prevent process from kicking off further
+        if (!documents.isEmpty()) {
+            updateAndSend(documents, FAILED_STATUS_ONE);
+        }
     }
 
     protected void processFailedDocuments() {
         List<XhbXmlDocumentDao> documents = getFailedDocumentsF1();
-        updateAndSend(documents, FAILED_STATUS_TWO);
+        // Check if F1 documents are null to prevent process from kicking off further
+        if (!documents.isEmpty()) {
+            updateAndSend(documents, FAILED_STATUS_TWO);
+        }
         documents = getFailedDocumentsF2();
-        updateAndSend(documents, FAILED_STATUS_THREE);
+        // Check if F2 documents are null to prevent process from kicking off further
+        if (!documents.isEmpty()) {
+            updateAndSend(documents, FAILED_STATUS_THREE);
+        }
     }
 
     public void updateAndSend(List<XhbXmlDocumentDao> documents, String failedStatus) {
         for (XhbXmlDocumentDao document : documents) {
             updateDocumentStatus(document, IN_PROGRESS_STATUS);
-            if (sendToCath(document)) {
+            if (Boolean.TRUE.equals(sendToCath(document))) {
                 LOG.debug("Sent successfully");
                 updateDocumentStatus(document, SUCCESSFUL_STATUS);
             } else {
