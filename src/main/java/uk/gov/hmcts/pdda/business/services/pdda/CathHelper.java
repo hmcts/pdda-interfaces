@@ -46,6 +46,7 @@ public class CathHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
     private static final String EMPTY_STRING = "";
     private static final Boolean SUCCESS = true;
+    private static final Boolean FAILED = false;
     private static final String IN_PROGRESS_STATUS = "IP";
     private static final String SUCCESSFUL_STATUS = "SC";
     private static final String FAILED_STATUS_ONE = "F1";
@@ -179,11 +180,14 @@ public class CathHelper {
     }
 
     public Boolean sendToCath(XhbXmlDocumentDao document) {
-        Boolean response = SUCCESS;
         String clobData = getDocumentClob(document);
-        LOG.debug("sendToCath");
-        LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
-        return response;
+        if (clobData != null) {
+            LOG.debug("sendToCath");
+            LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
+            return SUCCESS;
+        } else {
+            return FAILED;
+        }
     }
 
     private String getDocumentClob(XhbXmlDocumentDao document) {

@@ -220,4 +220,18 @@ class CathHelperTest {
             return false;
         }
     }
+    
+    @Test
+    void testUpdateAndSendFail() {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setXmlDocumentClobId(1L);
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+
+        // Run
+        boolean result = testUpdateAndSend(xhbXmlDocumentDaoList);
+        // Verify
+        assertTrue(result, TRUE);
+    }
 }
