@@ -63,33 +63,10 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
      * @return XhbXmlDocumentDao
      */
     @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findJsonDocuments() {
+    public List<XhbXmlDocumentDao> findJsonDocuments(String status) {
         LOG.debug("In XhbXmlDocumentRepository.findJsonDocuments");
         Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
-        return query.getResultList();
-    }
-    
-    /**
-     * findJsonDocumentsF1.
-     * 
-     * @return XhbXmlDocumentDao
-     */
-    @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findJsonDocumentsF1() {
-        LOG.debug("In XhbXmlDocumentRepository.findJsonDocumentsF1");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocumentsF1");
-        return query.getResultList();
-    }
-    
-    /**
-     * findJsonDocumentsF2.
-     * 
-     * @return XhbXmlDocumentDao
-     */
-    @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findJsonDocumentsF2() {
-        LOG.debug("In XhbXmlDocumentRepository.findJsonDocumentsF2");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocumentsF2");
+        query.setParameter("status", status);
         return query.getResultList();
     }
 }

@@ -47,6 +47,7 @@ public class CathHelper {
     private static final String EMPTY_STRING = "";
     private static final Boolean SUCCESS = true;
     private static final Boolean FAILED = false;
+    private static final String NOT_PROCESSED_STATUS = "ND";
     private static final String IN_PROGRESS_STATUS = "IP";
     private static final String SUCCESSFUL_STATUS = "SC";
     private static final String FAILED_STATUS_ONE = "F1";
@@ -135,7 +136,7 @@ public class CathHelper {
     }
     
     protected void processDocuments() {
-        List<XhbXmlDocumentDao> documents = getDocuments();
+        List<XhbXmlDocumentDao> documents = getDocuments(NOT_PROCESSED_STATUS);
         // Check if documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
             updateAndSend(documents, FAILED_STATUS_ONE);
@@ -143,12 +144,12 @@ public class CathHelper {
     }
 
     protected void processFailedDocuments() {
-        List<XhbXmlDocumentDao> documents = getFailedDocumentsF1();
+        List<XhbXmlDocumentDao> documents = getDocuments(FAILED_STATUS_ONE);
         // Check if F1 documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
             updateAndSend(documents, FAILED_STATUS_TWO);
         }
-        documents = getFailedDocumentsF2();
+        documents = getDocuments(FAILED_STATUS_TWO);
         // Check if F2 documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
             updateAndSend(documents, FAILED_STATUS_THREE);
@@ -175,17 +176,9 @@ public class CathHelper {
         version++;
         document.setVersion(version);
     }
-
-    private List<XhbXmlDocumentDao> getDocuments() {
-        return getXhbXmlDocumentRepository().findJsonDocuments();
-    }
-
-    private List<XhbXmlDocumentDao> getFailedDocumentsF1() {
-        return getXhbXmlDocumentRepository().findJsonDocumentsF1();
-    }
-
-    private List<XhbXmlDocumentDao> getFailedDocumentsF2() {
-        return getXhbXmlDocumentRepository().findJsonDocumentsF2();
+    
+    private List<XhbXmlDocumentDao> getDocuments(String status) {
+        return getXhbXmlDocumentRepository().findJsonDocuments(status);
     }
 
     public Boolean sendToCath(XhbXmlDocumentDao document) {
