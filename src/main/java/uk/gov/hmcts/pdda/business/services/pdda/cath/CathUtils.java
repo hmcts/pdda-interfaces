@@ -189,8 +189,8 @@ public final class CathUtils {
                     .generateCathDocumentTitleBuilderFromClob(xhbClobDaoTransformedXml.get())
                     .getStartDate()).atStartOfDay());
                 xhbXmlDocumentDaoJson.setDocumentTitle(CathDocumentTitleUtils.generateDocumentTitle(
-                    xhbCathDocumentLinkDao, xhbCourtelListRepository,
-                    xhbCppStagingInboundRepository, xhbXmlDocumentRepository, xhbClobRepository));
+                    xhbCathDocumentLinkDao, xhbClobDaoTransformedXml.get(), xhbCourtelListRepository,
+                    xhbCppStagingInboundRepository, xhbXmlDocumentRepository));
                 xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
                 xhbXmlDocumentDaoJson.setStatus("ND");
                 xhbXmlDocumentDaoJson.setDocumentType("JSN");
