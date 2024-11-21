@@ -98,6 +98,7 @@ public final class CathUtils {
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
         throws TransformerException {
+        String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -105,7 +106,13 @@ public final class CathUtils {
         Source xsltSource =
             new StreamSource(new File(classLoader.getResource(xsltSchemaPath).getFile()));
         Templates templates = transformerFactory.newTemplates(xsltSource);
-        Transformer transformer = templates.newTransformer();
+        Transformer cutDowntransformer = templates.newTransformer();
+
+        // Get the predefined namespace xslt schema
+        Source xsltNameSpaceSource =
+            new StreamSource(new File(classLoader.getResource(xsltNamespaceSchemaPath).getFile()));
+        Templates nameSpaceTemplates = transformerFactory.newTemplates(xsltNameSpaceSource);
+        Transformer nameSpaceTransformer = nameSpaceTemplates.newTransformer();
 
         // Check if there is an entry in the courtel_list table with the documentClobId
         Optional<XhbCourtelListDao> xhbCourtelListDao =
@@ -117,14 +124,20 @@ public final class CathUtils {
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
                 xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
             if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
-                // Transform the xml
+                // Transform the xml, removing the unneeded elements and attributes
                 Source xmlSource =
                     new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
-                StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
+                StringWriter outWriter =
+                    TransformerUtils.transformList(cutDowntransformer, xmlSource);
+
+                // Transform the xml, removing the namespaces
+                Source xmlCutDownSource = new StreamSource(new StringReader(outWriter.toString()));
+                StringWriter outWriterWithRemovedNameSpaces =
+                    TransformerUtils.transformList(nameSpaceTransformer, xmlCutDownSource);
 
                 // Save the transformed Xml to the clob table
                 XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
-                xhbClobDaoTransformedXml.setClobData(outWriter.toString());
+                xhbClobDaoTransformedXml.setClobData(outWriterWithRemovedNameSpaces.toString());
                 xhbClobRepository.save(xhbClobDaoTransformedXml);
 
                 // Save the transformed xml to xml_document table
@@ -188,9 +201,10 @@ public final class CathUtils {
                 xhbXmlDocumentDaoJson.setDateCreated(LocalDate.parse(CathDocumentTitleUtils
                     .generateCathDocumentTitleBuilderFromClob(xhbClobDaoTransformedXml.get())
                     .getStartDate()).atStartOfDay());
-                xhbXmlDocumentDaoJson.setDocumentTitle(CathDocumentTitleUtils.generateDocumentTitle(
-                    xhbCathDocumentLinkDao, xhbClobDaoTransformedXml.get(), xhbCourtelListRepository,
-                    xhbCppStagingInboundRepository, xhbXmlDocumentRepository));
+                xhbXmlDocumentDaoJson.setDocumentTitle(
+                    CathDocumentTitleUtils.generateDocumentTitle(xhbCathDocumentLinkDao,
+                        xhbClobDaoTransformedXml.get(), xhbCourtelListRepository,
+                        xhbCppStagingInboundRepository, xhbXmlDocumentRepository));
                 xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
                 xhbXmlDocumentDaoJson.setStatus("ND");
                 xhbXmlDocumentDaoJson.setDocumentType("JSN");
