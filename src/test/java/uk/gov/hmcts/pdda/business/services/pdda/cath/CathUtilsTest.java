@@ -152,7 +152,7 @@ class CathUtilsTest {
         // Setup using the example xml
         final String exampleXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220.xml";
-        final String xsltSchemaPath = "xslt_schemas/Example.xslt";
+        final String xsltSchemaPath = "config/xsl/listTransformation/Example.xslt";
 
         Optional<XhbCourtelListDao> xhbCourtelListDao =
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
