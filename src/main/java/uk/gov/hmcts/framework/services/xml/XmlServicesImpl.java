@@ -10,7 +10,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 import uk.gov.hmcts.framework.business.vos.CsValueObject;
 import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 import uk.gov.hmcts.framework.services.CsServices;
@@ -19,6 +24,9 @@ import uk.gov.hmcts.pdda.business.services.formatting.AbstractXmlUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,7 +37,16 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * <p>
@@ -97,11 +114,25 @@ import javax.xml.transform.TransformerException;
  *
  */
 
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
+
+    private static final String SCHEMA_SOURCE_PROPERTY =
+        "http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation";
+
+    private static final String SCHEMA_VALIDATION_FEATURE =
+        "http://apache.org/xml/features/validation/schema";
+
+    private static ErrorHandler defaultErrorHandler = new ErrorChecker();
+
+    private static EntityResolver defaultResolver = new SystemIdEntityResolver();
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlServicesImpl.class);
 
-    private static final DocumentBuilderFactory DOCUMENTBUILDERFACTORY = DocumentBuilderFactory.newInstance();
+    private static final String ENCODING = "UTF-8";
+
+    private static final DocumentBuilderFactory DOCUMENTBUILDERFACTORY =
+        DocumentBuilderFactory.newInstance();
 
     private static final String FACTORY_CONFIG_ERROR = "FactoryConfigurationError ";
 
@@ -123,8 +154,8 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
     /**
      * Convert a object implementing the CSValueObject interface to an xml document.
      *
-     * @param obj To work effectively the CSValueObject requires a default public constructor and public
-     *        get methods for all vos that are required in the resulting xml document
+     * @param obj To work effectively the CSValueObject requires a default public constructor and
+     *        public get methods for all vos that are required in the resulting xml document
      * @return Document xml representation of the CSValueObject
      * @throws CsXmlServicesException Exception
      */
@@ -148,6 +179,36 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     }
 
+    /**
+     * generates an xml document from a properties set.
+     *
+     * @param xmlToConvert the properties object which contains the key value pairs
+     * @param tag The root element of the xml document
+     * @return String the xml document
+     */
+    public String generateXmlFromPropSet(Map xmlToConvert, String tag) {
+        String methodName = "generateXMLFromPropSet() - ";
+        LOG.debug(methodName + "called :: tag: " + tag + " Map: " + xmlToConvert);
+
+        Document doc;
+
+        try {
+            // Get DocumentBuilder
+            DocumentBuilder builder = DOCUMENTBUILDERFACTORY.newDocumentBuilder();
+            doc = builder.newDocument();
+        } catch (ParserConfigurationException e) {
+            LOG.debug("ParserConfigurationException " + e);
+            CsXmlServicesException ex = new CsXmlServicesException(e);
+            CsServices.getDefaultErrorHandler().handleError(ex, XmlServicesImpl.class);
+            throw ex;
+        }
+
+        Element root = addPropertyMapToXmlDoc(doc, xmlToConvert, tag);
+        doc.appendChild(root);
+
+        return getStringXml(doc);
+    }
+
 
     /**
      * Add a collection to the XML document being created.
@@ -157,7 +218,8 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @param tag String
      * @return Collection of DOM Elements
      */
-    private Collection<Element> addCollectionToXmlDoc(Document doc, Collection<?> xmlToConvert, String tag) {
+    private Collection<Element> addCollectionToXmlDoc(Document doc, Collection<?> xmlToConvert,
+        String tag) {
         String methodName = "addCollectionToXMLDoc() - ";
         if (LOG.isDebugEnabled()) {
             LOG.debug(methodName + "called :: collection: " + xmlToConvert + " tag: " + tag);
@@ -246,7 +308,8 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
         try {
             LOG.debug("createDocFromString({})", xmlContent);
             xml = DocumentUtils.createInputDocument(xmlContent);
-        } catch (ParserConfigurationException | FactoryConfigurationError | IOException | SAXException exception) {
+        } catch (ParserConfigurationException | FactoryConfigurationError | IOException
+            | SAXException exception) {
             LOG.debug(FACTORY_CONFIG_ERROR + exception);
             CsXmlServicesException xmlE = new CsXmlServicesException(exception);
             CsServices.getDefaultErrorHandler().handleError(xmlE, XmlServicesImpl.class);
@@ -255,6 +318,97 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
         return xml;
 
+    }
+
+    public String getStringXml(Document doc) {
+        String methodName = "getStringXml() - ";
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(methodName + "called");
+        }
+
+        DOMSource source = new DOMSource(doc);
+
+        // ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // StreamResult result = new StreamResult(baos);
+        StringWriter write = new StringWriter();
+        StreamResult result = new StreamResult(write);
+
+        this.transform(source, result, null, null, false);
+
+        // ByteArrayOutputStream os =
+        // (ByteArrayOutputStream)(result.getOutputStream());
+        // String xmlout = new String(os.toByteArray());
+
+        String xmlout = write.toString();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(methodName + "exited :: xmlout: " + xmlout);
+        }
+        return xmlout;
+    }
+
+    /**
+     * Returns the transformer for the specified Style Sheet and resolver.
+     *
+     * @param xslSource The style sheet Source.
+     * @param resolver An object called by the processor to turn a URI used in document(),
+     *        xsl:import, or xsl:include into a Source object. can be null
+     * @return transformer
+     * @throws TransformerConfigurationException Exception
+     */
+    private Transformer getTransformer(Source xslSource, URIResolver resolver)
+        throws TransformerConfigurationException {
+
+        String methodName = "getTransformer() - ";
+        LOG.debug(methodName + "entry");
+
+        TransformerFactory transFactory = TransformerFactory.newInstance();
+        Transformer transformer;
+
+        if (resolver != null) {
+            transFactory.setURIResolver(resolver);
+        }
+
+        if (xslSource == null) {
+            transformer = transFactory.newTransformer();
+        } else {
+            transformer = transFactory.newTransformer(xslSource);
+        }
+
+        return transformer;
+    }
+
+    /**
+     * Performs the transformation.
+     *
+     * @param source source
+     * @param result the result of the transformation
+     * @param xslSource the XSL source
+     * @param resolver An object called by the processor to turn a URI used in document(),
+     *        xsl:import, or xsl:include into a Source object. can be null
+     * @param omitHeader omit the header boolean
+     * @throws CSXMLServicesException Exception
+     */
+    private void transform(Source source, Result result, Source xslSource, URIResolver resolver,
+        boolean omitHeader) {
+        try {
+
+            Transformer transformer = getTransformer(xslSource, resolver);
+            if (omitHeader) {
+                transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            }
+            transformer.setOutputProperty(OutputKeys.ENCODING, ENCODING);
+            transformer.transform(source, result);
+        } catch (TransformerConfigurationException e) {
+            LOG.debug("TransformerConfigurationException " + e);
+            CsXmlServicesException ex = new CsXmlServicesException(e);
+            CsServices.getDefaultErrorHandler().handleError(ex, XmlServicesImpl.class);
+            throw ex;
+        } catch (TransformerException e) {
+            LOG.debug("TransformerException " + e);
+            CsXmlServicesException ex = new CsXmlServicesException(e);
+            CsServices.getDefaultErrorHandler().handleError(ex, XmlServicesImpl.class);
+            throw ex;
+        }
     }
 
     /**
@@ -267,11 +421,13 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      */
     @Override
     public String getXpathValueFromXmlString(String xmlString, String xpath) {
-        LOG.debug("getXpathValueFromXpathString() start with " + "xmlString = " + xmlString + " and xpath = " + xpath);
+        LOG.debug("getXpathValueFromXpathString() start with " + "xmlString = " + xmlString
+            + " and xpath = " + xpath);
         // check parameters we're going to use
         if (xmlString == null || xpath == null) {
-            throw new IllegalArgumentException("Both xmlString and xpath parameters must both be provided "
-                + "with not null values to the getXpathValueFromXpathString() method");
+            throw new IllegalArgumentException(
+                "Both xmlString and xpath parameters must both be provided "
+                    + "with not null values to the getXpathValueFromXpathString() method");
         }
 
         try {
@@ -283,14 +439,15 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
             Node valueNode = XPathAPI.selectSingleNode(eventDocument, xpath);
 
             if (valueNode != null) { // Is there a node for the XPath?
-                LOG.debug("getXpathFromLogEntry() : Returning xpath value {}", valueNode.getNodeValue());
+                LOG.debug("getXpathFromLogEntry() : Returning xpath value {}",
+                    valueNode.getNodeValue());
                 return valueNode.getNodeValue();
             } else {
                 throw new CsUnrecoverableException(
                     "Could not get a node for the XPath: " + xpath + " for the xml: " + xmlString);
             }
-        } catch (ParserConfigurationException | FactoryConfigurationError | IOException | SAXException
-            | TransformerException exception) {
+        } catch (ParserConfigurationException | FactoryConfigurationError | IOException
+            | SAXException | TransformerException exception) {
             LOG.error("Error reading input XML: {}", xmlString, exception);
             CsServices.getDefaultErrorHandler().handleError(exception, getClass());
             throw new CsUnrecoverableException("Error reading input XML: " + xmlString, exception);
@@ -306,7 +463,8 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @param beforeTag Tag before whish the new element is added
      */
     @Override
-    public void addElementByTagName(Document document, String tagName, String value, String beforeTag) {
+    public void addElementByTagName(Document document, String tagName, String value,
+        String beforeTag) {
         if (document == null) {
             LOG.warn(getClass().getName() + "addElementByTagName() :: No XML document loaded");
             return;
@@ -321,6 +479,32 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
             beforeElement.insertBefore(newElement, beforeElement.getFirstChild());
         }
+    }
+
+    /**
+     * Validates the XML specified in <code>xmlString</code> against the schema specified
+     * by the argument <code>schemaBase</code>.
+     *
+     * @param xmlString XML to be validated
+     * @param schemaLocation Schema to use for validation
+     */
+    @Override
+    public void validateXml(String xmlString, String schemaLocation) {
+        try {
+            XMLReader reader = XMLReaderFactory.createXMLReader();
+            reader.setFeature(SCHEMA_VALIDATION_FEATURE, true);
+
+            URL schema = getClass().getResource(schemaLocation);
+            reader.setProperty(SCHEMA_SOURCE_PROPERTY, schema.toString());
+
+            reader.setEntityResolver(defaultResolver);
+            reader.setErrorHandler(defaultErrorHandler);
+            reader.parse(new InputSource(new StringReader(xmlString)));
+        } catch (Exception e) {
+            CsServices.getDefaultErrorHandler().handleError(e, getClass());
+            throw new CsUnrecoverableException(e.getMessage(), e);
+        }
+
     }
 
 }

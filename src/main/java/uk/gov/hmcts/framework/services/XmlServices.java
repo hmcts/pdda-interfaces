@@ -68,6 +68,16 @@ public interface XmlServices {
      */
     void addElementByTagName(Document document, String tagName, String value,
         String beforeTag);
+    
+    /**
+     * Validates the XML specified in
+     * <code>xmlString</code> against the schema specified
+     * by the argument <code>schemaBase</code>.
+     * 
+     * @param xmlString XML to be validated
+     * @param schemaLocation Schema to use for validation
+     */
+    void validateXml(String xmlString, String schemaLocation);
 
     /**
      * Create a serializer to write to the output stream.

@@ -7,10 +7,15 @@ import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
+import uk.gov.hmcts.pdda.courtlog.xsl.CourtLogXslHelper;
+import uk.gov.hmcts.pdda.courtlog.xsl.TranslationType;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -23,6 +28,10 @@ import java.util.Optional;
  */
 public final class CrLiveStatusHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
+
+    /** Stylesheet used to remove freetext. */
+    private static final String REMOVE_FREE_TEXT_STYLESHEET =
+        "config/courtlog/transformer/remove_free_text.xsl";
 
     private CrLiveStatusHelper() {
         // prevent external instantiation
@@ -85,6 +94,47 @@ public final class CrLiveStatusHelper {
         LOG.debug("deactivatePublicDisplay() - end");
     }
 
+    /**
+     * Update the public display status if the passed in court log event is more recent than the
+     * last displayed public display event for the case whose scheduled hearing is passed in on the
+     * view value.
+     * 
+     * @param clvv The <code>CourtLogViewValue</code> of the event that was created or updated.
+     * @return <i>true</i> if there is a cr live status entry for the scheduled hearing on the log
+     *         event passed in and the court log event passed in is more recent than the time status
+     *         set of the live status entry, <i>false</i> will be returned otherwise.
+     */
+    public static boolean updatePublicDisplayStatus(CourtLogViewValue clvv) {
+        LOG.debug("updatePublicDisplayStatus() - start");
+        XhbScheduledHearingDao xsh =
+            PddaEntityHelper.xshFindByPrimaryKey(clvv.getScheduledHearingId()).get();
+        XhbCrLiveDisplayDao xcld = getCrLiveDisplay(xsh);
+
+        if ((xcld != null) && !xcld.getTimeStatusSet().isAfter(clvv.getEntryDate())) {
+            xcld.setTimeStatusSet(clvv.getEntryDate());
+            xcld.setStatus(getPublicDisplayStatus(clvv));
+
+            LOG.debug("updatePublicDisplayStatus() - returning true");
+            return true;
+        }
+
+        LOG.debug("updatePublicDisplayStatus() - returning false");
+        return false;
+    }
+
+    /**
+     * Get the public display status by transforming the passed in value object by removing the free
+     * text.
+     * 
+     * @param viewValue view value
+     * @return The translated xml <code>String</code>.
+     */
+    private static String getPublicDisplayStatus(CourtLogViewValue viewValue) {
+        LOG.debug("getPublicDisplayStatus() - start and finish");
+        return CourtLogXslHelper.translateEvent(viewValue, Locale.UK,
+            TranslationType.PUBLIC_DISPLAY, REMOVE_FREE_TEXT_STYLESHEET);
+    }
+
     private static Optional<XhbCrLiveDisplayDao> getCrLiveDisplay(XhbCourtRoomDao courtRoom) {
         List<XhbCrLiveDisplayDao> liveStatuses =
             (List<XhbCrLiveDisplayDao>) courtRoom.getXhbCrLiveDisplays();
@@ -102,6 +152,19 @@ public final class CrLiveStatusHelper {
         xcldbv.setCourtRoomId(courtRoom.getCourtRoomId());
 
         return PddaEntityHelper.xcldSave(xcldbv);
+    }
+
+    private static XhbCrLiveDisplayDao getCrLiveDisplay(XhbScheduledHearingDao xsh) {
+        Collection<XhbCrLiveDisplayDao> col = xsh.getXhbCrLiveDisplays();
+        LOG.debug("getCrLiveDisplay(" + xsh.getScheduledHearingId() + ") has " + col.size()
+            + " cr_live_display entries");
+
+        if (col.isEmpty()) {
+            return col.iterator().next();
+        }
+
+        // no live display for the scheduled hearing so return null
+        return null;
     }
 
     private static void clearCrLiveDisplayStatus(XhbCrLiveDisplayDao crLiveDisplay) {

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -23,7 +23,8 @@ import java.util.Date;
  * @author Joseph Babad / Paul Fitton
  * @version $Revision: 1.6 $
  */
-public abstract class CourtLogAbstractValue extends CsAbstractValue implements Cloneable, Comparable<Object> {
+public abstract class CourtLogAbstractValue extends CsAbstractValue
+    implements Cloneable, Comparable<Object> {
 
     private static final long serialVersionUID = -3170263930219936328L;
 
@@ -36,9 +37,9 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     private Integer eventType;
 
     /** The date of the entry. */
-    private Date entryDate;
+    private LocalDateTime entryDate;
 
-    private Date lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
 
     /** The Case ID that this entry was made against. */
     private Integer caseId;
@@ -151,7 +152,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
      * 
      * @param date Date
      */
-    public void setEntryDate(Date date) {
+    public void setEntryDate(LocalDateTime date) {
         this.entryDate = date;
     }
 
@@ -160,7 +161,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
      * 
      * @return Date
      */
-    public Date getEntryDate() {
+    public LocalDateTime getEntryDate() {
         return this.entryDate;
     }
 
@@ -179,17 +180,18 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     }
 
     // Get the update date
-    public void setLastUpdateDate(Date lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public Date getLastUpdateDate() {
+    public LocalDateTime getLastUpdateDate() {
         return this.lastUpdateDate;
     }
 
     /**
-     * Implemented method of the <code>Comparable</code> interface, used to allow sorting of the court
-     * value objects. By default the value objects are sorted in an ascending order by the entry date.
+     * Implemented method of the <code>Comparable</code> interface, used to allow sorting of the
+     * court value objects. By default the value objects are sorted in an ascending order by the
+     * entry date.
      * 
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @see #getEntryDate()
