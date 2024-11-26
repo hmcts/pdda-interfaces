@@ -536,6 +536,13 @@
 			<xsd:element name="CourtHouseTelephone" type="apd:TelephoneNumberType" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
+	<xsd:complexType name="CourtHouseStructureNoAddress">
+		<xsd:sequence>
+			<xsd:element name="CourtHouseType" type="CourtType"/>
+			<xsd:element name="CourtHouseCode"/>
+			<xsd:element name="CourtHouseName" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
 	<xsd:complexType name="CourtOrderHeaderStructure">
 		<xsd:sequence>
 			<xsd:element name="OrderType" type="OrderTypeType"/>
@@ -672,22 +679,9 @@
 		<xsd:complexContent>
 			<xsd:extension base="PersonStructure">
 				<xsd:sequence>
-					<xsd:element name="ASNs" minOccurs="0">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="ASN" type="cs:ASnumberType" maxOccurs="unbounded"/>
-							</xsd:sequence>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="CRESTdefendantID" type="xsd:int" minOccurs="0"/>
-					<xsd:element name="PNCnumber" type="PNCnumberType" minOccurs="0"/>
 					<xsd:element name="URN" type="xsd:string" minOccurs="0"/>
-					<xsd:element name="CROnumber" type="xsd:string" minOccurs="0"/>
-					<xsd:element name="MagistratesCourtRefNumber" type="xsd:string" minOccurs="0"/>
 					<xsd:element name="PrisonerID" type="PrisonerIDtype" minOccurs="0"/>
 					<xsd:element name="PrisonLocation" type="PrisonLocationStructure" minOccurs="0"/>
-					<xsd:element name="CustodyStatus" type="BailStatusType" minOccurs="0"/>
-					<xsd:element name="Counsel" type="DefenceStructure" minOccurs="0" maxOccurs="unbounded"/>
 					<xsd:element name="Charges" minOccurs="0">
 						<xsd:complexType>
 							<xsd:sequence>
@@ -810,9 +804,8 @@
 			<xsd:element name="TimeMarkingNote" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="CaseNumber" type="xsd:string"/>
 			<xsd:element name="Prosecution" type="ProsecutionStructure" minOccurs="0"/>
-			<xsd:element name="CommittingCourt" type="CourtHouseStructure" minOccurs="0"/>
+			<xsd:element name="CommittingCourt" type="CourtHouseStructureNoAddress" minOccurs="0"/>
 			<xsd:element name="ListNote" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="NumberOfDefendants" type="xsd:int" minOccurs="0"/>
 			<xsd:element name="Defendants" minOccurs="0">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -972,11 +965,7 @@
 	</xsd:complexType>
 	<xsd:complexType name="OrganisationStructure">
 		<xsd:sequence>
-			<xsd:element name="OrganisationCode" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="OrganisationName" type="xsd:string"/>
-			<xsd:element name="OrganisationAddress" type="apd:UKPostalAddressStructure" minOccurs="0"/>
-			<xsd:element name="OrganisationDX" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="ContactDetails" type="apd:CitizenContactDetailsStructure" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="PartyStructure">
