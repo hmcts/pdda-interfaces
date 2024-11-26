@@ -395,47 +395,10 @@
 	</xsd:complexType>
 	<xsd:complexType name="ChargeStructure">
 		<xsd:sequence>
-			<xsd:element name="CRN" type="CRnumberType" minOccurs="0"/>
-			<xsd:element name="CRESTchargeID" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="CaseNumber" type="CaseNumberType" minOccurs="0"/>
 			<xsd:element name="OffenceStatement" type="xsd:string"/>
-			<xsd:element name="OffenceLocation" type="apd:UKPostalAddressStructure" minOccurs="0"/>
-			<xsd:element name="ArrestingPoliceForceCode" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="CommittedOnBail" type="YesNoType" minOccurs="0"/>
-			<xsd:element name="OffenceStartDateTime" type="xsd:dateTime" minOccurs="0"/>
-			<xsd:element name="OffenceEndDateTime" type="xsd:dateTime" minOccurs="0"/>
-			<xsd:element name="ArraignmentDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="ConvictionDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="OffenceParticulars" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="CRESToffenceNumber" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="Plea" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="Verdict" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="Disposals" minOccurs="0">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="Disposal" type="xsd:string" maxOccurs="unbounded"/>
-						<xsd:element name="CRESTDisposalData" type="cs:CRESTDisposalDataStructure" minOccurs="0" maxOccurs="unbounded"/>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="SentenceTerm" type="xsd:duration" minOccurs="0"/>
-			<xsd:element name="TermType" type="TermTypeType" minOccurs="0"/>
-			<xsd:element name="ForLife" type="YesNoType" default="yes" minOccurs="0"/>
 		</xsd:sequence>
-		<xsd:attribute name="ChargeType" type="xsd:string" use="optional">
-			<xsd:annotation>
-				<xsd:documentation>
-					Charge type must be one of: indictment, summary, breach, committal, appeal.
-				</xsd:documentation>
-			</xsd:annotation>
-		</xsd:attribute>
-		<xsd:attribute name="IndictmentNumber" type="xsd:int" use="optional"/>
 		<xsd:attribute name="IndictmentCountNumber" type="xsd:int" use="required"/>
 		<xsd:attribute name="CJSoffenceCode" type="xsd:string" use="optional"/>
-		<xsd:attribute name="PNCoffenceCode" type="xsd:string" use="optional"/>
-		<xsd:attribute name="HOoffenceCode" type="xsd:string" use="optional"/>
-		<xsd:attribute name="Life" type="YesNoType" use="optional"/>
-		<xsd:attribute name="BreachMultiple" type="xsd:int" use="optional"/>
 	</xsd:complexType>
 	<xsd:complexType name="CollectionCentreStructure">
 		<xsd:sequence>
@@ -687,30 +650,8 @@
 							<xsd:sequence>
 								<xsd:element name="Charge" type="ChargeStructure" maxOccurs="unbounded"/>
 							</xsd:sequence>
-							<xsd:attribute name="NumberOfCharges" type="xsd:integer" use="optional"/>
 						</xsd:complexType>
 					</xsd:element>
-					<xsd:element name="OriginalCharges" minOccurs="0">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="OriginalCharge" maxOccurs="unbounded">
-									<xsd:annotation>
-										<xsd:documentation>OriginalCharges are only applicable to trial cases. Each  OriginalCharge must be regarded as related to (and 'disposed' via) a defendant disposal. This relationship is relevant to, and identified in, the Trial Record Sheet XML Schema document. </xsd:documentation>
-									</xsd:annotation>
-									<xsd:complexType>
-										<xsd:sequence>
-											<xsd:element name="OriginalChargeSequenceNumber" type="xsd:int"/>
-											<xsd:element name="OriginalChargeDescription" type="xsd:string"/>
-										</xsd:sequence>
-									</xsd:complexType>
-								</xsd:element>
-							</xsd:sequence>
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="AdditionalNotes" type="xsd:string" minOccurs="0"/>
-					<xsd:element name="DeportationReason" type="DeportationReason" minOccurs="0"/>
-					<xsd:element name="HateCrime" type="HateCrimeStructure" minOccurs="0"/>
-					<xsd:element name="DefendantNumber" type="xsd:int" minOccurs="0"/>
 				</xsd:sequence>
 			</xsd:extension>
 		</xsd:complexContent>
