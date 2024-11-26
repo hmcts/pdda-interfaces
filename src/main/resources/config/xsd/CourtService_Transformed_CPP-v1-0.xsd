@@ -807,7 +807,6 @@
 		<xsd:sequence>
 			<xsd:element name="HearingSequenceNumber" type="xsd:int"/>
 			<xsd:element name="HearingDetails" type="HearingTypeStructure"/>
-			<xsd:element name="CRESThearingID" type="xsd:int" minOccurs="0"/>
 			<xsd:element name="TimeMarkingNote" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="CaseNumber" type="xsd:string"/>
 			<xsd:element name="Prosecution" type="ProsecutionStructure" minOccurs="0"/>
@@ -850,9 +849,6 @@
 	<xsd:complexType name="HearingTypeStructure">
 		<xsd:sequence>
 			<xsd:element name="HearingDescription" type="xsd:string"/>
-			<xsd:element name="HearingDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="HearingEndDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="ListNote" type="xsd:string" minOccurs="0"/>
 		</xsd:sequence>
 		<xsd:attribute name="HearingType" type="HearingTypeType"/>
 	</xsd:complexType>
@@ -861,11 +857,7 @@
 			<xsd:element name="Judge">
 				<xsd:complexType>
 					<xsd:complexContent>
-						<xsd:extension base="apd:CitizenNameStructure">
-							<xsd:sequence>
-								<xsd:element name="CRESTjudgeID" type="xsd:int" minOccurs="0"/>
-							</xsd:sequence>
-						</xsd:extension>
+						<xsd:extension base="apd:CitizenNameStructure"/>
 					</xsd:complexContent>
 				</xsd:complexType>
 			</xsd:element>
@@ -880,8 +872,6 @@
 					</xsd:complexContent>
 				</xsd:complexType>
 			</xsd:element>
-			<xsd:element name="StartDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="EndDate" type="xsd:date" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="LifeSentenceStructure">
@@ -1044,7 +1034,6 @@
 	</xsd:complexType>
 	<xsd:complexType name="ProsecutionStructure">
 		<xsd:sequence>
-			<xsd:element name="Advocate" type="AdvocateStructure" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="ProsecutingReference" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="ProsecutingOrganisation" type="OrganisationStructure" minOccurs="0"/>
 		</xsd:sequence>
