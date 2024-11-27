@@ -71,4 +71,6 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
         query.setParameter("courtId", courtId);
         return query.getResultList();
     }
+    
+    
 }
