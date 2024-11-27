@@ -535,31 +535,10 @@
 	<xsd:complexType name="CourtHouseStructure">
 		<xsd:sequence>
 			<xsd:element name="CourtHouseType" type="CourtType"/>
-			<xsd:element name="CourtHouseCode">
-				<xsd:complexType>
-					<xsd:simpleContent>
-						<xsd:extension base="CourtHouseCodeType">
-							<xsd:attribute name="CourtHouseShortName" use="optional">
-								<xsd:simpleType>
-									<xsd:restriction base="xsd:string">
-										<xsd:pattern value="[A-Z]{3,5}"/>
-									</xsd:restriction>
-								</xsd:simpleType>
-							</xsd:attribute>
-						</xsd:extension>
-					</xsd:simpleContent>
-				</xsd:complexType>
-			</xsd:element>
+			<xsd:element name="CourtHouseCode"/>
 			<xsd:element name="CourtHouseName" type="xsd:string"/>
 			<xsd:element name="CourtHouseAddress" type="apd:UKPostalAddressStructure" minOccurs="0"/>
-			<xsd:element name="CourtHouseDX" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="CourtHouseTelephone" type="apd:TelephoneNumberType" minOccurs="0"/>
-			<xsd:element name="CourtHouseFax" type="apd:TelephoneNumberType" minOccurs="0"/>
-			<xsd:element name="Description" type="xsd:string" minOccurs="0">
-				<xsd:annotation>
-					<xsd:documentation>Used to hold High and Combined</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="CourtOrderHeaderStructure">
@@ -749,20 +728,9 @@
 	</xsd:complexType>
 	<xsd:complexType name="DocumentIDstructure">
 		<xsd:sequence>
-			<xsd:element name="DocumentName" type="xsd:string"/>
 			<xsd:element name="UniqueID" type="xsd:string"/>
 			<xsd:element name="DocumentType" type="xsd:string"/>
-			<xsd:element name="TimeStamp" type="xsd:dateTime" minOccurs="0"/>
-			<xsd:element name="Version" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="SecurityClassification" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="SellByDate" type="xsd:date" minOccurs="0"/>
-			<xsd:element name="XSLstylesheetURL" type="xsd:string" minOccurs="0"/>
-			<xsd:element name="WelshTranslation" type="YesNoType" minOccurs="0"/>
-			<xsd:element name="DocumentInformation" type="xsd:string" minOccurs="0">
-				<xsd:annotation>
-					<xsd:documentation>Used to descibe version changes</xsd:documentation>
-				</xsd:annotation>
-			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="DrugRehabilitationStructure">
@@ -938,20 +906,10 @@
 	</xsd:complexType>
 	<xsd:complexType name="ListHeaderStructure">
 		<xsd:sequence>
-			<xsd:element name="ListCategory" default="Criminal">
-				<xsd:simpleType>
-					<xsd:restriction base="xsd:string">
-						<xsd:enumeration value="Combined"/>
-						<xsd:enumeration value="Criminal"/>
-					</xsd:restriction>
-				</xsd:simpleType>
-			</xsd:element>
 			<xsd:element name="StartDate" type="xsd:date"/>
 			<xsd:element name="EndDate" type="xsd:date" minOccurs="0"/>
 			<xsd:element name="Version" type="xsd:string"/>
-			<xsd:element name="CRESTprintRef" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="PublishedTime" type="xsd:dateTime"/>
-			<xsd:element name="CRESTlistID" type="xsd:int" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="LocationStructure">
