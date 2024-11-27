@@ -53,7 +53,7 @@ public class DataHelper {
         return getRepositoryHelper().getXhbCourtSiteRepository().update(dao);
     }
 
-    private RepositoryHelper getRepositoryHelper() {
+    protected RepositoryHelper getRepositoryHelper() {
         if (repositoryHelper == null) {
             repositoryHelper = new RepositoryHelper();
         }
