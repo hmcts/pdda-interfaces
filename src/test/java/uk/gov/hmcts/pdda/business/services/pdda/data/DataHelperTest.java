@@ -24,4 +24,5 @@ class DataHelperTest {
         DataHelper result = new DataHelper();
         assertNotNull(result, NOTNULL);
     }
+
 }
