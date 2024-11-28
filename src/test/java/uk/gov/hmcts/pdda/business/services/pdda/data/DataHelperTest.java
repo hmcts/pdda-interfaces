@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 
@@ -29,6 +31,9 @@ class DataHelperTest {
 
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+    
+    @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
 
     @InjectMocks
     private final DataHelper classUnderTest = new DataHelper(mockRepositoryHelper);
@@ -52,10 +57,19 @@ class DataHelperTest {
 
         XhbCourtSiteDao dao = DummyCourtUtil.getXhbCourtSiteDao();
         Optional<XhbCourtSiteDao> result = classUnderTest.createCourtSite(dao.getCourtId(),
-            dao.getCourtSiteName(), dao.getCourtSiteCode(), dao.getAddressId());
+            dao.getCourtSiteName(), dao.getCourtSiteCode());
         assertNotNull(result, NOTNULL);
     }
 
+    @Test
+    void testCreateCourtRoom() {
+        Mockito.when(mockRepositoryHelper.getXhbCourtRoomRepository())
+            .thenReturn(mockXhbCourtRoomRepository);
 
+        XhbCourtRoomDao dao = DummyCourtUtil.getXhbCourtRoomDao();
+        Optional<XhbCourtRoomDao> result = classUnderTest.createCourtRoom(dao.getCourtSiteId(),
+            dao.getCourtRoomName(), dao.getDescription(), dao.getCrestCourtRoomNo());
+        assertNotNull(result, NOTNULL);
+    }
 
 }
