@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_SCHED_HEARING_DEFENDANT")
 @NamedQuery(name = "XHB_SCHED_HEARING_DEFENDANT.findByScheduledHearingId",
     query = "SELECT o from XHB_SCHED_HEARING_DEFENDANT o WHERE o.scheduledHearingId = :scheduledHearingId")
+@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6844793990175522946L;
@@ -70,7 +71,7 @@ public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements
         return schedHearingDefendantId;
     }
 
-    private void setSchedHearingDefendantId(Integer schedHearingDefendantId) {
+    public void setSchedHearingDefendantId(Integer schedHearingDefendantId) {
         this.schedHearingDefendantId = schedHearingDefendantId;
     }
 
@@ -78,7 +79,7 @@ public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements
         return scheduledHearingId;
     }
 
-    private void setScheduledHearingId(Integer scheduledHearingId) {
+    public void setScheduledHearingId(Integer scheduledHearingId) {
         this.scheduledHearingId = scheduledHearingId;
     }
 
@@ -86,7 +87,7 @@ public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements
         return defendantOnCaseId;
     }
 
-    private void setDefendantOnCaseId(Integer defendantOnCaseId) {
+    public void setDefendantOnCaseId(Integer defendantOnCaseId) {
         this.defendantOnCaseId = defendantOnCaseId;
     }
 
