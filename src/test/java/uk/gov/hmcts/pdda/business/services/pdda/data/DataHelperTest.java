@@ -41,7 +41,8 @@ class DataHelperTest {
                 return super.getRepositoryHelper();
             }
         };
-        localClassUnderTest.getRepositoryHelper();
+        RepositoryHelper result = localClassUnderTest.getRepositoryHelper();
+        assertNotNull(result, NOTNULL);
     }
 
     @Test

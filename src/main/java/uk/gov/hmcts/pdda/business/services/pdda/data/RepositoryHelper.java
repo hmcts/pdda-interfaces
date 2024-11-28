@@ -56,31 +56,11 @@ public class RepositoryHelper {
     }
 
     // JUnit constructor
-    public RepositoryHelper(EntityManager entityManager,
-        XhbCourtSiteRepository xhbCourtSiteRepository,
-        XhbCourtRoomRepository xhbCourtRoomRepository,
-        XhbHearingListRepository xhbHearingListRepository,
-        XhbSittingRepository xhbSittingRepository, XhbCaseRepository xhbCaseRepository,
-        XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
-        XhbDefendantRepository xhbDefendantRepository, XhbHearingRepository xhbHearingRepository,
-        XhbScheduledHearingRepository xhbScheduledHearingRepository,
-        XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository,
-        XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository) {
+    public RepositoryHelper(EntityManager entityManager) {
         this.entityManager = entityManager;
-        this.xhbCourtSiteRepository = xhbCourtSiteRepository;
-        this.xhbCourtRoomRepository = xhbCourtRoomRepository;
-        this.xhbHearingListRepository = xhbHearingListRepository;
-        this.xhbSittingRepository = xhbSittingRepository;
-        this.xhbCaseRepository = xhbCaseRepository;
-        this.xhbDefendantRepository = xhbDefendantRepository;
-        this.xhbDefendantOnCaseRepository = xhbDefendantOnCaseRepository;
-        this.xhbHearingRepository = xhbHearingRepository;
-        this.xhbScheduledHearingRepository = xhbScheduledHearingRepository;
-        this.xhbSchedHearingDefendantRepository = xhbSchedHearingDefendantRepository;
-        this.xhbCrLiveDisplayRepository = xhbCrLiveDisplayRepository;
     }
 
-    protected void clearRepositories() {
+    private void clearRepositories() {
         LOG.info("clearRepositories()");
         xhbCourtSiteRepository = null;
         xhbCourtRoomRepository = null;
@@ -99,7 +79,7 @@ public class RepositoryHelper {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
     }
 
-    private EntityManager getEntityManager() {
+    protected EntityManager getEntityManager() {
         if (!isEntityManagerActive()) {
             clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
