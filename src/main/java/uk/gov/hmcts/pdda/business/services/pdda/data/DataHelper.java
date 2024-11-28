@@ -17,7 +17,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
  * @author HarrisM
  * @version 1.0
  */
-public class DataHelper extends CreationHelper {
+public class DataHelper extends FinderHelper {
 
     public DataHelper() {
         super();

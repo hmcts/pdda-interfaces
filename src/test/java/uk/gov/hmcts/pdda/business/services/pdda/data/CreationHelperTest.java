@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.data;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,12 +35,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
+
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 class CreationHelperTest {
 
     private static final String NOTNULL = "Result is Null";
