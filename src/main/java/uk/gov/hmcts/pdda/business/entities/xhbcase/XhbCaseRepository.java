@@ -29,7 +29,8 @@ public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> {
     /**
      * findByNumberTypeAndCourt.
      * @param courtId Integer
-     * @param courtSiteName String
+     * @param caseType String
+     * @param caseNumber Integer
      * @return XhbCaseDao
      */
     public Optional<XhbCaseDao> findByNumberTypeAndCourt(final Integer courtId,

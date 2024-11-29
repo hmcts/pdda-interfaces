@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -28,6 +30,7 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI"})
 public class DataHelper extends FinderHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
@@ -79,6 +82,28 @@ public class DataHelper extends FinderHelper {
         Optional<XhbCaseDao> result = findCase(courtId, caseType, caseNumber);
         if (result.isEmpty()) {
             result = createCase(courtId, caseType, caseNumber);
+        }
+        return result;
+    }
+
+    public Optional<XhbDefendantOnCaseDao> validateDefendantOnCase(final Integer caseId,
+        final Integer defendantId) {
+        LOG.debug("validateDefendantOnCase()");
+        Optional<XhbDefendantOnCaseDao> result = findDefendantOnCase(caseId, defendantId);
+        if (result.isEmpty()) {
+            result = createDefendantOnCase(caseId, defendantId);
+        }
+        return result;
+    }
+
+    public Optional<XhbDefendantDao> validateDefendant(final Integer courtId,
+        final String firstName, final String middleName, final String surname, final String gender,
+        final LocalDateTime dateOfBirth) {
+        LOG.debug("validateDefendant()");
+        Optional<XhbDefendantDao> result =
+            findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
+        if (result.isEmpty()) {
+            result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         }
         return result;
     }

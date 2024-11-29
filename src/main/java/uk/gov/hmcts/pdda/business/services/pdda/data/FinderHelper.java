@@ -3,6 +3,8 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -26,7 +28,7 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI"})
 public class FinderHelper extends CreationHelper {
 
     public FinderHelper() {
@@ -61,10 +63,23 @@ public class FinderHelper extends CreationHelper {
         return getRepositoryHelper().getXhbSittingRepository()
             .findByCourtRoomAndSittingTime(courtSiteId, courtRoomId, sittingTime);
     }
-    
+
     public Optional<XhbCaseDao> findCase(final Integer courtId, final String caseType,
         final Integer caseNumber) {
-        return getRepositoryHelper().getXhbCaseRepository()
-            .findByNumberTypeAndCourt(courtId, caseType, caseNumber);
+        return getRepositoryHelper().getXhbCaseRepository().findByNumberTypeAndCourt(courtId,
+            caseType, caseNumber);
+    }
+
+    public Optional<XhbDefendantOnCaseDao> findDefendantOnCase(final Integer caseId,
+        final Integer defendantId) {
+        return getRepositoryHelper().getXhbDefendantOnCaseRepository()
+            .findByDefendantAndCase(caseId, defendantId);
+    }
+
+    public Optional<XhbDefendantDao> findDefendant(final Integer courtId, final String firstName,
+        final String middleName, final String surname, final String gender,
+        final LocalDateTime dateOfBirth) {
+        return getRepositoryHelper().getXhbDefendantRepository().findByDefendantName(courtId,
+            firstName, middleName, surname, gender, dateOfBirth);
     }
 }

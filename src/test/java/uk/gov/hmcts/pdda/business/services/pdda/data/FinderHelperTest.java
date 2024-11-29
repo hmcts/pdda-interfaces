@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
@@ -17,6 +18,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -96,6 +99,17 @@ class FinderHelperTest {
         XhbCaseDao dao = DummyCaseUtil.getXhbCaseDao();
         Optional<XhbCaseDao> result =
             classUnderTest.findCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindDefendantOnCase() {
+        Mockito.when(mockRepositoryHelper.getXhbDefendantOnCaseRepository())
+            .thenReturn(Mockito.mock(XhbDefendantOnCaseRepository.class));
+
+        XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
+        Optional<XhbDefendantOnCaseDao> result =
+            classUnderTest.findDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
         assertNotNull(result, NOTNULL);
     }
 }

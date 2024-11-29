@@ -34,7 +34,8 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LawOfDemeter", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LawOfDemeter", "PMD.TooManyMethods",
+    "PMD.UseObjectForClearerAPI"})
 public class CreationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreationHelper.class);
@@ -138,14 +139,17 @@ public class CreationHelper {
     /**
      * Create XhbDefendantDao.
      */
-    public Optional<XhbDefendantDao> createDefendant(// final Integer courtId,
-        final String firstName, final String middleName, final String surname) {
+    public Optional<XhbDefendantDao> createDefendant(final Integer courtId, final String firstName,
+        final String middleName, final String surname, final String gender,
+        final LocalDateTime dateOfBirth) {
         LOG.info("createDefendant({},{},{})", firstName, middleName, surname);
         XhbDefendantDao dao = new XhbDefendantDao();
         dao.setFirstName(firstName);
         dao.setMiddleName(middleName);
         dao.setSurname(surname);
-        // dao.setCourtId(courtId);
+        dao.setCourtId(courtId);
+        dao.setGender(gender);
+        dao.setDateOfBirth(dateOfBirth);
         return getRepositoryHelper().getXhbDefendantRepository().update(dao);
     }
 

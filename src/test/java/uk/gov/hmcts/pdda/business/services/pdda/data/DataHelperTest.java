@@ -8,10 +8,13 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -22,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI"})
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";
@@ -126,6 +129,45 @@ class DataHelperTest {
     }
 
     /**
+     * validateDefendantOnCase.
+     */
+    @Test
+    void testValidateDefendantOnCase() {
+        XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
+        boolean result = testValidateDefendantOnCase(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateDefendantOnCase(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateDefendantOnCase(XhbDefendantOnCaseDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbDefendantOnCaseDao> result =
+            classUnderTest.validateDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+        return result.isPresent();
+    }
+
+    /**
+     * validateDefendant.
+     */
+    @Test
+    void testValidateDefendant() {
+        XhbDefendantDao dao = DummyDefendantUtil.getXhbDefendantDao();
+        boolean result = testValidateDefendant(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateDefendant(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateDefendant(XhbDefendantDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbDefendantDao> result =
+            classUnderTest.validateDefendant(dao.getCourtId(), dao.getFirstName(),
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+        return result.isPresent();
+    }
+
+    /**
      * Local test version of the DataHelper.
      */
     public class LocalDataHelper extends DataHelper {
@@ -207,6 +249,38 @@ class DataHelperTest {
         public Optional<XhbCaseDao> createCase(final Integer courtId, final String caseType,
             final Integer caseNumber) {
             return Optional.of(new XhbCaseDao());
+        }
+
+        /**
+         * validateDefendantOnCase overrides.
+         */
+        @Override
+        public Optional<XhbDefendantOnCaseDao> findDefendantOnCase(final Integer caseId,
+            final Integer defendantId) {
+            return this.isPresent ? Optional.of(new XhbDefendantOnCaseDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbDefendantOnCaseDao> createDefendantOnCase(final Integer caseId,
+            final Integer defendantId) {
+            return Optional.of(new XhbDefendantOnCaseDao());
+        }
+
+        /**
+         * validateDefendant overrides.
+         */
+        @Override
+        public Optional<XhbDefendantDao> findDefendant(final Integer courtId,
+            final String firstName, final String middleName, final String surname,
+            final String gender, final LocalDateTime dateOfBirth) {
+            return this.isPresent ? Optional.of(new XhbDefendantDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbDefendantDao> createDefendant(final Integer courtId,
+            final String firstName, final String middleName, final String surname,
+            final String gender, final LocalDateTime dateOfBirth) {
+            return Optional.of(new XhbDefendantDao());
         }
     }
 }

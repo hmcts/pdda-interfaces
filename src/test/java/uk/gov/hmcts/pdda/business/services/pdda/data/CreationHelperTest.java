@@ -137,8 +137,9 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbDefendantRepository.class));
 
         XhbDefendantDao dao = DummyDefendantUtil.getXhbDefendantDao();
-        Optional<XhbDefendantDao> result = classUnderTest.createDefendant(dao.getFirstName(),
-            dao.getMiddleName(), dao.getSurname());
+        Optional<XhbDefendantDao> result =
+            classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
         assertNotNull(result, NOTNULL);
     }
 
