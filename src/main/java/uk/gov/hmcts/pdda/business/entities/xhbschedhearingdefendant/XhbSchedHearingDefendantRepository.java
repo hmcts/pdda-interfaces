@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.util.List;
-
-
+import java.util.Optional;
 
 @Repository
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbSchedHearingDefendantRepository
     extends AbstractRepository<XhbSchedHearingDefendantDao> {
 
@@ -40,5 +40,20 @@ public class XhbSchedHearingDefendantRepository
             .createNamedQuery("XHB_SCHED_HEARING_DEFENDANT.findByScheduledHearingId");
         query.setParameter("scheduledHearingId", scheduledHearingId);
         return query.getResultList();
+    }
+    
+    /**
+     * findByHearingAndDefendant.
+     * 
+     * @return XhbSchedHearingDefendantDao
+     */
+    public Optional<XhbSchedHearingDefendantDao> findByHearingAndDefendant(final Integer scheduledHearingId,
+        final Integer defendantOnCaseId) {
+        LOG.debug("findByHearingAndDefendant()");
+        Query query = getEntityManager().createNamedQuery("XHB_SCHED_HEARING_DEFENDANT.findByHearingAndDefendant");
+        query.setParameter("scheduledHearingId", scheduledHearingId);
+        query.setParameter("defendantOnCaseId", defendantOnCaseId);
+        XhbSchedHearingDefendantDao dao = (XhbSchedHearingDefendantDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

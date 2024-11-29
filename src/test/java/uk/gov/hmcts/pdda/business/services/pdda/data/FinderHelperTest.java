@@ -11,6 +11,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
+import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
@@ -18,10 +19,16 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
@@ -110,6 +117,39 @@ class FinderHelperTest {
         XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
         Optional<XhbDefendantOnCaseDao> result =
             classUnderTest.findDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindScheduledHearing() {
+        Mockito.when(mockRepositoryHelper.getXhbScheduledHearingRepository())
+            .thenReturn(Mockito.mock(XhbScheduledHearingRepository.class));
+
+        XhbScheduledHearingDao dao = DummyHearingUtil.getXhbScheduledHearingDao();
+        Optional<XhbScheduledHearingDao> result = classUnderTest
+            .findScheduledHearing(dao.getSittingId(), dao.getHearingId(), dao.getNotBeforeTime());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindSchedHearingDefendant() {
+        Mockito.when(mockRepositoryHelper.getXhbSchedHearingDefendantRepository())
+            .thenReturn(Mockito.mock(XhbSchedHearingDefendantRepository.class));
+
+        XhbSchedHearingDefendantDao dao = DummyHearingUtil.getXhbSchedHearingDefendantDao();
+        Optional<XhbSchedHearingDefendantDao> result = classUnderTest
+            .findSchedHearingDefendant(dao.getScheduledHearingId(), dao.getDefendantOnCaseId());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindCrLiveDisplay() {
+        Mockito.when(mockRepositoryHelper.getXhbCrLiveDisplayRepository())
+            .thenReturn(Mockito.mock(XhbCrLiveDisplayRepository.class));
+
+        XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
+        Optional<XhbCrLiveDisplayDao> result =
+            classUnderTest.findCrLiveDisplay(dao.getCourtRoomId(), dao.getScheduledHearingId());
         assertNotNull(result, NOTNULL);
     }
 }

@@ -3,10 +3,12 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -30,7 +32,7 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI", "PMD.TooManyMethods"})
 public class FinderHelper extends CreationHelper {
 
     public FinderHelper() {
@@ -95,5 +97,17 @@ public class FinderHelper extends CreationHelper {
         final Integer hearingId, final LocalDateTime notBeforeTime) {
         return getRepositoryHelper().getXhbScheduledHearingRepository().findBySittingDate(sittingId,
             hearingId, notBeforeTime);
+    }
+
+    public Optional<XhbSchedHearingDefendantDao> findSchedHearingDefendant(
+        final Integer scheduledHearingId, final Integer defendantOnCaseId) {
+        return getRepositoryHelper().getXhbSchedHearingDefendantRepository()
+            .findByHearingAndDefendant(scheduledHearingId, defendantOnCaseId);
+    }
+
+    public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
+        final Integer scheduledHearingId) {
+        return getRepositoryHelper().getXhbCrLiveDisplayRepository().findByHearing(courtRoomId,
+            scheduledHearingId);
     }
 }

@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -120,9 +122,9 @@ public class DataHelper extends FinderHelper {
         return result;
     }
 
-    public Optional<XhbScheduledHearingDao> validateHearing(final Integer sittingId,
+    public Optional<XhbScheduledHearingDao> validateScheduledHearing(final Integer sittingId,
         final Integer hearingId, final LocalDateTime notBeforeTime) {
-        LOG.debug("validateHearing()");
+        LOG.debug("validateScheduledHearing()");
         Optional<XhbScheduledHearingDao> result =
             findScheduledHearing(sittingId, hearingId, notBeforeTime);
         if (result.isEmpty()) {
@@ -130,4 +132,27 @@ public class DataHelper extends FinderHelper {
         }
         return result;
     }
+
+    public Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant(
+        final Integer scheduledHearingId, final Integer defendantId) {
+        LOG.debug("validateSchedHearingDefendant()");
+        Optional<XhbSchedHearingDefendantDao> result =
+            findSchedHearingDefendant(scheduledHearingId, defendantId);
+        if (result.isEmpty()) {
+            result = createSchedHearingDefendant(scheduledHearingId, defendantId);
+        }
+        return result;
+    }
+
+    public Optional<XhbCrLiveDisplayDao> validateCrLiveDisplay(final Integer courtRoomId,
+        final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
+        LOG.debug("validateCrLiveDisplay()");
+        Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId, scheduledHearingId);
+        if (result.isEmpty()) {
+            result = createCrLiveDisplay(courtRoomId, scheduledHearingId, timeStatusSet);
+        }
+        return result;
+    }
+
+
 }

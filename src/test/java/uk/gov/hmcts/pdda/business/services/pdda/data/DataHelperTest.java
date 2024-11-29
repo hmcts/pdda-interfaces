@@ -9,14 +9,18 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
+import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
@@ -26,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI", "PMD.CouplingBetweenObjects"})
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";
@@ -188,6 +192,64 @@ class DataHelperTest {
     }
 
     /**
+     * validateScheduledHearing.
+     */
+    @Test
+    void testValidateScheduledHearing() {
+        XhbScheduledHearingDao dao = DummyHearingUtil.getXhbScheduledHearingDao();
+        boolean result = testValidateScheduledHearing(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateScheduledHearing(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateScheduledHearing(XhbScheduledHearingDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbScheduledHearingDao> result = classUnderTest.validateScheduledHearing(
+            dao.getSittingId(), dao.getHearingId(), dao.getNotBeforeTime());
+        return result.isPresent();
+    }
+
+    /**
+     * validateSchedHearingDefendant.
+     */
+    @Test
+    void testValidateSchedHearingDefendant() {
+        XhbSchedHearingDefendantDao dao = DummyHearingUtil.getXhbSchedHearingDefendantDao();
+        boolean result = testValidateSchedHearingDefendant(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateSchedHearingDefendant(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateSchedHearingDefendant(XhbSchedHearingDefendantDao dao,
+        boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbSchedHearingDefendantDao> result = classUnderTest
+            .validateSchedHearingDefendant(dao.getScheduledHearingId(), dao.getDefendantOnCaseId());
+        return result.isPresent();
+    }
+
+    /**
+     * ` validateCrLiveDisplay.
+     */
+    @Test
+    void testValidateCrLiveDisplay() {
+        XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
+        boolean result = testValidateCrLiveDisplay(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateCrLiveDisplay(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateCrLiveDisplay(XhbCrLiveDisplayDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbCrLiveDisplayDao> result = classUnderTest.validateCrLiveDisplay(
+            dao.getCourtRoomId(), dao.getScheduledHearingId(), dao.getTimeStatusSet());
+        return result.isPresent();
+    }
+
+    /**
      * Local test version of the DataHelper.
      */
     public class LocalDataHelper extends DataHelper {
@@ -316,6 +378,52 @@ class DataHelperTest {
         public Optional<XhbHearingDao> createHearing(final Integer courtId, final Integer caseId,
             final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
             return Optional.of(new XhbHearingDao());
+        }
+
+        /**
+         * validateScheduledHearing overrides.
+         */
+        @Override
+        public Optional<XhbScheduledHearingDao> findScheduledHearing(final Integer courtId,
+            final Integer caseId, final LocalDateTime hearingStartDate) {
+            return this.isPresent ? Optional.of(new XhbScheduledHearingDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbScheduledHearingDao> createScheduledHearing(final Integer sittingId,
+            final Integer hearingId, final LocalDateTime notBeforeTime) {
+            return Optional.of(new XhbScheduledHearingDao());
+        }
+
+        /**
+         * validateSchedHearingDefendant overrides.
+         */
+        @Override
+        public Optional<XhbSchedHearingDefendantDao> findSchedHearingDefendant(
+            final Integer scheduledHearingId, final Integer defendantOnCaseId) {
+            return this.isPresent ? Optional.of(new XhbSchedHearingDefendantDao())
+                : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbSchedHearingDefendantDao> createSchedHearingDefendant(
+            final Integer scheduledHearingId, final Integer defendantOnCaseId) {
+            return Optional.of(new XhbSchedHearingDefendantDao());
+        }
+
+        /**
+         * validateCrLiveDisplay overrides.
+         */
+        @Override
+        public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
+            final Integer scheduledHearingId) {
+            return this.isPresent ? Optional.of(new XhbCrLiveDisplayDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbCrLiveDisplayDao> createCrLiveDisplay(final Integer courtRoomId,
+            final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
+            return Optional.of(new XhbCrLiveDisplayDao());
         }
     }
 }
