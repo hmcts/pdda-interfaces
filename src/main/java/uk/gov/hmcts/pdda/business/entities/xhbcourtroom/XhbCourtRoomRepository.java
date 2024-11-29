@@ -8,10 +8,12 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 
 @Repository
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtRoomRepository.class);
@@ -78,4 +80,18 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
         return query.getResultList();
     }
 
+    /**
+     * findByCourtRoomName.
+     * @param courtSiteId Integer
+     * @param courtRoomName String
+     * @return XhbCourtRoomDao
+     */
+    public Optional<XhbCourtRoomDao> findByCourtRoomName(Integer courtSiteId, String courtRoomName) {
+        LOG.debug("findByCourtRoomName({})", courtRoomName);
+        Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtRoomName");
+        query.setParameter("courtSiteId", courtSiteId);
+        query.setParameter("courtRoomName", courtRoomName);
+        XhbCourtRoomDao dao = (XhbCourtRoomDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
+    }
 }

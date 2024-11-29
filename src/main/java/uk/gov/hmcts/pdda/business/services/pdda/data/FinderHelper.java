@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda.data;
 
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 
 import java.util.Optional;
@@ -37,5 +38,11 @@ public class FinderHelper extends CreationHelper {
         final String courtSiteName) {
         return getRepositoryHelper().getXhbCourtSiteRepository().findByCourtSiteName(courtId,
             courtSiteName);
+    }
+    
+    public Optional<XhbCourtRoomDao> findCourtRoom(final Integer courtId,
+        final String courtRoomName) {
+        return getRepositoryHelper().getXhbCourtRoomRepository().findByCourtRoomName(courtId,
+            courtRoomName);
     }
 }
