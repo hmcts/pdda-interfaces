@@ -16,6 +16,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import java.util.Optional;
 
@@ -69,6 +71,17 @@ class FinderHelperTest {
         XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
         Optional<XhbHearingListDao> result =
             classUnderTest.findHearingList(dao.getCourtId(), dao.getStatus(), dao.getStartDate());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindSitting() {
+        Mockito.when(mockRepositoryHelper.getXhbSittingRepository())
+            .thenReturn(Mockito.mock(XhbSittingRepository.class));
+
+        XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
+        Optional<XhbSittingDao> result = classUnderTest.findSitting(dao.getCourtSiteId(),
+            dao.getCourtRoomId(), dao.getSittingTime());
         assertNotNull(result, NOTNULL);
     }
 }

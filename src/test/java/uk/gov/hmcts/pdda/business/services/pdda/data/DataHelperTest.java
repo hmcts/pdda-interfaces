@@ -11,6 +11,7 @@ import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -84,6 +85,25 @@ class DataHelperTest {
     }
 
     /**
+     * validateSitting.
+     */
+    @Test
+    void testValidateSitting() {
+        XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
+        boolean result = testValidateSitting(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateSitting(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateSitting(XhbSittingDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbSittingDao> result = classUnderTest.validateSitting(dao.getCourtSiteId(),
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+        return result.isPresent();
+    }
+
+    /**
      * Local test version of the DataHelper.
      */
     public class LocalDataHelper extends DataHelper {
@@ -135,6 +155,21 @@ class DataHelperTest {
             final Integer crestListId, final String listType, final String status,
             final LocalDateTime startDate) {
             return Optional.of(new XhbHearingListDao());
+        }
+
+        /**
+         * validateSitting overrides.
+         */
+        @Override
+        public Optional<XhbSittingDao> findSitting(final Integer courtSiteId,
+            final Integer courtRoomId, final LocalDateTime sittingTime) {
+            return this.isPresent ? Optional.of(new XhbSittingDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
+            final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+            return Optional.of(new XhbSittingDao());
         }
     }
 }

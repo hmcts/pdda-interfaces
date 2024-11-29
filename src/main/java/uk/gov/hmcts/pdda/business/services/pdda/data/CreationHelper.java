@@ -100,12 +100,13 @@ public class CreationHelper {
      * Create XhbSittingDao.
      */
     public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
-        final Integer courtRoomId, final String isFloating) {
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
         LOG.info("createSitting()");
         XhbSittingDao dao = new XhbSittingDao();
         dao.setCourtSiteId(courtSiteId);
         dao.setCourtRoomId(courtRoomId);
         dao.setIsFloating(isFloating);
+        dao.setSittingTime(sittingTime);
         return getRepositoryHelper().getXhbSittingRepository().update(dao);
     }
 

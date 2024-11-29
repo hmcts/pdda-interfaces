@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -57,6 +58,16 @@ public class DataHelper extends FinderHelper {
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
             result = createHearingList(courtId, crestListId, listType, status, startDate);
+        }
+        return result;
+    }
+
+    public Optional<XhbSittingDao> validateSitting(final Integer courtSiteId,
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+        LOG.debug("validateSitting({})", sittingTime);
+        Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
+        if (result.isEmpty()) {
+            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime);
         }
         return result;
     }
