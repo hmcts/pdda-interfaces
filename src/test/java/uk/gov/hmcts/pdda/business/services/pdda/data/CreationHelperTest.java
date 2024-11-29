@@ -160,8 +160,8 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbScheduledHearingRepository.class));
 
         XhbScheduledHearingDao dao = DummyHearingUtil.getXhbScheduledHearingDao();
-        Optional<XhbScheduledHearingDao> result =
-            classUnderTest.createScheduledHearing(dao.getSittingId(), dao.getHearingId());
+        Optional<XhbScheduledHearingDao> result = classUnderTest
+            .createScheduledHearing(dao.getSittingId(), dao.getHearingId(), dao.getNotBeforeTime());
         assertNotNull(result, NOTNULL);
     }
 

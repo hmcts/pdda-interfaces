@@ -15,7 +15,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming",
+    "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_SCHEDULED_HEARING")
 @NamedQuery(name = "XHB_SCHEDULED_HEARING.findByHearingId",
     query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.hearingId = :hearingId")
@@ -25,6 +26,9 @@ import java.util.Collection;
         + ":courtRoomId ORDER BY o.scheduledHearingId")
 @NamedQuery(name = "XHB_SCHEDULED_HEARING.findBySittingId",
     query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.sittingId = :sittingId ORDER BY o.scheduledHearingId")
+@NamedQuery(name = "XHB_SCHEDULED_HEARING.findBySittingDate",
+    query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.sittingId = :sittingId AND o.hearingId = :hearingId "
+        + "AND o.notBeforeTime = :notBeforeTime")
 public class XhbScheduledHearingDao extends AbstractDao implements Serializable {
 
     private static final long serialVersionUID = -6844793990175522946L;

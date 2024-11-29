@@ -7,6 +7,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
@@ -88,5 +89,11 @@ public class FinderHelper extends CreationHelper {
         final LocalDateTime hearingStartDate) {
         return getRepositoryHelper().getXhbHearingRepository().findByCaseIdAndStartDate(courtId,
             caseId, hearingStartDate);
+    }
+
+    public Optional<XhbScheduledHearingDao> findScheduledHearing(final Integer sittingId,
+        final Integer hearingId, final LocalDateTime notBeforeTime) {
+        return getRepositoryHelper().getXhbScheduledHearingRepository().findBySittingDate(sittingId,
+            hearingId, notBeforeTime);
     }
 }

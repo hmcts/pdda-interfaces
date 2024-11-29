@@ -171,11 +171,12 @@ public class CreationHelper {
      * Create XhbScheduledHearingDao.
      */
     public Optional<XhbScheduledHearingDao> createScheduledHearing(final Integer sittingId,
-        final Integer hearingId) {
+        final Integer hearingId, final LocalDateTime notBeforeTime) {
         LOG.info("createScheduledHearing()");
         XhbScheduledHearingDao dao = new XhbScheduledHearingDao();
         dao.setSittingId(sittingId);
         dao.setHearingId(hearingId);
+        dao.setNotBeforeTime(notBeforeTime);
         dao.setIsCaseActive(YES);
         return getRepositoryHelper().getXhbScheduledHearingRepository().update(dao);
     }

@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
@@ -115,6 +116,17 @@ public class DataHelper extends FinderHelper {
         Optional<XhbHearingDao> result = findHearing(courtId, caseId, hearingStartDate);
         if (result.isEmpty()) {
             result = createHearing(courtId, caseId, refHearingTypeId, hearingStartDate);
+        }
+        return result;
+    }
+
+    public Optional<XhbScheduledHearingDao> validateHearing(final Integer sittingId,
+        final Integer hearingId, final LocalDateTime notBeforeTime) {
+        LOG.debug("validateHearing()");
+        Optional<XhbScheduledHearingDao> result =
+            findScheduledHearing(sittingId, hearingId, notBeforeTime);
+        if (result.isEmpty()) {
+            result = createScheduledHearing(sittingId, hearingId, notBeforeTime);
         }
         return result;
     }
