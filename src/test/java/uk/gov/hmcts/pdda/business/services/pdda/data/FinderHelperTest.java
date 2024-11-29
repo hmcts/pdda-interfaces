@@ -9,10 +9,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 
 import java.util.Optional;
 
@@ -35,7 +38,7 @@ class FinderHelperTest {
         FinderHelper result = new FinderHelper();
         assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testFindCourtSite() {
         Mockito.when(mockRepositoryHelper.getXhbCourtSiteRepository())
@@ -46,7 +49,7 @@ class FinderHelperTest {
             classUnderTest.findCourtSite(dao.getCourtId(), dao.getCourtSiteName());
         assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testFindCourtRoom() {
         Mockito.when(mockRepositoryHelper.getXhbCourtRoomRepository())
@@ -55,6 +58,17 @@ class FinderHelperTest {
         XhbCourtRoomDao dao = DummyCourtUtil.getXhbCourtRoomDao();
         Optional<XhbCourtRoomDao> result =
             classUnderTest.findCourtRoom(dao.getCourtSiteId(), dao.getCrestCourtRoomNo());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindHearingList() {
+        Mockito.when(mockRepositoryHelper.getXhbHearingListRepository())
+            .thenReturn(Mockito.mock(XhbHearingListRepository.class));
+
+        XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
+        Optional<XhbHearingListDao> result =
+            classUnderTest.findHearingList(dao.getCourtId(), dao.getStatus(), dao.getStartDate());
         assertNotNull(result, NOTNULL);
     }
 }

@@ -9,10 +9,11 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Repository
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbHearingListRepository extends AbstractRepository<XhbHearingListDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbHearingListRepository.class);
@@ -38,5 +39,21 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
         query.setParameter("courtId", courtId);
         query.setParameter("startDate", startDate);
         return query.getResultList();
+    }
+
+    /**
+     * findByCourtIdStatusAndDate.
+     * 
+     * @return XhbHearingListDao
+     */
+    public Optional<XhbHearingListDao> findByCourtIdStatusAndDate(Integer courtId, String status,
+        LocalDateTime startDate) {
+        LOG.debug("In XhbHearingRepository.findByCourtIdStatusAndDate");
+        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
+        query.setParameter("courtId", courtId);
+        query.setParameter("status", status);
+        query.setParameter("startDate", startDate);
+        XhbHearingListDao dao = (XhbHearingListDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }
