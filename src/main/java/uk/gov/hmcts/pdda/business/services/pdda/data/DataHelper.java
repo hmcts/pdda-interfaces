@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
@@ -68,6 +69,16 @@ public class DataHelper extends FinderHelper {
         Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
         if (result.isEmpty()) {
             result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime);
+        }
+        return result;
+    }
+
+    public Optional<XhbCaseDao> validateCase(final Integer courtId, final String caseType,
+        final Integer caseNumber) {
+        LOG.debug("validateCase({}{})", caseType, caseNumber);
+        Optional<XhbCaseDao> result = findCase(courtId, caseType, caseNumber);
+        if (result.isEmpty()) {
+            result = createCase(courtId, caseType, caseNumber);
         }
         return result;
     }

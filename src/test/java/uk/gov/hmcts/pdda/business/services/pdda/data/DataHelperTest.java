@@ -6,8 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyHearingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD.TooManyMethods")
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";
@@ -104,6 +107,25 @@ class DataHelperTest {
     }
 
     /**
+     * validateCase.
+     */
+    @Test
+    void testValidateCase() {
+        XhbCaseDao dao = DummyCaseUtil.getXhbCaseDao();
+        boolean result = testValidateCase(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateCase(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateCase(XhbCaseDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbCaseDao> result =
+            classUnderTest.validateCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
+        return result.isPresent();
+    }
+
+    /**
      * Local test version of the DataHelper.
      */
     public class LocalDataHelper extends DataHelper {
@@ -170,6 +192,21 @@ class DataHelperTest {
         public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
             final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
             return Optional.of(new XhbSittingDao());
+        }
+
+        /**
+         * validateCase overrides.
+         */
+        @Override
+        public Optional<XhbCaseDao> findCase(final Integer courtId, final String caseType,
+            final Integer caseNumber) {
+            return this.isPresent ? Optional.of(new XhbCaseDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbCaseDao> createCase(final Integer courtId, final String caseType,
+            final Integer caseNumber) {
+            return Optional.of(new XhbCaseDao());
         }
     }
 }

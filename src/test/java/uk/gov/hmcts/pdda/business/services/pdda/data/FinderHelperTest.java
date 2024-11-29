@@ -8,8 +8,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyHearingUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
@@ -82,6 +85,17 @@ class FinderHelperTest {
         XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
         Optional<XhbSittingDao> result = classUnderTest.findSitting(dao.getCourtSiteId(),
             dao.getCourtRoomId(), dao.getSittingTime());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindCase() {
+        Mockito.when(mockRepositoryHelper.getXhbCaseRepository())
+            .thenReturn(Mockito.mock(XhbCaseRepository.class));
+
+        XhbCaseDao dao = DummyCaseUtil.getXhbCaseDao();
+        Optional<XhbCaseDao> result =
+            classUnderTest.findCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
         assertNotNull(result, NOTNULL);
     }
 }

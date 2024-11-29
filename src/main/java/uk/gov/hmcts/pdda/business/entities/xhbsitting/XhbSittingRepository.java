@@ -65,7 +65,6 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
      * @param sittingTime LocalDateTime
      * @return XhbSittingDao
      */
-    @SuppressWarnings("unchecked")
     public Optional<XhbSittingDao> findByCourtRoomAndSittingTime(Integer courtSiteId,
         Integer courtRoomId, LocalDateTime sittingTime) {
         LOG.debug("In XhbSittingRepository.findByListId");

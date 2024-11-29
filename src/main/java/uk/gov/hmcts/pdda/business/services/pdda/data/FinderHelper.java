@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda.data;
 
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
@@ -59,5 +60,11 @@ public class FinderHelper extends CreationHelper {
         final LocalDateTime sittingTime) {
         return getRepositoryHelper().getXhbSittingRepository()
             .findByCourtRoomAndSittingTime(courtSiteId, courtRoomId, sittingTime);
+    }
+    
+    public Optional<XhbCaseDao> findCase(final Integer courtId, final String caseType,
+        final Integer caseNumber) {
+        return getRepositoryHelper().getXhbCaseRepository()
+            .findByNumberTypeAndCourt(courtId, caseType, caseNumber);
     }
 }
