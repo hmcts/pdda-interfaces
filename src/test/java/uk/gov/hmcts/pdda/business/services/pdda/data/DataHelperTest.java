@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -168,6 +169,25 @@ class DataHelperTest {
     }
 
     /**
+     * validateHearing.
+     */
+    @Test
+    void testValidateHearing() {
+        XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
+        boolean result = testValidateHearing(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateHearing(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateHearing(XhbHearingDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbHearingDao> result = classUnderTest.validateHearing(dao.getCourtId(),
+            dao.getCaseId(), dao.getRefHearingTypeId(), dao.getHearingStartDate());
+        return result.isPresent();
+    }
+
+    /**
      * Local test version of the DataHelper.
      */
     public class LocalDataHelper extends DataHelper {
@@ -281,6 +301,21 @@ class DataHelperTest {
             final String firstName, final String middleName, final String surname,
             final String gender, final LocalDateTime dateOfBirth) {
             return Optional.of(new XhbDefendantDao());
+        }
+
+        /**
+         * validateHearing overrides.
+         */
+        @Override
+        public Optional<XhbHearingDao> findHearing(final Integer courtId, final Integer caseId,
+            final LocalDateTime hearingStartDate) {
+            return this.isPresent ? Optional.of(new XhbHearingDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbHearingDao> createHearing(final Integer courtId, final Integer caseId,
+            final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
+            return Optional.of(new XhbHearingDao());
         }
     }
 }

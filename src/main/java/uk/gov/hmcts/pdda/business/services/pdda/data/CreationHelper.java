@@ -157,12 +157,13 @@ public class CreationHelper {
      * Create XhbHearingDao.
      */
     public Optional<XhbHearingDao> createHearing(final Integer courtId, final Integer caseId,
-        final Integer refHearingTypeId) {
+        final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
         LOG.info("createHearing()");
         XhbHearingDao dao = new XhbHearingDao();
         dao.setCourtId(courtId);
         dao.setCaseId(caseId);
         dao.setRefHearingTypeId(refHearingTypeId);
+        dao.setHearingStartDate(hearingStartDate);
         return getRepositoryHelper().getXhbHearingRepository().update(dao);
     }
 

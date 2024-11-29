@@ -150,7 +150,7 @@ class CreationHelperTest {
 
         XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
         Optional<XhbHearingDao> result = classUnderTest.createHearing(dao.getCourtId(),
-            dao.getCaseId(), dao.getRefHearingTypeId());
+            dao.getCaseId(), dao.getRefHearingTypeId(), dao.getHearingStartDate());
         assertNotNull(result, NOTNULL);
     }
 

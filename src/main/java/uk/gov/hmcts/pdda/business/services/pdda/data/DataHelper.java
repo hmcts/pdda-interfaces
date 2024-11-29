@@ -7,6 +7,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
@@ -104,6 +105,16 @@ public class DataHelper extends FinderHelper {
             findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         if (result.isEmpty()) {
             result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
+        }
+        return result;
+    }
+
+    public Optional<XhbHearingDao> validateHearing(final Integer courtId, final Integer caseId,
+        final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
+        LOG.debug("validateHearing()");
+        Optional<XhbHearingDao> result = findHearing(courtId, caseId, hearingStartDate);
+        if (result.isEmpty()) {
+            result = createHearing(courtId, caseId, refHearingTypeId, hearingStartDate);
         }
         return result;
     }
