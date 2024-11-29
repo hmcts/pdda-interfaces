@@ -18,7 +18,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtRoomRepository.class);
     private static final String UNCHECKED = "unchecked";
-    
+
     public XhbCourtRoomRepository(EntityManager em) {
         super(em);
     }
@@ -30,6 +30,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findByCourtSiteId.
+     * 
      * @param courtSiteId Integer
      * @return List
      */
@@ -40,9 +41,10 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
         query.setParameter("courtSiteId", courtSiteId);
         return query.getResultList();
     }
-    
+
     /**
      * findByDisplayId.
+     * 
      * @param displayId Integer
      * @return List
      */
@@ -56,6 +58,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findVIPMultiSite.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -69,6 +72,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findVIPMNoSite.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -81,16 +85,18 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
     }
 
     /**
-     * findByCourtRoomName.
+     * findByCourtRoomNo.
+     * 
      * @param courtSiteId Integer
-     * @param courtRoomName String
+     * @param crestCourtRoomNo Integer
      * @return XhbCourtRoomDao
      */
-    public Optional<XhbCourtRoomDao> findByCourtRoomName(Integer courtSiteId, String courtRoomName) {
-        LOG.debug("findByCourtRoomName({})", courtRoomName);
-        Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtRoomName");
+    public Optional<XhbCourtRoomDao> findByCourtRoomNo(Integer courtSiteId,
+        Integer crestCourtRoomNo) {
+        LOG.debug("findByCourtRoomNo({})", crestCourtRoomNo);
+        Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtRoomNo");
         query.setParameter("courtSiteId", courtSiteId);
-        query.setParameter("courtRoomName", courtRoomName);
+        query.setParameter("crestCourtRoomNo", crestCourtRoomNo);
         XhbCourtRoomDao dao = (XhbCourtRoomDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }

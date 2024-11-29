@@ -37,8 +37,8 @@ import java.util.Collection;
     + "AND dl.courtSiteId = cs.courtSiteId AND cs.courtId = :courtId "
     + "AND d.descriptionCode = 'v_i_p') ORDER BY o.crestCourtRoomNo")
 
-@NamedQuery(name = "XHB_COURT_ROOM.findByCourtRoomName",
-    query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtRoomName = :courtRoomName "
+@NamedQuery(name = "XHB_COURT_ROOM.findByCourtRoomNo",
+    query = "SELECT o from XHB_COURT_ROOM o WHERE o.crestCourtRoomNo = :crestCourtRoomNo "
     + "AND o.courtSiteId = :courtSiteId")
 
 public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializable {

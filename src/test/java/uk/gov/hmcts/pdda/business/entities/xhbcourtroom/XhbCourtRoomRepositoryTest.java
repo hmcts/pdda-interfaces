@@ -29,7 +29,7 @@ class XhbCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbCourtRoomDao>
     private static final String BY_DISPLAY_ID = "ByDisplay";
     private static final String BY_VIPMULTISITE_ID = "ByVipMultiSite";
     private static final String BY_VIPNOSITE_ID = "ByVipNoSite";
-    private static final String BY_COURTROOMNAME = "ByCourtRoomName";
+    private static final String BY_COURTROOMNO = "ByCourtRoomNo";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -116,11 +116,11 @@ class XhbCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbCourtRoomDao>
         } else if (BY_VIPNOSITE_ID.equals(queryBy)) {
             final Integer courtId = getDummyId();
             resultList = getClassUnderTest().findVipMNoSite(courtId);
-        } else if (BY_COURTROOMNAME.equals(queryBy)) {
+        } else if (BY_COURTROOMNO.equals(queryBy)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getSingleResult()).thenReturn(dao);
             Optional<XhbCourtRoomDao> result = getClassUnderTest()
-                .findByCourtRoomName(getDummyDao().getCourtSiteId(), getDummyDao().getCourtRoomName());
+                .findByCourtRoomNo(getDummyDao().getCourtSiteId(), getDummyDao().getCrestCourtRoomNo());
             assertNotNull(result, "Result is Null");
             if (dao != null) {
                 assertSame(dao, result.get(), SAME);

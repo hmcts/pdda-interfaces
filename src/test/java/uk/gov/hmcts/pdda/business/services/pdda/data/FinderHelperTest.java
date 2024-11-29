@@ -54,7 +54,7 @@ class FinderHelperTest {
 
         XhbCourtRoomDao dao = DummyCourtUtil.getXhbCourtRoomDao();
         Optional<XhbCourtRoomDao> result =
-            classUnderTest.findCourtRoom(dao.getCourtSiteId(), dao.getCourtRoomName());
+            classUnderTest.findCourtRoom(dao.getCourtSiteId(), dao.getCrestCourtRoomNo());
         assertNotNull(result, NOTNULL);
     }
 }
