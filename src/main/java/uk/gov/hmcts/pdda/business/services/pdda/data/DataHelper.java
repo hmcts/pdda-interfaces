@@ -27,15 +27,6 @@ public class DataHelper extends FinderHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
 
-    public DataHelper() {
-        super();
-    }
-
-    // JUnit constructor
-    public DataHelper(RepositoryHelper repositoryHelper) {
-        super(repositoryHelper);
-    }
-
     public Optional<XhbCourtSiteDao> validateCourtSite(final Integer courtId,
         final String courtSiteName, final String courtSiteCode) {
         LOG.debug("validateCourtSite({})", courtSiteName);
