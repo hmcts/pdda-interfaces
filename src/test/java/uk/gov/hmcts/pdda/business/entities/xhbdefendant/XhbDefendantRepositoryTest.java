@@ -1,17 +1,25 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdefendant;
 
+
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.isA;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -37,31 +45,24 @@ class XhbDefendantRepositoryTest extends AbstractRepositoryTest<XhbDefendantDao>
         return classUnderTest;
     }
 
+
+    @Test
+    void testFindByDefendantName() {
+        List<XhbDefendantDao> list = new ArrayList<>();
+        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+        XhbDefendantDao dao = getDummyDao();
+        Optional<XhbDefendantDao> result =
+            classUnderTest.findByDefendantName(dao.getCourtId(), dao.getFirstName(),
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+        assertNotNull(result, NOTNULL);
+    }
+
     @Override
     protected XhbDefendantDao getDummyDao() {
-        Integer defendantId = getDummyId();
-        String firstName = "firstName";
-        String middleName = "middleName";
-        String surname = "surname";
-        String publicDisplayHide = "publicDisplayHide";
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = 3;
-        XhbDefendantDao result = new XhbDefendantDao();
-        result.setDefendantId(defendantId);
-        result.setFirstName(firstName);
-        result.setMiddleName(middleName);
-        result.setSurname(surname);
-        result.setPublicDisplayHide(publicDisplayHide);
-        result.setLastUpdateDate(lastUpdateDate);
-        result.setCreationDate(creationDate);
-        result.setLastUpdatedBy(lastUpdatedBy);
-        result.setCreatedBy(createdBy);
-        result.setVersion(version);
-        defendantId = result.getPrimaryKey();
-        assertNotNull(defendantId, NOTNULL);
+        XhbDefendantDao result = DummyDefendantUtil.getXhbDefendantDao();
+        assertNotNull(result.getPrimaryKey(), NOTNULL);
         return new XhbDefendantDao(result);
     }
 

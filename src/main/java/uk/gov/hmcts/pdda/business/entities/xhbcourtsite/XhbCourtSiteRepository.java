@@ -43,14 +43,14 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
     }
 
     /**
-     * findByCourtCodeAndListTypeAndListDate.
+     * findByCourtSiteName.
      * @param courtId Integer
      * @param courtSiteName String
      * @return XhbCourtSiteDao
      */
-    public Optional<XhbCourtSiteDao> findByCourtCodeAndListTypeAndListDate(final Integer courtId,
+    public Optional<XhbCourtSiteDao> findByCourtSiteName(final Integer courtId,
         final String courtSiteName) {
-        LOG.debug("findByCourtCodeAndListTypeAndListDate()");
+        LOG.debug("findByCourtSiteName()");
         Query query =
             getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtIdAndCourtSiteName");
         query.setParameter("courtId", courtId);
@@ -71,4 +71,6 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
         query.setParameter("courtId", courtId);
         return query.getResultList();
     }
+    
+    
 }

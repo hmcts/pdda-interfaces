@@ -9,11 +9,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -23,7 +24,8 @@ import static org.mockito.ArgumentMatchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class XhbSchedHearingDefendantRepositoryTest extends AbstractRepositoryTest<XhbSchedHearingDefendantDao> {
+class XhbSchedHearingDefendantRepositoryTest
+    extends AbstractRepositoryTest<XhbSchedHearingDefendantDao> {
 
     @Mock
     private EntityManager mockEntityManager;
@@ -63,8 +65,8 @@ class XhbSchedHearingDefendantRepositoryTest extends AbstractRepositoryTest<XhbS
         }
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbSchedHearingDefendantDao> result = getClassUnderTest()
-            .findByScheduledHearingId(getDummyDao().getScheduledHearingId());
+        List<XhbSchedHearingDefendantDao> result =
+            getClassUnderTest().findByScheduledHearingId(getDummyDao().getScheduledHearingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");
@@ -74,20 +76,22 @@ class XhbSchedHearingDefendantRepositoryTest extends AbstractRepositoryTest<XhbS
         return true;
     }
 
+    @Test
+    void testFindByHearingAndDefendant() {
+        List<XhbSchedHearingDefendantDao> list = new ArrayList<>();
+        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+        XhbSchedHearingDefendantDao dao = getDummyDao();
+        Optional<XhbSchedHearingDefendantDao> result = classUnderTest
+            .findByHearingAndDefendant(dao.getScheduledHearingId(), dao.getDefendantOnCaseId());
+        assertNotNull(result, NOTNULL);
+    }
+
     @Override
     protected XhbSchedHearingDefendantDao getDummyDao() {
-        Integer schedHearingDefendantId = -1;
-        Integer scheduledHearingId = -1;
-        Integer defendantOnCaseId = -1;
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = 3;
-        XhbSchedHearingDefendantDao result = new XhbSchedHearingDefendantDao(schedHearingDefendantId,
-            scheduledHearingId, defendantOnCaseId, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
-        schedHearingDefendantId = result.getPrimaryKey();
-        assertNotNull(schedHearingDefendantId, NOTNULL);
+        XhbSchedHearingDefendantDao result = DummyHearingUtil.getXhbSchedHearingDefendantDao();
+        assertNotNull(result.getPrimaryKey(), NOTNULL);
         return new XhbSchedHearingDefendantDao(result);
     }
 
