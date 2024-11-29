@@ -9,11 +9,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -53,7 +55,7 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
     void testFindByCourtIdAndDateFailure() {
         boolean result = testFindByCourtIdAndDate(null);
         assertTrue(result, NOT_TRUE);
-        
+
     }
 
     private boolean testFindByCourtIdAndDate(XhbHearingListDao dao) {
@@ -74,41 +76,22 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
         return true;
     }
 
+    @Test
+    void testFindByCourtIdStatusAndDate() {
+        List<XhbHearingListDao> list = new ArrayList<>();
+        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+        XhbHearingListDao dao = getDummyDao();
+        Optional<XhbHearingListDao> result = classUnderTest
+            .findByCourtIdStatusAndDate(dao.getCourtId(), dao.getStatus(), dao.getStartDate());
+        assertNotNull(result, NOTNULL);
+    }
+
     @Override
     protected XhbHearingListDao getDummyDao() {
-        Integer hearingListId = getDummyId();
-        String listType = "listType";
-        LocalDateTime startDate = LocalDateTime.now();
-        LocalDateTime endDate = LocalDateTime.now();
-        String status = "status";
-        Integer editionNo = -1;
-        LocalDateTime publishedTime = LocalDateTime.now();
-        String printReference = "printReference";
-        Integer crestListId = -1;
-        Integer courtId = -1;
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = 3;
-        XhbHearingListDao result = new XhbHearingListDao();
-        result.setListId(hearingListId);
-        result.setListType(listType);
-        result.setStartDate(startDate);
-        result.setEndDate(endDate);
-        result.setStatus(status);
-        result.setEditionNo(editionNo);
-        result.setPublishedTime(publishedTime);
-        result.setPrintReference(printReference);
-        result.setCrestListId(crestListId);
-        result.setCourtId(courtId);
-        result.setLastUpdateDate(lastUpdateDate);
-        result.setCreationDate(creationDate);
-        result.setLastUpdatedBy(lastUpdatedBy);
-        result.setCreatedBy(createdBy);
-        result.setVersion(version);
-        hearingListId = result.getPrimaryKey();
-        assertNotNull(hearingListId, NOTNULL);
+        XhbHearingListDao result = DummyHearingUtil.getXhbHearingListDao();
+        assertNotNull(result.getPrimaryKey(), NOTNULL);
         return new XhbHearingListDao(result);
     }
 
