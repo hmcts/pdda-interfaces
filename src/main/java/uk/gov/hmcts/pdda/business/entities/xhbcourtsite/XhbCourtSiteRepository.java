@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> implements Serializable  {
+public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
+    implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtSiteRepository.class);
@@ -31,6 +32,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
 
     /**
      * findByCrestCourtIdValue.
+     * 
      * @param crestCourtId String
      * @return List
      */
@@ -44,6 +46,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
 
     /**
      * findByCourtSiteName.
+     * 
      * @param courtId Integer
      * @param courtSiteName String
      * @return XhbCourtSiteDao
@@ -55,12 +58,14 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
             getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtIdAndCourtSiteName");
         query.setParameter("courtId", courtId);
         query.setParameter("courtSiteName", courtSiteName);
-        XhbCourtSiteDao dao = (XhbCourtSiteDao) query.getSingleResult();
+        XhbCourtSiteDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCourtSiteDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
     /**
      * findByCourtId.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -71,6 +76,6 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
         query.setParameter("courtId", courtId);
         return query.getResultList();
     }
-    
-    
+
+
 }

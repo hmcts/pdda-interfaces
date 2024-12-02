@@ -97,7 +97,8 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
         Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtRoomNo");
         query.setParameter("courtSiteId", courtSiteId);
         query.setParameter("crestCourtRoomNo", crestCourtRoomNo);
-        XhbCourtRoomDao dao = (XhbCourtRoomDao) query.getSingleResult();
+        XhbCourtRoomDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCourtRoomDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

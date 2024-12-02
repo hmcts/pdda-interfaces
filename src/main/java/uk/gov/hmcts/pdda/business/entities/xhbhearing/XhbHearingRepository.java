@@ -56,7 +56,8 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao> {
         query.setParameter("courtId", courtId);
         query.setParameter("caseId", caseId);
         query.setParameter("hearingStartDate", hearingStartDate);
-        XhbHearingDao dao = (XhbHearingDao) query.getSingleResult();
+        XhbHearingDao dao =
+            query.getResultList().isEmpty() ? null : (XhbHearingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

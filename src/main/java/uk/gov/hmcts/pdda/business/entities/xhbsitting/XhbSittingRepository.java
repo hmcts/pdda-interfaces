@@ -72,7 +72,8 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
         query.setParameter("courtSiteId", courtSiteId);
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("sittingTime", sittingTime);
-        XhbSittingDao dao = (XhbSittingDao) query.getSingleResult();
+        XhbSittingDao dao =
+            query.getResultList().isEmpty() ? null : (XhbSittingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }
