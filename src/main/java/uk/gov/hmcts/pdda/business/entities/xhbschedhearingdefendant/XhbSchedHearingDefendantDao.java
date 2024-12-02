@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
     query = "SELECT o from XHB_SCHED_HEARING_DEFENDANT o WHERE o.scheduledHearingId = :scheduledHearingId")
 @NamedQuery(name = "XHB_SCHED_HEARING_DEFENDANT.findByHearingAndDefendant",
     query = "SELECT o from XHB_SCHED_HEARING_DEFENDANT o WHERE o.scheduledHearingId = :scheduledHearingId "
-        + "AND o.defendantId = :defendantId")
+        + "AND o.defendantOnCaseId = :defendantOnCaseId")
 @SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 public class XhbSchedHearingDefendantDao extends AbstractVersionedDao implements Serializable {
 
