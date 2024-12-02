@@ -68,7 +68,7 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
     public Optional<XhbSittingDao> findByCourtRoomAndSittingTime(Integer courtSiteId,
         Integer courtRoomId, LocalDateTime sittingTime) {
         LOG.debug("In XhbSittingRepository.findByListId");
-        Query query = getEntityManager().createNamedQuery("XHB_SITTING.findByListId");
+        Query query = getEntityManager().createNamedQuery("XHB_SITTING.findByCourtRoomAndSittingTime");
         query.setParameter("courtSiteId", courtSiteId);
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("sittingTime", sittingTime);

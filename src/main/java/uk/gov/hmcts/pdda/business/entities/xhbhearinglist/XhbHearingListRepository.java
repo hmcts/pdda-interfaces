@@ -49,11 +49,13 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
     public Optional<XhbHearingListDao> findByCourtIdStatusAndDate(Integer courtId, String status,
         LocalDateTime startDate) {
         LOG.debug("In XhbHearingRepository.findByCourtIdStatusAndDate");
-        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
+        Query query =
+            getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
         query.setParameter("courtId", courtId);
         query.setParameter("status", status);
         query.setParameter("startDate", startDate);
-        XhbHearingListDao dao = (XhbHearingListDao) query.getSingleResult();
+        XhbHearingListDao dao =
+            query.getResultList().isEmpty() ? null : (XhbHearingListDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }
