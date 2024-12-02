@@ -8,20 +8,13 @@
     <xsl:strip-space elements="*"/>
 
     <!-- Copy everything -->
-    <xsl:template match="*">
-        <xsl:element name="{local-name(.)}">
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:element>
-    </xsl:template>
-    <xsl:template match="@*">
-        <xsl:attribute name="{local-name(.)}">
-            <xsl:value-of select="."/>
-        </xsl:attribute>
+    <xsl:template match="node()|@*">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*"/>
+        </xsl:copy>
     </xsl:template>
 
     <!-- Remove these fields -->
-    <xsl:template match="@xsi:schemaLocation"/>
-
     <xsl:template match="cs:DocumentID/cs:DocumentName"/>
     <xsl:template match="cs:DocumentID/cs:TimeStamp"/>
     <xsl:template match="cs:DocumentID/cs:Version"/>

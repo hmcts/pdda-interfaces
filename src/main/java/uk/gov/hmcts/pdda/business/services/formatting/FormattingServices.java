@@ -109,8 +109,8 @@ public class FormattingServices extends FormattingServicesProcessing {
     
     private void transformXmlAndGenerateJson(FormattingValue formattingValue) {
         // Get the Path for the xslt schema to use
-        StringBuilder xsltSchemaPath = new StringBuilder();
-        xsltSchemaPath.append("xslt_schemas/");
+        StringBuilder xsltSchemaPath = new StringBuilder(100);
+        xsltSchemaPath.append("config/xsl/listTransformation/");
 
         for (Map.Entry<String, String> entry : DOC_TYPES.entrySet()) {
             if (formattingValue.getDocumentType().equals(entry.getKey())) {
