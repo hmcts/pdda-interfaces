@@ -101,7 +101,7 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbDefendantDao> validateDefendant(final Integer courtId,
-        final String firstName, final String middleName, final String surname, final String gender,
+        final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.debug("validateDefendant()");
         Optional<XhbDefendantDao> result =

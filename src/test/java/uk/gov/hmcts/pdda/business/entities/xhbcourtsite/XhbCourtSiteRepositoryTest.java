@@ -104,6 +104,7 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
             resultList = getClassUnderTest().findByCourtId(getDummyDao().getCourtId());
         } else if (BYCOURTSITENAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(list);
             Mockito.when(mockQuery.getSingleResult()).thenReturn(dao);
             Optional<XhbCourtSiteDao> result = getClassUnderTest()
                 .findByCourtSiteName(getDummyDao().getCourtId(), getDummyDao().getCourtSiteName());

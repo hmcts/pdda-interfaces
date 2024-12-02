@@ -57,7 +57,8 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
         Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByHearing");
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("scheduledHearingId", scheduledHearingId);
-        XhbCrLiveDisplayDao dao = (XhbCrLiveDisplayDao) query.getSingleResult();
+        XhbCrLiveDisplayDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCrLiveDisplayDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

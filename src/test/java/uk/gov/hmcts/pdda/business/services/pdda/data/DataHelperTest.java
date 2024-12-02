@@ -354,14 +354,14 @@ class DataHelperTest {
         @Override
         public Optional<XhbDefendantDao> findDefendant(final Integer courtId,
             final String firstName, final String middleName, final String surname,
-            final String gender, final LocalDateTime dateOfBirth) {
+            final Integer gender, final LocalDateTime dateOfBirth) {
             return this.isPresent ? Optional.of(new XhbDefendantDao()) : Optional.empty();
         }
 
         @Override
         public Optional<XhbDefendantDao> createDefendant(final Integer courtId,
             final String firstName, final String middleName, final String surname,
-            final String gender, final LocalDateTime dateOfBirth) {
+            final Integer gender, final LocalDateTime dateOfBirth) {
             return Optional.of(new XhbDefendantDao());
         }
 

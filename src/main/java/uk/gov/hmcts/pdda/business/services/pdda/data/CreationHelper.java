@@ -140,7 +140,7 @@ public class CreationHelper {
      * Create XhbDefendantDao.
      */
     public Optional<XhbDefendantDao> createDefendant(final Integer courtId, final String firstName,
-        final String middleName, final String surname, final String gender,
+        final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.info("createDefendant({},{},{})", firstName, middleName, surname);
         XhbDefendantDao dao = new XhbDefendantDao();

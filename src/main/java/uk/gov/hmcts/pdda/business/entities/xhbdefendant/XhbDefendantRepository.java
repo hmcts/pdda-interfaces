@@ -33,23 +33,24 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao> 
      * @param firstName String
      * @param middleName String
      * @param surname String
-     * @param gender String
+     * @param gender Integer
      * @param dateOfBirth LocalDateTime
      * @return XhbDefendantDao
      */
-    public Optional<XhbDefendantDao> findByDefendantName(final Integer courtId, final String firstName,
-        final String middleName, final String surname, final String gender,
+    public Optional<XhbDefendantDao> findByDefendantName(final Integer courtId,
+        final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.debug("findByDefendantAndCase()");
         Query query =
-            getEntityManager().createNamedQuery("XHB_DEFENDANT_ON_CASE.findByDefendantAndCase");
+            getEntityManager().createNamedQuery("XHB_DEFENDANT.findByDefendantName");
         query.setParameter("courtId", courtId);
         query.setParameter("firstName", firstName);
         query.setParameter("middleName", middleName);
         query.setParameter("surname", surname);
         query.setParameter("gender", gender);
         query.setParameter("dateOfBirth", dateOfBirth);
-        XhbDefendantDao dao = (XhbDefendantDao) query.getSingleResult();
+        XhbDefendantDao dao =
+            query.getResultList().isEmpty() ? null : (XhbDefendantDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

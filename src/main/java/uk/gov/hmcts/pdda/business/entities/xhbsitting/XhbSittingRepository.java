@@ -68,11 +68,12 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
     public Optional<XhbSittingDao> findByCourtRoomAndSittingTime(Integer courtSiteId,
         Integer courtRoomId, LocalDateTime sittingTime) {
         LOG.debug("In XhbSittingRepository.findByListId");
-        Query query = getEntityManager().createNamedQuery("XHB_SITTING.findByListId");
+        Query query = getEntityManager().createNamedQuery("XHB_SITTING.findByCourtRoomAndSittingTime");
         query.setParameter("courtSiteId", courtSiteId);
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("sittingTime", sittingTime);
-        XhbSittingDao dao = (XhbSittingDao) query.getSingleResult();
+        XhbSittingDao dao =
+            query.getResultList().isEmpty() ? null : (XhbSittingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

@@ -75,11 +75,13 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
     public Optional<XhbScheduledHearingDao> findBySittingDate(final Integer sittingId,
         final Integer hearingId, final LocalDateTime notBeforeTime) {
         LOG.debug("In XhbHearingRepository.findBySitting");
-        Query query = getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingDate");
+        Query query =
+            getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingDate");
         query.setParameter(SITTING_ID, sittingId);
         query.setParameter("hearingId", hearingId);
         query.setParameter("notBeforeTime", notBeforeTime);
-        XhbScheduledHearingDao dao = (XhbScheduledHearingDao) query.getSingleResult();
+        XhbScheduledHearingDao dao = query.getResultList().isEmpty() ? null
+            : (XhbScheduledHearingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }
