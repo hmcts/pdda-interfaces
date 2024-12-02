@@ -33,16 +33,16 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao> 
      * @param firstName String
      * @param middleName String
      * @param surname String
-     * @param gender String
+     * @param gender Integer
      * @param dateOfBirth LocalDateTime
      * @return XhbDefendantDao
      */
     public Optional<XhbDefendantDao> findByDefendantName(final Integer courtId,
-        final String firstName, final String middleName, final String surname, final String gender,
+        final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.debug("findByDefendantAndCase()");
         Query query =
-            getEntityManager().createNamedQuery("XHB_DEFENDANT_ON_CASE.findByDefendantAndCase");
+            getEntityManager().createNamedQuery("XHB_DEFENDANT.findByDefendantName");
         query.setParameter("courtId", courtId);
         query.setParameter("firstName", firstName);
         query.setParameter("middleName", middleName);

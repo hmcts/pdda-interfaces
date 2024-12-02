@@ -81,7 +81,7 @@ public class FinderHelper extends CreationHelper {
     }
 
     public Optional<XhbDefendantDao> findDefendant(final Integer courtId, final String firstName,
-        final String middleName, final String surname, final String gender,
+        final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         return getRepositoryHelper().getXhbDefendantRepository().findByDefendantName(courtId,
             firstName, middleName, surname, gender, dateOfBirth);
