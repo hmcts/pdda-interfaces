@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_HEARING_LIST")
 @NamedQuery(name = "XHB_HEARING_LIST.findByCourtIdAndDate",
     query = "SELECT o from XHB_HEARING_LIST o WHERE o.courtId = :courtId AND o.startDate = :startDate")
+@NamedQuery(name = "XHB_HEARING_LIST.findByCourtIdStatusAndDate",
+    query = "SELECT o from XHB_HEARING_LIST o WHERE o.courtId = :courtId AND status = :status "
+        + "AND o.startDate = :startDate")
 public class XhbHearingListDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6844793990175522946L;

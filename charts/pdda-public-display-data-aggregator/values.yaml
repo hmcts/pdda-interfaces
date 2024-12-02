@@ -31,10 +31,14 @@ java:
           alias: PDDA_BAIS_CP_SFTP_USERNAME
         - name: public-display-data-aggregator-BAIS-CP-SFTP-PASSWORD
           alias: PDDA_BAIS_CP_SFTP_PASSWORD
+        - name: public-display-data-aggregator-BAIS-CP-SFTP-UPLOAD-LOCATION
+          alias: PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION
         - name: public-display-data-aggregator-BAIS-SFTP-USERNAME
           alias: PDDA_BAIS_SFTP_USERNAME
         - name: public-display-data-aggregator-BAIS-SFTP-PASSWORD
           alias: PDDA_BAIS_SFTP_PASSWORD
+        - name: public-display-data-aggregator-BAIS-SFTP-UPLOAD-LOCATION
+          alias: PDDA_BAIS_SFTP_UPLOAD_LOCATION
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: false
     APIM_URI: https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management

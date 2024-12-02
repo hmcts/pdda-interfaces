@@ -127,11 +127,11 @@ class SftpHelperUtilTest {
         // Key vault values
         public static final String KV_SFTP_HOST = "pdda.bais_sftp_hostname";
         public static final String KV_SFTP_PASSWORD = "pdda.bais_sftp_password";
-        public static final String KV_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_SFTP_UPLOAD_LOCATION";
+        public static final String KV_SFTP_UPLOAD_LOCATION = "pdda.bais_sftp_upload_location";
         public static final String KV_SFTP_USERNAME = "pdda.bais_sftp_username";
         public static final String KV_CP_SFTP_USERNAME = "pdda.bais_cp_sftp_username";
         public static final String KV_CP_SFTP_PASSWORD = "pdda.bais_cp_sftp_password";
-        public static final String KV_CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+        public static final String KV_CP_SFTP_UPLOAD_LOCATION = "pdda.bais_cp_sftp_upload_location";
     }
 
     @Test

@@ -6,8 +6,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Resolves the entities name to a file in the entities dir. This uses the last part of the url
@@ -59,59 +57,11 @@ public class FileEntityResolver implements EntityResolver {
      */
     @Override
     public InputSource resolveEntity(String publicId, String systemId) {
-        String newSystemId = resolveEntityUrl(systemId);
-        if (newSystemId != null) {
-            InputSource inputSource = new InputSource(newSystemId);
-            inputSource.setPublicId(publicId);
-            return inputSource;
-        }
-        return null;
-    }
-
-    /**
-     * Resolve the entity URL.
-     * 
-     * @param publicId String
-     */
-    protected String resolveEntityUrl(final String publicId) {
-        File entityFile = resolveEntityFile(publicId);
-        if (entityFile != null) {
-            try {
-                String entityUrl = entityFile.toURL().toExternalForm();
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Resolved \"" + publicId + "\" to url \"" + entityUrl + "\".");
-                }
-                return entityUrl;
-            } catch (final MalformedURLException e) {
-                LOG.warn("An error ocured creating URL for file \"" + entityFile.getAbsolutePath()
-                    + "\".", e);
-                return null;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Resolve the entity.
-     * 
-     * @param publicId String
-     */
-    protected File resolveEntityFile(final String publicId) {
-        if (publicId == null) {
-            throw new IllegalArgumentException("publicId: null");
-        }
-
-        URL resource = Thread.currentThread().getContextClassLoader().getResource(publicId);
-        if (resource == null) {
-
-            resource = Thread.currentThread().getContextClassLoader().getResource(publicId);
-
-            if (resource == null) {
-                throw new IllegalArgumentException("file " + publicId + " is not found");
-            }
-        }
-
-        return new File(resource.getFile());
+        LOG.debug("Resolving entity {}", systemId);
+        InputSource inputSource = new InputSource(
+            Thread.currentThread().getContextClassLoader().getResourceAsStream(systemId));
+        inputSource.setPublicId(publicId);
+        return inputSource;
     }
     
     private void setEntityDir(File entityDir) {

@@ -30,7 +30,7 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
     
     private static final Integer BYCRESTCOURTID = 1;
     private static final Integer BYCOURTID = 2;
-    private static final Integer BYCOURTCODE = 3;
+    private static final Integer BYCOURTSITENAME = 3;
     
     @Mock
     private EntityManager mockEntityManager;
@@ -65,13 +65,13 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
 
     @Test
     void testFindByCourtCodeAndListTypeAndListDateSuccess() {
-        boolean result = testFind(getDummyDao(), BYCOURTCODE);
+        boolean result = testFind(getDummyDao(), BYCOURTSITENAME);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindByCourtCodeAndListTypeAndListDateFailure() {
-        boolean result = testFind(null, BYCOURTCODE);
+        boolean result = testFind(null, BYCOURTSITENAME);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -102,11 +102,11 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             resultList = getClassUnderTest().findByCourtId(getDummyDao().getCourtId());
-        } else if (BYCOURTCODE.equals(whichTest)) {
+        } else if (BYCOURTSITENAME.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getSingleResult()).thenReturn(dao);
             Optional<XhbCourtSiteDao> result = getClassUnderTest()
-                .findByCourtCodeAndListTypeAndListDate(getDummyDao().getCourtId(), getDummyDao().getCourtSiteName());
+                .findByCourtSiteName(getDummyDao().getCourtId(), getDummyDao().getCourtSiteName());
             assertNotNull(result, "Result is Null");
             if (dao != null) {
                 assertSame(dao, result.get(), SAME);

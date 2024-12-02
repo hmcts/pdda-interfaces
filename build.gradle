@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:10.20.1")
+    classpath("org.flywaydb:flyway-database-postgresql:10.21.0")
   }
 }
 
@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.20.1'
+  id 'org.flywaydb.flyway' version '10.21.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -183,7 +183,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.3.5'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.5'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.5'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.31'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.33'
     implementation 'org.apache.logging.log4j:log4j-core:2.24.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.24.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
@@ -227,11 +227,11 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.5.12'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.1'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.31'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.33'
     implementation 'com.squareup.okio:okio:3.9.1'
-    implementation 'org.flywaydb:flyway-core:10.20.1'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.20.1'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.20.1'
+    implementation 'org.flywaydb:flyway-core:10.21.0'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.21.0'
+    implementation 'org.flywaydb:flyway-database-hsqldb:10.21.0'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
       exclude group: 'junit', module: 'junit'
       exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -239,7 +239,7 @@ dependencies {
 	testImplementation group: 'com.github.stefanbirkner', name: 'fake-sftp-server-rule', version: 'fake-sftp-server-rule-2.0.0'
 	implementation group: 'de.ppi', name: 'fake-sftp-server-extension', version: '1.0.3'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
-    testImplementation 'org.easymock:easymock:5.4.0'
+    testImplementation 'org.easymock:easymock:5.5.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
