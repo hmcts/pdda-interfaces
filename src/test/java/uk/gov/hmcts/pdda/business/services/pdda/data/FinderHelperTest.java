@@ -61,7 +61,7 @@ class FinderHelperTest {
 
         XhbCourtSiteDao dao = DummyCourtUtil.getXhbCourtSiteDao();
         Optional<XhbCourtSiteDao> result =
-            classUnderTest.findCourtSite(dao.getCourtId(), dao.getCourtSiteName());
+            classUnderTest.findCourtSite(dao.getCourtSiteName(), dao.getCourtSiteCode());
         assertNotNull(result, NOTNULL);
     }
 

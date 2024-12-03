@@ -30,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI",
+    "PMD.CouplingBetweenObjects"})
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";
@@ -44,16 +45,14 @@ class DataHelperTest {
     @Test
     void testValidateCourtSite() {
         XhbCourtSiteDao dao = DummyCourtUtil.getXhbCourtSiteDao();
-        boolean result = testValidateCourtSite(dao, false);
-        assertTrue(result, TRUE);
-        result = testValidateCourtSite(dao, true);
+        boolean result = testValidateCourtSite(dao, true);
         assertTrue(result, TRUE);
     }
 
     private boolean testValidateCourtSite(XhbCourtSiteDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbCourtSiteDao> result = classUnderTest.validateCourtSite(dao.getCourtSiteId(),
-            dao.getCourtSiteName(), dao.getCourtSiteCode());
+        Optional<XhbCourtSiteDao> result =
+            classUnderTest.validateCourtSite(dao.getCourtSiteName(), dao.getCourtSiteCode());
         return result.isPresent();
     }
 
@@ -63,9 +62,7 @@ class DataHelperTest {
     @Test
     void testValidateCourtRoom() {
         XhbCourtRoomDao dao = DummyCourtUtil.getXhbCourtRoomDao();
-        boolean result = testValidateCourtRoom(dao, false);
-        assertTrue(result, TRUE);
-        result = testValidateCourtRoom(dao, true);
+        boolean result = testValidateCourtRoom(dao, true);
         assertTrue(result, TRUE);
     }
 
@@ -260,8 +257,8 @@ class DataHelperTest {
          * validateCourtSite overrides.
          */
         @Override
-        public Optional<XhbCourtSiteDao> findCourtSite(final Integer courtId,
-            final String courtSiteName) {
+        public Optional<XhbCourtSiteDao> findCourtSite(
+            final String courtSiteName, final String courtHouseCode) {
             return this.isPresent ? Optional.of(new XhbCourtSiteDao()) : Optional.empty();
         }
 

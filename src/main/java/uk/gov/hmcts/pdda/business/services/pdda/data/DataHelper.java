@@ -39,12 +39,12 @@ public class DataHelper extends FinderHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
 
-    public Optional<XhbCourtSiteDao> validateCourtSite(final Integer courtId,
-        final String courtSiteName, final String courtSiteCode) {
+    public Optional<XhbCourtSiteDao> validateCourtSite(final String courtSiteName,
+        final String courtSiteCode) {
         LOG.debug("validateCourtSite({})", courtSiteName);
-        Optional<XhbCourtSiteDao> result = findCourtSite(courtId, courtSiteName);
+        Optional<XhbCourtSiteDao> result = findCourtSite(courtSiteName, courtSiteCode);
         if (result.isEmpty()) {
-            result = createCourtSite(courtId, courtSiteName, courtSiteCode);
+            LOG.error("No XhbCourtSite found for name:{},  code:{}", courtSiteName, courtSiteCode);
         }
         return result;
     }
@@ -54,7 +54,8 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateCourtRoom({})", crestCourtRoomNo);
         Optional<XhbCourtRoomDao> result = findCourtRoom(courtSiteId, crestCourtRoomNo);
         if (result.isEmpty()) {
-            result = createCourtRoom(courtSiteId, courtRoomName, description, crestCourtRoomNo);
+            LOG.error("No XhbCourtRoom, found for courtSiteId:{},  crestCourtRoomNo:{}",
+                courtSiteId, crestCourtRoomNo);
         }
         return result;
     }

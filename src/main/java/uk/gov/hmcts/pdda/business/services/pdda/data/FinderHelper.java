@@ -44,10 +44,10 @@ public class FinderHelper extends CreationHelper {
         super(repositoryHelper);
     }
 
-    public Optional<XhbCourtSiteDao> findCourtSite(final Integer courtId,
-        final String courtSiteName) {
-        return getRepositoryHelper().getXhbCourtSiteRepository().findByCourtSiteName(courtId,
-            courtSiteName);
+    public Optional<XhbCourtSiteDao> findCourtSite(final String courtSiteName,
+        final String courtSiteCode) {
+        return getRepositoryHelper().getXhbCourtSiteRepository().findByCourtSiteName(courtSiteName,
+            courtSiteCode);
     }
 
     public Optional<XhbCourtRoomDao> findCourtRoom(final Integer courtId,

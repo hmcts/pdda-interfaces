@@ -47,17 +47,16 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
     /**
      * findByCourtSiteName.
      * 
-     * @param courtId Integer
      * @param courtSiteName String
+     * @param courtSiteCode String
      * @return XhbCourtSiteDao
      */
-    public Optional<XhbCourtSiteDao> findByCourtSiteName(final Integer courtId,
-        final String courtSiteName) {
+    public Optional<XhbCourtSiteDao> findByCourtSiteName(final String courtSiteName, final String courtSiteCode) {
         LOG.debug("findByCourtSiteName()");
         Query query =
-            getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtIdAndCourtSiteName");
-        query.setParameter("courtId", courtId);
+            getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtSiteName");
         query.setParameter("courtSiteName", courtSiteName);
+        query.setParameter("courtSiteCode", courtSiteCode);
         XhbCourtSiteDao dao =
             query.getResultList().isEmpty() ? null : (XhbCourtSiteDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
