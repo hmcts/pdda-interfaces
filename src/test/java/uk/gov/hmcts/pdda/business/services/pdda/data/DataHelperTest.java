@@ -68,8 +68,8 @@ class DataHelperTest {
 
     private boolean testValidateCourtRoom(XhbCourtRoomDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbCourtRoomDao> result = classUnderTest.validateCourtRoom(dao.getCourtRoomId(),
-            dao.getCourtRoomName(), dao.getDescription(), dao.getCrestCourtRoomNo());
+        Optional<XhbCourtRoomDao> result =
+            classUnderTest.validateCourtRoom(dao.getCourtRoomId(), dao.getCrestCourtRoomNo());
         return result.isPresent();
     }
 
@@ -257,8 +257,8 @@ class DataHelperTest {
          * validateCourtSite overrides.
          */
         @Override
-        public Optional<XhbCourtSiteDao> findCourtSite(
-            final String courtSiteName, final String courtHouseCode) {
+        public Optional<XhbCourtSiteDao> findCourtSite(final String courtSiteName,
+            final String courtHouseCode) {
             return this.isPresent ? Optional.of(new XhbCourtSiteDao()) : Optional.empty();
         }
 

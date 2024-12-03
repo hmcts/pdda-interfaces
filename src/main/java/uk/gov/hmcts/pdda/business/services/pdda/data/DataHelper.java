@@ -50,7 +50,7 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbCourtRoomDao> validateCourtRoom(final Integer courtSiteId,
-        final String courtRoomName, final String description, final Integer crestCourtRoomNo) {
+        final Integer crestCourtRoomNo) {
         LOG.debug("validateCourtRoom({})", crestCourtRoomNo);
         Optional<XhbCourtRoomDao> result = findCourtRoom(courtSiteId, crestCourtRoomNo);
         if (result.isEmpty()) {
