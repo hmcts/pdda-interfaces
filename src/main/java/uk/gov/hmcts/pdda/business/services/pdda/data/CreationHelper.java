@@ -86,7 +86,8 @@ public class CreationHelper {
      */
     public Optional<XhbHearingListDao> createHearingList(final Integer courtId,
         final Integer crestListId, final String listType, final String status,
-        final LocalDateTime startDate) {
+        final LocalDateTime startDate, final LocalDateTime publishedTime,
+        final String printReference) {
         LOG.info("createHearingList({},{})", status, startDate);
         XhbHearingListDao dao = new XhbHearingListDao();
         dao.setCourtId(courtId);
@@ -94,6 +95,8 @@ public class CreationHelper {
         dao.setListType(listType);
         dao.setStatus(status);
         dao.setStartDate(startDate);
+        dao.setPublishedTime(publishedTime);
+        dao.setPrintReference(printReference);
         return getRepositoryHelper().getXhbHearingListRepository().update(dao);
     }
 

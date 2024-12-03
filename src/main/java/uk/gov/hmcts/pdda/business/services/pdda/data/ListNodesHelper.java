@@ -40,7 +40,7 @@ import javax.xml.xpath.XPathExpressionException;
 public class ListNodesHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListNodesHelper.class);
-    private static final String DAILY_LIST = "DailyList/CourtLists/CourtList";
+    private static final String DAILY_LIST = "DailyList";
     private ListObjectHelper listObjectHelper;
 
     public void processNodes() {
@@ -90,12 +90,10 @@ public class ListNodesHelper {
             nodesMap.put(name, text);
             listObjectHelper.validateNodeMap(nodesMap, name);
             // Loop through the child nodes
-            Map<String, String> childNodesMap = new ConcurrentHashMap<>();
             for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-                childNodesMap.putAll(nodesMap);
                 Node childNode = node.getChildNodes().item(i);
                 // Call the next level down
-                processChildNodes(childNode, childNodesMap);
+                processChildNodes(childNode, nodesMap);
             } 
         }
     }

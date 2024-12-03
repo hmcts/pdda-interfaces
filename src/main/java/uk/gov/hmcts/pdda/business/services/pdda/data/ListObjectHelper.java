@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -33,10 +35,11 @@ public class ListObjectHelper {
     private static final String COURTHOUSECODE = "cs:CourtHouseCode";
     private static final String COURTHOUSENAME = "cs:CourtHouseName";
     private static final String COURTROOMNO = "cs:CourtRoomNo";
+    private static final String PUBLISHEDTIME = "cs:PublishedTime";
+    private static final String STARTDATE = "cs:StartDate";
+    private static final String VERSION = "cs:Version";
     private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
-
-    private static final String COURT = "Court";
 
     private final DataHelper dataHelper = new DataHelper();
     private Optional<XhbCourtSiteDao> xhbCourtSiteDao;
@@ -45,6 +48,7 @@ public class ListObjectHelper {
     public void validateNodeMap(Map<String, String> nodesMap, String lastEntryName) {
         if (Arrays.asList(COURTSITE_NODES).contains(lastEntryName)) {
             xhbCourtSiteDao = validateCourtSite(nodesMap);
+            validateHearingList(nodesMap);
         } else if (Arrays.asList(COURTROOM_NODES).contains(lastEntryName)) {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
         }
@@ -70,5 +74,33 @@ public class ListObjectHelper {
             }
         }
         return Optional.empty();
+    }
+
+    private void validateHearingList(Map<String, String> nodesMap) {
+        LOG.info("validateHearingList()");
+        if (xhbCourtSiteDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            Integer crestListId = 1;
+            String listType = "D";
+            String status = nodesMap.get(VERSION).substring(0, 5);
+            String startDateString = nodesMap.get(STARTDATE)+"T00:00:00.000";
+            LocalDateTime startDate = parseDate(startDateString, DateTimeFormatter.ISO_DATE_TIME);
+            String publishedTimeString = nodesMap.get(PUBLISHEDTIME);
+            LocalDateTime publishedTime = parseDate(publishedTimeString, DateTimeFormatter.ISO_DATE_TIME);
+            final String printReference = "/";
+            if (courtId != null && status != null && startDate != null) {
+                dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
+                    publishedTime, printReference);
+            }
+        }
+    }
+
+    private LocalDateTime parseDate(String dateAsString, DateTimeFormatter dateFormat) {
+        try {
+            return LocalDateTime.parse(dateAsString, dateFormat);
+        } catch (DateTimeParseException ex) {
+            LOG.error("Unable to format date string {} to {}", dateAsString, dateFormat);
+            return null;
+        }
     }
 }

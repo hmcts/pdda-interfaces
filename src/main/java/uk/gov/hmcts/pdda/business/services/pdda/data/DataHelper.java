@@ -62,11 +62,12 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbHearingListDao> validateHearingList(final Integer courtId,
         final Integer crestListId, final String listType, final String status,
-        final LocalDateTime startDate) {
+        final LocalDateTime startDate, final LocalDateTime publishedTime, String printReference) {
         LOG.debug("validateHearingList({},{})", status, startDate);
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
-            result = createHearingList(courtId, crestListId, listType, status, startDate);
+            result = createHearingList(courtId, crestListId, listType, status, startDate,
+                publishedTime, printReference);
         }
         return result;
     }

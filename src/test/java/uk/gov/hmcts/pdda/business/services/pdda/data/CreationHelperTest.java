@@ -94,7 +94,8 @@ class CreationHelperTest {
 
         XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
         Optional<XhbHearingListDao> result = classUnderTest.createHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate());
+            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate(),
+            dao.getPublishedTime(), dao.getPrintReference());
         assertNotNull(result, NOTNULL);
     }
 

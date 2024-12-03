@@ -88,7 +88,8 @@ class DataHelperTest {
     private boolean testValidateHearingList(XhbHearingListDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
         Optional<XhbHearingListDao> result = classUnderTest.validateHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate());
+            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate(),
+            dao.getPublishedTime(), dao.getPrintReference());
         return result.isPresent();
     }
 
@@ -296,7 +297,8 @@ class DataHelperTest {
         @Override
         public Optional<XhbHearingListDao> createHearingList(final Integer courtId,
             final Integer crestListId, final String listType, final String status,
-            final LocalDateTime startDate) {
+            final LocalDateTime startDate, final LocalDateTime publishedTime,
+            final String printReference) {
             return Optional.of(new XhbHearingListDao());
         }
 
