@@ -67,6 +67,7 @@ public class ListNodesHelper {
 
     /**
      * Process the nodes.
+     * 
      * @param nodes Nodes
      */
     public void processNodes(List<Node> nodes) {
@@ -80,6 +81,7 @@ public class ListNodesHelper {
 
     /**
      * Recursive called method to process the child nodes.
+     * 
      * @param node Node
      * @param nodesMap Map
      */
@@ -94,7 +96,7 @@ public class ListNodesHelper {
                 Node childNode = node.getChildNodes().item(i);
                 // Call the next level down
                 processChildNodes(childNode, nodesMap);
-            } 
+            }
         }
     }
 }

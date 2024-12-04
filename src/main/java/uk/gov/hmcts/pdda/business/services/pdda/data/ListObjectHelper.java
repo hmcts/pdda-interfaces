@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
@@ -34,16 +36,18 @@ public class ListObjectHelper {
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
     private static final String COURTHOUSECODE = "cs:CourtHouseCode";
     private static final String COURTHOUSENAME = "cs:CourtHouseName";
-    private static final String COURTROOMNO = "cs:CourtRoomNo";
+    private static final String COURTROOMNO = "cs:CourtRoomNumber";
     private static final String PUBLISHEDTIME = "cs:PublishedTime";
+    private static final String SITTINGTIME = "cs:SittingAt";
     private static final String STARTDATE = "cs:StartDate";
     private static final String VERSION = "cs:Version";
     private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
+    private static final String[] SITTING_NODES = {SITTINGTIME};
 
     private final DataHelper dataHelper = new DataHelper();
-    private Optional<XhbCourtSiteDao> xhbCourtSiteDao;
-    private Optional<XhbCourtRoomDao> xhbCourtRoomDao;
+    private Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
+    private Optional<XhbCourtRoomDao> xhbCourtRoomDao = Optional.empty();
 
     public void validateNodeMap(Map<String, String> nodesMap, String lastEntryName) {
         if (Arrays.asList(COURTSITE_NODES).contains(lastEntryName)) {
@@ -51,6 +55,8 @@ public class ListObjectHelper {
             validateHearingList(nodesMap);
         } else if (Arrays.asList(COURTROOM_NODES).contains(lastEntryName)) {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
+        } else if (Arrays.asList(SITTING_NODES).contains(lastEntryName)) {
+            validateSitting(nodesMap);
         }
     }
 
@@ -83,10 +89,11 @@ public class ListObjectHelper {
             Integer crestListId = 1;
             String listType = "D";
             String status = nodesMap.get(VERSION).substring(0, 5);
-            String startDateString = nodesMap.get(STARTDATE)+"T00:00:00.000";
-            LocalDateTime startDate = parseDate(startDateString, DateTimeFormatter.ISO_DATE_TIME);
+            String startDateString = nodesMap.get(STARTDATE);
+            LocalDateTime startDate = parseDate(startDateString, DateTimeFormatter.ISO_DATE);
             String publishedTimeString = nodesMap.get(PUBLISHEDTIME);
-            LocalDateTime publishedTime = parseDate(publishedTimeString, DateTimeFormatter.ISO_DATE_TIME);
+            LocalDateTime publishedTime =
+                parseDate(publishedTimeString, DateTimeFormatter.ISO_DATE_TIME);
             final String printReference = "/";
             if (courtId != null && status != null && startDate != null) {
                 dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
@@ -95,9 +102,29 @@ public class ListObjectHelper {
         }
     }
 
+    private void validateSitting(Map<String, String> nodesMap) {
+        LOG.info("validateSitting()");
+        if (xhbCourtRoomDao.isPresent()) {
+            Integer courtSiteId = xhbCourtRoomDao.get().getCourtSiteId();
+            Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
+            String floating = "N";
+            String sittingTimeString = nodesMap.get(SITTINGTIME);
+            LocalDateTime sittingTime = parseDate(sittingTimeString, DateTimeFormatter.ISO_TIME);
+            if (sittingTime != null) {
+                dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime);
+            }
+        }
+    }
+
     private LocalDateTime parseDate(String dateAsString, DateTimeFormatter dateFormat) {
         try {
-            return LocalDateTime.parse(dateAsString, dateFormat);
+            if (DateTimeFormatter.ISO_TIME.equals(dateFormat)) {
+                return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now());
+            } else if (DateTimeFormatter.ISO_DATE.equals(dateFormat)) {
+                return LocalDate.parse(dateAsString, dateFormat).atStartOfDay();
+            } else {
+                return LocalDateTime.parse(dateAsString, dateFormat);
+            }
         } catch (DateTimeParseException ex) {
             LOG.error("Unable to format date string {} to {}", dateAsString, dateFormat);
             return null;
