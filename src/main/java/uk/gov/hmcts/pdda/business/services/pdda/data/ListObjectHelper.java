@@ -34,6 +34,7 @@ import java.util.Optional;
 public class ListObjectHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
+    private static final String CASENUMBER = "cs:CaseNumber";
     private static final String COURTHOUSECODE = "cs:CourtHouseCode";
     private static final String COURTHOUSENAME = "cs:CourtHouseName";
     private static final String COURTROOMNO = "cs:CourtRoomNumber";
@@ -41,6 +42,7 @@ public class ListObjectHelper {
     private static final String SITTINGTIME = "cs:SittingAt";
     private static final String STARTDATE = "cs:StartDate";
     private static final String VERSION = "cs:Version";
+    private static final String[] CASE_NODES = {CASENUMBER};
     private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
     private static final String[] SITTING_NODES = {SITTINGTIME};
@@ -57,6 +59,8 @@ public class ListObjectHelper {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
         } else if (Arrays.asList(SITTING_NODES).contains(lastEntryName)) {
             validateSitting(nodesMap);
+        } else if (Arrays.asList(CASE_NODES).contains(lastEntryName)) {
+            validateCase(nodesMap);
         }
     }
 
@@ -102,6 +106,21 @@ public class ListObjectHelper {
         }
     }
 
+    private LocalDateTime parseDate(String dateAsString, DateTimeFormatter dateFormat) {
+        try {
+            if (DateTimeFormatter.ISO_TIME.equals(dateFormat)) {
+                return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now());
+            } else if (DateTimeFormatter.ISO_DATE.equals(dateFormat)) {
+                return LocalDate.parse(dateAsString, dateFormat).atStartOfDay();
+            } else {
+                return LocalDateTime.parse(dateAsString, dateFormat);
+            }
+        } catch (DateTimeParseException ex) {
+            LOG.error("Unable to format date string {} to {}", dateAsString, dateFormat);
+            return null;
+        }
+    }
+
     private void validateSitting(Map<String, String> nodesMap) {
         LOG.info("validateSitting()");
         if (xhbCourtRoomDao.isPresent()) {
@@ -116,18 +135,15 @@ public class ListObjectHelper {
         }
     }
 
-    private LocalDateTime parseDate(String dateAsString, DateTimeFormatter dateFormat) {
-        try {
-            if (DateTimeFormatter.ISO_TIME.equals(dateFormat)) {
-                return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now());
-            } else if (DateTimeFormatter.ISO_DATE.equals(dateFormat)) {
-                return LocalDate.parse(dateAsString, dateFormat).atStartOfDay();
-            } else {
-                return LocalDateTime.parse(dateAsString, dateFormat);
+    private void validateCase(Map<String, String> nodesMap) {
+        LOG.info("validateCase()");
+        if (xhbCourtRoomDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            String caseType = nodesMap.get(CASENUMBER).substring(0, 1);
+            String caseNumber = nodesMap.get(CASENUMBER).substring(1);
+            if (caseType != null && caseNumber != null) {
+                dataHelper.validateCase(courtId, caseType, Integer.valueOf(caseNumber));
             }
-        } catch (DateTimeParseException ex) {
-            LOG.error("Unable to format date string {} to {}", dateAsString, dateFormat);
-            return null;
         }
     }
 }
