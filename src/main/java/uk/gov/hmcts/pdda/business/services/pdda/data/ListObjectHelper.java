@@ -2,8 +2,11 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
+import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -35,21 +38,34 @@ public class ListObjectHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
     private static final String CASENUMBER = "cs:CaseNumber";
+    private static final String CATEGORY = "cs:ListCategory";
     private static final String COURTHOUSECODE = "cs:CourtHouseCode";
     private static final String COURTHOUSENAME = "cs:CourtHouseName";
     private static final String COURTROOMNO = "cs:CourtRoomNumber";
+    private static final String DATEOFBIRTH = "apd:BirthDate";
+    private static final String FEMALE = "FEMALE";
+    private static final String FIRSTNAME = "apd:CitizenNameForename";
+    private static final String GENDER = "cs:Sex";
+    private static final String HEARINGTYPECODE = "cs:HearingDetails.HearingType";
+    private static final String HEARINGTYPEDESC = "cs:HearingDescription";
+    private static final String MALE = "MALE";
     private static final String PUBLISHEDTIME = "cs:PublishedTime";
     private static final String SITTINGTIME = "cs:SittingAt";
     private static final String STARTDATE = "cs:StartDate";
+    private static final String SURNAME = "apd:CitizenNameSurname";
     private static final String VERSION = "cs:Version";
     private static final String[] CASE_NODES = {CASENUMBER};
     private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
+    private static final String[] DEFENDANT_NODES = {GENDER};
     private static final String[] SITTING_NODES = {SITTINGTIME};
 
     private final DataHelper dataHelper = new DataHelper();
     private Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
     private Optional<XhbCourtRoomDao> xhbCourtRoomDao = Optional.empty();
+    private Optional<XhbCaseDao> xhbCaseDao = Optional.empty();
+    private Optional<XhbDefendantDao> xhbDefendantDao = Optional.empty();
+    private Optional<XhbRefHearingTypeDao> xhbRefHearingTypeDao = Optional.empty();
 
     public void validateNodeMap(Map<String, String> nodesMap, String lastEntryName) {
         if (Arrays.asList(COURTSITE_NODES).contains(lastEntryName)) {
@@ -60,7 +76,12 @@ public class ListObjectHelper {
         } else if (Arrays.asList(SITTING_NODES).contains(lastEntryName)) {
             validateSitting(nodesMap);
         } else if (Arrays.asList(CASE_NODES).contains(lastEntryName)) {
-            validateCase(nodesMap);
+            xhbCaseDao = validateCase(nodesMap);
+            xhbRefHearingTypeDao = validateHearingType(nodesMap);
+            validateHearing(nodesMap);
+        } else if (Arrays.asList(DEFENDANT_NODES).contains(lastEntryName)) {
+            xhbDefendantDao = validateDefendant(nodesMap);
+            validateDefendantOnCase(nodesMap);
         }
     }
 
@@ -135,14 +156,80 @@ public class ListObjectHelper {
         }
     }
 
-    private void validateCase(Map<String, String> nodesMap) {
+    private Optional<XhbCaseDao> validateCase(Map<String, String> nodesMap) {
         LOG.info("validateCase()");
-        if (xhbCourtRoomDao.isPresent()) {
+        if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String caseType = nodesMap.get(CASENUMBER).substring(0, 1);
             String caseNumber = nodesMap.get(CASENUMBER).substring(1);
             if (caseType != null && caseNumber != null) {
-                dataHelper.validateCase(courtId, caseType, Integer.valueOf(caseNumber));
+                return dataHelper.validateCase(courtId, caseType, Integer.valueOf(caseNumber));
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
+        LOG.info("validateDefendant()");
+        if (xhbCourtSiteDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            String firstName = nodesMap.get(FIRSTNAME);
+            String middleName = nodesMap.get(FIRSTNAME);
+            String surname = nodesMap.get(SURNAME);
+            String genderAsString = nodesMap.get(GENDER);
+            Integer gender = null;
+            if (MALE.equalsIgnoreCase(genderAsString)) {
+                gender = 1;
+            } else if (FEMALE.equalsIgnoreCase(genderAsString)) {
+                gender = 2;
+            }
+            String dateOfBirthAsString = nodesMap.get(DATEOFBIRTH);
+            LocalDateTime dateOfBirth = parseDate(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
+            if (firstName != null && surname != null) {
+                return dataHelper.validateDefendant(courtId, firstName, middleName, surname, gender,
+                    dateOfBirth);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private void validateDefendantOnCase(Map<String, String> nodesMap) {
+        LOG.info("validateDefendantOnCase()");
+        if (xhbCaseDao.isPresent() && xhbDefendantDao.isPresent()) {
+            Integer caseId = xhbCaseDao.get().getCaseId();
+            Integer defendantId = xhbDefendantDao.get().getDefendantId();
+            if (caseId != null && defendantId != null) {
+                dataHelper.validateDefendantOnCase(caseId, defendantId);
+            }
+        }
+    }
+
+    private Optional<XhbRefHearingTypeDao> validateHearingType(Map<String, String> nodesMap) {
+        LOG.info("validateHearingType()");
+        if (xhbCourtSiteDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            String hearingTypeCode = nodesMap.get(HEARINGTYPECODE);
+            String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC);
+            String category = nodesMap.get(CATEGORY).substring(0, 1);
+            if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
+                return dataHelper.validateHearingType(courtId, hearingTypeCode, hearingTypeDesc,
+                    category);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private void validateHearing(Map<String, String> nodesMap) {
+        LOG.info("validateHearing()");
+        if (xhbRefHearingTypeDao.isPresent() && xhbCaseDao.isPresent()) {
+            Integer courtId = xhbCaseDao.get().getCourtId();
+            Integer caseId = xhbCaseDao.get().getCaseId();
+            Integer refHearingTypeId = xhbRefHearingTypeDao.get().getRefHearingTypeId();
+            String hearingStartDateString = nodesMap.get(STARTDATE);
+            LocalDateTime hearingStartDate =
+                parseDate(hearingStartDateString, DateTimeFormatter.ISO_DATE);
+            if (hearingStartDate != null) {
+                dataHelper.validateHearing(courtId, caseId, refHearingTypeId, hearingStartDate);
             }
         }
     }

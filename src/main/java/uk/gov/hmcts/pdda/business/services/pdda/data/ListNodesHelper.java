@@ -4,6 +4,7 @@ import com.pdda.hb.jpa.EntityManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -90,6 +91,10 @@ public class ListNodesHelper {
             String name = node.getNodeName();
             String text = node.getTextContent();
             nodesMap.put(name, text);
+            Map<String, String> attributesMap = getNodeAttributes(node);
+            if (!attributesMap.isEmpty()) {
+                nodesMap.putAll(attributesMap);
+            }
             listObjectHelper.validateNodeMap(nodesMap, name);
             // Loop through the child nodes
             for (int i = 0; i < node.getChildNodes().getLength(); i++) {
@@ -98,5 +103,21 @@ public class ListNodesHelper {
                 processChildNodes(childNode, nodesMap);
             }
         }
+    }
+
+    /**
+     * Return the node attributes as a map prefix with the nodeName.
+     * 
+     * @param node Node
+     * @param nodesMap Map
+     */
+    protected Map<String, String> getNodeAttributes(Node node) {
+        Map<String, String> results = new ConcurrentHashMap<>();
+        NamedNodeMap attributesList = node.getAttributes();
+        for (int i = 0; i < attributesList.getLength(); i++) {
+            results.put(node.getNodeName() + "." + attributesList.item(i).getNodeName(),
+                attributesList.item(i).getNodeValue());
+        }
+        return results;
     }
 }

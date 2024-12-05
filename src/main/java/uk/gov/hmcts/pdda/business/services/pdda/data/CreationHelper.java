@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -156,6 +157,20 @@ public class CreationHelper {
         return getRepositoryHelper().getXhbDefendantRepository().update(dao);
     }
 
+    /**
+     * Create XhbRefHearingTypeDao.
+     */
+    public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId, final String hearingTypeCode,
+        final String hearingTypeDesc, final String category) {
+        LOG.info("createHearingType()");
+        XhbRefHearingTypeDao dao = new XhbRefHearingTypeDao();
+        dao.setCourtId(courtId);
+        dao.setHearingTypeCode(hearingTypeCode);
+        dao.setHearingTypeDesc(hearingTypeDesc);
+        dao.setCategory(category);
+        return getRepositoryHelper().getXhbRefHearingTypeRepository().update(dao);
+    }
+    
     /**
      * Create XhbHearingDao.
      */

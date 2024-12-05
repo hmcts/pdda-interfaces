@@ -23,8 +23,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -117,6 +121,28 @@ class FinderHelperTest {
         XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
         Optional<XhbDefendantOnCaseDao> result =
             classUnderTest.findDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindHearingType() {
+        Mockito.when(mockRepositoryHelper.getXhbRefHearingTypeRepository())
+            .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
+
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        Optional<XhbRefHearingTypeDao> result =
+            classUnderTest.findHearingType(dao.getCourtId(), dao.getHearingTypeCode(), dao.getHearingTypeDesc());
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testFindHearing() {
+        Mockito.when(mockRepositoryHelper.getXhbHearingRepository())
+            .thenReturn(Mockito.mock(XhbHearingRepository.class));
+
+        XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
+        Optional<XhbHearingDao> result =
+            classUnderTest.findHearing(dao.getCourtId(), dao.getCaseId(), dao.getHearingStartDate());
         assertNotNull(result, NOTNULL);
     }
 
