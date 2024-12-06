@@ -72,11 +72,14 @@ public class ListObjectHelper {
     private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
     private static final String[] DEFENDANT_NODES = {GENDER};
+    private static final String[] HEARING_NODES = {STARTDATE};
+    private static final String[] HEARINGTYPE_NODES = {HEARINGTYPECODE, HEARINGTYPEDESC};
+    private static final String[] SCHEDHEARING_NODES = {NOTBEFORETIME};
     private static final String[] SITTING_NODES = {SITTINGTIME};
     private static final DateTimeFormatter TWELVEHOURTIMEFORMAT =
         DateTimeFormatter.ofPattern(TWELVEHOURTIME);
 
-    private final DataHelper dataHelper = new DataHelper();
+    private DataHelper dataHelper = new DataHelper();
     private Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
     private Optional<XhbCourtRoomDao> xhbCourtRoomDao = Optional.empty();
     private Optional<XhbCaseDao> xhbCaseDao = Optional.empty();
@@ -86,6 +89,14 @@ public class ListObjectHelper {
     private Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
     private Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
+
+    public ListObjectHelper() {
+        // Default constructor
+    }
+
+    public ListObjectHelper(DataHelper dataHelper) {
+        this.dataHelper = dataHelper;
+    }
 
     public void validateNodeMap(Map<String, String> nodesMap, String lastEntryName) {
         if (Arrays.asList(COURTSITE_NODES).contains(lastEntryName)) {
@@ -97,8 +108,11 @@ public class ListObjectHelper {
             xhbSittingDao = validateSitting(nodesMap);
         } else if (Arrays.asList(CASE_NODES).contains(lastEntryName)) {
             xhbCaseDao = validateCase(nodesMap);
+        } else if (Arrays.asList(HEARINGTYPE_NODES).contains(lastEntryName)) {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
+        } else if (Arrays.asList(HEARING_NODES).contains(lastEntryName)) {
             xhbHearingDao = validateHearing(nodesMap);
+        } else if (Arrays.asList(SCHEDHEARING_NODES).contains(lastEntryName)) {
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
         } else if (Arrays.asList(DEFENDANT_NODES).contains(lastEntryName)) {
@@ -122,7 +136,9 @@ public class ListObjectHelper {
         LOG.info("validateCourtRoom()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtSiteId = xhbCourtSiteDao.get().getCourtSiteId();
-            Integer crestCourtRoomNo = Integer.valueOf(nodesMap.get(COURTROOMNO));
+            String courtRoomNoString = nodesMap.get(COURTROOMNO);
+            Integer crestCourtRoomNo =
+                courtRoomNoString != null ? Integer.valueOf(courtRoomNoString) : null;
             if (courtSiteId != null && crestCourtRoomNo != null) {
                 return dataHelper.validateCourtRoom(courtSiteId, crestCourtRoomNo);
             }
@@ -136,7 +152,7 @@ public class ListObjectHelper {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             Integer crestListId = 1;
             String listType = "D";
-            String status = nodesMap.get(VERSION).substring(0, 5);
+            String status = getSubstring(nodesMap.get(VERSION), 0, 5);
             String startDateString = nodesMap.get(STARTDATE);
             LocalDateTime startDate = parseDateTime(startDateString, DateTimeFormatter.ISO_DATE);
             String publishedTimeString = nodesMap.get(PUBLISHEDTIME);
@@ -150,9 +166,20 @@ public class ListObjectHelper {
         }
     }
 
+    private String getSubstring(String text, Integer start, Integer end) {
+        if (text != null) {
+            Integer startPos = Math.min(start, text.length());
+            Integer endPos = end != null ? Math.min(end, text.length()) : text.length();
+            return text.substring(startPos, endPos);
+        }
+        return null;
+    }
+
     private LocalDateTime parseDateTime(String dateAsString, DateTimeFormatter dateFormat) {
         try {
-            if (DateTimeFormatter.ISO_TIME.equals(dateFormat)
+            if (dateAsString == null) {
+                return null;
+            } else if (DateTimeFormatter.ISO_TIME.equals(dateFormat)
                 || TWELVEHOURTIMEFORMAT.equals(dateFormat)) {
                 return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now());
             } else if (DateTimeFormatter.ISO_DATE.equals(dateFormat)) {
@@ -186,8 +213,8 @@ public class ListObjectHelper {
         LOG.info("validateCase()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
-            String caseType = nodesMap.get(CASENUMBER).substring(0, 1);
-            String caseNumber = nodesMap.get(CASENUMBER).substring(1);
+            String caseType = getSubstring(nodesMap.get(CASENUMBER), 0, 1);
+            String caseNumber = getSubstring(nodesMap.get(CASENUMBER), 1, null);
             if (caseType != null && caseNumber != null) {
                 return dataHelper.validateCase(courtId, caseType, Integer.valueOf(caseNumber));
             }
@@ -238,7 +265,7 @@ public class ListObjectHelper {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String hearingTypeCode = nodesMap.get(HEARINGTYPECODE);
             String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC);
-            String category = nodesMap.get(CATEGORY).substring(0, 1);
+            String category = getSubstring(nodesMap.get(CATEGORY), 0, 1);
             if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
                 return dataHelper.validateHearingType(courtId, hearingTypeCode, hearingTypeDesc,
                     category);
@@ -270,8 +297,7 @@ public class ListObjectHelper {
         if (xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {
             Integer sittingId = xhbSittingDao.get().getSittingId();
             Integer hearingId = xhbHearingDao.get().getHearingId();
-            String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME)
-                .toLowerCase(Locale.getDefault()).replaceAll(WHITESPACE_REGEX, EMPTY_STRING));
+            String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME));
             LocalDateTime notBeforeTime = parseDateTime(notBeforeTimeString, TWELVEHOURTIMEFORMAT);
             if (notBeforeTime != null) {
                 return dataHelper.validateScheduledHearing(sittingId, hearingId, notBeforeTime);
@@ -281,10 +307,16 @@ public class ListObjectHelper {
     }
 
     private String getTime(String notBeforeTimeString) {
-        // Find the first digit in the string
-        Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(notBeforeTimeString);
-        // Return the string from the point of the first digit onwards
-        return matcher.find() ? notBeforeTimeString.substring(matcher.start()) : null;
+        if (notBeforeTimeString != null) {
+            String result = notBeforeTimeString.toLowerCase(Locale.getDefault())
+                .replaceAll(WHITESPACE_REGEX, EMPTY_STRING);
+            // Find the first digit in the string
+            Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(result);
+            matcher.find();
+            // Return the string from the point of the first digit onwards
+            return result.substring(matcher.start());
+        }
+        return null;
     }
 
     private Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant() {
