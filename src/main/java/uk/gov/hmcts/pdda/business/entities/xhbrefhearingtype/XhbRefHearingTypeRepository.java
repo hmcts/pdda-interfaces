@@ -1,17 +1,17 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.util.Optional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-
 
 
 @Repository
+@SuppressWarnings({"PMD.LawOfDemeter"})
 public class XhbRefHearingTypeRepository extends AbstractRepository<XhbRefHearingTypeDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbRefHearingTypeRepository.class);

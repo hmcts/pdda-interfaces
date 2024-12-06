@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 class FinderHelperTest {
 
     private static final String NOTNULL = "Result is Null";
@@ -130,19 +131,19 @@ class FinderHelperTest {
             .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
 
         XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
-        Optional<XhbRefHearingTypeDao> result =
-            classUnderTest.findHearingType(dao.getCourtId(), dao.getHearingTypeCode(), dao.getHearingTypeDesc());
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.findHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testFindHearing() {
         Mockito.when(mockRepositoryHelper.getXhbHearingRepository())
             .thenReturn(Mockito.mock(XhbHearingRepository.class));
 
         XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
-        Optional<XhbHearingDao> result =
-            classUnderTest.findHearing(dao.getCourtId(), dao.getCaseId(), dao.getHearingStartDate());
+        Optional<XhbHearingDao> result = classUnderTest.findHearing(dao.getCourtId(),
+            dao.getCaseId(), dao.getHearingStartDate());
         assertNotNull(result, NOTNULL);
     }
 

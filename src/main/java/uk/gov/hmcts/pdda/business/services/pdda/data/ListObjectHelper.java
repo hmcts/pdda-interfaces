@@ -12,12 +12,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDa
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -98,11 +100,11 @@ public class ListObjectHelper {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
             xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
-            validateCrLiveDisplay(nodesMap);
+            validateCrLiveDisplay();
         } else if (Arrays.asList(DEFENDANT_NODES).contains(lastEntryName)) {
             xhbDefendantDao = validateDefendant(nodesMap);
-            xhbDefendantOnCaseDao = validateDefendantOnCase(nodesMap);
-            validateSchedHearingDefendant(nodesMap);
+            xhbDefendantOnCaseDao = validateDefendantOnCase();
+            validateSchedHearingDefendant();
         }
     }
 
@@ -218,7 +220,7 @@ public class ListObjectHelper {
         return Optional.empty();
     }
 
-    private Optional<XhbDefendantOnCaseDao> validateDefendantOnCase(Map<String, String> nodesMap) {
+    private Optional<XhbDefendantOnCaseDao> validateDefendantOnCase() {
         LOG.info("validateDefendantOnCase()");
         if (xhbCaseDao.isPresent() && xhbDefendantDao.isPresent()) {
             Integer caseId = xhbCaseDao.get().getCaseId();
@@ -268,8 +270,8 @@ public class ListObjectHelper {
         if (xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {
             Integer sittingId = xhbSittingDao.get().getSittingId();
             Integer hearingId = xhbHearingDao.get().getHearingId();
-            String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME).toLowerCase()
-                .replaceAll(WHITESPACE_REGEX, EMPTY_STRING));
+            String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME)
+                .toLowerCase(Locale.getDefault()).replaceAll(WHITESPACE_REGEX, EMPTY_STRING));
             LocalDateTime notBeforeTime = parseDateTime(notBeforeTimeString, TWELVEHOURTIMEFORMAT);
             if (notBeforeTime != null) {
                 return dataHelper.validateScheduledHearing(sittingId, hearingId, notBeforeTime);
@@ -285,8 +287,7 @@ public class ListObjectHelper {
         return matcher.find() ? notBeforeTimeString.substring(matcher.start()) : null;
     }
 
-    private Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant(
-        Map<String, String> nodesMap) {
+    private Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant() {
         LOG.info("validateSchedHearingDefendant()");
         if (xhbScheduledHearingDao.isPresent() && xhbDefendantOnCaseDao.isPresent()) {
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
@@ -299,13 +300,14 @@ public class ListObjectHelper {
         return Optional.empty();
     }
 
-    private void validateCrLiveDisplay(Map<String, String> nodesMap) {
+    private void validateCrLiveDisplay() {
         LOG.info("validateCrLiveDisplay()");
         if (xhbScheduledHearingDao.isPresent() && xhbCourtRoomDao.isPresent()) {
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
             if (courtRoomId != null && scheduledHearingId != null) {
-                dataHelper.validateCrLiveDisplay(courtRoomId, scheduledHearingId, LocalDateTime.now());
+                dataHelper.validateCrLiveDisplay(courtRoomId, scheduledHearingId,
+                    LocalDateTime.now());
             }
         }
     }

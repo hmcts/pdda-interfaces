@@ -108,8 +108,7 @@ public class ListNodesHelper {
     /**
      * Return the node attributes as a map prefix with the nodeName.
      * 
-     * @param node Node
-     * @param nodesMap Map
+     * @param node Node return nodesMap
      */
     protected Map<String, String> getNodeAttributes(Node node) {
         Map<String, String> results = new ConcurrentHashMap<>();
