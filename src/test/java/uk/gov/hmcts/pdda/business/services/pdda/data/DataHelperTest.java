@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -70,6 +71,25 @@ class DataHelperTest {
         classUnderTest.isPresent = isPresent;
         Optional<XhbCourtRoomDao> result =
             classUnderTest.validateCourtRoom(dao.getCourtRoomId(), dao.getCrestCourtRoomNo());
+        return result.isPresent();
+    }
+
+    /**
+     * validateHearingType.
+     */
+    @Test
+    void testValidateHearingType() {
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        boolean result = testValidateHearingType(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateHearingType(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateHearingType(XhbRefHearingTypeDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.validateHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         return result.isPresent();
     }
 
@@ -362,6 +382,21 @@ class DataHelperTest {
             final String firstName, final String middleName, final String surname,
             final Integer gender, final LocalDateTime dateOfBirth) {
             return Optional.of(new XhbDefendantDao());
+        }
+
+        /**
+         * validateHearingType overrides.
+         */
+        @Override
+        public Optional<XhbRefHearingTypeDao> findHearingType(final Integer courtId,
+            final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+            return this.isPresent ? Optional.of(new XhbRefHearingTypeDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId,
+            final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+            return Optional.of(new XhbRefHearingTypeDao());
         }
 
         /**

@@ -29,6 +29,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -141,6 +143,18 @@ class CreationHelperTest {
         Optional<XhbDefendantDao> result =
             classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
                 dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+        assertNotNull(result, NOTNULL);
+    }
+
+
+    @Test
+    void testCreateHearingType() {
+        Mockito.when(mockRepositoryHelper.getXhbRefHearingTypeRepository())
+            .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
+
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.createHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         assertNotNull(result, NOTNULL);
     }
 
