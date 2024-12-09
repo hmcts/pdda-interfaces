@@ -17,11 +17,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageReposito
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.Assert.assertNull;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -243,7 +244,7 @@ class LighthousePddaControllerBeanTest {
     @Test
     void testGetDocType() {
         String result = classUnderTest.getDocType("NOTVALID");
-        assertNull(result, null);
+        assertNull(result, NULL);
     }
 
     @Test
