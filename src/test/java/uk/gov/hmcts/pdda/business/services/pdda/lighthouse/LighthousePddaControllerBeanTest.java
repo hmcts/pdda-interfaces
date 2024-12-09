@@ -246,6 +246,45 @@ class LighthousePddaControllerBeanTest {
         assertNull(result, null);
     }
 
+    @Test
+    void testIsGetDocumentNameValid() {
+        String documentName1 = "DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName1), TRUE);
+
+        String documentName2 = "FirmList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName2), TRUE);
+
+        String documentName3 = "WarnedList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName3), TRUE);
+
+        String documentName4 = "PublicDisplay_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName4), TRUE);
+
+        String documentName5 = "WebPage_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName5), TRUE);
+
+        String documentName6 =
+            "PDDA_CPD_34_1_453_20220811235559 pd_filename = PublicDisplay_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName6), TRUE);
+
+        String documentName7 =
+            "PDDA_XDL_34_1_453_20220811235559 list_filename = DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName7), TRUE);
+
+        String documentName8 = "PDDA_XPD_34_1_453_20220811235559";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName8), TRUE);
+
+        String documentName9 = "PDDA_CPD_34_1_453_202208112355";
+        assertFalse(classUnderTest.isDocumentNameValid(documentName9), FALSE);
+
+        String documentName10 =
+            "PDDA_XDL_34_1_453_20220811235559 list_filename = DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName10), TRUE);
+
+        String documentName11 = "PDDA_XDL_34_1_453_20220811235559";
+        assertFalse(classUnderTest.isDocumentNameValid(documentName11), FALSE);
+    }
+
 
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
         List<XhbPddaMessageDao> result = new ArrayList<>();

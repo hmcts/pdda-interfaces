@@ -269,6 +269,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         String regexOther =
             "^(DailyList_|FirmList_|WarnedList_|PublicDisplay_|WebPage_).+\\d{14}.xml$";
 
+        boolean a1 = documentName.matches(regexPdda);
+        boolean a2 = documentName.matches(regexPddaXpd);
+        boolean a3 = documentName.matches(regexOther);
+
         return documentName.matches(regexPdda) || documentName.matches(regexPddaXpd)
             || documentName.matches(regexOther);
     }
