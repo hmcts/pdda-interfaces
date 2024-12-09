@@ -211,7 +211,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * @param fileType portion of the filename
      * @return shorthand documentType
      */
-    private String getDocType(final String fileType) {
+    String getDocType(final String fileType) {
         writeToLog("METHOD ENTRY: getDocType");
 
         DocumentType docType = DocumentType.fromString(fileType);
