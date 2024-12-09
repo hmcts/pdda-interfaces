@@ -69,7 +69,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Scott Atwell
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "PMD.CouplingBetweenObjects",
+    "PMD.TooManyMethods"})
 class SftpServiceTest {
 
     @RegisterExtension
@@ -88,6 +89,36 @@ class SftpServiceTest {
     private static final String FIRM_LIST = "FirmList";
     private static final String WARNED_LIST = "WarnedList";
     private static final String UNKNOWN = "Unknown";
+
+    // Files from CP
+    private static final String FILENAME_CP_INVALID_PARTS =
+        "PublicDisplay_453_20241009130506_1.xml";
+    private static final String FILENAME_CP_INVALID_TITLE = "PublicDplay_453_20241209130506.xml";
+    private static final String FILENAME_CP_INVALID_EXTENSION =
+        "PublicDisplay_453_20241009130506.xl";
+
+    private static final String FILENAME_CP_PD_VALID = "PublicDisplay_453_20241209130506.xml";
+
+    private static final String FILENAME_CP_WP_VALID = "WebPage_453_20241209130506.xml";
+
+    private static final String FILENAME_CP_DL_VALID = "DailyList_453_20241209130506.xml";
+
+    private static final String FILENAME_CP_FL_VALID = "FirmList_453_20241209130506.xml";
+
+    private static final String FILENAME_CP_WL_VALID = "WarnedList_453_20241209130506.xml";
+
+    // Files from XHIBIT
+    private static final String FILENAME_XHB_INVALID_PARTS = "PDDA_XPD_1_453_20241209130506";
+    private static final String FILENAME_XHB_INVALID_MESSAGE_TYPE =
+        "PDDA_LPD_34_1_457_20241209130506";
+    private static final String FILENAME_XHB_INVALID_TITLE = "PDA_XPD_34_1_453_20241209130506";
+    private static final String FILENAME_XHB_INVALID_COURT = "PDA_XPD_34_1_391_20241209130506";
+
+    private static final String FILENAME_XHB_DL_VALID = "PDDA_XDL_34_1_453_20241209130506";
+
+    private static final String FILENAME_XHB_PD_VALID = "PDDA_XPD_34_1_453_20241209130506";
+
+    private static final String FILENAME_XHB_PD_FROMCP_VALID = "PDDA_CPD_34_1_453_20241209130506";
 
 
     @Mock
@@ -169,7 +200,7 @@ class SftpServiceTest {
         EasyMock
             .expect(
                 mockPddaMessageHelper
-                    .findByCpDocumentName("PublicDisplay_453_20241009130506_1.xml"))
+                    .findByCpDocumentName(FILENAME_CP_INVALID_PARTS))
             .andReturn(pddaMessageDao);
 
         Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
@@ -210,7 +241,7 @@ class SftpServiceTest {
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
         EasyMock
             .expect(
-                mockPddaMessageHelper.findByCpDocumentName("PDDA_XPD_34_1_457_2024101409000.xml"))
+                mockPddaMessageHelper.findByCpDocumentName(FILENAME_XHB_PD_VALID))
             .andReturn(pddaMessageDao);
 
         EasyMock.expect(mockXhbPddaMessageRepository.update(EasyMock.isA(XhbPddaMessageDao.class)))
@@ -318,6 +349,7 @@ class SftpServiceTest {
     }
 
     @Test
+    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void testProcessDataFromBais() {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
@@ -335,60 +367,115 @@ class SftpServiceTest {
         BaisCpValidation bcv = new BaisCpValidation(mockXhbCourtRepository);
 
         // Run multiple tests
+        testProcessDataFromBaisXhibit(bxv, publicDisplayEvent);
+
+        testProcessDataFromBaisCp(bcv, publicDisplayEvent);
+    }
+
+    private void testProcessDataFromBaisXhibit(BaisXhibitValidation bxv,
+        ConfigurationChangeEvent publicDisplayEvent) {
+
         // Test 1 - invalid number of parts in filename
-        String cpFilename = "PublicDisplay_453_20241009130506_1.xml";
-        String xhibitFilename = "PDDA_34_2024101409000.xml";
+        String xhibitFilename = FILENAME_XHB_INVALID_PARTS;
 
         String result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertTrue(result.length() > 0, ALL_GOOD); // There is an error
-        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
-
 
         // Test 2 - valid number of parts but invalid filename
-        cpFilename = "NotWorkingFilenamePublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "NotWorkingFilenamePDDA_XPD_34_1_453_2024101409000.xml";
+        xhibitFilename = FILENAME_XHB_INVALID_TITLE;
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertTrue(result.length() > 0, ALL_GOOD); // There is an error
-        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
-
 
         // Test 3 - valid number of parts and valid filename and valid event
-        cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_XPD_34_1_457_2024101409000.xml";
-
+        xhibitFilename = FILENAME_XHB_PD_VALID;
         result = bxv.validateFilename(xhibitFilename, publicDisplayEvent);
         assertNull(result, ALL_GOOD);
-        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertNull(result, ALL_GOOD);
 
-
-        // Test 4 - Cp only - check the file extension
-        cpFilename = "PublicDisplay_453_20241009130506.txt";
-
-        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
-        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
-
-
-        // Test 5 - Event is an error
-        cpFilename = "PublicDisplay_453_20241009130506.xml";
-        xhibitFilename = "PDDA_XPD_34_1_453_2024101409000.xml";
+        // Test 4 - Event is an error
+        xhibitFilename = FILENAME_XHB_PD_VALID;
         HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(null, null);
         result = bxv.validateFilename(xhibitFilename, hearingStatusEvent);
         assertNull(result, ALL_GOOD);
+
+        // Test 5 - Public Display CP messages from XHIBIT
+        // Valid
+        xhibitFilename = FILENAME_XHB_PD_FROMCP_VALID;
+        result = bxv.validateFilename(xhibitFilename, null);
+        assertNull(result, ALL_GOOD);
+        // Invalid
+        xhibitFilename = FILENAME_XHB_INVALID_MESSAGE_TYPE; // Invalid message type
+        result = bxv.validateFilename(xhibitFilename, null);
+        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
+        // Invalid
+        xhibitFilename = FILENAME_XHB_INVALID_COURT; // Invalid court id in filename
+        result = bxv.validateFilename(xhibitFilename, null);
+        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
+
+        // Test 6 - Daily Lists from XHIBIT
+        xhibitFilename = FILENAME_XHB_DL_VALID;
+        result = bxv.validateFilename(xhibitFilename, null);
+        assertNull(result, ALL_GOOD);
+    }
+
+    private void testProcessDataFromBaisCp(BaisCpValidation bcv,
+        ConfigurationChangeEvent publicDisplayEvent) {
+
+        // Test 1 - invalid number of parts in filename
+        String cpFilename = FILENAME_CP_INVALID_PARTS;
+        String result = bcv.validateFilename(cpFilename, publicDisplayEvent);
+        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
+
+        // Test 2 - valid number of parts but invalid filename
+        cpFilename = FILENAME_CP_INVALID_TITLE;
+        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
+        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
+
+        // Test 3 - valid number of parts and valid filename and valid event
+        cpFilename = FILENAME_CP_PD_VALID;
+        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
+        assertNull(result, ALL_GOOD);
+
+        // Test 4 - Cp only - check the file extension
+        cpFilename = FILENAME_CP_INVALID_EXTENSION;
+        result = bcv.validateFilename(cpFilename, publicDisplayEvent);
+        assertTrue(result.length() > 0, ALL_GOOD); // There is an error
+
+        // Test 5 - Event is an error
+        cpFilename = FILENAME_CP_PD_VALID;
+        HearingStatusEvent hearingStatusEvent = new HearingStatusEvent(null, null);
         result = bcv.validateFilename(cpFilename, hearingStatusEvent);
         assertNull(result, ALL_GOOD);
+
+        // Test 6 - Daily Lists from CP
+        cpFilename = FILENAME_CP_DL_VALID;
+        result = bcv.validateFilename(cpFilename, null);
+        assertNull(result, ALL_GOOD);
+
+        // Test 7 - Firm Lists from CP
+        cpFilename = FILENAME_CP_FL_VALID;
+        result = bcv.validateFilename(cpFilename, null);
+        assertNull(result, ALL_GOOD);
+
+        // Test 8 - Warned Lists from CP
+        cpFilename = FILENAME_CP_WL_VALID;
+        result = bcv.validateFilename(cpFilename, null);
+        assertNull(result, ALL_GOOD);
+
+        // Test 9 - Web Pages from CP
+        cpFilename = FILENAME_CP_WP_VALID;
+        result = bcv.validateFilename(cpFilename, null);
+        assertNull(result, ALL_GOOD);
+
     }
 
     @Test
     void testGetUpdatedFilename() {
         // Setup
-        String filename = "PDDA_XDL_34_1_453_20241014090000";
-        String updatedFilename =
-            "PDDA_XDL_34_1_453_20241014090000 list_filename = DailyList_453_20241014090000.xml";
+        String filenameXhb = FILENAME_XHB_DL_VALID;
+        String filenameCp = FILENAME_CP_DL_VALID;
+        String updatedFilename = filenameXhb + " list_filename = " + filenameCp;
         String listType = "DailyList";
-        String result = classUnderTest.getUpdatedFilename(filename, listType);
+        String result = classUnderTest.getUpdatedFilename(filenameXhb, listType);
         assertTrue(updatedFilename.equals(result), ALL_GOOD);
     }
 

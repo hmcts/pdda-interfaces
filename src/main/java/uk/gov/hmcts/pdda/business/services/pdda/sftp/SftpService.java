@@ -284,8 +284,8 @@ public class SftpService extends XhibitPddaHelper {
 
             // Validate messageType
             String messageType = validation.getMessageType(filename, event);
-            if (EMPTY_STRING.equals(messageType)) {
-                messageType = INVALID_MESSAGE_TYPE;
+            if (INVALID_MESSAGE_TYPE.equals(messageType)) {
+                errorMessage = "Invalid filename - MessageType";
             }
 
             if (errorMessage != null) {
@@ -459,7 +459,7 @@ public class SftpService extends XhibitPddaHelper {
             }
 
             // Check the message type of the file is valid
-            if (INVALID_MESSAGE_TYPE.equals(getFilenamePart(filename, 1))) {
+            if (INVALID_MESSAGE_TYPE.equals(getMessageType(getFilenamePart(filename, 1), event))) {
                 errorMessages.append("Invalid filename - MessageType\n");
             }
 
@@ -513,13 +513,14 @@ public class SftpService extends XhibitPddaHelper {
             if (event != null) {
                 return event.getClass().getSimpleName().replace("Event", "");
             } else {
-                if (filename.contains("XPD")) {
+                if (filename.contains("XDL")) {
                     return DAILY_LIST_DOCUMENT_TYPE;
                 } else if (filename.contains("CPD")) {
                     return PUBLIC_DISPLAY_DOCUMENT_TYPE;
+                } else {
+                    return INVALID_MESSAGE_TYPE;
                 }
             }
-            return EMPTY_STRING;
         }
 
         @Override
