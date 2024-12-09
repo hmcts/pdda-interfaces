@@ -11,8 +11,10 @@ import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
+import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -74,11 +76,11 @@ class ListObjectHelperTest {
     void testHearingList() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
-        nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
         nodesMap.put(classUnderTest.PUBLISHEDTIME, "23:40");
         nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
         nodesMap.put(classUnderTest.VERSION, "1");
+        nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
+        nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
         // Expects
         Mockito
             .when(mockDataHelper.validateCourtSite(Mockito.isA(String.class),
@@ -117,7 +119,9 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        nodesMap.clear();
+        nodesMap.put(classUnderTest.CASENUMBER, "T");
+        result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
     }
 
@@ -134,6 +138,8 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
+        nodesMap.clear();
+        nodesMap.put(classUnderTest.CATEGORY, "Criminal");
         result = testNodeMap(nodesMap, false);
         assertTrue(result, TRUE);
     }
@@ -177,8 +183,8 @@ class ListObjectHelperTest {
     void testDefendant() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.FIRSTNAME, "John");
-        nodesMap.put(classUnderTest.FIRSTNAME, "Fitzgerald");
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
+        nodesMap.put(classUnderTest.FIRSTNAME + ".2", "Fitzgerald");
         nodesMap.put(classUnderTest.SURNAME, "Kennedy");
         nodesMap.put(classUnderTest.DATEOFBIRTH, "1917-05-29");
         nodesMap.put(classUnderTest.GENDER, "male");
@@ -188,7 +194,39 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        nodesMap.clear();
+        nodesMap.put(classUnderTest.GENDER, "Female");
+        result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
     }
+
+    @Test
+    void testDefendantOnCase() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
+        nodesMap.put(classUnderTest.FIRSTNAME + ".2", "Fitzgerald");
+        nodesMap.put(classUnderTest.SURNAME, "Kennedy");
+        nodesMap.put(classUnderTest.DATEOFBIRTH, "1917-05-29");
+        nodesMap.put(classUnderTest.GENDER, "male");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateDefendant(Mockito.isA(Integer.class),
+                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
+                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+        // Run
+        boolean result = testNodeMap(nodesMap, true);
+        assertTrue(result, TRUE);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.empty());
+        result = testNodeMap(nodesMap, true);
+        assertTrue(result, TRUE);
+    }
+
 }

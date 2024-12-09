@@ -42,7 +42,8 @@ import java.util.regex.Pattern;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
+    "PMD.CyclomaticComplexity"})
 public class ListObjectHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
@@ -73,7 +74,7 @@ public class ListObjectHelper {
     private static final String[] COURTROOM_NODES = {COURTROOMNO};
     private static final String[] DEFENDANT_NODES = {GENDER};
     private static final String[] HEARING_NODES = {STARTDATE};
-    private static final String[] HEARINGTYPE_NODES = {HEARINGTYPECODE, HEARINGTYPEDESC};
+    private static final String[] HEARINGTYPE_NODES = {HEARINGTYPECODE, HEARINGTYPEDESC, CATEGORY};
     private static final String[] SCHEDHEARING_NODES = {NOTBEFORETIME};
     private static final String[] SITTING_NODES = {SITTINGTIME};
     private static final String[] NUMBERED_NODES = {FIRSTNAME};
@@ -181,7 +182,9 @@ public class ListObjectHelper {
         if (text != null) {
             Integer startPos = Math.min(start, text.length());
             Integer endPos = end != null ? Math.min(end, text.length()) : text.length();
-            return text.substring(startPos, endPos);
+            if (!startPos.equals(endPos)) {
+                return text.substring(startPos, endPos);
+            }
         }
         return null;
     }
@@ -224,11 +227,13 @@ public class ListObjectHelper {
         LOG.info("validateCase()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
-            String caseType = getSubstring(nodesMap.get(CASENUMBER), 0, 1);
-            String caseNumber = getSubstring(nodesMap.get(CASENUMBER), 1, null);
+            String caseTypeAndNumber = nodesMap.get(CASENUMBER);
+            String caseType = getSubstring(caseTypeAndNumber, 0, 1);
+            String caseNumber = getSubstring(caseTypeAndNumber, 1, null);
             if (caseType != null && caseNumber != null) {
                 return dataHelper.validateCase(courtId, caseType, getInteger(caseNumber));
             }
+
         }
         return Optional.empty();
     }
