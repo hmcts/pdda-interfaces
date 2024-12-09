@@ -13,10 +13,10 @@ import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -37,12 +37,14 @@ import javax.xml.xpath.XPathExpressionException;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
+    "PMD.UseConcurrentHashMap"})
 public class ListNodesHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListNodesHelper.class);
     private static final String DAILY_LIST = "DailyList";
     private ListObjectHelper listObjectHelper;
+    private final Map<String, Integer> numberedNodes = new LinkedHashMap<>();
 
     public void processNodes() {
         XhbClobRepository xhbClobRepository =
@@ -74,9 +76,10 @@ public class ListNodesHelper {
     public void processNodes(List<Node> nodes) {
         LOG.debug("processNodes()");
         listObjectHelper = new ListObjectHelper();
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         for (Node node : nodes) {
             processChildNodes(node, nodesMap);
+            numberedNodes.clear();
         }
     }
 
@@ -88,7 +91,7 @@ public class ListNodesHelper {
      */
     protected void processChildNodes(Node node, Map<String, String> nodesMap) {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            String name = node.getNodeName();
+            String name = getName(node);
             String text = node.getTextContent();
             nodesMap.put(name, text);
             Map<String, String> attributesMap = getNodeAttributes(node);
@@ -105,13 +108,26 @@ public class ListNodesHelper {
         }
     }
 
+    private String getName(Node node) {
+        String name = node.getNodeName();
+        if (listObjectHelper.isNumberedNode(node.getNodeName())) {
+            Integer nodeNumber = 1;
+            if (numberedNodes.containsKey(node.getNodeName())) {
+                nodeNumber = numberedNodes.get(node.getNodeName());
+            }
+            name += "." + nodeNumber;
+            numberedNodes.put(node.getNodeName(), nodeNumber + 1);
+        }
+        return name;
+    }
+
     /**
      * Return the node attributes as a map prefix with the nodeName.
      * 
      * @param node Node return nodesMap
      */
     protected Map<String, String> getNodeAttributes(Node node) {
-        Map<String, String> results = new ConcurrentHashMap<>();
+        Map<String, String> results = new LinkedHashMap<>();
         NamedNodeMap attributesList = node.getAttributes();
         for (int i = 0; i < attributesList.getLength(); i++) {
             results.put(node.getNodeName() + "." + attributesList.item(i).getNodeName(),

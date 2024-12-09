@@ -76,6 +76,7 @@ public class ListObjectHelper {
     private static final String[] HEARINGTYPE_NODES = {HEARINGTYPECODE, HEARINGTYPEDESC};
     private static final String[] SCHEDHEARING_NODES = {NOTBEFORETIME};
     private static final String[] SITTING_NODES = {SITTINGTIME};
+    private static final String[] NUMBERED_NODES = {FIRSTNAME};
     private static final DateTimeFormatter TWELVEHOURTIMEFORMAT =
         DateTimeFormatter.ofPattern(TWELVEHOURTIME);
 
@@ -137,13 +138,23 @@ public class ListObjectHelper {
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtSiteId = xhbCourtSiteDao.get().getCourtSiteId();
             String courtRoomNoString = nodesMap.get(COURTROOMNO);
-            Integer crestCourtRoomNo =
-                courtRoomNoString != null ? Integer.valueOf(courtRoomNoString) : null;
+            Integer crestCourtRoomNo = getInteger(courtRoomNoString);
             if (courtSiteId != null && crestCourtRoomNo != null) {
                 return dataHelper.validateCourtRoom(courtSiteId, crestCourtRoomNo);
             }
         }
         return Optional.empty();
+    }
+
+    private Integer getInteger(String string) {
+        try {
+            return Integer.valueOf(string);
+        } catch (NumberFormatException ex) {
+            if (string != null) {
+                LOG.error("{} is not an Integer", string);
+            }
+            return null;
+        }
     }
 
     private void validateHearingList(Map<String, String> nodesMap) {
@@ -216,7 +227,7 @@ public class ListObjectHelper {
             String caseType = getSubstring(nodesMap.get(CASENUMBER), 0, 1);
             String caseNumber = getSubstring(nodesMap.get(CASENUMBER), 1, null);
             if (caseType != null && caseNumber != null) {
-                return dataHelper.validateCase(courtId, caseType, Integer.valueOf(caseNumber));
+                return dataHelper.validateCase(courtId, caseType, getInteger(caseNumber));
             }
         }
         return Optional.empty();
@@ -226,8 +237,8 @@ public class ListObjectHelper {
         LOG.info("validateDefendant()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
-            String firstName = nodesMap.get(FIRSTNAME);
-            String middleName = nodesMap.get(FIRSTNAME);
+            String firstName = nodesMap.get(FIRSTNAME + ".1");
+            String middleName = nodesMap.get(FIRSTNAME + ".2");
             String surname = nodesMap.get(SURNAME);
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;
@@ -342,5 +353,9 @@ public class ListObjectHelper {
                     LocalDateTime.now());
             }
         }
+    }
+
+    public boolean isNumberedNode(String nodeName) {
+        return Arrays.asList(NUMBERED_NODES).contains(nodeName);
     }
 }

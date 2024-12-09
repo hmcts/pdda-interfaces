@@ -13,32 +13,31 @@ import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings({"static-access", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods"})
+    "PMD.TooManyMethods", "PMD.UseConcurrentHashMap"})
 class ListObjectHelperTest {
 
+    private static final String XHBCOURTSITEDAO = "xhbCourtSiteDao";
+    private static final String EMPTY_STRING = "";
     private static final String TRUE = "Result is False";
 
     @Mock
     private DataHelper mockDataHelper;
-
-    @Mock
-    private Map<String, String> mockNodesMap;
 
     @InjectMocks
     private final ListObjectHelper classUnderTest = new ListObjectHelper(mockDataHelper);
 
     @Test
     void testCourtSite() {
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
         nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
         boolean result = testNodeMap(nodesMap, true);
@@ -50,19 +49,20 @@ class ListObjectHelperTest {
     private boolean testNodeMap(Map<String, String> nodesMap, boolean populate) {
         String lastEntryName = null;
         for (Map.Entry<String, String> entry : nodesMap.entrySet()) {
-            String value = populate ? entry.getValue() : null;
-            Mockito.when(mockNodesMap.get(entry.getKey())).thenReturn(value);
+            if (!populate) {
+                entry.setValue(EMPTY_STRING);
+            }
             lastEntryName = entry.getKey();
         }
-        classUnderTest.validateNodeMap(mockNodesMap, lastEntryName);
+        classUnderTest.validateNodeMap(nodesMap, lastEntryName);
         return true;
     }
 
     @Test
     void testCourtRoom() {
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.COURTROOMNO, "1");
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         boolean result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
@@ -73,7 +73,7 @@ class ListObjectHelperTest {
     @Test
     void testHearingList() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
         nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
         nodesMap.put(classUnderTest.PUBLISHEDTIME, "23:40");
@@ -94,7 +94,7 @@ class ListObjectHelperTest {
     @Test
     void testSitting() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.SITTINGTIME, "23:40");
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
@@ -109,10 +109,10 @@ class ListObjectHelperTest {
     @Test
     void testCase() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.CASENUMBER, "T123321");
         // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true);
@@ -120,16 +120,16 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false);
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testHearingType() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.HEARINGTYPECODE, "XXX");
         nodesMap.put(classUnderTest.HEARINGTYPEDESC, "Description");
         nodesMap.put(classUnderTest.CATEGORY, "Criminal");
         // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true);
@@ -137,11 +137,11 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false);
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testHearing() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
@@ -154,17 +154,37 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false);
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testScheduledHearing() {
         // Setup
-        Map<String, String> nodesMap = new ConcurrentHashMap<>();
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
             Optional.of(DummyHearingUtil.getXhbHearingDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
             Optional.of(DummyHearingUtil.getXhbSittingDao()));
+        // Run
+        boolean result = testNodeMap(nodesMap, true);
+        assertTrue(result, TRUE);
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
+        result = testNodeMap(nodesMap, false);
+        assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testDefendant() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME, "John");
+        nodesMap.put(classUnderTest.FIRSTNAME, "Fitzgerald");
+        nodesMap.put(classUnderTest.SURNAME, "Kennedy");
+        nodesMap.put(classUnderTest.DATEOFBIRTH, "1917-05-29");
+        nodesMap.put(classUnderTest.GENDER, "male");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true);
         assertTrue(result, TRUE);
