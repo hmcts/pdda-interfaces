@@ -69,14 +69,24 @@ public class ListObjectHelper {
     private static final String DECIMALS_REGEX = "\\d+";
     private static final String TWELVEHOURTIME = "hh:mma";
     private static final String WHITESPACE_REGEX = "\\s";
-    private static final String[] CASE_NODES = {CASENUMBER};
-    private static final String[] COURTSITE_NODES = {COURTHOUSECODE, COURTHOUSENAME};
-    private static final String[] COURTROOM_NODES = {COURTROOMNO};
-    private static final String[] DEFENDANT_NODES = {GENDER};
-    private static final String[] HEARING_NODES = {STARTDATE};
-    private static final String[] HEARINGTYPE_NODES = {HEARINGTYPECODE, HEARINGTYPEDESC, CATEGORY};
-    private static final String[] SCHEDHEARING_NODES = {NOTBEFORETIME};
-    private static final String[] SITTING_NODES = {SITTINGTIME};
+    // Paths
+    private static final String COURTLIST_PATH = "cs:CourtLists.cs:CourtList";
+    private static final String LISTHEADER_PATH = "cs:ListHeader";
+    private static final String SITTING_PATH = COURTLIST_PATH + ".cs:Sittings.cs:Sitting";
+    private static final String HEARING_PATH = SITTING_PATH + ".cs:Hearings.cs:Hearing";
+    // Breadcrumbs
+    protected static final String CASE_BREADCRUMB =
+        SITTING_PATH + ".cs:Hearings.cs:Hearing.cs:CaseNumber";
+    protected static final String COURTSITE_BREADCRUMB =
+        COURTLIST_PATH + ".cs:CourtHouse.cs:CourtHouseName";
+    protected static final String COURTROOM_BREADCRUMB = SITTING_PATH + "." + COURTROOMNO;
+    protected static final String DEFENDANT_BREADCRUMB =
+        HEARING_PATH + ".cs:Defendants.cs:Defendant";
+    protected static final String HEARING_BREADCRUMB =
+        HEARING_PATH + ".cs:HearingDetails." + HEARINGTYPEDESC;
+    protected static final String SCHEDHEARING_BREADCRUMB = HEARING_PATH + "." + NOTBEFORETIME;
+    protected static final String SITTING_BREADCRUMB = SITTING_PATH + "." + SITTINGTIME;
+
     private static final String[] NUMBERED_NODES = {FIRSTNAME};
     private static final DateTimeFormatter TWELVEHOURTIMEFORMAT =
         DateTimeFormatter.ofPattern(TWELVEHOURTIME);
@@ -100,24 +110,23 @@ public class ListObjectHelper {
         this.dataHelper = dataHelper;
     }
 
-    public void validateNodeMap(Map<String, String> nodesMap, String lastEntryName) {
-        if (Arrays.asList(COURTSITE_NODES).contains(lastEntryName)) {
+    public void validateNodeMap(Map<String, String> nodesMap, String breadcrumb) {
+        if (breadcrumb.contains(COURTSITE_BREADCRUMB)) {
             xhbCourtSiteDao = validateCourtSite(nodesMap);
             validateHearingList(nodesMap);
-        } else if (Arrays.asList(COURTROOM_NODES).contains(lastEntryName)) {
+        } else if (breadcrumb.contains(COURTROOM_BREADCRUMB)) {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
-        } else if (Arrays.asList(SITTING_NODES).contains(lastEntryName)) {
+        } else if (breadcrumb.contains(SITTING_BREADCRUMB)) {
             xhbSittingDao = validateSitting(nodesMap);
-        } else if (Arrays.asList(CASE_NODES).contains(lastEntryName)) {
-            xhbCaseDao = validateCase(nodesMap);
-        } else if (Arrays.asList(HEARINGTYPE_NODES).contains(lastEntryName)) {
+        } else if (breadcrumb.contains(HEARING_BREADCRUMB)) {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
-        } else if (Arrays.asList(HEARING_NODES).contains(lastEntryName)) {
             xhbHearingDao = validateHearing(nodesMap);
-        } else if (Arrays.asList(SCHEDHEARING_NODES).contains(lastEntryName)) {
+        } else if (breadcrumb.contains(SCHEDHEARING_BREADCRUMB)) {
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
-        } else if (Arrays.asList(DEFENDANT_NODES).contains(lastEntryName)) {
+        } else if (breadcrumb.contains(CASE_BREADCRUMB)) {
+            xhbCaseDao = validateCase(nodesMap);
+        } else if (breadcrumb.contains(DEFENDANT_BREADCRUMB)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
             validateSchedHearingDefendant();
@@ -162,8 +171,8 @@ public class ListObjectHelper {
         LOG.info("validateHearingList()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
-            Integer crestListId = 1;
-            String listType = "D";
+            final Integer crestListId = 1;
+            final String listType = "D";
             String status = getSubstring(nodesMap.get(VERSION), 0, 5);
             String startDateString = nodesMap.get(STARTDATE);
             LocalDateTime startDate = parseDateTime(startDateString, DateTimeFormatter.ISO_DATE);
@@ -171,9 +180,11 @@ public class ListObjectHelper {
             LocalDateTime publishedTime =
                 parseDateTime(publishedTimeString, DateTimeFormatter.ISO_DATE_TIME);
             final String printReference = "/";
+            final Integer editionNo = 1;
+            final String listCourtType = "CR";
             if (courtId != null && status != null && startDate != null) {
                 dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
-                    publishedTime, printReference);
+                    publishedTime, printReference, editionNo, listCourtType);
             }
         }
     }

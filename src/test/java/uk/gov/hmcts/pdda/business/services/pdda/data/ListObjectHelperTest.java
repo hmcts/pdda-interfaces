@@ -42,21 +42,19 @@ class ListObjectHelperTest {
         Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
         nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTSITE_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.COURTSITE_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
-    private boolean testNodeMap(Map<String, String> nodesMap, boolean populate) {
-        String lastEntryName = null;
+    private boolean testNodeMap(Map<String, String> nodesMap, boolean populate, String breadcrumb) {
         for (Map.Entry<String, String> entry : nodesMap.entrySet()) {
             if (!populate) {
                 entry.setValue(EMPTY_STRING);
             }
-            lastEntryName = entry.getKey();
         }
-        classUnderTest.validateNodeMap(nodesMap, lastEntryName);
+        classUnderTest.validateNodeMap(nodesMap, breadcrumb);
         return true;
     }
 
@@ -66,9 +64,9 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.COURTROOMNO, "1");
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTROOM_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.COURTROOM_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -87,9 +85,9 @@ class ListObjectHelperTest {
                 Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -102,9 +100,9 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
             Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.SITTING_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.SITTING_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -117,11 +115,11 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.CASENUMBER, "T");
-        result = testNodeMap(nodesMap, true);
+        result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -136,11 +134,11 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.CATEGORY, "Criminal");
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -155,9 +153,9 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeDao",
             Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -172,10 +170,10 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
             Optional.of(DummyHearingUtil.getXhbSittingDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.SCHEDHEARING_BREADCRUMB);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
-        result = testNodeMap(nodesMap, false);
+        result = testNodeMap(nodesMap, false, classUnderTest.SCHEDHEARING_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -192,11 +190,11 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.GENDER, "Female");
-        result = testNodeMap(nodesMap, true);
+        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -221,11 +219,11 @@ class ListObjectHelperTest {
                 Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.empty());
-        result = testNodeMap(nodesMap, true);
+        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 

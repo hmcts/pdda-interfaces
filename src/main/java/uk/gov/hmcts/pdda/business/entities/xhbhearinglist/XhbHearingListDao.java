@@ -56,6 +56,9 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
 
     @Column(name = "COURT_ID")
     private Integer courtId;
+    
+    @Column(name = "LIST_COURT_TYPE")
+    private String listCourtType;
 
     public XhbHearingListDao() {
         super();
@@ -70,6 +73,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         setStatus(otherData.getStatus());
         setEditionNo(otherData.getEditionNo());
         setPublishedTime(otherData.getPublishedTime());
+        setListCourtType(otherData.getListCourtType());
         setPrintReference(otherData.getPrintReference());
         setCrestListId(otherData.getCrestListId());
         setCourtId(otherData.getCourtId());
@@ -162,6 +166,14 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
 
     public void setCourtId(Integer courtId) {
         this.courtId = courtId;
+    }
+
+    public String getListCourtType() {
+        return listCourtType;
+    }
+
+    public void setListCourtType(String listCourtType) {
+        this.listCourtType = listCourtType;
     }
 
 }

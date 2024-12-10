@@ -63,12 +63,13 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbHearingListDao> validateHearingList(final Integer courtId,
         final Integer crestListId, final String listType, final String status,
-        final LocalDateTime startDate, final LocalDateTime publishedTime, String printReference) {
+        final LocalDateTime startDate, final LocalDateTime publishedTime, String printReference,
+        final Integer editionNo, final String listCourtType) {
         LOG.debug("validateHearingList({},{})", status, startDate);
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
             result = createHearingList(courtId, crestListId, listType, status, startDate,
-                publishedTime, printReference);
+                publishedTime, printReference, editionNo, listCourtType);
         }
         return result;
     }
@@ -115,8 +116,8 @@ public class DataHelper extends FinderHelper {
         return result;
     }
 
-    public Optional<XhbRefHearingTypeDao> validateHearingType(final Integer courtId, final String hearingTypeCode,
-        final String hearingTypeDesc, final String category) {
+    public Optional<XhbRefHearingTypeDao> validateHearingType(final Integer courtId,
+        final String hearingTypeCode, final String hearingTypeDesc, final String category) {
         LOG.debug("validateHearingType()");
         Optional<XhbRefHearingTypeDao> result =
             findHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
@@ -125,7 +126,7 @@ public class DataHelper extends FinderHelper {
         }
         return result;
     }
-    
+
     public Optional<XhbHearingDao> validateHearing(final Integer courtId, final Integer caseId,
         final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
         LOG.debug("validateHearing()");

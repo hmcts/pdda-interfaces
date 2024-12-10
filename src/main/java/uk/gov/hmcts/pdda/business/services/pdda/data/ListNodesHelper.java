@@ -78,7 +78,7 @@ public class ListNodesHelper {
         listObjectHelper = new ListObjectHelper();
         Map<String, String> nodesMap = new LinkedHashMap<>();
         for (Node node : nodes) {
-            processChildNodes(node, nodesMap);
+            processChildNodes(node, nodesMap, node.getNodeName());
             numberedNodes.clear();
         }
     }
@@ -88,8 +88,9 @@ public class ListNodesHelper {
      * 
      * @param node Node
      * @param nodesMap Map
+     * @param breadcrumb String
      */
-    protected void processChildNodes(Node node, Map<String, String> nodesMap) {
+    protected void processChildNodes(Node node, Map<String, String> nodesMap, String breadcrumb) {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             String name = getName(node);
             String text = node.getTextContent();
@@ -98,12 +99,12 @@ public class ListNodesHelper {
             if (!attributesMap.isEmpty()) {
                 nodesMap.putAll(attributesMap);
             }
-            listObjectHelper.validateNodeMap(nodesMap, name);
+            listObjectHelper.validateNodeMap(nodesMap, breadcrumb + '.' + name);
             // Loop through the child nodes
             for (int i = 0; i < node.getChildNodes().getLength(); i++) {
                 Node childNode = node.getChildNodes().item(i);
                 // Call the next level down
-                processChildNodes(childNode, nodesMap);
+                processChildNodes(childNode, nodesMap, breadcrumb + '.' + name);
             }
         }
     }
