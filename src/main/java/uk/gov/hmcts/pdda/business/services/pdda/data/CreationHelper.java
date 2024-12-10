@@ -41,6 +41,7 @@ public class CreationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreationHelper.class);
     private static final Integer ADDRESS_ID = -1;
+    private static final String NO = "N";
     private static final String YES = "Y";
 
     private RepositoryHelper repositoryHelper;
@@ -128,6 +129,7 @@ public class CreationHelper {
         dao.setCourtId(courtId);
         dao.setCaseType(caseType);
         dao.setCaseNumber(caseNumber);
+        dao.setVideoLinkRequired(NO);
         return getRepositoryHelper().getXhbCaseRepository().update(dao);
     }
 

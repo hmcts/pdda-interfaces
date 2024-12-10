@@ -163,6 +163,7 @@ class ListObjectHelperTest {
     void testScheduledHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.CASENUMBER, "T123321");
         nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
@@ -170,10 +171,10 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
             Optional.of(DummyHearingUtil.getXhbSittingDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.SCHEDHEARING_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
-        result = testNodeMap(nodesMap, false, classUnderTest.SCHEDHEARING_BREADCRUMB);
+        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 

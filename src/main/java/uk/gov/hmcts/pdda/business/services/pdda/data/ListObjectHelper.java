@@ -71,12 +71,11 @@ public class ListObjectHelper {
     private static final String WHITESPACE_REGEX = "\\s";
     // Paths
     private static final String COURTLIST_PATH = "cs:CourtLists.cs:CourtList";
-    private static final String LISTHEADER_PATH = "cs:ListHeader";
     private static final String SITTING_PATH = COURTLIST_PATH + ".cs:Sittings.cs:Sitting";
     private static final String HEARING_PATH = SITTING_PATH + ".cs:Hearings.cs:Hearing";
     // Breadcrumbs
     protected static final String CASE_BREADCRUMB =
-        SITTING_PATH + ".cs:Hearings.cs:Hearing.cs:CaseNumber";
+        SITTING_PATH + HEARING_PATH + ".cs:CaseNumber";
     protected static final String COURTSITE_BREADCRUMB =
         COURTLIST_PATH + ".cs:CourtHouse.cs:CourtHouseName";
     protected static final String COURTROOM_BREADCRUMB = SITTING_PATH + "." + COURTROOMNO;
@@ -84,9 +83,9 @@ public class ListObjectHelper {
         HEARING_PATH + ".cs:Defendants.cs:Defendant";
     protected static final String HEARING_BREADCRUMB =
         HEARING_PATH + ".cs:HearingDetails." + HEARINGTYPEDESC;
-    protected static final String SCHEDHEARING_BREADCRUMB = HEARING_PATH + "." + NOTBEFORETIME;
     protected static final String SITTING_BREADCRUMB = SITTING_PATH + "." + SITTINGTIME;
 
+    private static final String CPP = "CPP";
     private static final String[] NUMBERED_NODES = {FIRSTNAME};
     private static final DateTimeFormatter TWELVEHOURTIMEFORMAT =
         DateTimeFormatter.ofPattern(TWELVEHOURTIME);
@@ -121,11 +120,10 @@ public class ListObjectHelper {
         } else if (breadcrumb.contains(HEARING_BREADCRUMB)) {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
             xhbHearingDao = validateHearing(nodesMap);
-        } else if (breadcrumb.contains(SCHEDHEARING_BREADCRUMB)) {
-            xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
-            validateCrLiveDisplay();
         } else if (breadcrumb.contains(CASE_BREADCRUMB)) {
             xhbCaseDao = validateCase(nodesMap);
+            xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
+            validateCrLiveDisplay();
         } else if (breadcrumb.contains(DEFENDANT_BREADCRUMB)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
@@ -239,19 +237,20 @@ public class ListObjectHelper {
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String caseTypeAndNumber = nodesMap.get(CASENUMBER);
-            String caseType = getSubstring(caseTypeAndNumber, 0, 1);
-            String caseNumber = getSubstring(caseTypeAndNumber, 1, null);
-            if (caseType != null && caseNumber != null) {
-                return dataHelper.validateCase(courtId, caseType, getInteger(caseNumber));
+            if (!CPP.equals(caseTypeAndNumber)) {
+                String caseType = getSubstring(caseTypeAndNumber, 0, 1);
+                String caseNumber = getSubstring(caseTypeAndNumber, 1, null);
+                if (caseType != null && caseNumber != null) {
+                    return dataHelper.validateCase(courtId, caseType, getInteger(caseNumber));
+                }
             }
-
         }
         return Optional.empty();
     }
 
     private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
         LOG.info("validateDefendant()");
-        if (xhbCourtSiteDao.isPresent()) {
+        if (xhbCourtSiteDao.isPresent() && xhbCaseDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String firstName = nodesMap.get(FIRSTNAME + ".1");
             String middleName = nodesMap.get(FIRSTNAME + ".2");
@@ -321,7 +320,7 @@ public class ListObjectHelper {
     private Optional<XhbScheduledHearingDao> validateScheduledHearing(
         Map<String, String> nodesMap) {
         LOG.info("validateScheduledHearing()");
-        if (xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {
+        if (xhbCaseDao.isPresent() && xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {
             Integer sittingId = xhbSittingDao.get().getSittingId();
             Integer hearingId = xhbHearingDao.get().getHearingId();
             String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME));
