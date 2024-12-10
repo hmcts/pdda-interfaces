@@ -484,7 +484,7 @@ public class SftpService extends XhibitPddaHelper {
             return null;
         }
 
-        public Object getFilenameMessageType(String filenamePart) {
+        public String getFilenameMessageType(String filenamePart) {
             switch (filenamePart) {
                 case "XPD":
                     return "XhibitPublicDisplay";

@@ -479,6 +479,35 @@ class SftpServiceTest {
         assertTrue(updatedFilename.equals(result), ALL_GOOD);
     }
 
+    @Test
+    void testGetFilenameMessageType() {
+        // Setup
+        List<XhbCourtDao> courtDaos = new ArrayList<>();
+        courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .andStubReturn(courtDaos);
+
+        EasyMock.replay(mockXhbCourtRepository);
+
+        BaisXhibitValidation bxv = new BaisXhibitValidation(mockXhbCourtRepository);
+
+        String filenamePart = "XPD";
+        String result = bxv.getFilenameMessageType(filenamePart);
+        assertTrue("XhibitPublicDisplay".equals(result), ALL_GOOD);
+
+        filenamePart = "XDL";
+        result = bxv.getFilenameMessageType(filenamePart);
+        assertTrue("XhibitDailyList".equals(result), ALL_GOOD);
+
+        filenamePart = "CPD";
+        result = bxv.getFilenameMessageType(filenamePart);
+        assertTrue("CpPublicDisplay".equals(result), ALL_GOOD);
+
+        filenamePart = "INV";
+        result = bxv.getFilenameMessageType(filenamePart);
+        assertFalse("DailyList".equals(result), ALL_GOOD);
+    }
+
 
     @Test
     void testGetListType() {
