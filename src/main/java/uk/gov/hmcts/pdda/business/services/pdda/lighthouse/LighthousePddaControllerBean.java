@@ -211,7 +211,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * @param fileType portion of the filename
      * @return shorthand documentType
      */
-    private String getDocType(final String fileType) {
+    String getDocType(final String fileType) {
         writeToLog("METHOD ENTRY: getDocType");
 
         DocumentType docType = DocumentType.fromString(fileType);
@@ -235,13 +235,18 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         String tempDocumentName = documentName;
 
         if (tempDocumentName.contains("PDDA_")) {
-            if (tempDocumentName.indexOf("list_filename = ") == -1) {
-                return ""; // This is a public display event so will be processed separately
-            } else {
+            if (tempDocumentName.contains("list_filename = ")) {
                 // We only want the text after the first "list_filename = " in the document name
                 tempDocumentName =
                     tempDocumentName.substring(tempDocumentName.indexOf("list_filename = ") + 16);
                 return tempDocumentName;
+            } else if (tempDocumentName.contains("pd_filename = ")) {
+                // We only want the text after the first "pd_filename = " in the document name
+                tempDocumentName =
+                    tempDocumentName.substring(tempDocumentName.indexOf("pd_filename = ") + 14);
+                return tempDocumentName;
+            } else {
+                return ""; // This is a public display event so will be processed separately
             }
         }
         return tempDocumentName;
@@ -257,11 +262,15 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     boolean isDocumentNameValid(String documentName) {
         writeToLog("METHOD ENTRY: checkDocumentNameIsValid");
 
-        String regexPdda = "^PDDA_.*\\d{14}$";
+        String regexPdda =
+            "^PDDA_(XDL|CPD)_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14} "
+                + "(list_filename = DailyList_\\d{3}_\\d{14}.xml|pd_filename = PublicDisplay_\\d{3}_\\d{14}.xml)$";
+        String regexPddaXpd = "^PDDA_XPD_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}$";
         String regexOther =
             "^(DailyList_|FirmList_|WarnedList_|PublicDisplay_|WebPage_).+\\d{14}.xml$";
 
-        return documentName.matches(regexPdda) || documentName.matches(regexOther);
+        return documentName.matches(regexPdda) || documentName.matches(regexPddaXpd)
+            || documentName.matches(regexOther);
     }
 
 }

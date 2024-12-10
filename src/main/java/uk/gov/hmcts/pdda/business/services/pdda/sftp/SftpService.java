@@ -45,6 +45,8 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String XHIBIT_CONNECTION_TYPE = "XHIBIT";
     protected static final String TEST_CONNECTION_TYPE = "TEST";
     protected static final String PDDA_FILENAME_PREFIX = "PDDA";
+    protected static final String PUBLIC_DISPLAY_DOCUMENT_TYPE = "PublicDisplay";
+    protected static final String DAILY_LIST_DOCUMENT_TYPE = "DailyList";
 
     public static final String NEWLINE = "\n";
 
@@ -260,14 +262,17 @@ public class SftpService extends XhibitPddaHelper {
                 return;
             }
 
-            // Get the event (if from XHIBIT and it is not a list. CP will be null)
+            // Get the event from XHIBIT, if applicable
             boolean isList = true;
             String listType = EMPTY_STRING;
             PublicDisplayEvent event = null;
-            if (filename.startsWith(PDDA_FILENAME_PREFIX) && !clobData.startsWith("<?xml")) {
+            if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XPD_")) {
                 isList = false;
                 event = validation.getPublicDisplayEvent(filename, clobData);
                 sendMessage(event);
+            } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
+                isList = false;
+                // We don't want to send a message for CPD files
             } else {
                 // What type of list is this?
                 LOG.debug("Getting the list type.");
@@ -279,23 +284,33 @@ public class SftpService extends XhibitPddaHelper {
 
             // Validate messageType
             String messageType = validation.getMessageType(filename, event);
-            if (EMPTY_STRING.equals(messageType)) {
-                messageType = INVALID_MESSAGE_TYPE;
+            if (INVALID_MESSAGE_TYPE.equals(messageType)) {
+                errorMessage = "Invalid filename - MessageType";
+            }
+
+            if (errorMessage != null) {
+                LOG.debug("Filename {}{}", filename, " is invalid");
+                // Continue to process though as we need a record of the file in the database
             }
 
             // Get the crestCourtId (should have already been validated by this point)
             Integer courtId = validation.getCourtId(filename, event);
+            LOG.debug("CourtId is {}", courtId);
+            LOG.debug("Validation of filename {} is now complete, attempting to process the file.",
+                filename);
 
             // Write the pddaMessage
             createBaisMessage(courtId, messageType, filename, clobData, errorMessage, listType);
 
-            getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
-                config.getActiveRemoteFolder(), filename);
-            LOG.debug("Removed file from bais after processing: {}", filename);
-
+            LOG.debug("Processed file {}", filename);
         } catch (IOException | NotFoundException ex) {
             LOG.error("Error processing BAIS file {} ", ExceptionUtils.getStackTrace(ex));
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
+        } finally {
+            // Try and remove the file from BAIS
+            getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
+                config.getActiveRemoteFolder(), filename);
+            LOG.debug("Removed file from bais after processing: {}", filename);
         }
     }
 
@@ -329,11 +344,15 @@ public class SftpService extends XhibitPddaHelper {
             throw new NotFoundException("Message Type");
         }
 
-        // For lists only, the filename will need to be updated to ensure lists can
+        // For daily lists the filename will need to be updated to ensure lists can
         // be picked up in XHB_PDDA_MESSAGE
+        // Similarly for public display messages that have came from XHIBIT but
+        // originated from CPP
         String updatedFilename = filename;
         if (listType != null && !listType.isEmpty() && filename.startsWith(PDDA_FILENAME_PREFIX)) {
             updatedFilename = getUpdatedFilename(filename, listType);
+        } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
+            updatedFilename = getUpdatedFilename(filename, PUBLIC_DISPLAY_DOCUMENT_TYPE);
         }
 
         // Create the clob data for the message
@@ -351,18 +370,22 @@ public class SftpService extends XhibitPddaHelper {
      * "list_filename = " to the filename - Further append what would be the name of the file were
      * it originating from CPP.
      * 
-     * @param filename The orignal filename
+     * @param filename The original filename
      * @return The updated filename
      */
-    protected String getUpdatedFilename(String filename, String listType) {
-        String cppFilename = filename + " list_filename = " + listType;
-
+    protected String getUpdatedFilename(String filename, String documentType) {
+        StringBuilder cppFilename = new StringBuilder(filename);
+        if (PUBLIC_DISPLAY_DOCUMENT_TYPE.equals(documentType)) {
+            cppFilename.append(" pd_filename = ");
+        } else {
+            cppFilename.append(" list_filename = ");
+        }
         // We want to retain the last 18 chars of original filename
         int startingPosition = filename.length() - 18;
 
-        cppFilename =
-            cppFilename + "_" + filename.substring(startingPosition, filename.length()) + ".xml";
-        return cppFilename;
+        cppFilename.append(documentType).append('_')
+            .append(filename.substring(startingPosition, filename.length())).append(".xml");
+        return cppFilename.toString();
     }
 
 
@@ -374,7 +397,7 @@ public class SftpService extends XhibitPddaHelper {
      */
     protected String getListType(String clobData) {
         if (clobData.contains("<cs:DailyList")) {
-            return "DailyList";
+            return DAILY_LIST_DOCUMENT_TYPE;
         } else if (clobData.contains("<cs:FirmList")) {
             return "FirmList";
         } else if (clobData.contains("<cs:WarnedList")) {
@@ -387,9 +410,10 @@ public class SftpService extends XhibitPddaHelper {
 
 
     /**
-     * A class to validate XHIBIT messages retrieved from BAIS.
-     * There should be 5 parts to a valid file from BAIS originating from XHIBIT. 1. PDDA 2. Batch
-     * id 3. Message number in this batch 4. Court ID (crestCourtId) 5. Date and time
+     * A class to validate XHIBIT messages retrieved from BAIS. There should be 6 parts to a valid
+     * file from BAIS originating from XHIBIT. 1. PDDA 2. Message Type 3. Batch id 4. Message number
+     * in this batch 5. Court ID (crestCourtId) 6. Date and time e.g.
+     * PDDA_XPD_1234_1_453_20200101120000.xml
      * 
      */
     public static class BaisXhibitValidation extends BaisValidation {
@@ -398,12 +422,13 @@ public class SftpService extends XhibitPddaHelper {
 
         /**
          * There should be 5 parts to a valid file from BAIS originating from XHIBIT. 1. PDDA 2.
-         * Batch id 3. Message number in this batch 4. Court ID (crestCourtId) 5. Date and time
+         * Message Type 3. Batch id 4. Message number in this batch 5. Court ID (crestCourtId) 6.
+         * Date and time
          * 
          * @param courtRepository The court repository
          */
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
-            super(courtRepository, false, 5);
+            super(courtRepository, false, 6);
         }
 
         @Override
@@ -423,26 +448,33 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append(errorMessage + NEWLINE);
             }
 
-            // Check the file has the right overall format of 5 parts
+            // Check the file has the right overall format of 6 parts
             if (!isValidNoOfParts(filename)) {
                 errorMessages.append("Invalid filename - No. Of Parts\n");
             }
+
             // Check Title is right format
             if (!PDDA.equalsIgnoreCase(getFilenamePart(filename, 0))) {
                 errorMessages.append("Invalid filename - Title\n");
             }
 
+            // Check the message type of the file is valid
+            if (INVALID_MESSAGE_TYPE.equals(getMessageType(getFilenamePart(filename, 1), event))) {
+                errorMessages.append("Invalid filename - MessageType\n");
+            }
+
             // Check we have the event from the file contents, and if not null check the
-            // crestcourtId
-            // Only applies to lists
-            if (!isList) {
+            // crestcourtId.
+            // Only applies to XHIBIT PD docs
+            if (filename.contains("XPD")) {
                 if (event == null) {
                     errorMessages.append("Invalid filename - Invalid event in filecontents\n");
-
-                } else if (getCourtId(filename, event) == null) {
+                }
+                if (getCourtId(filename, event) == null) {
                     errorMessages.append("Invalid filename - CrestCourtId\n");
                 }
             }
+
 
             if (errorMessages.length() > 0) {
                 LOG.debug(debugErrorPrefix, errorMessages.toString());
@@ -450,6 +482,19 @@ public class SftpService extends XhibitPddaHelper {
             }
 
             return null;
+        }
+
+        public String getFilenameMessageType(String filenamePart) {
+            switch (filenamePart) {
+                case "XPD":
+                    return "XhibitPublicDisplay";
+                case "CPD":
+                    return "CpPublicDisplay";
+                case "XDL":
+                    return "XhibitDailyList";
+                default:
+                    return INVALID_MESSAGE_TYPE;
+            }
         }
 
         @Override
@@ -467,8 +512,15 @@ public class SftpService extends XhibitPddaHelper {
         public String getMessageType(String filename, PublicDisplayEvent event) {
             if (event != null) {
                 return event.getClass().getSimpleName().replace("Event", "");
+            } else {
+                if (filename.contains("XDL")) {
+                    return DAILY_LIST_DOCUMENT_TYPE;
+                } else if (filename.contains("CPD")) {
+                    return PUBLIC_DISPLAY_DOCUMENT_TYPE;
+                } else {
+                    return INVALID_MESSAGE_TYPE;
+                }
             }
-            return EMPTY_STRING;
         }
 
         @Override
@@ -477,7 +529,7 @@ public class SftpService extends XhibitPddaHelper {
                 return event.getCourtId();
             } else { // must be a list
                 try {
-                    String crestCourtId = getFilenamePart(filename, 3);
+                    String crestCourtId = getFilenamePart(filename, 4);
                     LOG.debug("getCourtId({},{})", filename, event);
                     return getCourtIdFromCrestCourtId(crestCourtId);
                 } catch (NumberFormatException e) {
@@ -504,7 +556,8 @@ public class SftpService extends XhibitPddaHelper {
     public static class BaisCpValidation extends BaisValidation {
 
         private static final String[] POSSIBLETITLES =
-            {"DailyList", "FirmList", "WarnedList", "WebPage", "PublicDisplay"};
+            {DAILY_LIST_DOCUMENT_TYPE, "FirmList", "WarnedList", "WebPage",
+                PUBLIC_DISPLAY_DOCUMENT_TYPE};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
             super(courtRespository, false, 3);

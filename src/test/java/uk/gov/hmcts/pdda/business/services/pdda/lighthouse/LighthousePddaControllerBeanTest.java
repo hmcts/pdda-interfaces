@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,9 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SuppressWarnings("PMD.TooManyMethods")
 class LighthousePddaControllerBeanTest {
 
-    private static final String NOTNULL = "Result is Null";
+    private static final String NOTNULL = "Result is not Null";
+    private static final String NULL = "Result is Null";
     private static final String TRUE = "Result is True";
-    private static final String SAME = "Result is not Same";
+    private static final String SAME = "Result is Same";
     private static final String FALSE = "Result is False";
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String MESSAGE_STATUS_PROCESSED = "VP";
@@ -145,6 +147,20 @@ class LighthousePddaControllerBeanTest {
         String documentName8 = "PDDA_34_1_453_2024101409000.xml";
         result = classUnderTest.getDocumentNameToProcess(documentName8);
         assertEquals("", result, SAME);
+
+        String documentName9 =
+            "PDDA_CPD_34_1_453_2024101409000 pd_filename = PublicDisplay_453_20220811235559.xml";
+        result = classUnderTest.getDocumentNameToProcess(documentName9);
+        assertEquals("PublicDisplay_453_20220811235559.xml", result, SAME);
+
+        String documentName10 =
+            "PDDA_XDL_34_1_453_2024101409000 list_filename = DailyList_453_20220811235559.xml";
+        result = classUnderTest.getDocumentNameToProcess(documentName10);
+        assertEquals("DailyList_453_20220811235559.xml", result, SAME);
+
+        String documentName11 = "PDDA_XPD_34_1_453_2024101409000";
+        result = classUnderTest.getDocumentNameToProcess(documentName11);
+        assertEquals("", result, SAME);
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
@@ -224,6 +240,52 @@ class LighthousePddaControllerBeanTest {
         assertFalse(classUnderTest.isDocumentNameValid("Invalid_File.csv"), FALSE);
         assertFalse(classUnderTest.isDocumentNameValid("NotAFile_100_20220802030423.xml"), FALSE);
     }
+
+    @Test
+    void testGetDocType() {
+        String result = classUnderTest.getDocType("NOTVALID");
+        assertNull(result, NULL);
+    }
+
+    @Test
+    void testIsGetDocumentNameValid() {
+        String documentName1 = "DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName1), TRUE);
+
+        String documentName2 = "FirmList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName2), TRUE);
+
+        String documentName3 = "WarnedList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName3), TRUE);
+
+        String documentName4 = "PublicDisplay_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName4), TRUE);
+
+        String documentName5 = "WebPage_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName5), TRUE);
+
+        String documentName6 =
+            "PDDA_CPD_34_1_453_20220811235559 pd_filename = PublicDisplay_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName6), TRUE);
+
+        String documentName7 =
+            "PDDA_XDL_34_1_453_20220811235559 list_filename = DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName7), TRUE);
+
+        String documentName8 = "PDDA_XPD_34_1_453_20220811235559";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName8), TRUE);
+
+        String documentName9 = "PDDA_CPD_34_1_453_202208112355";
+        assertFalse(classUnderTest.isDocumentNameValid(documentName9), FALSE);
+
+        String documentName10 =
+            "PDDA_XDL_34_1_453_20220811235559 list_filename = DailyList_453_20220811235559.xml";
+        assertTrue(classUnderTest.isDocumentNameValid(documentName10), TRUE);
+
+        String documentName11 = "PDDA_XDL_34_1_453_20220811235559";
+        assertFalse(classUnderTest.isDocumentNameValid(documentName11), FALSE);
+    }
+
 
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
         List<XhbPddaMessageDao> result = new ArrayList<>();
