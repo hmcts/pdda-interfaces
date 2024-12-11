@@ -159,24 +159,17 @@ class ListObjectHelperTest {
     void testHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.HEARINGTYPECODE, "XXX");
-        nodesMap.put(classUnderTest.HEARINGTYPEDESC, "Description");
-        nodesMap.put(classUnderTest.CATEGORY, "Criminal");
+        expectCase(nodesMap);
         nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
         // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
-            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeDao",
+            Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
-        // Expects
-        Mockito
-            .when(mockDataHelper.validateHearingType(Mockito.isA(Integer.class),
-                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
-            .thenReturn(Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
+        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 

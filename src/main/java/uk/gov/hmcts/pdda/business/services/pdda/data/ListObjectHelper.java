@@ -75,8 +75,7 @@ public class ListObjectHelper {
     private static final String SITTING_PATH = COURTLIST_PATH + ".cs:Sittings.cs:Sitting";
     private static final String HEARING_PATH = SITTING_PATH + ".cs:Hearings.cs:Hearing";
     // Breadcrumbs
-    protected static final String CASE_BREADCRUMB =
-        SITTING_PATH + HEARING_PATH + ".cs:CaseNumber";
+    protected static final String CASE_BREADCRUMB = HEARING_PATH + ".cs:CaseNumber";
     protected static final String COURTSITE_BREADCRUMB =
         COURTLIST_PATH + ".cs:CourtHouse.cs:CourtHouseName";
     protected static final String COURTROOM_BREADCRUMB = SITTING_PATH + "." + COURTROOMNO;
@@ -121,9 +120,9 @@ public class ListObjectHelper {
             xhbSittingDao = validateSitting(nodesMap);
         } else if (breadcrumb.contains(HEARING_BREADCRUMB)) {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
-            xhbHearingDao = validateHearing(nodesMap);
         } else if (breadcrumb.contains(CASE_BREADCRUMB)) {
             xhbCaseDao = validateCase(nodesMap);
+            xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
         } else if (breadcrumb.contains(DEFENDANT_BREADCRUMB)) {
@@ -183,8 +182,8 @@ public class ListObjectHelper {
             final Integer editionNo = 1;
             final String listCourtType = "CR";
             if (courtId != null && status != null && startDate != null) {
-                return dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
-                    publishedTime, printReference, editionNo, listCourtType);
+                return dataHelper.validateHearingList(courtId, crestListId, listType, status,
+                    startDate, publishedTime, printReference, editionNo, listCourtType);
             }
         }
         return Optional.empty();
@@ -230,7 +229,8 @@ public class ListObjectHelper {
             LocalDateTime sittingTime =
                 parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
             if (sittingTime != null) {
-                return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime, listId);
+                return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime,
+                    listId);
             }
         }
         return Optional.empty();
