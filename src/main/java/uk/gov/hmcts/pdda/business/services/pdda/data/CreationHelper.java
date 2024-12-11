@@ -109,13 +109,15 @@ public class CreationHelper {
      * Create XhbSittingDao.
      */
     public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
-        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+        final Integer listId) {
         LOG.info("createSitting()");
         XhbSittingDao dao = new XhbSittingDao();
         dao.setCourtSiteId(courtSiteId);
         dao.setCourtRoomId(courtRoomId);
         dao.setIsFloating(isFloating);
         dao.setSittingTime(sittingTime);
+        dao.setListId(listId);
         return getRepositoryHelper().getXhbSittingRepository().update(dao);
     }
 
@@ -165,8 +167,8 @@ public class CreationHelper {
     /**
      * Create XhbRefHearingTypeDao.
      */
-    public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId, final String hearingTypeCode,
-        final String hearingTypeDesc, final String category) {
+    public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId,
+        final String hearingTypeCode, final String hearingTypeDesc, final String category) {
         LOG.info("createHearingType()");
         XhbRefHearingTypeDao dao = new XhbRefHearingTypeDao();
         dao.setCourtId(courtId);
@@ -175,7 +177,7 @@ public class CreationHelper {
         dao.setCategory(category);
         return getRepositoryHelper().getXhbRefHearingTypeRepository().update(dao);
     }
-    
+
     /**
      * Create XhbHearingDao.
      */

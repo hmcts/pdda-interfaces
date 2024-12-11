@@ -75,11 +75,12 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbSittingDao> validateSitting(final Integer courtSiteId,
-        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+        final Integer listId) {
         LOG.debug("validateSitting({})", sittingTime);
         Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
         if (result.isEmpty()) {
-            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime);
+            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime, listId);
         }
         return result;
     }

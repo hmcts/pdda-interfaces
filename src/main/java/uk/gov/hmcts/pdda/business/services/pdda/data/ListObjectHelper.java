@@ -80,7 +80,7 @@ public class ListObjectHelper {
         COURTLIST_PATH + ".cs:CourtHouse.cs:CourtHouseName";
     protected static final String COURTROOM_BREADCRUMB = SITTING_PATH + "." + COURTROOMNO;
     protected static final String DEFENDANT_BREADCRUMB =
-        HEARING_PATH + ".cs:Defendants.cs:Defendant";
+        HEARING_PATH + ".cs:Defendants.cs:Defendant.cs:PersonalDetails";
     protected static final String HEARING_BREADCRUMB =
         HEARING_PATH + ".cs:HearingDetails." + HEARINGTYPEDESC;
     protected static final String SITTING_BREADCRUMB = SITTING_PATH + "." + SITTINGTIME;
@@ -221,12 +221,13 @@ public class ListObjectHelper {
         if (xhbCourtRoomDao.isPresent()) {
             Integer courtSiteId = xhbCourtRoomDao.get().getCourtSiteId();
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
-            String floating = "N";
+            final String floating = "N";
+            final Integer listId = 1;
             String sittingTimeString = nodesMap.get(SITTINGTIME);
             LocalDateTime sittingTime =
                 parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
             if (sittingTime != null) {
-                return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime);
+                return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime, listId);
             }
         }
         return Optional.empty();

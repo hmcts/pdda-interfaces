@@ -107,9 +107,10 @@ class DataHelperTest {
 
     private boolean testValidateHearingList(XhbHearingListDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbHearingListDao> result = classUnderTest.validateHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate(),
-            dao.getPublishedTime(), dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
+        Optional<XhbHearingListDao> result =
+            classUnderTest.validateHearingList(dao.getCourtId(), dao.getCrestListId(),
+                dao.getListType(), dao.getStatus(), dao.getStartDate(), dao.getPublishedTime(),
+                dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
         return result.isPresent();
     }
 
@@ -128,7 +129,7 @@ class DataHelperTest {
     private boolean testValidateSitting(XhbSittingDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
         Optional<XhbSittingDao> result = classUnderTest.validateSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         return result.isPresent();
     }
 
@@ -333,7 +334,8 @@ class DataHelperTest {
 
         @Override
         public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
-            final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+            final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+            final Integer listId) {
             return Optional.of(new XhbSittingDao());
         }
 

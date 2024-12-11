@@ -108,7 +108,7 @@ class CreationHelperTest {
 
         XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
         Optional<XhbSittingDao> result = classUnderTest.createSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         assertNotNull(result, NOTNULL);
     }
 
