@@ -88,10 +88,13 @@ public class SftpService extends XhibitPddaHelper {
         SftpConfig sftpConfig = getSftpHelperUtil().populateSftpConfig(sftpPort);
 
         // First get the CP data from BAIS
+        LOG.debug("About to attempt to connect to BAIS to download any CP files");
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
+            LOG.debug("About to authenticate with CP credentials: {} and {}",
+                sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
             ssh.authPassword(sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
 
             sftpConfig.setSshClient(ssh);
@@ -104,10 +107,13 @@ public class SftpService extends XhibitPddaHelper {
         }
 
         // Second get the XHIBIT data from BAIS
+        LOG.debug("About to attempt to connect to BAIS to download any XHIBIT files");
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
+            LOG.debug("About to authenticate with XHIBIT credentials: {} and {}",
+                sftpConfig.getXhibitUsername(), sftpConfig.getXhibitPassword());
             ssh.authPassword(sftpConfig.getXhibitUsername(), sftpConfig.getXhibitPassword());
 
             sftpConfig.setSshClient(ssh);
