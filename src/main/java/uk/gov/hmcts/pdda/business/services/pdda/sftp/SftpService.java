@@ -98,9 +98,12 @@ public class SftpService extends XhibitPddaHelper {
             ssh.authPassword(sftpConfig.getCpUsername(), sftpConfig.getCpPassword());
 
             sftpConfig.setSshClient(ssh);
+            LOG.debug("Setting active remote folder to look at as {}",
+                sftpConfig.getCpRemoteFolder());
             sftpConfig.setActiveRemoteFolder(sftpConfig.getCpRemoteFolder());
 
             setupSftpClientAndProcessBaisData(sftpConfig, ssh, true);
+            LOG.debug("Processed CP files");
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS CP: {}", ExceptionUtils.getStackTrace(e));
             error = true;
@@ -117,10 +120,12 @@ public class SftpService extends XhibitPddaHelper {
             ssh.authPassword(sftpConfig.getXhibitUsername(), sftpConfig.getXhibitPassword());
 
             sftpConfig.setSshClient(ssh);
+            LOG.debug("Setting active remote folder to look at as {}",
+                sftpConfig.getXhibitRemoteFolder());
             sftpConfig.setActiveRemoteFolder(sftpConfig.getXhibitRemoteFolder());
 
             setupSftpClientAndProcessBaisData(sftpConfig, ssh, false);
-
+            LOG.debug("Processed XHIBIT files");
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS XHIBIT: {}",
                 ExceptionUtils.getStackTrace(e));
@@ -228,7 +233,7 @@ public class SftpService extends XhibitPddaHelper {
         LOG.debug(methodName, LOG_CALLED);
 
         try {
-            // Do something
+            // Get the files from BAIS
             return getPddaSftpHelperSshj().sftpFetch(config.getSshjSftpClient(),
                 config.getActiveRemoteFolder(), validation);
         } catch (Exception ex) {
