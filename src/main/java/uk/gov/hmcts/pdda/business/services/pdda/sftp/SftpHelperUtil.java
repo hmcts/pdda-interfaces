@@ -269,11 +269,11 @@ public class SftpHelperUtil extends SftpService {
 
             // Next the XHIBIT BAIS properties
             currentProperty = Config.KV_SFTP_USERNAME;
-            sftpConfig.setCpUsername(getMandatoryEnvValue(currentProperty));
+            sftpConfig.setXhibitUsername(getMandatoryEnvValue(currentProperty));
             LOG.debug("SFTP XHIBIT Username: {}", sftpConfig.getCpUsername());
 
             currentProperty = Config.KV_SFTP_PASSWORD;
-            sftpConfig.setCpPassword(getMandatoryEnvValue(currentProperty));
+            sftpConfig.setXhibitPassword(getMandatoryEnvValue(currentProperty));
 
             currentProperty = Config.KV_SFTP_UPLOAD_LOCATION;
             sftpConfig.setXhibitRemoteFolder(getMandatoryEnvValue(currentProperty));
