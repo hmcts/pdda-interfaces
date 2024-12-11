@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -96,6 +97,7 @@ public class ListObjectHelper {
     private Optional<XhbCaseDao> xhbCaseDao = Optional.empty();
     private Optional<XhbDefendantDao> xhbDefendantDao = Optional.empty();
     private Optional<XhbDefendantOnCaseDao> xhbDefendantOnCaseDao = Optional.empty();
+    private Optional<XhbHearingListDao> xhbHearingListDao = Optional.empty();
     private Optional<XhbRefHearingTypeDao> xhbRefHearingTypeDao = Optional.empty();
     private Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
@@ -112,7 +114,7 @@ public class ListObjectHelper {
     public void validateNodeMap(Map<String, String> nodesMap, String breadcrumb) {
         if (breadcrumb.contains(COURTSITE_BREADCRUMB)) {
             xhbCourtSiteDao = validateCourtSite(nodesMap);
-            validateHearingList(nodesMap);
+            xhbHearingListDao = validateHearingList(nodesMap);
         } else if (breadcrumb.contains(COURTROOM_BREADCRUMB)) {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
         } else if (breadcrumb.contains(SITTING_BREADCRUMB)) {
@@ -165,7 +167,7 @@ public class ListObjectHelper {
         }
     }
 
-    private void validateHearingList(Map<String, String> nodesMap) {
+    private Optional<XhbHearingListDao> validateHearingList(Map<String, String> nodesMap) {
         LOG.info("validateHearingList()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
@@ -181,10 +183,11 @@ public class ListObjectHelper {
             final Integer editionNo = 1;
             final String listCourtType = "CR";
             if (courtId != null && status != null && startDate != null) {
-                dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
+                return dataHelper.validateHearingList(courtId, crestListId, listType, status, startDate,
                     publishedTime, printReference, editionNo, listCourtType);
             }
         }
+        return Optional.empty();
     }
 
     private String getSubstring(String text, Integer start, Integer end) {
@@ -218,11 +221,11 @@ public class ListObjectHelper {
 
     private Optional<XhbSittingDao> validateSitting(Map<String, String> nodesMap) {
         LOG.info("validateSitting()");
-        if (xhbCourtRoomDao.isPresent()) {
+        if (xhbCourtRoomDao.isPresent() && xhbHearingListDao.isPresent()) {
             Integer courtSiteId = xhbCourtRoomDao.get().getCourtSiteId();
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
             final String floating = "N";
-            final Integer listId = 1;
+            final Integer listId = xhbHearingListDao.get().getListId();
             String sittingTimeString = nodesMap.get(SITTINGTIME);
             LocalDateTime sittingTime =
                 parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);

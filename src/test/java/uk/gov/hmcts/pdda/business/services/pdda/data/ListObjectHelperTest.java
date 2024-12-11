@@ -101,6 +101,8 @@ class ListObjectHelperTest {
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
             Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
+            Optional.of(DummyHearingUtil.getXhbHearingListDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true, classUnderTest.SITTING_BREADCRUMB);
         assertTrue(result, TRUE);
