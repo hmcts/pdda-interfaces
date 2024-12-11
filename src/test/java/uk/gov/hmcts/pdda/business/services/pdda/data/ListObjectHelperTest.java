@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +30,7 @@ class ListObjectHelperTest {
 
     private static final String XHBCOURTSITEDAO = "xhbCourtSiteDao";
     private static final String EMPTY_STRING = "";
+    private static final String FALSE = "Result is True";
     private static final String TRUE = "Result is False";
 
     @Mock
@@ -85,9 +87,9 @@ class ListObjectHelperTest {
                 Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTSITE_BREADCRUMB);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
+        result = testNodeMap(nodesMap, false, classUnderTest.COURTSITE_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
@@ -110,10 +112,7 @@ class ListObjectHelperTest {
     void testCase() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.CASENUMBER, "T123321");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
-            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        expectCase(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
@@ -121,6 +120,18 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.CASENUMBER, "T");
         result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
+    }
+
+    private void expectCase(Map<String, String> nodesMap) {
+        // Setup
+        nodesMap.put(classUnderTest.CASENUMBER, "T123321");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        // Expects
+        Mockito.when(mockDataHelper.validateCase(Mockito.isA(Integer.class),
+            Mockito.isA(String.class), Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyCaseUtil.getXhbCaseDao()));
     }
 
     @Test
@@ -146,12 +157,20 @@ class ListObjectHelperTest {
     void testHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.HEARINGTYPECODE, "XXX");
+        nodesMap.put(classUnderTest.HEARINGTYPEDESC, "Description");
+        nodesMap.put(classUnderTest.CATEGORY, "Criminal");
         nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
         // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeDao",
-            Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateHearingType(Mockito.isA(Integer.class),
+                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
         assertTrue(result, TRUE);
@@ -163,13 +182,8 @@ class ListObjectHelperTest {
     void testScheduledHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.CASENUMBER, "T123321");
-        nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
-            Optional.of(DummyHearingUtil.getXhbHearingDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
-            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+        expectCase(nodesMap);
+        expectScheduledHearing(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
         assertTrue(result, TRUE);
@@ -203,6 +217,17 @@ class ListObjectHelperTest {
     void testDefendantOnCase() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectDefendant(nodesMap);
+        // Run
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        assertTrue(result, TRUE);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao", Optional.empty());
+        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        assertTrue(result, TRUE);
+    }
+
+    private void expectDefendant(Map<String, String> nodesMap) {
+        // Setup
         nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
         nodesMap.put(classUnderTest.FIRSTNAME + ".2", "Fitzgerald");
         nodesMap.put(classUnderTest.SURNAME, "Kennedy");
@@ -219,13 +244,65 @@ class ListObjectHelperTest {
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
                 Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+    }
+
+    @Test
+    void testSchedHearingDefendant() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectDefendant(nodesMap);
+        // Sets
+        ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateDefendantOnCase(Mockito.isA(Integer.class),
+                Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()));
         // Run
         boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
-            Optional.empty());
         result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
         assertTrue(result, TRUE);
     }
 
+    @Test
+    void testCrLiveDisplay() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectCase(nodesMap);
+        expectScheduledHearing(nodesMap);
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
+            Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        // Run
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        assertTrue(result, TRUE);
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
+        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
+        assertTrue(result, TRUE);
+    }
+
+    private void expectScheduledHearing(Map<String, String> nodesMap) {
+        // Setup
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateScheduledHearing(Mockito.isA(Integer.class),
+                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+    }
+    
+    @Test
+    void testIsNumberedNode() {
+        boolean result = classUnderTest.isNumberedNode(classUnderTest.FIRSTNAME);
+        assertTrue(result, TRUE);
+        result = classUnderTest.isNumberedNode(EMPTY_STRING);
+        assertFalse(result, FALSE);
+    }
 }
