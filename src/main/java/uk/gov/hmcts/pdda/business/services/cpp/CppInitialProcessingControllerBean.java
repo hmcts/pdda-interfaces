@@ -80,8 +80,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     @Override
     public void doTask() {
+        LOG.debug("CppStaging -- doTask() - entered");
         handleNewDocuments();
         handleStuckDocuments();
+        LOG.debug("CppStaging -- doTask() - exiting");
     }
 
     /**
@@ -108,9 +110,15 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         }
 
         if (docs != null) {
+            LOG.debug(
+                "# About to process unprocessed documents; there are ## {} ## documents to process",
+                docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
+                LOG.debug("## Processing document: {}", doc.getDocumentName());
                 processDocument(doc);
+                LOG.debug("## Finished processing document: {}", doc.getDocumentName());
             }
+            LOG.debug("# Finished processing unprocessed documents");
         } else {
             // There are no documents currently to validate
             LOG.debug("There are no unprocessed CPP documents at this time");

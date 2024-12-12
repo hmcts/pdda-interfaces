@@ -132,6 +132,8 @@ public class SftpService extends XhibitPddaHelper {
             error = true;
         }
 
+        LOG.debug("{} - Finished processing files from BAIS", methodName);
+
         return error;
     }
 
