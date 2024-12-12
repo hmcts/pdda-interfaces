@@ -56,7 +56,9 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
      */
     @Override
     public void doTask() {
+        LOG.debug("DailyListNotifier -- doTask() - entered");
         callDailyListNotifierHelper();
+        LOG.debug("DailyListNotifier -- doTask() - exited");
     }
 
     /**
