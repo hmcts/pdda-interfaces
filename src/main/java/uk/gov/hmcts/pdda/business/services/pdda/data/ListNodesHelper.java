@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
@@ -13,11 +14,15 @@ import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 /**
@@ -42,7 +47,6 @@ import javax.xml.xpath.XPathExpressionException;
 public class ListNodesHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListNodesHelper.class);
-    private static final String DAILY_LIST = "DailyList";
     private ListObjectHelper listObjectHelper;
     private final Map<String, Integer> numberedNodes = new LinkedHashMap<>();
 
@@ -56,9 +60,10 @@ public class ListNodesHelper {
                 // Build the clob data as a document
                 Document document = DocumentUtils.createInputDocument(clobData);
                 // Get the list of nodes below the passed in root node
-                String[] rootNodes = {DAILY_LIST};
+                String[] rootNodes = {ListObjectHelper.ROOTNODE};
                 List<Node> nodes = MergeDocumentUtils.getNodeList(
                     MergeDocumentUtils.getRootNodeExpressionArray(rootNodes), document);
+
                 // Process the nodes
                 processNodes(nodes);
             } catch (SAXException | IOException | ParserConfigurationException
@@ -71,40 +76,112 @@ public class ListNodesHelper {
     /**
      * Process the nodes.
      * 
-     * @param nodes Nodes
+     * @param topNodes Nodes
      */
-    public void processNodes(List<Node> nodes) {
+    public void processNodes(List<Node> topNodes) {
         LOG.debug("processNodes()");
         listObjectHelper = new ListObjectHelper();
-        Map<String, String> nodesMap = new LinkedHashMap<>();
-        for (Node node : nodes) {
-            processChildNodes(node, nodesMap, node.getNodeName());
+        for (Node topNode : topNodes) {
+            // Get reference data used by the main nodes
+            Map<String, String> referenceNodesMap =
+                getReferenceNodeMap(topNode, ListObjectHelper.LISTHEADER_NODE);
+            // Loop the main entries
+            for (Node courtListNode : getChildNodesArray(ListObjectHelper.COURTLIST_NODE,
+                topNode)) {
+                Map<String, String> courtListNodesMap = new LinkedHashMap<>();
+                courtListNodesMap.putAll(referenceNodesMap);
+                courtListNodesMap.putAll(getNodesMap(courtListNode));
+                courtListNodesMap
+                    .putAll(getReferenceNodeMap(courtListNode, ListObjectHelper.COURTHOUSE_NODE));
+                listObjectHelper.validateNodeMap(courtListNodesMap,
+                    ListObjectHelper.COURTLIST_NODE);
+                for (Node sittingNode : getChildNodesArray(ListObjectHelper.SITTING_NODE,
+                    courtListNode)) {
+                    Map<String, String> sittingNodesMap = new LinkedHashMap<>();
+                    sittingNodesMap.putAll(courtListNodesMap);
+                    sittingNodesMap.putAll(getNodesMap(sittingNode));
+                    listObjectHelper.validateNodeMap(sittingNodesMap,
+                        ListObjectHelper.SITTING_NODE);
+                    for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
+                        sittingNode)) {
+                        Map<String, String> hearingNodesMap = new LinkedHashMap<>();
+                        hearingNodesMap.putAll(sittingNodesMap);
+                        hearingNodesMap.putAll(getNodesMap(hearingNode));
+                        hearingNodesMap.putAll(
+                            getReferenceNodeMap(hearingNode, ListObjectHelper.HEARINGDETAILS_NODE));
+                        listObjectHelper.validateNodeMap(hearingNodesMap,
+                            ListObjectHelper.HEARING_NODE);
+                        for (Node defendantNode : getChildNodesArray(
+                            ListObjectHelper.DEFENDANT_NODE, hearingNode)) {
+                            Map<String, String> defendantNodesMap = new LinkedHashMap<>();
+                            defendantNodesMap.putAll(hearingNodesMap);
+                            defendantNodesMap.putAll(getNodesMap(defendantNode));
+                            defendantNodesMap.putAll(getReferenceNodeMap(defendantNode,
+                                ListObjectHelper.DEFENDANTNAME_NODE));
+                            listObjectHelper.validateNodeMap(defendantNodesMap,
+                                ListObjectHelper.DEFENDANT_NODE);
+                        }
+                    }
+                }
+            }
         }
+        LOG.debug("processNodes() - Finished");
+    }
+
+    protected Map<String, String> getReferenceNodeMap(Node parentNode, String rootNode) {
+        Map<String, String> results = new LinkedHashMap<>();
+        for (Node childNode : getChildNodesArray(rootNode, parentNode)) {
+            results.putAll(getNodesMap(childNode));
+        }
+        return results;
     }
 
     /**
-     * Recursive called method to process the child nodes.
+     * Loop through the child nodes.
+     * 
+     * @param rootNode String
+     * @param node Node
+     * @return list
+     */
+    public List<Node> getChildNodesArray(String rootNode, Node node) {
+        List<Node> result = new ArrayList<>();
+        String[] rootNodes = {rootNode};
+        try {
+            for (XPathExpression rootNodeExp : Arrays
+                .asList(MergeDocumentUtils.getRootNodeExpressionArray(rootNodes))) {
+                NodeList nodeList = (NodeList) rootNodeExp.evaluate(node, XPathConstants.NODESET);
+                for (int nodeNo = 0; nodeNo < nodeList.getLength(); nodeNo++) {
+                    result.add(nodeList.item(nodeNo));
+                }
+            }
+        } catch (XPathExpressionException e) {
+            LOG.error("Failed to get nodes for {}", rootNode);
+        }
+        return result;
+    }
+
+    /**
+     * Return the node map of name and value.
      * 
      * @param node Node
-     * @param nodesMap Map
-     * @param parentBreadcrumb String
+     * @return nodesMap
      */
-    protected void processChildNodes(Node node, Map<String, String> nodesMap, String parentBreadcrumb) {
+    private Map<String, String> getNodesMap(Node node) {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            String name = getName(node);
-            String text = node.getTextContent();
-            String breadcrumb = parentBreadcrumb + '.' + name;
-            nodesMap.put(name, text);
+            // Add any node attribute values
             nodesMap.putAll(getNodeAttributes(node));
-            listObjectHelper.validateNodeMap(nodesMap, breadcrumb);
-            
-            // Loop through the child nodes
+            // Add any node child values
             for (int i = 0; i < node.getChildNodes().getLength(); i++) {
                 Node childNode = node.getChildNodes().item(i);
-                // Call the next level down
-                processChildNodes(childNode, nodesMap, breadcrumb);
+                if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+                    String name = getName(childNode);
+                    String text = childNode.getTextContent();
+                    nodesMap.put(name, text);
+                }
             }
         }
+        return nodesMap;
     }
 
     private String getName(Node node) {
@@ -116,6 +193,8 @@ public class ListNodesHelper {
             }
             name += "." + nodeNumber;
             numberedNodes.put(node.getNodeName(), nodeNumber + 1);
+        } else {
+            numberedNodes.clear();
         }
         return name;
     }

@@ -48,6 +48,17 @@ import java.util.regex.Pattern;
 public class ListObjectHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
+
+    public static final String ROOTNODE = "DailyList";
+    public static final String LISTHEADER_NODE = "ListHeader";
+    public static final String COURTLIST_NODE = "CourtLists/CourtList";
+    public static final String COURTHOUSE_NODE = "CourtHouse";
+    public static final String SITTING_NODE = "Sittings/Sitting";
+    public static final String HEARING_NODE = "Hearings/Hearing";
+    public static final String HEARINGDETAILS_NODE = "HearingDetails";
+    public static final String DEFENDANT_NODE = "Defendants/Defendant/PersonalDetails";
+    public static final String DEFENDANTNAME_NODE = "Name";
+
     protected static final String CASENUMBER = "cs:CaseNumber";
     protected static final String CATEGORY = "cs:ListCategory";
     protected static final String COURTHOUSECODE = "cs:CourtHouseCode";
@@ -70,20 +81,6 @@ public class ListObjectHelper {
     private static final String DECIMALS_REGEX = "\\d+";
     private static final String TWELVEHOURTIME = "hh:mma";
     private static final String WHITESPACE_REGEX = "\\s";
-    // Paths
-    private static final String COURTLIST_PATH = "cs:CourtLists.cs:CourtList";
-    private static final String SITTING_PATH = COURTLIST_PATH + ".cs:Sittings.cs:Sitting";
-    private static final String HEARING_PATH = SITTING_PATH + ".cs:Hearings.cs:Hearing";
-    // Breadcrumbs
-    protected static final String CASE_BREADCRUMB = HEARING_PATH + ".cs:CaseNumber";
-    protected static final String COURTSITE_BREADCRUMB =
-        COURTLIST_PATH + ".cs:CourtHouse.cs:CourtHouseName";
-    protected static final String COURTROOM_BREADCRUMB = SITTING_PATH + "." + COURTROOMNO;
-    protected static final String DEFENDANT_BREADCRUMB =
-        HEARING_PATH + ".cs:Defendants.cs:Defendant.cs:PersonalDetails";
-    protected static final String HEARING_BREADCRUMB =
-        HEARING_PATH + ".cs:HearingDetails." + HEARINGTYPEDESC;
-    protected static final String SITTING_BREADCRUMB = SITTING_PATH + "." + SITTINGTIME;
 
     private static final String CPP = "CPP";
     private static final String[] NUMBERED_NODES = {FIRSTNAME};
@@ -111,21 +108,19 @@ public class ListObjectHelper {
     }
 
     public void validateNodeMap(Map<String, String> nodesMap, String breadcrumb) {
-        if (breadcrumb.contains(COURTSITE_BREADCRUMB)) {
+        if (breadcrumb.contains(COURTLIST_NODE)) {
             xhbCourtSiteDao = validateCourtSite(nodesMap);
             xhbHearingListDao = validateHearingList(nodesMap);
-        } else if (breadcrumb.contains(COURTROOM_BREADCRUMB)) {
+        } else if (breadcrumb.contains(SITTING_NODE)) {
             xhbCourtRoomDao = validateCourtRoom(nodesMap);
-        } else if (breadcrumb.contains(SITTING_BREADCRUMB)) {
             xhbSittingDao = validateSitting(nodesMap);
-        } else if (breadcrumb.contains(HEARING_BREADCRUMB)) {
+        } else if (breadcrumb.contains(HEARING_NODE)) {
             xhbRefHearingTypeDao = validateHearingType(nodesMap);
-        } else if (breadcrumb.contains(CASE_BREADCRUMB)) {
             xhbCaseDao = validateCase(nodesMap);
             xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
-        } else if (breadcrumb.contains(DEFENDANT_BREADCRUMB)) {
+        } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
             validateSchedHearingDefendant();
@@ -344,7 +339,9 @@ public class ListObjectHelper {
             Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(result);
             matcher.find();
             // Return the string from the point of the first digit onwards
-            return result.substring(matcher.start());
+            if (matcher.matches()) {
+                return result.substring(matcher.start());
+            }
         }
         return null;
     }
