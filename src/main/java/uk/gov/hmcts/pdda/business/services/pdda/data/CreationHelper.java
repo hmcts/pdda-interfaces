@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHear
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -37,8 +38,9 @@ import java.util.Optional;
  */
 @SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LawOfDemeter", "PMD.TooManyMethods",
     "PMD.UseObjectForClearerAPI"})
-public class CreationHelper {
+public class CreationHelper implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(CreationHelper.class);
     private static final Integer ADDRESS_ID = -1;
     private static final String NO = "N";

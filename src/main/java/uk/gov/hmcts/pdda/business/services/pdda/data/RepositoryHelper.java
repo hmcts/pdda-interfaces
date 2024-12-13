@@ -17,6 +17,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHear
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * Title: RepositoryHelper.
@@ -35,8 +37,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
  * @version 1.0
  */
 @SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList"})
-public class RepositoryHelper {
+public class RepositoryHelper implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(RepositoryHelper.class);
 
     private EntityManager entityManager;

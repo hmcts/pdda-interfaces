@@ -28,6 +28,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public class CppStagingInboundControllerBean extends AbstractCppStagingInboundControllerBean
     implements CppStagingInboundController {
 

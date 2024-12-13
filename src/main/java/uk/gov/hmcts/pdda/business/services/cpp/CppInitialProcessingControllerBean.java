@@ -27,6 +27,7 @@ import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInbou
 import uk.gov.hmcts.pdda.business.services.formatting.AbstractListXmlMergeUtils;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServices;
 import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
@@ -52,7 +53,7 @@ import javax.xml.parsers.ParserConfigurationException;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public class CppInitialProcessingControllerBean extends AbstractCppInitialProcessingControllerBean
     implements RemoteTask, Serializable {
 
@@ -65,6 +66,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
     private static final String EXIT_METHOD = " : exiting";
     private static final String IWP = "IWP";
+    private ListNodesHelper listNodesHelper;
 
     public CppInitialProcessingControllerBean() {
         super();
@@ -502,6 +504,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             // indicate this
             getCppStagingInboundControllerBean().updateStatusProcessingSuccess(thisDoc,
                 BATCH_USERNAME);
+            
+            // Process the xml nodes and store the data contained in it
+            getListNodesHelper().processClobData(clobXml);
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
@@ -509,5 +514,12 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             throw new CppInitialProcessingControllerException("cpp.initial.processing.controller",
                 methodName + ": " + e.getMessage(), e);
         }
+    }
+    
+    private ListNodesHelper getListNodesHelper() {
+        if (listNodesHelper == null) {
+            listNodesHelper = new ListNodesHelper();
+        }
+        return listNodesHelper;
     }
 }

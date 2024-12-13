@@ -38,6 +38,7 @@ import java.util.Optional;
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI"})
 public class DataHelper extends FinderHelper {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
 
     public Optional<XhbCourtSiteDao> validateCourtSite(final String courtSiteName,

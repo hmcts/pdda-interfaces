@@ -7,13 +7,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 
 @Repository
 @SuppressWarnings({"PMD.LawOfDemeter"})
-public class XhbRefHearingTypeRepository extends AbstractRepository<XhbRefHearingTypeDao> {
+public class XhbRefHearingTypeRepository extends AbstractRepository<XhbRefHearingTypeDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbRefHearingTypeRepository.class);
 
     public XhbRefHearingTypeRepository(EntityManager em) {

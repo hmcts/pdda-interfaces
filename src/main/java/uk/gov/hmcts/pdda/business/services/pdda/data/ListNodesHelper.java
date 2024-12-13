@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.data;
 
-import com.pdda.hb.jpa.EntityManagerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -8,17 +7,15 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
-import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
@@ -44,8 +41,9 @@ import javax.xml.xpath.XPathExpressionException;
  */
 @SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
     "PMD.CognitiveComplexity"})
-public class ListNodesHelper {
+public class ListNodesHelper implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(ListNodesHelper.class);
     private ListObjectHelper listObjectHelper;
     private final Map<String, Integer> numberedNodes = new ConcurrentHashMap<>();
@@ -53,33 +51,29 @@ public class ListNodesHelper {
     public ListNodesHelper() {
         // Default constructor
     }
-    
+
     // Junit constructor
     public ListNodesHelper(ListObjectHelper listObjectHelper) {
         this.listObjectHelper = listObjectHelper;
     }
-    
-    public void processNodes() {
-        XhbClobRepository xhbClobRepository =
-            new XhbClobRepository(EntityManagerUtil.getEntityManager());
-        Optional<XhbClobDao> clob = xhbClobRepository.findById(1);
-        if (clob.isPresent()) {
-            try {
-                String clobData = clob.get().getClobData();
-                // Build the clob data as a document
-                Document document = DocumentUtils.createInputDocument(clobData);
-                // Get the list of nodes below the passed in root node
-                String[] rootNodes = {ListObjectHelper.ROOTNODE};
-                List<Node> nodes = MergeDocumentUtils.getNodeList(
-                    MergeDocumentUtils.getRootNodeExpressionArray(rootNodes), document);
 
-                // Process the nodes
-                processNodes(nodes);
-            } catch (SAXException | IOException | ParserConfigurationException
-                | XPathExpressionException e) {
-                LOG.error("Failed to get nodes");
-            }
+    public void processClobData(String clobData) {
+        LOG.info("processClobData()");
+        try {
+            // Build the clob data as a document
+            Document document = DocumentUtils.createInputDocument(clobData);
+            // Get the list of nodes below the passed in root node
+            String[] rootNodes = {ListObjectHelper.ROOTNODE};
+            List<Node> nodes = MergeDocumentUtils
+                .getNodeList(MergeDocumentUtils.getRootNodeExpressionArray(rootNodes), document);
+
+            // Process the nodes
+            processNodes(nodes);
+        } catch (SAXException | IOException | ParserConfigurationException
+            | XPathExpressionException ex) {
+            LOG.error("processClobData() - Failed to get nodes: {}", ex.getMessage());
         }
+        LOG.info("processClobData() - Finished");
     }
 
     /**
