@@ -55,14 +55,14 @@ class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDis
     }
 
     @Test
-    void testFindByHearing() {
+    void testFindByCourtRoom() {
         List<XhbCrLiveDisplayDao> list = new ArrayList<>();
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
 
         XhbCrLiveDisplayDao dao = getDummyDao();
         Optional<XhbCrLiveDisplayDao> result =
-            classUnderTest.findByHearing(dao.getCourtRoomId(), dao.getScheduledHearingId());
+            classUnderTest.findByCourtRoom(dao.getCourtRoomId());
         assertNotNull(result, NOTNULL);
     }
 
