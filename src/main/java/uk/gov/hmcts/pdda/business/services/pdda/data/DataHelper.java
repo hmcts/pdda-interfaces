@@ -163,9 +163,13 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbCrLiveDisplayDao> validateCrLiveDisplay(final Integer courtRoomId,
         final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
         LOG.debug("validateCrLiveDisplay()");
-        Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId, scheduledHearingId);
+        Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId);
         if (result.isEmpty()) {
             result = createCrLiveDisplay(courtRoomId, scheduledHearingId, timeStatusSet);
+        } else if (!scheduledHearingId.equals(result.get().getScheduledHearingId())) {
+            result.get().setScheduledHearingId(scheduledHearingId);
+            result.get().setTimeStatusSet(timeStatusSet);
+            result = updateCrLiveDisplay(result.get());
         }
         return result;
     }

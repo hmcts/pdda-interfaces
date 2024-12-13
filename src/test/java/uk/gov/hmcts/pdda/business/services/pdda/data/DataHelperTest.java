@@ -451,8 +451,7 @@ class DataHelperTest {
          * validateCrLiveDisplay overrides.
          */
         @Override
-        public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
-            final Integer scheduledHearingId) {
+        public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId) {
             return this.isPresent ? Optional.of(new XhbCrLiveDisplayDao()) : Optional.empty();
         }
 

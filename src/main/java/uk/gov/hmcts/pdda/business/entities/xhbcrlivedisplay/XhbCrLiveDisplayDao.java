@@ -17,9 +17,8 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_CR_LIVE_DISPLAY")
 @NamedQuery(name = "XHB_CR_LIVE_DISPLAY.findLiveDisplaysWhereStatusNotNull",
     query = "SELECT o from XHB_CR_LIVE_DISPLAY o WHERE o.status IS NOT NULL ")
-@NamedQuery(name = "XHB_CR_LIVE_DISPLAY.findByHearing",
-    query = "SELECT o from XHB_CR_LIVE_DISPLAY o WHERE o.scheduledHearingId = :scheduledHearingId "
-        + "AND o.courtRoomId = :courtRoomId")
+@NamedQuery(name = "XHB_CR_LIVE_DISPLAY.findByCourtRoom",
+    query = "SELECT o from XHB_CR_LIVE_DISPLAY o WHERE o.courtRoomId = :courtRoomId ")
 public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;

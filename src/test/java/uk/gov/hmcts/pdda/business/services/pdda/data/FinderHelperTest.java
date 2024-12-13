@@ -176,7 +176,7 @@ class FinderHelperTest {
 
         XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
         Optional<XhbCrLiveDisplayDao> result =
-            classUnderTest.findCrLiveDisplay(dao.getCourtRoomId(), dao.getScheduledHearingId());
+            classUnderTest.findCrLiveDisplay(dao.getCourtRoomId());
         assertNotNull(result, NOTNULL);
     }
 }

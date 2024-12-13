@@ -112,9 +112,7 @@ public class FinderHelper extends CreationHelper {
             .findByHearingAndDefendant(scheduledHearingId, defendantOnCaseId);
     }
 
-    public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
-        final Integer scheduledHearingId) {
-        return getRepositoryHelper().getXhbCrLiveDisplayRepository().findByHearing(courtRoomId,
-            scheduledHearingId);
+    public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId) {
+        return getRepositoryHelper().getXhbCrLiveDisplayRepository().findByCourtRoom(courtRoomId);
     }
 }

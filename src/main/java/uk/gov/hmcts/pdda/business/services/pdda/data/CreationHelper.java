@@ -230,6 +230,14 @@ public class CreationHelper {
         dao.setTimeStatusSet(timeStatusSet);
         return getRepositoryHelper().getXhbCrLiveDisplayRepository().update(dao);
     }
+    
+    /**
+     * Update XhbCrLiveDisplayDao.
+     */
+    public Optional<XhbCrLiveDisplayDao> updateCrLiveDisplay(final XhbCrLiveDisplayDao dao) {
+        LOG.info("updateCrLiveDisplay()");
+        return getRepositoryHelper().getXhbCrLiveDisplayRepository().update(dao);
+    }
 
     protected RepositoryHelper getRepositoryHelper() {
         if (repositoryHelper == null) {

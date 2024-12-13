@@ -95,9 +95,10 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbHearingListRepository.class));
 
         XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
-        Optional<XhbHearingListDao> result = classUnderTest.createHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate(),
-            dao.getPublishedTime(), dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
+        Optional<XhbHearingListDao> result =
+            classUnderTest.createHearingList(dao.getCourtId(), dao.getCrestListId(),
+                dao.getListType(), dao.getStatus(), dao.getStartDate(), dao.getPublishedTime(),
+                dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
         assertNotNull(result, NOTNULL);
     }
 
@@ -199,6 +200,8 @@ class CreationHelperTest {
         XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
         Optional<XhbCrLiveDisplayDao> result = classUnderTest.createCrLiveDisplay(
             dao.getCourtRoomId(), dao.getScheduledHearingId(), dao.getTimeStatusSet());
+        assertNotNull(result, NOTNULL);
+        result = classUnderTest.updateCrLiveDisplay(dao);
         assertNotNull(result, NOTNULL);
     }
 }
