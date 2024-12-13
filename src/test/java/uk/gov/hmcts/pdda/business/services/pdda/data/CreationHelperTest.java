@@ -29,6 +29,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -93,8 +95,10 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbHearingListRepository.class));
 
         XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
-        Optional<XhbHearingListDao> result = classUnderTest.createHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate());
+        Optional<XhbHearingListDao> result =
+            classUnderTest.createHearingList(dao.getCourtId(), dao.getCrestListId(),
+                dao.getListType(), dao.getStatus(), dao.getStartDate(), dao.getPublishedTime(),
+                dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
         assertNotNull(result, NOTNULL);
     }
 
@@ -105,7 +109,7 @@ class CreationHelperTest {
 
         XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
         Optional<XhbSittingDao> result = classUnderTest.createSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         assertNotNull(result, NOTNULL);
     }
 
@@ -140,6 +144,18 @@ class CreationHelperTest {
         Optional<XhbDefendantDao> result =
             classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
                 dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+        assertNotNull(result, NOTNULL);
+    }
+
+
+    @Test
+    void testCreateHearingType() {
+        Mockito.when(mockRepositoryHelper.getXhbRefHearingTypeRepository())
+            .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
+
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.createHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         assertNotNull(result, NOTNULL);
     }
 
@@ -184,6 +200,8 @@ class CreationHelperTest {
         XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
         Optional<XhbCrLiveDisplayDao> result = classUnderTest.createCrLiveDisplay(
             dao.getCourtRoomId(), dao.getScheduledHearingId(), dao.getTimeStatusSet());
+        assertNotNull(result, NOTNULL);
+        result = classUnderTest.updateCrLiveDisplay(dao);
         assertNotNull(result, NOTNULL);
     }
 }

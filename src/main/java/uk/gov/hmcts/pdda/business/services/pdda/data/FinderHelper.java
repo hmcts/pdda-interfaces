@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -44,10 +45,10 @@ public class FinderHelper extends CreationHelper {
         super(repositoryHelper);
     }
 
-    public Optional<XhbCourtSiteDao> findCourtSite(final Integer courtId,
-        final String courtSiteName) {
-        return getRepositoryHelper().getXhbCourtSiteRepository().findByCourtSiteName(courtId,
-            courtSiteName);
+    public Optional<XhbCourtSiteDao> findCourtSite(final String courtSiteName,
+        final String courtSiteCode) {
+        return getRepositoryHelper().getXhbCourtSiteRepository().findByCourtSiteName(courtSiteName,
+            courtSiteCode);
     }
 
     public Optional<XhbCourtRoomDao> findCourtRoom(final Integer courtId,
@@ -87,6 +88,12 @@ public class FinderHelper extends CreationHelper {
             firstName, middleName, surname, gender, dateOfBirth);
     }
 
+    public Optional<XhbRefHearingTypeDao> findHearingType(final Integer courtId,
+        final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+        return getRepositoryHelper().getXhbRefHearingTypeRepository().findByHearingType(courtId,
+            hearingTypeCode, hearingTypeDesc, category);
+    }
+
     public Optional<XhbHearingDao> findHearing(final Integer courtId, final Integer caseId,
         final LocalDateTime hearingStartDate) {
         return getRepositoryHelper().getXhbHearingRepository().findByCaseIdAndStartDate(courtId,
@@ -105,9 +112,7 @@ public class FinderHelper extends CreationHelper {
             .findByHearingAndDefendant(scheduledHearingId, defendantOnCaseId);
     }
 
-    public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
-        final Integer scheduledHearingId) {
-        return getRepositoryHelper().getXhbCrLiveDisplayRepository().findByHearing(courtRoomId,
-            scheduledHearingId);
+    public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId) {
+        return getRepositoryHelper().getXhbCrLiveDisplayRepository().findByCourtRoom(courtRoomId);
     }
 }

@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
@@ -46,6 +47,7 @@ public class RepositoryHelper {
     private XhbCaseRepository xhbCaseRepository;
     private XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository;
     private XhbDefendantRepository xhbDefendantRepository;
+    private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
     private XhbHearingRepository xhbHearingRepository;
     private XhbScheduledHearingRepository xhbScheduledHearingRepository;
     private XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository;
@@ -69,6 +71,7 @@ public class RepositoryHelper {
         xhbCaseRepository = null;
         xhbDefendantRepository = null;
         xhbDefendantOnCaseRepository = null;
+        xhbRefHearingTypeRepository = null;
         xhbHearingRepository = null;
         xhbScheduledHearingRepository = null;
         xhbSchedHearingDefendantRepository = null;
@@ -136,6 +139,13 @@ public class RepositoryHelper {
         return xhbDefendantRepository;
     }
 
+    public XhbRefHearingTypeRepository getXhbRefHearingTypeRepository() {
+        if (xhbRefHearingTypeRepository == null || !isEntityManagerActive()) {
+            xhbRefHearingTypeRepository = new XhbRefHearingTypeRepository(getEntityManager());
+        }
+        return xhbRefHearingTypeRepository;
+    }
+    
     public XhbHearingRepository getXhbHearingRepository() {
         if (xhbHearingRepository == null || !isEntityManagerActive()) {
             xhbHearingRepository = new XhbHearingRepository(getEntityManager());

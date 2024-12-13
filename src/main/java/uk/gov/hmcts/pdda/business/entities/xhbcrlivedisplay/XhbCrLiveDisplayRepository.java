@@ -45,18 +45,15 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
     }
 
     /**
-     * findByHearing.
+     * findByCourtRoom.
      * 
      * @param courtRoomId Integer
-     * @param scheduledHearingId Integer
      * @return XhbCrLiveDisplayDao
      */
-    public Optional<XhbCrLiveDisplayDao> findByHearing(final Integer courtRoomId,
-        final Integer scheduledHearingId) {
+    public Optional<XhbCrLiveDisplayDao> findByCourtRoom(final Integer courtRoomId) {
         LOG.debug("findByHearing()");
-        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByHearing");
+        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByCourtRoom");
         query.setParameter("courtRoomId", courtRoomId);
-        query.setParameter("scheduledHearingId", scheduledHearingId);
         XhbCrLiveDisplayDao dao =
             query.getResultList().isEmpty() ? null : (XhbCrLiveDisplayDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();

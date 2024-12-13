@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -40,6 +41,7 @@ public class CreationHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CreationHelper.class);
     private static final Integer ADDRESS_ID = -1;
+    private static final String NO = "N";
     private static final String YES = "Y";
 
     private RepositoryHelper repositoryHelper;
@@ -86,7 +88,8 @@ public class CreationHelper {
      */
     public Optional<XhbHearingListDao> createHearingList(final Integer courtId,
         final Integer crestListId, final String listType, final String status,
-        final LocalDateTime startDate) {
+        final LocalDateTime startDate, final LocalDateTime publishedTime,
+        final String printReference, final Integer editionNo, final String listCourtType) {
         LOG.info("createHearingList({},{})", status, startDate);
         XhbHearingListDao dao = new XhbHearingListDao();
         dao.setCourtId(courtId);
@@ -94,6 +97,11 @@ public class CreationHelper {
         dao.setListType(listType);
         dao.setStatus(status);
         dao.setStartDate(startDate);
+        dao.setEndDate(startDate);
+        dao.setEditionNo(editionNo);
+        dao.setPublishedTime(publishedTime);
+        dao.setPrintReference(printReference);
+        dao.setListCourtType(listCourtType);
         return getRepositoryHelper().getXhbHearingListRepository().update(dao);
     }
 
@@ -101,13 +109,15 @@ public class CreationHelper {
      * Create XhbSittingDao.
      */
     public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
-        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+        final Integer listId) {
         LOG.info("createSitting()");
         XhbSittingDao dao = new XhbSittingDao();
         dao.setCourtSiteId(courtSiteId);
         dao.setCourtRoomId(courtRoomId);
         dao.setIsFloating(isFloating);
         dao.setSittingTime(sittingTime);
+        dao.setListId(listId);
         return getRepositoryHelper().getXhbSittingRepository().update(dao);
     }
 
@@ -121,6 +131,7 @@ public class CreationHelper {
         dao.setCourtId(courtId);
         dao.setCaseType(caseType);
         dao.setCaseNumber(caseNumber);
+        dao.setVideoLinkRequired(NO);
         return getRepositoryHelper().getXhbCaseRepository().update(dao);
     }
 
@@ -151,6 +162,20 @@ public class CreationHelper {
         dao.setGender(gender);
         dao.setDateOfBirth(dateOfBirth);
         return getRepositoryHelper().getXhbDefendantRepository().update(dao);
+    }
+
+    /**
+     * Create XhbRefHearingTypeDao.
+     */
+    public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId,
+        final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+        LOG.info("createHearingType()");
+        XhbRefHearingTypeDao dao = new XhbRefHearingTypeDao();
+        dao.setCourtId(courtId);
+        dao.setHearingTypeCode(hearingTypeCode);
+        dao.setHearingTypeDesc(hearingTypeDesc);
+        dao.setCategory(category);
+        return getRepositoryHelper().getXhbRefHearingTypeRepository().update(dao);
     }
 
     /**
@@ -203,6 +228,14 @@ public class CreationHelper {
         dao.setCourtRoomId(courtRoomId);
         dao.setScheduledHearingId(scheduledHearingId);
         dao.setTimeStatusSet(timeStatusSet);
+        return getRepositoryHelper().getXhbCrLiveDisplayRepository().update(dao);
+    }
+    
+    /**
+     * Update XhbCrLiveDisplayDao.
+     */
+    public Optional<XhbCrLiveDisplayDao> updateCrLiveDisplay(final XhbCrLiveDisplayDao dao) {
+        LOG.info("updateCrLiveDisplay()");
         return getRepositoryHelper().getXhbCrLiveDisplayRepository().update(dao);
     }
 

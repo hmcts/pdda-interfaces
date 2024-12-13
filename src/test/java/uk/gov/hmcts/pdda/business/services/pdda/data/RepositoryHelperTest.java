@@ -21,6 +21,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
@@ -213,6 +214,25 @@ class RepositoryHelperTest {
         assertNotNull(result, NOTNULL);
     }
 
+    @Test
+    void testGetXhbRefHearingTypeRepository() {
+        // Check the null condition
+        mockTheEntityManager(false);
+        XhbRefHearingTypeRepository result = classUnderTest.getXhbRefHearingTypeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the inactive enitytManager
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeRepository",
+            Mockito.mock(XhbRefHearingTypeRepository.class));
+        result = classUnderTest.getXhbRefHearingTypeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the active entityManager
+        mockTheEntityManager(true);
+        result = classUnderTest.getXhbRefHearingTypeRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
     @Test
     void testGetXhbHearingRepository() {
         // Check the null condition
