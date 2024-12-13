@@ -16,10 +16,10 @@ import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
@@ -43,12 +43,12 @@ import javax.xml.xpath.XPathExpressionException;
  * @version 1.0
  */
 @SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.UseConcurrentHashMap"})
+    "PMD.CognitiveComplexity"})
 public class ListNodesHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ListNodesHelper.class);
     private ListObjectHelper listObjectHelper;
-    private final Map<String, Integer> numberedNodes = new LinkedHashMap<>();
+    private final Map<String, Integer> numberedNodes = new ConcurrentHashMap<>();
 
     public void processNodes() {
         XhbClobRepository xhbClobRepository =
@@ -81,6 +81,10 @@ public class ListNodesHelper {
     public void processNodes(List<Node> topNodes) {
         LOG.debug("processNodes()");
         listObjectHelper = new ListObjectHelper();
+        Map<String, String> courtListNodesMap = new ConcurrentHashMap<>();
+        Map<String, String> sittingNodesMap = new ConcurrentHashMap<>();
+        Map<String, String> hearingNodesMap = new ConcurrentHashMap<>();
+        Map<String, String> defendantNodesMap = new ConcurrentHashMap<>();
         for (Node topNode : topNodes) {
             // Get reference data used by the main nodes
             Map<String, String> referenceNodesMap =
@@ -88,7 +92,7 @@ public class ListNodesHelper {
             // Loop the courtlists
             for (Node courtListNode : getChildNodesArray(ListObjectHelper.COURTLIST_NODE,
                 topNode)) {
-                Map<String, String> courtListNodesMap = new LinkedHashMap<>();
+                courtListNodesMap.clear();
                 courtListNodesMap.putAll(referenceNodesMap);
                 courtListNodesMap.putAll(getNodesMap(courtListNode));
                 courtListNodesMap
@@ -98,7 +102,7 @@ public class ListNodesHelper {
                 // Sittings in the courtlist
                 for (Node sittingNode : getChildNodesArray(ListObjectHelper.SITTING_NODE,
                     courtListNode)) {
-                    Map<String, String> sittingNodesMap = new LinkedHashMap<>();
+                    sittingNodesMap.clear();
                     sittingNodesMap.putAll(courtListNodesMap);
                     sittingNodesMap.putAll(getNodesMap(sittingNode));
                     listObjectHelper.validateNodeMap(sittingNodesMap,
@@ -106,7 +110,7 @@ public class ListNodesHelper {
                     // Hearings in the sitting
                     for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
                         sittingNode)) {
-                        Map<String, String> hearingNodesMap = new LinkedHashMap<>();
+                        hearingNodesMap.clear();
                         hearingNodesMap.putAll(sittingNodesMap);
                         hearingNodesMap.putAll(getNodesMap(hearingNode));
                         hearingNodesMap.putAll(
@@ -116,7 +120,7 @@ public class ListNodesHelper {
                         // Defendants in the hearing
                         for (Node defendantNode : getChildNodesArray(
                             ListObjectHelper.DEFENDANT_NODE, hearingNode)) {
-                            Map<String, String> defendantNodesMap = new LinkedHashMap<>();
+                            defendantNodesMap.clear();
                             defendantNodesMap.putAll(hearingNodesMap);
                             defendantNodesMap.putAll(getNodesMap(defendantNode));
                             defendantNodesMap.putAll(getReferenceNodeMap(defendantNode,
@@ -132,7 +136,7 @@ public class ListNodesHelper {
     }
 
     protected Map<String, String> getReferenceNodeMap(Node parentNode, String rootNode) {
-        Map<String, String> results = new LinkedHashMap<>();
+        Map<String, String> results = new ConcurrentHashMap<>();
         for (Node childNode : getChildNodesArray(rootNode, parentNode)) {
             results.putAll(getNodesMap(childNode));
         }
@@ -170,7 +174,7 @@ public class ListNodesHelper {
      * @return nodesMap
      */
     private Map<String, String> getNodesMap(Node node) {
-        Map<String, String> nodesMap = new LinkedHashMap<>();
+        Map<String, String> nodesMap = new ConcurrentHashMap<>();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             // Add any node attribute values
             nodesMap.putAll(getNodeAttributes(node));
@@ -208,7 +212,7 @@ public class ListNodesHelper {
      * @param node Node return nodesMap
      */
     protected Map<String, String> getNodeAttributes(Node node) {
-        Map<String, String> results = new LinkedHashMap<>();
+        Map<String, String> results = new ConcurrentHashMap<>();
         NamedNodeMap attributesList = node.getAttributes();
         for (int i = 0; i < attributesList.getLength(); i++) {
             results.put(node.getNodeName() + "." + attributesList.item(i).getNodeName(),
