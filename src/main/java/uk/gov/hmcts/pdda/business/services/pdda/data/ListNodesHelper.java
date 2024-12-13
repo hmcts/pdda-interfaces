@@ -81,7 +81,7 @@ public class ListNodesHelper implements Serializable {
      * 
      * @param topNodes Nodes
      */
-    public void processNodes(List<Node> topNodes) {
+    protected void processNodes(List<Node> topNodes) {
         LOG.debug("processNodes()");
         Map<String, String> courtListNodesMap = new ConcurrentHashMap<>();
         Map<String, String> sittingNodesMap = new ConcurrentHashMap<>();
