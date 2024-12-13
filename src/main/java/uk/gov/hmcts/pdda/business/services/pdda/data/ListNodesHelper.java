@@ -50,6 +50,15 @@ public class ListNodesHelper {
     private ListObjectHelper listObjectHelper;
     private final Map<String, Integer> numberedNodes = new ConcurrentHashMap<>();
 
+    public ListNodesHelper() {
+        // Default constructor
+    }
+    
+    // Junit constructor
+    public ListNodesHelper(ListObjectHelper listObjectHelper) {
+        this.listObjectHelper = listObjectHelper;
+    }
+    
     public void processNodes() {
         XhbClobRepository xhbClobRepository =
             new XhbClobRepository(EntityManagerUtil.getEntityManager());
@@ -80,7 +89,6 @@ public class ListNodesHelper {
      */
     public void processNodes(List<Node> topNodes) {
         LOG.debug("processNodes()");
-        listObjectHelper = new ListObjectHelper();
         Map<String, String> courtListNodesMap = new ConcurrentHashMap<>();
         Map<String, String> sittingNodesMap = new ConcurrentHashMap<>();
         Map<String, String> hearingNodesMap = new ConcurrentHashMap<>();
@@ -97,7 +105,7 @@ public class ListNodesHelper {
                 courtListNodesMap.putAll(getNodesMap(courtListNode));
                 courtListNodesMap
                     .putAll(getReferenceNodeMap(courtListNode, ListObjectHelper.COURTHOUSE_NODE));
-                listObjectHelper.validateNodeMap(courtListNodesMap,
+                getListObjectHelper().validateNodeMap(courtListNodesMap,
                     ListObjectHelper.COURTLIST_NODE);
                 // Sittings in the courtlist
                 for (Node sittingNode : getChildNodesArray(ListObjectHelper.SITTING_NODE,
@@ -105,7 +113,7 @@ public class ListNodesHelper {
                     sittingNodesMap.clear();
                     sittingNodesMap.putAll(courtListNodesMap);
                     sittingNodesMap.putAll(getNodesMap(sittingNode));
-                    listObjectHelper.validateNodeMap(sittingNodesMap,
+                    getListObjectHelper().validateNodeMap(sittingNodesMap,
                         ListObjectHelper.SITTING_NODE);
                     // Hearings in the sitting
                     for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
@@ -115,7 +123,7 @@ public class ListNodesHelper {
                         hearingNodesMap.putAll(getNodesMap(hearingNode));
                         hearingNodesMap.putAll(
                             getReferenceNodeMap(hearingNode, ListObjectHelper.HEARINGDETAILS_NODE));
-                        listObjectHelper.validateNodeMap(hearingNodesMap,
+                        getListObjectHelper().validateNodeMap(hearingNodesMap,
                             ListObjectHelper.HEARING_NODE);
                         // Defendants in the hearing
                         for (Node defendantNode : getChildNodesArray(
@@ -125,7 +133,7 @@ public class ListNodesHelper {
                             defendantNodesMap.putAll(getNodesMap(defendantNode));
                             defendantNodesMap.putAll(getReferenceNodeMap(defendantNode,
                                 ListObjectHelper.DEFENDANTNAME_NODE));
-                            listObjectHelper.validateNodeMap(defendantNodesMap,
+                            getListObjectHelper().validateNodeMap(defendantNodesMap,
                                 ListObjectHelper.DEFENDANT_NODE);
                         }
                     }
@@ -193,7 +201,7 @@ public class ListNodesHelper {
 
     private String getName(Node node) {
         String name = node.getNodeName();
-        if (listObjectHelper.isNumberedNode(node.getNodeName())) {
+        if (getListObjectHelper().isNumberedNode(node.getNodeName())) {
             Integer nodeNumber = 1;
             if (numberedNodes.containsKey(node.getNodeName())) {
                 nodeNumber = numberedNodes.get(node.getNodeName());
@@ -219,5 +227,12 @@ public class ListNodesHelper {
                 attributesList.item(i).getNodeValue());
         }
         return results;
+    }
+
+    private ListObjectHelper getListObjectHelper() {
+        if (listObjectHelper == null) {
+            listObjectHelper = new ListObjectHelper();
+        }
+        return listObjectHelper;
     }
 }
