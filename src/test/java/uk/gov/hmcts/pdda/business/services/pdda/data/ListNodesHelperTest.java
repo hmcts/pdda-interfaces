@@ -3,7 +3,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -44,11 +44,10 @@ class ListNodesHelperTest {
     private static final String XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
         + "<cs:DailyList>" + LISTHEADER_XML + COURTLIST_XML + "</cs:DailyList>";
 
-    @Mock
-    private ListObjectHelper mockListObjectHelper;
 
     @InjectMocks
-    private final ListNodesHelper classUnderTest = new ListNodesHelper(mockListObjectHelper);
+    private final ListNodesHelper classUnderTest =
+        new ListNodesHelper(Mockito.mock(ListObjectHelper.class));
 
     @Test
     void testDefaultConstructor() {
