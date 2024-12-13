@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,6 +40,18 @@ class ListObjectHelperTest {
     @InjectMocks
     private final ListObjectHelper classUnderTest = new ListObjectHelper(mockDataHelper);
 
+    @Test
+    void testDefaultConstructor() {
+        boolean result = false;
+        try {
+            new ListObjectHelper();
+            result = true;
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+        assertTrue(result, TRUE);
+    }
+    
     @Test
     void testCourtSite() {
         Map<String, String> nodesMap = new LinkedHashMap<>();
