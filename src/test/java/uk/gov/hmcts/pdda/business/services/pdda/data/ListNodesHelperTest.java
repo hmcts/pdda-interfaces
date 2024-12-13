@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 class ListNodesHelperTest {
 
     private static final String TRUE = "Result is False";
-    private static final String DAILY_LIST = "DailyList";
     private static final String LISTHEADER_XML = "<cs:ListHeader>"
         + "<cs:ListCategory>Criminal</cs:ListCategory>" + "<cs:StartDate>2024-10-01</cs:StartDate>"
         + "<cs:EndDate>2024-10-01</cs:EndDate>" + "<cs:Version>DRAFT 1</cs:Version>"
@@ -58,6 +57,18 @@ class ListNodesHelperTest {
     @InjectMocks
     private final ListNodesHelper classUnderTest = new ListNodesHelper(mockListObjectHelper);
 
+    @Test
+    void testDefaultConstructor() {
+        boolean result = false;
+        try {
+            new ListNodesHelper();
+            result = true;
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+        assertTrue(result, TRUE);
+    }
+    
     @Test
     void testProcessNodes() {
         boolean result = false;
