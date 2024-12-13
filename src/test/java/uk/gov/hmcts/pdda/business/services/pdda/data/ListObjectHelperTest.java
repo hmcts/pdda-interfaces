@@ -44,9 +44,9 @@ class ListObjectHelperTest {
         Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.COURTHOUSECODE, "404");
         nodesMap.put(classUnderTest.COURTHOUSENAME, "Birmingham");
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTSITE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.COURTLIST_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.COURTSITE_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.COURTLIST_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -66,9 +66,9 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.COURTROOMNO, "1");
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTROOM_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTLIST_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.COURTROOM_BREADCRUMB);
+        result = testNodeMap(nodesMap, false, classUnderTest.COURTLIST_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -87,9 +87,9 @@ class ListObjectHelperTest {
                 Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.COURTSITE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.COURTLIST_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.COURTSITE_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.COURTLIST_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -104,9 +104,9 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
             Optional.of(DummyHearingUtil.getXhbHearingListDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.SITTING_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.SITTING_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.SITTING_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.SITTING_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -116,11 +116,11 @@ class ListObjectHelperTest {
         Map<String, String> nodesMap = new LinkedHashMap<>();
         expectCase(nodesMap);
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true, classUnderTest.SITTING_NODE);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.CASENUMBER, "T");
-        result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        result = testNodeMap(nodesMap, true, classUnderTest.SITTING_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -147,11 +147,11 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.HEARING_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.CATEGORY, "Criminal");
-        result = testNodeMap(nodesMap, false, classUnderTest.HEARING_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -167,9 +167,9 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -180,10 +180,10 @@ class ListObjectHelperTest {
         expectCase(nodesMap);
         expectScheduledHearing(nodesMap);
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
-        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -200,11 +200,11 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
         nodesMap.clear();
         nodesMap.put(classUnderTest.GENDER, "Female");
-        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -214,10 +214,10 @@ class ListObjectHelperTest {
         Map<String, String> nodesMap = new LinkedHashMap<>();
         expectDefendant(nodesMap);
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao", Optional.empty());
-        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -255,9 +255,9 @@ class ListObjectHelperTest {
                 Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, true, classUnderTest.DEFENDANT_BREADCRUMB);
+        result = testNodeMap(nodesMap, true,ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -271,10 +271,10 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
             Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
         // Run
-        boolean result = testNodeMap(nodesMap, true, classUnderTest.CASE_BREADCRUMB);
+        boolean result = testNodeMap(nodesMap, true,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
-        result = testNodeMap(nodesMap, false, classUnderTest.CASE_BREADCRUMB);
+        result = testNodeMap(nodesMap, false,ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
 

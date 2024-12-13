@@ -85,7 +85,7 @@ public class ListNodesHelper {
             // Get reference data used by the main nodes
             Map<String, String> referenceNodesMap =
                 getReferenceNodeMap(topNode, ListObjectHelper.LISTHEADER_NODE);
-            // Loop the main entries
+            // Loop the courtlists
             for (Node courtListNode : getChildNodesArray(ListObjectHelper.COURTLIST_NODE,
                 topNode)) {
                 Map<String, String> courtListNodesMap = new LinkedHashMap<>();
@@ -95,6 +95,7 @@ public class ListNodesHelper {
                     .putAll(getReferenceNodeMap(courtListNode, ListObjectHelper.COURTHOUSE_NODE));
                 listObjectHelper.validateNodeMap(courtListNodesMap,
                     ListObjectHelper.COURTLIST_NODE);
+                // Sittings in the courtlist
                 for (Node sittingNode : getChildNodesArray(ListObjectHelper.SITTING_NODE,
                     courtListNode)) {
                     Map<String, String> sittingNodesMap = new LinkedHashMap<>();
@@ -102,6 +103,7 @@ public class ListNodesHelper {
                     sittingNodesMap.putAll(getNodesMap(sittingNode));
                     listObjectHelper.validateNodeMap(sittingNodesMap,
                         ListObjectHelper.SITTING_NODE);
+                    // Hearings in the sitting
                     for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
                         sittingNode)) {
                         Map<String, String> hearingNodesMap = new LinkedHashMap<>();
@@ -111,6 +113,7 @@ public class ListNodesHelper {
                             getReferenceNodeMap(hearingNode, ListObjectHelper.HEARINGDETAILS_NODE));
                         listObjectHelper.validateNodeMap(hearingNodesMap,
                             ListObjectHelper.HEARING_NODE);
+                        // Defendants in the hearing
                         for (Node defendantNode : getChildNodesArray(
                             ListObjectHelper.DEFENDANT_NODE, hearingNode)) {
                             Map<String, String> defendantNodesMap = new LinkedHashMap<>();
