@@ -460,5 +460,10 @@ class DataHelperTest {
             final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
             return Optional.of(new XhbCrLiveDisplayDao());
         }
+        
+        @Override
+        public Optional<XhbCrLiveDisplayDao> updateCrLiveDisplay(final XhbCrLiveDisplayDao dao) {
+            return Optional.of(new XhbCrLiveDisplayDao());
+        }
     }
 }
