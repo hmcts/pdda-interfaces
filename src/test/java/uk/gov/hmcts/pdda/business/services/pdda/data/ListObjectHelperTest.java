@@ -159,12 +159,7 @@ class ListObjectHelperTest {
     void testHearingType() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.HEARINGTYPECODE, "XXX");
-        nodesMap.put(classUnderTest.HEARINGTYPEDESC, "Description");
-        nodesMap.put(classUnderTest.CATEGORY, "Criminal");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
-            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        expectHearingType(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
@@ -174,50 +169,82 @@ class ListObjectHelperTest {
         assertTrue(result, TRUE);
     }
 
+    private void expectHearingType(Map<String, String> nodesMap) {
+        // Setup
+        nodesMap.put(classUnderTest.HEARINGTYPECODE, "XXX");
+        nodesMap.put(classUnderTest.HEARINGTYPEDESC, "Description");
+        nodesMap.put(classUnderTest.CATEGORY, "Criminal");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateHearingType(Mockito.isA(Integer.class),
+                Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
+    }
+
     @Test
     void testHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
         expectCase(nodesMap);
-        nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbRefHearingTypeDao",
-            Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
-            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        expectHearingType(nodesMap);
+        expectHearing(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
+    }
+
+    private void expectHearing(Map<String, String> nodesMap) {
+        // Setup
+        nodesMap.put(classUnderTest.STARTDATE, "2024-10-31");
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateHearing(Mockito.isA(Integer.class),
+                Mockito.isA(Integer.class), Mockito.isA(Integer.class),
+                Mockito.isA(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbHearingDao()));
     }
 
     @Test
     void testScheduledHearing() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectHearingType(nodesMap);
         expectCase(nodesMap);
+        expectHearing(nodesMap);
         expectScheduledHearing(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
-        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
-        result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "Invalid Time");
+        result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
+    }
+    
+    private void expectScheduledHearing(Map<String, String> nodesMap) {
+        // Setup
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateScheduledHearing(Mockito.isA(Integer.class),
+                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
     }
 
     @Test
     void testDefendant() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
-        nodesMap.put(classUnderTest.FIRSTNAME + ".2", "Fitzgerald");
-        nodesMap.put(classUnderTest.SURNAME, "Kennedy");
-        nodesMap.put(classUnderTest.DATEOFBIRTH, "1917-05-29");
-        nodesMap.put(classUnderTest.GENDER, "male");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
-            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        expectDefendant(nodesMap);
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
@@ -276,7 +303,7 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
-        result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
+        result = testNodeMap(nodesMap, false, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
 
@@ -284,7 +311,9 @@ class ListObjectHelperTest {
     void testCrLiveDisplay() {
         // Setup
         Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectHearingType(nodesMap);
         expectCase(nodesMap);
+        expectHearing(nodesMap);
         expectScheduledHearing(nodesMap);
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
@@ -295,21 +324,6 @@ class ListObjectHelperTest {
         ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.empty());
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
-    }
-
-    private void expectScheduledHearing(Map<String, String> nodesMap) {
-        // Setup
-        nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
-        // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
-            Optional.of(DummyHearingUtil.getXhbHearingDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
-            Optional.of(DummyHearingUtil.getXhbSittingDao()));
-        // Expects
-        Mockito
-            .when(mockDataHelper.validateScheduledHearing(Mockito.isA(Integer.class),
-                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
-            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
     }
 
     @Test

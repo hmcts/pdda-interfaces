@@ -337,9 +337,8 @@ public class ListObjectHelper {
                 .replaceAll(WHITESPACE_REGEX, EMPTY_STRING);
             // Find the first digit in the string
             Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(result);
-            matcher.find();
             // Return the string from the point of the first digit onwards
-            if (matcher.matches()) {
+            if (matcher.find()) {
                 return result.substring(matcher.start());
             }
         }
