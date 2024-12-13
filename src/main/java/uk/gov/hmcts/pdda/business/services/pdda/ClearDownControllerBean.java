@@ -54,9 +54,11 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      */
     @Override
     public void doTask() {
+        LOG.debug("ClearDown -- doTask() - entered");
         if (getClearDownHelper().isClearDownRequired()) {
             resetLiveDisplays();
         }
+        LOG.debug("ClearDown -- doTask() - exited");
     }
 
     /**
@@ -65,7 +67,7 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
      * </p>
      */
     public void resetLiveDisplays() {
-        LOG.debug("resetLiveDisplays()");
+        LOG.debug("Calling resetLiveDisplays()");
         getClearDownHelper().resetLiveDisplays();
         
     }

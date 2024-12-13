@@ -63,6 +63,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final String ENTERED = " : entered";
     private static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
+    private static final String EXIT_METHOD = " : exiting";
     private static final String IWP = "IWP";
 
     public CppInitialProcessingControllerBean() {
@@ -79,8 +80,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     @Override
     public void doTask() {
+        LOG.debug("CppStaging -- doTask() - entered");
         handleNewDocuments();
         handleStuckDocuments();
+        LOG.debug("CppStaging -- doTask() - exiting");
     }
 
     /**
@@ -93,30 +96,47 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
         List<XhbCppStagingInboundDao> docs = null;
         try {
-            // Step 1: Get any unprocessed documents
+            // Step 1: Get the next unprocessed document
             docs = getCppStagingInboundControllerBean().getLatestUnprocessedDocument();
+            if (docs != null) {
+                LOG.info("Number of unprocessed documents found: {}", docs.size());
+            } else {
+                LOG.info("No unprocessed documents found");
+            }
         } catch (CppStagingInboundControllerException e) {
             LOG.error("CPP Staging Inbound Controller Exception when obtaining the next "
                 + "document received from CPP that has not been processed at all");
-            LOG.error("Error:" + e.getMessage());
+            LOG.error("Error:{}", e.getMessage());
         }
 
         if (docs != null) {
+            LOG.debug(
+                "# About to process unprocessed documents; there are ## {} ## documents to process",
+                docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
+                LOG.debug("## Processing document: {}", doc.getDocumentName());
                 processDocument(doc);
+                LOG.debug("## Finished processing document: {}", doc.getDocumentName());
             }
+            LOG.debug("# Finished processing unprocessed documents");
         } else {
             // There are no documents currently to validate
             LOG.debug("There are no unprocessed CPP documents at this time");
         }
     }
 
+    /**
+     * Process a document from XHB_CPP_STAGING_INBOUND that has been added but not yet validated or
+     * processed.
+     * 
+     * @param xcsi The cpp staging inbound record to process
+     */
     private void processDocument(XhbCppStagingInboundDao xcsi) {
         String methodName = "processDocument(" + xcsi + ")";
         LOG.debug(methodName + ENTERED);
 
         try {
-            LOG.debug("Document to validate:: " + xcsi.toString());
+            LOG.debug("Document to validate:: {}", xcsi);
             XhbCppStagingInboundDao updatedXcsi = xcsi;
 
             // Set the status to IN_PROCESS so that no other incoming process can pick up
@@ -128,8 +148,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             }
 
             // Step 2: Validate a document which has the VALIDATION_STATUS='IP'
-            // Performing a valdation will also check that the DOCUMENT_NAME and
-            // DOCUMENT_TYPE values are ok
+            // Performing a validation will also check that the DOCUMENT_NAME and
+            // DOCUMENT_TYPE values are valid.
             boolean docIsValid =
                 getCppStagingInboundControllerBean().validateDocument(updatedXcsi, BATCH_USERNAME);
 
@@ -145,19 +165,20 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             } else {
                 // Logging a validation failure as an error at this time
                 LOG.error("The document is not valid. Check XHB_CPP_STAGING_INBOUND.ERROR_MESSAGE "
-                    + "for more details. Document details are: " + updatedXcsi.toString());
+                    + "for more details. Document details are: {}", updatedXcsi.toString());
             }
 
-            // Not throwing any exceptions here as a failure processing one document should
+            // Not throwing any exceptions here, as a failure processing one document should
             // not impact others
         } catch (ValidationException e) {
             LOG.error(
-                "Validation error when validating document. Turn debugging on for more info. Error: "
-                    + e.getMessage());
+                "Validation error when validating document. Turn debugging on for more info. Error: {}",
+                e.getMessage());
         } catch (CppInitialProcessingControllerException e) {
-            LOG.error("Error validating document. Turn debugging on for more info. Error: "
-                + e.getMessage());
+            LOG.error("Error validating document. Turn debugging on for more info. Error: {}",
+                e.getMessage());
         }
+        LOG.debug(methodName + EXIT_METHOD);
     }
 
     /**
@@ -173,7 +194,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             docs = getCppStagingInboundControllerBean().getNextValidatedDocument();
         } catch (CppStagingInboundControllerException cppsie) {
             LOG.error("Error in EJB when processing a document that has already been validated. "
-                + "Turn debugging on for more info. Error: " + cppsie.getMessage());
+                + "Turn debugging on for more info. Error: {}", cppsie.getMessage());
         }
 
         if (docs != null) {
@@ -182,6 +203,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             }
         }
 
+        LOG.debug(methodName + EXIT_METHOD);
     }
 
     /**
@@ -210,9 +232,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         }
 
         // Have found the need to clear cached entites that have already been merged (updated)
-        // before a
-        // persist (insert)
-        // is performed to prevent duplicate updates.
+        // before a persist (insert) is performed to prevent duplicate updates.
         getEntityManager().clear();
 
         // Which type of document is this?
@@ -234,9 +254,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Not a valid document type");
             getCppStagingInboundControllerBean().updateStatusProcessingFail(thisDoc,
                 "Problem reconciling document type after successful validation", BATCH_USERNAME);
+            LOG.debug(methodName + EXIT_METHOD);
             return false;
         }
 
+        LOG.debug(methodName + EXIT_METHOD);
         return true;
     }
 
