@@ -298,14 +298,15 @@ public class ListObjectHelper implements Serializable {
             String firstName = nodesMap.get(FIRSTNAME + ".1");
             String surname = nodesMap.get(SURNAME);
             String caseTitle = xhbCaseDao.get().getCaseTitle();
-            if (caseTitle == null && surname != null && "U".equals(xhbCaseDao.get().getCaseType())) {
-                caseTitle = surname; 
+            if (caseTitle == null && surname != null
+                && "U".equals(xhbCaseDao.get().getCaseType())) {
+                caseTitle = surname;
                 if (firstName != null) {
-                    caseTitle += firstName; 
+                    caseTitle += firstName;
                 }
             }
             if (caseTitle != null && !caseTitle.equals(xhbCaseDao.get().getCaseTitle())) {
-               return dataHelper.updateCase(xhbCaseDao.get(), caseTitle);
+                return dataHelper.updateCase(xhbCaseDao.get(), caseTitle);
             }
             return xhbCaseDao;
         }
