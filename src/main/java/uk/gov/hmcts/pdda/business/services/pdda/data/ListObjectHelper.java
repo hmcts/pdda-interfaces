@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHear
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -45,8 +46,9 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
     "PMD.CyclomaticComplexity"})
-public class ListObjectHelper {
+public class ListObjectHelper implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(ListObjectHelper.class);
 
     public static final String ROOTNODE = "DailyList";
@@ -88,16 +90,16 @@ public class ListObjectHelper {
         DateTimeFormatter.ofPattern(TWELVEHOURTIME);
 
     private DataHelper dataHelper = new DataHelper();
-    private Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
-    private Optional<XhbCourtRoomDao> xhbCourtRoomDao = Optional.empty();
-    private Optional<XhbCaseDao> xhbCaseDao = Optional.empty();
-    private Optional<XhbDefendantDao> xhbDefendantDao = Optional.empty();
-    private Optional<XhbDefendantOnCaseDao> xhbDefendantOnCaseDao = Optional.empty();
-    private Optional<XhbHearingListDao> xhbHearingListDao = Optional.empty();
-    private Optional<XhbRefHearingTypeDao> xhbRefHearingTypeDao = Optional.empty();
-    private Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
-    private Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
-    private Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
+    private transient Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
+    private transient Optional<XhbCourtRoomDao> xhbCourtRoomDao = Optional.empty();
+    private transient Optional<XhbCaseDao> xhbCaseDao = Optional.empty();
+    private transient Optional<XhbDefendantDao> xhbDefendantDao = Optional.empty();
+    private transient Optional<XhbDefendantOnCaseDao> xhbDefendantOnCaseDao = Optional.empty();
+    private transient Optional<XhbHearingListDao> xhbHearingListDao = Optional.empty();
+    private transient Optional<XhbRefHearingTypeDao> xhbRefHearingTypeDao = Optional.empty();
+    private transient Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
+    private transient Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
+    private transient Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
 
     public ListObjectHelper() {
         // Default constructor

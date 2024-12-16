@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -14,8 +15,10 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI"})
-public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao> {
+public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbDefendantRepository.class);
 
     public XhbDefendantRepository(EntityManager em) {
@@ -41,8 +44,7 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao> 
         final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.debug("findByDefendantAndCase()");
-        Query query =
-            getEntityManager().createNamedQuery("XHB_DEFENDANT.findByDefendantName");
+        Query query = getEntityManager().createNamedQuery("XHB_DEFENDANT.findByDefendantName");
         query.setParameter("courtId", courtId);
         query.setParameter("firstName", firstName);
         query.setParameter("middleName", middleName);
