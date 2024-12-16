@@ -19,6 +19,7 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         LoggerFactory.getLogger(CppInitialProcessingControllerBean.class);
 
     protected static final String ENTERED = " : entered";
+    protected static final String EXITED = " : exited";
     protected static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     protected static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
 

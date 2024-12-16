@@ -55,7 +55,9 @@ public class CppStagingInboundHelper implements Serializable {
 
     public static final String ACKNOWLEDGMENT_STATUS_SENT = "AS";
 
-    private static final String CALLED = " called";
+    protected static final String ENTERED = " : entered";
+
+    protected static final String EXITED = " : exited";
 
     private Integer numberOfDocsToProcess;
 
@@ -117,7 +119,7 @@ public class CppStagingInboundHelper implements Serializable {
     public List<XhbCppStagingInboundDao> findNextDocumentByStatus(String validationStatus,
         String processingStatus) {
         String methodName = "findNextDocumentByStatus()";
-        LOG.debug(methodName + CALLED);
+        LOG.debug(methodName + ENTERED);
         LOG.debug("Helloo - Finding a document in " + methodName);
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
 
@@ -125,8 +127,9 @@ public class CppStagingInboundHelper implements Serializable {
             new XhbCppStagingInboundRepository(em).findNextDocumentByValidationAndProcessingStatus(
                 LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT), validationStatus,
                 processingStatus);
+
         if (docs != null && !docs.isEmpty()) {
-            LOG.debug("Some docs were found");
+            LOG.debug("{} docs were found", docs.size());
             for (int i = 0; i < numberOfDocsToProcess; i++) {
                 if (i >= docs.size()) {
                     break;
@@ -138,9 +141,10 @@ public class CppStagingInboundHelper implements Serializable {
                 }
             }
         } else {
-            LOG.debug("No docs were found");
+            LOG.debug("{} - No docs were found", methodName);
         }
 
+        LOG.debug(methodName + EXITED);
         return toReturn;
     }
 
@@ -151,7 +155,7 @@ public class CppStagingInboundHelper implements Serializable {
      */
     public List<XhbCppStagingInboundDao> findUnrespondedCppMessages() {
         String methodName = "findUnrespondedCPPMessages()";
-        LOG.debug(methodName + CALLED);
+        LOG.debug(methodName + ENTERED);
         return getCppStagingInboundRepository().findUnrespondedCppMessages();
     }
 
@@ -166,7 +170,7 @@ public class CppStagingInboundHelper implements Serializable {
         XhbCppStagingInboundDao cppStagingInboundDao, String userDisplayName) {
         String methodName =
             "updateCppStagingInbound(" + cppStagingInboundDao + "," + userDisplayName + ") - ";
-        LOG.debug(methodName + CALLED);
+        LOG.debug(methodName + ENTERED);
         cppStagingInboundDao.setLastUpdatedBy(userDisplayName);
         return getCppStagingInboundRepository().update(cppStagingInboundDao);
     }

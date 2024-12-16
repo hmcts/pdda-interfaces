@@ -235,6 +235,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         // Column limited to 4000 chars so truncate to avoid unrecoverable error
         cppStagingInboundDao.setLastUpdatedBy(userDisplayName);
         getCppStagingInboundHelper().updateCppStagingInbound(cppStagingInboundDao, userDisplayName);
+        LOG.debug(methodName + EXITED);
     }
 
     /**
@@ -290,7 +291,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         try {
             if (DocumentValidationUtils
                 .isValidDocumentName(cppStagingInboundDao.getDocumentName())) {
-                LOG.debug("Document Name is valid");
+                LOG.debug("{} - Document Name is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Document Name is invalid",
                     userDisplayName);
@@ -298,7 +299,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             }
             if (DocumentValidationUtils
                 .isValidDocumentType(cppStagingInboundDao.getDocumentType())) {
-                LOG.debug("Document Type is valid");
+                LOG.debug("{} - Document Type is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Document Type is invalid",
                     userDisplayName);
@@ -312,7 +313,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             ValidationResult validDoc =
                 getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
             if (validDoc.isValid()) {
-                LOG.debug("Document XML is valid");
+                LOG.debug("{} - Document XML is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
                     + schemaName + "; error::" + validDoc.toString(), userDisplayName);

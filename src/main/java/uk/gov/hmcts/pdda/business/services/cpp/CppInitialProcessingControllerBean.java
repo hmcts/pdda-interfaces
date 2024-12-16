@@ -60,10 +60,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final Logger LOG =
         LoggerFactory.getLogger(CppInitialProcessingControllerBean.class);
 
-    private static final String ENTERED = " : entered";
     private static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
-    private static final String EXIT_METHOD = " : exiting";
     private static final String IWP = "IWP";
 
     public CppInitialProcessingControllerBean() {
@@ -99,9 +97,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             // Step 1: Get the next unprocessed document
             docs = getCppStagingInboundControllerBean().getLatestUnprocessedDocument();
             if (docs != null) {
-                LOG.info("Number of unprocessed documents found: {}", docs.size());
+                LOG.info("{} - Number of unprocessed documents found: {}", methodName, docs.size());
             } else {
-                LOG.info("No unprocessed documents found");
+                LOG.info("{} - No unprocessed documents found", methodName);
             }
         } catch (CppStagingInboundControllerException e) {
             LOG.error("CPP Staging Inbound Controller Exception when obtaining the next "
@@ -111,18 +109,22 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
         if (docs != null) {
             LOG.debug(
-                "# About to process unprocessed documents; there are ## {} ## documents to process",
-                docs.size());
+                "{} - # About to process unprocessed documents; there are ## {} ## documents to process",
+                methodName, docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
-                LOG.debug("## Processing document: {}", doc.getDocumentName());
+                LOG.debug("{} - ## Processing document: {}", methodName, doc.getDocumentName());
                 processDocument(doc);
-                LOG.debug("## Finished processing document: {}", doc.getDocumentName());
+                LOG.debug("{} - ## Finished processing document: {}", methodName,
+                    doc.getDocumentName());
             }
-            LOG.debug("# Finished processing unprocessed documents");
+            LOG.debug("{} - # Finished processing unprocessed documents", methodName);
         } else {
             // There are no documents currently to validate
-            LOG.debug("There are no unprocessed CPP documents at this time");
+            LOG.debug(
+                "{} - There are no unprocessed inbound documents in XHB_CPP_STAGING_INBOUND at this time",
+                methodName);
         }
+        LOG.debug(methodName + EXITED);
     }
 
     /**
@@ -154,13 +156,14 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 getCppStagingInboundControllerBean().validateDocument(updatedXcsi, BATCH_USERNAME);
 
             if (docIsValid) {
-                LOG.debug("The document has been successfully validated");
+                LOG.debug("{} - The document has been successfully validated", methodName);
 
                 // Now attempt to process the validated document - i.e. examine XML and insert
                 // into downstream database tables
 
                 if (processValidatedDocument(updatedXcsi)) {
-                    LOG.debug("The validated document has been successfully processed");
+                    LOG.debug("{} - The validated document has been successfully processed",
+                        methodName);
                 }
             } else {
                 // Logging a validation failure as an error at this time
@@ -178,7 +181,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Error validating document. Turn debugging on for more info. Error: {}",
                 e.getMessage());
         }
-        LOG.debug(methodName + EXIT_METHOD);
+        LOG.debug(methodName + EXITED);
     }
 
     /**
@@ -198,12 +201,19 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         }
 
         if (docs != null) {
+            LOG.debug(
+                "{} - # About to process unprocessed documents; there are ## {} ## documents to process",
+                methodName, docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
+                LOG.debug("{} - ## Processing document: {}", methodName, doc.getDocumentName());
                 handleStuckDocuments(doc);
+                LOG.debug("{} - ## Finished processing document: {}", methodName,
+                    doc.getDocumentName());
             }
+            LOG.debug("{} - # Finished processing unprocessed documents", methodName);
         }
 
-        LOG.debug(methodName + EXIT_METHOD);
+        LOG.debug(methodName + EXITED);
     }
 
     /**
@@ -254,11 +264,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Not a valid document type");
             getCppStagingInboundControllerBean().updateStatusProcessingFail(thisDoc,
                 "Problem reconciling document type after successful validation", BATCH_USERNAME);
-            LOG.debug(methodName + EXIT_METHOD);
+            LOG.debug(methodName + EXITED);
             return false;
         }
 
-        LOG.debug(methodName + EXIT_METHOD);
+        LOG.debug(methodName + EXITED);
         return true;
     }
 
@@ -446,6 +456,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             throw e;
         }
 
+        LOG.debug(methodName + EXITED);
+
     }
 
     /**
@@ -509,5 +521,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             throw new CppInitialProcessingControllerException("cpp.initial.processing.controller",
                 methodName + ": " + e.getMessage(), e);
         }
+        
+        LOG.debug(methodName + EXITED);
     }
 }
