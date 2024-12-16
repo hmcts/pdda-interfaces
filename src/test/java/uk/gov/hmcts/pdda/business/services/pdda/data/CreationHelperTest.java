@@ -40,6 +40,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 class CreationHelperTest {
 
+    private static final String EQUALS = "Result is not Equal";
     private static final String NOTNULL = "Result is Null";
 
     @Mock
@@ -115,13 +117,19 @@ class CreationHelperTest {
 
     @Test
     void testCreateCase() {
-        Mockito.when(mockRepositoryHelper.getXhbCaseRepository())
-            .thenReturn(Mockito.mock(XhbCaseRepository.class));
-
         XhbCaseDao dao = DummyCaseUtil.getXhbCaseDao();
+        XhbCaseRepository mockXhbCaseRepository = Mockito.mock(XhbCaseRepository.class);
+        Mockito.when(mockRepositoryHelper.getXhbCaseRepository()).thenReturn(mockXhbCaseRepository);
+        Mockito.when(mockXhbCaseRepository.update(Mockito.isA(XhbCaseDao.class)))
+            .thenReturn(Optional.of(dao));
+
         Optional<XhbCaseDao> result =
             classUnderTest.createCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
         assertNotNull(result, NOTNULL);
+        String caseTitle = "caseTitle";
+        result = classUnderTest.updateCase(dao, caseTitle);
+        assertNotNull(result, NOTNULL);
+        assertEquals(caseTitle, result.get().getCaseTitle(), EQUALS);
     }
 
     @Test

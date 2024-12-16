@@ -125,6 +125,7 @@ public class ListObjectHelper implements Serializable {
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
+            updateCaseTitle(nodesMap);
             validateSchedHearingDefendant();
         }
     }
@@ -288,6 +289,25 @@ public class ListObjectHelper implements Serializable {
             if (caseId != null && defendantId != null) {
                 return dataHelper.validateDefendantOnCase(caseId, defendantId);
             }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<XhbCaseDao> updateCaseTitle(Map<String, String> nodesMap) {
+        if (xhbCaseDao.isPresent()) {
+            String firstName = nodesMap.get(FIRSTNAME + ".1");
+            String surname = nodesMap.get(SURNAME);
+            String caseTitle = xhbCaseDao.get().getCaseTitle();
+            if (caseTitle == null && surname != null && "U".equals(xhbCaseDao.get().getCaseType())) {
+                caseTitle = surname; 
+                if (firstName != null) {
+                    caseTitle += firstName; 
+                }
+            }
+            if (caseTitle != null && !caseTitle.equals(xhbCaseDao.get().getCaseTitle())) {
+               return dataHelper.updateCase(xhbCaseDao.get(), caseTitle);
+            }
+            return xhbCaseDao;
         }
         return Optional.empty();
     }
