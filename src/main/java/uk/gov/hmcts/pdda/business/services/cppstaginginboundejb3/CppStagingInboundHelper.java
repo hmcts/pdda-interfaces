@@ -59,6 +59,8 @@ public class CppStagingInboundHelper implements Serializable {
 
     protected static final String EXITED = " : exited";
 
+    protected static final String TWO_PARAMS = "{}{}";
+
     private Integer numberOfDocsToProcess;
 
     private EntityManager em;
@@ -119,8 +121,8 @@ public class CppStagingInboundHelper implements Serializable {
     public List<XhbCppStagingInboundDao> findNextDocumentByStatus(String validationStatus,
         String processingStatus) {
         String methodName = "findNextDocumentByStatus()";
-        LOG.debug(methodName + ENTERED);
-        LOG.debug("Helloo - Finding a document in " + methodName);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        LOG.debug("Helloo - Finding a document in {}", methodName);
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
 
         List<XhbCppStagingInboundDao> docs =
@@ -144,7 +146,7 @@ public class CppStagingInboundHelper implements Serializable {
             LOG.debug("{} - No docs were found", methodName);
         }
 
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
         return toReturn;
     }
 
@@ -155,7 +157,7 @@ public class CppStagingInboundHelper implements Serializable {
      */
     public List<XhbCppStagingInboundDao> findUnrespondedCppMessages() {
         String methodName = "findUnrespondedCPPMessages()";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         return getCppStagingInboundRepository().findUnrespondedCppMessages();
     }
 
@@ -170,7 +172,7 @@ public class CppStagingInboundHelper implements Serializable {
         XhbCppStagingInboundDao cppStagingInboundDao, String userDisplayName) {
         String methodName =
             "updateCppStagingInbound(" + cppStagingInboundDao + "," + userDisplayName + ") - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         cppStagingInboundDao.setLastUpdatedBy(userDisplayName);
         return getCppStagingInboundRepository().update(cppStagingInboundDao);
     }

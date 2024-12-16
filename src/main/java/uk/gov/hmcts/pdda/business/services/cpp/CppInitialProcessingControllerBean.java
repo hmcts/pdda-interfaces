@@ -90,7 +90,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     public void handleNewDocuments() {
         String methodName = "handleNewDocuments()";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         List<XhbCppStagingInboundDao> docs = null;
         try {
@@ -124,7 +124,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 "{} - There are no unprocessed inbound documents in XHB_CPP_STAGING_INBOUND at this time",
                 methodName);
         }
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -135,7 +135,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     private void processDocument(XhbCppStagingInboundDao xcsi) {
         String methodName = "processDocument(" + xcsi + ")";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         try {
             LOG.debug("Document to validate:: {}", xcsi);
@@ -181,7 +181,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Error validating document. Turn debugging on for more info. Error: {}",
                 e.getMessage());
         }
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -190,7 +190,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     public void handleStuckDocuments() {
         String methodName = "handleStuckDocuments()";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         List<XhbCppStagingInboundDao> docs = null;
         try {
@@ -213,7 +213,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.debug("{} - # Finished processing unprocessed documents", methodName);
         }
 
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -230,7 +230,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public boolean processValidatedDocument(XhbCppStagingInboundDao thisDoc) {
         String methodName = "processValidatedDocument() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
 
         String clobXml =
@@ -264,11 +264,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Not a valid document type");
             getCppStagingInboundControllerBean().updateStatusProcessingFail(thisDoc,
                 "Problem reconciling document type after successful validation", BATCH_USERNAME);
-            LOG.debug(methodName + EXITED);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
             return false;
         }
 
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
         return true;
     }
 
@@ -286,7 +286,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getListStartDate(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         Date listStartDate;
@@ -300,7 +300,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find list start date");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -321,7 +321,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getListEndDate(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         Date listEndDate;
@@ -335,7 +335,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find list end date");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -356,7 +356,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getCourtHouseCode(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         String courtCode;
@@ -370,7 +370,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find court code");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -385,7 +385,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public void createUpdateNonListRecords(XhbCppStagingInboundDao thisDoc) {
         String methodName = "createUpdateNonListRecords() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         try {
             int courtId = getCppStagingInboundControllerBean()
@@ -452,11 +452,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
         } catch (EJBException e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
 
     }
 
@@ -468,7 +468,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public void createUpdateListRecords(XhbCppStagingInboundDao thisDoc, String clobXml) {
         String methodName = "createUpdateListRecords() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         try {
             String documentType = thisDoc.getDocumentType();
@@ -517,11 +517,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw new CppInitialProcessingControllerException("cpp.initial.processing.controller",
                 methodName + ": " + e.getMessage(), e);
         }
         
-        LOG.debug(methodName + EXITED);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 }
