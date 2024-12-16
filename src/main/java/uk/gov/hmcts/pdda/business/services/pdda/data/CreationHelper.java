@@ -44,6 +44,7 @@ public class CreationHelper implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(CreationHelper.class);
     private static final Integer ADDRESS_ID = -1;
     private static final String NO = "N";
+    private static final String OPEN = "O";
     private static final String YES = "Y";
 
     private RepositoryHelper repositoryHelper;
@@ -134,6 +135,8 @@ public class CreationHelper implements Serializable {
         dao.setCaseType(caseType);
         dao.setCaseNumber(caseNumber);
         dao.setVideoLinkRequired(NO);
+        dao.setCaseListed(YES);
+        dao.setCaseStatus(OPEN);
         return getRepositoryHelper().getXhbCaseRepository().update(dao);
     }
 
