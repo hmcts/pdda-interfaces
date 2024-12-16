@@ -253,6 +253,18 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
+    
+    @Test
+    void testDefendantInvalidData() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectDefendant(nodesMap);
+        nodesMap.clear();
+        nodesMap.put(classUnderTest.SURNAME, "Kennedy, John F");
+        // Run
+        boolean result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
+        assertTrue(result, TRUE);
+    }
 
     @Test
     void testDefendantOnCase() {

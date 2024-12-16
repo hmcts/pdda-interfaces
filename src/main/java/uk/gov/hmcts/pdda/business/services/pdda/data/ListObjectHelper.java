@@ -125,6 +125,7 @@ public class ListObjectHelper implements Serializable {
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
+            updateCaseTitle(nodesMap);
             validateSchedHearingDefendant();
         }
     }
@@ -256,6 +257,12 @@ public class ListObjectHelper implements Serializable {
             String firstName = nodesMap.get(FIRSTNAME + ".1");
             String middleName = nodesMap.get(FIRSTNAME + ".2");
             String surname = nodesMap.get(SURNAME);
+            // Correct any invalid data with only a surname populated
+            if (firstName == null && surname != null && surname.contains(",")) {
+                int commaPosition = surname.indexOf(',');
+                firstName = surname.substring(commaPosition + 1).trim();
+                surname = surname.substring(0, commaPosition);
+            }
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;
             if (MALE.equalsIgnoreCase(genderAsString)) {
@@ -282,6 +289,27 @@ public class ListObjectHelper implements Serializable {
             if (caseId != null && defendantId != null) {
                 return dataHelper.validateDefendantOnCase(caseId, defendantId);
             }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<XhbCaseDao> updateCaseTitle(Map<String, String> nodesMap) {
+        if (xhbCaseDao.isPresent()) {
+            String firstName = nodesMap.get(FIRSTNAME + ".1");
+            String surname = nodesMap.get(SURNAME);
+            if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
+                StringBuilder caseTitleSb = new StringBuilder();
+                caseTitleSb.append(surname);
+                if (firstName != null) {
+                    if (!"U".equals(xhbCaseDao.get().getCaseType())
+                        && !"B".equals(xhbCaseDao.get().getCaseType())) {
+                        caseTitleSb.append(", ");
+                    }
+                    caseTitleSb.append(firstName);
+                }
+                return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
+            }
+            return xhbCaseDao;
         }
         return Optional.empty();
     }

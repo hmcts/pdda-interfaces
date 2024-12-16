@@ -41,12 +41,12 @@ public class DataHelper extends FinderHelper {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
 
-    public Optional<XhbCourtSiteDao> validateCourtSite(final String courtSiteName,
-        final String courtSiteCode) {
-        LOG.debug("validateCourtSite({})", courtSiteName);
-        Optional<XhbCourtSiteDao> result = findCourtSite(courtSiteName, courtSiteCode);
+    public Optional<XhbCourtSiteDao> validateCourtSite(final String courtHouseName,
+        final String courtHouseCode) {
+        LOG.debug("validateCourtSite({})", courtHouseName);
+        Optional<XhbCourtSiteDao> result = findCourtSite(courtHouseName, courtHouseCode);
         if (result.isEmpty()) {
-            LOG.error("No XhbCourtSite found for name:{},  code:{}", courtSiteName, courtSiteCode);
+            LOG.error("No XhbCourtSite found for name:{},  code:{}", courtHouseName, courtHouseCode);
         }
         return result;
     }
