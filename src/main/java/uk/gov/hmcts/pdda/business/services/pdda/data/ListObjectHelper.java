@@ -297,18 +297,16 @@ public class ListObjectHelper implements Serializable {
         if (xhbCaseDao.isPresent()) {
             String firstName = nodesMap.get(FIRSTNAME + ".1");
             String surname = nodesMap.get(SURNAME);
-            String caseTitle = xhbCaseDao.get().getCaseTitle();
-            if (caseTitle == null && surname != null) {
-                caseTitle = surname;
+            if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
+                StringBuilder caseTitleSb = new StringBuilder();
+                caseTitleSb.append(surname);
                 if (firstName != null) {
                     if (!"U".equals(xhbCaseDao.get().getCaseType())) {
-                        caseTitle += ", ";
+                        caseTitleSb.append(", ");
                     }
-                    caseTitle += firstName;
+                    caseTitleSb.append(firstName);
                 }
-            }
-            if (caseTitle != null && !caseTitle.equals(xhbCaseDao.get().getCaseTitle())) {
-                return dataHelper.updateCase(xhbCaseDao.get(), caseTitle);
+                return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
             }
             return xhbCaseDao;
         }
