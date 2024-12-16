@@ -301,7 +301,8 @@ public class ListObjectHelper implements Serializable {
                 StringBuilder caseTitleSb = new StringBuilder();
                 caseTitleSb.append(surname);
                 if (firstName != null) {
-                    if (!"U".equals(xhbCaseDao.get().getCaseType())) {
+                    if (!"U".equals(xhbCaseDao.get().getCaseType())
+                        && !"B".equals(xhbCaseDao.get().getCaseType())) {
                         caseTitleSb.append(", ");
                     }
                     caseTitleSb.append(firstName);
