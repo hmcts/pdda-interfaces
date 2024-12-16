@@ -280,14 +280,14 @@ class DataHelperTest {
          * validateCourtSite overrides.
          */
         @Override
-        public Optional<XhbCourtSiteDao> findCourtSite(final String courtSiteName,
+        public Optional<XhbCourtSiteDao> findCourtSite(final String courtHouseName,
             final String courtHouseCode) {
             return this.isPresent ? Optional.of(new XhbCourtSiteDao()) : Optional.empty();
         }
 
         @Override
         public Optional<XhbCourtSiteDao> createCourtSite(final Integer courtId,
-            final String courtSiteName, final String courtSiteCode) {
+            final String courteName, final String courtHouseCode) {
             return Optional.of(new XhbCourtSiteDao());
         }
 

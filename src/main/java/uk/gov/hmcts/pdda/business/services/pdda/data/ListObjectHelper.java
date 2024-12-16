@@ -259,7 +259,7 @@ public class ListObjectHelper implements Serializable {
             // Correct any invalid data with only a surname populated
             if (firstName == null && surname != null && surname.contains(",")) {
                 int commaPosition = surname.indexOf(',');
-                firstName = surname.substring(commaPosition+1).trim();
+                firstName = surname.substring(commaPosition + 1).trim();
                 surname = surname.substring(0, commaPosition);
             }
             String genderAsString = nodesMap.get(GENDER);

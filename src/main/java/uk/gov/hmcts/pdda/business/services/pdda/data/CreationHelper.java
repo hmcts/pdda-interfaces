@@ -66,7 +66,7 @@ public class CreationHelper implements Serializable {
         XhbCourtSiteDao dao = new XhbCourtSiteDao();
         dao.setCourtId(courtId);
         dao.setCourtSiteName(courtSiteName);
-        dao.setCourtSiteCode(courtSiteCode);
+        dao.setCrestCourtId(courtSiteCode);
         dao.setAddressId(ADDRESS_ID);
         return getRepositoryHelper().getXhbCourtSiteRepository().update(dao);
     }
