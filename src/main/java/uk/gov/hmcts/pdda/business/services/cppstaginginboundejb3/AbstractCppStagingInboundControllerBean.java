@@ -27,6 +27,8 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     protected static final String SCHEMA_DIR_DEFAULT = "config/xsd/";
 
     protected static final String ENTERED = " : entered";
+    protected static final String EXITED = " : exited";
+    protected static final String TWO_PARAMS = "{}{}";
     protected static final String METHOD_NAME_SUFFIX = ") - ";
     protected static final Integer REASON_LIMIT = 4000;
     protected static final String EMPTY_STRING = " ";
