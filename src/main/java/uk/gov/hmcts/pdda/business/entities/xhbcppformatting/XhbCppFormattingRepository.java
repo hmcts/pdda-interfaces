@@ -42,17 +42,24 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
     public XhbCppFormattingDao findLatestByCourtDateInDoc(final Integer courtCode,
         final String documentType, final LocalDateTime dateIn) {
         LOG.debug("findLatestByCourtDateInDoc()");
+        LOG.debug("courtCode: {}", courtCode);
+        LOG.debug("documentType: {}", documentType);
+        LOG.debug("dateIn: {}", dateIn);
         Query query =
             getEntityManager().createNamedQuery("XHB_CPP_FORMATTING.findLatestByCourtDateInDoc");
         query.setParameter(COURT_ID, courtCode);
         query.setParameter(DOCUMENT_TYPE, documentType);
         query.setParameter("dateIn", dateIn);
 
+        LOG.debug("Query has been created: {}", query);
         @SuppressWarnings("unchecked")
         List<XhbCppFormattingDao> xcfList = query.getResultList();
+
         if (xcfList == null  || xcfList.isEmpty()) {
+            LOG.debug("Query has been executed, there are no results");
             return null;
         } else {
+            LOG.debug("Query has been executed, there are {} results", xcfList.size());
             return xcfList.get(0);
         }
     }
