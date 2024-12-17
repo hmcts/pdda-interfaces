@@ -20,7 +20,9 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbDefendantRepository.class);
-
+    private static final String NO = "N";
+    private static final String YES = "Y";
+    
     public XhbDefendantRepository(EntityManager em) {
         super(em);
     }
@@ -47,9 +49,12 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
         Query query = getEntityManager().createNamedQuery("XHB_DEFENDANT.findByDefendantName");
         query.setParameter("courtId", courtId);
         query.setParameter("firstName", firstName);
+        query.setParameter("middleNameIsNull", middleName == null ? YES : NO);
         query.setParameter("middleName", middleName);
         query.setParameter("surname", surname);
+        query.setParameter("genderIsNull", gender == null ? YES : NO);
         query.setParameter("gender", gender);
+        query.setParameter("dateOfBirthIsNull", dateOfBirth == null ? YES : NO);
         query.setParameter("dateOfBirth", dateOfBirth);
         XhbDefendantDao dao =
             query.getResultList().isEmpty() ? null : (XhbDefendantDao) query.getSingleResult();
