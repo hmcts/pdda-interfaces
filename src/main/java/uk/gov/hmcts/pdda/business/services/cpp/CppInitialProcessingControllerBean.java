@@ -396,25 +396,31 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             // If court id is not > 0 then the court could not be found and processing of
             // this record should stop
             if (courtId > 0) {
+                LOG.debug("{} - Court found, going to create or update", methodName);
                 String documentType = thisDoc.getDocumentType();
                 if (CppDocumentTypes.WP == CppDocumentTypes.fromString(documentType)) {
                     documentType = IWP;
                 }
+                LOG.debug("{} - Doc type found = {}, going to create or update", methodName,
+                    documentType);
                 XhbCppFormattingDao docToUpdate =
                     getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
                         documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
 
+                LOG.debug("{} - Formatting doc to update query has been run, docToUpdate={}",
+                    methodName, docToUpdate);
                 if (docToUpdate != null) {
                     // Update - directly rather through maintainer as that
-                    // was
-                    // generating CMP/CMR
-                    // relationship errors
+                    // was generating CMP/CMR relationship errors
                     docToUpdate.setFormatStatus(CppFormattingHelper.FORMAT_STATUS_NOT_PROCESSED);
                     docToUpdate.setXmlDocumentClobId(thisDoc.getClobId());
                     docToUpdate.setDateIn(thisDoc.getTimeLoaded());
                     docToUpdate.setStagingTableId(thisDoc.getCppStagingInboundId());
                     docToUpdate.setLastUpdatedBy(BATCH_USERNAME);
+                    LOG.debug("{} - Updating doc in XHB_CPP_FORMATTING", methodName);
                     getXhbCppFormattingRepository().update(docToUpdate);
+                    LOG.debug("{} - Updated doc in XHB_CPP_FORMATTING", methodName);
+
 
                 } else { // Insert
                     // Create a record to insert
@@ -426,7 +432,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     docToCreate.setStagingTableId(thisDoc.getCppStagingInboundId());
                     docToCreate.setXmlDocumentClobId(thisDoc.getClobId());
                     docToCreate.setObsInd("N");
+                    LOG.debug("{} - Creating doc in XHB_CPP_FORMATTING", methodName);
                     getXhbCppFormattingRepository().save(docToCreate);
+                    LOG.debug("{} - Created doc in XHB_CPP_FORMATTING", methodName);
                 }
 
                 if (IWP.equalsIgnoreCase(documentType)) {
@@ -442,6 +450,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     getXhbFormattingRepository().save(xfbv);
                 }
 
+                LOG.debug("{} - Updating the status to success", methodName);
                 // If all successful then we need to set record in XHB_STAGING_INBOUND to
                 // indicate this
                 getCppStagingInboundControllerBean().updateStatusProcessingSuccess(thisDoc,

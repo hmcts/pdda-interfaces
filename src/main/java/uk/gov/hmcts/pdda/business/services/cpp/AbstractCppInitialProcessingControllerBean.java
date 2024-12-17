@@ -41,6 +41,8 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
     public abstract boolean processValidatedDocument(XhbCppStagingInboundDao thisDoc);
 
     protected void handleStuckDocuments(XhbCppStagingInboundDao doc) {
+        String methodName = "handleStuckDocuments()";
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             if (doc != null) {
                 // Now attempt to process the validated document - i.e. examine XML and
@@ -59,8 +61,10 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         } catch (Exception e) {
             LOG.error(
                 "Error processing a document that has already been validated. Turn debugging on for more info."
-                    + " Error: " + e.getMessage());
+                    + " Error: {}",
+                e.getMessage());
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
 
