@@ -23,8 +23,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -38,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 class FinderHelperTest {
 
     private static final String NOTNULL = "Result is Null";
@@ -61,7 +66,7 @@ class FinderHelperTest {
 
         XhbCourtSiteDao dao = DummyCourtUtil.getXhbCourtSiteDao();
         Optional<XhbCourtSiteDao> result =
-            classUnderTest.findCourtSite(dao.getCourtId(), dao.getCourtSiteName());
+            classUnderTest.findCourtSite(dao.getCourtSiteName(), dao.getCourtSiteCode());
         assertNotNull(result, NOTNULL);
     }
 
@@ -121,6 +126,28 @@ class FinderHelperTest {
     }
 
     @Test
+    void testFindHearingType() {
+        Mockito.when(mockRepositoryHelper.getXhbRefHearingTypeRepository())
+            .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
+
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.findHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindHearing() {
+        Mockito.when(mockRepositoryHelper.getXhbHearingRepository())
+            .thenReturn(Mockito.mock(XhbHearingRepository.class));
+
+        XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
+        Optional<XhbHearingDao> result = classUnderTest.findHearing(dao.getCourtId(),
+            dao.getCaseId(), dao.getHearingStartDate());
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
     void testFindScheduledHearing() {
         Mockito.when(mockRepositoryHelper.getXhbScheduledHearingRepository())
             .thenReturn(Mockito.mock(XhbScheduledHearingRepository.class));
@@ -149,7 +176,7 @@ class FinderHelperTest {
 
         XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
         Optional<XhbCrLiveDisplayDao> result =
-            classUnderTest.findCrLiveDisplay(dao.getCourtRoomId(), dao.getScheduledHearingId());
+            classUnderTest.findCrLiveDisplay(dao.getCourtRoomId());
         assertNotNull(result, NOTNULL);
     }
 }

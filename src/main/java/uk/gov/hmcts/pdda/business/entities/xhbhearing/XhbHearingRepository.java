@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +16,10 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI"})
-public class XhbHearingRepository extends AbstractRepository<XhbHearingDao> {
+public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbHearingRepository.class);
 
     public XhbHearingRepository(EntityManager em) {
@@ -56,7 +59,8 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao> {
         query.setParameter("courtId", courtId);
         query.setParameter("caseId", caseId);
         query.setParameter("hearingStartDate", hearingStartDate);
-        XhbHearingDao dao = (XhbHearingDao) query.getSingleResult();
+        XhbHearingDao dao =
+            query.getResultList().isEmpty() ? null : (XhbHearingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

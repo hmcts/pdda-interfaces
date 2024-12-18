@@ -100,6 +100,7 @@ public final class DummyHearingUtil {
         String printReference = "printReference";
         Integer crestListId = -1;
         Integer courtId = -1;
+        String listCourtType = "CR";
         LocalDateTime lastUpdateDate = LocalDateTime.now();
         LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
         String lastUpdatedBy = TEST2;
@@ -114,6 +115,7 @@ public final class DummyHearingUtil {
         result.setEditionNo(editionNo);
         result.setPublishedTime(publishedTime);
         result.setPrintReference(printReference);
+        result.setListCourtType(listCourtType);
         result.setCrestListId(crestListId);
         result.setCourtId(courtId);
         result.setLastUpdateDate(lastUpdateDate);

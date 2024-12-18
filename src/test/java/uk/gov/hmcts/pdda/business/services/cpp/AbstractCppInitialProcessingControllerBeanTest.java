@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
+import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -191,6 +192,9 @@ class AbstractCppInitialProcessingControllerBeanTest {
     
     @Mock
     protected XhbCourtRepository mockXhbCourtRepository;
+    
+    @Mock
+    protected ListNodesHelper mockListNodesHelper;
 
     @TestSubject
     protected final CppInitialProcessingControllerBean classUnderTest =
@@ -284,6 +288,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.replay(mockXhbFormattingRepository);
         EasyMock.replay(mockXhbXmlDocumentRepository);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockListNodesHelper);
     }
 
     /**

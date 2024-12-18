@@ -29,6 +29,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -38,6 +40,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
 class CreationHelperTest {
 
+    private static final String EQUALS = "Result is not Equal";
     private static final String NOTNULL = "Result is Null";
 
     @Mock
@@ -93,8 +97,10 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbHearingListRepository.class));
 
         XhbHearingListDao dao = DummyHearingUtil.getXhbHearingListDao();
-        Optional<XhbHearingListDao> result = classUnderTest.createHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate());
+        Optional<XhbHearingListDao> result =
+            classUnderTest.createHearingList(dao.getCourtId(), dao.getCrestListId(),
+                dao.getListType(), dao.getStatus(), dao.getStartDate(), dao.getPublishedTime(),
+                dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
         assertNotNull(result, NOTNULL);
     }
 
@@ -105,19 +111,25 @@ class CreationHelperTest {
 
         XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
         Optional<XhbSittingDao> result = classUnderTest.createSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         assertNotNull(result, NOTNULL);
     }
 
     @Test
     void testCreateCase() {
-        Mockito.when(mockRepositoryHelper.getXhbCaseRepository())
-            .thenReturn(Mockito.mock(XhbCaseRepository.class));
-
         XhbCaseDao dao = DummyCaseUtil.getXhbCaseDao();
+        XhbCaseRepository mockXhbCaseRepository = Mockito.mock(XhbCaseRepository.class);
+        Mockito.when(mockRepositoryHelper.getXhbCaseRepository()).thenReturn(mockXhbCaseRepository);
+        Mockito.when(mockXhbCaseRepository.update(Mockito.isA(XhbCaseDao.class)))
+            .thenReturn(Optional.of(dao));
+
         Optional<XhbCaseDao> result =
             classUnderTest.createCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
         assertNotNull(result, NOTNULL);
+        String caseTitle = "caseTitle";
+        result = classUnderTest.updateCase(dao, caseTitle);
+        assertNotNull(result, NOTNULL);
+        assertEquals(caseTitle, result.get().getCaseTitle(), EQUALS);
     }
 
     @Test
@@ -140,6 +152,18 @@ class CreationHelperTest {
         Optional<XhbDefendantDao> result =
             classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
                 dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+        assertNotNull(result, NOTNULL);
+    }
+
+
+    @Test
+    void testCreateHearingType() {
+        Mockito.when(mockRepositoryHelper.getXhbRefHearingTypeRepository())
+            .thenReturn(Mockito.mock(XhbRefHearingTypeRepository.class));
+
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.createHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         assertNotNull(result, NOTNULL);
     }
 
@@ -184,6 +208,8 @@ class CreationHelperTest {
         XhbCrLiveDisplayDao dao = DummyDisplayUtil.getXhbCrLiveDisplayDao();
         Optional<XhbCrLiveDisplayDao> result = classUnderTest.createCrLiveDisplay(
             dao.getCourtRoomId(), dao.getScheduledHearingId(), dao.getTimeStatusSet());
+        assertNotNull(result, NOTNULL);
+        result = classUnderTest.updateCrLiveDisplay(dao);
         assertNotNull(result, NOTNULL);
     }
 }

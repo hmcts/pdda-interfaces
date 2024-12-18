@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
@@ -12,6 +13,9 @@ import java.io.Serializable;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_REF_HEARING_TYPE")
+@NamedQuery(name = "XHB_REF_HEARING_TYPE.findByHearingType",
+    query = "SELECT o from XHB_REF_HEARING_TYPE o WHERE o.courtId = :courtId AND o.hearingTypeCode = :hearingTypeCode "
+        + "AND o.category = :category")
 public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6788003970955114552L;

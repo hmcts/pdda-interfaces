@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 class CppInitialProcessingControllerBeanTest
     extends AbstractCppInitialProcessingControllerBeanTest {
 
@@ -101,6 +101,9 @@ class CppInitialProcessingControllerBeanTest
             
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
+            
+            mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+            EasyMock.expectLastCall().anyTimes();
 
             EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
                 .andReturn(validatedDocList);
@@ -117,6 +120,7 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
                 BATCH_USERNAME);
+            
         } catch (CppStagingInboundControllerException | ValidationException exception) {
             fail(exception);
         }
@@ -183,6 +187,10 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
+            
+            mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+            EasyMock.expectLastCall().anyTimes();
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
                 .andReturn(validatedDocList);
             EasyMock.expect(
@@ -416,7 +424,9 @@ class CppInitialProcessingControllerBeanTest
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
         mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
-
+        mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+        EasyMock.expectLastCall().anyTimes();
+        
         replayMocks();
 
         // Run

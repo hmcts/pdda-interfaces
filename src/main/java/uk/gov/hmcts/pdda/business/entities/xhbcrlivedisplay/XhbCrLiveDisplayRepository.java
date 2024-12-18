@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,7 +16,10 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisplayDao> {
+public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisplayDao>
+    implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCrLiveDisplayRepository.class);
 
@@ -45,19 +49,17 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
     }
 
     /**
-     * findByHearing.
+     * findByCourtRoom.
      * 
      * @param courtRoomId Integer
-     * @param scheduledHearingId Integer
      * @return XhbCrLiveDisplayDao
      */
-    public Optional<XhbCrLiveDisplayDao> findByHearing(final Integer courtRoomId,
-        final Integer scheduledHearingId) {
+    public Optional<XhbCrLiveDisplayDao> findByCourtRoom(final Integer courtRoomId) {
         LOG.debug("findByHearing()");
-        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByHearing");
+        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByCourtRoom");
         query.setParameter("courtRoomId", courtRoomId);
-        query.setParameter("scheduledHearingId", scheduledHearingId);
-        XhbCrLiveDisplayDao dao = (XhbCrLiveDisplayDao) query.getSingleResult();
+        XhbCrLiveDisplayDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCrLiveDisplayDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

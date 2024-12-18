@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +16,10 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
+public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbSittingRepository.class);
 
     public XhbSittingRepository(EntityManager em) {
@@ -68,11 +71,13 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao> {
     public Optional<XhbSittingDao> findByCourtRoomAndSittingTime(Integer courtSiteId,
         Integer courtRoomId, LocalDateTime sittingTime) {
         LOG.debug("In XhbSittingRepository.findByListId");
-        Query query = getEntityManager().createNamedQuery("XHB_SITTING.findByListId");
+        Query query =
+            getEntityManager().createNamedQuery("XHB_SITTING.findByCourtRoomAndSittingTime");
         query.setParameter("courtSiteId", courtSiteId);
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("sittingTime", sittingTime);
-        XhbSittingDao dao = (XhbSittingDao) query.getSingleResult();
+        XhbSittingDao dao =
+            query.getResultList().isEmpty() ? null : (XhbSittingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

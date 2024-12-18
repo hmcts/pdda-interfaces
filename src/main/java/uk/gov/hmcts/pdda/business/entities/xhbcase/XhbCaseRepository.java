@@ -7,16 +7,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> {
+public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbCaseRepository.class);
-    
+
     public XhbCaseRepository(EntityManager em) {
         super(em);
     }
@@ -25,9 +27,10 @@ public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> {
     public Class<XhbCaseDao> getDaoClass() {
         return XhbCaseDao.class;
     }
-    
+
     /**
      * findByNumberTypeAndCourt.
+     * 
      * @param courtId Integer
      * @param caseType String
      * @param caseNumber Integer
@@ -36,12 +39,12 @@ public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> {
     public Optional<XhbCaseDao> findByNumberTypeAndCourt(final Integer courtId,
         final String caseType, final Integer caseNumber) {
         LOG.debug("findByNumberTypeAndCourt({}{})", caseType, caseNumber);
-        Query query =
-            getEntityManager().createNamedQuery("XHB_CASE.findByNumberTypeAndCourt");
+        Query query = getEntityManager().createNamedQuery("XHB_CASE.findByNumberTypeAndCourt");
         query.setParameter("courtId", courtId);
         query.setParameter("caseType", caseType);
         query.setParameter("caseNumber", caseNumber);
-        XhbCaseDao dao = (XhbCaseDao) query.getSingleResult();
+        XhbCaseDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCaseDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

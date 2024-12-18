@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -37,45 +38,50 @@ import java.util.Optional;
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI"})
 public class DataHelper extends FinderHelper {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(DataHelper.class);
 
-    public Optional<XhbCourtSiteDao> validateCourtSite(final Integer courtId,
-        final String courtSiteName, final String courtSiteCode) {
-        LOG.debug("validateCourtSite({})", courtSiteName);
-        Optional<XhbCourtSiteDao> result = findCourtSite(courtId, courtSiteName);
+    public Optional<XhbCourtSiteDao> validateCourtSite(final String courtHouseName,
+        final String courtHouseCode) {
+        LOG.debug("validateCourtSite({})", courtHouseName);
+        Optional<XhbCourtSiteDao> result = findCourtSite(courtHouseName, courtHouseCode);
         if (result.isEmpty()) {
-            result = createCourtSite(courtId, courtSiteName, courtSiteCode);
+            LOG.error("No XhbCourtSite found for name:{},  code:{}", courtHouseName, courtHouseCode);
         }
         return result;
     }
 
     public Optional<XhbCourtRoomDao> validateCourtRoom(final Integer courtSiteId,
-        final String courtRoomName, final String description, final Integer crestCourtRoomNo) {
+        final Integer crestCourtRoomNo) {
         LOG.debug("validateCourtRoom({})", crestCourtRoomNo);
         Optional<XhbCourtRoomDao> result = findCourtRoom(courtSiteId, crestCourtRoomNo);
         if (result.isEmpty()) {
-            result = createCourtRoom(courtSiteId, courtRoomName, description, crestCourtRoomNo);
+            LOG.error("No XhbCourtRoom, found for courtSiteId:{},  crestCourtRoomNo:{}",
+                courtSiteId, crestCourtRoomNo);
         }
         return result;
     }
 
     public Optional<XhbHearingListDao> validateHearingList(final Integer courtId,
         final Integer crestListId, final String listType, final String status,
-        final LocalDateTime startDate) {
+        final LocalDateTime startDate, final LocalDateTime publishedTime, String printReference,
+        final Integer editionNo, final String listCourtType) {
         LOG.debug("validateHearingList({},{})", status, startDate);
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
-            result = createHearingList(courtId, crestListId, listType, status, startDate);
+            result = createHearingList(courtId, crestListId, listType, status, startDate,
+                publishedTime, printReference, editionNo, listCourtType);
         }
         return result;
     }
 
     public Optional<XhbSittingDao> validateSitting(final Integer courtSiteId,
-        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+        final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+        final Integer listId) {
         LOG.debug("validateSitting({})", sittingTime);
         Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
         if (result.isEmpty()) {
-            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime);
+            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime, listId);
         }
         return result;
     }
@@ -101,13 +107,24 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbDefendantDao> validateDefendant(final Integer courtId,
-        final String firstName, final String middleName, final String surname, final String gender,
+        final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {
         LOG.debug("validateDefendant()");
         Optional<XhbDefendantDao> result =
             findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         if (result.isEmpty()) {
             result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
+        }
+        return result;
+    }
+
+    public Optional<XhbRefHearingTypeDao> validateHearingType(final Integer courtId,
+        final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+        LOG.debug("validateHearingType()");
+        Optional<XhbRefHearingTypeDao> result =
+            findHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
+        if (result.isEmpty()) {
+            result = createHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
         }
         return result;
     }
@@ -147,9 +164,13 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbCrLiveDisplayDao> validateCrLiveDisplay(final Integer courtRoomId,
         final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
         LOG.debug("validateCrLiveDisplay()");
-        Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId, scheduledHearingId);
+        Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId);
         if (result.isEmpty()) {
             result = createCrLiveDisplay(courtRoomId, scheduledHearingId, timeStatusSet);
+        } else if (!scheduledHearingId.equals(result.get().getScheduledHearingId())) {
+            result.get().setScheduledHearingId(scheduledHearingId);
+            result.get().setTimeStatusSet(timeStatusSet);
+            result = updateCrLiveDisplay(result.get());
         }
         return result;
     }

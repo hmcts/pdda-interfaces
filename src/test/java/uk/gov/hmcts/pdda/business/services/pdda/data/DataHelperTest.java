@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -30,7 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI",
+    "PMD.CouplingBetweenObjects"})
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";
@@ -44,16 +46,14 @@ class DataHelperTest {
     @Test
     void testValidateCourtSite() {
         XhbCourtSiteDao dao = DummyCourtUtil.getXhbCourtSiteDao();
-        boolean result = testValidateCourtSite(dao, false);
-        assertTrue(result, TRUE);
-        result = testValidateCourtSite(dao, true);
+        boolean result = testValidateCourtSite(dao, true);
         assertTrue(result, TRUE);
     }
 
     private boolean testValidateCourtSite(XhbCourtSiteDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbCourtSiteDao> result = classUnderTest.validateCourtSite(dao.getCourtSiteId(),
-            dao.getCourtSiteName(), dao.getCourtSiteCode());
+        Optional<XhbCourtSiteDao> result =
+            classUnderTest.validateCourtSite(dao.getCourtSiteName(), dao.getCourtSiteCode());
         return result.isPresent();
     }
 
@@ -63,16 +63,33 @@ class DataHelperTest {
     @Test
     void testValidateCourtRoom() {
         XhbCourtRoomDao dao = DummyCourtUtil.getXhbCourtRoomDao();
-        boolean result = testValidateCourtRoom(dao, false);
-        assertTrue(result, TRUE);
-        result = testValidateCourtRoom(dao, true);
+        boolean result = testValidateCourtRoom(dao, true);
         assertTrue(result, TRUE);
     }
 
     private boolean testValidateCourtRoom(XhbCourtRoomDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbCourtRoomDao> result = classUnderTest.validateCourtRoom(dao.getCourtRoomId(),
-            dao.getCourtRoomName(), dao.getDescription(), dao.getCrestCourtRoomNo());
+        Optional<XhbCourtRoomDao> result =
+            classUnderTest.validateCourtRoom(dao.getCourtRoomId(), dao.getCrestCourtRoomNo());
+        return result.isPresent();
+    }
+
+    /**
+     * validateHearingType.
+     */
+    @Test
+    void testValidateHearingType() {
+        XhbRefHearingTypeDao dao = DummyHearingUtil.getXhbRefHearingTypeDao();
+        boolean result = testValidateHearingType(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateHearingType(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateHearingType(XhbRefHearingTypeDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbRefHearingTypeDao> result = classUnderTest.validateHearingType(dao.getCourtId(),
+            dao.getHearingTypeCode(), dao.getHearingTypeDesc(), dao.getCategory());
         return result.isPresent();
     }
 
@@ -90,8 +107,10 @@ class DataHelperTest {
 
     private boolean testValidateHearingList(XhbHearingListDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbHearingListDao> result = classUnderTest.validateHearingList(dao.getCourtId(),
-            dao.getCrestListId(), dao.getListType(), dao.getStatus(), dao.getStartDate());
+        Optional<XhbHearingListDao> result =
+            classUnderTest.validateHearingList(dao.getCourtId(), dao.getCrestListId(),
+                dao.getListType(), dao.getStatus(), dao.getStartDate(), dao.getPublishedTime(),
+                dao.getPrintReference(), dao.getEditionNo(), dao.getListCourtType());
         return result.isPresent();
     }
 
@@ -110,7 +129,7 @@ class DataHelperTest {
     private boolean testValidateSitting(XhbSittingDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
         Optional<XhbSittingDao> result = classUnderTest.validateSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         return result.isPresent();
     }
 
@@ -254,20 +273,21 @@ class DataHelperTest {
      */
     public class LocalDataHelper extends DataHelper {
 
+        private static final long serialVersionUID = 1L;
         public boolean isPresent;
 
         /**
          * validateCourtSite overrides.
          */
         @Override
-        public Optional<XhbCourtSiteDao> findCourtSite(final Integer courtId,
-            final String courtSiteName) {
+        public Optional<XhbCourtSiteDao> findCourtSite(final String courtHouseName,
+            final String courtHouseCode) {
             return this.isPresent ? Optional.of(new XhbCourtSiteDao()) : Optional.empty();
         }
 
         @Override
         public Optional<XhbCourtSiteDao> createCourtSite(final Integer courtId,
-            final String courtSiteName, final String courtSiteCode) {
+            final String courteName, final String courtHouseCode) {
             return Optional.of(new XhbCourtSiteDao());
         }
 
@@ -299,7 +319,8 @@ class DataHelperTest {
         @Override
         public Optional<XhbHearingListDao> createHearingList(final Integer courtId,
             final Integer crestListId, final String listType, final String status,
-            final LocalDateTime startDate) {
+            final LocalDateTime startDate, final LocalDateTime publishedTime,
+            final String printReference, final Integer editionNo, final String listCourtType) {
             return Optional.of(new XhbHearingListDao());
         }
 
@@ -314,7 +335,8 @@ class DataHelperTest {
 
         @Override
         public Optional<XhbSittingDao> createSitting(final Integer courtSiteId,
-            final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime) {
+            final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
+            final Integer listId) {
             return Optional.of(new XhbSittingDao());
         }
 
@@ -354,15 +376,30 @@ class DataHelperTest {
         @Override
         public Optional<XhbDefendantDao> findDefendant(final Integer courtId,
             final String firstName, final String middleName, final String surname,
-            final String gender, final LocalDateTime dateOfBirth) {
+            final Integer gender, final LocalDateTime dateOfBirth) {
             return this.isPresent ? Optional.of(new XhbDefendantDao()) : Optional.empty();
         }
 
         @Override
         public Optional<XhbDefendantDao> createDefendant(final Integer courtId,
             final String firstName, final String middleName, final String surname,
-            final String gender, final LocalDateTime dateOfBirth) {
+            final Integer gender, final LocalDateTime dateOfBirth) {
             return Optional.of(new XhbDefendantDao());
+        }
+
+        /**
+         * validateHearingType overrides.
+         */
+        @Override
+        public Optional<XhbRefHearingTypeDao> findHearingType(final Integer courtId,
+            final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+            return this.isPresent ? Optional.of(new XhbRefHearingTypeDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbRefHearingTypeDao> createHearingType(final Integer courtId,
+            final String hearingTypeCode, final String hearingTypeDesc, final String category) {
+            return Optional.of(new XhbRefHearingTypeDao());
         }
 
         /**
@@ -415,14 +452,18 @@ class DataHelperTest {
          * validateCrLiveDisplay overrides.
          */
         @Override
-        public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId,
-            final Integer scheduledHearingId) {
+        public Optional<XhbCrLiveDisplayDao> findCrLiveDisplay(final Integer courtRoomId) {
             return this.isPresent ? Optional.of(new XhbCrLiveDisplayDao()) : Optional.empty();
         }
 
         @Override
         public Optional<XhbCrLiveDisplayDao> createCrLiveDisplay(final Integer courtRoomId,
             final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
+            return Optional.of(new XhbCrLiveDisplayDao());
+        }
+        
+        @Override
+        public Optional<XhbCrLiveDisplayDao> updateCrLiveDisplay(final XhbCrLiveDisplayDao dao) {
             return Optional.of(new XhbCrLiveDisplayDao());
         }
     }

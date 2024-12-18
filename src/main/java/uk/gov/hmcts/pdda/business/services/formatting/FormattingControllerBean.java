@@ -31,7 +31,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 public class FormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     @SuppressWarnings("unused")
@@ -39,7 +39,6 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     private static final Logger LOG = LoggerFactory.getLogger(FormattingControllerBean.class);
 
-    private static final String ENTERED = " : entered";
     private static final String METHOD_SUFFIX = ") - ";
 
     private FormattingServices formattingServices;
@@ -65,8 +64,9 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     @Override
     public void doTask() {
         final String methodName = "doTask() - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
         processFormattingDocument();
+        LOG.debug("{} Exiting", methodName);
     }
 
     /**
@@ -84,7 +84,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
             + formattingValue.getMajorVersion() + "," + formattingValue.getLocale().getLanguage()
             + "," + formattingValue.getLocale().getCountry() + "," + xml + ","
             + formattingValue.getCourtId() + METHOD_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
 
@@ -114,7 +114,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
      */
     public void processFormattingDocument() {
         final String methodName = "processFormattingDocument() - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
         XhbFormattingDao formattingDocument = getFormattingServices().getNextFormattingDocument();
 
         if (formattingDocument != null) {
@@ -147,7 +147,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     public void processFormattingDocument(final XhbFormattingDao formattingDocument) {
         final String methodName =
             "processFormattingDocument(" + formattingDocument.getFormattingId() + METHOD_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
 
         // Get the clob data
         Optional<XhbClobDao> clobDao =
@@ -181,7 +181,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     public void updateFormattingDocumentStatus(final Integer formattingId, final boolean success) {
         final String methodName =
             "updateCppFormatting(" + formattingId + "," + success + METHOD_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
 
         // validation of input parameters is performed in the called method...
         getFormattingServices().updateFormattingStatus(formattingId, success);
@@ -199,7 +199,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     public void updateCppFormatting(final Integer cppFormattingId, final String errorMessage) {
         final String methodName =
             "updateCppFormatting(" + cppFormattingId + "," + errorMessage + ") - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug("{} : entered", methodName);
 
         // validation of input parameters is performed in the called method...
         getFormattingServices().updateCppFormatting(cppFormattingId, "MF", errorMessage);

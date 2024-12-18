@@ -16,8 +16,10 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_DEFENDANT")
 @NamedQuery(name = "XHB_DEFENDANT.findByDefendantName",
     query = "SELECT o from XHB_DEFENDANT o WHERE o.courtId = :courtId "
-        + "AND o.firstName = :firstName AND o.middleName = :middleName AND o.surname = :surname "
-        + "AND o.gender = :gender AND o.dateOfBirth = :dateOfBirth AND o.courtId = :courtId")
+        + "AND o.firstName = :firstName AND o.surname = :surname "
+        + "AND (:middleNameIsNull = 'Y' OR o.middleName = :middleName) "
+        + "AND (:genderIsNull ='Y' OR o.gender = :gender) "
+        + "AND (:dateOfBirthIsNull = 'Y' OR o.dateOfBirth = :dateOfBirth) ")
 public class XhbDefendantDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6788003970955114552L;
@@ -42,7 +44,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
     private Integer courtId;
     
     @Column(name = "GENDER")
-    private String gender;
+    private Integer gender;
     
     @Column(name = "DATE_OF_BIRTH")
     private LocalDateTime dateOfBirth;
@@ -120,11 +122,11 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         this.courtId = courtId;
     }
 
-    public String getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

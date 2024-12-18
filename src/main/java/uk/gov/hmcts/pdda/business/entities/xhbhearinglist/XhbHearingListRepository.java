@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +15,10 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbHearingListRepository extends AbstractRepository<XhbHearingListDao> {
+public class XhbHearingListRepository extends AbstractRepository<XhbHearingListDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbHearingListRepository.class);
 
     public XhbHearingListRepository(EntityManager em) {
@@ -49,11 +52,13 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
     public Optional<XhbHearingListDao> findByCourtIdStatusAndDate(Integer courtId, String status,
         LocalDateTime startDate) {
         LOG.debug("In XhbHearingRepository.findByCourtIdStatusAndDate");
-        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
+        Query query =
+            getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
         query.setParameter("courtId", courtId);
         query.setParameter("status", status);
         query.setParameter("startDate", startDate);
-        XhbHearingListDao dao = (XhbHearingListDao) query.getSingleResult();
+        XhbHearingListDao dao =
+            query.getResultList().isEmpty() ? null : (XhbHearingListDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

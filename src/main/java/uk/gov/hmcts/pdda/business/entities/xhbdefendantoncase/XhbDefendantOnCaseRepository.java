@@ -7,14 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbDefendantOnCaseRepository extends AbstractRepository<XhbDefendantOnCaseDao> {
+public class XhbDefendantOnCaseRepository extends AbstractRepository<XhbDefendantOnCaseDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbDefendantOnCaseRepository.class);
 
     public XhbDefendantOnCaseRepository(EntityManager em) {
@@ -40,7 +43,8 @@ public class XhbDefendantOnCaseRepository extends AbstractRepository<XhbDefendan
             getEntityManager().createNamedQuery("XHB_DEFENDANT_ON_CASE.findByDefendantAndCase");
         query.setParameter("caseId", caseId);
         query.setParameter("defendantId", defendantId);
-        XhbDefendantOnCaseDao dao = (XhbDefendantOnCaseDao) query.getSingleResult();
+        XhbDefendantOnCaseDao dao = query.getResultList().isEmpty() ? null
+            : (XhbDefendantOnCaseDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }
