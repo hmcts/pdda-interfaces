@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_CPP_FORMATTING")
 @NamedQuery(name = "XHB_CPP_FORMATTING.findByCourtAndDocType",
     query = "SELECT o from XHB_CPP_FORMATTING o WHERE o.courtId = :courtId AND o.documentType "
-        + "= :documentType AND o.creationDate = :creationDate AND (o.obsInd IS NULL OR o.obsInd = 'N') "
+        + "= :documentType AND o.creationDate >= :creationDate AND (o.obsInd IS NULL OR o.obsInd = 'N') "
         + "AND (o.formatStatus IS NULL OR o.formatStatus <> 'MF') ORDER BY o.creationDate DESC")
 @NamedQuery(name = "XHB_CPP_FORMATTING.findLatestByCourtDateInDoc",
     query = "SELECT o from XHB_CPP_FORMATTING o WHERE o.cppFormattingId = (SELECT MAX(o2.cppFormattingId) "
         + "FROM XHB_CPP_FORMATTING AS o2 WHERE o2.courtId = :courtId AND o2.documentType = :documentType AND o2.dateIn "
-        + "= :dateIn AND (o.obsInd IS NULL OR o.obsInd = 'N'))")
+        + "= :dateIn AND (o2.obsInd IS NULL OR o2.obsInd = 'N'))")
 @NamedQuery(name = "XHB_CPP_FORMATTING.findAllNewByDocType",
-    query = "SELECT o from XHB_CPP_FORMATTING o WHERE o.documentType = :documentType AND o.formatStatus = 'ND' AND "
+    query = "SELECT o from XHB_CPP_FORMATTING o WHERE o.documentType >= :documentType AND o.formatStatus = 'ND' AND "
         + "o.creationDate >= :creationDate ORDER BY o.creationDate")
 public class XhbCppFormattingDao extends AbstractDao implements Serializable {
 
