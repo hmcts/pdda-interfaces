@@ -4,6 +4,7 @@ import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +85,8 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 localEntityManager.getTransaction().commit();
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
+                LOG.error("Stacktrace doing a database save; dao: {}: {}", dao,
+                    ExceptionUtils.getStackTrace(e));
                 if (localEntityManager != null && localEntityManager.getTransaction().isActive()) {
                     localEntityManager.getTransaction().rollback();
                 }
@@ -110,6 +113,8 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 return Optional.of(updatedDao);
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
+                LOG.error("Stacktrace doing a database update; dao: {}: {}", dao,
+                    ExceptionUtils.getStackTrace(e));
                 if (localEntityManager != null && localEntityManager.getTransaction().isActive()) {
                     localEntityManager.getTransaction().rollback();
                 }
@@ -133,6 +138,8 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 }
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
+                LOG.error("Stacktrace doing a database delete; xds: {}: {}", xds,
+                    ExceptionUtils.getStackTrace(e));
                 if (localEntityManager != null && localEntityManager.getTransaction().isActive()) {
                     localEntityManager.getTransaction().rollback();
                 }
