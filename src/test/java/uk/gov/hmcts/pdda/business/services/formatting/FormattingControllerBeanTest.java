@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
@@ -45,12 +46,16 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class FormattingControllerBeanTest {
 
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String XML_TAG = "<xml/>";
 
+    @ Mock
+    private EntityManager mockEntityManager;
+    
     @Mock
     private FormattingServices mockFormattingServices;
 
@@ -59,7 +64,7 @@ class FormattingControllerBeanTest {
 
     @TestSubject
     private final FormattingControllerBean classUnderTest =
-        new FormattingControllerBean(EasyMock.createMock(EntityManager.class));
+        new FormattingControllerBean(mockEntityManager);
 
     @BeforeAll
     public static void setUp() {
@@ -79,6 +84,7 @@ class FormattingControllerBeanTest {
         formattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         final FormattingValue formattingValue = getDummyFormattingValue(formattingDao);
         final boolean success = true;
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockFormattingServices.getNextFormattingDocument())
             .andReturn(formattingDao);
         EasyMock.expect(mockFormattingServices.getClob(EasyMock.isA(Long.class)))
@@ -91,6 +97,7 @@ class FormattingControllerBeanTest {
                 EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class)))
             .andReturn(formattingValue);
         EasyMock.replay(mockFormattingServices);
+        EasyMock.replay(mockEntityManager);
 
         // Run
         boolean result = false;
@@ -141,7 +148,9 @@ class FormattingControllerBeanTest {
             .expect(mockFormattingServices.getFormattingValue(EasyMock.isA(XhbFormattingDao.class),
                 EasyMock.isA(Reader.class), EasyMock.isA(OutputStream.class)))
             .andReturn(formattingValue);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.replay(mockFormattingServices);
+        EasyMock.replay(mockEntityManager);
 
         // Run
         boolean result = false;
@@ -218,6 +227,8 @@ class FormattingControllerBeanTest {
         List<XhbCppListDao> dummyList = new ArrayList<>();
         dummyList.add(xhbCppListDao);
 
+        expectGetEntityManager(mockXhbCppListRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(
             EasyMock.isA(Integer.class), EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
@@ -226,6 +237,7 @@ class FormattingControllerBeanTest {
 
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockFormattingServices);
+        EasyMock.replay(mockEntityManager);
 
         // Run
         FormattingValue formattingValue = new FormattingValue(distributionTypeIn, mimeTypeIn,
@@ -332,5 +344,10 @@ class FormattingControllerBeanTest {
 
     private Integer getRandomInt() {
         return Double.valueOf(Math.random()).intValue();
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
     }
 }

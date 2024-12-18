@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * CppStagingInboundControllerBeanValidateTest.
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class CppStagingInboundControllerBeanValidateTest {
 
     private static final String EMPTY_STRING = "";
@@ -94,6 +96,7 @@ class CppStagingInboundControllerBeanValidateTest {
             XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
             dao.setDocumentName(VALIDFILENAME);
 
+            EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             testingXhbConfigPropRepository();
 
             testingClobRepository(dao);
@@ -109,6 +112,7 @@ class CppStagingInboundControllerBeanValidateTest {
             EasyMock.replay(mockXhbClobRepository);
             EasyMock.replay(mockValidationService);
             EasyMock.replay(mockValidationResult);
+            EasyMock.replay(mockEntityManager);
             // Run
             final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
             // Checks
@@ -126,6 +130,7 @@ class CppStagingInboundControllerBeanValidateTest {
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName(VALIDFILENAME);
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         testingXhbConfigPropRepository();
 
         testingClobRepository(dao);
@@ -140,6 +145,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockValidationService);
         EasyMock.replay(mockValidationResult);
+        EasyMock.replay(mockEntityManager);
         // Run
         final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -156,9 +162,11 @@ class CppStagingInboundControllerBeanValidateTest {
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName("INVALIDNAME.txt");
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         testingXhbConfigPropRepository();
 
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -173,9 +181,11 @@ class CppStagingInboundControllerBeanValidateTest {
         dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("INVALID");
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         testingXhbConfigPropRepository();
 
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -192,10 +202,12 @@ class CppStagingInboundControllerBeanValidateTest {
         dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("PD");
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         testingXhbConfigPropRepository();
 
         testingClobRepository(dao);
 
+        expectGetEntityManager(mockXhbCourtRepository);
         EasyMock.expect(
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
@@ -208,6 +220,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockValidationService);
         EasyMock.replay(mockValidationResult);
+        EasyMock.replay(mockEntityManager);
         // Run
         final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -255,6 +268,7 @@ class CppStagingInboundControllerBeanValidateTest {
     private void testingXhbConfigPropRepository() {
         String documentType = "PD";
         List<XhbConfigPropDao> returnList = new ArrayList<>();
+        expectGetEntityManager(mockXhbConfigPropRepository);
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
@@ -264,7 +278,13 @@ class CppStagingInboundControllerBeanValidateTest {
     private void testingClobRepository(XhbCppStagingInboundDao dao) {
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
+        expectGetEntityManager(mockXhbClobRepository);
         EasyMock.expect(mockXhbClobRepository.findById(dao.getClobId()))
             .andReturn(Optional.of(clobObj));
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
     }
 }

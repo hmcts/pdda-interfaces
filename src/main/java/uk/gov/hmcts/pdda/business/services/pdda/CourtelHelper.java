@@ -42,7 +42,7 @@ import java.util.Optional;
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods"})
 public class CourtelHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourtelHelper.class);
@@ -60,6 +60,7 @@ public class CourtelHelper {
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
     private XhbConfigPropRepository xhbConfigPropRepository;
     private ConfigPropMaintainer configPropMaintainer;
+    private EntityManager entityManager;
 
     private final BlobHelper blobHelper;
     private CathHelper cathHelper;
@@ -210,8 +211,21 @@ public class CourtelHelper {
         return cathHelper;
     }
 
+    private void clearRepositories() {
+        this.xhbClobRepository = null;
+        this.xhbCourtRepository = null;
+        this.xhbCourtelListRepository = null;
+        this.xhbXmlDocumentRepository = null;
+        this.xhbConfigPropRepository = null;
+    }
+
     private EntityManager getEntityManager() {
-        return EntityManagerUtil.getEntityManager();
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
+            LOG.debug("getEntityManager() - Creating new entityManager");
+            entityManager = EntityManagerUtil.getEntityManager();
+        }
+        return entityManager;
     }
 
     private XhbCourtelListRepository getXhbCourtelListRepository() {

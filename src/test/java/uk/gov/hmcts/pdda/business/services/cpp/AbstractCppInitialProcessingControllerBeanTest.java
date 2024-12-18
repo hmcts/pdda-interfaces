@@ -281,6 +281,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
      * Replay the mocked objects.
      */
     protected void replayMocks() {
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockCppStagingInboundControllerBean);
         EasyMock.replay(mockCppListControllerBean);
         EasyMock.replay(mockXhbCppListRepository);

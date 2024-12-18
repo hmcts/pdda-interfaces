@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -60,7 +61,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.TooManyMethods"})
 class PdConfigurationControllerBeanGetTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -156,6 +158,8 @@ class PdConfigurationControllerBeanGetTest {
             dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(courtId, "TestCourt" + courtId));
         }
 
+        expectGetEntityManager(mockXhbCourtRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
 
         // Run method
@@ -192,6 +196,8 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
         Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        expectGetEntityManager(mockXhbCourtRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         // Run Method
         DisplayRotationSetData[] result = classUnderTest.getCourtConfiguration(COURT_ID);
@@ -253,6 +259,9 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         Mockito.when(mockXhbCourtRoomRepository.findByDisplayId(Mockito.isA(Integer.class)))
             .thenReturn(roomList);
+        expectGetEntityManager(mockXhbCourtRepository);
+        expectGetEntityManager(mockXhbDisplayRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         // Run Method
         DisplayRotationSetData[] result =
@@ -420,6 +429,8 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
+        expectGetEntityManager(mockXhbRotationSetDdRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         try {
             Mockito.when(
@@ -471,6 +482,8 @@ class PdConfigurationControllerBeanGetTest {
 
         Mockito.when(mockXhbCourtSiteRepository.findByCourtId(Mockito.isA(Integer.class)))
             .thenReturn(siteList);
+        expectGetEntityManager(mockXhbCourtRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
 
         // Run Method
@@ -480,5 +493,10 @@ class PdConfigurationControllerBeanGetTest {
         assertEquals(2, result.length, EQUALS);
         assertEquals(COURT_ID, result[0].getCourtSiteDao().getCourtId(), EQUALS);
         assertEquals(COURT_ID, result[1].getCourtSiteDao().getCourtId(), EQUALS);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        Mockito.when(mockRepository.getEntityManager()).thenReturn(mockEntityManager);
     }
 }
