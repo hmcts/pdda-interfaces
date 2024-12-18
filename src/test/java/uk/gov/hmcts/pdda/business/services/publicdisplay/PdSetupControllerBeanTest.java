@@ -57,6 +57,9 @@ class PdSetupControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
+    private EntityManager mockEntityManager;
+
+    @Mock
     private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
@@ -70,7 +73,7 @@ class PdSetupControllerBeanTest {
 
     @TestSubject
     private final PdSetupControllerBean classUnderTest =
-        new PdSetupControllerBean(EasyMock.createMock(EntityManager.class));
+        new PdSetupControllerBean(mockEntityManager);
 
     @BeforeAll
     public static void setUp() {
@@ -125,6 +128,11 @@ class PdSetupControllerBeanTest {
                     .andReturn(displaysList);
             }
         }
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager())
+            .andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockXhbDisplayLocationRepository.getEntityManager())
+        .andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
 
         replayMocks();
 
@@ -143,7 +151,10 @@ class PdSetupControllerBeanTest {
 
         Assertions.assertThrows(CourtNotFoundException.class, () -> {
             EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
+            EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager);
+            EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             EasyMock.replay(mockXhbCourtRepository);
+            EasyMock.replay(mockEntityManager);
             // Run
             classUnderTest.getDrillDownForCourt(courtId);
         });
@@ -157,6 +168,8 @@ class PdSetupControllerBeanTest {
         dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(3, "TestCourt3"));
         dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(5, "TestCourt5"));
         EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         replayMocks();
 
         // Run
@@ -175,6 +188,7 @@ class PdSetupControllerBeanTest {
         EasyMock.replay(mockXhbCourtSiteRepository);
         EasyMock.replay(mockXhbDisplayLocationRepository);
         EasyMock.replay(mockXhbDisplayRepository);
+        EasyMock.replay(mockEntityManager);
     }
 
     /**
