@@ -58,14 +58,16 @@ public class CourtelListControllerBean extends AbstractControllerBean implements
         List<XhbCourtelListDao> xhbCourtelList = getCourtelHelper().getCourtelList();
 
         if (!xhbCourtelList.isEmpty()) {
-            xhbCourtelList.forEach(xhbCourtelListDao -> getCourtelHelper().sendCourtelList(xhbCourtelListDao));
+            xhbCourtelList.forEach(
+                xhbCourtelListDao -> getCourtelHelper().sendCourtelList(xhbCourtelListDao));
         }
     }
 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository());
+                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository(),
+                getXhbCourtRepository());
         }
         return courtelHelper;
     }

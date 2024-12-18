@@ -1,11 +1,15 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
+import com.pdda.hb.jpa.RepositoryUtil;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
@@ -38,6 +42,7 @@ import java.util.Optional;
  * @author Luke Gittins
  * @version 1.0
  */
+@SuppressWarnings("PMD.TooManyMethods")
 public class CourtelHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourtelHelper.class);
@@ -49,10 +54,11 @@ public class CourtelHelper {
     protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
     private static final Integer SECONDS_IN_A_DAY = 86_400;
 
-    private final XhbClobRepository xhbClobRepository;
-    private final XhbCourtelListRepository xhbCourtelListRepository;
-    private final XhbXmlDocumentRepository xhbXmlDocumentRepository;
-    private final XhbConfigPropRepository xhbConfigPropRepository;
+    private XhbClobRepository xhbClobRepository;
+    private XhbCourtRepository xhbCourtRepository;
+    private XhbCourtelListRepository xhbCourtelListRepository;
+    private XhbXmlDocumentRepository xhbXmlDocumentRepository;
+    private XhbConfigPropRepository xhbConfigPropRepository;
     private ConfigPropMaintainer configPropMaintainer;
 
     private final BlobHelper blobHelper;
@@ -61,8 +67,9 @@ public class CourtelHelper {
     public CourtelHelper(XhbClobRepository xhbClobRepository,
         XhbCourtelListRepository xhbCourtelListRepository,
         XhbXmlDocumentRepository xhbXmlDocumentRepository, BlobHelper blobHelper,
-        XhbConfigPropRepository xhbConfigPropRepository) {
+        XhbConfigPropRepository xhbConfigPropRepository, XhbCourtRepository xhbCourtRepository) {
         this.xhbClobRepository = xhbClobRepository;
+        this.xhbCourtRepository = xhbCourtRepository;
         this.xhbCourtelListRepository = xhbCourtelListRepository;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.blobHelper = blobHelper;
@@ -75,7 +82,7 @@ public class CourtelHelper {
 
     public void writeToCourtel(final Long xmlDocumentClobId, final Long blobId) {
         // Get the clob data
-        Optional<XhbClobDao> clobDao = xhbClobRepository.findById(xmlDocumentClobId);
+        Optional<XhbClobDao> clobDao = getXhbClobRepository().findById(xmlDocumentClobId);
         if (clobDao.isPresent()) {
             LOG.debug("Fetched clob for xmlDocumentClobId {}", xmlDocumentClobId);
             // Get the xmlDocumentId
@@ -88,7 +95,7 @@ public class CourtelHelper {
                 xhbCourtelListDao.setSentToCourtel(NO);
                 xhbCourtelListDao.setNumSendAttempts(0);
                 // Write to Courtel
-                xhbCourtelListRepository.save(xhbCourtelListDao);
+                getXhbCourtelListRepository().save(xhbCourtelListDao);
             }
         }
     }
@@ -96,12 +103,12 @@ public class CourtelHelper {
     private Integer getXmlDocumentIdForClobId(final Long xmlDocumentClobId) {
         // Get the latest xmlDocumentId
         Optional<XhbXmlDocumentDao> xmlDocumentList =
-            xhbXmlDocumentRepository.findByXmlDocumentClobId(xmlDocumentClobId);
+            getXhbXmlDocumentRepository().findByXmlDocumentClobId(xmlDocumentClobId);
         if (xmlDocumentList.isPresent()) {
             Integer xmlDocumentId = xmlDocumentList.get().getXmlDocumentId();
             LOG.debug("Fetched XmlDocumentId {}", xmlDocumentId);
             Optional<XhbCourtelListDao> xhbCourtelListDao =
-                xhbCourtelListRepository.findByXmlDocumentId(xmlDocumentId);
+                getXhbCourtelListRepository().findByXmlDocumentId(xmlDocumentId);
             if (xhbCourtelListDao.isPresent()) {
                 LOG.debug("XhbCourtelList (id={}) already exists for XmlDocumentId {}",
                     xhbCourtelListDao.get().getCourtelListId(), xmlDocumentId);
@@ -113,7 +120,7 @@ public class CourtelHelper {
     }
 
     public List<XhbCourtelListDao> getCourtelList() {
-        return xhbCourtelListRepository.findCourtelList(
+        return getXhbCourtelListRepository().findCourtelList(
             getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
             getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT));
@@ -127,7 +134,7 @@ public class CourtelHelper {
                 LOG.error("{} = {}", value, propertyValue);
                 return maxRetry;
             } else {
-                LOG.error("{} is null", value); 
+                LOG.error("{} is null", value);
             }
         } catch (Exception ex) {
             LOG.error("{} contains non-numeric data", value);
@@ -154,47 +161,91 @@ public class CourtelHelper {
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
-            xhbXmlDocumentRepository.findById(xhbCourtelListDao.getXmlDocumentId());
+            getXhbXmlDocumentRepository().findById(xhbCourtelListDao.getXmlDocumentId());
         if (xhbXmlDocumentDao.isEmpty()) {
             LOG.debug("No XhbXmlDocumentDao found for id {}", xhbCourtelListDao.getXmlDocumentId());
             return null;
         }
-
+        Optional<XhbCourtDao> xhbCourtDao =
+            getXhbCourtRepository().findById(xhbXmlDocumentDao.get().getCourtId());
+        if (xhbCourtDao.isEmpty()) {
+            LOG.debug("No XhbCourtDao found for id {}", xhbXmlDocumentDao.get().getCourtId());
+            return null;
+        }
         // Check Document Type and create appropriate object
         if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.get().getDocumentType())) {
-            return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get());
+            return populateJsonObject(new ListJson(), xhbXmlDocumentDao.get(), xhbCourtDao.get());
         } else {
-            return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get());
+            return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao.get(),
+                xhbCourtDao.get());
         }
     }
 
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
-        XhbXmlDocumentDao xhbXmlDocumentDao) {
+        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao) {
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
             listJson.setListType(ListType.fromString(xhbXmlDocumentDao.getDocumentType()));
         }
         // Populate shared fields
-        jsonObject.setCourtId(xhbXmlDocumentDao.getCourtId());
+        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         jsonObject.setContentDate(LocalDateTime.now());
         jsonObject.setLanguage(Language.ENGLISH);
 
         return jsonObject;
     }
 
-    protected ConfigPropMaintainer getConfigPropMaintainer() {
+    private ConfigPropMaintainer getConfigPropMaintainer() {
         if (configPropMaintainer == null) {
-            configPropMaintainer = new ConfigPropMaintainer(xhbConfigPropRepository);
+            configPropMaintainer = new ConfigPropMaintainer(getXhbConfigPropRepository());
         }
         return configPropMaintainer;
     }
 
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
-            this.cathHelper =
-                new CathHelper(EntityManagerUtil.getEntityManager(), xhbXmlDocumentRepository,
-                    xhbClobRepository);
+            this.cathHelper = new CathHelper(getEntityManager(),
+                getXhbXmlDocumentRepository(), getXhbClobRepository());
         }
         return cathHelper;
+    }
+
+    private EntityManager getEntityManager() {
+        return EntityManagerUtil.getEntityManager();
+    }
+
+    private XhbCourtelListRepository getXhbCourtelListRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtelListRepository)) {
+            xhbCourtelListRepository = new XhbCourtelListRepository(getEntityManager());
+        }
+        return xhbCourtelListRepository;
+    }
+
+    private XhbCourtRepository getXhbCourtRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtRepository)) {
+            xhbCourtRepository = new XhbCourtRepository(getEntityManager());
+        }
+        return xhbCourtRepository;
+    }
+    
+    private XhbClobRepository getXhbClobRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbClobRepository)) {
+            xhbClobRepository = new XhbClobRepository(getEntityManager());
+        }
+        return xhbClobRepository;
+    }
+    
+    private XhbConfigPropRepository getXhbConfigPropRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbConfigPropRepository)) {
+            xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
+        }
+        return xhbConfigPropRepository;
+    }
+    
+    private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbXmlDocumentRepository)) {
+            xhbXmlDocumentRepository = new XhbXmlDocumentRepository(getEntityManager());
+        }
+        return xhbXmlDocumentRepository;
     }
 }

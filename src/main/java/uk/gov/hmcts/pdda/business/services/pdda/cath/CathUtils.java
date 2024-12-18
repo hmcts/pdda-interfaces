@@ -53,7 +53,7 @@ public final class CathUtils {
     private static final String DATETIME_FORMAT = "yyyy-MM-ddHH:mm";
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
-    private static final String PROVENANCE = "PDDA";
+    private static final String GOVERNANCE = "PDDA";
 
     private CathUtils() {
         // Private constructor
@@ -70,17 +70,19 @@ public final class CathUtils {
         // Get the bearer token
         String bearerToken = String.format(BEARER, courtelJson.getToken());
         // Return the HttpRequest for the post
-        return HttpRequest.newBuilder().uri(URI.create(url))
+        HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
             .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
-            .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
+            .header(PublicationConfiguration.GOVERNANCE_HEADER, GOVERNANCE)
             .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
             .header(PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth)
-            .header(PublicationConfiguration.COURT_ID, courtelJson.getCourtId().toString())
+            .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
             .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
             .header(PublicationConfiguration.CONTENT_DATE, now).header(AUTHENTICATION, bearerToken)
             .header(CONTENT_TYPE, CONTENT_TYPE_JSON)
             .POST(BodyPublishers.ofString(courtelJson.getJson())).build();
+        LOG.debug("getHttpPostRequest() - built POST");
+        return result;
     }
 
     public static boolean isApimEnabled() {

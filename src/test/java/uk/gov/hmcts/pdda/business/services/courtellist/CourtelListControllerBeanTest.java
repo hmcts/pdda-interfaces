@@ -9,9 +9,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,8 @@ class CourtelListControllerBeanTest {
 
     @Test
     void testDoTask() {
+        ReflectionTestUtils.setField(classUnderTest, "courtelHelper",
+            Mockito.mock(CourtelHelper.class));
         // Run method
         boolean result;
         try {
@@ -67,7 +71,7 @@ class CourtelListControllerBeanTest {
             xhbConfigPropDao.setPropertyValue("1");
             List<XhbConfigPropDao> configPropDaos = new ArrayList<>();
             configPropDaos.add(xhbConfigPropDao);
-            
+
             Mockito.when(mockXhbConfigPropRepository.findByPropertyName(Mockito.isA(String.class)))
                 .thenReturn(configPropDaos);
 
@@ -80,7 +84,7 @@ class CourtelListControllerBeanTest {
         // Check results
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testDoTaskFail() {
         // Run method
@@ -95,7 +99,7 @@ class CourtelListControllerBeanTest {
         // Check results
         assertFalse(result, FALSE);
     }
-    
+
     @Test
     void testDoTaskBadConfigProp() {
         // Run method
@@ -106,7 +110,7 @@ class CourtelListControllerBeanTest {
             xhbConfigPropDao.setPropertyValue("abcdefgh");
             List<XhbConfigPropDao> configPropDaos = new ArrayList<>();
             configPropDaos.add(xhbConfigPropDao);
-            
+
             Mockito.when(mockXhbConfigPropRepository.findByPropertyName(Mockito.isA(String.class)))
                 .thenReturn(configPropDaos);
 
