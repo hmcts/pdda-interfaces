@@ -196,14 +196,14 @@ public class CourtelHelper {
         return jsonObject;
     }
 
-    private ConfigPropMaintainer getConfigPropMaintainer() {
+    protected ConfigPropMaintainer getConfigPropMaintainer() {
         if (configPropMaintainer == null) {
             configPropMaintainer = new ConfigPropMaintainer(getXhbConfigPropRepository());
         }
         return configPropMaintainer;
     }
 
-    private CathHelper getCathHelper() {
+    protected CathHelper getCathHelper() {
         if (cathHelper == null) {
             this.cathHelper = new CathHelper(getEntityManager(),
                 getXhbXmlDocumentRepository(), getXhbClobRepository());
@@ -228,35 +228,35 @@ public class CourtelHelper {
         return entityManager;
     }
 
-    private XhbCourtelListRepository getXhbCourtelListRepository() {
+    protected XhbCourtelListRepository getXhbCourtelListRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbCourtelListRepository)) {
             xhbCourtelListRepository = new XhbCourtelListRepository(getEntityManager());
         }
         return xhbCourtelListRepository;
     }
 
-    private XhbCourtRepository getXhbCourtRepository() {
+    protected XhbCourtRepository getXhbCourtRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbCourtRepository)) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
         }
         return xhbCourtRepository;
     }
     
-    private XhbClobRepository getXhbClobRepository() {
+    protected XhbClobRepository getXhbClobRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbClobRepository)) {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
     }
     
-    private XhbConfigPropRepository getXhbConfigPropRepository() {
+    protected XhbConfigPropRepository getXhbConfigPropRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbConfigPropRepository)) {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         return xhbConfigPropRepository;
     }
     
-    private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
+    protected XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbXmlDocumentRepository)) {
             xhbXmlDocumentRepository = new XhbXmlDocumentRepository(getEntityManager());
         }
