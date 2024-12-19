@@ -53,9 +53,9 @@ public final class DummyCourtelUtil {
     
     public static ListJson getListJson() {
         ListJson result = new ListJson();
-        result.setListType(ListType.CROWN_DAILY_LIST);
+        result.setListType(ListType.CROWN_DAILY_PDDA_LIST);
         result.setLanguage(Language.ENGLISH);
-        result.setCourtId(1);
+        result.setCrestCourtId("999");
         result.setContentDate(LocalDateTime.now());
         result.setJson("");
         return result;

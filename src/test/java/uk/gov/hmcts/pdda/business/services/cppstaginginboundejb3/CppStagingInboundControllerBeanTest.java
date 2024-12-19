@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
@@ -50,6 +51,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -213,10 +215,13 @@ class CppStagingInboundControllerBeanTest {
         List<XhbConfigPropDao> returnList = new ArrayList<>();
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
+        expectGetEntityManager(mockXhbConfigPropRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock
             .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
             .andReturn(returnList);
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String result = classUnderTest.getSchemaName(documentType);
         // Checks
@@ -230,10 +235,12 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
         data.add(DummyCourtUtil.getXhbCourtDao(courtCode, "TestCourt1"));
-
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
@@ -246,14 +253,21 @@ class CppStagingInboundControllerBeanTest {
         // Setup
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
-
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
         assertEquals(0, returnedCourtId, EQUALS);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
     }
 }

@@ -5,7 +5,7 @@ package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
  */
 public enum ListType {
     SJP_PUBLIC_LIST, SJP_PRESS_LIST, 
-    CROWN_DAILY_LIST, CROWN_FIRM_LIST, CROWN_WARNED_LIST, 
+    CROWN_DAILY_PDDA_LIST, CROWN_FIRM_PDDA_LIST, CROWN_WARNED_PDDA_LIST, 
     MAGS_PUBLIC_LIST, MAGS_STANDARD_LIST, 
     CIVIL_DAILY_CAUSE_LIST, FAMILY_DAILY_CAUSE_LIST;
 
@@ -15,11 +15,11 @@ public enum ListType {
 
     public static ListType fromString(String value) {
         if (DAILY_LIST.equals(value)) {
-            return CROWN_DAILY_LIST;
+            return CROWN_DAILY_PDDA_LIST;
         } else if (FIRM_LIST.equals(value)) {
-            return CROWN_FIRM_LIST;
+            return CROWN_FIRM_PDDA_LIST;
         } else if (WARN_LIST.equals(value)) {
-            return CROWN_WARNED_LIST;
+            return CROWN_WARNED_PDDA_LIST;
         }
         return null;
     }

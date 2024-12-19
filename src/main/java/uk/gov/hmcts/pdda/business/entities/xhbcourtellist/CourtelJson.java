@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public abstract class CourtelJson {
 
     private String json;
-    private Integer courtId;
+    private String crestCourtId;
     private LocalDateTime contentDate;
     private String provenance;
     private Language language;
@@ -20,12 +20,12 @@ public abstract class CourtelJson {
         this.json = json;
     }
 
-    public Integer getCourtId() {
-        return courtId;
+    public String getCrestCourtId() {
+        return crestCourtId;
     }
     
-    public void setCourtId(Integer courtId) {
-        this.courtId = courtId;
+    public void setCrestCourtId(String crestCourtId) {
+        this.crestCourtId = crestCourtId;
     }
     
     public LocalDateTime getContentDate() {

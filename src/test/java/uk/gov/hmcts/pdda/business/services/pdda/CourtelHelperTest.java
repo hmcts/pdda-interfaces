@@ -1,17 +1,21 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import jakarta.persistence.EntityManager;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
@@ -43,6 +47,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(EasyMockExtension.class)
 class CourtelHelperTest {
 
@@ -50,18 +55,22 @@ class CourtelHelperTest {
     private static final String NOT_TRUE = "Result is not True";
     private static final String NOT_FALSE = "Result is not False";
 
+    private XhbCourtRepository mockXhbCourtRepository;
     private XhbClobRepository mockXhbClobRepository;
     private XhbCourtelListRepository mockXhbCourtelListRepository;
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
     private CathHelper mockCathHelper;
     private BlobHelper mockBlobHelper;
     private ConfigPropMaintainer mockConfigPropMaintainer;
+    private EntityManager mockEntityManager;
 
     private CourtelHelper classUnderTest;
 
     @BeforeEach
     public void setUp() {
+        mockEntityManager = EasyMock.mock(EntityManager.class);
         mockXhbClobRepository = EasyMock.mock(XhbClobRepository.class);
+        mockXhbCourtRepository = EasyMock.mock(XhbCourtRepository.class);
         mockXhbCourtelListRepository = EasyMock.mock(XhbCourtelListRepository.class);
         mockXhbXmlDocumentRepository = EasyMock.mock(XhbXmlDocumentRepository.class);
         mockBlobHelper = EasyMock.mock(BlobHelper.class);
@@ -71,7 +80,8 @@ class CourtelHelperTest {
             EasyMock.mock(XhbConfigPropRepository.class);
 
         classUnderTest = new CourtelHelper(mockXhbClobRepository, mockXhbCourtelListRepository,
-            mockXhbXmlDocumentRepository, mockBlobHelper, mockXhbConfigPropRepository);
+            mockXhbXmlDocumentRepository, mockBlobHelper, mockXhbConfigPropRepository,
+            mockXhbCourtRepository);
 
         ReflectionTestUtils.setField(classUnderTest, "cathHelper", mockCathHelper);
         ReflectionTestUtils.setField(classUnderTest, "configPropMaintainer",
@@ -129,10 +139,20 @@ class CourtelHelperTest {
             .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
             .andReturn(Optional.empty());
         mockXhbCourtelListRepository.save(EasyMock.isA(XhbCourtelListDao.class));
+
+        expectFindByCourtId();
+        expectGetEntityManager(mockXhbClobRepository);
+        expectGetEntityManager(mockXhbXmlDocumentRepository);
+        expectGetEntityManager(mockXhbCourtelListRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+
         // Replays
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockXhbXmlDocumentRepository);
         EasyMock.replay(mockXhbCourtelListRepository);
+        EasyMock.replay(mockXhbCourtRepository);
         boolean result;
         Long blobId = Long.valueOf(-99);
         // Run - 1st (No Clob)
@@ -190,12 +210,48 @@ class CourtelHelperTest {
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
         mockCathHelper.send(EasyMock.isA(CourtelJson.class));
         EasyMock.expectLastCall();
+
+        expectFindByCourtId();
+        expectGetEntityManager(mockXhbXmlDocumentRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbXmlDocumentRepository);
+        EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockCathHelper);
         // Run
         classUnderTest.sendCourtelList(xhbCourtelListDao);
         // Checks
         EasyMock.verify(mockCathHelper);
+    }
+
+    @Test
+    void testSendCourtelListEmptyCourtDao() {
+        // Setup
+        byte[] blobData = "Test Blob Data".getBytes();
+        XhbBlobDao xhbBlobDao = DummyFormattingUtil.getXhbBlobDao(blobData);
+        XhbCourtelListDao xhbCourtelListDao = DummyCourtelUtil.getXhbCourtelListDao();
+        xhbCourtelListDao.setBlob(xhbBlobDao);
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("DL");
+        EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbXmlDocumentDao));
+        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.empty());
+        expectGetEntityManager(mockXhbXmlDocumentRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+
+        EasyMock.replay(mockEntityManager);
+        EasyMock.replay(mockXhbXmlDocumentRepository);
+        EasyMock.replay(mockXhbCourtRepository);
+        // Run
+        classUnderTest.sendCourtelList(xhbCourtelListDao);
+        // Checks
+        EasyMock.verify(mockEntityManager);
+        EasyMock.verify(mockXhbXmlDocumentRepository);
+        EasyMock.verify(mockXhbCourtRepository);
     }
 
     @Test
@@ -206,6 +262,9 @@ class CourtelHelperTest {
         final Integer courtelLookupDelay = 2;
         final Integer courtelLisAmount = 20;
         // Expects
+        EasyMock.expect(mockXhbCourtelListRepository.getEntityManager())
+            .andReturn(mockEntityManager);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
             .andReturn(courtelMaxRetry.toString());
         EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
@@ -216,6 +275,7 @@ class CourtelHelperTest {
             .expect(mockXhbCourtelListRepository.findCourtelList(EasyMock.isA(Integer.class),
                 EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelListDaoList);
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockConfigPropMaintainer);
         EasyMock.replay(mockXhbCourtelListRepository);
         // Run
@@ -224,4 +284,16 @@ class CourtelHelperTest {
         assertNotNull(results, NULL);
 
     }
+
+    private void expectFindByCourtId() {
+        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(1, "Court1"))).anyTimes();
+    }
+
+
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+    }
+
 }

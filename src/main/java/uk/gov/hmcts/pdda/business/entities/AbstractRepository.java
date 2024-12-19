@@ -143,7 +143,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     /*
      * Main EntityManager for reads, etc.
      */
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return entityManager;
     }
 
