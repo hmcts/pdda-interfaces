@@ -227,6 +227,34 @@ class CourtelHelperTest {
     }
 
     @Test
+    void testSendCourtelListEmptyCourtDao() {
+        // Setup
+        byte[] blobData = "Test Blob Data".getBytes();
+        XhbBlobDao xhbBlobDao = DummyFormattingUtil.getXhbBlobDao(blobData);
+        XhbCourtelListDao xhbCourtelListDao = DummyCourtelUtil.getXhbCourtelListDao();
+        xhbCourtelListDao.setBlob(xhbBlobDao);
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("DL");
+        EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(xhbXmlDocumentDao));
+        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.empty());
+        expectGetEntityManager(mockXhbXmlDocumentRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+
+        EasyMock.replay(mockEntityManager);
+        EasyMock.replay(mockXhbXmlDocumentRepository);
+        EasyMock.replay(mockXhbCourtRepository);
+        // Run
+        classUnderTest.sendCourtelList(xhbCourtelListDao);
+        // Checks
+        EasyMock.verify(mockEntityManager);
+        EasyMock.verify(mockXhbXmlDocumentRepository);
+        EasyMock.verify(mockXhbCourtRepository);
+    }
+
+    @Test
     void testGetCourtelList() {
         // Setup
         List<XhbCourtelListDao> xhbCourtelListDaoList = new ArrayList<>();
