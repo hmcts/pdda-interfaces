@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.courtellist;
 
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,8 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 
@@ -59,6 +62,11 @@ class CourtelListControllerBeanTest {
     private final CourtelListControllerBean classUnderTest =
         new CourtelListControllerBean(mockEntityManager);
 
+    @AfterEach
+    public void teardown() {
+        Mockito.clearAllCaches();
+    }
+    
     @Test
     void testDoTask() {
         ReflectionTestUtils.setField(classUnderTest, "courtelHelper",
@@ -122,6 +130,26 @@ class CourtelListControllerBeanTest {
         }
         // Check results
         assertFalse(result, FALSE);
+    }
+
+    @Test
+    void testDoTaskPoppulatedList() {
+        // Setup
+        CourtelHelper mockCourtelHelper = Mockito.mock(CourtelHelper.class);
+        List<XhbCourtelListDao> xhbCourtelList = new ArrayList<>();
+        xhbCourtelList.add(DummyCourtelUtil.getXhbCourtelListDao());
+        // Run method
+        boolean result;
+        try {
+            ReflectionTestUtils.setField(classUnderTest, "courtelHelper", mockCourtelHelper);
+            Mockito.when(mockCourtelHelper.getCourtelList()).thenReturn(xhbCourtelList);
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertTrue(result, TRUE);
     }
 
     @Test
