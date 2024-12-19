@@ -212,7 +212,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
         return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 
-    private FormattingServices getFormattingServices() { 
+    protected FormattingServices getFormattingServices() { 
         if (formattingServices == null) {
             formattingServices =
                 new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
