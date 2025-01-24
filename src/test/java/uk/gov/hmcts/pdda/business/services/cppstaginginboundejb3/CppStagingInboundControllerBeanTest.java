@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -262,7 +263,20 @@ class CppStagingInboundControllerBeanTest {
     }
     
     @Test
+    void testGetXhbCppStagingInboundRepositoryNullRepo() {
+        assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
+            NOT_INSTANCE);
+    }
+    
+    @Test
     void testGetXhbCppStagingInboundRepository() {
+        // Create Mock
+        XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository =
+            EasyMock.createMock(XhbCppStagingInboundRepository.class);
+        // Set Mock
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppStagingInboundRepository",
+            mockXhbCppStagingInboundRepository);
+        // Run
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
     }
