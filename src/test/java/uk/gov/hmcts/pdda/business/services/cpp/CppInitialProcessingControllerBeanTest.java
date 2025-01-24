@@ -81,6 +81,10 @@ class CppInitialProcessingControllerBeanTest
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
                 BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
+                .andReturn(mockXhbCppStagingInboundRepository);
+            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+                .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(DAILY_LIST_XML);
@@ -167,6 +171,10 @@ class CppInitialProcessingControllerBeanTest
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
                 BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
+                .andReturn(mockXhbCppStagingInboundRepository);
+            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+                .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(INTERNET_WEBPAGE);
