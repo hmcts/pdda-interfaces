@@ -160,10 +160,13 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             if (docIsValid) {
                 LOG.debug("{} - The document has been successfully validated", methodName);
 
+                // Fetch the document with the new validation status and version from the DB
+                Optional<XhbCppStagingInboundDao> validatedXcsi = getCppStagingInboundControllerBean()
+                    .getXhbCppStagingInboundRepository().findById(updatedXcsi.getCppStagingInboundId());
+                
                 // Now attempt to process the validated document - i.e. examine XML and insert
                 // into downstream database tables
-
-                if (processValidatedDocument(updatedXcsi)) {
+                if (validatedXcsi.isPresent() && processValidatedDocument(validatedXcsi.get())) {
                     LOG.debug("{} - The validated document has been successfully processed",
                         methodName);
                 }
