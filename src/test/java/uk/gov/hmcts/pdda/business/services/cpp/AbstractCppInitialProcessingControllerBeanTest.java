@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepo
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
 import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
@@ -191,6 +192,9 @@ class AbstractCppInitialProcessingControllerBeanTest {
     protected XhbFormattingRepository mockXhbFormattingRepository;
     
     @Mock
+    protected XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock
     protected XhbCourtRepository mockXhbCourtRepository;
     
     @Mock
@@ -287,6 +291,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbFormattingRepository);
+        EasyMock.replay(mockXhbXmlDocumentRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockListNodesHelper);
     }
@@ -301,6 +306,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.verify(mockXhbCppListRepository);
         EasyMock.verify(mockXhbCppFormattingRepository);
         EasyMock.verify(mockXhbFormattingRepository);
+        EasyMock.verify(mockXhbXmlDocumentRepository);
     }
 
 }
