@@ -77,6 +77,7 @@ public class ListObjectHelper implements Serializable {
     protected static final String PUBLISHEDTIME = "cs:PublishedTime";
     protected static final String SITTINGTIME = "cs:SittingAt";
     protected static final String STARTDATE = "cs:StartDate";
+    protected static final String ENDDATE = "cs:EndDate";
     protected static final String SURNAME = "apd:CitizenNameSurname";
     protected static final String VERSION = "cs:Version";
     private static final String EMPTY_STRING = "";
@@ -336,11 +337,14 @@ public class ListObjectHelper implements Serializable {
             Integer caseId = xhbCaseDao.get().getCaseId();
             Integer refHearingTypeId = xhbRefHearingTypeDao.get().getRefHearingTypeId();
             String hearingStartDateString = nodesMap.get(STARTDATE);
+            String hearingEndDateString = nodesMap.get(ENDDATE);
             LocalDateTime hearingStartDate =
                 parseDateTime(hearingStartDateString, DateTimeFormatter.ISO_DATE);
+            LocalDateTime hearingEndDate =
+                parseDateTime(hearingEndDateString, DateTimeFormatter.ISO_DATE);
             if (hearingStartDate != null) {
                 return dataHelper.validateHearing(courtId, caseId, refHearingTypeId,
-                    hearingStartDate);
+                    hearingStartDate, hearingEndDate);
             }
         }
         return Optional.empty();
