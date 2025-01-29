@@ -205,8 +205,9 @@ class DataHelperTest {
 
     private boolean testValidateHearing(XhbHearingDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
-        Optional<XhbHearingDao> result = classUnderTest.validateHearing(dao.getCourtId(),
-            dao.getCaseId(), dao.getRefHearingTypeId(), dao.getHearingStartDate());
+        Optional<XhbHearingDao> result =
+            classUnderTest.validateHearing(dao.getCourtId(), dao.getCaseId(),
+                dao.getRefHearingTypeId(), dao.getHearingStartDate(), dao.getHearingEndDate());
         return result.isPresent();
     }
 
@@ -413,7 +414,7 @@ class DataHelperTest {
 
         @Override
         public Optional<XhbHearingDao> createHearing(final Integer courtId, final Integer caseId,
-            final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
+            final Integer refHearingTypeId, final LocalDateTime hearingStartDate, final LocalDateTime hearingEndDate) {
             return Optional.of(new XhbHearingDao());
         }
 

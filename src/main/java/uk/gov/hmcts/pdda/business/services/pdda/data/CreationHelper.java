@@ -193,13 +193,15 @@ public class CreationHelper implements Serializable {
      * Create XhbHearingDao.
      */
     public Optional<XhbHearingDao> createHearing(final Integer courtId, final Integer caseId,
-        final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
+        final Integer refHearingTypeId, final LocalDateTime hearingStartDate,
+        final LocalDateTime hearingEndDate) {
         LOG.info("createHearing()");
         XhbHearingDao dao = new XhbHearingDao();
         dao.setCourtId(courtId);
         dao.setCaseId(caseId);
         dao.setRefHearingTypeId(refHearingTypeId);
         dao.setHearingStartDate(hearingStartDate);
+        dao.setHearingEndDate(hearingEndDate);
         return getRepositoryHelper().getXhbHearingRepository().update(dao);
     }
 
