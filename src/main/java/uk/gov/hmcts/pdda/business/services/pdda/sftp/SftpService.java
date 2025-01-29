@@ -271,7 +271,7 @@ public class SftpService extends XhibitPddaHelper {
 
                 // Now delete this file
                 getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
-                    config.getActiveRemoteFolder(), filename);
+                    config.getActiveRemoteFolder(), filename, validation);
                 return;
             }
 
@@ -322,7 +322,7 @@ public class SftpService extends XhibitPddaHelper {
         } finally {
             // Try and remove the file from BAIS
             getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
-                config.getActiveRemoteFolder(), filename);
+                config.getActiveRemoteFolder(), filename, validation);
             LOG.debug("Removed file from bais after processing: {}", filename);
         }
     }
