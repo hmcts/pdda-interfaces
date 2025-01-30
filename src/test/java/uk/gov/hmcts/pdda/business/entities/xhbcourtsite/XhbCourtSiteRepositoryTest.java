@@ -27,11 +27,11 @@ import static org.mockito.ArgumentMatchers.isA;
 class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao> {
 
     public static final String NULL = "Result is Null";
-    
+
     private static final Integer BYCRESTCOURTID = 1;
     private static final Integer BYCOURTID = 2;
-    private static final Integer BYCOURTCODE = 3;
-    
+    private static final Integer BYCOURTSITENAME = 3;
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -65,13 +65,13 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
 
     @Test
     void testFindByCourtCodeAndListTypeAndListDateSuccess() {
-        boolean result = testFind(getDummyDao(), BYCOURTCODE);
+        boolean result = testFind(getDummyDao(), BYCOURTSITENAME);
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testFindByCourtCodeAndListTypeAndListDateFailure() {
-        boolean result = testFind(null, BYCOURTCODE);
+        boolean result = testFind(null, BYCOURTSITENAME);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -94,19 +94,23 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
         }
         List<XhbCourtSiteDao> resultList = null;
         if (BYCRESTCOURTID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
+                .thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             resultList =
                 getClassUnderTest().findByCrestCourtIdValue(getDummyDao().getCrestCourtId());
         } else if (BYCOURTID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
+                .thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             resultList = getClassUnderTest().findByCourtId(getDummyDao().getCourtId());
-        } else if (BYCOURTCODE.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        } else if (BYCOURTSITENAME.equals(whichTest)) {
+            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(list);
             Mockito.when(mockQuery.getSingleResult()).thenReturn(dao);
-            Optional<XhbCourtSiteDao> result = getClassUnderTest()
-                .findByCourtCodeAndListTypeAndListDate(getDummyDao().getCourtId(), getDummyDao().getCourtSiteName());
+            Optional<XhbCourtSiteDao> result = getClassUnderTest().findByCourtSiteName(
+                getDummyDao().getCourtSiteName(), getDummyDao().getCourtSiteCode());
             assertNotNull(result, "Result is Null");
             if (dao != null) {
                 assertSame(dao, result.get(), SAME);
@@ -126,7 +130,7 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
 
     @Test
     void testXhbCourtSiteDaoSecondConstructor() {
-        XhbCourtSiteDao result =  new XhbCourtSiteDao(getDummyDao());
+        XhbCourtSiteDao result = new XhbCourtSiteDao(getDummyDao());
         assertNotNull(result, NULL);
     }
 

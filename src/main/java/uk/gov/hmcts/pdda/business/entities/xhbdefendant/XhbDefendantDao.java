@@ -5,13 +5,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_DEFENDANT")
+@NamedQuery(name = "XHB_DEFENDANT.findByDefendantName",
+    query = "SELECT o from XHB_DEFENDANT o WHERE o.courtId = :courtId "
+        + "AND o.firstName = :firstName AND o.surname = :surname "
+        + "AND (:middleNameIsNull = 'Y' OR o.middleName = :middleName) "
+        + "AND (:genderIsNull ='Y' OR o.gender = :gender) "
+        + "AND (:dateOfBirthIsNull = 'Y' OR o.dateOfBirth = :dateOfBirth) ")
 public class XhbDefendantDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6788003970955114552L;
@@ -31,6 +39,15 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
 
     @Column(name = "SURNAME")
     private String surname;
+    
+    @Column(name = "COURT_ID")
+    private Integer courtId;
+    
+    @Column(name = "GENDER")
+    private Integer gender;
+    
+    @Column(name = "DATE_OF_BIRTH")
+    private LocalDateTime dateOfBirth;
 
     @Column(name = "PUBLIC_DISPLAY_HIDE")
     private String publicDisplayHide;
@@ -97,4 +114,27 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         this.publicDisplayHide = publicDisplayHide;
     }
 
+    public Integer getCourtId() {
+        return courtId;
+    }
+
+    public void setCourtId(Integer courtId) {
+        this.courtId = courtId;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public LocalDateTime getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

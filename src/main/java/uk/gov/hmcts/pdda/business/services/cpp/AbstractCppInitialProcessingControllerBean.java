@@ -19,6 +19,8 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         LoggerFactory.getLogger(CppInitialProcessingControllerBean.class);
 
     protected static final String ENTERED = " : entered";
+    protected static final String EXITED = " : exited";
+    protected static final String TWO_PARAMS = "{}{}";
     protected static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     protected static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
 
@@ -39,6 +41,8 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
     public abstract boolean processValidatedDocument(XhbCppStagingInboundDao thisDoc);
 
     protected void handleStuckDocuments(XhbCppStagingInboundDao doc) {
+        String methodName = "handleStuckDocuments()";
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             if (doc != null) {
                 // Now attempt to process the validated document - i.e. examine XML and
@@ -57,8 +61,10 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
         } catch (Exception e) {
             LOG.error(
                 "Error processing a document that has already been validated. Turn debugging on for more info."
-                    + " Error: " + e.getMessage());
+                    + " Error: {}",
+                e.getMessage());
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
 

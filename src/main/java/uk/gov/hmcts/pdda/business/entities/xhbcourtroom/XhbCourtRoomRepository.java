@@ -7,16 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 
 @Repository
-public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> {
+@SuppressWarnings("PMD.LawOfDemeter")
+public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
+    implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtRoomRepository.class);
     private static final String UNCHECKED = "unchecked";
-    
+
     public XhbCourtRoomRepository(EntityManager em) {
         super(em);
     }
@@ -28,6 +34,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findByCourtSiteId.
+     * 
      * @param courtSiteId Integer
      * @return List
      */
@@ -38,9 +45,10 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
         query.setParameter("courtSiteId", courtSiteId);
         return query.getResultList();
     }
-    
+
     /**
      * findByDisplayId.
+     * 
      * @param displayId Integer
      * @return List
      */
@@ -54,6 +62,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findVIPMultiSite.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -67,6 +76,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
 
     /**
      * findVIPMNoSite.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -78,4 +88,21 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao> 
         return query.getResultList();
     }
 
+    /**
+     * findByCourtRoomNo.
+     * 
+     * @param courtSiteId Integer
+     * @param crestCourtRoomNo Integer
+     * @return XhbCourtRoomDao
+     */
+    public Optional<XhbCourtRoomDao> findByCourtRoomNo(Integer courtSiteId,
+        Integer crestCourtRoomNo) {
+        LOG.debug("findByCourtRoomNo({})", crestCourtRoomNo);
+        Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByCourtRoomNo");
+        query.setParameter("courtSiteId", courtSiteId);
+        query.setParameter("crestCourtRoomNo", crestCourtRoomNo);
+        XhbCourtRoomDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCourtRoomDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
+    }
 }

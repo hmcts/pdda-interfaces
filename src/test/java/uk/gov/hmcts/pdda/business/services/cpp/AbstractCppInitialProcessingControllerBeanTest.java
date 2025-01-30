@@ -13,9 +13,11 @@ import uk.gov.hmcts.framework.exception.CsBusinessException;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
+import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -172,6 +174,9 @@ class AbstractCppInitialProcessingControllerBeanTest {
 
     @Mock
     protected CppStagingInboundControllerBean mockCppStagingInboundControllerBean;
+    
+    @Mock
+    protected XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository;
 
     @Mock
     protected CppListControllerBean mockCppListControllerBean;
@@ -187,6 +192,9 @@ class AbstractCppInitialProcessingControllerBeanTest {
     
     @Mock
     protected XhbCourtRepository mockXhbCourtRepository;
+    
+    @Mock
+    protected ListNodesHelper mockListNodesHelper;
 
     @TestSubject
     protected final CppInitialProcessingControllerBean classUnderTest =
@@ -274,11 +282,13 @@ class AbstractCppInitialProcessingControllerBeanTest {
      */
     protected void replayMocks() {
         EasyMock.replay(mockCppStagingInboundControllerBean);
+        EasyMock.replay(mockXhbCppStagingInboundRepository);
         EasyMock.replay(mockCppListControllerBean);
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockXhbCppFormattingRepository);
         EasyMock.replay(mockXhbFormattingRepository);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockListNodesHelper);
     }
 
     /**
@@ -286,6 +296,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
      */
     protected void verifyMocks() {
         EasyMock.verify(mockCppStagingInboundControllerBean);
+        EasyMock.verify(mockXhbCppStagingInboundRepository);
         EasyMock.verify(mockCppListControllerBean);
         EasyMock.verify(mockXhbCppListRepository);
         EasyMock.verify(mockXhbCppFormattingRepository);

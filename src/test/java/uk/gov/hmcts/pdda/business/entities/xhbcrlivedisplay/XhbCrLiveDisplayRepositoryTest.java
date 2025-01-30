@@ -1,17 +1,24 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay;
 
+
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -37,32 +44,32 @@ class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDis
         return classUnderTest;
     }
 
+    @Test
+    void testFindLiveDisplaysWhereStatusNotNull() {
+        List<XhbCrLiveDisplayDao> list = new ArrayList<>();
+        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+        List<XhbCrLiveDisplayDao> result = classUnderTest.findLiveDisplaysWhereStatusNotNull();
+        assertNotNull(result, NOTNULL);
+    }
+
+    @Test
+    void testFindByCourtRoom() {
+        List<XhbCrLiveDisplayDao> list = new ArrayList<>();
+        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+        XhbCrLiveDisplayDao dao = getDummyDao();
+        Optional<XhbCrLiveDisplayDao> result =
+            classUnderTest.findByCourtRoom(dao.getCourtRoomId());
+        assertNotNull(result, NOTNULL);
+    }
+
     @Override
     protected XhbCrLiveDisplayDao getDummyDao() {
-        Integer crLiveDisplayId = getDummyId();
-        Integer courtRoomId = -1;
-        Integer scheduledHearingId = -1;
-        LocalDateTime timeStatusSet = LocalDateTime.now();
-        String status = "status";
-        LocalDateTime lastUpdateDate = LocalDateTime.now();
-        LocalDateTime creationDate = LocalDateTime.now().minusMinutes(1);
-        String lastUpdatedBy = "Test2";
-        String createdBy = "Test1";
-        Integer version = 3;
-        XhbCrLiveDisplayDao result = new XhbCrLiveDisplayDao();
-        result.setCrLiveDisplayId(crLiveDisplayId);
-        result.setCourtRoomId(courtRoomId);
-        result.setScheduledHearingId(scheduledHearingId);
-        result.setTimeStatusSet(timeStatusSet);
-        result.setStatus(status);
-        result.setLastUpdateDate(lastUpdateDate);
-        result.setCreationDate(creationDate);
-        result.setLastUpdatedBy(lastUpdatedBy);
-        result.setCreatedBy(createdBy);
-        result.setVersion(version);
-        crLiveDisplayId = result.getPrimaryKey();
-        assertNotNull(crLiveDisplayId, NOTNULL);
-        result.setXhbScheduledHearing(result.getXhbScheduledHearing());
+        XhbCrLiveDisplayDao result = DummyDisplayUtil.getXhbCrLiveDisplayDao();
+        assertNotNull(result.getPrimaryKey(), NOTNULL);
         return new XhbCrLiveDisplayDao(result);
     }
 

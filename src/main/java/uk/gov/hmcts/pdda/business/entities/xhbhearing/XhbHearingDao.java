@@ -18,6 +18,9 @@ import java.util.Collection;
 @Entity(name = "XHB_HEARING")
 @NamedQuery(name = "XHB_HEARING.findByCaseId",
     query = "SELECT o from XHB_HEARING o WHERE o.caseId = :caseId")
+@NamedQuery(name = "XHB_HEARING.findByCaseIdAndStartDate",
+    query = "SELECT o from XHB_HEARING o WHERE o.caseId = :caseId "
+        + "AND o.courtId = :courtId AND o.hearingStartDate = :hearingStartDate")
 public class XhbHearingDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6844793990175522946L;

@@ -8,15 +8,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 
 
 @Repository
-public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisplayDao> {
+@SuppressWarnings("PMD.LawOfDemeter")
+public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisplayDao>
+    implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbCrLiveDisplayRepository.class);
-    
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -28,7 +34,7 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
     public Class<XhbCrLiveDisplayDao> getDaoClass() {
         return XhbCrLiveDisplayDao.class;
     }
-    
+
     /**
      * findLiveDisplaysWhereStatusNotNull.
      * 
@@ -37,7 +43,23 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
     @SuppressWarnings("unchecked")
     public List<XhbCrLiveDisplayDao> findLiveDisplaysWhereStatusNotNull() {
         LOG.debug("findLiveDisplaysWhereStatusNotNull()");
-        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findLiveDisplaysWhereStatusNotNull");
+        Query query = getEntityManager()
+            .createNamedQuery("XHB_CR_LIVE_DISPLAY.findLiveDisplaysWhereStatusNotNull");
         return query.getResultList();
+    }
+
+    /**
+     * findByCourtRoom.
+     * 
+     * @param courtRoomId Integer
+     * @return XhbCrLiveDisplayDao
+     */
+    public Optional<XhbCrLiveDisplayDao> findByCourtRoom(final Integer courtRoomId) {
+        LOG.debug("findByHearing()");
+        Query query = getEntityManager().createNamedQuery("XHB_CR_LIVE_DISPLAY.findByCourtRoom");
+        query.setParameter("courtRoomId", courtRoomId);
+        XhbCrLiveDisplayDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCrLiveDisplayDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

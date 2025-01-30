@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @Repository
 @SuppressWarnings("PMD.LawOfDemeter")
-public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> implements Serializable  {
+public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
+    implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbCourtSiteRepository.class);
@@ -31,6 +32,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
 
     /**
      * findByCrestCourtIdValue.
+     * 
      * @param crestCourtId String
      * @return List
      */
@@ -43,24 +45,26 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
     }
 
     /**
-     * findByCourtCodeAndListTypeAndListDate.
-     * @param courtId Integer
+     * findByCourtSiteName.
+     * 
      * @param courtSiteName String
+     * @param crestCourtId String
      * @return XhbCourtSiteDao
      */
-    public Optional<XhbCourtSiteDao> findByCourtCodeAndListTypeAndListDate(final Integer courtId,
-        final String courtSiteName) {
-        LOG.debug("findByCourtCodeAndListTypeAndListDate()");
+    public Optional<XhbCourtSiteDao> findByCourtSiteName(final String courtSiteName, final String crestCourtId) {
+        LOG.debug("findByCourtSiteName()");
         Query query =
-            getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtIdAndCourtSiteName");
-        query.setParameter("courtId", courtId);
+            getEntityManager().createNamedQuery("XHB_COURT_SITE.findByCourtSiteName");
         query.setParameter("courtSiteName", courtSiteName);
-        XhbCourtSiteDao dao = (XhbCourtSiteDao) query.getSingleResult();
+        query.setParameter("crestCourtId", crestCourtId);
+        XhbCourtSiteDao dao =
+            query.getResultList().isEmpty() ? null : (XhbCourtSiteDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
     /**
      * findByCourtId.
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -71,4 +75,6 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao> 
         query.setParameter("courtId", courtId);
         return query.getResultList();
     }
+
+
 }

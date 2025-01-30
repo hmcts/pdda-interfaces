@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 class CppInitialProcessingControllerBeanTest
     extends AbstractCppInitialProcessingControllerBeanTest {
 
@@ -81,6 +81,10 @@ class CppInitialProcessingControllerBeanTest
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
                 BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
+                .andReturn(mockXhbCppStagingInboundRepository);
+            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+                .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(DAILY_LIST_XML);
@@ -99,6 +103,9 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
+            
+            mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+            EasyMock.expectLastCall().anyTimes();
 
             EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
                 .andReturn(validatedDocList);
@@ -115,6 +122,7 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
                 BATCH_USERNAME);
+            
         } catch (CppStagingInboundControllerException | ValidationException exception) {
             fail(exception);
         }
@@ -163,6 +171,10 @@ class CppInitialProcessingControllerBeanTest
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(mockCppStagingInboundControllerBean.validateDocument(unprocessedXcsi,
                 BATCH_USERNAME)).andReturn(true);
+            EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
+                .andReturn(mockXhbCppStagingInboundRepository);
+            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+                .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
                 .andReturn(INTERNET_WEBPAGE);
@@ -181,6 +193,10 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
+            
+            mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+            EasyMock.expectLastCall().anyTimes();
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
                 .andReturn(validatedDocList);
             EasyMock.expect(
@@ -413,7 +429,9 @@ class CppInitialProcessingControllerBeanTest
             .andReturn(xhbCourtDaoList);
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
-
+        mockListNodesHelper.processClobData(EasyMock.isA(String.class));
+        EasyMock.expectLastCall().anyTimes();
+        
         replayMocks();
 
         // Run

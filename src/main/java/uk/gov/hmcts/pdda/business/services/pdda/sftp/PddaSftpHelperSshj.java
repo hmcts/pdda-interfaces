@@ -54,18 +54,28 @@ public class PddaSftpHelperSshj {
      * @param filename The filename
      * @throws IOException The IO Exception
      */
-    public void sftpDeleteFile(SFTPClient sftpClient, String remoteFolder, String filename)
-        throws IOException {
+    public void sftpDeleteFile(SFTPClient sftpClient, String remoteFolder, String filename, 
+        BaisValidation validation) throws IOException {
         String methodName = "sftpDeleteFile()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
+        LOG.debug("Attempting to delete file: {}", filename);
 
-        try {
-            sftpClient.rm(remoteFolder + filename);
-        } catch (IOException e) {
-            throw new IOException("Error deleting file", e);
+        // Get a list of files in the folder
+        List<String> listOfFilesInFolder =
+            listFilesInFolder(sftpClient, remoteFolder, validation);
+        
+        // Check if the current file is in the remote folder
+        if (listOfFilesInFolder.contains(filename)) {
+            try {
+                LOG.debug("Deleting file: {}", filename);
+                sftpClient.rm(remoteFolder + filename);
+            } catch (IOException e) {
+                throw new IOException("Error deleting file", e);
+            }
+        } else {
+            LOG.debug(TWO_PARAMS, filename, ", already deleted from the remote folder");
         }
     }
-
 
     /**
      * Fetch the files from the remote folder.

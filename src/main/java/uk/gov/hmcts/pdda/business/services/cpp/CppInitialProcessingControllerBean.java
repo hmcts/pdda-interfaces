@@ -27,6 +27,7 @@ import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInbou
 import uk.gov.hmcts.pdda.business.services.formatting.AbstractListXmlMergeUtils;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServices;
 import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
+import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
@@ -52,7 +53,7 @@ import javax.xml.parsers.ParserConfigurationException;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public class CppInitialProcessingControllerBean extends AbstractCppInitialProcessingControllerBean
     implements RemoteTask, Serializable {
 
@@ -60,10 +61,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final Logger LOG =
         LoggerFactory.getLogger(CppInitialProcessingControllerBean.class);
 
-    private static final String ENTERED = " : entered";
     private static final String BATCH_USERNAME = "CPPX_SCHEDULED_JOB";
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
     private static final String IWP = "IWP";
+    private ListNodesHelper listNodesHelper;
 
     public CppInitialProcessingControllerBean() {
         super();
@@ -79,8 +80,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     @Override
     public void doTask() {
+        LOG.debug("CppStaging -- doTask() - entered");
         handleNewDocuments();
         handleStuckDocuments();
+        LOG.debug("CppStaging -- doTask() - exiting");
     }
 
     /**
@@ -89,75 +92,101 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     public void handleNewDocuments() {
         String methodName = "handleNewDocuments()";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         List<XhbCppStagingInboundDao> docs = null;
         try {
-            // Step 1: Get any unprocessed documents
+            // Step 1: Get the next unprocessed document
             docs = getCppStagingInboundControllerBean().getLatestUnprocessedDocument();
+            if (docs != null) {
+                LOG.info("{} - Number of unprocessed documents found: {}", methodName, docs.size());
+            } else {
+                LOG.info("{} - No unprocessed documents found", methodName);
+            }
         } catch (CppStagingInboundControllerException e) {
             LOG.error("CPP Staging Inbound Controller Exception when obtaining the next "
                 + "document received from CPP that has not been processed at all");
-            LOG.error("Error:" + e.getMessage());
+            LOG.error("Error:{}", e.getMessage());
         }
 
         if (docs != null) {
+            LOG.debug(
+                "{} - # About to process unprocessed documents; there are ## {} ## documents to process",
+                methodName, docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
+                LOG.debug("{} - ## Processing document: {}", methodName, doc.getDocumentName());
                 processDocument(doc);
+                LOG.debug("{} - ## Finished processing document: {}", methodName,
+                    doc.getDocumentName());
             }
+            LOG.debug("{} - # Finished processing unprocessed documents", methodName);
         } else {
             // There are no documents currently to validate
-            LOG.debug("There are no unprocessed CPP documents at this time");
+            LOG.debug(
+                "{} - There are no unprocessed inbound documents in XHB_CPP_STAGING_INBOUND at this time",
+                methodName);
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
+    /**
+     * Process a document from XHB_CPP_STAGING_INBOUND that has been added but not yet validated or
+     * processed.
+     * 
+     * @param xcsi The cpp staging inbound record to process
+     */
     private void processDocument(XhbCppStagingInboundDao xcsi) {
         String methodName = "processDocument(" + xcsi + ")";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         try {
-            LOG.debug("Document to validate:: " + xcsi.toString());
+            LOG.debug("Document to validate:: {}", xcsi);
             XhbCppStagingInboundDao updatedXcsi = xcsi;
 
             // Set the status to IN_PROCESS so that no other incoming process can pick up
             // this document
-            Optional<XhbCppStagingInboundDao> savedXcsi =
-                getCppStagingInboundControllerBean().updateStatusInProcess(updatedXcsi, BATCH_USERNAME);
+            Optional<XhbCppStagingInboundDao> savedXcsi = getCppStagingInboundControllerBean()
+                .updateStatusInProcess(updatedXcsi, BATCH_USERNAME);
             if (savedXcsi.isPresent()) {
                 updatedXcsi = savedXcsi.get();
             }
 
             // Step 2: Validate a document which has the VALIDATION_STATUS='IP'
-            // Performing a valdation will also check that the DOCUMENT_NAME and
-            // DOCUMENT_TYPE values are ok
+            // Performing a validation will also check that the DOCUMENT_NAME and
+            // DOCUMENT_TYPE values are valid.
             boolean docIsValid =
                 getCppStagingInboundControllerBean().validateDocument(updatedXcsi, BATCH_USERNAME);
 
             if (docIsValid) {
-                LOG.debug("The document has been successfully validated");
+                LOG.debug("{} - The document has been successfully validated", methodName);
 
+                // Fetch the document with the new validation status and version from the DB
+                Optional<XhbCppStagingInboundDao> validatedXcsi = getCppStagingInboundControllerBean()
+                    .getXhbCppStagingInboundRepository().findById(updatedXcsi.getCppStagingInboundId());
+                
                 // Now attempt to process the validated document - i.e. examine XML and insert
                 // into downstream database tables
-
-                if (processValidatedDocument(updatedXcsi)) {
-                    LOG.debug("The validated document has been successfully processed");
+                if (validatedXcsi.isPresent() && processValidatedDocument(validatedXcsi.get())) {
+                    LOG.debug("{} - The validated document has been successfully processed",
+                        methodName);
                 }
             } else {
                 // Logging a validation failure as an error at this time
                 LOG.error("The document is not valid. Check XHB_CPP_STAGING_INBOUND.ERROR_MESSAGE "
-                    + "for more details. Document details are: " + updatedXcsi.toString());
+                    + "for more details. Document details are: {}", updatedXcsi.toString());
             }
 
-            // Not throwing any exceptions here as a failure processing one document should
+            // Not throwing any exceptions here, as a failure processing one document should
             // not impact others
         } catch (ValidationException e) {
             LOG.error(
-                "Validation error when validating document. Turn debugging on for more info. Error: "
-                    + e.getMessage());
+                "Validation error when validating document. Turn debugging on for more info. Error: {}",
+                e.getMessage());
         } catch (CppInitialProcessingControllerException e) {
-            LOG.error("Error validating document. Turn debugging on for more info. Error: "
-                + e.getMessage());
+            LOG.error("Error validating document. Turn debugging on for more info. Error: {}",
+                e.getMessage());
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -166,22 +195,30 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      */
     public void handleStuckDocuments() {
         String methodName = "handleStuckDocuments()";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         List<XhbCppStagingInboundDao> docs = null;
         try {
             docs = getCppStagingInboundControllerBean().getNextValidatedDocument();
         } catch (CppStagingInboundControllerException cppsie) {
             LOG.error("Error in EJB when processing a document that has already been validated. "
-                + "Turn debugging on for more info. Error: " + cppsie.getMessage());
+                + "Turn debugging on for more info. Error: {}", cppsie.getMessage());
         }
 
-        if (docs != null) { 
+        if (docs != null) {
+            LOG.debug(
+                "{} - # About to process unprocessed documents; there are ## {} ## documents to process",
+                methodName, docs.size());
             for (XhbCppStagingInboundDao doc : docs) {
+                LOG.debug("{} - ## Processing document: {}", methodName, doc.getDocumentName());
                 handleStuckDocuments(doc);
+                LOG.debug("{} - ## Finished processing document: {}", methodName,
+                    doc.getDocumentName());
             }
+            LOG.debug("{} - # Finished processing unprocessed documents", methodName);
         }
 
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -198,20 +235,19 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public boolean processValidatedDocument(XhbCppStagingInboundDao thisDoc) {
         String methodName = "processValidatedDocument() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
 
-        String clobXml = getCppStagingInboundControllerBean().getClobXmlAsString(thisDoc.getClobId());
+        String clobXml =
+            getCppStagingInboundControllerBean().getClobXmlAsString(thisDoc.getClobId());
         if (clobXml == null) {
-            LOG.error(
-                "There was a problem obtaining the clob data: clob_id={}", thisDoc.getClobId());
+            LOG.error("There was a problem obtaining the clob data: clob_id={}",
+                thisDoc.getClobId());
             return false;
         }
 
         // Have found the need to clear cached entites that have already been merged (updated)
-        // before a
-        // persist (insert)
-        // is performed to prevent duplicate updates.
+        // before a persist (insert) is performed to prevent duplicate updates.
         getEntityManager().clear();
 
         // Which type of document is this?
@@ -233,11 +269,14 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             LOG.error("Not a valid document type");
             getCppStagingInboundControllerBean().updateStatusProcessingFail(thisDoc,
                 "Problem reconciling document type after successful validation", BATCH_USERNAME);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
             return false;
         }
 
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
         return true;
     }
+
 
     /**
      * getListStartDate.
@@ -253,7 +292,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getListStartDate(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         Date listStartDate;
@@ -267,7 +306,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find list start date");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -288,7 +327,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getListEndDate(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         Date listEndDate;
@@ -302,7 +341,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find list end date");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -323,7 +362,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         throws ParserConfigurationException, IOException, SAXException {
         String methodName = "getCourtHouseCode(" + xml + "," + documentType + ")";
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         Document xhibitDocument;
         String courtCode;
@@ -337,7 +376,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         } catch (SAXException | IOException | ParserConfigurationException e) {
             LOG.error("SAX Error whilst parsing XML to find court code");
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
 
@@ -352,7 +391,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public void createUpdateNonListRecords(XhbCppStagingInboundDao thisDoc) {
         String methodName = "createUpdateNonListRecords() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         try {
             int courtId = getCppStagingInboundControllerBean()
@@ -361,24 +400,31 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             // If court id is not > 0 then the court could not be found and processing of
             // this record should stop
             if (courtId > 0) {
+                LOG.debug("{} - Court found, going to create or update", methodName);
                 String documentType = thisDoc.getDocumentType();
                 if (CppDocumentTypes.WP == CppDocumentTypes.fromString(documentType)) {
                     documentType = IWP;
                 }
-                XhbCppFormattingDao docToUpdate = getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
-                    documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
+                LOG.debug("{} - Doc type found = {}, going to create or update", methodName,
+                    documentType);
+                XhbCppFormattingDao docToUpdate =
+                    getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
+                        documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
 
+                LOG.debug("{} - Formatting doc to update query has been run, docToUpdate={}",
+                    methodName, docToUpdate);
                 if (docToUpdate != null) {
                     // Update - directly rather through maintainer as that
-                    // was
-                    // generating CMP/CMR
-                    // relationship errors
+                    // was generating CMP/CMR relationship errors
                     docToUpdate.setFormatStatus(CppFormattingHelper.FORMAT_STATUS_NOT_PROCESSED);
                     docToUpdate.setXmlDocumentClobId(thisDoc.getClobId());
                     docToUpdate.setDateIn(thisDoc.getTimeLoaded());
                     docToUpdate.setStagingTableId(thisDoc.getCppStagingInboundId());
                     docToUpdate.setLastUpdatedBy(BATCH_USERNAME);
+                    LOG.debug("{} - Updating doc in XHB_CPP_FORMATTING", methodName);
                     getXhbCppFormattingRepository().update(docToUpdate);
+                    LOG.debug("{} - Updated doc in XHB_CPP_FORMATTING", methodName);
+
 
                 } else { // Insert
                     // Create a record to insert
@@ -390,7 +436,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     docToCreate.setStagingTableId(thisDoc.getCppStagingInboundId());
                     docToCreate.setXmlDocumentClobId(thisDoc.getClobId());
                     docToCreate.setObsInd("N");
+                    LOG.debug("{} - Creating doc in XHB_CPP_FORMATTING", methodName);
                     getXhbCppFormattingRepository().save(docToCreate);
+                    LOG.debug("{} - Created doc in XHB_CPP_FORMATTING", methodName);
                 }
 
                 if (IWP.equalsIgnoreCase(documentType)) {
@@ -399,13 +447,14 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
                         thisDoc.getTimeLoaded(), documentType, "en");
                     getXhbFormattingRepository().save(xfbv);
-                    
+
                     // Create the "cy" version
                     xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
                         thisDoc.getTimeLoaded(), documentType, "cy");
                     getXhbFormattingRepository().save(xfbv);
                 }
 
+                LOG.debug("{} - Updating the status to success", methodName);
                 // If all successful then we need to set record in XHB_STAGING_INBOUND to
                 // indicate this
                 getCppStagingInboundControllerBean().updateStatusProcessingSuccess(thisDoc,
@@ -418,9 +467,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
         } catch (EJBException e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw e;
         }
+
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
 
     }
 
@@ -432,7 +483,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     public void createUpdateListRecords(XhbCppStagingInboundDao thisDoc, String clobXml) {
         String methodName = "createUpdateListRecords() - thisDoc: " + thisDoc.toString();
         if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + ENTERED);
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
         }
         try {
             String documentType = thisDoc.getDocumentType();
@@ -458,13 +509,13 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 docToCreate.setCourtCode(Integer.valueOf(thisDoc.getCourtCode()));
                 docToCreate.setStatus(CppListHelper.NOT_PROCESSED);
                 docToCreate.setTimeLoaded(thisDoc.getTimeLoaded());
-                docToCreate.setListType(listType); 
+                docToCreate.setListType(listType);
                 docToCreate.setListStartDate(listStartDate);
                 docToCreate.setListEndDate(listEndDate);
                 docToCreate.setListClobId(thisDoc.getClobId());
                 docToCreate.setObsInd("N");
                 getXhbCppListRepository().save(docToCreate);
-                
+
                 // Create the xhbFormatting record
                 List<XhbCourtDao> xhbCourtDaoList =
                     getXhbCourtRepository().findByCrestCourtIdValue(thisDoc.getCourtCode());
@@ -478,12 +529,24 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             // indicate this
             getCppStagingInboundControllerBean().updateStatusProcessingSuccess(thisDoc,
                 BATCH_USERNAME);
+            
+            // Process the xml nodes and store the data contained in it
+            getListNodesHelper().processClobData(clobXml);
 
         } catch (ParserConfigurationException | IOException | SAXException e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass());
-            LOG.error(methodName + ROLLBACK_MSG);
+            LOG.debug(TWO_PARAMS, methodName, ROLLBACK_MSG);
             throw new CppInitialProcessingControllerException("cpp.initial.processing.controller",
                 methodName + ": " + e.getMessage(), e);
         }
+        
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+    
+    private ListNodesHelper getListNodesHelper() {
+        if (listNodesHelper == null) {
+            listNodesHelper = new ListNodesHelper();
+        }
+        return listNodesHelper;
     }
 }

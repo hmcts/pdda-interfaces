@@ -7,13 +7,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 
 @Repository
-public class XhbScheduledHearingRepository extends AbstractRepository<XhbScheduledHearingDao> {
+@SuppressWarnings("PMD.LawOfDemeter")
+public class XhbScheduledHearingRepository extends AbstractRepository<XhbScheduledHearingDao>
+    implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbScheduledHearingRepository.class);
 
     private static final String LIST_ID = "listId";
@@ -62,5 +68,23 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
         Query query = getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingId");
         query.setParameter(SITTING_ID, sittingId);
         return query.getResultList();
+    }
+
+    /**
+     * findBySittingDate.
+     * 
+     * @return XhbScheduledHearingDao
+     */
+    public Optional<XhbScheduledHearingDao> findBySittingDate(final Integer sittingId,
+        final Integer hearingId, final LocalDateTime notBeforeTime) {
+        LOG.debug("In XhbHearingRepository.findBySitting");
+        Query query =
+            getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingDate");
+        query.setParameter(SITTING_ID, sittingId);
+        query.setParameter("hearingId", hearingId);
+        query.setParameter("notBeforeTime", notBeforeTime);
+        XhbScheduledHearingDao dao = query.getResultList().isEmpty() ? null
+            : (XhbScheduledHearingDao) query.getSingleResult();
+        return dao != null ? Optional.of(dao) : Optional.empty();
     }
 }

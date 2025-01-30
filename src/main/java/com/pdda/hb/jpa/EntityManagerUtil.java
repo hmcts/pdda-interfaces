@@ -26,6 +26,9 @@ public class EntityManagerUtil {
         EntityManager entityManager = ENTITYMANAGERFACTORY.createEntityManager();
         entityManager.setFlushMode(FlushModeType.AUTO);
         return entityManager;
-
+    }
+    
+    public static boolean isEntityManagerActive(EntityManager entityManager) {
+        return entityManager != null && entityManager.isOpen();
     }
 }

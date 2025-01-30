@@ -28,6 +28,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.TooManyMethods")
 public class CppStagingInboundControllerBean extends AbstractCppStagingInboundControllerBean
     implements CppStagingInboundController {
 
@@ -62,7 +63,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     @Override
     public List<XhbCppStagingInboundDao> getLatestUnprocessedDocument() {
         String methodName = "getLatestUnprocessedDocument() - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         try {
             return getCppStagingInboundHelper().findNextDocumentByStatus(
@@ -88,7 +89,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     @Override
     public List<XhbCppStagingInboundDao> getNextValidatedDocument() {
         String methodName = "getNextValidatedDocument() - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         try {
             // Find documents where VALIDATION_STATUS='VS' and PROCESSING_STATUS='NP'
@@ -113,7 +114,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     @Override
     public List<XhbCppStagingInboundDao> getNextDocumentToValidate() {
         String methodName = "getNextDocumentToValidate() - ";
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             String processingStatus = "";
             // Not doing any searches by processingStatus but passing
@@ -138,7 +139,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String userDisplayName) {
         String methodName = "updateStatusSuccess(" + cppStagingInboundDao + "," + userDisplayName
             + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             cppStagingInboundDao
                 .setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_NOTPROCESSED);
@@ -152,6 +153,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             LOG.error(e.getMessage());
             throw e;
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -166,7 +168,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String reasonForFail, String userDisplayName) {
         String methodName = "updateStatusFailed(" + cppStagingInboundDao + "," + userDisplayName
             + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             String reasonForFailToUse = reasonForFail;
             cppStagingInboundDao
@@ -185,6 +187,8 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             LOG.error(e.getMessage());
             throw e;
         }
+        
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -199,7 +203,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         XhbCppStagingInboundDao cppStagingInboundDao, String userDisplayName) {
         String methodName = "updateStatusInProcess(" + cppStagingInboundDao + "," + userDisplayName
             + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             cppStagingInboundDao
                 .setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_INPROCESS);
@@ -225,7 +229,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String reasonForFail, String userDisplayName) {
         String methodName = "updateStatusProcessingFail(" + cppStagingInboundDao + ","
             + userDisplayName + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         String reasonForFailToUse = reasonForFail;
         cppStagingInboundDao.setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_FAIL);
         if (reasonForFailToUse.length() > REASON_LIMIT) {
@@ -235,6 +239,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         // Column limited to 4000 chars so truncate to avoid unrecoverable error
         cppStagingInboundDao.setLastUpdatedBy(userDisplayName);
         getCppStagingInboundHelper().updateCppStagingInbound(cppStagingInboundDao, userDisplayName);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -249,7 +254,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String userDisplayName) {
         String methodName = "updateStatusProcessingSuccess(" + cppStagingInboundDao + ","
             + userDisplayName + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         try {
             cppStagingInboundDao
                 .setProcessingStatus(CppStagingInboundHelper.PROCESSING_STATUS_SENT);
@@ -261,6 +266,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             LOG.error(e.getMessage());
             throw e;
         }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
 
     /**
@@ -279,7 +285,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String userDisplayName) throws ValidationException {
         String methodName =
             "validateDocument(" + cppStagingInboundDao + "," + userDisplayName + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
         // Get schema to validate against
         String schemaName = getSchemaName(cppStagingInboundDao.getDocumentType());
         if (EMPTY_STRING.equals(schemaName)) {
@@ -290,7 +296,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         try {
             if (DocumentValidationUtils
                 .isValidDocumentName(cppStagingInboundDao.getDocumentName())) {
-                LOG.debug("Document Name is valid");
+                LOG.debug("{} - Document Name is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Document Name is invalid",
                     userDisplayName);
@@ -298,7 +304,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             }
             if (DocumentValidationUtils
                 .isValidDocumentType(cppStagingInboundDao.getDocumentType())) {
-                LOG.debug("Document Type is valid");
+                LOG.debug("{} - Document Type is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Document Type is invalid",
                     userDisplayName);
@@ -312,7 +318,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             ValidationResult validDoc =
                 getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
             if (validDoc.isValid()) {
-                LOG.debug("Document XML is valid");
+                LOG.debug("{} - Document XML is valid", methodName);
             } else {
                 updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
                     + schemaName + "; error::" + validDoc.toString(), userDisplayName);
@@ -336,7 +342,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             } else {
                 updateStatusFailed(cppStagingInboundDao,
                     "Validation failed: error:: CPP court flag not set ", userDisplayName);
-                // if its iwp and has zero courtsites the fail validation
+                // if its iwp and has zero court sites then fail validation
                 return true;
             }
 
@@ -357,13 +363,13 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     @Override
     public String getClobXmlAsString(Long clobId) {
         String methodName = "getClobXmlAsString(" + clobId.longValue() + METHOD_NAME_SUFFIX;
-        LOG.debug(methodName + ENTERED);
+        LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
         Optional<XhbClobDao> clobObj = getXhbClobRepository().findById(clobId);
         if (clobObj.isPresent()) {
             return clobObj.get().getClobData();
         } else {
-            LOG.debug("There is no CLOB object returned for clobId=" + clobId);
+            LOG.debug("There is no CLOB object returned for clobId={}", clobId);
             return null;
         }
     }
