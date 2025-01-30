@@ -67,6 +67,7 @@ public class PddaSftpHelperSshj {
         // Check if the current file is in the remote folder
         if (listOfFilesInFolder.contains(filename)) {
             try {
+                LOG.debug("Deleting file: {}", filename);
                 sftpClient.rm(remoteFolder + filename);
             } catch (IOException e) {
                 throw new IOException("Error deleting file", e);
