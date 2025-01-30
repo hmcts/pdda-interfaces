@@ -237,7 +237,7 @@ dependencies {
     }
 	testImplementation group: 'com.github.stefanbirkner', name: 'fake-sftp-server-rule', version: 'fake-sftp-server-rule-2.0.0'
 	implementation group: 'de.ppi', name: 'fake-sftp-server-extension', version: '1.0.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testImplementation 'org.easymock:easymock:5.5.0'
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
