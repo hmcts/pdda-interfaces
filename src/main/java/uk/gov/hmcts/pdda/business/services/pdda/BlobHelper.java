@@ -28,23 +28,23 @@ import java.util.Optional;
 public class BlobHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlobHelper.class);
-
+    
     private final XhbBlobRepository xhbBlobRepository;
-
+    
     public BlobHelper(XhbBlobRepository xhbBlobRepository) {
         this.xhbBlobRepository = xhbBlobRepository;
     }
-
+    
     public Long createBlob(byte[] blobData) {
         LOG.debug("createBlob({})", blobData);
         XhbBlobDao dao = FormattingServiceUtils.createXhbBlobDao(blobData);
         Optional<XhbBlobDao> savedDao = xhbBlobRepository.update(dao);
         return savedDao.isPresent() ? savedDao.get().getBlobId() : null;
     }
-
-    public byte[] getBlobData(Long blobId) {
+    
+    public XhbBlobDao getBlob(Long blobId) {
         Optional<XhbBlobDao> savedDao = xhbBlobRepository.findById(blobId);
-        return savedDao.isPresent() ? savedDao.get().getBlobData() : null;
+        return savedDao.isPresent() ? savedDao.get() : null;
     }
 
     public void updateBlob(Long blobId, byte[] blobData) {
