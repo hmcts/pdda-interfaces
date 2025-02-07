@@ -91,7 +91,7 @@ class PddaSftpHelperSshjTest {
         setupFiles();
         try {
             pddaSftpHelperSshj.sftpDeleteFile(sftpConfig2.getSshjSftpClient(),
-                sftpConfig2.getActiveRemoteFolder(), "test.txt");
+                sftpConfig2.getActiveRemoteFolder(), "test.txt", new BaisXhibitValidation(null));
             assertNotNull(sftpConfig2.getSshjSftpClient(), "SFTPClient should not be null");
         } catch (IOException e) {
             LOG.error("Error deleting file", e);
