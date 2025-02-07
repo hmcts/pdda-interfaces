@@ -205,7 +205,7 @@ class ListObjectHelperTest {
         Mockito
             .when(mockDataHelper.validateHearing(Mockito.isA(Integer.class),
                 Mockito.isA(Integer.class), Mockito.isA(Integer.class),
-                Mockito.isA(LocalDateTime.class)))
+                Mockito.isA(LocalDateTime.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(Optional.of(DummyHearingUtil.getXhbHearingDao()));
     }
 

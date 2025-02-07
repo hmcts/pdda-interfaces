@@ -130,11 +130,13 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbHearingDao> validateHearing(final Integer courtId, final Integer caseId,
-        final Integer refHearingTypeId, final LocalDateTime hearingStartDate) {
+        final Integer refHearingTypeId, final LocalDateTime hearingStartDate,
+        final LocalDateTime hearingEndDate) {
         LOG.debug("validateHearing()");
         Optional<XhbHearingDao> result = findHearing(courtId, caseId, hearingStartDate);
         if (result.isEmpty()) {
-            result = createHearing(courtId, caseId, refHearingTypeId, hearingStartDate);
+            result =
+                createHearing(courtId, caseId, refHearingTypeId, hearingStartDate, hearingEndDate);
         }
         return result;
     }

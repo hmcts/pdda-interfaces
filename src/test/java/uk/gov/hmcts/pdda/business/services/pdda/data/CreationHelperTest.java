@@ -173,8 +173,9 @@ class CreationHelperTest {
             .thenReturn(Mockito.mock(XhbHearingRepository.class));
 
         XhbHearingDao dao = DummyHearingUtil.getXhbHearingDao();
-        Optional<XhbHearingDao> result = classUnderTest.createHearing(dao.getCourtId(),
-            dao.getCaseId(), dao.getRefHearingTypeId(), dao.getHearingStartDate());
+        Optional<XhbHearingDao> result =
+            classUnderTest.createHearing(dao.getCourtId(), dao.getCaseId(),
+                dao.getRefHearingTypeId(), dao.getHearingStartDate(), dao.getHearingEndDate());
         assertNotNull(result, NOTNULL);
     }
 

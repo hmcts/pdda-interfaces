@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
@@ -21,6 +22,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationResult;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -50,11 +53,13 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
+    private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String EMPTY_STRING = "";
     private static final String USERDISPLAYNAME = "";
 
@@ -255,5 +260,24 @@ class CppStagingInboundControllerBeanTest {
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
         assertEquals(0, returnedCourtId, EQUALS);
+    }
+    
+    @Test
+    void testGetXhbCppStagingInboundRepositoryNullRepo() {
+        assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
+            NOT_INSTANCE);
+    }
+    
+    @Test
+    void testGetXhbCppStagingInboundRepository() {
+        // Create Mock
+        XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository =
+            EasyMock.createMock(XhbCppStagingInboundRepository.class);
+        // Set Mock
+        ReflectionTestUtils.setField(classUnderTest, "xhbCppStagingInboundRepository",
+            mockXhbCppStagingInboundRepository);
+        // Run
+        assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
+            NOT_INSTANCE);
     }
 }
