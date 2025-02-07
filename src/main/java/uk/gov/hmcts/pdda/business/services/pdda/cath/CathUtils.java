@@ -159,7 +159,8 @@ public final class CathUtils {
                     .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
                 xhbXmlDocumentRepository.save(xhbXmlDocumentDaoTransformedXml);
 
-                // Save to the cath_document_link table with the original and transformed xml id's
+                // Save to the cath_document_link table with the original and transformed xml
+                // id's
                 XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
                 xhbCathDocumentLinkDao
                     .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
