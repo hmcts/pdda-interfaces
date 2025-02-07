@@ -195,8 +195,8 @@ dependencies {
     implementation 'org.springframework:spring-core:6.2.2'
     implementation 'org.springframework:spring-beans:6.2.2'
     implementation 'org.springframework:spring-context:6.2.2'
-    implementation 'org.springframework.data:spring-data-commons:3.4.0'
-    implementation 'org.springframework.data:spring-data-jpa:3.4.0'
+    implementation 'org.springframework.data:spring-data-commons:3.4.2'
+    implementation 'org.springframework.data:spring-data-jpa:3.4.2'
     implementation 'org.springframework:spring-tx:6.2.2'
     implementation 'org.springframework:spring-web:6.2.2'
     implementation files('lib/jsch-0.1.54.jar')
