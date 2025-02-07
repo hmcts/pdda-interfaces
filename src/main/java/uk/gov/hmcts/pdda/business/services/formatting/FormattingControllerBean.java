@@ -212,7 +212,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
         return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 
-    private FormattingServices getFormattingServices() { 
+    protected FormattingServices getFormattingServices() { 
         if (formattingServices == null) {
             formattingServices =
                 new FormattingServices(getEntityManager(), getCourtelHelper(), getBlobHelper());
@@ -223,7 +223,8 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private CourtelHelper getCourtelHelper() {
         if (courtelHelper == null) {
             courtelHelper = new CourtelHelper(getXhbClobRepository(), getXhbCourtelListRepository(),
-                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository());
+                getXhbXmlDocumentRepository(), getBlobHelper(), getXhbConfigPropRepository(),
+                getXhbCourtRepository());
         }
         return courtelHelper;
     }

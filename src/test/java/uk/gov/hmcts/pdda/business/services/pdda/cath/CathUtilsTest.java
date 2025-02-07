@@ -21,6 +21,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLi
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
@@ -31,12 +32,15 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -71,6 +75,8 @@ class CathUtilsTest {
     private static final String EQUALS = "Result is not equal";
     private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is not True";
+    private static final String GOVERNANCE = "PDDA";
+    private static final String TYPE = "LIST";
 
     @Mock
     private Environment mockEnvironment;
@@ -115,6 +121,30 @@ class CathUtilsTest {
         // Run
         HttpRequest result = CathUtils.getHttpPostRequest(url, courtelJson);
         assertNotNull(result, NOTNULL);
+        HttpHeaders headers = result.headers();
+        assertNotNull(headers, NOTNULL);
+        validateHeaderValue(headers, PublicationConfiguration.GOVERNANCE_HEADER, GOVERNANCE);
+        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE);
+        validateHeaderValue(headers, PublicationConfiguration.LIST_TYPE,
+            courtelJson.getListType().toString());
+        validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
+            courtelJson.getCrestCourtId());
+        String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
+        validateHeaderValue(headers, PublicationConfiguration.CONTENT_DATE, now);
+        validateHeaderValue(headers, PublicationConfiguration.LANGUAGE_HEADER,
+            courtelJson.getLanguage().toString());
+        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_FROM_HEADER, now);
+        String nextMonth =
+            CathUtils.getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
+        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth);
+    }
+
+    private void validateHeaderValue(HttpHeaders headers, Object key, Object expectedValue) {
+        Map<String, List<String>> map = headers.map();
+        assertNotNull(map, NOTNULL);
+        List<String> mapValues = map.get(key);
+        assertNotNull(mapValues, NOTNULL);
+        assertEquals(expectedValue, mapValues.get(0), EQUALS);
     }
 
     @Test
@@ -160,7 +190,7 @@ class CathUtilsTest {
             .of(DummyFormattingUtil.getXhbClobDao(1L, fetchExampleListClobData(exampleXmlPath)));
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
-        
+
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
@@ -183,7 +213,7 @@ class CathUtilsTest {
         // Setup using the example transformed xml
         final String exampleXmlPath =
             "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Transformed.xml";
-        
+
         XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
         xhbCathDocumentLinkDao.setCathXmlId(1);
         xhbCathDocumentLinkDao.setCathDocumentLinkId(1);

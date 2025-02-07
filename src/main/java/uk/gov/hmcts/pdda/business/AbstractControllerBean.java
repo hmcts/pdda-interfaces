@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
+import com.pdda.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.NullAssignment"})
 public class AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractControllerBean.class);
@@ -50,9 +52,18 @@ public class AbstractControllerBean {
     protected AbstractControllerBean() {
         // protected constructor
     }
+    
+    protected void clearRepositories() {
+        this.xhbClobRepository = null;
+        this.xhbBlobRepository = null;
+        this.xhbCourtRepository = null;
+        this.xhbConfigPropRepository = null;
+        this.xhbCppFormattingRepository = null;
+    }
 
     protected EntityManager getEntityManager() {
-        if (entityManager == null) {
+        if (!EntityManagerUtil.isEntityManagerActive(entityManager)) {
+            clearRepositories();
             LOG.debug("getEntityManager() - Creating new entityManager");
             entityManager = EntityManagerUtil.getEntityManager();
         }
@@ -60,49 +71,49 @@ public class AbstractControllerBean {
     }
 
     protected XhbClobRepository getXhbClobRepository() {
-        if (xhbClobRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbClobRepository)) {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
     }
     
     protected XhbBlobRepository getXhbBlobRepository() {
-        if (xhbBlobRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbBlobRepository)) {
             xhbBlobRepository = new XhbBlobRepository(getEntityManager());
         }
         return xhbBlobRepository;
     }
 
     protected XhbCourtelListRepository getXhbCourtelListRepository() {
-        if (xhbCourtelListRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtelListRepository)) {
             xhbCourtelListRepository = new XhbCourtelListRepository(getEntityManager());
         }
         return xhbCourtelListRepository;
     }
 
     protected XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
-        if (xhbXmlDocumentRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbXmlDocumentRepository)) {
             xhbXmlDocumentRepository = new XhbXmlDocumentRepository(getEntityManager());
         }
         return xhbXmlDocumentRepository;
     }
 
     protected XhbCourtRepository getXhbCourtRepository() {
-        if (xhbCourtRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtRepository)) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
         }
         return xhbCourtRepository;
     }
 
     protected XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (xhbConfigPropRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbConfigPropRepository)) {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         return xhbConfigPropRepository;
     }
 
     protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
-        if (xhbCppFormattingRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCppFormattingRepository)) {
             xhbCppFormattingRepository = new XhbCppFormattingRepository(getEntityManager());
         }
         return xhbCppFormattingRepository;
@@ -114,7 +125,7 @@ public class AbstractControllerBean {
      * @return XhbCppListRepository
      */
     protected XhbCppListRepository getXhbCppListRepository() {
-        if (xhbCppListRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbCppListRepository)) {
             xhbCppListRepository = new XhbCppListRepository(getEntityManager());
         }
         return xhbCppListRepository;
@@ -126,7 +137,7 @@ public class AbstractControllerBean {
      * @return XhbFormattingRepository
      */
     protected XhbFormattingRepository getXhbFormattingRepository() {
-        if (xhbFormattingRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbFormattingRepository)) {
             xhbFormattingRepository = new XhbFormattingRepository(getEntityManager());
         }
         return xhbFormattingRepository;

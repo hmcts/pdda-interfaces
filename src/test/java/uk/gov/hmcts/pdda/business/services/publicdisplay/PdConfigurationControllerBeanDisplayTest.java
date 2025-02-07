@@ -14,6 +14,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -63,6 +64,9 @@ class PdConfigurationControllerBeanDisplayTest {
     private static final String DAILYLIST = "DailyList";
 
     @Mock
+    private EntityManager mockEntityManager;
+    
+    @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
@@ -100,7 +104,7 @@ class PdConfigurationControllerBeanDisplayTest {
 
     @InjectMocks
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(
-        Mockito.mock(EntityManager.class), mockXhbCourtRepository, mockXhbRotationSetsRepository,
+        mockEntityManager, mockXhbCourtRepository, mockXhbRotationSetsRepository,
         mockXhbRotationSetDdRepository, mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
         mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository,
         Mockito.mock(XhbCourtRoomRepository.class), mockPublicDisplayNotifier,
@@ -179,6 +183,10 @@ class PdConfigurationControllerBeanDisplayTest {
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
         xhbRotationSetsDao.setCourtId(COURT_ID);
 
+        expectGetEntityManager(mockXhbDisplayRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
         String courtName = "Test Court Name";
@@ -208,4 +216,10 @@ class PdConfigurationControllerBeanDisplayTest {
         assertEquals(ROTATION_SET_ID, result[0].getRotationSetId(), EQUALS);
         assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
     }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        Mockito.when(mockRepository.getEntityManager()).thenReturn(mockEntityManager);
+    }
+
 }

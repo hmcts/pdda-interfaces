@@ -15,6 +15,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
@@ -221,7 +222,9 @@ class CppStagingInboundControllerBeanTest {
         EasyMock
             .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
             .andReturn(returnList);
+        expectGetEntityManager(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String result = classUnderTest.getSchemaName(documentType);
         // Checks
@@ -238,7 +241,9 @@ class CppStagingInboundControllerBeanTest {
 
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
+        expectGetEntityManager(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
@@ -254,18 +259,14 @@ class CppStagingInboundControllerBeanTest {
 
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
+        expectGetEntityManager(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
         assertEquals(0, returnedCourtId, EQUALS);
-    }
-    
-    @Test
-    void testGetXhbCppStagingInboundRepositoryNullRepo() {
-        assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
-            NOT_INSTANCE);
     }
     
     @Test
@@ -279,5 +280,11 @@ class CppStagingInboundControllerBeanTest {
         // Run
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
     }
 }

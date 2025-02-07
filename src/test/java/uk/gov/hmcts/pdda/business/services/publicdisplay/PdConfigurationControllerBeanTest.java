@@ -88,6 +88,9 @@ class PdConfigurationControllerBeanTest {
     private static final String DAILYLIST = "DailyList";
 
     @Mock
+    private EntityManager mockEntityManager;
+    
+    @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
@@ -113,7 +116,7 @@ class PdConfigurationControllerBeanTest {
 
     @InjectMocks
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(
-        Mockito.mock(EntityManager.class), Mockito.mock(XhbCourtRepository.class),
+        mockEntityManager, Mockito.mock(XhbCourtRepository.class),
         mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository,
         Mockito.mock(XhbDisplayTypeRepository.class), Mockito.mock(XhbDisplayRepository.class),
         Mockito.mock(XhbDisplayLocationRepository.class), mockXhbCourtSiteRepository,
@@ -172,6 +175,7 @@ class PdConfigurationControllerBeanTest {
                 .when(mockXhbRotationSetDdRepository.update(Mockito.isA(XhbRotationSetDdDao.class)))
                 .thenReturn(Optional.of(rsddComplex.getRotationSetDdDao()));
             mockPublicDisplayNotifier.sendMessage(Mockito.isA(ConfigurationChangeEvent.class));
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
             // Run Method
             classUnderTest.setDisplayDocumentsForRotationSet(rsComplex);
@@ -221,6 +225,7 @@ class PdConfigurationControllerBeanTest {
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         boolean result = false;
         try {
@@ -318,6 +323,7 @@ class PdConfigurationControllerBeanTest {
                 Mockito.mock(XhbScheduledHearingRepository.class);
             Mockito.when(mockRepo.findById(SCHEDULED_HEARING_ID))
                 .thenReturn(Optional.of(scheduledHearing));
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
             // Run Method
             classUnderTest.isPublicDisplayActive(SCHEDULED_HEARING_ID);
@@ -335,6 +341,7 @@ class PdConfigurationControllerBeanTest {
         schedHearingIdList.add(SCHEDULED_HEARING_ID);
 
         try {
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             // Run Method
             classUnderTest.activatePublicDisplay(SCHEDULED_HEARING_ID, activationDate);
 
@@ -355,6 +362,7 @@ class PdConfigurationControllerBeanTest {
         schedHearingIdList.add(SCHEDULED_HEARING_ID);
 
         try {
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             // Run Method
             classUnderTest.deActivatePublicDisplay(SCHEDULED_HEARING_ID, deactivationDate);
 
