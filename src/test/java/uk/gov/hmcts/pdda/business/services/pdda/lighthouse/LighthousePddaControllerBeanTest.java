@@ -207,6 +207,9 @@ class LighthousePddaControllerBeanTest {
         Optional<XhbPddaMessageDao> xhbPddaMessageDao1 =
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
 
+        EasyMock.expect(mockXhbCppStagingInboundRepository
+            .findDocumentByDocumentName(EasyMock.isA(String.class))).andReturn(new ArrayList<>());
+        
         EasyMock
             .expect(mockXhbPddaMessageRepository.update(EasyMock.capture(xhbPddaMessageDaoCapture)))
             .andReturn(xhbPddaMessageDao1).times(noOfExpects);
@@ -284,6 +287,30 @@ class LighthousePddaControllerBeanTest {
 
         String documentName11 = "PDDA_XDL_34_1_453_20220811235559";
         assertFalse(classUnderTest.isDocumentNameValid(documentName11), FALSE);
+    }
+    
+    @Test
+    void testProcessFileAlreadyProcessed() {
+        List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = new ArrayList<>();
+        XhbCppStagingInboundDao xhbCppStagingInboundDao = new XhbCppStagingInboundDao();
+        xhbCppStagingInboundDao.setDocumentName("TestDoc");
+        xhbCppStagingInboundDaos.add(xhbCppStagingInboundDao);
+        
+        XhbPddaMessageDao xhbPddaMessageDao = new XhbPddaMessageDao();
+        xhbPddaMessageDao.setCpDocumentName("TestDoc");
+        
+        EasyMock.expect(classUnderTestMock.getXhbCppStagingInboundRepository())
+            .andReturn(mockXhbCppStagingInboundRepository);
+        
+        EasyMock.expect(mockXhbCppStagingInboundRepository
+            .findDocumentByDocumentName(EasyMock.isA(String.class))).andReturn(xhbCppStagingInboundDaos);
+        
+        EasyMock.replay(classUnderTestMock);
+        EasyMock.replay(mockXhbCppStagingInboundRepository);
+        
+        boolean result = true;
+        classUnderTest.processFile(xhbPddaMessageDao);
+        assertTrue(result, TRUE);
     }
 
 
