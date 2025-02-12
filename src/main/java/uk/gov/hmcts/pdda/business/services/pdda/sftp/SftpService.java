@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings("PMD.CouplingBetweenObjects")
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -368,6 +368,16 @@ public class SftpService extends XhibitPddaHelper {
             updatedFilename = getUpdatedFilename(filename, PUBLIC_DISPLAY_DOCUMENT_TYPE);
         }
 
+        // Check for a second time that there is not already a duplicate entry in the pdda_message table
+        Optional<XhbPddaMessageDao> xhbPddaMessageDao = 
+            getPddaMessageHelper().findByCpDocumentName(updatedFilename);
+        
+        if (!xhbPddaMessageDao.isEmpty()) {
+            LOG.warn("The file: {}{}", updatedFilename, 
+                " already has an entry in xhb_pdda_message, and therefore a duplicate entry has not been added");
+            return;
+        }
+        
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
@@ -376,8 +386,7 @@ public class SftpService extends XhibitPddaHelper {
             messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
             NO, errorMessage);
     }
-
-
+    
     /**
      * Applies to lists sent from XHIBIT, update the filename as follows: - Append the text
      * "list_filename = " to the filename - Further append what would be the name of the file were
