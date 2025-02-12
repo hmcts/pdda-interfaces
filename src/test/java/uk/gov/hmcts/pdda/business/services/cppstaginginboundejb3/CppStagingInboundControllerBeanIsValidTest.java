@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyServicesUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
@@ -32,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * CppStagingInboundControllerBeanIsValidTest.
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class CppStagingInboundControllerBeanIsValidTest {
 
     private static final String FALSE = "Result is not False";
@@ -141,9 +143,12 @@ class CppStagingInboundControllerBeanIsValidTest {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
         properties.add(DummyServicesUtil.getXhbConfigPropDao(TESTING, EMPTY_STRING));
+        expectGetEntityManager(mockXhbConfigPropRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
             .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
         // Checks
@@ -155,9 +160,12 @@ class CppStagingInboundControllerBeanIsValidTest {
     void testFindConfigEntryByPropertyNameNullArray() {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
+        expectGetEntityManager(mockXhbConfigPropRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
             .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
         // Checks
@@ -168,11 +176,14 @@ class CppStagingInboundControllerBeanIsValidTest {
     @Test
     void testGetClobXmlAsString() {
         // Setup
-        Long clobId = (long) 421_000;
+        expectGetEntityManager(mockXhbClobRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
+        Long clobId = (long) 421_000; 
         EasyMock.expect(mockXhbClobRepository.findById(clobId)).andReturn(Optional.of(clobObj));
         EasyMock.replay(mockXhbClobRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String clobReturnData = classUnderTest.getClobXmlAsString(clobId);
         // Checks
@@ -184,12 +195,20 @@ class CppStagingInboundControllerBeanIsValidTest {
     void testGetClobXmlAsStringFail() {
         // Setup
         Long clobId = (long) 421_000;
+        expectGetEntityManager(mockXhbClobRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbClobRepository.findById(clobId)).andReturn(Optional.empty());
         EasyMock.replay(mockXhbClobRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String clobReturnData = classUnderTest.getClobXmlAsString(clobId);
         // Checks
         EasyMock.verify(mockXhbClobRepository);
         assertNull(clobReturnData, NULL);
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
     }
 }
