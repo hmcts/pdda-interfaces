@@ -262,6 +262,9 @@ class SftpServiceTest {
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+            .andReturn(Optional.empty());
+        
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(0L,
             "rO0ABXNyAEl1ay5nb3YuY291cnRzZXJ2aWNlLnhoaWJpdC5jb21tb24ucHVibGljZGlzcGxheS5ldmVudHMuS"
                 + "GVhcmluZ1N0YXR1c0V2ZW500UDp/kCipvgCAAB4cgBJdWsuZ292LmNvdXJ0c2VydmljZS54aGliaXQuY29t"
