@@ -75,6 +75,16 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
         writeToLog("About to process file " + dao.getCpDocumentName());
 
+        List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = 
+            getXhbCppStagingInboundRepository().findDocumentByDocumentName(dao.getCpDocumentName());
+        
+        // Check the file hasn't already been processed
+        if (!xhbCppStagingInboundDaos.isEmpty()) {
+            LOG.warn("The file: {}{}", dao.getCpDocumentName(), 
+                " has already been sent for processing, and therefore a duplicate entry has not been added");
+            return;
+        }
+        
         try {
             // First check the filename is valid
             if (!isDocumentNameValid(dao.getCpDocumentName())) {

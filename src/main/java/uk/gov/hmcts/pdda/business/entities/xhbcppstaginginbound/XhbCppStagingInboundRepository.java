@@ -101,5 +101,12 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
             .createNamedQuery("XHB_CPP_STAGING_INBOUND.findUnrespondedCPPMessages");
         return query.getResultList();
     }
-
+    
+    public List<XhbCppStagingInboundDao> findDocumentByDocumentName(String documentName) {
+        LOG.debug("findDocumentByDocumentName({})", documentName);
+        Query query =
+            getEntityManager().createNamedQuery("XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName");
+        query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
+        return query.getResultList();
+    }
 }
