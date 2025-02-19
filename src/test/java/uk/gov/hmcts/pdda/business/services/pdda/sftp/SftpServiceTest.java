@@ -253,9 +253,8 @@ class SftpServiceTest {
         EasyMock.expect(mockPddaMessageHelper.findByMessageType("HearingStatus"))
             .andReturn(pddaRefMessageTypeDao);
 
-        EasyMock
-            .expect(mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class)))
-            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao()));
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
@@ -338,10 +337,9 @@ class SftpServiceTest {
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
-
-        EasyMock
-            .expect(mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class)))
-            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao()));
+        
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
 
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockPddaMessageHelper);

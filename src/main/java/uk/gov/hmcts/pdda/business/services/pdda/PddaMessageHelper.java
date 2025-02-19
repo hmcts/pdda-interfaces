@@ -92,12 +92,11 @@ public class PddaMessageHelper {
     /**
      * savePddaMessage.
      * @param dao XhbPddaMessageDao
-     * @return XhbPddaMessageDao
      */
-    public Optional<XhbPddaMessageDao> savePddaMessage(XhbPddaMessageDao dao) {
+    public void savePddaMessage(XhbPddaMessageDao dao) {
         String methodName = "savePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
-        return getPddaMessageRepository().update(dao);
+        getPddaMessageRepository().save(dao);
     }
 
     /**
