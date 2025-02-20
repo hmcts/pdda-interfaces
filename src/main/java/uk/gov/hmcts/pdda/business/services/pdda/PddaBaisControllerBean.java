@@ -12,9 +12,6 @@ import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * <p>
  * Title: PDDA Bais Controller Bean.
@@ -44,8 +41,6 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
 
     private SftpService sftpService;
     
-    private final Lock instanceLock = new ReentrantLock();
-
     public PddaBaisControllerBean(EntityManager entityManager) {
         super(entityManager);
     }
@@ -63,14 +58,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     public void doTask() {
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
-        try {
-            instanceLock.lock();
-            getSftpService().processBaisMessages(0);
-        } finally {
-            instanceLock.unlock();
-        }
-        
+        getSftpService().processBaisMessages(0);
     }
 
 
