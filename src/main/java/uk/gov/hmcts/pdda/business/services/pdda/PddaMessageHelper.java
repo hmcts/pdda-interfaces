@@ -110,12 +110,12 @@ public class PddaMessageHelper {
         return getRefPddaMessageTypeRepository().update(dao);
     }
 
-    public void updatePddaMessage(XhbPddaMessageDao dao,
+    public Optional<XhbPddaMessageDao> updatePddaMessage(XhbPddaMessageDao dao,
         String userDisplayName) {
         String methodName = "updatePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
         dao.setLastUpdatedBy(userDisplayName);
-        getPddaMessageRepository().save(dao);
+        return getPddaMessageRepository().update(dao);
     }
 
     private XhbPddaMessageRepository getPddaMessageRepository() {
