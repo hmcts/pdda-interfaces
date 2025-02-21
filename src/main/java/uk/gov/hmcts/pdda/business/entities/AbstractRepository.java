@@ -83,8 +83,6 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 localEntityManager.getTransaction().begin();
                 localEntityManager.persist(dao);
                 localEntityManager.getTransaction().commit();
-                // Clear the cache on the EntityManager after saving
-                clearEntityManager();
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
                 LOG.error("Stacktrace doing a database save; dao: {}: {}", dao,
