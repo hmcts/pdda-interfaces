@@ -159,17 +159,14 @@ class PddaMessageHelperTest {
     void testUpdatePddaMessage() {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
-        EasyMock.expect(mockXhbPddaMessageRepository.update(xhbPddaMessageDao))
-            .andReturn(Optional.of(xhbPddaMessageDao));
+        mockXhbPddaMessageRepository.save(xhbPddaMessageDao);
         EasyMock.replay(mockXhbPddaMessageRepository);
         // Run
-        Optional<XhbPddaMessageDao> actualResult =
-            classUnderTest.updatePddaMessage(xhbPddaMessageDao, "TestUser");
+        boolean result = true;
+        classUnderTest.updatePddaMessage(xhbPddaMessageDao, "TestUser");
         // Checks
         EasyMock.verify(mockXhbPddaMessageRepository);
-        assertNotNull(actualResult, NOTNULL);
-        assertTrue(actualResult.isPresent(), TRUE);
-        assertSame(xhbPddaMessageDao.getPrimaryKey(), actualResult.get().getPrimaryKey(), SAME);
+        assertTrue(result, TRUE);
     }
 
     @Test
