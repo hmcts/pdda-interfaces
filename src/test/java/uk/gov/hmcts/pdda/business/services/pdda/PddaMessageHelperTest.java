@@ -144,8 +144,27 @@ class PddaMessageHelperTest {
     void testSavePddaMessage() {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        EasyMock.expect(mockXhbPddaMessageRepository.findByCpDocumentName(EasyMock.isA(String.class)))
+            .andReturn(new ArrayList<>());
         mockXhbPddaMessageRepository.save(xhbPddaMessageDao);
         EasyMock.expectLastCall();
+        EasyMock.replay(mockXhbPddaMessageRepository);
+        boolean result = true;
+        // Run
+        classUnderTest.savePddaMessage(xhbPddaMessageDao);
+        // Checks
+        EasyMock.verify(mockXhbPddaMessageRepository);
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testSavePddaMessageExistingEntry() {
+        // Setup
+        XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        List<XhbPddaMessageDao> xhbPddaMessageDaos = new ArrayList<>();
+        xhbPddaMessageDaos.add(xhbPddaMessageDao);
+        EasyMock.expect(mockXhbPddaMessageRepository.findByCpDocumentName(EasyMock.isA(String.class)))
+            .andReturn(xhbPddaMessageDaos);
         EasyMock.replay(mockXhbPddaMessageRepository);
         boolean result = true;
         // Run
