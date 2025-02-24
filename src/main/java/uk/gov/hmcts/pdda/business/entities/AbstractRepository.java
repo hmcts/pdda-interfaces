@@ -7,6 +7,7 @@ import jakarta.persistence.Query;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +77,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * save.
      * @param dao Dao
      */
+    @Transactional
     public void save(T dao) {
         try (EntityManager localEntityManager = createEntityManager()) {
             try {
@@ -99,6 +101,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * @param dao Dao
      * @return dao
      */
+    @Transactional
     public Optional<T> update(T dao) {
         try (EntityManager localEntityManager = createEntityManager()) {
             try {
