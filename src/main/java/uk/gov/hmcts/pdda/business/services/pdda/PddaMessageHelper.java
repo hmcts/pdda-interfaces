@@ -96,6 +96,7 @@ public class PddaMessageHelper {
     public void savePddaMessage(XhbPddaMessageDao dao) {
         String methodName = "savePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
+        dao.setErrorMessage("Record entered from save()");
         getPddaMessageRepository().save(dao);
     }
 
