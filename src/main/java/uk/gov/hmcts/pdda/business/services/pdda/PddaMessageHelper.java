@@ -96,8 +96,13 @@ public class PddaMessageHelper {
     public void savePddaMessage(XhbPddaMessageDao dao) {
         String methodName = "savePddaMessage()";
         LOG.debug(methodName + LOG_CALLED);
-        dao.setErrorMessage("Record entered from save()");
-        getPddaMessageRepository().save(dao);
+        
+        // Check a final time to make sure the document doesn't already exist before saving
+        if (getPddaMessageRepository().findByCpDocumentName(dao.getCpDocumentName()).isEmpty()) {
+            getPddaMessageRepository().save(dao);
+        } else {
+            LOG.debug("There is already an entry for the document: {}", dao.getCpDocumentName());
+        }
     }
 
     /**
