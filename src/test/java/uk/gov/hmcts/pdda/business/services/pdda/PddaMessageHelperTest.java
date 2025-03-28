@@ -100,19 +100,30 @@ class PddaMessageHelperTest {
     }
 
     @Test
+    void testCleardown() {
+        testFindByPddaMessageId(false);
+    }
+    
+    @Test
     void testFindByPddaMessageId() {
+        testFindByPddaMessageId(true);
+    }
+        
+    private void testFindByPddaMessageId(boolean useMockEntityManager) {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
             .thenReturn(Optional.of(xhbPddaMessageDao));
-        mockTheEntityManager();
+        mockTheEntityManager(useMockEntityManager);
         // Run
         Optional<XhbPddaMessageDao> actualResult =
             classUnderTest.findByPddaMessageId(xhbPddaMessageDao.getPrimaryKey());
         // Checks
         assertNotNull(actualResult, NOTNULL);
-        assertTrue(actualResult.isPresent(), TRUE);
-        assertSame(xhbPddaMessageDao, actualResult.get(), SAME);
+        if (useMockEntityManager) {
+            assertTrue(actualResult.isPresent(), TRUE);
+            assertSame(xhbPddaMessageDao, actualResult.get(), SAME);
+        }
     }
 
     @Test
@@ -124,7 +135,7 @@ class PddaMessageHelperTest {
             .when(mockXhbRefPddaMessageTypeRepository
                 .findByMessageType(xhbRefPddaMessageTypeDaoList.get(0).getPddaMessageType()))
             .thenReturn(xhbRefPddaMessageTypeDaoList);
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         // Run
         Optional<XhbRefPddaMessageTypeDao> actualResult = classUnderTest
             .findByMessageType(xhbRefPddaMessageTypeDaoList.get(0).getPddaMessageType());
@@ -143,7 +154,7 @@ class PddaMessageHelperTest {
             .when(mockXhbPddaMessageRepository
                 .findByCpDocumentName(xhbPddaMessageDaoList.get(0).getCpDocumentName()))
             .thenReturn(xhbPddaMessageDaoList);
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         // Run
         Optional<XhbPddaMessageDao> actualResult =
             classUnderTest.findByCpDocumentName(xhbPddaMessageDaoList.get(0).getCpDocumentName());
@@ -160,7 +171,7 @@ class PddaMessageHelperTest {
         xhbPddaMessageDaoList.add(DummyPdNotifierUtil.getXhbPddaMessageDao());
         Mockito.when(mockXhbPddaMessageRepository.findUnrespondedCpMessages())
             .thenReturn(xhbPddaMessageDaoList);
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         // Run
         List<XhbPddaMessageDao> actualResult = classUnderTest.findUnrespondedCpMessages();
         // Checks
@@ -175,7 +186,7 @@ class PddaMessageHelperTest {
         Mockito.when(mockXhbPddaMessageRepository.findByCpDocumentName(Mockito.isA(String.class)))
             .thenReturn(new ArrayList<>());
         mockXhbPddaMessageRepository.save(xhbPddaMessageDao);
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         boolean result = true;
         // Run
         classUnderTest.savePddaMessage(xhbPddaMessageDao);
@@ -191,7 +202,7 @@ class PddaMessageHelperTest {
         xhbPddaMessageDaos.add(xhbPddaMessageDao);
         Mockito.when(mockXhbPddaMessageRepository.findByCpDocumentName(Mockito.isA(String.class)))
             .thenReturn(xhbPddaMessageDaos);
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         boolean result = true;
         // Run
         classUnderTest.savePddaMessage(xhbPddaMessageDao);
@@ -205,7 +216,7 @@ class PddaMessageHelperTest {
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         Mockito.when(mockXhbPddaMessageRepository.update(xhbPddaMessageDao))
             .thenReturn(Optional.of(xhbPddaMessageDao));
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         // Run
         Optional<XhbPddaMessageDao> actualResult =
             classUnderTest.updatePddaMessage(xhbPddaMessageDao, "TestUser");
@@ -222,7 +233,7 @@ class PddaMessageHelperTest {
             DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao();
         Mockito.when(mockXhbRefPddaMessageTypeRepository.update(xhbRefPddaMessageTypeDao))
             .thenReturn(Optional.of(xhbRefPddaMessageTypeDao));
-        mockTheEntityManager();
+        mockTheEntityManager(true);
         // Run
         Optional<XhbRefPddaMessageTypeDao> actualResult =
             classUnderTest.savePddaMessageType(xhbRefPddaMessageTypeDao);
@@ -233,9 +244,9 @@ class PddaMessageHelperTest {
             SAME);
     }
     
-    private void mockTheEntityManager() {
+    private void mockTheEntityManager(boolean result) {
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
-        Mockito.when(EntityManagerUtil.isEntityManagerActive(mockEntityManager)).thenReturn(true);
+        Mockito.when(EntityManagerUtil.isEntityManagerActive(mockEntityManager)).thenReturn(result);
         Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockEntityTransaction);
     }
 }
