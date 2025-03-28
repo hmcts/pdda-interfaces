@@ -55,10 +55,10 @@ class PddaMessageHelperTest {
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
     private static final String SAME = "Result is not Same";
-   
+
     @Mock
     private EntityTransaction mockEntityTransaction;
-    
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -70,7 +70,7 @@ class PddaMessageHelperTest {
 
     @InjectMocks
     private PddaMessageHelper classUnderTest;
-    
+
     @BeforeAll
     public static void setUp() {
         Mockito.mockStatic(EntityManagerUtil.class);
@@ -80,7 +80,7 @@ class PddaMessageHelperTest {
     public static void tearDown() {
         Mockito.clearAllCaches();
     }
-    
+
     @BeforeEach
     public void setUpEach() {
         mockEntityManager = Mockito.mock(EntityManager.class);
@@ -100,34 +100,31 @@ class PddaMessageHelperTest {
     }
 
     @Test
-    void testCleardown() {
-        boolean result = true;
-        testFindByPddaMessageId(false);
-        assertTrue(result, TRUE);
+    void testGetPddaMessageRepository() {
+        XhbPddaMessageRepository result = classUnderTest.getPddaMessageRepository();
+        assertNotNull(result, NOTNULL);
     }
-    
+
     @Test
     void testFindByPddaMessageId() {
-        boolean result = true;
-        testFindByPddaMessageId(true);
-        assertTrue(result, TRUE);
-    }
-        
-    private void testFindByPddaMessageId(boolean useMockEntityManager) {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
             .thenReturn(Optional.of(xhbPddaMessageDao));
-        mockTheEntityManager(useMockEntityManager);
+        mockTheEntityManager(true);
         // Run
         Optional<XhbPddaMessageDao> actualResult =
             classUnderTest.findByPddaMessageId(xhbPddaMessageDao.getPrimaryKey());
         // Checks
         assertNotNull(actualResult, NOTNULL);
-        if (useMockEntityManager) {
-            assertTrue(actualResult.isPresent(), TRUE);
-            assertSame(xhbPddaMessageDao, actualResult.get(), SAME);
-        }
+        assertTrue(actualResult.isPresent(), TRUE);
+        assertSame(xhbPddaMessageDao, actualResult.get(), SAME);
+    }
+
+    @Test
+    void testGetRefPddaMessageTypeRepository() {
+        XhbRefPddaMessageTypeRepository result = classUnderTest.getRefPddaMessageTypeRepository();
+        assertNotNull(result, NOTNULL);
     }
 
     @Test
@@ -197,7 +194,7 @@ class PddaMessageHelperTest {
         // Checks
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testSavePddaMessageExistingEntry() {
         // Setup
@@ -247,7 +244,7 @@ class PddaMessageHelperTest {
         assertSame(xhbRefPddaMessageTypeDao.getPrimaryKey(), actualResult.get().getPrimaryKey(),
             SAME);
     }
-    
+
     private void mockTheEntityManager(boolean result) {
         Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(EntityManagerUtil.isEntityManagerActive(mockEntityManager)).thenReturn(result);

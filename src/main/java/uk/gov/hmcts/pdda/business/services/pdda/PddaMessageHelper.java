@@ -126,14 +126,14 @@ public class PddaMessageHelper {
         return getPddaMessageRepository().update(dao);
     }
 
-    private XhbPddaMessageRepository getPddaMessageRepository() {
+    protected XhbPddaMessageRepository getPddaMessageRepository() {
         if (pddaMessageRepository == null || !isEntityManagerActive()) {
             pddaMessageRepository = new XhbPddaMessageRepository(getEntityManager());
         }
         return pddaMessageRepository;
     }
 
-    private XhbRefPddaMessageTypeRepository getRefPddaMessageTypeRepository() {
+    protected XhbRefPddaMessageTypeRepository getRefPddaMessageTypeRepository() {
         if (refPddaMessageTypeRepository == null || !isEntityManagerActive()) {
             refPddaMessageTypeRepository = new XhbRefPddaMessageTypeRepository(getEntityManager());
         }
