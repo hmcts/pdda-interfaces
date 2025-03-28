@@ -47,6 +47,12 @@ public class CaseControllerBean extends AbstractControllerBean {
     public CaseControllerBean() {
         super();
     }
+    
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbHearingRepository = null;
+        xhbHearingListRepository = null;
+    }
 
     /**
      * This method is called to get all the hearings scheduled for a case on a particular day.
@@ -145,7 +151,7 @@ public class CaseControllerBean extends AbstractControllerBean {
      * @return XhbHearingRepository
      */
     private XhbHearingRepository getXhbHearingRepository() {
-        if (xhbHearingRepository == null) {
+        if (xhbHearingRepository == null  || !isEntityManagerActive()) {
             xhbHearingRepository = new XhbHearingRepository(getEntityManager());
         }
         return xhbHearingRepository;
@@ -157,7 +163,7 @@ public class CaseControllerBean extends AbstractControllerBean {
      * @return XhbHearingListRepository
      */
     private XhbHearingListRepository getXhbHearingListRepository() {
-        if (xhbHearingListRepository == null) {
+        if (xhbHearingListRepository == null  || !isEntityManagerActive()) {
             xhbHearingListRepository = new XhbHearingListRepository(getEntityManager());
         }
         return xhbHearingListRepository;

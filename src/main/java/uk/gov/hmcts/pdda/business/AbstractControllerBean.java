@@ -37,6 +37,15 @@ public class AbstractControllerBean {
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
     }
+    
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbClobRepository = null;
+        xhbBlobRepository = null;
+        xhbCourtRepository = null;
+        xhbConfigPropRepository = null;
+        xhbCppFormattingRepository = null;
+    }
 
     protected AbstractControllerBean(EntityManager entityManager) {
         this();
@@ -50,41 +59,42 @@ public class AbstractControllerBean {
     protected EntityManager getEntityManager() {
         if (entityManager == null) {
             LOG.debug("getEntityManager() - Creating new entityManager");
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbClobRepository getXhbClobRepository() {
-        if (xhbClobRepository == null) {
+        if (xhbClobRepository == null || !isEntityManagerActive()) {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
     }
 
     protected XhbBlobRepository getXhbBlobRepository() {
-        if (xhbBlobRepository == null) {
+        if (xhbBlobRepository == null || !isEntityManagerActive()) {
             xhbBlobRepository = new XhbBlobRepository(getEntityManager());
         }
         return xhbBlobRepository;
     }
 
     protected XhbCourtRepository getXhbCourtRepository() {
-        if (xhbCourtRepository == null) {
+        if (xhbCourtRepository == null || !isEntityManagerActive()) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
         }
         return xhbCourtRepository;
     }
 
     protected XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (xhbConfigPropRepository == null) {
+        if (xhbConfigPropRepository == null || !isEntityManagerActive()) {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         return xhbConfigPropRepository;
     }
 
     protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
-        if (xhbCppFormattingRepository == null) {
+        if (xhbCppFormattingRepository == null || !isEntityManagerActive()) {
             xhbCppFormattingRepository = new XhbCppFormattingRepository(getEntityManager());
         }
         return xhbCppFormattingRepository;
@@ -96,7 +106,7 @@ public class AbstractControllerBean {
      * @return XhbCppListRepository
      */
     protected XhbCppListRepository getXhbCppListRepository() {
-        if (xhbCppListRepository == null) {
+        if (xhbCppListRepository == null || !isEntityManagerActive()) {
             xhbCppListRepository = new XhbCppListRepository(getEntityManager());
         }
         return xhbCppListRepository;
@@ -108,10 +118,13 @@ public class AbstractControllerBean {
      * @return XhbFormattingRepository
      */
     protected XhbFormattingRepository getXhbFormattingRepository() {
-        if (xhbFormattingRepository == null) {
+        if (xhbFormattingRepository == null || !isEntityManagerActive()) {
             xhbFormattingRepository = new XhbFormattingRepository(getEntityManager());
         }
         return xhbFormattingRepository;
     }
 
+    protected boolean isEntityManagerActive() {
+        return EntityManagerUtil.isEntityManagerActive(entityManager);
+    }
 }
