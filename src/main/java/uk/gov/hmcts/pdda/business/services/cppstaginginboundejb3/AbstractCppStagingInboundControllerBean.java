@@ -52,6 +52,11 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         this.cppStagingInboundHelper = cppStagingInboundHelper;
         this.validationService = validationService;
     }
+    
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCppStagingInboundRepository = null;
+    }
 
     /**
      * Get courtId from XHB_COURT using crest court id (aka court code).
@@ -161,7 +166,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     }
     
     public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null) {
+        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
             xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
         }
         return xhbCppStagingInboundRepository;
