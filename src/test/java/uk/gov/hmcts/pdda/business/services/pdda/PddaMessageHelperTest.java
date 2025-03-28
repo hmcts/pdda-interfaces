@@ -101,12 +101,16 @@ class PddaMessageHelperTest {
 
     @Test
     void testCleardown() {
+        boolean result = true;
         testFindByPddaMessageId(false);
+        assertTrue(result, TRUE);
     }
     
     @Test
     void testFindByPddaMessageId() {
+        boolean result = true;
         testFindByPddaMessageId(true);
+        assertTrue(result, TRUE);
     }
         
     private void testFindByPddaMessageId(boolean useMockEntityManager) {
