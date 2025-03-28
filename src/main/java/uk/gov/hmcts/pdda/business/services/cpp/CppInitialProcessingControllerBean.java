@@ -49,7 +49,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * that it is valid.
  */
 @Stateless
-@Service
+@Service 
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
