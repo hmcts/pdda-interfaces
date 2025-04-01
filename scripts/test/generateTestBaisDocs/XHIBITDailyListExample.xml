@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.courtservice.gov.uk/schemas/courtservice file:///C:/XHIBIT/Schemas/DailyList-v1-0.xsd">
 	<cs:DocumentID>
-		<cs:DocumentName>Daily List DRAFT v1 06-DEC-24</cs:DocumentName>
+		<cs:DocumentName>Daily List DRAFT v1 23-DEC-24</cs:DocumentName>
 		<cs:UniqueID>CSDDL000000013138967</cs:UniqueID>
 		<cs:DocumentType>DL</cs:DocumentType>
 		<cs:TimeStamp>2024-12-06T08:45:57.643</cs:TimeStamp>
 		<cs:Version>1.0</cs:Version>
 		<cs:SecurityClassification>NPM</cs:SecurityClassification>
-		<cs:SellByDate>2024-12-13</cs:SellByDate>
+		<cs:SellByDate>2024-12-23</cs:SellByDate>
 		<cs:XSLstylesheetURL>http://www.courtservice.gov.uk/transforms/courtservice/dailyListHtml-v2-2.xsl</cs:XSLstylesheetURL>
 	</cs:DocumentID>
 	<cs:ListHeader>
 		<cs:ListCategory>Criminal</cs:ListCategory>
-		<cs:StartDate>2024-12-06</cs:StartDate>
-		<cs:EndDate>2024-12-06</cs:EndDate>
+		<cs:StartDate>2024-12-23</cs:StartDate>
+		<cs:EndDate>2024-12-23</cs:EndDate>
 		<cs:Version>DRAFT 1</cs:Version>
-		<cs:PublishedTime>2024-12-06T08:45:57.000</cs:PublishedTime>
+		<cs:PublishedTime>2024-12-23T08:45:57.000</cs:PublishedTime>
 		<cs:CRESTlistID>808840</cs:CRESTlistID>
 	</cs:ListHeader>
 	<cs:CrownCourt>
@@ -75,7 +75,7 @@
 							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="TPH">
 								<cs:HearingDescription>Trial (Part Heard)</cs:HearingDescription>
-								<cs:HearingDate>2024-12-06</cs:HearingDate>
+								<cs:HearingDate>2024-12-23</cs:HearingDate>
 								<cs:ListNote>Subject to commencing on 13.11.24</cs:ListNote>
 							</cs:HearingDetails>
 							<cs:CRESThearingID>9547655</cs:CRESThearingID>
@@ -153,7 +153,7 @@
 													</cs:ContactDetails>
 												</cs:Organisation>
 											</cs:Party>
-											<cs:StartDate>2024-12-06</cs:StartDate>
+											<cs:StartDate>2024-12-13</cs:StartDate>
 										</cs:Solicitor>
 									</cs:Counsel>
 									<cs:Charges NumberOfCharges="1">
