@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,12 @@ import java.util.Optional;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.NullAssignment"})
 public class PddaMessageHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaMessageHelper.class);
     private static final String LOG_CALLED = " called";
 
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
     private XhbPddaMessageRepository pddaMessageRepository;
     private XhbRefPddaMessageTypeRepository refPddaMessageTypeRepository;
 
@@ -124,18 +126,24 @@ public class PddaMessageHelper {
         return getPddaMessageRepository().update(dao);
     }
 
-    private XhbPddaMessageRepository getPddaMessageRepository() {
-        if (pddaMessageRepository == null) {
-            pddaMessageRepository = new XhbPddaMessageRepository(entityManager);
+    protected XhbPddaMessageRepository getPddaMessageRepository() {
+        if (pddaMessageRepository == null || !isEntityManagerActive()) {
+            pddaMessageRepository = new XhbPddaMessageRepository(getEntityManager());
         }
         return pddaMessageRepository;
     }
 
-    private XhbRefPddaMessageTypeRepository getRefPddaMessageTypeRepository() {
-        if (refPddaMessageTypeRepository == null) {
-            refPddaMessageTypeRepository = new XhbRefPddaMessageTypeRepository(entityManager);
+    protected XhbRefPddaMessageTypeRepository getRefPddaMessageTypeRepository() {
+        if (refPddaMessageTypeRepository == null || !isEntityManagerActive()) {
+            refPddaMessageTypeRepository = new XhbRefPddaMessageTypeRepository(getEntityManager());
         }
         return refPddaMessageTypeRepository;
+    }
+    
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        refPddaMessageTypeRepository = null;
+        pddaMessageRepository = null;
     }
 
     private Optional<?> getFirstInList(List<?> daoList) {
@@ -143,5 +151,18 @@ public class PddaMessageHelper {
         LOG.debug(methodName + LOG_CALLED);
         return daoList != null && !daoList.isEmpty() ? Optional.of(daoList.get(0))
             : Optional.empty();
+    }
+    
+    protected EntityManager getEntityManager() {
+        if (!isEntityManagerActive()) {
+            LOG.debug("getEntityManager() - Creating new entityManager");
+            clearRepositories();
+            entityManager = EntityManagerUtil.getEntityManager();
+        }
+        return entityManager;
+    }
+    
+    private boolean isEntityManagerActive() {
+        return EntityManagerUtil.isEntityManagerActive(entityManager);
     }
 }

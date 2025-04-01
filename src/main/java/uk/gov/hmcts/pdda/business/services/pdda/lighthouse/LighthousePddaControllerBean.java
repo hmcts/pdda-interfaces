@@ -4,7 +4,6 @@ import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import java.util.Optional;
  */
 @Stateless
 @Service
-@Transactional
 @LocalBean
 @ApplicationException(rollback = true)
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
