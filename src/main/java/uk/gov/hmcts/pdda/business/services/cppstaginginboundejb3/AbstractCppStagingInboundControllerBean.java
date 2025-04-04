@@ -12,7 +12,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 import uk.gov.hmcts.pdda.business.services.validation.sax.FileEntityResolver;
 import uk.gov.hmcts.pdda.business.services.validation.sax.SaxValidationService;
@@ -37,8 +36,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
 
     private CppStagingInboundHelper cppStagingInboundHelper;
     private ValidationService validationService;
-    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
-
+    
     public AbstractCppStagingInboundControllerBean() {
         super();
     }
@@ -54,12 +52,6 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         this.validationService = validationService;
     }
     
-    @Override
-    protected void clearRepositories() {
-        super.clearRepositories();
-        xhbCppStagingInboundRepository = null;
-    }
-
     /**
      * Get courtId from XHB_COURT using crest court id (aka court code).
      * 
@@ -165,12 +157,5 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
             validationService = new SaxValidationService(new FileEntityResolver());
         }
         return validationService;
-    }
-    
-    public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
-            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
-        }
-        return xhbCppStagingInboundRepository;
     }
 }
