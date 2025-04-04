@@ -152,7 +152,7 @@ public class CaseControllerBean extends AbstractControllerBean {
      * 
      * @return XhbHearingRepository
      */
-    private XhbHearingRepository getXhbHearingRepository() {
+    protected XhbHearingRepository getXhbHearingRepository() {
         if (xhbHearingRepository == null  || !isEntityManagerActive()) {
             xhbHearingRepository = new XhbHearingRepository(getEntityManager());
         }
@@ -164,7 +164,7 @@ public class CaseControllerBean extends AbstractControllerBean {
      * 
      * @return XhbHearingListRepository
      */
-    private XhbHearingListRepository getXhbHearingListRepository() {
+    protected XhbHearingListRepository getXhbHearingListRepository() {
         if (xhbHearingListRepository == null  || !isEntityManagerActive()) {
             xhbHearingListRepository = new XhbHearingListRepository(getEntityManager());
         }
