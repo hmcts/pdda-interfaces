@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.services.validation.sax.SaxValidationService;
 
 import java.util.List;
 
+@SuppressWarnings("PMD.NullAssignment")
 public class AbstractCppStagingInboundControllerBean extends AbstractControllerBean {
 
     private static final Logger LOG =
@@ -53,6 +54,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         this.validationService = validationService;
     }
     
+    @Override
     protected void clearRepositories() {
         super.clearRepositories();
         xhbCppStagingInboundRepository = null;

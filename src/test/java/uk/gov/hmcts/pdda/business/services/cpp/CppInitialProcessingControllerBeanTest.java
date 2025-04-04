@@ -74,6 +74,12 @@ class CppInitialProcessingControllerBeanTest
         xhbCourtDaoList.add(DummyCourtUtil.getXhbCourtDao(1, ""));
 
         try {
+            EasyMock.expect(mockXhbCppStagingInboundRepository.getEntityManager())
+                .andReturn(mockEntityManager).anyTimes();
+            EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+            mockEntityManager.clear();
+            EasyMock.expectLastCall().times(2);
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
             EasyMock.expect(mockCppStagingInboundControllerBean
@@ -164,6 +170,12 @@ class CppInitialProcessingControllerBeanTest
         XhbCppFormattingDao xcf = DummyFormattingUtil.getXhbCppFormattingDao();
 
         try {
+            EasyMock.expect(mockXhbCppStagingInboundRepository.getEntityManager())
+                .andReturn(mockEntityManager).anyTimes();
+            EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+            mockEntityManager.clear();
+            EasyMock.expectLastCall().times(2);
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
             EasyMock.expect(mockCppStagingInboundControllerBean
@@ -325,6 +337,10 @@ class CppInitialProcessingControllerBeanTest
         invalidXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         invalidXcsi.setProcessingStatus(null);
 
+        EasyMock.expect(mockXhbCppStagingInboundRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        mockEntityManager.clear();
+        EasyMock.expectLastCall();
         EasyMock
             .expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
             .andReturn(DAILY_LIST_XML);
@@ -424,6 +440,10 @@ class CppInitialProcessingControllerBeanTest
                 EasyMock.isA(Integer.class), EasyMock.isA(String.class),
                 EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
             .andReturn(null);
+        
+        EasyMock.expect(mockXhbCppListRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);

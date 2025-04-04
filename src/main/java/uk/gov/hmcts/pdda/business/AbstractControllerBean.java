@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepo
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 
+@SuppressWarnings("PMD.NullAssignment")
 public class AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractControllerBean.class);

@@ -58,6 +58,9 @@ class CaseControllerBeanTest {
 
     @Mock
     private XhbHearingListRepository mockXhbHearingListRepository;
+    
+    @Mock
+    private EntityManager mockEntityManager;
 
     @TestSubject
     private final CaseControllerBean classUnderTest =
@@ -87,6 +90,9 @@ class CaseControllerBeanTest {
         Optional<XhbHearingListDao> oldList =
             Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt.minusDays(1), ldt.minusDays(1)));
 
+        EasyMock.expect(mockXhbHearingRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
 
         EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
@@ -278,6 +284,7 @@ class CaseControllerBeanTest {
      * Replay the mocked objects.
      */
     private void replayMocks() {
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbHearingRepository);
         EasyMock.replay(mockXhbHearingListRepository);
     }
@@ -286,6 +293,7 @@ class CaseControllerBeanTest {
      * Verify the mocked objects.
      */
     private void verifyMocks() {
+        EasyMock.verify(mockEntityManager);
         EasyMock.verify(mockXhbHearingRepository);
         EasyMock.verify(mockXhbHearingListRepository);
     }

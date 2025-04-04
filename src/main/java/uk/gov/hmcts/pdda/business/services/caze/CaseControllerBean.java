@@ -29,6 +29,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class CaseControllerBean extends AbstractControllerBean {
 
     @SuppressWarnings("unused")
@@ -48,6 +49,7 @@ public class CaseControllerBean extends AbstractControllerBean {
         super();
     }
     
+    @Override
     protected void clearRepositories() {
         super.clearRepositories();
         xhbHearingRepository = null;
