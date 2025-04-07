@@ -289,6 +289,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.replay(mockXhbFormattingRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockListNodesHelper);
+        EasyMock.replay(mockEntityManager);
     }
 
     /**
@@ -301,6 +302,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.verify(mockXhbCppListRepository);
         EasyMock.verify(mockXhbCppFormattingRepository);
         EasyMock.verify(mockXhbFormattingRepository);
+        EasyMock.verify(mockEntityManager);
     }
 
 }

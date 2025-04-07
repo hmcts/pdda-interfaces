@@ -29,6 +29,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class CaseControllerBean extends AbstractControllerBean {
 
     @SuppressWarnings("unused")
@@ -46,6 +47,13 @@ public class CaseControllerBean extends AbstractControllerBean {
 
     public CaseControllerBean() {
         super();
+    }
+    
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbHearingRepository = null;
+        xhbHearingListRepository = null;
     }
 
     /**
@@ -144,8 +152,8 @@ public class CaseControllerBean extends AbstractControllerBean {
      * 
      * @return XhbHearingRepository
      */
-    private XhbHearingRepository getXhbHearingRepository() {
-        if (xhbHearingRepository == null) {
+    protected XhbHearingRepository getXhbHearingRepository() {
+        if (xhbHearingRepository == null  || !isEntityManagerActive()) {
             xhbHearingRepository = new XhbHearingRepository(getEntityManager());
         }
         return xhbHearingRepository;
@@ -156,8 +164,8 @@ public class CaseControllerBean extends AbstractControllerBean {
      * 
      * @return XhbHearingListRepository
      */
-    private XhbHearingListRepository getXhbHearingListRepository() {
-        if (xhbHearingListRepository == null) {
+    protected XhbHearingListRepository getXhbHearingListRepository() {
+        if (xhbHearingListRepository == null  || !isEntityManagerActive()) {
             xhbHearingListRepository = new XhbHearingListRepository(getEntityManager());
         }
         return xhbHearingListRepository;

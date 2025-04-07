@@ -10,8 +10,10 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 
+@SuppressWarnings("PMD.NullAssignment")
 public class AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractControllerBean.class);
@@ -24,6 +26,7 @@ public class AbstractControllerBean {
     private XhbCppFormattingRepository xhbCppFormattingRepository;
     private XhbCppListRepository xhbCppListRepository;
     private XhbFormattingRepository xhbFormattingRepository;
+    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
 
     // For unit tests.
     protected AbstractControllerBean(EntityManager entityManager,
@@ -36,6 +39,16 @@ public class AbstractControllerBean {
         this.xhbCourtRepository = xhbCourtRepository;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
+    }
+    
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbClobRepository = null;
+        xhbBlobRepository = null;
+        xhbCourtRepository = null;
+        xhbConfigPropRepository = null;
+        xhbCppFormattingRepository = null;
+        xhbCppStagingInboundRepository = null;
     }
 
     protected AbstractControllerBean(EntityManager entityManager) {
@@ -50,41 +63,42 @@ public class AbstractControllerBean {
     protected EntityManager getEntityManager() {
         if (entityManager == null) {
             LOG.debug("getEntityManager() - Creating new entityManager");
+            clearRepositories();
             entityManager = EntityManagerUtil.getEntityManager();
         }
         return entityManager;
     }
 
     protected XhbClobRepository getXhbClobRepository() {
-        if (xhbClobRepository == null) {
+        if (xhbClobRepository == null || !isEntityManagerActive()) {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
     }
 
     protected XhbBlobRepository getXhbBlobRepository() {
-        if (xhbBlobRepository == null) {
+        if (xhbBlobRepository == null || !isEntityManagerActive()) {
             xhbBlobRepository = new XhbBlobRepository(getEntityManager());
         }
         return xhbBlobRepository;
     }
 
     protected XhbCourtRepository getXhbCourtRepository() {
-        if (xhbCourtRepository == null) {
+        if (xhbCourtRepository == null || !isEntityManagerActive()) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
         }
         return xhbCourtRepository;
     }
 
     protected XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (xhbConfigPropRepository == null) {
+        if (xhbConfigPropRepository == null || !isEntityManagerActive()) {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         return xhbConfigPropRepository;
     }
 
     protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
-        if (xhbCppFormattingRepository == null) {
+        if (xhbCppFormattingRepository == null || !isEntityManagerActive()) {
             xhbCppFormattingRepository = new XhbCppFormattingRepository(getEntityManager());
         }
         return xhbCppFormattingRepository;
@@ -96,7 +110,7 @@ public class AbstractControllerBean {
      * @return XhbCppListRepository
      */
     protected XhbCppListRepository getXhbCppListRepository() {
-        if (xhbCppListRepository == null) {
+        if (xhbCppListRepository == null || !isEntityManagerActive()) {
             xhbCppListRepository = new XhbCppListRepository(getEntityManager());
         }
         return xhbCppListRepository;
@@ -108,10 +122,25 @@ public class AbstractControllerBean {
      * @return XhbFormattingRepository
      */
     protected XhbFormattingRepository getXhbFormattingRepository() {
-        if (xhbFormattingRepository == null) {
+        if (xhbFormattingRepository == null || !isEntityManagerActive()) {
             xhbFormattingRepository = new XhbFormattingRepository(getEntityManager());
         }
         return xhbFormattingRepository;
     }
 
+    /**
+     * Retrieves a reference to the xhbCppStagingInboundRepository.
+     * 
+     * @return XhbCppStagingInboundRepository
+     */
+    public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
+        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
+            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
+        }
+        return xhbCppStagingInboundRepository;
+    }
+    
+    protected boolean isEntityManagerActive() {
+        return EntityManagerUtil.isEntityManagerActive(entityManager);
+    }
 }
