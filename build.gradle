@@ -249,9 +249,7 @@ dependencies {
 	implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
 }
 
-application {
-	mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
-}
+mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
 
 bootJar {
   archiveFileName = "PDDA-1.0.war"
