@@ -218,14 +218,20 @@ class CppStagingInboundControllerBeanTest {
         List<XhbConfigPropDao> returnList = new ArrayList<>();
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
+        
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock
             .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
             .andReturn(returnList);
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         String result = classUnderTest.getSchemaName(documentType);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(result, NOTNULL);
     }
 
@@ -236,13 +242,18 @@ class CppStagingInboundControllerBeanTest {
         List<XhbCourtDao> data = new ArrayList<>();
         data.add(DummyCourtUtil.getXhbCourtDao(courtCode, "TestCourt1"));
 
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
+        EasyMock.verify(mockEntityManager);
         assertEquals(courtCode, returnedCourtId, EQUALS);
     }
 
@@ -252,13 +263,18 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
 
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
+        EasyMock.verify(mockEntityManager);
         assertEquals(0, returnedCourtId, EQUALS);
     }
     

@@ -56,6 +56,9 @@ class FormattingControllerBeanTest {
 
     @Mock
     private XhbCppListRepository mockXhbCppListRepository;
+    
+    @Mock
+    private static EntityManager mockEntityManager;
 
     @TestSubject
     private final FormattingControllerBean classUnderTest =
@@ -218,6 +221,9 @@ class FormattingControllerBeanTest {
         List<XhbCppListDao> dummyList = new ArrayList<>();
         dummyList.add(xhbCppListDao);
 
+        EasyMock.expect(mockXhbCppListRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(
             EasyMock.isA(Integer.class), EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
@@ -226,16 +232,18 @@ class FormattingControllerBeanTest {
 
         EasyMock.replay(mockXhbCppListRepository);
         EasyMock.replay(mockFormattingServices);
+        EasyMock.replay(mockEntityManager);
 
         // Run
         FormattingValue formattingValue = new FormattingValue(distributionTypeIn, mimeTypeIn,
             documentTypeIn, majorVersion, majorVersion, language, country, null,
             new ByteArrayOutputStream(1024), courtId, null);
-        byte[] result = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
+        final byte[] result = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
 
         // Checks
         EasyMock.verify(mockFormattingServices);
         EasyMock.verify(mockXhbCppListRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(result, NOTNULL);
     }
 

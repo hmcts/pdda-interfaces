@@ -94,6 +94,9 @@ class CppStagingInboundControllerBeanValidateTest {
             XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
             dao.setDocumentName(VALIDFILENAME);
 
+            EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+            EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+            
             testingXhbConfigPropRepository();
 
             testingClobRepository(dao);
@@ -109,6 +112,7 @@ class CppStagingInboundControllerBeanValidateTest {
             EasyMock.replay(mockXhbClobRepository);
             EasyMock.replay(mockValidationService);
             EasyMock.replay(mockValidationResult);
+            EasyMock.replay(mockEntityManager);
             // Run
             final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
             // Checks
@@ -116,6 +120,7 @@ class CppStagingInboundControllerBeanValidateTest {
             EasyMock.verify(mockXhbClobRepository);
             EasyMock.verify(mockValidationService);
             EasyMock.verify(mockValidationResult);
+            EasyMock.verify(mockEntityManager);
             assertFalse(validDocument, FALSE);
         });
     }
@@ -126,6 +131,9 @@ class CppStagingInboundControllerBeanValidateTest {
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName(VALIDFILENAME);
 
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         testingXhbConfigPropRepository();
 
         testingClobRepository(dao);
@@ -140,6 +148,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockValidationService);
         EasyMock.replay(mockValidationResult);
+        EasyMock.replay(mockEntityManager);
         // Run
         final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -147,6 +156,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockXhbClobRepository);
         EasyMock.verify(mockValidationService);
         EasyMock.verify(mockValidationResult);
+        EasyMock.verify(mockEntityManager);
         assertFalse(validDocument, FALSE);
     }
 
@@ -156,13 +166,18 @@ class CppStagingInboundControllerBeanValidateTest {
         XhbCppStagingInboundDao dao = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         dao.setDocumentName("INVALIDNAME.txt");
 
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         testingXhbConfigPropRepository();
 
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertFalse(invalidDocument, FALSE);
     }
 
@@ -173,13 +188,18 @@ class CppStagingInboundControllerBeanValidateTest {
         dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("INVALID");
 
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         testingXhbConfigPropRepository();
 
         EasyMock.replay(mockXhbConfigPropRepository);
+        EasyMock.replay(mockEntityManager);
         // Run
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertFalse(invalidDocument, FALSE);
     }
 
@@ -192,6 +212,9 @@ class CppStagingInboundControllerBeanValidateTest {
         dao.setDocumentName(VALIDFILENAME);
         dao.setDocumentType("PD");
 
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         testingXhbConfigPropRepository();
 
         testingClobRepository(dao);
@@ -208,6 +231,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockValidationService);
         EasyMock.replay(mockValidationResult);
+        EasyMock.replay(mockEntityManager);
         // Run
         final boolean validDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
@@ -215,6 +239,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockXhbClobRepository);
         EasyMock.verify(mockValidationService);
         EasyMock.verify(mockValidationResult);
+        EasyMock.verify(mockEntityManager);
         assertTrue(validDocument, TRUE);
     }
 

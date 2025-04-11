@@ -156,6 +156,7 @@ class PdConfigurationControllerBeanGetTest {
             dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(courtId, "TestCourt" + courtId));
         }
 
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
 
         // Run method
@@ -181,6 +182,7 @@ class PdConfigurationControllerBeanGetTest {
         Optional<XhbCourtDao> court =
             Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSets);
@@ -236,6 +238,7 @@ class PdConfigurationControllerBeanGetTest {
         Optional<XhbCourtDao> court =
             Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
             .thenReturn(xrs);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
