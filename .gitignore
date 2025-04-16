@@ -63,3 +63,6 @@ README.html
 *.iml
 .idea
 .exercism
+
+### Test files not to be checked in
+scripts/test/generateTestBaisDocs/*.xml
