@@ -3,6 +3,7 @@ package uk.gov.hmcts;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogeventdesc.XhbCourtLogEventDescDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
@@ -148,6 +149,19 @@ public final class DummyCourtUtil {
         entryId = result.getPrimaryKey();
         assertNotNull(entryId, NOTNULL);
         return new XhbCourtLogEntryDao(result);
+    }
+
+
+    public static XhbCourtLogEventDescDao getXhbCourtLogEventDescDao() {
+        XhbCourtLogEventDescDao dao = new XhbCourtLogEventDescDao();
+        dao.setEventDescId(-5);
+        dao.setEventDescription("Test Description");
+        dao.setCreationDate(LocalDateTime.now().minusMinutes(5));
+        dao.setLastUpdateDate(LocalDateTime.now());
+        dao.setCreatedBy("Test1");
+        dao.setLastUpdatedBy("Test2");
+        dao.setVersion(1);
+        return dao;
     }
 
 

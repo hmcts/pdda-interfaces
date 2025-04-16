@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaystore.XhbDisplayStoreDao;
@@ -39,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class DisplayStoreControllerBeanTest {
 
     private static final String TRUE = "Result is not True";
@@ -51,6 +53,9 @@ class DisplayStoreControllerBeanTest {
     @Mock
     private XhbDisplayStoreRepository mockXhbDisplayStoreRepository;
 
+    @Mock
+    protected EntityManager mockEntityManager;
+
     @TestSubject
     private final DisplayStoreControllerBean classUnderTest =
         new DisplayStoreControllerBean(EasyMock.createMock(EntityManager.class));
@@ -58,6 +63,12 @@ class DisplayStoreControllerBeanTest {
     @BeforeAll
     public static void setUp() {
         // Do nothing
+    }
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
     }
 
     @AfterAll

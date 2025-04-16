@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCaseUtil;
@@ -58,7 +59,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
+    "PMD.TooManyMethods"})
 class CourtListQueryTest extends AbstractQueryTest {
 
     private static final String TRUE = "Result is not True";
@@ -109,6 +111,12 @@ class CourtListQueryTest extends AbstractQueryTest {
     @BeforeAll
     public static void setUp() {
         // Do nothing
+    }
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
     }
 
     @AfterAll

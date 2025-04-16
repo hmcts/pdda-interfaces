@@ -94,20 +94,21 @@ class ActiveCasesInRoomQueryTest {
         Integer courtRoomId = 81;
         Integer scheduledHearingId = -1;
 
-        // Expects
-        EasyMock.expect(mockXhbScheduledHearingRepository.findActiveCasesInRoom(EasyMock.isA(Integer.class),
-            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class))).andReturn(xhbScheduledHearingDaoList);
+        // Expectations
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true); // 👈 Fixes the error
+        EasyMock
+            .expect(mockXhbScheduledHearingRepository.findActiveCasesInRoom(EasyMock.eq(listId),
+                EasyMock.eq(courtRoomId), EasyMock.eq(scheduledHearingId)))
+            .andReturn(xhbScheduledHearingDaoList);
 
-
-        // Replays
-        EasyMock.replay(mockXhbScheduledHearingRepository);
-
+        EasyMock.replay(mockEntityManager, mockXhbScheduledHearingRepository);
 
         // Run
         classUnderTest.getData(listId, courtRoomId, scheduledHearingId);
 
-        // Checks
-        EasyMock.verify(mockXhbScheduledHearingRepository);
+        // Verify
+        EasyMock.verify(mockEntityManager, mockXhbScheduledHearingRepository);
         return true;
     }
+
 }

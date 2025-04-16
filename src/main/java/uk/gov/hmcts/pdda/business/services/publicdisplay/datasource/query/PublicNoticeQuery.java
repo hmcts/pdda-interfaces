@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefinitivepublicnotice.XhbDefinitivePublicNoticeDao;
@@ -20,12 +21,11 @@ import java.util.Optional;
  * 
  * @author pznwc5
  */
-public class PublicNoticeQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class PublicNoticeQuery extends AbstractControllerBean {
 
     /** Logger object. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
-
-    private EntityManager entityManager;
 
     private XhbConfiguredPublicNoticeRepository xhbConfiguredPublicNoticeRepository;
 
@@ -39,21 +39,25 @@ public class PublicNoticeQuery {
      * @param entityManager EntityManager
      */
     public PublicNoticeQuery(EntityManager entityManager) {
-        setEntityManager(entityManager);
+        super(entityManager);
     }
 
     public PublicNoticeQuery(EntityManager entityManager,
         XhbConfiguredPublicNoticeRepository xhbConfiguredPublicNoticeRepository,
         XhbPublicNoticeRepository xhbPublicNoticeRepository,
         XhbDefinitivePublicNoticeRepository xhbDefinitivePublicNoticeRepository) {
-        setEntityManager(entityManager);
+        super(entityManager);
         this.xhbConfiguredPublicNoticeRepository = xhbConfiguredPublicNoticeRepository;
         this.xhbPublicNoticeRepository = xhbPublicNoticeRepository;
         this.xhbDefinitivePublicNoticeRepository = xhbDefinitivePublicNoticeRepository;
     }
 
-    private void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbConfiguredPublicNoticeRepository = null;
+        xhbPublicNoticeRepository = null;
+        xhbDefinitivePublicNoticeRepository = null;
     }
 
     /**
@@ -95,22 +99,24 @@ public class PublicNoticeQuery {
     }
 
     private XhbConfiguredPublicNoticeRepository getXhbConfiguredPublicNoticeRepository() {
-        if (xhbConfiguredPublicNoticeRepository == null) {
-            xhbConfiguredPublicNoticeRepository = new XhbConfiguredPublicNoticeRepository(entityManager);
+        if (xhbConfiguredPublicNoticeRepository == null || !isEntityManagerActive()) {
+            xhbConfiguredPublicNoticeRepository =
+                new XhbConfiguredPublicNoticeRepository(getEntityManager());
         }
         return xhbConfiguredPublicNoticeRepository;
     }
 
     private XhbPublicNoticeRepository getXhbPublicNoticeRepository() {
-        if (xhbPublicNoticeRepository == null) {
-            xhbPublicNoticeRepository = new XhbPublicNoticeRepository(entityManager);
+        if (xhbPublicNoticeRepository == null || !isEntityManagerActive()) {
+            xhbPublicNoticeRepository = new XhbPublicNoticeRepository(getEntityManager());
         }
         return xhbPublicNoticeRepository;
     }
 
     private XhbDefinitivePublicNoticeRepository getXhbDefinitivePublicNoticeRepository() {
-        if (xhbDefinitivePublicNoticeRepository == null) {
-            xhbDefinitivePublicNoticeRepository = new XhbDefinitivePublicNoticeRepository(entityManager);
+        if (xhbDefinitivePublicNoticeRepository == null || !isEntityManagerActive()) {
+            xhbDefinitivePublicNoticeRepository =
+                new XhbDefinitivePublicNoticeRepository(getEntityManager());
         }
         return xhbDefinitivePublicNoticeRepository;
     }

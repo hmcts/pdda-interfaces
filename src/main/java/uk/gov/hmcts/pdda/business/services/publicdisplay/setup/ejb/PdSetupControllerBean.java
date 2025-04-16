@@ -32,6 +32,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class PdSetupControllerBean extends AbstractControllerBean implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
@@ -53,6 +54,14 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     public PdSetupControllerBean() {
         super();
+    }
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayLocationRepository = null;
+        xhbDisplayRepository = null;
+        xhbCourtSiteRepository = null;
     }
 
     /**
@@ -148,7 +157,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
      * @return XhbCourtSiteRepository
      */
     private XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
@@ -160,7 +169,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
             xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
@@ -172,7 +181,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
             xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;

@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -48,6 +49,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class VipDisplayCourtRoomQueryTest {
 
     private static final String TRUE = "Result is not True";
@@ -79,6 +81,13 @@ class VipDisplayCourtRoomQueryTest {
     public static void setUp() {
         // Do nothing
     }
+
+    @BeforeEach
+    void setupEntityManagerExpectations() {
+        EasyMock.expect(mockEntityManager.isOpen()).andStubReturn(true);
+        EasyMock.replay(mockEntityManager);
+    }
+
 
     @AfterAll
     public static void tearDown() {

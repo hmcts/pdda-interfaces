@@ -31,4 +31,15 @@ public class EntityManagerUtil {
     public static boolean isEntityManagerActive(EntityManager entityManager) {
         return entityManager != null && entityManager.isOpen();
     }
+
+    public static boolean isEntityManagerClosed(EntityManager entityManager) {
+        return entityManager == null || !entityManager.isOpen();
+    }
+
+    public static boolean isTransactionActive(EntityManager entityManager) {
+        if (entityManager != null && entityManager.getTransaction() != null) {
+            return entityManager.getTransaction().isActive();
+        }
+        return false;
+    }
 }

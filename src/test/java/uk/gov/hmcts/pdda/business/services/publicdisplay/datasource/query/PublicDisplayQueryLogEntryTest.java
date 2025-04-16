@@ -5,6 +5,7 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -57,9 +58,18 @@ class PublicDisplayQueryLogEntryTest {
     @Mock
     private XhbCourtLogEventDescRepository mockXhbCourtLogEventDescRepository;
 
+    @Mock
+    protected EntityManager mockEntityManager;
+
     @TestSubject
     private final PublicDisplayQueryLogEntry classUnderTest =
         new PublicDisplayQueryLogEntry(EasyMock.createMock(EntityManager.class));
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
+    }
 
     @Test
     void testPopulateEventData() {

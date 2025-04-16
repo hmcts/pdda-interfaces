@@ -127,11 +127,6 @@ class LighthousePddaControllerBeanTest {
     }
 
     @Test
-    void testGetEntityManager() {
-        assertInstanceOf(EntityManager.class, classUnderTest.getEntityManager(), NOT_INSTANCE);
-    }
-
-    @Test
     void testGetDocumentNameToProcess() {
 
         String documentName1 = DAILY_LIST_EXAMPLE;

@@ -1,8 +1,10 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -30,6 +33,9 @@ class VipCourtRoomsQueryTest {
 
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
+
+    @Mock
+    protected EntityManager mockEntityManager;
 
     @InjectMocks
     private final VipCourtRoomsQuery classUnderTestMultiSite =
@@ -42,6 +48,17 @@ class VipCourtRoomsQueryTest {
     @BeforeAll
     public static void setUp() {
         // Do nothing
+    }
+
+    @BeforeEach
+    void setupMocks() {
+        Query mockQuery = Mockito.mock(Query.class);
+        when(mockQuery.setParameter(Mockito.anyString(), Mockito.any())).thenReturn(mockQuery);
+        when(mockQuery.getResultList()).thenReturn(new ArrayList<>()); // or your test data
+
+        // This ensures findVipMultiSite and findVipMNoSite can run safely
+        when(mockXhbCourtRoomRepository.getEntityManager()).thenReturn(mockEntityManager);
+        when(mockEntityManager.createNamedQuery(Mockito.anyString())).thenReturn(mockQuery);
     }
 
     @AfterAll
@@ -83,10 +100,10 @@ class VipCourtRoomsQueryTest {
 
         // Expects
         if (isMultiSite) {
-            Mockito.when(mockXhbCourtRoomRepository.findVipMultiSite(Mockito.isA(Integer.class)))
+            when(mockXhbCourtRoomRepository.findVipMultiSite(Mockito.isA(Integer.class)))
                 .thenReturn(xhbCourtRoomDaos);
         } else {
-            Mockito.when(mockXhbCourtRoomRepository.findVipMNoSite(Mockito.isA(Integer.class)))
+            when(mockXhbCourtRoomRepository.findVipMNoSite(Mockito.isA(Integer.class)))
                 .thenReturn(xhbCourtRoomDaos);
         }
 

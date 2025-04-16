@@ -35,6 +35,7 @@ import java.util.Optional;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings("PMD.NullAssignment")
 public class PddaDlNotifierHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaDlNotifierHelper.class);
 
@@ -58,6 +59,14 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
         super(entityManager, xhbConfigPropRepository, environment);
     }
     
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        pddaDlNotifierRepository = null;
+        courtRepository = null;
+    }
+
+
     public boolean isDailyNotifierRequired() {
         return isTimeToExecute() && isSendToPddaOnly();
     }
@@ -159,15 +168,15 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
 
 
     private XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
-        if (pddaDlNotifierRepository == null) {
-            pddaDlNotifierRepository = new XhbPddaDlNotifierRepository(entityManager);
+        if (pddaDlNotifierRepository == null || !isEntityManagerActive()) {
+            pddaDlNotifierRepository = new XhbPddaDlNotifierRepository(getEntityManager());
         }
         return pddaDlNotifierRepository;
     }
 
     private XhbCourtRepository getCourtRepository() {
-        if (courtRepository == null) {
-            courtRepository = new XhbCourtRepository(entityManager);
+        if (courtRepository == null || !isEntityManagerActive()) {
+            courtRepository = new XhbCourtRepository(getEntityManager());
         }
         return courtRepository;
     }
