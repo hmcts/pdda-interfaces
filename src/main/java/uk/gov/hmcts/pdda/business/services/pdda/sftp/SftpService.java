@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "PMD.AvoidSynchronizedAtMethodLevel"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -78,7 +78,7 @@ public class SftpService extends XhibitPddaHelper {
      * @return True if there was an error
      */
     @SuppressWarnings("PMD")
-    public boolean processBaisMessages(int sftpPort) {
+    public synchronized boolean processBaisMessages(int sftpPort) {
 
         boolean error = false;
 
@@ -144,7 +144,7 @@ public class SftpService extends XhibitPddaHelper {
      * 
      * @param config The SFTP configuration
      */
-    void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
+    synchronized void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
         boolean isCpConnection) {
         methodName = "setupSftpClient()";
         LOG.debug(methodName, LOG_CALLED);
@@ -164,7 +164,7 @@ public class SftpService extends XhibitPddaHelper {
      * 
      * @param config The SFTP configuration
      */
-    private void processDataFromBais(SftpConfig config, boolean isCpConnection) {
+    private synchronized void processDataFromBais(SftpConfig config, boolean isCpConnection) {
         methodName = "getDataFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
@@ -190,7 +190,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param baisValidation The validation class
      * @throws IOException The IOException
      */
-    void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
+    synchronized void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
         throws IOException {
 
         methodName = "retrieveFromBais()";
@@ -254,7 +254,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param clobData The CLOB data
      * @throws IOException The IOException
      */
-    private void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
+    private synchronized void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
         String clobData) throws IOException {
 
         methodName = "processBaisFile()";
@@ -338,7 +338,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param errorMessage The error message
      * @throws NotFoundException The NotFoundException
      */
-    private void createBaisMessage(final Integer courtId, final String messageType,
+    private synchronized void createBaisMessage(final Integer courtId, final String messageType,
         final String filename, final String clobData, String errorMessage, String listType)
         throws NotFoundException {
 
