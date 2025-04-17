@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
@@ -31,19 +32,20 @@ import java.util.List;
  * @author Nathan Toft
  * @version 1.0
  */
-public class ClearDownHelper {
+@SuppressWarnings("PMD.NullAssignment")
+public class ClearDownHelper extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClearDownHelper.class);
     public static final DateTimeFormatter DATETIME_FORMAT =
         DateTimeFormatter.ofPattern("yyyyMMddHHmm");
     public static final String RESET_DISPLAY_IWP_TIME = "RESET_DISPLAY_IWP_TIME";
 
-    private final EntityManager entityManager;
     private XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository;
+    @SuppressWarnings("unused")
     private XhbConfigPropRepository xhbConfigPropRepository;
 
     public ClearDownHelper(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        super(entityManager);
     }
 
     // JUnit Constructor
@@ -52,6 +54,14 @@ public class ClearDownHelper {
         this(null);
         this.xhbCrLiveDisplayRepository = xhbCrLiveDisplayRepository;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
+    }
+
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        LOG.info("clearRepositories()");
+        xhbCrLiveDisplayRepository = null;
     }
 
     /**
@@ -63,8 +73,12 @@ public class ClearDownHelper {
     }
 
     private LocalDateTime getClearDownTime() {
+        if (xhbConfigPropRepository == null) {
+            xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
+        }
         List<XhbConfigPropDao> xhbConfigPropDaoList =
-            getXhbConfigPropRepository().findByPropertyName(RESET_DISPLAY_IWP_TIME);
+            xhbConfigPropRepository.findByPropertyName(RESET_DISPLAY_IWP_TIME);
+
         if (!xhbConfigPropDaoList.isEmpty()) {
             String propertyValue = xhbConfigPropDaoList.get(0).getPropertyValue();
             return getClearDownTime(propertyValue);
@@ -114,15 +128,9 @@ public class ClearDownHelper {
 
     private XhbCrLiveDisplayRepository getXhbCrLiveDisplayRepository() {
         if (xhbCrLiveDisplayRepository == null) {
-            xhbCrLiveDisplayRepository = new XhbCrLiveDisplayRepository(entityManager);
+            xhbCrLiveDisplayRepository = new XhbCrLiveDisplayRepository(getEntityManager());
         }
         return xhbCrLiveDisplayRepository;
     }
 
-    private XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (xhbConfigPropRepository == null) {
-            xhbConfigPropRepository = new XhbConfigPropRepository(entityManager);
-        }
-        return xhbConfigPropRepository;
-    }
 }

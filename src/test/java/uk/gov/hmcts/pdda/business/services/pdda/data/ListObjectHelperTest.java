@@ -295,7 +295,7 @@ class ListObjectHelperTest {
         Mockito
             .when(mockDataHelper.validateDefendant(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
-                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
+                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class), Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
     }
 
@@ -310,8 +310,9 @@ class ListObjectHelperTest {
         // Expects
         Mockito
             .when(mockDataHelper.validateDefendantOnCase(Mockito.isA(Integer.class),
-                Mockito.isA(Integer.class)))
+                Mockito.isA(Integer.class), Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()));
+
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);

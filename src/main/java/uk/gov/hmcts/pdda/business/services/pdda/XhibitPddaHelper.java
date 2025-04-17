@@ -72,6 +72,13 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         this.courtRepository = courtRepository;
     }
 
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        clobRepository = null;
+        courtRepository = null;
+    }
+
     /**
      * Sends a public display event.
      * 
@@ -90,22 +97,22 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     }
 
     protected XhbClobRepository getClobRepository() {
-        if (clobRepository == null) {
+        if (clobRepository == null || !isEntityManagerActive()) {
             clobRepository = new XhbClobRepository(entityManager);
         }
         return clobRepository;
     }
 
     protected XhbCourtRepository getCourtRepository() {
-        if (courtRepository == null) {
-            courtRepository = new XhbCourtRepository(entityManager);
+        if (courtRepository == null || !isEntityManagerActive()) {
+            courtRepository = new XhbCourtRepository(getEntityManager());
         }
         return courtRepository;
     }
 
     protected PddaMessageHelper getPddaMessageHelper() {
         if (pddaMessageHelper == null) {
-            pddaMessageHelper = new PddaMessageHelper(entityManager);
+            pddaMessageHelper = new PddaMessageHelper(getEntityManager());
         }
         return pddaMessageHelper;
     }

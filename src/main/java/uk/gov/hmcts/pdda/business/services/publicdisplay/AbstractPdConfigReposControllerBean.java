@@ -21,7 +21,7 @@ import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDispl
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyMethods", "PMD.NullAssignment"})
 public abstract class AbstractPdConfigReposControllerBean extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPdConfigReposControllerBean.class);
@@ -61,6 +61,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
         this.xhbRotationSetsRepository = xhbRotationSetsRepository;
         this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;
         this.xhbDisplayTypeRepository = xhbDisplayTypeRepository;
+        this.xhbDisplayDocumentRepository = null;
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
         this.xhbCourtRoomRepository = xhbCourtRoomRepository;
@@ -68,6 +69,20 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
         this.publicDisplayNotifier = publicDisplayNotifier;
         this.vipDisplayDocumentQuery = vipDisplayDocumentQuery;
         this.vipDisplayCourtRoomQuery = vipDisplayCourtRoomQuery;
+    }
+
+    @Override
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbRotationSetsRepository = null;
+        xhbRotationSetDdRepository = null;
+        xhbDisplayTypeRepository = null;
+        xhbDisplayRepository = null;
+        xhbCourtSiteRepository = null;
+        xhbCourtRoomRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayDocumentRepository = null;
+        super.clearRepositories();
     }
 
     /**
@@ -88,7 +103,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbRotationSetsRepository
      */
     protected XhbRotationSetsRepository getXhbRotationSetsRepository() {
-        if (xhbRotationSetsRepository == null) {
+        if (xhbRotationSetsRepository == null || !isEntityManagerActive()) {
             xhbRotationSetsRepository = new XhbRotationSetsRepository(getEntityManager());
         }
         return xhbRotationSetsRepository;
@@ -100,7 +115,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbRotationSetDdRepository
      */
     protected XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
-        if (xhbRotationSetDdRepository == null) {
+        if (xhbRotationSetDdRepository == null || !isEntityManagerActive()) {
             xhbRotationSetDdRepository = new XhbRotationSetDdRepository(getEntityManager());
         }
         return xhbRotationSetDdRepository;
@@ -112,7 +127,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbDisplayDocumentRepository
      */
     protected XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
-        if (xhbDisplayDocumentRepository == null) {
+        if (xhbDisplayDocumentRepository == null || !isEntityManagerActive()) {
             xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(getEntityManager());
         }
         return xhbDisplayDocumentRepository;
@@ -124,7 +139,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbDisplayTypeRepository
      */
     protected XhbDisplayTypeRepository getXhbDisplayTypeRepository() {
-        if (xhbDisplayTypeRepository == null) {
+        if (xhbDisplayTypeRepository == null || !isEntityManagerActive()) {
             xhbDisplayTypeRepository = new XhbDisplayTypeRepository(getEntityManager());
         }
         return xhbDisplayTypeRepository;
@@ -136,7 +151,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbDisplayRepository
      */
     protected XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
             xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;
@@ -148,7 +163,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbCourtSiteRepository
      */
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
@@ -160,7 +175,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbCourtRoomRepository
      */
     protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
             xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
@@ -172,7 +187,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
      * @return XhbDisplayLocationRepository
      */
     protected XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
             xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;

@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -99,7 +100,7 @@ class PdConfigurationControllerBeanDisplayTest {
     private VipCourtRoomsQuery mockVipQuery;
     
     @Mock
-    private static EntityManager mockEntityManager;
+    private EntityManager mockEntityManager;
 
     @InjectMocks
     private final PdConfigurationControllerBean classUnderTest = new PdConfigurationControllerBean(
@@ -115,6 +116,16 @@ class PdConfigurationControllerBeanDisplayTest {
         Mockito.mockStatic(RotationSetMaintainHelper.class);
         Mockito.mockStatic(DisplayConfigurationHelper.class);
         Mockito.mockStatic(PublicDisplayActivationHelper.class);
+    }
+
+    @BeforeEach
+    public void stubCreateQuery() {
+        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList())
+            .thenReturn(List.of(DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
+                DummyPublicDisplayUtil.getXhbDisplayDocumentDao()));
+
     }
 
     @AfterAll
@@ -146,7 +157,9 @@ class PdConfigurationControllerBeanDisplayTest {
         dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
         dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
 
-        Mockito.when(mockXhbDisplayDocumentRepository.findAll()).thenReturn(dummyList);
+        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(dummyList);
 
         // Run method
         XhbDisplayDocumentDao[] displayDocsArray = classUnderTest.getDisplayDocuments();
@@ -154,6 +167,7 @@ class PdConfigurationControllerBeanDisplayTest {
         // Check results
         assertArrayEquals(dummyList.toArray(), displayDocsArray, EQUALS);
     }
+
 
     @Test
     void testGetUpdatedDisplay() {

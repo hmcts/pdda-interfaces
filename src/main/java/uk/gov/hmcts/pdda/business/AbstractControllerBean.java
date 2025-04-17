@@ -81,7 +81,7 @@ public class AbstractControllerBean {
     }
 
     protected XhbCourtRepository getXhbCourtRepository() {
-        if (xhbCourtRepository == null || !isEntityManagerActive()) {
+        if ((xhbCourtRepository == null || !isEntityManagerActive()) && !isTransactionActive()) {
             xhbCourtRepository = new XhbCourtRepository(getEntityManager());
         }
         return xhbCourtRepository;
@@ -127,5 +127,9 @@ public class AbstractControllerBean {
     
     protected boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
+    }
+
+    protected boolean isTransactionActive() {
+        return EntityManagerUtil.isTransactionActive(entityManager);
     }
 }

@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.database.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
@@ -36,12 +37,10 @@ import java.util.Optional;
  * @author Bal Bhamra
  * @version $Id: VIPDisplayDocumentQuery.java,v 1.2 2005/11/17 10:55:48 bzjrnl Exp $
  */
-
-public class VipDisplayDocumentQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class VipDisplayDocumentQuery extends AbstractControllerBean {
     /** Logger object. */
     private static final Logger LOG = LoggerFactory.getLogger(VipDisplayDocumentQuery.class);
-
-    private final EntityManager entityManager;
 
     private XhbDisplayRepository xhbDisplayRepository;
     private XhbDisplayLocationRepository xhbDisplayLocationRepository;
@@ -49,18 +48,27 @@ public class VipDisplayDocumentQuery {
     private XhbRotationSetDdRepository xhbRotationSetDdRepository;
 
     public VipDisplayDocumentQuery(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        super(entityManager);
     }
 
     public VipDisplayDocumentQuery(EntityManager entityManager, XhbDisplayRepository xhbDisplayRepository,
         XhbDisplayLocationRepository xhbDisplayLocationRepository,
         XhbDisplayDocumentRepository xhbDisplayDocumentRepository,
         XhbRotationSetDdRepository xhbRotationSetDdRepository) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.xhbDisplayLocationRepository = xhbDisplayLocationRepository;
         this.xhbDisplayDocumentRepository = xhbDisplayDocumentRepository;
         this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;
+    }
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayDocumentRepository = null;
+        xhbRotationSetDdRepository = null;
     }
 
     /**
@@ -115,29 +123,29 @@ public class VipDisplayDocumentQuery {
     }
 
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
-            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(entityManager);
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
+            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
     }
 
     private XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
-            xhbDisplayRepository = new XhbDisplayRepository(entityManager);
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
+            xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;
     }
 
     private XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
-        if (xhbDisplayDocumentRepository == null) {
-            xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(entityManager);
+        if (xhbDisplayDocumentRepository == null || !isEntityManagerActive()) {
+            xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(getEntityManager());
         }
         return xhbDisplayDocumentRepository;
     }
 
     private XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
-        if (xhbRotationSetDdRepository == null) {
-            xhbRotationSetDdRepository = new XhbRotationSetDdRepository(entityManager);
+        if (xhbRotationSetDdRepository == null || !isEntityManagerActive()) {
+            xhbRotationSetDdRepository = new XhbRotationSetDdRepository(getEntityManager());
         }
         return xhbRotationSetDdRepository;
     }

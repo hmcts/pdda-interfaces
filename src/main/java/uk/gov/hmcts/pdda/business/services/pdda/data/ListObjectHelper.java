@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 @SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.CyclomaticComplexity"})
+    "PMD.CyclomaticComplexity", "PMD.UseLocaleWithCaseConversions"})
 public class ListObjectHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -79,6 +79,7 @@ public class ListObjectHelper implements Serializable {
     protected static final String STARTDATE = "cs:StartDate";
     protected static final String ENDDATE = "cs:EndDate";
     protected static final String SURNAME = "apd:CitizenNameSurname";
+    protected static final String ISMASKED = "cs:IsMasked";
     protected static final String VERSION = "cs:Version";
     private static final String EMPTY_STRING = "";
     private static final String DECIMALS_REGEX = "\\d+";
@@ -264,6 +265,10 @@ public class ListObjectHelper implements Serializable {
                 firstName = surname.substring(commaPosition + 1).trim();
                 surname = surname.substring(0, commaPosition);
             }
+            String publicDisplayHide = "NO";
+            if (nodesMap.get(ISMASKED) != null) {
+                publicDisplayHide = nodesMap.get(ISMASKED).toUpperCase();
+            }
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;
             if (MALE.equalsIgnoreCase(genderAsString)) {
@@ -276,7 +281,7 @@ public class ListObjectHelper implements Serializable {
                 parseDateTime(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
             if (firstName != null && surname != null) {
                 return dataHelper.validateDefendant(courtId, firstName, middleName, surname, gender,
-                    dateOfBirth);
+                    dateOfBirth, publicDisplayHide);
             }
         }
         return Optional.empty();
@@ -287,8 +292,9 @@ public class ListObjectHelper implements Serializable {
         if (xhbCaseDao.isPresent() && xhbDefendantDao.isPresent()) {
             Integer caseId = xhbCaseDao.get().getCaseId();
             Integer defendantId = xhbDefendantDao.get().getDefendantId();
+            String publicDisplayHide = xhbDefendantDao.get().getPublicDisplayHide();
             if (caseId != null && defendantId != null) {
-                return dataHelper.validateDefendantOnCase(caseId, defendantId);
+                return dataHelper.validateDefendantOnCase(caseId, defendantId, publicDisplayHide);
             }
         }
         return Optional.empty();

@@ -145,9 +145,6 @@ class SftpServiceTest {
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
-    // @Mock
-    // private SftpConfigHelper mockSftpConfigHelper;
-
     @Mock
     private SFTPClient mockSftpClient;
 
@@ -168,8 +165,9 @@ class SftpServiceTest {
 
     @TestSubject
     private final SftpService classUnderTest =
-        new SftpService(EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository,
+        new SftpService(mockEntityManager, mockXhbConfigPropRepository,
             mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository);
+
 
     @TestSubject
     private final SftpHelperUtil subClassUnderTest = new SftpHelperUtil(mockEntityManager);
@@ -286,6 +284,9 @@ class SftpServiceTest {
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockXhbPddaMessageRepository);
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
+
         // Run
         boolean result = false;
         try {
@@ -332,7 +333,6 @@ class SftpServiceTest {
     @Test
     @SuppressWarnings("PMD")
     void testProcessBaisMessages() {
-
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
         EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
@@ -341,6 +341,8 @@ class SftpServiceTest {
         mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
         EasyMock.expectLastCall();
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockPddaMessageHelper);
 
@@ -348,6 +350,7 @@ class SftpServiceTest {
 
         assertFalse(result, "Expected processBaisMessages to return false");
     }
+
 
     @Test
     @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")

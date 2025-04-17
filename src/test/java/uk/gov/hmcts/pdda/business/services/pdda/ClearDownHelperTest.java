@@ -68,9 +68,18 @@ class ClearDownHelperTest {
 
     @BeforeEach
     public void setUp() {
+        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
+        Mockito.when(mockQuery.setParameter(Mockito.anyString(), Mockito.any()))
+            .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(
+            List.of(DummyServicesUtil.getXhbConfigPropDao("RESET_DISPLAY_IWP_TIME", "10:00")));
+
+        // Use the constructor that accepts the repositories
         classUnderTest =
             new ClearDownHelper(mockXhbCrLiveDisplayRepository, mockXhbConfigPropRepository);
     }
+
 
     @AfterEach
     public void tearDown() {

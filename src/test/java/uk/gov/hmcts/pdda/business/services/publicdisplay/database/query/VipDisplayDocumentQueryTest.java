@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
@@ -72,6 +73,13 @@ class VipDisplayDocumentQueryTest {
     public static void setUp() {
         // Do nothing
     }
+
+    @BeforeEach
+    void setupEntityManagerExpectations() {
+        EasyMock.expect(mockEntityManager.isOpen()).andStubReturn(true);
+        EasyMock.replay(mockEntityManager);
+    }
+
 
     @AfterAll
     public static void tearDown() {

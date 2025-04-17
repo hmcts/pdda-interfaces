@@ -167,7 +167,8 @@ class DataHelperTest {
     private boolean testValidateDefendantOnCase(XhbDefendantOnCaseDao dao, boolean isPresent) {
         classUnderTest.isPresent = isPresent;
         Optional<XhbDefendantOnCaseDao> result =
-            classUnderTest.validateDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+            classUnderTest.validateDefendantOnCase(dao.getCaseId(), dao.getDefendantId(),
+                dao.getPublicDisplayHide());
         return result.isPresent();
     }
 
@@ -187,7 +188,8 @@ class DataHelperTest {
         classUnderTest.isPresent = isPresent;
         Optional<XhbDefendantDao> result =
             classUnderTest.validateDefendant(dao.getCourtId(), dao.getFirstName(),
-                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth(),
+                dao.getPublicDisplayHide());
         return result.isPresent();
     }
 
@@ -367,7 +369,7 @@ class DataHelperTest {
 
         @Override
         public Optional<XhbDefendantOnCaseDao> createDefendantOnCase(final Integer caseId,
-            final Integer defendantId) {
+            final Integer defendantId, final String publicDisplayHide) {
             return Optional.of(new XhbDefendantOnCaseDao());
         }
 
@@ -384,7 +386,7 @@ class DataHelperTest {
         @Override
         public Optional<XhbDefendantDao> createDefendant(final Integer courtId,
             final String firstName, final String middleName, final String surname,
-            final Integer gender, final LocalDateTime dateOfBirth) {
+            final Integer gender, final LocalDateTime dateOfBirth, final String publicDisplayHide) {
             return Optional.of(new XhbDefendantDao());
         }
 

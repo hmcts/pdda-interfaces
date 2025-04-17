@@ -130,6 +130,7 @@ class PddaDlNotifierHelperTest {
 
         List<XhbCourtDao> xhbCourtDaoList = getXhbCourtDaoList();
         EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(xhbCourtDaoList);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
 
         for (XhbCourtDao courtDao : xhbCourtDaoList) {
             List<XhbPddaDlNotifierDao> xhbPddaDlNotifierDaoList =
@@ -171,10 +172,25 @@ class PddaDlNotifierHelperTest {
                 }
             }
         }
+        // Create a mock Query object
+        jakarta.persistence.Query mockQuery = EasyMock.createMock(jakarta.persistence.Query.class);
+
+        // Expect the createQuery call and return the mock Query
+        EasyMock.expect(mockEntityManager.createQuery(EasyMock.anyString())).andReturn(mockQuery)
+            .anyTimes();
+
+        // Expect getResultList() to return your dummy court list
+        EasyMock.expect(mockQuery.getResultList()).andReturn(getXhbCourtDaoList()).anyTimes();
+
+        // Don't forget to replay the mock Query as well
+        EasyMock.replay(mockQuery);
+
+        EasyMock.replay(mockEntityManager);
 
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockXhbPddaDlNotifierRepository);
+
         // Run
         classUnderTest.runDailyListNotifier();
         // Checks

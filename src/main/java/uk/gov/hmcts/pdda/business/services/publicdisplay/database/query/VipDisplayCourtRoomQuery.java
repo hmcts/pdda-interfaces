@@ -4,6 +4,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.database.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
@@ -39,13 +40,12 @@ import java.util.Optional;
  * @author Bal Bhamra
  * @version $Id: VIPDisplayCourtRoomQuery.java,v 1.2 2005/11/17 10:55:48 bzjrnl Exp $
  */
-
-public class VipDisplayCourtRoomQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
     /** Logger object. */
     private static final Logger LOG = LoggerFactory.getLogger(VipDisplayCourtRoomQuery.class);
 
     private static final String EMPTY_STRING = "";
-    private final EntityManager entityManager;
     private XhbDisplayRepository xhbDisplayRepository;
     private XhbDisplayLocationRepository xhbDisplayLocationRepository;
     private XhbDisplayCourtRoomRepository xhbDisplayCourtRoomRepository;
@@ -55,19 +55,29 @@ public class VipDisplayCourtRoomQuery {
     private boolean showUnassignedCases;
 
     public VipDisplayCourtRoomQuery(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        super(entityManager);
     }
 
     public VipDisplayCourtRoomQuery(EntityManager entityManager, XhbDisplayRepository xhbDisplayRepository,
         XhbDisplayLocationRepository xhbDisplayLocationRepository,
         XhbDisplayCourtRoomRepository xhbDisplayCourtRoomRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.xhbDisplayLocationRepository = xhbDisplayLocationRepository;
         this.xhbDisplayCourtRoomRepository = xhbDisplayCourtRoomRepository;
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
         this.xhbCourtRoomRepository = xhbCourtRoomRepository;
+    }
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayCourtRoomRepository = null;
+        xhbCourtSiteRepository = null;
+        xhbCourtRoomRepository = null;
     }
 
     /**
@@ -147,36 +157,36 @@ public class VipDisplayCourtRoomQuery {
     }
 
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
-            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(entityManager);
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
+            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
     }
 
     private XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
-            xhbDisplayRepository = new XhbDisplayRepository(entityManager);
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
+            xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;
     }
 
     private XhbDisplayCourtRoomRepository getXhbDisplayCourtRoomRepository() {
-        if (xhbDisplayCourtRoomRepository == null) {
-            xhbDisplayCourtRoomRepository = new XhbDisplayCourtRoomRepository(entityManager);
+        if (xhbDisplayCourtRoomRepository == null || !isEntityManagerActive()) {
+            xhbDisplayCourtRoomRepository = new XhbDisplayCourtRoomRepository(getEntityManager());
         }
         return xhbDisplayCourtRoomRepository;
     }
 
     private XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
-            xhbCourtSiteRepository = new XhbCourtSiteRepository(entityManager);
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
+            xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
     }
 
     private XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
-            xhbCourtRoomRepository = new XhbCourtRoomRepository(entityManager);
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
+            xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
     }

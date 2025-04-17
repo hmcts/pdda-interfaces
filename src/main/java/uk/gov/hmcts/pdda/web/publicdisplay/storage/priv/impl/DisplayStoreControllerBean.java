@@ -23,6 +23,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class DisplayStoreControllerBean extends AbstractControllerBean implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
@@ -41,6 +42,12 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     public DisplayStoreControllerBean() {
         super();
+    }
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayStoreRepository = null;
     }
 
     /**
@@ -133,6 +140,9 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         Optional<XhbDisplayStoreDao> xds =
             getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
         if (xds.isPresent()) {
+            xds.get().setLastUpdateDate(LocalDateTime.now());
+            xds.get().setLastUpdatedBy("PDDA");
+            xds.get().setContent(contents);
             getXhbDisplayStoreRepository().update(xds.get());
         } else {
             XhbDisplayStoreDao xhbDisplayStore = new XhbDisplayStoreDao();
@@ -161,7 +171,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
      * @return XhbDisplayStoreRepository
      */
     private XhbDisplayStoreRepository getXhbDisplayStoreRepository() {
-        if (xhbDisplayStoreRepository == null) {
+        if (xhbDisplayStoreRepository == null || !isEntityManagerActive()) {
             xhbDisplayStoreRepository = new XhbDisplayStoreRepository(getEntityManager());
         }
         return xhbDisplayStoreRepository;
