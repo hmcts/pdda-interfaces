@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourt;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -44,10 +47,27 @@ class XhbCourtRepositoryTest extends AbstractRepositoryTest<XhbCourtDao> {
 
     @Override
     protected XhbCourtRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCourtRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCourtRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCourtDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCourtDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -125,9 +145,9 @@ class XhbCourtRepositoryTest extends AbstractRepositoryTest<XhbCourtDao> {
         }
         assertNotNull(result, NOTNULL);
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }

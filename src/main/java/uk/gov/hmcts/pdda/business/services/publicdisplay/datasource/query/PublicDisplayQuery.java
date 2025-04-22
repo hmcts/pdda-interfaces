@@ -103,7 +103,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         result.setNotBeforeTime(notBeforeTime);
 
         // Get the court site
-        Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findById(courtSiteId);
+        Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findByIdSafe(courtSiteId);
         if (courtSite.isPresent()) {
             result.setCourtSiteCode(courtSite.get().getCourtSiteCode());
             result.setCourtSiteName(courtSite.get().getCourtSiteName());
@@ -115,7 +115,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         }
 
         // Get courtRoom
-        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository().findById(courtRoomId);
+        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository().findByIdSafe(courtRoomId);
         if (courtRoom.isPresent()) {
             result.setCourtRoomId(courtRoom.get().getCourtRoomId());
             result.setCourtRoomName(courtRoom.get().getDisplayName());
@@ -132,12 +132,12 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         result.setMovedFromCourtSiteShortName("");
         if (movedFromCourtRoomId != null) {
             Optional<XhbCourtRoomDao> movedCourtRoom =
-                getXhbCourtRoomRepository().findById(movedFromCourtRoomId);
+                getXhbCourtRoomRepository().findByIdSafe(movedFromCourtRoomId);
             if (movedCourtRoom.isPresent()) {
                 result.setMovedFromCourtRoomId(movedCourtRoom.get().getCourtRoomId());
                 result.setMovedFromCourtRoomName(movedCourtRoom.get().getDisplayName());
                 Optional<XhbCourtSiteDao> movedCourtSite =
-                    getXhbCourtSiteRepository().findById(movedCourtRoom.get().getCourtSiteId());
+                    getXhbCourtSiteRepository().findByIdSafe(movedCourtRoom.get().getCourtSiteId());
                 if (movedCourtSite.isPresent()) {
                     result.setMovedFromCourtSiteShortName(movedCourtSite.get().getShortName());
                 }
@@ -146,7 +146,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected List<XhbHearingListDao> getHearingListDaos(int courtId, LocalDateTime startDate) {
-        return getXhbHearingListRepository().findByCourtIdAndDate(courtId, startDate);
+        return getXhbHearingListRepository().findByCourtIdAndDateSafe(courtId, startDate);
     }
 
     protected List<XhbSittingDao> getSittingListDaos(Integer listId) {
@@ -222,6 +222,6 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected Optional<XhbHearingDao> getXhbHearingDao(Integer hearingId) {
-        return getXhbHearingRepository().findById(hearingId);
+        return getXhbHearingRepository().findByIdSafe(hearingId);
     }
 }

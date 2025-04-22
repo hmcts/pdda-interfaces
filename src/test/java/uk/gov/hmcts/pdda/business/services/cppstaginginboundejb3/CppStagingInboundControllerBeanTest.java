@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods"})
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -223,7 +223,8 @@ class CppStagingInboundControllerBeanTest {
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
         EasyMock
-            .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
+            .expect(
+                mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + documentType))
             .andReturn(returnList);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockEntityManager);

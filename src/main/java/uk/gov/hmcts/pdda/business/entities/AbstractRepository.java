@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 public abstract class AbstractRepository<T extends AbstractDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRepository.class);
@@ -32,29 +32,28 @@ public abstract class AbstractRepository<T extends AbstractDao> {
 
     protected abstract Class<T> getDaoClass();
     
-    /**
-     * findById.
-     * 
-     * @param id Integer
-     * @return dao
-     */
-    public Optional<T> findById(Integer id) {
-        LOG.debug("findById({})", id);
-        T dao = getEntityManager().find(getDaoClass(), id);
-        return dao != null ? Optional.of(dao) : Optional.empty();
-    }
-
-    /**
-     * findById.
-     * @param id Long
-     * @return dao
-     */
-    public Optional<T> findById(Long id) {
-        LOG.debug("findById({})", id);
-        T dao = getEntityManager().find(getDaoClass(), id);
-        return dao != null ? Optional.of(dao) : Optional.empty();
+    public Optional<T> findByIdSafe(Integer id) {
+        LOG.debug("findByIdSafe({})", id);
+        try (EntityManager em = createEntityManager()) {
+            T dao = em.find(getDaoClass(), id);
+            return dao != null ? Optional.of(dao) : Optional.empty();
+        } catch (Exception e) {
+            LOG.error("Error in findByIdSafe({}): {}", id, e.getMessage(), e);
+            return Optional.empty();
+        }
     }
     
+    public Optional<T> findByIdSafe(Long id) {
+        LOG.debug("findByIdSafe({})", id);
+        try (EntityManager em = createEntityManager()) {
+            T dao = em.find(getDaoClass(), id);
+            return dao != null ? Optional.of(dao) : Optional.empty();
+        } catch (Exception e) {
+            LOG.error("Error in findByIdSafe({}): {}", id, e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private List<T> findAll(String sql) {
         LOG.debug("findAll({})", sql);
@@ -70,6 +69,14 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     public List<T> findAll() {
         LOG.debug("findAll()");
         return findAll("from " + getDaoClass().getName());
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> findAllSafe() {
+        try (EntityManager em = createEntityManager()) {
+            Query query = em.createQuery("from " + getDaoClass().getName());
+            return query.getResultList();
+        }
     }
 
     /**
@@ -107,7 +114,8 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 localEntityManager.getTransaction().begin();
                 updatedDao = localEntityManager.merge(updatedDao);
                 localEntityManager.getTransaction().commit();
-                updatedDao.setVersion(updatedDao.getVersion() != null ? updatedDao.getVersion() + 1 : 1);
+                // updatedDao.setVersion(updatedDao.getVersion() != null ? updatedDao.getVersion() +
+                // 1 : 1);
                 // Clear the cache on the EntityManager after updating
                 clearEntityManager();
                 return Optional.of(updatedDao);

@@ -230,7 +230,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
 
             // Set the status as successful
             Optional<XhbCppListDao> optCppList =
-                getXhbCppListRepository().findById(cppList.getCppListId());
+                getXhbCppListRepository().findByIdSafe(cppList.getCppListId());
             if (optCppList.isEmpty()) {
                 LOG.error("Failed to save cppList - Status MS");
                 throw new FormattingException(TRANSFORMATION_ERROR);

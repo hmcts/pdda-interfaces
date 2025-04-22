@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public abstract class AbstractVersionedDao extends AbstractDao implements Serial
     @Column(name = "CREATED_BY")
     private String createdBy;
 
+    @Version
     @Column(name = "VERSION")
     private Integer version;
 

@@ -8,9 +8,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
-import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DateUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -69,6 +69,14 @@ public class ClearDownHelper extends AbstractControllerBean {
      */
     public boolean isClearDownRequired() {
         LocalDateTime clearDownTime = getClearDownTime();
+        if (clearDownTime == null) {
+            return false;
+        }
+
+        LOG.debug("Clear down time: " + clearDownTime);
+        LOG.debug("Current time: " + LocalDateTime.now());
+        LOG.debug("Comparison result: " + LocalDateTime.now().isAfter(clearDownTime));
+
         return clearDownTime != null && LocalDateTime.now().isAfter(clearDownTime);
     }
 
@@ -77,7 +85,7 @@ public class ClearDownHelper extends AbstractControllerBean {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         List<XhbConfigPropDao> xhbConfigPropDaoList =
-            xhbConfigPropRepository.findByPropertyName(RESET_DISPLAY_IWP_TIME);
+            xhbConfigPropRepository.findByPropertyNameSafe(RESET_DISPLAY_IWP_TIME);
 
         if (!xhbConfigPropDaoList.isEmpty()) {
             String propertyValue = xhbConfigPropDaoList.get(0).getPropertyValue();
@@ -89,16 +97,24 @@ public class ClearDownHelper extends AbstractControllerBean {
     /**
      * getClearDownTime.
      */
+    @SuppressWarnings("PMD.UnnecessaryLocalBeforeReturn")
     public LocalDateTime getClearDownTime(String propertyValue) {
-        LOG.debug("getclearDownTime({})", propertyValue);
-        String todaysDate = DateUtils.getDate(LocalDateTime.now());
-        String todaysTime = propertyValue.replace(":", "").substring(0, 4);
+        LOG.debug("getClearDownTime({})", propertyValue);
         try {
-            return LocalDateTime.parse(todaysDate + todaysTime, DATETIME_FORMAT);
-        } catch (DateTimeParseException ex) {
+            LocalTime parsedTime =
+                LocalTime.parse(propertyValue, DateTimeFormatter.ofPattern("HH:mm"));
+
+            // Parse to LocalTime (safe way to handle HH:mm)
+            LocalDateTime candidateTime =
+                LocalDateTime.of(LocalDateTime.now().toLocalDate(), parsedTime
+                );
+            return candidateTime;
+        } catch (DateTimeParseException | NullPointerException ex) {
+            LOG.warn("Invalid clear down time format: {}", propertyValue);
             return null;
         }
     }
+
 
     /**
      * resetLiveDisplays.

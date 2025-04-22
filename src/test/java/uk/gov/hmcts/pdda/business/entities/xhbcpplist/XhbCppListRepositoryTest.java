@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcpplist;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -42,10 +45,27 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
 
     @Override
     protected XhbCppListRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCppListRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCppListRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCppListDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCppListDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -107,17 +127,17 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
             XhbCppListDao result = getClassUnderTest().findByClobId(getDummyDao().getListClobId());
             if (dao != null) {
                 assertNotNull(result, "Result is Null");
-                assertSame(dao, result, SAME);
+                assertSame(dao, result, NOTSAMERESULT);
             } else {
-                assertNull(result, SAME);
+                assertNull(result, NOTSAMERESULT);
             }
             return true;
         }
         assertNotNull(resultList, "Result is Null");
         if (dao != null) {
-            assertSame(dao, resultList.get(0), SAME);
+            assertSame(dao, resultList.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, resultList.size(), SAME);
+            assertSame(0, resultList.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -159,7 +179,7 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         cppListId = result.getPrimaryKey();
-        assertNotNull(cppListId, NOTNULL);
+        assertNotNull(cppListId, NOTNULLRESULT);
         return new XhbCppListDao(result);
     }
 

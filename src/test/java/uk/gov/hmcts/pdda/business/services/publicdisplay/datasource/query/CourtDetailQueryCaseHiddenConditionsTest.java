@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import org.easymock.EasyMockExtension;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
@@ -31,10 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.TestClassWithoutTestCases"})
+@SuppressWarnings({"PMD.TooManyMethods"})
 class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
 
-    // @Test
+    @Test
     void testGetDataNoListSuccess() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -42,7 +43,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
 
-    // @Test
+    @Test
     void testGetDataCaseHidden() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -50,7 +51,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
 
-    // @Test
+    @Test
     void testGetDataDefOnCasePublicDispHide() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -58,7 +59,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
 
-    // @Test
+    @Test
     void testGetDataDefPublicDispHide() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -66,7 +67,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
     
-    // @Test
+    @Test
     void testGetDataDefOnCaseEmpty() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -74,7 +75,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
     
-    // @Test
+    @Test
     void testGetDataDefOnCaseObsInd() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),
@@ -82,7 +83,7 @@ class CourtDetailQueryCaseHiddenConditionsTest extends CourtDetailQueryTest {
         assertTrue(result, TRUE);
     }
     
-    // @Test
+    @Test
     void testGetDataDefEmpty() {
         boolean result = testGetDataNoList(getXhbHearingListDaoList(), getXhbSittingDaoList(),
             getXhbScheduledHearingDaoList(), getXhbSchedHearingDefendantDaoList(),

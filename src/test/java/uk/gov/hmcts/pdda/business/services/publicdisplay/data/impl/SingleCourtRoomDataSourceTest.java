@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.data.impl;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,6 +32,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -69,6 +72,16 @@ class SingleCourtRoomDataSourceTest {
         // Do nothing
     }
 
+
+    @SuppressWarnings("PMD.CloseResource")
+    @BeforeAll
+    public static void mockEntityManagerFactory() {
+        EntityManagerFactory emf = Mockito.mock(EntityManagerFactory.class);
+        EntityManager em = Mockito.mock(EntityManager.class);
+        Mockito.when(emf.createEntityManager()).thenReturn(em);
+        EntityManagerUtil.setEntityManagerFactory(emf);
+    }
+
     @AfterAll
     public static void tearDown() {
         // Do nothing
@@ -102,28 +115,46 @@ class SingleCourtRoomDataSourceTest {
     @Test
     void testRetrieveNoCourtSite() {
         classUnderTest = getClassUnderTest(DisplayDocumentType.COURT_DETAIL);
+
         Assertions.assertThrows(CourtRoomNotFoundException.class, () -> {
-            testRetrieve(Optional.of(DummyCourtUtil.getXhbCourtDao(1, COURTNAME)), Optional.empty(), true);
+            testRetrieve(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURTNAME)), // court
+                Optional.empty(), // missing site
+                true // room expected
+            );
         });
     }
+
+
 
     @Test
     void testRetrieveNoCourtRoom() {
         classUnderTest = getClassUnderTest(DisplayDocumentType.COURT_DETAIL);
+
+        // Ensure courtId matches COURT_ID (81)
+        XhbCourtSiteDao courtSite = DummyCourtUtil.getXhbCourtSiteDao();
+        courtSite.setCourtId(COURT_ID);
+
         Assertions.assertThrows(CourtRoomNotFoundException.class, () -> {
-            testRetrieve(Optional.of(DummyCourtUtil.getXhbCourtDao(1, COURTNAME)),
-                Optional.of(DummyCourtUtil.getXhbCourtSiteDao()), false);
+            testRetrieve(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURTNAME)), // court
+                Optional.of(courtSite), // site
+                false // no rooms
+            );
         });
     }
 
+
+
     private boolean testRetrieve(Optional<XhbCourtDao> xhbCourtDao, Optional<XhbCourtSiteDao> xhbCourtSiteDao,
         boolean isXhbCourtRoomDaoReqd) {
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(xhbCourtDao);
-        Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class))).thenReturn(xhbCourtSiteDao);
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(xhbCourtDao);
+        Mockito.when(mockXhbCourtSiteRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(xhbCourtSiteDao);
         for (int courtRoomId : COURT_ROOM_IDS) {
             Optional<XhbCourtRoomDao> xhbCourtRoomDao =
                 isXhbCourtRoomDaoReqd ? Optional.of(DummyCourtUtil.getXhbCourtRoomDao()) : Optional.empty();
-            Mockito.when(mockXhbCourtRoomRepository.findById(courtRoomId)).thenReturn(xhbCourtRoomDao);
+            Mockito.when(mockXhbCourtRoomRepository.findByIdSafe(courtRoomId))
+                .thenReturn(xhbCourtRoomDao);
         }
         classUnderTest.retrieve(mockEntityManager);
 

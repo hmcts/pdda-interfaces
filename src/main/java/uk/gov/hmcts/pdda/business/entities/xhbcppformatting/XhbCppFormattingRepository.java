@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppformatting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Repository
+@SuppressWarnings("unchecked")
 public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormattingDao> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +55,6 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
         query.setParameter("dateIn", dateIn);
 
         LOG.debug("{} - Query has been created: {}", methodName, query);
-        @SuppressWarnings("unchecked")
         List<XhbCppFormattingDao> xcfList = query.getResultList();
 
         if (xcfList == null  || xcfList.isEmpty()) {
@@ -72,7 +73,6 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
      * @param creationDate LocalDateTime
      * @return List
      */
-    @SuppressWarnings("unchecked")
     public List<XhbCppFormattingDao> findAllNewByDocType(String documentType,
         LocalDateTime creationDate) {
         LOG.debug("findAllNewByDocType()");
@@ -81,6 +81,23 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
         query.setParameter(CREATION_DATE, creationDate);
         return query.getResultList();
     }
+
+    public List<XhbCppFormattingDao> findAllNewByDocTypeSafe(String documentType,
+        LocalDateTime creationDate) {
+        LOG.debug("findAllNewByDocTypeSafe(documentType={}, creationDate={})", documentType,
+            creationDate);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CPP_FORMATTING.findAllNewByDocType");
+            query.setParameter("documentType", documentType);
+            query.setParameter("creationDate", creationDate);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findAllNewByDocTypeSafe({}, {}): {}", documentType, creationDate,
+                e.getMessage(), e);
+            return List.of(); // Avoid nulls and maintain calling code stability
+        }
+    }
+
 
     /**
      * getLatestDocumentByCourtIdAndType.
@@ -97,8 +114,30 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
         query.setParameter(COURT_ID, courtId);
         query.setParameter(DOCUMENT_TYPE, documentType);
         query.setParameter(CREATION_DATE, creationDate);
-        @SuppressWarnings("unchecked")
         List<XhbCppFormattingDao> resultList = query.getResultList();
         return resultList.isEmpty() ? null : resultList.get(0);
     }
+
+    @SuppressWarnings("unchecked")
+    public XhbCppFormattingDao getLatestDocumentByCourtIdAndTypeSafe(Integer courtId,
+        String documentType, LocalDateTime creationDate) {
+
+        LOG.debug("getLatestDocumentByCourtIdAndTypeSafe({}, {}, {})", courtId, documentType,
+            creationDate);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CPP_FORMATTING.findByCourtAndDocType");
+            query.setParameter("courtId", courtId);
+            query.setParameter("documentType", documentType);
+            query.setParameter("creationDate", creationDate);
+
+            List<XhbCppFormattingDao> resultList = query.getResultList();
+            return resultList.isEmpty() ? null : resultList.get(0);
+        } catch (Exception e) {
+            LOG.error("Error in getLatestDocumentByCourtIdAndTypeSafe({}, {}, {}): {}", courtId,
+                documentType, creationDate, e.getMessage(), e);
+            return null; // Preserves original method contract
+        }
+    }
+
 }

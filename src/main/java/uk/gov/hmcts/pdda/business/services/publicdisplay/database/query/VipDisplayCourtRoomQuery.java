@@ -95,7 +95,8 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
             // Loop the VIP courtSites
             for (XhbDisplayLocationDao dlDao : dlDaos) {
                 // Get the courtSite
-                Optional<XhbCourtSiteDao> ocsDao = getXhbCourtSiteRepository().findById(dlDao.getCourtSiteId());
+                Optional<XhbCourtSiteDao> ocsDao =
+                    getXhbCourtSiteRepository().findByIdSafe(dlDao.getCourtSiteId());
                 if (ocsDao.isPresent()) {
                     results.addAll(getDisplays(dlDao, ocsDao));
                 }
@@ -130,7 +131,8 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
         LOG.debug("getCourtRooms({},{})", dcrDaos, ocsDao);
         List<VipDisplayConfigurationCourtRoom> results = new ArrayList<>();
         for (XhbDisplayCourtRoomDao dcrDao : dcrDaos) {
-            Optional<XhbCourtRoomDao> ocrDao = getXhbCourtRoomRepository().findById(dcrDao.getCourtRoomId());
+            Optional<XhbCourtRoomDao> ocrDao =
+                getXhbCourtRoomRepository().findByIdSafe(dcrDao.getCourtRoomId());
             if (ocrDao.isPresent()) {
                 String shortName = ocsDao.isPresent() ? ocsDao.get().getShortName() : EMPTY_STRING;
                 String displayName = ocsDao.isPresent() ? ocrDao.get().getDisplayName() : EMPTY_STRING;

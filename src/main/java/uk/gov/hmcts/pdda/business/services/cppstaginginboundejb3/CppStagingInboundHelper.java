@@ -88,7 +88,7 @@ public class CppStagingInboundHelper implements Serializable {
         List<XhbConfigPropDao> properties = null;
         try {
             properties = xhbConfigPropRepository
-                .findByPropertyName("STAGING_DOCS_TO_PROCESS");
+                .findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS");
         } catch (Exception e) {
             LOG.debug("Error...{}", e.getMessage());
         }
@@ -126,7 +126,8 @@ public class CppStagingInboundHelper implements Serializable {
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
 
         List<XhbCppStagingInboundDao> docs =
-            new XhbCppStagingInboundRepository(em).findNextDocumentByValidationAndProcessingStatus(
+            new XhbCppStagingInboundRepository(em)
+                .findNextDocumentByValidationAndProcessingStatusSafe(
                 LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT), validationStatus,
                 processingStatus);
 
@@ -137,7 +138,8 @@ public class CppStagingInboundHelper implements Serializable {
                     break;
                 }
                 Optional<XhbCppStagingInboundDao> cppSI =
-                    getCppStagingInboundRepository().findById(docs.get(i).getCppStagingInboundId());
+                    getCppStagingInboundRepository()
+                        .findByIdSafe(docs.get(i).getCppStagingInboundId());
                 if (cppSI.isPresent()) {
                     toReturn.add(cppSI.get());
                 }

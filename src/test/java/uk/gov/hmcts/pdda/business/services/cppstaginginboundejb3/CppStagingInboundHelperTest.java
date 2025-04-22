@@ -60,7 +60,7 @@ class CppStagingInboundHelperTest {
         Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(xhbCppStagingInboundDaos);
 
-        Mockito.when(xhbCppStagingInboundRepository.findById(isA(Integer.class)))
+        Mockito.when(xhbCppStagingInboundRepository.findByIdSafe(isA(Integer.class)))
             .thenReturn(Optional.of(DummyPdNotifierUtil.getXhbCppStagingInboundDao()));
 
         // Run

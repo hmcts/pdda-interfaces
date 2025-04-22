@@ -35,7 +35,8 @@ public class ConfigPropMaintainer {
 
     public XhbConfigPropDao getConfigPropBasicValue(String propertyName) {
         LOG.debug("getConfigPropBasicValue()");
-        List<XhbConfigPropDao> properties = xhbConfigPropRepository.findByPropertyName(propertyName);
+        List<XhbConfigPropDao> properties =
+            xhbConfigPropRepository.findByPropertyNameSafe(propertyName);
         if (properties != null && !properties.isEmpty()) {
             return properties.get(0);
         }

@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods"})
 class DisplayStoreControllerBeanTest {
 
     private static final String TRUE = "Result is not True";
@@ -164,7 +164,7 @@ class DisplayStoreControllerBeanTest {
     @Test
     void testWriteToDatabaseSave() {
         final String newContent = "New Test Content";
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(Optional.empty());
         mockXhbDisplayStoreRepository.save(EasyMock.isA(XhbDisplayStoreDao.class));
         EasyMock.replay(mockXhbDisplayStoreRepository);
@@ -186,9 +186,7 @@ class DisplayStoreControllerBeanTest {
         final String newContent = "New Test Content";
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
-            .andReturn(displayStoreDao);
-        EasyMock.expect(mockXhbDisplayStoreRepository.update(displayStoreDao.get()))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
 

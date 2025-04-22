@@ -109,7 +109,7 @@ class PddaMessageHelperTest {
     void testFindByPddaMessageId() {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
-        Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDao.getPrimaryKey()))
             .thenReturn(Optional.of(xhbPddaMessageDao));
         mockTheEntityManager(true);
         // Run

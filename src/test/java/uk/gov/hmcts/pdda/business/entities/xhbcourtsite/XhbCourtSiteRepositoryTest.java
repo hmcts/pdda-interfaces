@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtsite;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -20,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -45,10 +47,27 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
 
     @Override
     protected XhbCourtSiteRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCourtSiteRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCourtSiteRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCourtSiteDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCourtSiteDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -113,17 +132,17 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
                 getDummyDao().getCourtSiteName(), getDummyDao().getCourtSiteCode());
             assertNotNull(result, "Result is Null");
             if (dao != null) {
-                assertSame(dao, result.get(), SAME);
+                assertSame(dao, result.get(), NOTSAMERESULT);
             } else {
-                assertSame(Optional.empty(), result, SAME);
+                assertSame(Optional.empty(), result, NOTSAMERESULT);
             }
             return true;
         }
         assertNotNull(resultList, "Result is Null");
         if (dao != null) {
-            assertSame(dao, resultList.get(0), SAME);
+            assertSame(dao, resultList.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, resultList.size(), SAME);
+            assertSame(0, resultList.size(), NOTSAMERESULT);
         }
         return true;
     }

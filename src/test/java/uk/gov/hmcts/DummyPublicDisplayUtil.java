@@ -14,12 +14,14 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public final class DummyPublicDisplayUtil {
     
     private static final String NOTNULL = "Result is Null";
     private static final String TEST1 = "Test1";
     private static final String TEST2 = "Test2";
     private static final String DESCRIPTIONCODE = "descriptionCode";
+    private static final String TEST = "Test";
     
     private DummyPublicDisplayUtil() {
         // Do nothing
@@ -149,10 +151,44 @@ public final class DummyPublicDisplayUtil {
         return new XhbDisplayDocumentDao(result);
     }
 
+    public static XhbDisplayDocumentDao getXhbDisplayDocumentDao(int id) {
+        XhbDisplayDocumentDao dao = new XhbDisplayDocumentDao();
+        dao.setDisplayDocumentId(id);
+        dao.setDescriptionCode("DailyList");
+        dao.setDefaultPageDelay(10);
+        dao.setMultipleCourtYn("N");
+        dao.setCountry("GB");
+        dao.setLanguage("en");
+        dao.setVersion(1);
+        dao.setCreatedBy(TEST);
+        dao.setLastUpdatedBy(TEST);
+        dao.setCreationDate(LocalDateTime.now().minusDays(1));
+        dao.setLastUpdateDate(LocalDateTime.now());
+        return dao;
+    }
+
+    public static XhbRotationSetDdDao getXhbRotationSetDdDao(int rotationSetDdId,
+        int displayDocumentId) {
+        XhbRotationSetDdDao result = new XhbRotationSetDdDao();
+        result.setRotationSetDdId(rotationSetDdId);
+        result.setRotationSetId(70);
+        result.setDisplayDocumentId(displayDocumentId);
+        result.setPageDelay(5);
+        result.setOrdering(1);
+        result.setLastUpdateDate(LocalDateTime.now());
+        result.setCreationDate(LocalDateTime.now().minusMinutes(1));
+        result.setLastUpdatedBy("TestUser");
+        result.setCreatedBy("TestUser");
+        result.setVersion(1);
+        return result;
+    }
+
+
+    
     public static XhbRotationSetDdDao getXhbRotationSetDdDao() {
         Integer rotationSetDdId = -1;
-        Integer rotationSetId = -1;
         Integer displayDocumentId = -1;
+        Integer rotationSetId = -1;
         Integer pageDelay = -1;
         Integer ordering = -1;
         LocalDateTime lastUpdateDate = LocalDateTime.now();
@@ -160,6 +196,7 @@ public final class DummyPublicDisplayUtil {
         String lastUpdatedBy = TEST2;
         String createdBy = TEST1;
         Integer version = 3;
+
         XhbRotationSetDdDao result = new XhbRotationSetDdDao();
         result.setRotationSetDdId(rotationSetDdId);
         result.setRotationSetId(rotationSetId);
@@ -176,7 +213,7 @@ public final class DummyPublicDisplayUtil {
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);
     }
-    
+
     public static XhbDisplayCourtRoomDao getXhbDisplayCourtRoomDao() {
         XhbDisplayCourtRoomDao result = new XhbDisplayCourtRoomDao();
         result.setDisplayId(-1);
@@ -206,4 +243,21 @@ public final class DummyPublicDisplayUtil {
         result.setVersion(version);
         return result;
     }
+    
+    public static XhbDisplayDocumentDao createDisplayDocument(int id, String desc) {
+        XhbDisplayDocumentDao dao = new XhbDisplayDocumentDao();
+        dao.setDisplayDocumentId(id);
+        dao.setDescriptionCode(desc);
+        dao.setDefaultPageDelay(10);
+        dao.setMultipleCourtYn("N");
+        dao.setCountry("GB");
+        dao.setLanguage("en");
+        dao.setVersion(1);
+        dao.setCreatedBy(TEST);
+        dao.setLastUpdatedBy(TEST);
+        dao.setCreationDate(LocalDateTime.now().minusDays(1));
+        dao.setLastUpdateDate(LocalDateTime.now());
+        return dao;
+    }
+
 }

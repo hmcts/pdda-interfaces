@@ -5,6 +5,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
@@ -37,17 +38,23 @@ class TestablePdConfigurationControllerBean extends PdConfigurationControllerBea
     private final EntityManager em;
     private final XhbRotationSetsRepository rotationSetsRepo;
 
+    private final XhbDisplayDocumentRepository displayDocumentRepository;
+
+
     public TestablePdConfigurationControllerBean(EntityManager em,
         XhbCourtRepository xhbCourtRepository, XhbRotationSetsRepository rotationSetsRepo,
         XhbRotationSetDdRepository rotationSetDdRepo, XhbDisplayTypeRepository displayTypeRepo,
         XhbDisplayRepository displayRepo, XhbDisplayLocationRepository locationRepo,
         XhbCourtSiteRepository siteRepo, XhbCourtRoomRepository roomRepo,
         PublicDisplayNotifier notifier, VipDisplayDocumentQuery docQuery,
-        VipDisplayCourtRoomQuery roomQuery) {
+        VipDisplayCourtRoomQuery roomQuery,
+        DisplayRotationSetDataHelper displayRotationSetDataHelper,
+        XhbDisplayDocumentRepository displayDocumentRepository) {
         super(em, xhbCourtRepository, rotationSetsRepo, rotationSetDdRepo, displayTypeRepo,
-            displayRepo, locationRepo, siteRepo, roomRepo, notifier, docQuery, roomQuery);
+            displayRepo, locationRepo, siteRepo, roomRepo, notifier, docQuery, roomQuery, displayRotationSetDataHelper);
         this.em = em;
         this.rotationSetsRepo = rotationSetsRepo;
+        this.displayDocumentRepository = displayDocumentRepository;
     }
 
     @Override
@@ -59,4 +66,10 @@ class TestablePdConfigurationControllerBean extends PdConfigurationControllerBea
     protected XhbRotationSetsRepository getXhbRotationSetsRepository() {
         return rotationSetsRepo;
     }
+
+    @Override
+    protected XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
+        return displayDocumentRepository;
+    }
+
 }

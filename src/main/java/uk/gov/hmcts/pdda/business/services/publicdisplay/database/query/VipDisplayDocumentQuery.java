@@ -104,7 +104,8 @@ public class VipDisplayDocumentQuery extends AbstractControllerBean {
                 for (XhbRotationSetDdDao rsDao : rsDaos) {
                     // Get the document
                     Optional<XhbDisplayDocumentDao> ddDao =
-                        getXhbDisplayDocumentRepository().findById(rsDao.getDisplayDocumentId());
+                        getXhbDisplayDocumentRepository()
+                            .findByIdSafe(rsDao.getDisplayDocumentId());
                     if (ddDao.isPresent()) {
                         VipDisplayConfigurationDisplayDocument result = getVipDisplayConfigurationDisplayDocument(
                             ddDao.get().getDescriptionCode(), "Y".equals(ddDao.get().getMultipleCourtYn()),

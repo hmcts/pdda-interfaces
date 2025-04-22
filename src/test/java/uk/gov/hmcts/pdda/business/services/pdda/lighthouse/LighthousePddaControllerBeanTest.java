@@ -182,7 +182,7 @@ class LighthousePddaControllerBeanTest {
         // Setup
         List<XhbPddaMessageDao> xhbPddaMessageDaoList = getDummyXhbPddaMessageDaoList();
         mockTheEntityManager();
-        Mockito.when(mockXhbPddaMessageRepository.findByLighthouse())
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouseSafe())
             .thenReturn(xhbPddaMessageDaoList);
         for (XhbPddaMessageDao xhbPddaMessageDao : xhbPddaMessageDaoList) {
             String[] fileParts = xhbPddaMessageDao.getCpDocumentName().split(UNDERSCORE);
@@ -206,7 +206,7 @@ class LighthousePddaControllerBeanTest {
     }
 
     private void processMessage(XhbPddaMessageDao xhbPddaMessageDao, String expectedSavedStatus) {
-        Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDao.getPrimaryKey()))
             .thenReturn(Optional.of(xhbPddaMessageDao));
 
         Optional<XhbPddaMessageDao> xhbPddaMessageDao1 =

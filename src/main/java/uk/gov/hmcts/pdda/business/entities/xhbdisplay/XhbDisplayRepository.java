@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplay;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -40,6 +41,20 @@ public class XhbDisplayRepository extends AbstractRepository<XhbDisplayDao> impl
         query.setParameter("rotationSetId", rotationSetId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbDisplayDao> findByRotationSetIdSafe(Integer rotationSetId) {
+        LOG.debug("findByRotationSetIdSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_DISPLAY.findByRotationSetId");
+            query.setParameter("rotationSetId", rotationSetId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByRotationSetIdSafe({}): {}", rotationSetId, e.getMessage(), e);
+            return List.of(); // Defensive empty list to avoid nulls or leaks
+        }
+    }
+
 
     /**
      * findByDisplayLocationId.

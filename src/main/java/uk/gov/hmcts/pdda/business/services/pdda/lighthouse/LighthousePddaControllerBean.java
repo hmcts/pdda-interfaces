@@ -64,7 +64,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     public void doTask() {
 
         LOG.debug("Lighthouse -- doTask() - entered");
-        List<XhbPddaMessageDao> xhbPddaMessageDaos = getXhbPddaMessageRepository().findByLighthouse();
+        List<XhbPddaMessageDao> xhbPddaMessageDaos =
+            getXhbPddaMessageRepository().findByLighthouseSafe();
         xhbPddaMessageDaos.forEach(this::processFile);
         LOG.debug("Lighthouse -- doTask() - completed");
     }
@@ -154,7 +155,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     private XhbPddaMessageDao fetchLatestXhbPddaMessageDao(XhbPddaMessageDao dao) {
         LOG.debug("fetchLatestXhbPddaMessageDao()");
-        Optional<XhbPddaMessageDao> opt = getXhbPddaMessageRepository().findById(dao.getPrimaryKey());
+        Optional<XhbPddaMessageDao> opt =
+            getXhbPddaMessageRepository().findByIdSafe(dao.getPrimaryKey());
         return opt.isPresent() ? opt.get() : dao;
     }
 

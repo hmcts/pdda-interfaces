@@ -83,10 +83,12 @@ public class PublicNoticeQuery extends AbstractControllerBean {
     }
 
     private PublicNoticeValue getPublicNoticeValue(XhbConfiguredPublicNoticeDao cpnDao) {
-        Optional<XhbPublicNoticeDao> pnDao = getXhbPublicNoticeRepository().findById(cpnDao.getPublicNoticeId());
+        Optional<XhbPublicNoticeDao> pnDao =
+            getXhbPublicNoticeRepository().findByIdSafe(cpnDao.getPublicNoticeId());
         if (pnDao.isPresent()) {
             Optional<XhbDefinitivePublicNoticeDao> dpnDao =
-                getXhbDefinitivePublicNoticeRepository().findById(pnDao.get().getDefinitivePnId());
+                getXhbDefinitivePublicNoticeRepository()
+                    .findByIdSafe(pnDao.get().getDefinitivePnId());
             if (dpnDao.isPresent()) {
                 PublicNoticeValue pnValue = new PublicNoticeValue();
                 pnValue.setPublicNoticeDesc(pnDao.get().getPublicNoticeDesc());

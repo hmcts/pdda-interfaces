@@ -158,7 +158,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                 result.setCaseTitle(caseDao.get().getCaseTitle());
@@ -190,12 +191,13 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     private DefendantName getDefendantNameFromSchedule(XhbSchedHearingDefendantDao schedHearingDefendantDao,
         boolean isCaseHidden) {
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-            getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
+            getXhbDefendantOnCaseRepository()
+                .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
         if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
             // Get the defendant
             Optional<XhbDefendantDao> defendantDao =
-                getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
             if (defendantDao.isPresent()) {
                 return getDefendantName(defendantDao.get().getFirstName(), defendantDao.get().getMiddleName(),
                     defendantDao.get().getSurname(), isDefendantHidden(defendantDao, defendantOnCaseDao, isCaseHidden));
@@ -226,7 +228,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     private String getHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
         if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository().findById(hearingDao.get().getRefHearingTypeId());
+                getXhbRefHearingTypeRepository()
+                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
             if (refHearingTypeDao.isPresent()) {
                 return refHearingTypeDao.get().getHearingTypeDesc();
             }

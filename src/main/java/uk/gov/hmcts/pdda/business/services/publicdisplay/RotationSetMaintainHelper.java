@@ -71,7 +71,7 @@ public class RotationSetMaintainHelper {
         // Get the court id and lookup the court local reference
         final Integer courtId = newRotationSet.getCourtId();
 
-        Optional<XhbCourtDao> courtLocal = xhbCourtRepository.findById(courtId);
+        Optional<XhbCourtDao> courtLocal = xhbCourtRepository.findByIdSafe(courtId);
         if (!courtLocal.isPresent()) {
             LOG.debug("Court is Not Present {}", courtLocal);
             throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
@@ -108,7 +108,8 @@ public class RotationSetMaintainHelper {
             xhbRotationSetDdRepository);
 
         final Integer rotationSetId = rotationSet.getRotationSetId();
-        Optional<XhbRotationSetsDao> rotationSetLocal = xhbRotationSetsRepository.findById(Long.valueOf(rotationSetId));
+        Optional<XhbRotationSetsDao> rotationSetLocal =
+            xhbRotationSetsRepository.findByIdSafe(Long.valueOf(rotationSetId));
         if (!rotationSetLocal.isPresent()) {
             throw new RotationSetNotFoundCheckedException(rotationSetId);
         }
@@ -156,7 +157,8 @@ public class RotationSetMaintainHelper {
         LOG.debug("deleteRotationSet({},{},{})", rotationSet, xrsRepo, xrsddRepo);
         // Check optimistic locking.
         // Get the rotation set from the DB
-        Optional<XhbRotationSetsDao> rotationSetLocal = xrsRepo.findById(Long.valueOf(rotationSet.getRotationSetId()));
+        Optional<XhbRotationSetsDao> rotationSetLocal =
+            xrsRepo.findByIdSafe(Long.valueOf(rotationSet.getRotationSetId()));
         if (!rotationSetLocal.isPresent()) {
             // if the object could not be found, then it is already deleted.
             // Even though this is an unexpected condition, it results in

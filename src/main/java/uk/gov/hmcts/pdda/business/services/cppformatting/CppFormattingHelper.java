@@ -51,7 +51,7 @@ public class CppFormattingHelper {
         LOG.debug(methodName + " called");
 
         XhbCppFormattingRepository repo = new XhbCppFormattingRepository(entityManager);
-        return repo.getLatestDocumentByCourtIdAndType(courtId, DOC_TYPE_PUBLIC_DISPLAY,
+        return repo.getLatestDocumentByCourtIdAndTypeSafe(courtId, DOC_TYPE_PUBLIC_DISPLAY,
             LocalDateTime.now());
     }
     

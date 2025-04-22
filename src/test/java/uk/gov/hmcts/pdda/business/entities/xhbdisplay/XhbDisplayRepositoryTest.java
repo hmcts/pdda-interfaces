@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplay;
 
-
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,10 +40,27 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
 
     @Override
     protected XhbDisplayRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDisplayRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDisplayRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDisplayDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDisplayDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -67,9 +86,9 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
             getClassUnderTest().findByRotationSetId(getDummyDao().getRotationSetId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -97,9 +116,9 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
             .findByDisplayLocationId(getDummyDao().getDisplayLocationId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -132,7 +151,7 @@ class XhbDisplayRepositoryTest extends AbstractRepositoryTest<XhbDisplayDao> {
         result.setVersion(version);
         result.setShowUnassignedYn(showUnassignedYN);
         displayId = result.getPrimaryKey();
-        assertNotNull(displayId, NOTNULL);
+        assertNotNull(displayId, NOTNULLRESULT);
         result.setDisplayTypeId(result.getDisplayTypeId());
         result.setDisplayLocationId(result.getDisplayLocationId());
         return new XhbDisplayDao(result);

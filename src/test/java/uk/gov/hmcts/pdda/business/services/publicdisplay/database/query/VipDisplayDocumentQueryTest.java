@@ -174,7 +174,8 @@ class VipDisplayDocumentQueryTest {
             abortExpects = xhbRotationSetDdDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayDocumentRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayDocumentRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayDocumentDao);
             replayArray.add(mockXhbDisplayDocumentRepository);
         }

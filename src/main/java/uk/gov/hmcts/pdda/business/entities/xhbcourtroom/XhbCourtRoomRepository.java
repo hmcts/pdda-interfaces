@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtroom;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -46,19 +47,46 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtRoomDao> findByCourtSiteIdSafe(Integer courtSiteId) {
+        LOG.debug("findByCourtSiteIdSafe({})", courtSiteId);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_ROOM.findByCourtSiteId");
+            query.setParameter("courtSiteId", courtSiteId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtSiteIdSafe({}): {}", courtSiteId, e.getMessage(), e);
+            return List.of(); // Return empty list on failure
+        }
+    }
+
+
     /**
      * findByDisplayId.
      * 
      * @param displayId Integer
      * @return List
      */
+    /*
+     * @SuppressWarnings(UNCHECKED) public List<XhbCourtRoomDao> findByDisplayId(Integer displayId)
+     * { LOG.debug("findByDisplayId({})", displayId); Query query =
+     * getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByDisplayId");
+     * query.setParameter("displayId", displayId); return query.getResultList(); }
+     */
+
     @SuppressWarnings(UNCHECKED)
-    public List<XhbCourtRoomDao> findByDisplayId(Integer displayId) {
-        LOG.debug("findByDisplayId({})", displayId);
-        Query query = getEntityManager().createNamedQuery("XHB_COURT_ROOM.findByDisplayId");
-        query.setParameter("displayId", displayId);
-        return query.getResultList();
+    public List<XhbCourtRoomDao> findByDisplayIdSafe(Integer displayId) {
+        LOG.debug("findByDisplayIdSafe({})", displayId);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_ROOM.findByDisplayId");
+            query.setParameter("displayId", displayId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDisplayIdSafe({}): {}", displayId, e.getMessage(), e);
+            return List.of(); // Return empty list on failure
+        }
     }
+
 
     /**
      * findVIPMultiSite.

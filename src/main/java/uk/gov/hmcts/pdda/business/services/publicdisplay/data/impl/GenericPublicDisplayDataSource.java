@@ -163,7 +163,7 @@ public class GenericPublicDisplayDataSource extends DataSource {
      * @throws FinderException Exception
      */
     private void setCourtName(final Integer courtId, final EntityManager entityManager) {
-        Optional<XhbCourtDao> court = getXhbCourtRepository(entityManager).findById(courtId);
+        Optional<XhbCourtDao> court = getXhbCourtRepository(entityManager).findByIdSafe(courtId);
         if (!court.isPresent()) {
             throw new CourtNotFoundException(courtId);
         }

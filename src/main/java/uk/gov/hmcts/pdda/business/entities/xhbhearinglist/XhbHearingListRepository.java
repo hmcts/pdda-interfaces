@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbhearinglist;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -61,4 +62,20 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
             query.getResultList().isEmpty() ? null : (XhbHearingListDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbHearingListDao> findByCourtIdAndDateSafe(Integer courtId,
+        LocalDateTime startDate) {
+        LOG.debug("In XhbHearingListRepository.findByCourtIdAndDateSafe");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_HEARING_LIST.findByCourtIdAndDate");
+            query.setParameter("courtId", courtId);
+            query.setParameter("startDate", startDate);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdAndDateSafe: {}", e.getMessage(), e);
+            return List.of();
+        }
+    }
+
 }

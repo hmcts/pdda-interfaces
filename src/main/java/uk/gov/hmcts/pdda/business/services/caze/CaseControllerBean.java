@@ -128,7 +128,7 @@ public class CaseControllerBean extends AbstractControllerBean {
                 XhbSittingDao sitting = scheduledHearing.getXhbSitting();
                 if (sitting.getListId() != null) {
                     Optional<XhbHearingListDao> hearingList =
-                        getXhbHearingListRepository().findById(sitting.getListId());
+                        getXhbHearingListRepository().findByIdSafe(sitting.getListId());
                     if (hearingList.isPresent()) {
                         schedHearingDate = hearingList.get().getStartDate();
                     }

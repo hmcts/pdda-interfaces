@@ -68,7 +68,7 @@ public class PublicDisplayActivationHelper {
         XhbScheduledHearingRepository xhbScheduledHearingRepository) {
         boolean result = false;
         Optional<XhbScheduledHearingDao> scheduledHearing =
-            xhbScheduledHearingRepository.findById(schedHearingId);
+            xhbScheduledHearingRepository.findByIdSafe(schedHearingId);
         if (scheduledHearing.isPresent()) {
             result = DISPLAY_ACTIVE.equals(scheduledHearing.get().getIsCaseActive());
         }
@@ -96,7 +96,7 @@ public class PublicDisplayActivationHelper {
         LOG.debug("activatePublicDisplay() with schedHearingId: " + schedHearingId);
 
         Optional<XhbScheduledHearingDao> scheduledHearing =
-            xhbScheduledHearingRepository.findById(schedHearingId);
+            xhbScheduledHearingRepository.findByIdSafe(schedHearingId);
         if (scheduledHearing.isPresent()) {
             if (activate) {
                 CrLiveStatusHelper.activatePublicDisplay(scheduledHearing.get(),
@@ -175,7 +175,7 @@ public class PublicDisplayActivationHelper {
             LOG.debug("Deactivating SH ID: " + thisSchedHearingId);
 
             Optional<XhbScheduledHearingDao> xsh =
-                xhbScheduledHearingRepository.findById(thisSchedHearingId);
+                xhbScheduledHearingRepository.findByIdSafe(thisSchedHearingId);
             if (xsh.isPresent()) {
                 setActivationOfPDforSchedHearing(xsh.get(), false, xhbScheduledHearingRepository);
             }

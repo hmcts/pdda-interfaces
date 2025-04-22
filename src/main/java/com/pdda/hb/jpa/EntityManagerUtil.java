@@ -7,11 +7,11 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 
 @SuppressWarnings("PMD.LawOfDemeter")
 public class EntityManagerUtil {
-    private static final EntityManagerFactory ENTITYMANAGERFACTORY;
+    private static EntityManagerFactory entityManagerFactory;
 
     static {
         try {
-            ENTITYMANAGERFACTORY = InitializationService.getInstance().getEntityManagerFactory();
+            entityManagerFactory = InitializationService.getInstance().getEntityManagerFactory();
 
         } catch (RuntimeException ex) {
             throw new ExceptionInInitializerError(ex);
@@ -23,11 +23,16 @@ public class EntityManagerUtil {
     }
 
     public static EntityManager getEntityManager() {
-        EntityManager entityManager = ENTITYMANAGERFACTORY.createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.setFlushMode(FlushModeType.AUTO);
         return entityManager;
     }
     
+    public static void setEntityManagerFactory(EntityManagerFactory factory) {
+        entityManagerFactory = factory;
+    }
+
+
     public static boolean isEntityManagerActive(EntityManager entityManager) {
         return entityManager != null && entityManager.isOpen();
     }

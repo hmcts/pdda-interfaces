@@ -70,7 +70,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.GodClass",
-    "PMD.TooManyFields", "PMD.DetachedTestCase", "PMD.TooManyMethods"})
+    "PMD.TooManyFields", "PMD.TooManyMethods"})
 class PdConfigurationControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -131,6 +131,9 @@ class PdConfigurationControllerBeanTest {
     @Mock
     private VipDisplayCourtRoomQuery mockVipDisplayCourtRoomQuery;
 
+    @Mock
+    private DisplayRotationSetDataHelper mockDisplayRotationSetDataHelper;
+
     private final XhbRotationSetsDao sharedRotationSet =
         DummyPublicDisplayUtil.getXhbRotationSetsDao();
     private final XhbDisplayDao sharedDisplay = DummyPublicDisplayUtil.getXhbDisplayDao();
@@ -159,9 +162,9 @@ class PdConfigurationControllerBeanTest {
         sharedDisplay.setShowUnassignedYn(YES);
 
         // Configure repository returns
-        Mockito.when(mockXhbRotationSetsRepository.findById(ROTATION_SET_ID.longValue()))
+        Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(ROTATION_SET_ID.longValue()))
             .thenReturn(Optional.of(sharedRotationSet));
-        Mockito.when(mockXhbDisplayRepository.findById(DISPLAY_ID))
+        Mockito.when(mockXhbDisplayRepository.findByIdSafe(DISPLAY_ID))
             .thenReturn(Optional.of(sharedDisplay));
 
         // Real repo if needed
@@ -173,7 +176,7 @@ class PdConfigurationControllerBeanTest {
             mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
             mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository,
             mockXhbCourtRoomRepository, mockPublicDisplayNotifier, mockVipDisplayDocumentQuery,
-            mockVipDisplayCourtRoomQuery));
+            mockVipDisplayCourtRoomQuery, mockDisplayRotationSetDataHelper));
 
         Mockito.doReturn(realCourtSiteRepository).when(classUnderTest).getXhbCourtSiteRepository();
         Mockito.doReturn(mockXhbDisplayDocumentRepository).when(classUnderTest)
@@ -201,7 +204,7 @@ class PdConfigurationControllerBeanTest {
             mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
             mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository,
             mockXhbCourtRoomRepository, mockPublicDisplayNotifier, mockVipDisplayDocumentQuery,
-            mockVipDisplayCourtRoomQuery);
+            mockVipDisplayCourtRoomQuery, mockDisplayRotationSetDataHelper);
     }
 
 
@@ -229,7 +232,7 @@ class PdConfigurationControllerBeanTest {
         rsComplex.addRotationSetDdComplexValue(rsddComplex);
 
         // Mocks
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(DISPLAY_DOCUMENT_ID))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(DISPLAY_DOCUMENT_ID))
             .thenReturn(Optional.of(displayDoc));
         Mockito.when(mockXhbRotationSetDdRepository.update(rsddDao))
             .thenReturn(Optional.of(rsddDao));
@@ -273,11 +276,11 @@ class PdConfigurationControllerBeanTest {
                 DummyPublicDisplayUtil.getXhbRotationSetDdDao());
 
         // Mocks
-        Mockito.when(mockXhbDisplayRepository.findById(DISPLAY_ID))
+        Mockito.when(mockXhbDisplayRepository.findByIdSafe(DISPLAY_ID))
             .thenReturn(Optional.of(sharedDisplay));
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(ROTATION_SET_ID))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(ROTATION_SET_ID))
             .thenReturn(rsddList);
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(DISPLAY_DOCUMENT_ID))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(DISPLAY_DOCUMENT_ID))
             .thenReturn(Optional.of(displayDoc));
 
         // Act
@@ -353,7 +356,7 @@ class PdConfigurationControllerBeanTest {
         siteList.add(site1);
         siteList.add(site2);
 
-        Mockito.when(mockXhbCourtSiteRepository.findByCourtId(COURT_ID)).thenReturn(siteList);
+        Mockito.when(mockXhbCourtSiteRepository.findByCourtIdSafe(COURT_ID)).thenReturn(siteList);
         Mockito.doReturn(mockXhbCourtSiteRepository).when(classUnderTest)
             .getXhbCourtSiteRepository();
 
@@ -381,7 +384,7 @@ class PdConfigurationControllerBeanTest {
         try {
             XhbScheduledHearingRepository mockRepo =
                 Mockito.mock(XhbScheduledHearingRepository.class);
-            Mockito.when(mockRepo.findById(SCHEDULED_HEARING_ID))
+            Mockito.when(mockRepo.findByIdSafe(SCHEDULED_HEARING_ID))
                 .thenReturn(Optional.of(scheduledHearing));
 
             // Run Method

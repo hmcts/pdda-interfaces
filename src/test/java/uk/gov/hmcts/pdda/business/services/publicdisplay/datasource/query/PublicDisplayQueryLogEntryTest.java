@@ -87,7 +87,8 @@ class PublicDisplayQueryLogEntryTest {
         XhbCourtLogEventDescDao xhbCourtLogEventDescDao = new XhbCourtLogEventDescDao();
         xhbCourtLogEventDescDao.setEventType(30_300);
 
-        EasyMock.expect(mockXhbCourtLogEventDescRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbCourtLogEventDescRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbCourtLogEventDescDao));
         EasyMock.expectLastCall().times(2);
 

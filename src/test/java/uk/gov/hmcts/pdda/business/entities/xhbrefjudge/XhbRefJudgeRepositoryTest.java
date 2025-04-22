@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrefjudge;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -20,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -39,10 +41,27 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
 
     @Override
     protected XhbRefJudgeRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbRefJudgeRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbRefJudgeRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbRefJudgeDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbRefJudgeDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -68,9 +87,9 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         Optional<XhbRefJudgeDao> result = getClassUnderTest().findScheduledAttendeeJudge(scheduledHearingId);
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(), SAME);
+            assertSame(dao, result.get(), NOTSAMERESULT);
         } else {
-            assertSame(Optional.empty(), result, SAME);
+            assertSame(Optional.empty(), result, NOTSAMERESULT);
         }
         return true;
     }
@@ -98,9 +117,9 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         Optional<XhbRefJudgeDao> result = getClassUnderTest().findScheduledSittingJudge(scheduledHearingId);
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(), SAME);
+            assertSame(dao, result.get(), NOTSAMERESULT);
         } else {
-            assertSame(Optional.empty(), result, SAME);
+            assertSame(Optional.empty(), result, NOTSAMERESULT);
         }
         return true;
     }
@@ -153,7 +172,7 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         refJudgeId = result.getPrimaryKey();
-        assertNotNull(refJudgeId, NOTNULL);
+        assertNotNull(refJudgeId, NOTNULLRESULT);
         return new XhbRefJudgeDao(result);
     }
 

@@ -100,13 +100,13 @@ class CaseControllerBeanTest {
         
         EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
 
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(oldList);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
 
         replayMocks();

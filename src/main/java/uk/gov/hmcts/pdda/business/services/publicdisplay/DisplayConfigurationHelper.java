@@ -70,12 +70,12 @@ public class DisplayConfigurationHelper {
         XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository) {
         LOG.debug("getDisplayConfiguration({},{},{})", displayId, xhbDisplayRepository, xhbCourtRepository);
-        Optional<XhbDisplayDao> display = xhbDisplayRepository.findById(displayId);
+        Optional<XhbDisplayDao> display = xhbDisplayRepository.findByIdSafe(displayId);
         if (!display.isPresent()) {
             throw new DisplayNotFoundException(displayId);
         }
         Optional<XhbRotationSetsDao> xhbRotationSet =
-            xhbRotationSetsRepository.findById(display.get().getRotationSetId());
+            xhbRotationSetsRepository.findByIdSafe(display.get().getRotationSetId());
         XhbRotationSetsDao xhbRotationSetDao = xhbRotationSet.isPresent() ? xhbRotationSet.get() : null;
         return new DisplayConfiguration(display.get(), xhbRotationSetDao,
             getDisplayCourtRooms(display.get(), xhbCourtRepository, xhbCourtSiteRepository, xhbCourtRoomRepository));
@@ -87,11 +87,13 @@ public class DisplayConfigurationHelper {
         LOG.debug("getDisplayCourtRooms({},{})", display, xhbCourtRepository);
         boolean isMultiSite = false;
 
-        List<XhbCourtRoomDao> rooms = xhbCourtRoomRepository.findByDisplayId(display.getDisplayId());
+        List<XhbCourtRoomDao> rooms =
+            xhbCourtRoomRepository.findByDisplayIdSafe(display.getDisplayId());
 
         if (!rooms.isEmpty()) {
             Integer courtSiteId = rooms.iterator().next().getCourtSiteId();
-            Optional<XhbCourtSiteDao> xhbCourtSite = xhbCourtSiteRepository.findById(courtSiteId);
+            Optional<XhbCourtSiteDao> xhbCourtSite =
+                xhbCourtSiteRepository.findByIdSafe(courtSiteId);
             if (xhbCourtSite.isPresent()) {
                 Integer courtId = xhbCourtSite.get().getCourtId();
                 isMultiSite = isCourtMultiSite(courtId, xhbCourtRepository, xhbCourtSiteRepository);
@@ -113,7 +115,8 @@ public class DisplayConfigurationHelper {
         Iterator<?> iter = values.iterator();
         while (iter.hasNext()) {
             XhbCourtRoomDao courtRoom = (XhbCourtRoomDao) iter.next();
-            Optional<XhbCourtSiteDao> thisSite = xhbCourtSiteRepository.findById(courtRoom.getCourtSiteId());
+            Optional<XhbCourtSiteDao> thisSite =
+                xhbCourtSiteRepository.findByIdSafe(courtRoom.getCourtSiteId());
             if (thisSite.isPresent()) {
                 courtRoom.setMultiSiteDisplayName(thisSite.get().getShortName() + "-" + courtRoom.getDisplayName());
                 returnValues[recNo] = courtRoom;
@@ -126,7 +129,7 @@ public class DisplayConfigurationHelper {
     private static boolean isCourtMultiSite(final Integer courtId, XhbCourtRepository xhbCourtRepository,
         XhbCourtSiteRepository xhbCourtSiteRepository) {
         LOG.debug("isCourtMultiSite({},{})", courtId, xhbCourtRepository);
-        Optional<XhbCourtDao> dao = xhbCourtRepository.findById(courtId);
+        Optional<XhbCourtDao> dao = xhbCourtRepository.findByIdSafe(courtId);
         boolean result = false;
         if (dao.isPresent()) {
             List<XhbCourtSiteDao> xhbCourtSites = xhbCourtSiteRepository.findByCourtId(courtId);
@@ -158,7 +161,8 @@ public class DisplayConfigurationHelper {
             xhbRotationSetsRepository, xhbCourtRoomRepository);
 
         // Lookup the display local reference
-        Optional<XhbDisplayDao> displayLocal = xhbDisplayRepository.findById(displayConfiguration.getDisplayId());
+        Optional<XhbDisplayDao> displayLocal =
+            xhbDisplayRepository.findByIdSafe(displayConfiguration.getDisplayId());
         if (!displayLocal.isPresent()) {
             throw new DisplayNotFoundException(displayConfiguration.getDisplayId());
         }
@@ -188,10 +192,11 @@ public class DisplayConfigurationHelper {
         XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
         if (displayLocal.isPresent()) {
             Optional<XhbDisplayLocationDao> xhbDisplayLocation =
-                xhbDisplayLocationRepository.findById(displayLocal.get().getDisplayLocationId());
+                xhbDisplayLocationRepository
+                    .findByIdSafe(displayLocal.get().getDisplayLocationId());
             if (xhbDisplayLocation.isPresent()) {
                 Optional<XhbCourtSiteDao> xhbCourtSiteDao =
-                    xhbCourtSiteRepository.findById(xhbDisplayLocation.get().getCourtSiteId());
+                    xhbCourtSiteRepository.findByIdSafe(xhbDisplayLocation.get().getCourtSiteId());
                 if (xhbCourtSiteDao.isPresent()) {
                     return xhbCourtSiteDao.get().getCourtId();
                 }
@@ -216,7 +221,8 @@ public class DisplayConfigurationHelper {
          */
         XhbCourtRoomDao[] courtRoomBasicValues = displayConfiguration.getCourtRoomDaos();
 
-        List<XhbCourtRoomDao> courtRoomLocals = xhbCourtRoomRepository.findByDisplayId(displayLocal.getDisplayId());
+        List<XhbCourtRoomDao> courtRoomLocals =
+            xhbCourtRoomRepository.findByDisplayIdSafe(displayLocal.getDisplayId());
 
         // delete existing collection
         courtRoomLocals.clear();
@@ -224,7 +230,7 @@ public class DisplayConfigurationHelper {
         // Add new ones
         for (XhbCourtRoomDao courtRoomBasicValue : courtRoomBasicValues) {
             Integer courtRoomId = courtRoomBasicValue.getPrimaryKey();
-            Optional<XhbCourtRoomDao> room = xhbCourtRoomRepository.findById(courtRoomId);
+            Optional<XhbCourtRoomDao> room = xhbCourtRoomRepository.findByIdSafe(courtRoomId);
             if (!room.isPresent()) {
                 throw new CourtRoomNotFoundException(courtRoomId);
             }
@@ -243,7 +249,8 @@ public class DisplayConfigurationHelper {
         final XhbDisplayDao displayLocal, XhbRotationSetsRepository xhbRotationSetsRepository) {
         LOG.debug("setRotationSet({},{},{})", displayConfiguration, displayLocal, xhbRotationSetsRepository);
         Integer rotationSetId = displayConfiguration.getRotationSetId();
-        Optional<XhbRotationSetsDao> rotationSetLocal = xhbRotationSetsRepository.findById(Long.valueOf(rotationSetId));
+        Optional<XhbRotationSetsDao> rotationSetLocal =
+            xhbRotationSetsRepository.findByIdSafe(Long.valueOf(rotationSetId));
         if (!rotationSetLocal.isPresent()) {
             throw new RotationSetNotFoundCheckedException(rotationSetId);
         }

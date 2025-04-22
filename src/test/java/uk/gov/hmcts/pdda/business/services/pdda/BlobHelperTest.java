@@ -80,7 +80,7 @@ class BlobHelperTest {
         byte[] dummyByteArray = {'1', '2', '3'};
         Optional<XhbBlobDao> dummyBlobDao =
             Optional.of(DummyFormattingUtil.getXhbBlobDao(dummyByteArray));
-        Mockito.when(mockXhbBlobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbBlobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(dummyBlobDao);
         // Run
         byte[] result = classUnderTest.getBlobData(dummyId);
@@ -95,7 +95,7 @@ class BlobHelperTest {
         byte[] dummyByteArray = {'1', '2', '3'};
         Optional<XhbBlobDao> dummyBlobDao =
             Optional.of(DummyFormattingUtil.getXhbBlobDao(dummyByteArray));
-        Mockito.when(mockXhbBlobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbBlobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(dummyBlobDao);
         Mockito.when(mockXhbBlobRepository.update(Mockito.isA(XhbBlobDao.class)))
             .thenReturn(dummyBlobDao);

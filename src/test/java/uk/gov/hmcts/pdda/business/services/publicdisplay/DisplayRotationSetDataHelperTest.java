@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({"PMD.ExcessiveImports"})
 class DisplayRotationSetDataHelperTest {
 
     private static final String TRUE = "Result is not True";
@@ -114,13 +114,15 @@ class DisplayRotationSetDataHelperTest {
         List<XhbDisplayDao> xhbDisplays = new ArrayList<>();
         XhbDisplayDocumentDao xhbDisplayDocumentDao = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         // Expects
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+        Mockito
+            .when(
+                mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetDdDaoList);
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
-        Mockito.when(mockXhbDisplayLocationRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayLocationRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
-        Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtSiteRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Run
         boolean result = false;
@@ -146,15 +148,16 @@ class DisplayRotationSetDataHelperTest {
         List<XhbCourtRoomDao> rooms = new ArrayList<>();
         rooms.add(DummyCourtUtil.getXhbCourtRoomDao());
         // Expects
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
-        Mockito.when(mockXhbDisplayTypeRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayTypeRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayTypeDao()));
-        Mockito.when(mockXhbDisplayLocationRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayLocationRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbDisplayLocationDao()));
-        Mockito.when(mockXhbCourtSiteRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtSiteRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
-        Mockito.when(mockXhbCourtRoomRepository.findByDisplayId(Mockito.isA(Integer.class))).thenReturn(rooms);
+        Mockito.when(mockXhbCourtRoomRepository.findByDisplayIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(rooms);
         // Run
         boolean result = false;
         try {

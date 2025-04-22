@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcasereference;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,25 +40,43 @@ class XhbCaseReferenceRepositoryTest extends AbstractRepositoryTest<XhbCaseRefer
 
     @Override
     protected XhbCaseReferenceRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCaseReferenceRepository(getEntityManager());
+        return classUnderTest; // Let Mockito inject it
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCaseReferenceRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCaseReferenceDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCaseReferenceDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
         }
-        return classUnderTest;
     }
 
+
     @Test
-    void testfindByCaseIdSuccess() {
-        boolean result = testfindByCaseId(getDummyDao());
+    void testFindByCaseIdSuccess() {
+        boolean result = testFindByCaseId(getDummyDao());
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
-    void testfindByCaseIdFailure() {
-        boolean result = testfindByCaseId(null);
+    void testFindByCaseIdFailure() {
+        boolean result = testFindByCaseId(null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testfindByCaseId(XhbCaseReferenceDao dao) {
+    private boolean testFindByCaseId(XhbCaseReferenceDao dao) {
         List<XhbCaseReferenceDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
@@ -85,12 +106,12 @@ class XhbCaseReferenceRepositoryTest extends AbstractRepositoryTest<XhbCaseRefer
         Integer version = 3;
 
         XhbCaseReferenceDao result = new XhbCaseReferenceDao();
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
         result = new XhbCaseReferenceDao(caseReferenceId, reportingRestrictions, caseId, lastUpdateDate, creationDate,
             lastUpdatedBy, createdBy, version);
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
         caseReferenceId = result.getPrimaryKey();
-        assertNotNull(caseReferenceId, NOTNULL);
+        assertNotNull(caseReferenceId, NOTNULLRESULT);
         return new XhbCaseReferenceDao(result);
     }
 

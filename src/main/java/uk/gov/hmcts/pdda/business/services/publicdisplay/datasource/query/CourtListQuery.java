@@ -150,7 +150,8 @@ public class CourtListQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 isHidden = YES.equals(caseDao.get().getPublicDisplayHide());
             }
@@ -158,12 +159,13 @@ public class CourtListQuery extends PublicDisplayQuery {
 
         // Get the defendant on case
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-            getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
+            getXhbDefendantOnCaseRepository()
+                .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
         if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
             // Get the defendant
             Optional<XhbDefendantDao> defendantDao =
-                getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
             if (defendantDao.isPresent()) {
                 isHidden = isHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
                     || YES.contentEquals(defendantDao.get().getPublicDisplayHide());

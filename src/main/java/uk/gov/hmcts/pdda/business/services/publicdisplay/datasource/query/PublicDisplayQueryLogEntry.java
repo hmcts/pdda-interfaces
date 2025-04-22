@@ -104,7 +104,7 @@ public class PublicDisplayQueryLogEntry extends AbstractControllerBean {
 
     private Integer getCourtLogEventType(XhbCourtLogEntryDao courtLogEntryDao) {
         Optional<XhbCourtLogEventDescDao> courtLogEventDescDao =
-            getXhbCourtLogEventDescRepository().findById(courtLogEntryDao.getEventDescId());
+            getXhbCourtLogEventDescRepository().findByIdSafe(courtLogEntryDao.getEventDescId());
         return courtLogEventDescDao.isPresent() ? courtLogEventDescDao.get().getEventType() : null;
     }
 

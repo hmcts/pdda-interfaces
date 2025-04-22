@@ -136,10 +136,12 @@ class PublicNoticeQueryTest {
         EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNotices(courtRoomId))
             .andReturn(xhbConfiguredPublicNoticeDaoList);
         if (!xhbConfiguredPublicNoticeDaoList.isEmpty()) {
-            EasyMock.expect(mockXhbPublicNoticeRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbPublicNoticeRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbPublicNoticeDao);
             if (xhbPublicNoticeDao.isPresent()) {
-                EasyMock.expect(mockXhbDefinitivePublicNoticeRepository.findById(EasyMock.isA(Integer.class)))
+                EasyMock
+                    .expect(mockXhbDefinitivePublicNoticeRepository
+                        .findByIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(xhbDefinitivePublicNoticeDao);
             }
         }

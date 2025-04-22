@@ -365,7 +365,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String methodName = "getClobXmlAsString(" + clobId.longValue() + METHOD_NAME_SUFFIX;
         LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
-        Optional<XhbClobDao> clobObj = getXhbClobRepository().findById(clobId);
+        Optional<XhbClobDao> clobObj = getXhbClobRepository().findByIdSafe(clobId);
         if (clobObj.isPresent()) {
             return clobObj.get().getClobData();
         } else {

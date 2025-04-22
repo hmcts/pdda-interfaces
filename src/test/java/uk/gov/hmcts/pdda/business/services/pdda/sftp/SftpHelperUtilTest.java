@@ -140,7 +140,7 @@ class SftpHelperUtilTest {
         testGetBaisConfigs(null);
         String propertyName = USE_KEY_VAULT_PROPERTIES;
         List<XhbConfigPropDao> propList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(propList);
 
         EasyMock.replay(mockXhbConfigPropRepository);
@@ -228,33 +228,33 @@ class SftpHelperUtilTest {
         EasyMock.expect(mockEnvironment.getProperty(propertyName))
             .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
         List<XhbConfigPropDao> usernameList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(usernameList).anyTimes();
         // Password
         propertyName = Config.DB_CP_SFTP_PASSWORD;
         EasyMock.expect(mockEnvironment.getProperty(propertyName))
             .andReturn(propertyName.toLowerCase(Locale.getDefault())).anyTimes();
         List<XhbConfigPropDao> passwordList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(passwordList).anyTimes();
         // Location
         propertyName = Config.DB_CP_SFTP_UPLOAD_LOCATION;
         List<XhbConfigPropDao> locationList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(locationList).anyTimes();
         propertyName = Config.DB_SFTP_USERNAME;
         usernameList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(usernameList).anyTimes();
         // Password
         propertyName = Config.DB_SFTP_PASSWORD;
         passwordList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(passwordList).anyTimes();
         // Location
         propertyName = Config.DB_SFTP_UPLOAD_LOCATION;
         locationList = getXhbConfigPropDaoList(propertyName);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(locationList).anyTimes();
         // Host
         propertyName = Config.DB_SFTP_HOST;
@@ -264,7 +264,7 @@ class SftpHelperUtilTest {
             hostAndPort = hostList.get(0).getPropertyValue() + ":22";
             hostList = getXhbConfigPropDaoList(hostAndPort);
         }
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(hostList).anyTimes();
         EasyMock.expect(mockEnvironment.getProperty(propertyName)).andReturn(hostAndPort)
             .anyTimes();

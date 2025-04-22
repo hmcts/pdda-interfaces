@@ -16,6 +16,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.AllCourtStatusComp
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -295,4 +296,11 @@ public final class DummyCourtUtil {
         Calendar calendar) {
         return new AllCourtStatusCompiledRendererDelegate(calendar.getTime());
     }
+
+    public static XhbCourtSiteDao getXhbCourtSiteDaoWithRooms(List<XhbCourtRoomDao> courtRooms) {
+        XhbCourtSiteDao site = getXhbCourtSiteDao();
+        site.setXhbCourtRooms(courtRooms);
+        return site;
+    }
+
 }

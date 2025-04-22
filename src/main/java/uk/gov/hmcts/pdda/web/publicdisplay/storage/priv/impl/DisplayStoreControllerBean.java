@@ -138,18 +138,21 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode); // uses main EM
         if (xds.isPresent()) {
-            xds.get().setLastUpdateDate(LocalDateTime.now());
-            xds.get().setLastUpdatedBy("PDDA");
-            xds.get().setContent(contents);
-            getXhbDisplayStoreRepository().update(xds.get());
+            XhbDisplayStoreDao entity = xds.get(); // managed entity
+            entity.setLastUpdateDate(LocalDateTime.now());
+            entity.setLastUpdatedBy("PDDA");
+            entity.setContent(contents);
+            // No need to merge if already managed
+            // Just let the transaction commit
         } else {
-            XhbDisplayStoreDao xhbDisplayStore = new XhbDisplayStoreDao();
-            xhbDisplayStore.setRetrievalCode(retrievalCode);
-            xhbDisplayStore.setContent(contents);
-            getXhbDisplayStoreRepository().save(xhbDisplayStore);
+            XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
+            newEntity.setRetrievalCode(retrievalCode);
+            newEntity.setContent(contents);
+            getXhbDisplayStoreRepository().save(newEntity);
         }
+
     }
 
     /**

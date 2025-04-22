@@ -89,7 +89,9 @@ class CppInitialProcessingControllerBeanTest
                 BATCH_USERNAME)).andReturn(true);
             EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
                 .andReturn(mockXhbCppStagingInboundRepository);
-            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCppStagingInboundRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
@@ -185,7 +187,9 @@ class CppInitialProcessingControllerBeanTest
                 BATCH_USERNAME)).andReturn(true);
             EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
                 .andReturn(mockXhbCppStagingInboundRepository);
-            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCppStagingInboundRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))

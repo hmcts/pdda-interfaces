@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbhearing;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,10 +40,27 @@ class XhbHearingRepositoryTest extends AbstractRepositoryTest<XhbHearingDao> {
 
     @Override
     protected XhbHearingRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbHearingRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbHearingRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbHearingDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbHearingDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -104,7 +124,7 @@ class XhbHearingRepositoryTest extends AbstractRepositoryTest<XhbHearingDao> {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         hearingId = result.getPrimaryKey();
-        assertNotNull(hearingId, NOTNULL);
+        assertNotNull(hearingId, NOTNULLRESULT);
         return new XhbHearingDao(result);
     }
 

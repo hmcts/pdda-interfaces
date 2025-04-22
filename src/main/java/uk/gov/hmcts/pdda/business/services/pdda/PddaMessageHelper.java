@@ -50,7 +50,7 @@ public class PddaMessageHelper {
     public Optional<XhbPddaMessageDao> findByPddaMessageId(final Integer pddaMessageId) {
         String methodName = "findByPddaMessageId()";
         LOG.debug(methodName + LOG_CALLED);
-        return getPddaMessageRepository().findById(pddaMessageId);
+        return getPddaMessageRepository().findByIdSafe(pddaMessageId);
     }
 
     /**

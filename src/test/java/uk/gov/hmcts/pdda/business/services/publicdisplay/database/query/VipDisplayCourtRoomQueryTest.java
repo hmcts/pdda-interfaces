@@ -187,7 +187,7 @@ class VipDisplayCourtRoomQueryTest {
         replayArray.add(mockXhbDisplayLocationRepository);
         abortExpects = xhbDisplayLocationDaoList.isEmpty();
         if (!abortExpects) {
-            EasyMock.expect(mockXhbCourtSiteRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbCourtSiteRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtSiteDao);
             replayArray.add(mockXhbCourtSiteRepository);
             abortExpects = xhbCourtSiteDao.isEmpty();
@@ -205,7 +205,7 @@ class VipDisplayCourtRoomQueryTest {
             abortExpects = xhbDisplayCourtRoomDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbCourtRoomRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbCourtRoomRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtRoomDao);
             replayArray.add(mockXhbCourtRoomRepository);
         }

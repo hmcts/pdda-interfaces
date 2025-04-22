@@ -131,7 +131,7 @@ class DisplayLocationDataHelperTest {
             .thenReturn("TranslatedText");
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(new ArrayList<>());
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDocumentDao);
         // Run
         boolean result = false;
@@ -170,7 +170,7 @@ class DisplayLocationDataHelperTest {
             .thenThrow(new MissingResourceException(null, null, null));
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(new ArrayList<>());
-        Mockito.when(mockXhbDisplayDocumentRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDocumentDao);
         // Run
         boolean result = true;

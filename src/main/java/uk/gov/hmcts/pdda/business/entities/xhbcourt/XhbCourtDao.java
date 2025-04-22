@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourt;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.LinguisticNaming","PMD.GodClass",
                    "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_COURT")
+@Access(AccessType.FIELD)
 @NamedQuery(name = "XHB_COURT.findByCrestCourtIdValue",
     query = "SELECT o from XHB_COURT o WHERE o.crestCourtId = :crestCourtId ")
 @NamedQuery(name = "XHB_COURT.findNonObsoleteByCrestCourtIdValue",

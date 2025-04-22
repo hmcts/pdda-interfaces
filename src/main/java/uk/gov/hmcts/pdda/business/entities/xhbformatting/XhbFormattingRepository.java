@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbformatting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -39,6 +40,20 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
         query.setParameter("formatStatus", formatStatus);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbFormattingDao> findByFormatStatusSafe(String formatStatus) {
+        LOG.debug("findByFormatStatusSafe({})", formatStatus);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_FORMATTING.findByFormatStatus");
+            query.setParameter("formatStatus", formatStatus);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByFormatStatusSafe({}): {}", formatStatus, e.getMessage(), e);
+            return List.of(); // Return empty list to avoid nulls and maintain stability
+        }
+    }
+
 
     /**
      * findByDocumentAndClob.

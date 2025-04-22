@@ -75,7 +75,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         String methodName = "getDrillDownForCourt(" + courtId + ") - ";
         LOG.debug(methodName + ENTERED);
 
-        Optional<XhbCourtDao> court = getXhbCourtRepository().findById(courtId);
+        Optional<XhbCourtDao> court = getXhbCourtRepository().findByIdSafe(courtId);
         if (!court.isPresent()) {
             throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
         }

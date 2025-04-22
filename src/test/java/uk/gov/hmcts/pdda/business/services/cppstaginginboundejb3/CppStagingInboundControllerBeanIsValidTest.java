@@ -141,11 +141,12 @@ class CppStagingInboundControllerBeanIsValidTest {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
         properties.add(DummyServicesUtil.getXhbConfigPropDao(TESTING, EMPTY_STRING));
-        
-        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager)
+            .anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
+
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(TESTING))
             .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockEntityManager);
@@ -161,11 +162,12 @@ class CppStagingInboundControllerBeanIsValidTest {
     void testFindConfigEntryByPropertyNameNullArray() {
         // Setup
         List<XhbConfigPropDao> properties = new ArrayList<>();
-        
-        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager)
+            .anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName("scheduledtasks.pdda"))
+
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(TESTING))
             .andReturn(properties);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockEntityManager);
@@ -176,6 +178,15 @@ class CppStagingInboundControllerBeanIsValidTest {
         EasyMock.verify(mockEntityManager);
         assertNull(returnString, NULL);
     }
+    
+    /*
+     * @Test void testFindConfigEntryByPropertyNameNullArray() { CppStagingInboundControllerBean
+     * testClass = new TestableCppStagingInboundControllerBean(...); // pass required mocks
+     * 
+     * String result = testClass.findConfigEntryByPropertyName("Testing"); assertNull(result,
+     * "Expected null when config entry list is empty"); }
+     */
+
 
     @Test
     void testGetClobXmlAsString() {
@@ -187,7 +198,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         EasyMock.expect(mockXhbClobRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbClobRepository.findById(clobId)).andReturn(Optional.of(clobObj));
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(clobId)).andReturn(Optional.of(clobObj));
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -206,7 +217,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         EasyMock.expect(mockXhbClobRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbClobRepository.findById(clobId)).andReturn(Optional.empty());
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(clobId)).andReturn(Optional.empty());
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockEntityManager);
         // Run

@@ -114,7 +114,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         LOG.debug(methodName + ENTERED);
 
         List<XhbConfigPropDao> configPropReturnList =
-            getXhbConfigPropRepository().findByPropertyName("CPPX_Schema" + documentType);
+            getXhbConfigPropRepository().findByPropertyNameSafe("CPPX_Schema" + documentType);
         
         for (XhbConfigPropDao configPropReturn : configPropReturnList) {
             LOG.debug("Config prop return: {} {} {}", configPropReturn.getConfigPropId(),
@@ -130,20 +130,22 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         return tempConfigProp.getPropertyValue();
     }
 
+    protected List<XhbConfigPropDao> getSafeConfigProperties(String propertyName) {
+        return getXhbConfigPropRepository().findByPropertyNameSafe(propertyName);
+    }
+
     public String findConfigEntryByPropertyName(String propertyName) {
-        String returnString = null;
         LOG.info("findConfigEntryByPropertyName(" + propertyName + ")");
-        List<XhbConfigPropDao> properties =
-            getXhbConfigPropRepository()
-                .findByPropertyName("scheduledtasks.pdda");
-        if (null != properties && !properties.isEmpty()) {
-            returnString = properties.get(0).getPropertyValue();
-        } else {
+        List<XhbConfigPropDao> properties = getSafeConfigProperties(propertyName);
+        if (properties.isEmpty()) {
             LOG.debug("findConfigEntryByPropertyName(" + propertyName
                 + "): cannot find property in database.");
+        } else {
+            return properties.get(0).getPropertyValue();
         }
-        return returnString;
+        return null;
     }
+
 
     protected CppStagingInboundHelper getCppStagingInboundHelper() {
         if (cppStagingInboundHelper == null) {

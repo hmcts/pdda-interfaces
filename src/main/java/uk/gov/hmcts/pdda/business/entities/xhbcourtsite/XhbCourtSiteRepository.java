@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtsite;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -76,5 +77,17 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtSiteDao> findByCourtIdSafe(final Integer courtId) {
+        LOG.debug("findByCourtIdSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_SITE.findByCourtId");
+            query.setParameter("courtId", courtId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdSafe({}): {}", courtId, e.getMessage(), e);
+            return List.of(); // Return empty list on failure to avoid nulls and leaks
+        }
+    }
 
 }

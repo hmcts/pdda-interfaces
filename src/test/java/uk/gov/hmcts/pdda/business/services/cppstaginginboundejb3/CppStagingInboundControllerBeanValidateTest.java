@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * CppStagingInboundControllerBeanValidateTest.
  */
+@SuppressWarnings({"PMD.TooManyMethods"})
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundControllerBeanValidateTest {
 
@@ -282,14 +283,15 @@ class CppStagingInboundControllerBeanValidateTest {
         List<XhbConfigPropDao> returnList = new ArrayList<>();
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbConfigPropRepository.findByPropertyNameSafe(EasyMock.isA(String.class)))
             .andReturn(returnList);
     }
 
     private void testingClobRepository(XhbCppStagingInboundDao dao) {
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
-        EasyMock.expect(mockXhbClobRepository.findById(dao.getClobId()))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(dao.getClobId()))
             .andReturn(Optional.of(clobObj));
     }
 }

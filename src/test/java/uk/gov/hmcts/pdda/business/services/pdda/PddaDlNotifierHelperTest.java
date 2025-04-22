@@ -208,7 +208,7 @@ class PddaDlNotifierHelperTest {
         List<XhbConfigPropDao> dummyXhbConfigPropDaoList = DummyServicesUtil.getNewArrayList();
         dummyXhbConfigPropDaoList
             .add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .andReturn(dummyXhbConfigPropDaoList);
     }
 

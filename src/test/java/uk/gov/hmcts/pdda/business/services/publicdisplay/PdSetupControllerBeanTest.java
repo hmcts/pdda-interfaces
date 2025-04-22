@@ -108,7 +108,8 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.of(courtDao));
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+            .andReturn(Optional.of(courtDao));
         EasyMock
             .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
             .andReturn(courtSiteList);
@@ -152,7 +153,8 @@ class PdSetupControllerBeanTest {
             EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
             EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             
-            EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
+            EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+                .andReturn(Optional.empty());
             EasyMock.replay(mockXhbCourtRepository);
             EasyMock.replay(mockEntityManager);
             // Run

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -45,6 +46,33 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         query.setParameter(PROCESSING_STATUS, Parameter.getPostgresInParameter(processingStatus));
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCppStagingInboundDao> findNextDocumentByValidationAndProcessingStatusSafe(
+        LocalDateTime timeLoaded, String validationStatus, String processingStatus) {
+
+        LOG.debug("findNextDocumentByValidationAndProcessingStatusSafe({},{},{})", timeLoaded,
+            validationStatus, processingStatus);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery(
+                "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationAndProcessingStatus");
+
+            query.setParameter("timeLoaded", timeLoaded);
+            query.setParameter("validationStatus",
+                Parameter.getPostgresInParameter(validationStatus));
+            query.setParameter("processingStatus",
+                Parameter.getPostgresInParameter(processingStatus));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error(
+                "Error in findNextDocumentByValidationAndProcessingStatusSafe({}, {}, {}): {}",
+                timeLoaded, validationStatus, processingStatus, e.getMessage(), e);
+            return List.of(); // Safe fallback to prevent nulls or crashes
+        }
+    }
+
 
     public List<XhbCppStagingInboundDao> findNextDocumentByProcessingStatus(
         LocalDateTime timeLoaded, String processingStatus) {
