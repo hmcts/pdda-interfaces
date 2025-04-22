@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -38,9 +39,15 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class PublicDisplayQueryRepoTest {
 
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @TestSubject
     private final AllCaseStatusQuery classUnderTest =
+        new AllCaseStatusQuery(EasyMock.createMock(EntityManager.class));
+
+    @TestSubject
+    private final PublicDisplayQueryRepo classUnderTest2 =
         new AllCaseStatusQuery(EasyMock.createMock(EntityManager.class));
 
     @Test
@@ -95,5 +102,93 @@ class PublicDisplayQueryRepoTest {
     void testGetXhbDefendantOnCaseRepository() {
         assertInstanceOf(XhbDefendantOnCaseRepository.class,
             classUnderTest.getXhbDefendantOnCaseRepository(), NOT_INSTANCE);
+    }
+    
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest2.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PublicDisplayQueryRepo.class.getDeclaredField("xhbCaseReferenceRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbDefendantRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbDefendantOnCaseRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbHearingRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbHearingListRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbRefJudgeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbRefHearingTypeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbSittingRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbScheduledHearingRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+        
+        // Use reflection to check the private field
+        field = PublicDisplayQueryRepo.class.getDeclaredField("xhbSchedHearingDefendantRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest2);
+        
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
     }
 }

@@ -50,11 +50,14 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(EasyMockExtension.class)
 class PdSetupControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private XhbCourtRepository mockXhbCourtRepository;
@@ -223,5 +226,37 @@ class PdSetupControllerBeanTest {
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         return xdList;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
     }
 }

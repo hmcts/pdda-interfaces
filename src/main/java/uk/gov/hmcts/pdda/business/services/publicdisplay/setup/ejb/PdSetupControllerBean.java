@@ -57,7 +57,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
     }
 
     @Override
-    protected void clearRepositories() {
+    public void clearRepositories() {
         super.clearRepositories();
         xhbDisplayLocationRepository = null;
         xhbDisplayRepository = null;
