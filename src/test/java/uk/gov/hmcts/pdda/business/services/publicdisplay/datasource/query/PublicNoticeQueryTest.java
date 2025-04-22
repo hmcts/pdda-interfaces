@@ -47,6 +47,8 @@ class PublicNoticeQueryTest {
 
     private static final String TRUE = "Result is not True";
 
+    private static final String CLEAR_REPOSITORIES_MESSAGE = "Repository has been cleared";
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -166,5 +168,36 @@ class PublicNoticeQueryTest {
             }
         }
         return true;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PublicNoticeQuery.class.getDeclaredField("xhbConfiguredPublicNoticeRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicNoticeQuery.class.getDeclaredField("xhbPublicNoticeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicNoticeQuery.class.getDeclaredField("xhbDefinitivePublicNoticeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 }
