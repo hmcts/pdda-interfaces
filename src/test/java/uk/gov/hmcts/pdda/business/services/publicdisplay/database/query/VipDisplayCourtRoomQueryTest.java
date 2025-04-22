@@ -225,4 +225,52 @@ class VipDisplayCourtRoomQueryTest {
         return true;
     }
 
+
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+    }
+
 }

@@ -122,4 +122,51 @@ class PublicDisplayQueryLogEntryTest {
             NOT_INSTANCE);
     }
 
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtLogEntryRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtLogEventDescRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCaseRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+    }
+
 }

@@ -194,4 +194,42 @@ class VipDisplayDocumentQueryTest {
         }
         return true;
     }
+
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayDocumentRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbRotationSetDdRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+    }
 }
