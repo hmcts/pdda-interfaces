@@ -218,11 +218,11 @@ public class SftpService extends XhibitPddaHelper {
                     
                     // If the filename is not in the list then its already been processed and deleted previously
                     if (!listOfFilesInFolder.contains(filename)) {
-                        return;
+                        continue;
                     }
                     LOG.debug("File: {}{}", filename,
                         ", still exists in remote folder - calling processBaisFile()...");
-                    processBaisFile(config, baisValidation, filename, clobData);
+                    processBaisFile(config, baisValidation, filename, clobData);  
                 }
             }
         } finally {
