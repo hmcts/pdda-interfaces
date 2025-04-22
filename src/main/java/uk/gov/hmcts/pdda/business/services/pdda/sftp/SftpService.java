@@ -27,10 +27,11 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity", "PMD.AvoidSynchronizedAtMethodLevel"})
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -78,7 +79,7 @@ public class SftpService extends XhibitPddaHelper {
      * @return True if there was an error
      */
     @SuppressWarnings("PMD")
-    public synchronized boolean processBaisMessages(int sftpPort) {
+    public boolean processBaisMessages(int sftpPort) {
 
         boolean error = false;
 
@@ -144,7 +145,7 @@ public class SftpService extends XhibitPddaHelper {
      * 
      * @param config The SFTP configuration
      */
-    synchronized void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
+    void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
         boolean isCpConnection) {
         methodName = "setupSftpClient()";
         LOG.debug(methodName, LOG_CALLED);
@@ -164,7 +165,7 @@ public class SftpService extends XhibitPddaHelper {
      * 
      * @param config The SFTP configuration
      */
-    private synchronized void processDataFromBais(SftpConfig config, boolean isCpConnection) {
+    private void processDataFromBais(SftpConfig config, boolean isCpConnection) {
         methodName = "getDataFromBais()";
         LOG.debug(methodName, LOG_CALLED);
 
@@ -190,7 +191,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param baisValidation The validation class
      * @throws IOException The IOException
      */
-    synchronized void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
+    void retrieveFromBais(SftpConfig config, BaisValidation baisValidation)
         throws IOException {
 
         methodName = "retrieveFromBais()";
@@ -206,6 +207,18 @@ public class SftpService extends XhibitPddaHelper {
                 for (Map.Entry<String, String> entry : files.entrySet()) {
                     String filename = entry.getKey();
                     String clobData = entry.getValue();
+                    
+                    // Fetch the remote folder's file list each time a file is processed
+                    List<String> listOfFilesInFolder = getPddaSftpHelperSshj()
+                        .listFilesInFolder(config.getSshjSftpClient(),
+                                          config.getActiveRemoteFolder(),
+                                          baisValidation);
+                    
+                    // If the filename is not in the list then its already been processed and deleted previously
+                    if (!listOfFilesInFolder.contains(filename)) {
+                        LOG.debug("File: {}{}", filename, ", has already been processed");
+                        return;
+                    }
                     processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
@@ -254,7 +267,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param clobData The CLOB data
      * @throws IOException The IOException
      */
-    private synchronized void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
+    private void processBaisFile(SftpConfig config, BaisValidation validation, String filename,
         String clobData) throws IOException {
 
         methodName = "processBaisFile()";
@@ -338,7 +351,7 @@ public class SftpService extends XhibitPddaHelper {
      * @param errorMessage The error message
      * @throws NotFoundException The NotFoundException
      */
-    private synchronized void createBaisMessage(final Integer courtId, final String messageType,
+    private void createBaisMessage(final Integer courtId, final String messageType,
         final String filename, final String clobData, String errorMessage, String listType)
         throws NotFoundException {
 

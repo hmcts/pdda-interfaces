@@ -31,7 +31,6 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class PddaBaisControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(PddaBaisControllerBean.class);
@@ -54,7 +53,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
      * </p>
      */
     @Override
-    public synchronized void doTask() {
+    public void doTask() {
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         getSftpService().processBaisMessages(0);
