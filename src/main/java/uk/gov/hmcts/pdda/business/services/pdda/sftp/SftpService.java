@@ -205,10 +205,12 @@ public class SftpService extends XhibitPddaHelper {
             if (!files.isEmpty()) {
                 // Process the files we have retrieved.
                 for (Map.Entry<String, String> entry : files.entrySet()) {
-                    String filename = entry.getKey();
-                    String clobData = entry.getValue();
+                    final String filename = entry.getKey();
+                    final String clobData = entry.getValue();
                     
                     // Fetch the remote folder's file list each time a file is processed
+                    LOG.debug("Checking current list of files in remote folder before processing current file: {}",
+                        filename);
                     List<String> listOfFilesInFolder = getPddaSftpHelperSshj()
                         .listFilesInFolder(config.getSshjSftpClient(),
                                           config.getActiveRemoteFolder(),
@@ -216,9 +218,10 @@ public class SftpService extends XhibitPddaHelper {
                     
                     // If the filename is not in the list then its already been processed and deleted previously
                     if (!listOfFilesInFolder.contains(filename)) {
-                        LOG.debug("File: {}{}", filename, ", has already been processed");
                         return;
                     }
+                    LOG.debug("File: {}{}", filename,
+                        ", still exists in remote folder - calling processBaisFile()...");
                     processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
