@@ -21,6 +21,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +30,7 @@ import static org.mockito.ArgumentMatchers.isA;
 /**
  * CppStagingInboundHelperTest.
  */
-
+@SuppressWarnings("PMD.CloseResource")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CppStagingInboundHelperTest {
@@ -150,9 +151,6 @@ class CppStagingInboundHelperTest {
     @Test
     void testFindNextDocumentByStatusMultipleDocs() {
         // Mocks
-        EntityManager mockEm = Mockito.mock(EntityManager.class);
-        XhbCppStagingInboundRepository mockStagingRepo =
-            Mockito.mock(XhbCppStagingInboundRepository.class);
         XhbConfigPropRepository mockConfigRepo = Mockito.mock(XhbConfigPropRepository.class);
 
         // Dummy Config DAO to control numberOfDocsToProcess
@@ -170,6 +168,9 @@ class CppStagingInboundHelperTest {
         List<XhbCppStagingInboundDao> returnedDocs = List.of(dao1, dao2);
 
         // Manually create helper with mocked dependencies
+        XhbCppStagingInboundRepository mockStagingRepo =
+            Mockito.mock(XhbCppStagingInboundRepository.class);
+        EntityManager mockEm = Mockito.mock(EntityManager.class);
         CppStagingInboundHelper helper = new CppStagingInboundHelper(mockEm, mockConfigRepo);
         ReflectionTestUtils.setField(helper, "cppStagingInboundRepository", mockStagingRepo);
 
@@ -193,10 +194,7 @@ class CppStagingInboundHelperTest {
     @Test
     void testFindNextDocumentByStatusFallbackToUnsafeConfigLookup() {
         // Mocks
-        EntityManager mockEm = Mockito.mock(EntityManager.class);
         XhbConfigPropRepository mockConfigRepo = Mockito.mock(XhbConfigPropRepository.class);
-        XhbCppStagingInboundRepository mockStagingRepo =
-            Mockito.mock(XhbCppStagingInboundRepository.class);
 
         // Config: simulate fallback logic
         Mockito.when(mockConfigRepo.findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS"))
@@ -214,6 +212,9 @@ class CppStagingInboundHelperTest {
         List<XhbCppStagingInboundDao> dummyDocs = List.of(dao1, dao2);
 
         // Repo mocks
+        XhbCppStagingInboundRepository mockStagingRepo =
+            Mockito.mock(XhbCppStagingInboundRepository.class);
+        EntityManager mockEm = Mockito.mock(EntityManager.class);
         Mockito
             .when(mockStagingRepo.findNextDocumentByValidationAndProcessingStatusSafe(Mockito.any(),
                 Mockito.any(), Mockito.any()))

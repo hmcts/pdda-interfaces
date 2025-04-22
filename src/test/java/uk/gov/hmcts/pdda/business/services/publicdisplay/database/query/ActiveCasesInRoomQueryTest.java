@@ -89,6 +89,7 @@ class ActiveCasesInRoomQueryTest {
     }
 
 
+    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     @Test
     void testRepositoryCreatedWhenNullAndEntityManagerIsOpen() {
         // Setup
@@ -141,6 +142,7 @@ class ActiveCasesInRoomQueryTest {
         return true;
     }
 
+    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     @Test
     void testGetXhbScheduledHearingRepositoryCreatesNewWhenNull() {
         // Simulate case where repo is null by using constructor without repo
@@ -178,8 +180,7 @@ class ActiveCasesInRoomQueryTest {
         daoList.add(DummyHearingUtil.getXhbScheduledHearingDao());
 
         // Expectations
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true); // Required due to internal
-                                                                     // check
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
         EasyMock.expect(mockXhbScheduledHearingRepository.findActiveCasesInRoom(EasyMock.eq(-1),
             EasyMock.eq(81), EasyMock.eq(-1))).andReturn(daoList);
 
@@ -189,10 +190,11 @@ class ActiveCasesInRoomQueryTest {
         Collection<Integer> result = classUnderTest.getData(-1, 81, -1);
 
         // Then
-        assertTrue(result.contains(daoList.get(0).getScheduledHearingId()));
+        assertTrue(result.contains(daoList.get(0).getScheduledHearingId()), "result is true");
         EasyMock.verify(mockEntityManager, mockXhbScheduledHearingRepository);
     }
 
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
     @Test
     void testClearRepositoriesSetsRepositoryToNull() throws Exception {
         // Given

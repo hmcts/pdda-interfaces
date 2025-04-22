@@ -48,6 +48,8 @@ class PublicDisplayQueryLogEntryTest {
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String TEST_XML =
         "<testNode><testChildNode>courtroomname</testChildNode></testNode>";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private PublicDisplayValue mockPublicDisplayValue;
@@ -122,6 +124,7 @@ class PublicDisplayQueryLogEntryTest {
             NOT_INSTANCE);
     }
 
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
     @Test
     void testClearRepositoriesSetsRepositoryToNull() throws Exception {
         // Given
@@ -133,7 +136,7 @@ class PublicDisplayQueryLogEntryTest {
         Object repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtLogEventDescRepository");
@@ -141,7 +144,7 @@ class PublicDisplayQueryLogEntryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCaseRepository");
@@ -149,7 +152,7 @@ class PublicDisplayQueryLogEntryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtSiteRepository");
@@ -157,7 +160,7 @@ class PublicDisplayQueryLogEntryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
 
         // Use reflection to check the private field
@@ -166,7 +169,7 @@ class PublicDisplayQueryLogEntryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 
 }

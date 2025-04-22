@@ -48,6 +48,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 class VipDisplayDocumentQueryTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     protected EntityManager mockEntityManager;
@@ -195,6 +197,7 @@ class VipDisplayDocumentQueryTest {
         return true;
     }
 
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
     @Test
     void testClearRepositoriesSetsRepositoryToNull() throws Exception {
         // Given
@@ -206,7 +209,7 @@ class VipDisplayDocumentQueryTest {
         Object repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayLocationRepository");
@@ -214,7 +217,7 @@ class VipDisplayDocumentQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayDocumentRepository");
@@ -222,7 +225,7 @@ class VipDisplayDocumentQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayDocumentQuery.class.getDeclaredField("xhbRotationSetDdRepository");
@@ -230,6 +233,6 @@ class VipDisplayDocumentQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 }

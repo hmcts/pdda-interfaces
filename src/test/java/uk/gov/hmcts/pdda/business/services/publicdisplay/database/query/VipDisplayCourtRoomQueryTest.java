@@ -53,6 +53,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 class VipDisplayCourtRoomQueryTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     protected EntityManager mockEntityManager;
@@ -226,6 +228,7 @@ class VipDisplayCourtRoomQueryTest {
     }
 
 
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
     @Test
     void testClearRepositoriesSetsRepositoryToNull() throws Exception {
         // Given
@@ -237,7 +240,7 @@ class VipDisplayCourtRoomQueryTest {
         Object repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayLocationRepository");
@@ -245,7 +248,7 @@ class VipDisplayCourtRoomQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayCourtRoomRepository");
@@ -253,7 +256,7 @@ class VipDisplayCourtRoomQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
         // Use reflection to check the private field
         field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbCourtSiteRepository");
@@ -261,7 +264,7 @@ class VipDisplayCourtRoomQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
 
 
         // Use reflection to check the private field
@@ -270,7 +273,7 @@ class VipDisplayCourtRoomQueryTest {
         repository = field.get(classUnderTest);
 
         // Then
-        assertTrue(repository == null, "Repository should be null after clearRepositories()");
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 
 }

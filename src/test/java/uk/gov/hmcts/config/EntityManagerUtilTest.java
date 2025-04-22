@@ -33,15 +33,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -49,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author harrism
  */
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.CloseResource"})
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestMethodOrder(OrderAnnotation.class)
@@ -119,39 +119,43 @@ class EntityManagerUtilTest extends AbstractJUnit {
 
         EntityManagerUtil.setEntityManagerFactory(factory);
         EntityManager result = EntityManagerUtil.getEntityManager();
-        assertNotNull(result);
+        assertNotNull(result, "Entity Manager is not null");
         Mockito.verify(result).setFlushMode(FlushModeType.AUTO);
     }
     
     @Test
     void testEntityManagerClosedNull() {
-        assertTrue(EntityManagerUtil.isEntityManagerClosed(null));
+        assertTrue(EntityManagerUtil.isEntityManagerClosed(null),
+            "Entity Manager closed check is null");
     }
 
     @Test
     void testEntityManagerClosedTrue() {
         EntityManager em = Mockito.mock(EntityManager.class);
         Mockito.when(em.isOpen()).thenReturn(false);
-        assertTrue(EntityManagerUtil.isEntityManagerClosed(em));
+        assertTrue(EntityManagerUtil.isEntityManagerClosed(em),
+            "Entity Manager closed check is true");
     }
 
     @Test
     void testEntityManagerClosedFalse() {
         EntityManager em = Mockito.mock(EntityManager.class);
         Mockito.when(em.isOpen()).thenReturn(true);
-        assertFalse(EntityManagerUtil.isEntityManagerClosed(em));
+        assertFalse(EntityManagerUtil.isEntityManagerClosed(em),
+            "Entity Manager closed check is false");
     }
 
     @Test
-    void testIsTransactionActiveFalseNullEM() {
-        assertFalse(EntityManagerUtil.isTransactionActive(null));
+    void testIsTransactionActiveFalseNullEm() {
+        assertFalse(EntityManagerUtil.isTransactionActive(null),
+            "Transaction active check has null entity manager");
     }
 
     @Test
     void testIsTransactionActiveFalseNullTx() {
         EntityManager em = Mockito.mock(EntityManager.class);
         Mockito.when(em.getTransaction()).thenReturn(null);
-        assertFalse(EntityManagerUtil.isTransactionActive(em));
+        assertFalse(EntityManagerUtil.isTransactionActive(em), "Transaction is null");
     }
 
     @Test
@@ -160,7 +164,7 @@ class EntityManagerUtilTest extends AbstractJUnit {
         EntityTransaction tx = Mockito.mock(EntityTransaction.class);
         Mockito.when(em.getTransaction()).thenReturn(tx);
         Mockito.when(tx.isActive()).thenReturn(false);
-        assertFalse(EntityManagerUtil.isTransactionActive(em));
+        assertFalse(EntityManagerUtil.isTransactionActive(em), "Transaction is inactive");
     }
 
     @Test
@@ -169,7 +173,7 @@ class EntityManagerUtilTest extends AbstractJUnit {
         EntityTransaction tx = Mockito.mock(EntityTransaction.class);
         Mockito.when(em.getTransaction()).thenReturn(tx);
         Mockito.when(tx.isActive()).thenReturn(true);
-        assertTrue(EntityManagerUtil.isTransactionActive(em));
+        assertTrue(EntityManagerUtil.isTransactionActive(em), "Transaction is active");
     }
 
 
