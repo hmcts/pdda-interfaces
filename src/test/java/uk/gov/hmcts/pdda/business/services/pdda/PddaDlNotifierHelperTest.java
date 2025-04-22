@@ -1,17 +1,15 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import jakarta.persistence.EntityManager;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockExtension;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
+import jakarta.persistence.Query;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
-import uk.gov.hmcts.DummyServicesUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
@@ -19,14 +17,23 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier.XhbPddaDlNotifierDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier.XhbPddaDlNotifierRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * <p>
@@ -44,36 +51,56 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 
  * @author Mark Harris
  */
-@ExtendWith(EasyMockExtension.class)
+@ExtendWith(MockitoExtension.class)
 class PddaDlNotifierHelperTest {
 
-    private static final String NOT_FALSE = "Result is not False";
-    private static final String NOT_TRUE = "Result is not True";
     private static final String YES = "Y";
     private static final String NO = "N";
+    private static final String NOT_TRUE = "Expected true";
+    private static final String NOT_FALSE = "Expected false";
     private static final DateTimeFormatter DL_NOTIFIER_EXECUTION_TIME_FORMAT =
         DateTimeFormatter.ofPattern("HH:mm");
+    private static final String DL_NOTIFIER_EXECUTION_TIME = "DL_NOTIFIER_EXECUTION_TIME";
 
     @Mock
     private EntityManager mockEntityManager;
-
     @Mock
     private XhbConfigPropRepository mockXhbConfigPropRepository;
-
     @Mock
     private XhbCourtRepository mockXhbCourtRepository;
-
     @Mock
     private XhbPddaDlNotifierRepository mockXhbPddaDlNotifierRepository;
+    @Mock
+    private Environment mockEnvironment;
+    @Mock
+    private Query mockQuery;
 
-    @TestSubject
-    private final PddaDlNotifierHelper classUnderTest = new PddaDlNotifierHelper(mockEntityManager,
-        mockXhbConfigPropRepository, EasyMock.createMock(Environment.class));
+    private PddaDlNotifierHelper helper;
 
+    @BeforeEach
+    void setUp() {
+        helper = new PddaDlNotifierHelper(mockEntityManager, mockXhbConfigPropRepository,
+            mockEnvironment) {
+            @Override
+            protected boolean isEntityManagerActive() {
+                return true;
+            }
 
-    private static final class Config {
-        static final String PDDA_SWITCHER = "PDDA_SWITCHER";
-        static final String DL_NOTIFIER_EXECUTION_TIME = "DL_NOTIFIER_EXECUTION_TIME";
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+
+            @Override
+            protected XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
+                return mockXhbPddaDlNotifierRepository;
+            }
+
+            @Override
+            protected XhbCourtRepository getCourtRepository() {
+                return mockXhbCourtRepository;
+            }
+        };
     }
 
     @Test
@@ -84,149 +111,173 @@ class PddaDlNotifierHelperTest {
     }
 
     @Test
+    void testClearRepositoriesShouldResetCachedRepositories() {
+        PddaDlNotifierHelper localHelper = new PddaDlNotifierHelper(mockEntityManager,
+            mockXhbConfigPropRepository, mockEnvironment) {
+            @Override
+            protected boolean isEntityManagerActive() {
+                return true;
+            }
+
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+        };
+
+        // Get initial instances (cached)
+        XhbPddaDlNotifierRepository initialNotifierRepo = localHelper.getPddaDlNotifierRepository();
+        XhbCourtRepository initialCourtRepo = localHelper.getCourtRepository();
+
+        assertNotNull(initialNotifierRepo, "Notifier repository should not be null");
+        assertNotNull(initialCourtRepo, "Court repository should not be null");
+
+        // Clear repositories
+        localHelper.clearRepositories();
+
+        // Get new instances (should not be the same as before)
+        XhbPddaDlNotifierRepository newNotifierRepo = localHelper.getPddaDlNotifierRepository();
+        XhbCourtRepository newCourtRepo = localHelper.getCourtRepository();
+
+        assertNotNull(newNotifierRepo, "Notifier repository should not be null after clearing");
+        assertNotNull(newCourtRepo, "Court repository should not be null after clearing");
+        assertNotSame(initialNotifierRepo, newNotifierRepo,
+            "Notifier repository should have been cleared and re-instantiated.");
+        assertNotSame(initialCourtRepo, newCourtRepo,
+            "Court repository should have been cleared and re-instantiated.");
+    }
+
+
+    @Test
     void testIsDailyNotifierRequiredSuccess() {
-        // Setup
         String minuteAgo =
             LocalDateTime.now().minusMinutes(1).format(DL_NOTIFIER_EXECUTION_TIME_FORMAT);
-        expectXhbConfigPropDao(Config.DL_NOTIFIER_EXECUTION_TIME, minuteAgo);
-        expectXhbConfigPropDao(Config.PDDA_SWITCHER, "1");
-        EasyMock.replay(mockXhbConfigPropRepository);
-        // Run
-        boolean result = classUnderTest.isDailyNotifierRequired();
-        // Checks
-        EasyMock.verify(mockXhbConfigPropRepository);
+        when(mockXhbConfigPropRepository.findByPropertyNameSafe(DL_NOTIFIER_EXECUTION_TIME))
+            .thenReturn(List.of(new XhbConfigPropDao(1, DL_NOTIFIER_EXECUTION_TIME, minuteAgo)));
+        when(mockXhbConfigPropRepository.findByPropertyNameSafe("PDDA_SWITCHER"))
+            .thenReturn(List.of(new XhbConfigPropDao(2, "PDDA_SWITCHER", "1")));
+
+        boolean result = helper.isDailyNotifierRequired();
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testIsDailyNotifierRequiredFailure() {
-        // Setup
-        expectXhbConfigPropDao(Config.DL_NOTIFIER_EXECUTION_TIME, "InvalidEntry");
-        EasyMock.replay(mockXhbConfigPropRepository);
-        // Run
-        boolean result = classUnderTest.isDailyNotifierRequired();
-        // Checks
-        EasyMock.verify(mockXhbConfigPropRepository);
+        when(mockXhbConfigPropRepository.findByPropertyNameSafe(DL_NOTIFIER_EXECUTION_TIME))
+            .thenReturn(List.of(new XhbConfigPropDao(1, DL_NOTIFIER_EXECUTION_TIME, "Invalid")));
+
+        boolean result = helper.isDailyNotifierRequired();
         assertFalse(result, NOT_FALSE);
     }
 
     @Test
     void testRunDailyListNotifierSuccess() {
-        // boolean result = testRunDailyListNotifier(DlNotifierStatusEnum.RUNNING,
-        // DlNotifierStatusEnum.SUCCESS);
-        boolean result =
-            testRunDailyListNotifier(DlNotifierStatusEnum.SUCCESS, DlNotifierStatusEnum.SUCCESS);
-        assertTrue(result, NOT_TRUE);
+        LocalDateTime now = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
+
+        XhbCourtDao court1 = DummyCourtUtil.getXhbCourtDao(100, "Court1");
+        XhbCourtDao court2 = DummyCourtUtil.getXhbCourtDao(200, "Court2");
+        court1.setObsInd(null);
+        court2.setObsInd(NO);
+        List<XhbCourtDao> courtList = List.of(court1, court2);
+
+        XhbPddaDlNotifierDao newDao = DummyPdNotifierUtil.getXhbPddaDlNotifierDao(200, now);
+        when(mockXhbCourtRepository.findAll()).thenReturn(courtList);
+        when(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDate(anyInt(), any()))
+            .thenReturn(List.of(new XhbPddaDlNotifierDao())) // court 100 – no notifier
+            .thenReturn(List.of(newDao)) // re-fetch after try block
+            .thenReturn(List.of(newDao)); // second court
+        when(mockXhbPddaDlNotifierRepository.update(any())).thenReturn(Optional.of(newDao));
+
+        helper.runDailyListNotifier();
+
+        verify(mockXhbPddaDlNotifierRepository, times(2)).update(any());
     }
 
-    private boolean testRunDailyListNotifier(final DlNotifierStatusEnum expectedFirstSaveStatus,
-        final DlNotifierStatusEnum expectedSecondSaveStatus) {
-        // Add Captured Values
-        Capture<XhbPddaDlNotifierDao> firstSave = EasyMock.newCapture();
-        Capture<XhbPddaDlNotifierDao> secondSave = EasyMock.newCapture();
-        // Setup
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime dayAgo = now.minusDays(1);
-
-        List<XhbCourtDao> xhbCourtDaoList = getXhbCourtDaoList();
-        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(xhbCourtDaoList);
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-
-        for (XhbCourtDao courtDao : xhbCourtDaoList) {
-            List<XhbPddaDlNotifierDao> xhbPddaDlNotifierDaoList =
-                DummyServicesUtil.getNewArrayList();
-            XhbPddaDlNotifierDao xhbPddaDlNotifierDao =
-                DummyPdNotifierUtil.getXhbPddaDlNotifierDao(courtDao.getCourtId(), dayAgo);
-            // Ignore obsolete courts
-            if (!YES.equals(courtDao.getObsInd())) {
-                // Only find the first court, so no notifier for this court
-                if (courtDao.equals(xhbCourtDaoList.get(0))) {
-                    // Test the already run for the day
-                    xhbPddaDlNotifierDaoList.add(xhbPddaDlNotifierDao);
-                    EasyMock
-                        .expect(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDate(
-                            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
-                        .andReturn(xhbPddaDlNotifierDaoList);
-                } else {
-                    // Test the running for the day
-                    EasyMock
-                        .expect(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDate(
-                            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
-                        .andReturn(xhbPddaDlNotifierDaoList);
-                    EasyMock
-                        .expect(mockXhbPddaDlNotifierRepository.update(EasyMock.and(
-                            EasyMock.capture(firstSave), EasyMock.isA(XhbPddaDlNotifierDao.class))))
-                        .andReturn(Optional.of(xhbPddaDlNotifierDao));
-                    if (DlNotifierStatusEnum.FAILURE == expectedSecondSaveStatus) {
-                        EasyMock.expectLastCall().andThrow(getRuntimeException());
-                    }
-                    EasyMock
-                        .expect(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDate(
-                            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
-                        .andReturn(xhbPddaDlNotifierDaoList);
-                    EasyMock
-                        .expect(mockXhbPddaDlNotifierRepository
-                            .update(EasyMock.and(EasyMock.capture(secondSave),
-                                EasyMock.isA(XhbPddaDlNotifierDao.class))))
-                        .andReturn(Optional.of(xhbPddaDlNotifierDao));
-                }
+    @Test
+    void testGetPddaDlNotifierRepositoryWhenSameEmShouldReturnSameInstance() {
+        PddaDlNotifierHelper localHelper = new PddaDlNotifierHelper(mockEntityManager,
+            mockXhbConfigPropRepository, mockEnvironment) {
+            @Override
+            protected boolean isEntityManagerActive() {
+                return true;
             }
-        }
-        // Create a mock Query object
-        jakarta.persistence.Query mockQuery = EasyMock.createMock(jakarta.persistence.Query.class);
 
-        // Expect the createQuery call and return the mock Query
-        EasyMock.expect(mockEntityManager.createQuery(EasyMock.anyString())).andReturn(mockQuery)
-            .anyTimes();
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+        };
 
-        // Expect getResultList() to return your dummy court list
-        EasyMock.expect(mockQuery.getResultList()).andReturn(getXhbCourtDaoList()).anyTimes();
+        XhbPddaDlNotifierRepository repo1 = localHelper.getPddaDlNotifierRepository();
+        XhbPddaDlNotifierRepository repo2 = localHelper.getPddaDlNotifierRepository();
 
-        // Don't forget to replay the mock Query as well
-        EasyMock.replay(mockQuery);
-
-        EasyMock.replay(mockEntityManager);
-
-        EasyMock.replay(mockXhbConfigPropRepository);
-        EasyMock.replay(mockXhbCourtRepository);
-        EasyMock.replay(mockXhbPddaDlNotifierRepository);
-
-        // Run
-        classUnderTest.runDailyListNotifier();
-        // Checks
-        EasyMock.verify(mockXhbConfigPropRepository);
-        EasyMock.verify(mockXhbCourtRepository);
-        EasyMock.verify(mockXhbPddaDlNotifierRepository);
-        assertSame(expectedFirstSaveStatus.getStatus(), firstSave.getValue().getStatus(),
-            "Result is not Same");
-        assertSame(expectedSecondSaveStatus.getStatus(), secondSave.getValue().getStatus(),
-            "Result is not Same");
-        return true;
+        assertSame(repo1, repo2, "Repositories should be the same instance");
     }
 
-    private void expectXhbConfigPropDao(String propertyName, String propertyValue) {
-        List<XhbConfigPropDao> dummyXhbConfigPropDaoList = DummyServicesUtil.getNewArrayList();
-        dummyXhbConfigPropDaoList
-            .add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
-            .andReturn(dummyXhbConfigPropDaoList);
+    @Test
+    void testGetPddaDlNotifierRepositoryWhenInactiveEmShouldRecreate() {
+        PddaDlNotifierHelper localHelper = new PddaDlNotifierHelper(mockEntityManager,
+            mockXhbConfigPropRepository, mockEnvironment) {
+            private int counter;
+
+            @Override
+            protected boolean isEntityManagerActive() {
+                return counter++ > 0; // first call false, second call true
+            }
+
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+        };
+
+        XhbPddaDlNotifierRepository repo1 = localHelper.getPddaDlNotifierRepository();
+        XhbPddaDlNotifierRepository repo2 = localHelper.getPddaDlNotifierRepository();
+
+        assertNotSame(repo1, repo2, "Repositories should not be the same instance");
     }
 
-    private List<XhbCourtDao> getXhbCourtDaoList() {
-        List<XhbCourtDao> result = DummyServicesUtil.getNewArrayList();
-        XhbCourtDao courtDao1 = DummyCourtUtil.getXhbCourtDao(453, "Court1");
-        courtDao1.setObsInd(null);
-        result.add(courtDao1);
-        XhbCourtDao courtDao2 = DummyCourtUtil.getXhbCourtDao(777, "Court2");
-        courtDao2.setObsInd(NO);
-        result.add(courtDao2);
-        XhbCourtDao courtDao3 = DummyCourtUtil.getXhbCourtDao(999, "Court3");
-        courtDao2.setObsInd(YES);
-        result.add(courtDao3);
-        return result;
+    @Test
+    void testGetCourtRepositoryWhenSameEmShouldReturnSameInstance() {
+        PddaDlNotifierHelper localHelper = new PddaDlNotifierHelper(mockEntityManager,
+            mockXhbConfigPropRepository, mockEnvironment) {
+            @Override
+            protected boolean isEntityManagerActive() {
+                return true;
+            }
+
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+        };
+
+        XhbCourtRepository repo1 = localHelper.getCourtRepository();
+        XhbCourtRepository repo2 = localHelper.getCourtRepository();
+
+        assertSame(repo1, repo2, "Repositories should be the same instance");
     }
 
-    private RuntimeException getRuntimeException() {
-        return new RuntimeException();
+    @Test
+    void testGetCourtRepositoryWhenInactiveEmShouldRecreate() {
+        PddaDlNotifierHelper localHelper = new PddaDlNotifierHelper(mockEntityManager,
+            mockXhbConfigPropRepository, mockEnvironment) {
+            private int counter;
+
+            @Override
+            protected boolean isEntityManagerActive() {
+                return counter++ > 0;
+            }
+
+            @Override
+            protected EntityManager getEntityManager() {
+                return mockEntityManager;
+            }
+        };
+
+        XhbCourtRepository repo1 = localHelper.getCourtRepository();
+        XhbCourtRepository repo2 = localHelper.getCourtRepository();
+
+        assertNotSame(repo1, repo2, "Repositories should not be the same instance");
     }
 }

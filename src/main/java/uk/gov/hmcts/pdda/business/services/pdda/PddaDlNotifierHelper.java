@@ -46,8 +46,8 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
     private static final DateTimeFormatter EXECUTIONTIMEFORMAT =
         DateTimeFormatter.ofPattern(STR_DATEFORMAT + "HH:mm");
 
-    private XhbPddaDlNotifierRepository pddaDlNotifierRepository;
-    private XhbCourtRepository courtRepository;
+    protected XhbPddaDlNotifierRepository pddaDlNotifierRepository;
+    protected XhbCourtRepository courtRepository;
 
     public PddaDlNotifierHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
@@ -167,14 +167,14 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
     }
 
 
-    private XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
+    protected XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
         if (pddaDlNotifierRepository == null || !isEntityManagerActive()) {
             pddaDlNotifierRepository = new XhbPddaDlNotifierRepository(getEntityManager());
         }
         return pddaDlNotifierRepository;
     }
 
-    private XhbCourtRepository getCourtRepository() {
+    protected XhbCourtRepository getCourtRepository() {
         if (courtRepository == null || !isEntityManagerActive()) {
             courtRepository = new XhbCourtRepository(getEntityManager());
         }
