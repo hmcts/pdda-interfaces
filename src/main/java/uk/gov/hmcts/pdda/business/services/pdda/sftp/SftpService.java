@@ -222,7 +222,7 @@ public class SftpService extends XhibitPddaHelper {
                     }
                     LOG.debug("File: {}{}", filename,
                         ", still exists in remote folder - calling processBaisFile()...");
-                    processBaisFile(config, baisValidation, filename, clobData);  
+                    processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
         } finally {
