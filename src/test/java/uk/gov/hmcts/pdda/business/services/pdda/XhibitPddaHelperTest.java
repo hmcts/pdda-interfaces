@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import jakarta.persistence.EntityManager;
+import org.easymock.TestSubject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.env.Environment;
@@ -10,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.verify;
     "PMD.CompareObjectsWithEquals"})
 class XhibitPddaHelperTest {
 
+    private static final String CLEAR_REPOSITORIES_MESSAGE = "Repositories have been cleared";
     private EntityManager mockEntityManager;
     private Environment mockEnvironment;
     private XhbConfigPropRepository mockConfigPropRepo;
@@ -27,6 +30,9 @@ class XhibitPddaHelperTest {
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     private TestableXhibitPddaHelper helper;
+
+    @TestSubject
+    protected XhibitPddaHelper classUnderTest;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +50,8 @@ class XhibitPddaHelperTest {
                 mockPddaSftpHelper, mockPddaMessageHelper, mockClobRepo, mockCourtRepo);
 
         helper.setPublicDisplayNotifier(mockPublicDisplayNotifier);
+
+        classUnderTest = helper;
     }
 
     @Test
@@ -78,6 +86,29 @@ class XhibitPddaHelperTest {
     void testGetPddaSftpHelper() {
         PddaSftpHelper result = helper.getPddaSftpHelper();
         assert result == mockPddaSftpHelper;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = XhibitPddaHelper.class.getDeclaredField("clobRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = XhibitPddaHelper.class.getDeclaredField("courtRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 
     // Add more tests for the other helper getters if needed

@@ -206,7 +206,7 @@ class PdConfigurationControllerBeanGetTest {
         displayDao.setRotationSetId(ROTATION_SET_ID);
         List<XhbDisplayDao> xdList = List.of(displayDao);
 
-        // 🔑 Inject mocked helper logic
+        // Inject mocked helper logic
         DisplayUri displayUri = new DisplayUri("swansea", "sitecode", "location", "desc");
         RotationSetDisplayDocument[] rotationDocs =
             {new RotationSetDisplayDocument(new DisplayDocumentUri(new Locale("en", "GB"), COURT_ID,
@@ -269,7 +269,7 @@ class PdConfigurationControllerBeanGetTest {
 
         List<XhbDisplayDao> xdList = List.of(displayDao);
 
-        // 🔑 Critical: mock the helper call
+        // Mock the helper call
         DisplayUri displayUri = new DisplayUri("swansea", "sitecode", "location", "desc");
         RotationSetDisplayDocument[] rotationDocs =
             {new RotationSetDisplayDocument(new DisplayDocumentUri(Locale.UK, COURT_ID,
