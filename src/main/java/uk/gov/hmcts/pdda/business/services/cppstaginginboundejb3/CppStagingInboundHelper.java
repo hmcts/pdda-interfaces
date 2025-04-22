@@ -76,6 +76,15 @@ public class CppStagingInboundHelper implements Serializable {
         super();
     }
 
+    // For testing
+    public CppStagingInboundHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository,
+        XhbCppStagingInboundRepository cppStagingInboundRepository) {
+        this(entityManager, xhbConfigPropRepository);
+        this.cppStagingInboundRepository = cppStagingInboundRepository;
+    }
+
+
     // This is called dynamically
     public CppStagingInboundHelper(EntityManager entityManager) {
         this(entityManager, new XhbConfigPropRepository(entityManager));
@@ -126,7 +135,7 @@ public class CppStagingInboundHelper implements Serializable {
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
 
         List<XhbCppStagingInboundDao> docs =
-            new XhbCppStagingInboundRepository(em)
+            getCppStagingInboundRepository()
                 .findNextDocumentByValidationAndProcessingStatusSafe(
                 LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT), validationStatus,
                 processingStatus);
