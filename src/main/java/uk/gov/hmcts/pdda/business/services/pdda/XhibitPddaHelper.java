@@ -151,4 +151,8 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return pddaSftpHelperSshj;
     }
+
+    public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {
+        this.publicDisplayNotifier = publicDisplayNotifier;
+    }
 }
