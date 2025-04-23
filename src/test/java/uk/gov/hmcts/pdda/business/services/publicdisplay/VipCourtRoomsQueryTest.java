@@ -30,6 +30,8 @@ class VipCourtRoomsQueryTest {
 
     private static final String NOTNULL = "Result is Null";
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
@@ -116,5 +118,21 @@ class VipCourtRoomsQueryTest {
         }
         assertNotNull(results, NOTNULL);
         return true;
+    }
+
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTestSingleSite.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = VipCourtRoomsQuery.class.getDeclaredField("xhbCourtRoomRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTestSingleSite);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 }
