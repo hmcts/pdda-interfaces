@@ -98,7 +98,7 @@ class CaseControllerBeanTest {
         EasyMock.expect(mockXhbHearingRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdSafe(CASE_ID)).andReturn(xhList);
 
         EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);

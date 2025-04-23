@@ -81,18 +81,30 @@ class XhbCaseReferenceRepositoryTest extends AbstractRepositoryTest<XhbCaseRefer
         if (dao != null) {
             list.add(dao);
         }
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbCaseReferenceDao> result =
-            getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
-        assertNotNull(result, "Result is Null");
-        if (dao != null) {
-            assertSame(dao, result.get(0), "Result is not Same");
-        } else {
-            assertSame(0, result.size(), "Result is not Same");
+
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(mockEntityManager.createNamedQuery(isA(String.class)))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+            List<XhbCaseReferenceDao> result =
+                getClassUnderTest().findByCaseIdSafe(dao != null ? dao.getCaseId() : -1);
+
+            assertNotNull(result, "Result is Null");
+            if (dao != null) {
+                assertTrue(!result.isEmpty(), "Result list is empty");
+                assertSame(dao, result.get(0), "Result is not Same");
+            } else {
+                assertTrue(result.isEmpty(), "Expected empty result list");
+            }
+
+            return true;
         }
-        return true;
     }
+
 
     @Override
     protected XhbCaseReferenceDao getDummyDao() {

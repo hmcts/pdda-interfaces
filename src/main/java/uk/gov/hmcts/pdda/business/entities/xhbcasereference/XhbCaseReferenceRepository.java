@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcasereference;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -38,4 +39,20 @@ public class XhbCaseReferenceRepository extends AbstractRepository<XhbCaseRefere
         query.setParameter("caseId", caseId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCaseReferenceDao> findByCaseIdSafe(Integer caseId) {
+        LOG.debug("findByCaseIdSafe(caseId: {})", caseId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CASE_REFERENCE.findByCaseId");
+            query.setParameter("caseId", caseId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCaseIdSafe({}): {}", caseId, e.getMessage(), e);
+            return List.of(); // Safe fallback to prevent NPEs
+        }
+    }
+
 }

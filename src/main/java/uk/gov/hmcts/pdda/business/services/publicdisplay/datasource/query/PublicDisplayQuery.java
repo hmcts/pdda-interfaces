@@ -150,20 +150,21 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected List<XhbSittingDao> getSittingListDaos(Integer listId) {
-        return getXhbSittingRepository().findByListId(listId);
+        return getXhbSittingRepository().findByListIdSafe(listId);
     }
 
     protected List<XhbSittingDao> getNonFloatingSittingListDaos(Integer listId) {
-        return getXhbSittingRepository().findByNonFloatingHearingList(listId);
+        return getXhbSittingRepository().findByNonFloatingHearingListSafe(listId);
     }
 
     protected List<XhbScheduledHearingDao> getScheduledHearingDaos(Integer sittingId) {
-        return getXhbScheduledHearingRepository().findBySittingId(sittingId);
+        return getXhbScheduledHearingRepository().findBySittingIdSafe(sittingId);
     }
 
     protected List<XhbSchedHearingDefendantDao> getSchedHearingDefendantDaos(
         Integer scheduledHearingId) {
-        return getXhbSchedHearingDefendantRepository().findByScheduledHearingId(scheduledHearingId);
+        return getXhbSchedHearingDefendantRepository()
+            .findByScheduledHearingIdSafe(scheduledHearingId);
     }
 
     protected Optional<XhbRefJudgeDao> getXhbRefJudgeDao(Integer scheduledHearingId) {
@@ -175,7 +176,8 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             log.debug("Found Judge {} in scheduledHearingAttendees",
                 xhbRefJudgeDao.get().getRefJudgeId());
         } else {
-            xhbRefJudgeDao = getXhbRefJudgeRepository().findScheduledSittingJudge(scheduledHearingId);
+            xhbRefJudgeDao =
+                getXhbRefJudgeRepository().findScheduledSittingJudgeSafe(scheduledHearingId);
             if (xhbRefJudgeDao.isPresent()) {
                 log.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
             } else {
@@ -199,7 +201,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected boolean isReportingRestricted(Integer caseId) {
         boolean result = false;
         List<XhbCaseReferenceDao> caseReferenceDaos =
-            getXhbCaseReferenceRepository().findByCaseId(caseId);
+            getXhbCaseReferenceRepository().findByCaseIdSafe(caseId);
         Integer trueInt = 1;
         if (!caseReferenceDaos.isEmpty()) {
             for (XhbCaseReferenceDao caseReferenceDao : caseReferenceDaos) {

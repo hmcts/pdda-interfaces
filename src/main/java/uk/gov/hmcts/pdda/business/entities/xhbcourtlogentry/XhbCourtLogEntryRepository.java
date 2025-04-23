@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -38,4 +39,20 @@ public class XhbCourtLogEntryRepository extends AbstractRepository<XhbCourtLogEn
         query.setParameter("caseId", caseId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtLogEntryDao> findByCaseIdSafe(final Integer caseId) {
+        LOG.debug("findByCaseIdSafe(caseId: {})", caseId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_LOG_ENTRY.findByCaseId");
+            query.setParameter("caseId", caseId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCaseIdSafe({}): {}", caseId, e.getMessage(), e);
+            return List.of(); // Return an empty list to prevent NPEs
+        }
+    }
+
 }

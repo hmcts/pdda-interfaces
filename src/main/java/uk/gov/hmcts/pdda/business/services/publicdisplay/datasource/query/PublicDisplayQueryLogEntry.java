@@ -59,7 +59,8 @@ public class PublicDisplayQueryLogEntry extends AbstractControllerBean {
 
     protected void populateEventData(PublicDisplayValue result, Integer caseId) {
         LOG.debug("populateEventData({},{})", result, caseId);
-        List<XhbCourtLogEntryDao> courtLogEntryDaos = getXhbCourtLogEntryRepository().findByCaseId(caseId);
+        List<XhbCourtLogEntryDao> courtLogEntryDaos =
+            getXhbCourtLogEntryRepository().findByCaseIdSafe(caseId);
         if (!courtLogEntryDaos.isEmpty()) {
             XhbCourtLogEntryDao courtLogEntryDao = getLogEntry(courtLogEntryDaos);
             if (courtLogEntryDao != null) {

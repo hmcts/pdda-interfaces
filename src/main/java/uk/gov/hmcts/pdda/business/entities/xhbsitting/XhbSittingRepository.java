@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @Repository
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
     implements Serializable {
 
@@ -47,6 +47,23 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<XhbSittingDao> findByNonFloatingHearingListSafe(Integer listId) {
+        LOG.debug("findByNonFloatingHearingListSafe(listId: {})", listId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SITTING.findByNonFloatingHearingList");
+            query.setParameter("listId", listId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByNonFloatingHearingListSafe({}): {}", listId, e.getMessage(),
+                e);
+            return List.of(); // Return empty list as a safe fallback
+        }
+    }
+
+
     /**
      * findByListId.
      * 
@@ -60,6 +77,22 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
         query.setParameter("listId", listId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbSittingDao> findByListIdSafe(Integer listId) {
+        LOG.debug("findByListIdSafe(listId: {})", listId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SITTING.findByListId");
+            query.setParameter("listId", listId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByListIdSafe({}): {}", listId, e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid nulls
+        }
+    }
+
 
     /**
      * findByCourtRoomAndSittingTime.

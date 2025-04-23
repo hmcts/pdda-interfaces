@@ -261,7 +261,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         addReplayArray(replayArray, mockXhbHearingListRepository);
         abortExpects = xhbHearingListDaoList.isEmpty();
         if (!abortExpects) {
-            EasyMock.expect(mockXhbSittingRepository.findByListId(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbSittingRepository.findByListIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbSittingDaoList);
             addReplayArray(replayArray, mockXhbSittingRepository);
             abortExpects = xhbSittingDaoList.isEmpty();
@@ -295,7 +295,8 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         boolean caseHidden, boolean defOnCasePublicDisplayHide, boolean defPublicDisplayHide,
         boolean defOnCaseEmpty, boolean defEmpty, boolean defOnCaseObsIndYes) {
         EasyMock
-            .expect(mockXhbScheduledHearingRepository.findBySittingId(EasyMock.isA(Integer.class)))
+            .expect(
+                mockXhbScheduledHearingRepository.findBySittingIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbScheduledHearingDaoList);
         addReplayArray(replayArray, mockXhbScheduledHearingRepository);
         boolean abortExpects = xhbScheduledHearingDaoList.isEmpty();
@@ -329,13 +330,15 @@ class CourtDetailQueryTest extends AbstractQueryTest {
             List<XhbCaseReferenceDao> xhbCaseReferenceDaoList = DummyServicesUtil.getNewArrayList();
             xhbCaseReferenceDaoList.add(DummyCaseUtil.getXhbCaseReferenceDao());
             EasyMock
-                .expect(mockXhbCaseReferenceRepository.findByCaseId(EasyMock.isA(Integer.class)))
+                .expect(
+                    mockXhbCaseReferenceRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCaseReferenceDaoList);
             addReplayArray(replayArray, mockXhbCaseReferenceRepository);
             List<XhbCourtLogEntryDao> xhbCourtLogEntryDaoList = DummyServicesUtil.getNewArrayList();
             xhbCourtLogEntryDaoList.add(DummyCourtUtil.getXhbCourtLogEntryDao());
             EasyMock
-                .expect(mockXhbCourtLogEntryRepository.findByCaseId(EasyMock.isA(Integer.class)))
+                .expect(
+                    mockXhbCourtLogEntryRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtLogEntryDaoList);
             addReplayArray(replayArray, mockXhbCourtLogEntryRepository);
             EasyMock
@@ -346,7 +349,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
 
         EasyMock
             .expect(mockXhbSchedHearingDefendantRepository
-                .findByScheduledHearingId(EasyMock.isA(Integer.class)))
+                .findByScheduledHearingIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbSchedHearingDefendantDaoList);
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbSchedHearingDefendantRepository);
