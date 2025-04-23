@@ -224,7 +224,7 @@ class FormattingControllerBeanTest {
         EasyMock.expect(mockXhbCppListRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(
+        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDateSafe(
             EasyMock.isA(Integer.class), EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
         mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class),

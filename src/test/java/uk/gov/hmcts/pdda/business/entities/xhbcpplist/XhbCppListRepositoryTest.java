@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -109,35 +110,55 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         if (dao != null) {
             list.add(dao);
         }
+
         List<XhbCppListDao> resultList = null;
+
         if (BYLISTDATE.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+            // Standard method – no static mocking needed
+            Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             resultList = getClassUnderTest().findByCourtCodeAndListTypeAndListDate(
                 getDummyDao().getCourtCode(), getDummyDao().getListType(), LocalDateTime.now());
+
         } else if (BYSTARTDATE.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList = getClassUnderTest()
-                .findByCourtCodeAndListTypeAndListStartDateAndListEndDate(getDummyDao().getCourtCode(),
-                    getDummyDao().getListType(), LocalDateTime.now(), LocalDateTime.now());
-        } else if (BYCLOBID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            XhbCppListDao result = getClassUnderTest().findByClobId(getDummyDao().getListClobId());
-            if (dao != null) {
-                assertNotNull(result, "Result is Null");
-                assertSame(dao, result, NOTSAMERESULT);
-            } else {
-                assertNull(result, NOTSAMERESULT);
+            // Safe method – needs static mocking of EntityManagerUtil
+            try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                resultList = getClassUnderTest()
+                    .findByCourtCodeAndListTypeAndListStartDateAndListEndDateSafe(
+                        getDummyDao().getCourtCode(),
+                        getDummyDao().getListType(),
+                        LocalDateTime.now().minusMinutes(5),
+                        LocalDateTime.now());
             }
-            return true;
+
+        } else if (BYCLOBID.equals(whichTest)) {
+            // Safe method – needs static mocking of EntityManagerUtil
+            try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                XhbCppListDao result = getClassUnderTest().findByClobIdSafe(getDummyDao().getListClobId());
+                if (dao != null) {
+                    assertNotNull(result, "Result is Null");
+                    assertSame(dao, result, NOTSAMERESULT);
+                } else {
+                    assertNull(result, NOTSAMERESULT);
+                }
+                return true;
+            }
         }
+
         assertNotNull(resultList, "Result is Null");
         if (dao != null) {
+            assertFalse(resultList.isEmpty(), "Result list is empty");
             assertSame(dao, resultList.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, resultList.size(), NOTSAMERESULT);
+            assertTrue(resultList.isEmpty(), NOTSAMERESULT);
         }
         return true;
     }

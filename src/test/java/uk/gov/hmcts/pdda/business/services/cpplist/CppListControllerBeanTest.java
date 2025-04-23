@@ -70,7 +70,8 @@ class CppListControllerBeanTest {
         xhbCppListDaoList.add(xhbCppListDao);
         EasyMock
             .expect(
-                mockcppListRepo.findByCourtCodeAndListTypeAndListDate(xhbCppListDao.getCourtCode(),
+                mockcppListRepo.findByCourtCodeAndListTypeAndListDateSafe(
+                    xhbCppListDao.getCourtCode(),
                     xhbCppListDao.getListType(), xhbCppListDao.getListStartDate()))
             .andReturn(xhbCppListDaoList);
         EasyMock.replay(mockcppListRepo);
@@ -110,7 +111,7 @@ class CppListControllerBeanTest {
         List<XhbCppListDao> xhbCppListDaoList = new ArrayList<>();
         xhbCppListDaoList.add(xhbCppListDao);
         EasyMock
-            .expect(mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDate(
+            .expect(mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDateSafe(
                 xhbCppListDao.getCourtCode(), xhbCppListDao.getListType(),
                 xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate()))
             .andReturn(xhbCppListDaoList);

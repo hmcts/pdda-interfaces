@@ -80,6 +80,43 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<XhbCourtSiteDao> findByCourtSiteNameSafe(final String courtSiteName,
+        final String crestCourtId) {
+        LOG.debug("findByCourtSiteNameSafe({}, {})", courtSiteName, crestCourtId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_SITE.findByCourtSiteName");
+            query.setParameter("courtSiteName", courtSiteName);
+            query.setParameter("crestCourtId", crestCourtId);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug("findByCourtSiteNameSafe({}, {}) - No results found", courtSiteName,
+                    crestCourtId);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbCourtSiteDao) {
+                LOG.debug("findByCourtSiteNameSafe({}, {}) - Returning first result", courtSiteName,
+                    crestCourtId);
+                return Optional.of((XhbCourtSiteDao) result);
+            } else {
+                LOG.warn("findByCourtSiteNameSafe({}, {}) - Unexpected result type: {}",
+                    courtSiteName, crestCourtId, result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtSiteNameSafe({}, {}): {}", courtSiteName, crestCourtId,
+                e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
+
     /**
      * findByCourtId.
      * 

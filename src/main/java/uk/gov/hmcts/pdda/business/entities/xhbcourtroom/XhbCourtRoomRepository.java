@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @Repository
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
     implements Serializable {
 
@@ -133,4 +133,44 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
             query.getResultList().isEmpty() ? null : (XhbCourtRoomDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<XhbCourtRoomDao> findByCourtRoomNoSafe(Integer courtSiteId,
+        Integer crestCourtRoomNo) {
+        LOG.debug("findByCourtRoomNoSafe(courtSiteId: {}, crestCourtRoomNo: {})", courtSiteId,
+            crestCourtRoomNo);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_ROOM.findByCourtRoomNo");
+            query.setParameter("courtSiteId", courtSiteId);
+            query.setParameter("crestCourtRoomNo", crestCourtRoomNo);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findByCourtRoomNoSafe - No results found for courtSiteId: {}, crestCourtRoomNo: {}",
+                    courtSiteId, crestCourtRoomNo);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbCourtRoomDao) {
+                LOG.debug(
+                    "findByCourtRoomNoSafe - Returning first result for courtSiteId: {}, crestCourtRoomNo: {}",
+                    courtSiteId, crestCourtRoomNo);
+                return Optional.of((XhbCourtRoomDao) result);
+            } else {
+                LOG.warn("findByCourtRoomNoSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomNoSafe({}, {}): {}", courtSiteId, crestCourtRoomNo,
+                e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
 }

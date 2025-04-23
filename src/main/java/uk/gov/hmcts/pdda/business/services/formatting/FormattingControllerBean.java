@@ -206,7 +206,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     private XhbCppListDao getLatestCppList(Integer courtId, String listType,
         LocalDateTime listStartDate) {
         List<XhbCppListDao> cppList = getXhbCppListRepository()
-            .findByCourtCodeAndListTypeAndListDate(courtId, listType, listStartDate);
+            .findByCourtCodeAndListTypeAndListDateSafe(courtId, listType, listStartDate);
         return cppList != null && !cppList.isEmpty() ? cppList.get(0) : null;
     }
 

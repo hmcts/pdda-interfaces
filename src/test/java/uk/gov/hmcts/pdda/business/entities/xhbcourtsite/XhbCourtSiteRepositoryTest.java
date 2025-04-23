@@ -106,46 +106,81 @@ class XhbCourtSiteRepositoryTest extends AbstractRepositoryTest<XhbCourtSiteDao>
         assertTrue(result, NOT_TRUE);
     }
 
+    @SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity"})
     private boolean testFind(XhbCourtSiteDao dao, Integer whichTest) {
         List<XhbCourtSiteDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
         }
+
         List<XhbCourtSiteDao> resultList = null;
+
         if (BYCRESTCOURTID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
-                .thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList =
-                getClassUnderTest().findByCrestCourtIdValue(getDummyDao().getCrestCourtId());
-        } else if (BYCOURTID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
-                .thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList = getClassUnderTest().findByCourtId(getDummyDao().getCourtId());
-        } else if (BYCOURTSITENAME.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class)))
-                .thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            Mockito.when(mockQuery.getSingleResult()).thenReturn(dao);
-            Optional<XhbCourtSiteDao> result = getClassUnderTest().findByCourtSiteName(
-                getDummyDao().getCourtSiteName(), getDummyDao().getCourtSiteCode());
-            assertNotNull(result, "Result is Null");
-            if (dao != null) {
-                assertSame(dao, result.get(), NOTSAMERESULT);
-            } else {
-                assertSame(Optional.empty(), result, NOTSAMERESULT);
+            try (MockedStatic<EntityManagerUtil> mockedStatic =
+                Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager)
+                    .thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class)))
+                    .thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                resultList = getClassUnderTest()
+                    .findByCrestCourtIdValueSafe(getDummyDao().getCrestCourtId());
             }
-            return true;
+
+        } else if (BYCOURTID.equals(whichTest)) {
+            try (MockedStatic<EntityManagerUtil> mockedStatic =
+                Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager)
+                    .thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class)))
+                    .thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                resultList = getClassUnderTest().findByCourtIdSafe(getDummyDao().getCourtId());
+            }
+
+        } else if (BYCOURTSITENAME.equals(whichTest)) {
+            try (MockedStatic<EntityManagerUtil> mockedStatic =
+                Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager)
+                    .thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class)))
+                    .thenReturn(mockQuery);
+
+                if (dao != null) {
+                    Mockito.when(mockQuery.getResultList()).thenReturn(List.of(dao));
+                } else {
+                    Mockito.when(mockQuery.getResultList()).thenReturn(List.of());
+                }
+
+                Optional<XhbCourtSiteDao> result = getClassUnderTest().findByCourtSiteNameSafe(
+                    dao != null ? dao.getCourtSiteName() : null,
+                    dao != null ? dao.getCourtSiteCode() : null);
+
+                assertNotNull(result, "Result is Null");
+                if (dao != null) {
+                    assertTrue(result.isPresent(), "Expected result to be present");
+                    assertSame(dao, result.get(), NOTSAMERESULT);
+                } else {
+                    assertTrue(result.isEmpty(), "Expected result to be empty");
+                }
+                return true;
+            }
         }
+
+
         assertNotNull(resultList, "Result is Null");
         if (dao != null) {
+            assertTrue(!resultList.isEmpty(), "Result list is empty");
             assertSame(dao, resultList.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, resultList.size(), NOTSAMERESULT);
+            assertTrue(resultList.isEmpty(), NOTSAMERESULT);
         }
+
         return true;
     }
+
 
     @Test
     void testXhbCourtSiteDaoSecondConstructor() {

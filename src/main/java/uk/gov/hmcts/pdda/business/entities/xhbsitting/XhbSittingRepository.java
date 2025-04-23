@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbsitting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -80,4 +81,48 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
             query.getResultList().isEmpty() ? null : (XhbSittingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<XhbSittingDao> findByCourtRoomAndSittingTimeSafe(Integer courtSiteId,
+        Integer courtRoomId, LocalDateTime sittingTime) {
+        LOG.debug(
+            "findByCourtRoomAndSittingTimeSafe(courtSiteId: {}, courtRoomId: {}, sittingTime: {})",
+            courtSiteId, courtRoomId, sittingTime);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SITTING.findByCourtRoomAndSittingTime");
+            query.setParameter("courtSiteId", courtSiteId);
+            query.setParameter("courtRoomId", courtRoomId);
+            query.setParameter("sittingTime", sittingTime);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findByCourtRoomAndSittingTimeSafe - No results found for courtSiteId: {},"
+                        + " courtRoomId: {}, sittingTime: {}",
+                    courtSiteId, courtRoomId, sittingTime);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbSittingDao) {
+                LOG.debug(
+                    "findByCourtRoomAndSittingTimeSafe - Returning result for courtSiteId: {},"
+                        + " courtRoomId: {}, sittingTime: {}",
+                    courtSiteId, courtRoomId, sittingTime);
+                return Optional.of((XhbSittingDao) result);
+            } else {
+                LOG.warn("findByCourtRoomAndSittingTimeSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomAndSittingTimeSafe({}, {}, {}): {}", courtSiteId,
+                courtRoomId, sittingTime, e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
 }
