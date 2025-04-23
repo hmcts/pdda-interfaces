@@ -68,7 +68,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             formattingValue.getFormattingId());
 
         XhbCppFormattingDao val = getXhbCppFormattingRepository()
-            .findLatestByCourtDateInDoc(formattingValue.getCourtId(), IWP, LocalDateTime.now());
+            .findLatestByCourtDateInDocSafe(formattingValue.getCourtId(), IWP, LocalDateTime.now());
         try {
             Document cppDocument = getCppDocument(val);
             List<Node> cppNodes = CourtUtils.getCourtSites(cppDocument);

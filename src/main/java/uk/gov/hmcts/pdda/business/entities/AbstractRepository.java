@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.entities;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -107,29 +108,25 @@ public abstract class AbstractRepository<T extends AbstractDao> {
      * @return dao
      */
     public Optional<T> update(T dao) {
-        try (EntityManager localEntityManager = createEntityManager()) {
-            try {
-                LOG.debug("update({})", dao);
-                T updatedDao = dao;
-                localEntityManager.getTransaction().begin();
-                updatedDao = localEntityManager.merge(updatedDao);
-                localEntityManager.getTransaction().commit();
-                // updatedDao.setVersion(updatedDao.getVersion() != null ? updatedDao.getVersion() +
-                // 1 : 1);
-                // Clear the cache on the EntityManager after updating
-                clearEntityManager();
-                return Optional.of(updatedDao);
-            } catch (Exception e) {
-                LOG.error(ERROR, e.getMessage());
-                LOG.error("Stacktrace doing a database update; dao: {}: {}", dao,
-                    ExceptionUtils.getStackTrace(e));
-                if (localEntityManager != null && localEntityManager.getTransaction().isActive()) {
-                    localEntityManager.getTransaction().rollback();
-                }
-            }
+        LOG.debug("Attempting update for DAO: {}", dao);
+
+        try (EntityManager em = createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+
+            T updatedDao = em.merge(dao);
+            transaction.commit();
+
+            clearEntityManager(); // optional but useful
+            return Optional.of(updatedDao);
+
+        } catch (Exception e) {
+            LOG.error("Error during update for DAO {}: {}", dao, e.getMessage(), e);
+            throw new IllegalStateException("Update failed for DAO: " + dao.getPrimaryKey(), e);
         }
-        return Optional.empty();
     }
+
+
 
     /**
      * delete.

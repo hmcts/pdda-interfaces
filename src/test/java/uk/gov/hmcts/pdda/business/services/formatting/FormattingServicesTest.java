@@ -439,7 +439,8 @@ class FormattingServicesTest {
         Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(MERGE_CUT_OFF_TIME))
             .thenReturn(propertyList);
         Mockito.when(
-            mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(Mockito.isA(Integer.class),
+            mockXhbCppFormattingRepository.findLatestByCourtDateInDocSafe(
+                Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(xhbCppFormattingDao);
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))

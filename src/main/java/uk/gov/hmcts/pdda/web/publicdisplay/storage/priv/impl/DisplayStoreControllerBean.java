@@ -62,7 +62,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         boolean exists = false;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             exists = true;
         }
@@ -79,7 +79,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             getXhbDisplayStoreRepository().delete(xds);
         }
@@ -97,7 +97,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         long lastModified;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             lastModified = convertLocalDateTimeToDate(xds.get().getLastUpdateDate()).getTime();
         } else {
@@ -119,7 +119,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         String contents = null;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             contents = xds.get().getContent();
         }

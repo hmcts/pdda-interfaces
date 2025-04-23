@@ -66,7 +66,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         int courtId = 0;
 
         List<XhbCourtDao> data =
-            getXhbCourtRepository().findByCrestCourtIdValue(courtCode.toString());
+            getXhbCourtRepository().findByCrestCourtIdValueSafe(courtCode.toString());
         if (data.isEmpty()) {
             LOG.debug("No court site items returned when searching for court code: "
                 + courtCode.intValue());

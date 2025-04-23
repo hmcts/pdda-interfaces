@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @Repository
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
     implements Serializable {
 
@@ -44,6 +44,23 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
         query.setParameter("crestCourtId", crestCourtId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtSiteDao> findByCrestCourtIdValueSafe(String crestCourtId) {
+        LOG.debug("findByCrestCourtIdValueSafe({})", crestCourtId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_SITE.findByCrestCourtIdValue");
+            query.setParameter("crestCourtId", crestCourtId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCrestCourtIdValueSafe({}): {}", crestCourtId, e.getMessage(),
+                e);
+            return List.of(); // Safe fallback
+        }
+    }
+
 
     /**
      * findByCourtSiteName.

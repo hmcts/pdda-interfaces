@@ -137,4 +137,21 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCppStagingInboundDao> findDocumentByDocumentNameSafe(String documentName) {
+        LOG.debug("findDocumentByDocumentNameSafe({})", documentName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName");
+            query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findDocumentByDocumentNameSafe({}): {}", documentName,
+                e.getMessage(), e);
+            return List.of(); // Empty list to safely handle failure
+        }
+    }
+
 }

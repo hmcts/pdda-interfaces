@@ -223,7 +223,8 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.expect(
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courts);
         EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
 

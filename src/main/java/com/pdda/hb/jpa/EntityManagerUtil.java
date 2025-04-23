@@ -5,33 +5,33 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.FlushModeType;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidSynchronizedAtMethodLevel"})
 public class EntityManagerUtil {
     private static EntityManagerFactory entityManagerFactory;
 
-    static {
-        try {
-            entityManagerFactory = InitializationService.getInstance().getEntityManagerFactory();
+    protected EntityManagerUtil() {
+        // Protected constructor to prevent instantiation
+    }
 
-        } catch (RuntimeException ex) {
-            throw new ExceptionInInitializerError(ex);
+    public static synchronized void setEntityManagerFactory(EntityManagerFactory factory) {
+        entityManagerFactory = factory;
+    }
+
+    private static synchronized void initializeIfNecessary() {
+        if (entityManagerFactory == null) {
+            entityManagerFactory = InitializationService.getInstance().getEntityManagerFactory();
         }
     }
 
-    protected EntityManagerUtil() {
-        // Protected constructor
-    }
-
     public static EntityManager getEntityManager() {
+        initializeIfNecessary();
+        if (entityManagerFactory == null) {
+            throw new IllegalStateException("EntityManagerFactory is not initialized.");
+        }
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.setFlushMode(FlushModeType.AUTO);
         return entityManager;
     }
-    
-    public static void setEntityManagerFactory(EntityManagerFactory factory) {
-        entityManagerFactory = factory;
-    }
-
 
     public static boolean isEntityManagerActive(EntityManager entityManager) {
         return entityManager != null && entityManager.isOpen();

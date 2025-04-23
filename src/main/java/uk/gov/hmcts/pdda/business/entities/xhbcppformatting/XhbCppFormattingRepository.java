@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-
 @Repository
 @SuppressWarnings("unchecked")
 public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormattingDao> implements Serializable {
@@ -66,6 +65,46 @@ public class XhbCppFormattingRepository extends AbstractRepository<XhbCppFormatt
             return xcfList.get(0);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public XhbCppFormattingDao findLatestByCourtDateInDocSafe(final Integer courtCode,
+        final String documentType, final LocalDateTime dateIn) {
+
+        String methodName = "findLatestByCourtDateInDocSafe";
+        LOG.debug("{} - courtCode: {}", methodName, courtCode);
+        LOG.debug("{} - documentType: {}", methodName, documentType);
+        LOG.debug("{} - dateIn: {}", methodName, dateIn);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CPP_FORMATTING.findLatestByCourtDateInDoc");
+            query.setParameter(COURT_ID, courtCode);
+            query.setParameter(DOCUMENT_TYPE, documentType);
+            query.setParameter("dateIn", dateIn);
+
+            LOG.debug("{} - Query has been created", methodName);
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug("{} - No results found", methodName);
+                return null;
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbCppFormattingDao) {
+                LOG.debug("{} - Returning first result", methodName);
+                return (XhbCppFormattingDao) result;
+            } else {
+                LOG.warn("{} - Unexpected result type: {}", methodName,
+                    result.getClass().getName());
+                return null;
+            }
+
+        } catch (Exception e) {
+            LOG.error("{} - Error during query execution: {}", methodName, e.getMessage(), e);
+            return null;
+        }
+    }
+
 
     /**
      * findAllNewByDocType.

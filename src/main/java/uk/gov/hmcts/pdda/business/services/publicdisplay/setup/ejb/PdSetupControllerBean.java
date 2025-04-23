@@ -81,7 +81,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         }
 
         List<XhbCourtSiteDao> xhbCourtSites = getXhbCourtSiteRepository()
-            .findByCrestCourtIdValue(court.get().getCrestCourtId());
+            .findByCrestCourtIdValueSafe(court.get().getCrestCourtId());
 
         CourtDrillDown courtDrillDown = new CourtDrillDown(court.get().getDisplayName());
         for (XhbCourtSiteDao xhbCourtSite : xhbCourtSites) {
@@ -146,7 +146,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         String methodName = "getAllCourts() - ";
         LOG.debug(methodName + ENTERED);
 
-        List<XhbCourtDao> courts = getXhbCourtRepository().findAll();
+        List<XhbCourtDao> courts = getXhbCourtRepository().findAllSafe();
         courts.sort(Comparator.comparing(XhbCourtDao::getCourtName));
         return courts.toArray(new XhbCourtDao[0]);
     }

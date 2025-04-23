@@ -75,7 +75,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         writeToLog("About to process file " + dao.getCpDocumentName());
 
         List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = 
-            getXhbCppStagingInboundRepository().findDocumentByDocumentName(dao.getCpDocumentName());
+            getXhbCppStagingInboundRepository()
+                .findDocumentByDocumentNameSafe(dao.getCpDocumentName());
         
         // Check the file hasn't already been processed
         if (!xhbCppStagingInboundDaos.isEmpty()) {
@@ -157,8 +158,17 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("fetchLatestXhbPddaMessageDao()");
         Optional<XhbPddaMessageDao> opt =
             getXhbPddaMessageRepository().findByIdSafe(dao.getPrimaryKey());
-        return opt.isPresent() ? opt.get() : dao;
+
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            String message = "DAO not found in DB for ID: " + dao.getPrimaryKey()
+                + ". Original document name: " + dao.getCpDocumentName();
+            LOG.error(message);
+            throw new IllegalStateException(message);
+        }
     }
+
 
     /**
      * Insert the row into XHB_CPP_STAGING_INBOUND.
@@ -196,26 +206,47 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * @throws SQLException Exception
      */
     private void updatePddaMessage(final Integer stagingInboundId, XhbPddaMessageDao dao) {
-
-        writeToLog("doc " + dao.getCpDocumentName() + " docStatus: " + MESSAGE_STATUS_PROCESSED + " messageId: "
-                + dao.getPddaMessageId());
+        writeToLog("Updating doc " + dao.getCpDocumentName() + " with status: "
+            + MESSAGE_STATUS_PROCESSED + " and messageId: " + dao.getPddaMessageId());
 
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+        LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
+            latest.getVersion());
+
         latest.setCpDocumentStatus(MESSAGE_STATUS_PROCESSED);
         latest.setCppStagingInboundId(stagingInboundId);
-        getXhbPddaMessageRepository().update(latest);
 
+        getXhbPddaMessageRepository().update(latest)
+            .ifPresentOrElse(updated -> LOG
+                .debug("Successfully updated message with new staging ID: {}", stagingInboundId),
+                () -> {
+                    LOG.error("Failed to update DAO with staging ID: {}", stagingInboundId);
+                    throw new IllegalStateException(
+                        "Update failed for DAO: " + latest.getPrimaryKey());
+                });
     }
+
 
     /**
      * Updates the XHB_PDDA_MESSAGE record.
      */
     void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
-        LOG.debug("updatePddaMessageStatus");
+        LOG.debug("updatePddaMessageStatus for DAO ID: {}", dao.getPrimaryKey());
+
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+        LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
+            latest.getVersion());
+
         latest.setCpDocumentStatus(messageStatus);
-        getXhbPddaMessageRepository().update(latest);
+        getXhbPddaMessageRepository().update(latest).ifPresentOrElse(
+            updated -> LOG.debug("Successfully updated status to {} for DAO ID: {}", messageStatus,
+                updated.getPrimaryKey()),
+            () -> {
+                LOG.error("Failed to update status for DAO ID: {}", latest.getPrimaryKey());
+                throw new IllegalStateException("Update failed for DAO: " + latest.getPrimaryKey());
+            });
     }
+
 
     /**
      * Return the document type depending on what's been used in the file name.

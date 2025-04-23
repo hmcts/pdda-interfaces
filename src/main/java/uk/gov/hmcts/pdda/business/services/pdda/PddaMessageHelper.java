@@ -63,7 +63,7 @@ public class PddaMessageHelper {
         String methodName = "findByMessageType()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbRefPddaMessageTypeDao> daoList =
-            getRefPddaMessageTypeRepository().findByMessageType(messageType);
+            getRefPddaMessageTypeRepository().findByMessageTypeSafe(messageType);
         return (Optional<XhbRefPddaMessageTypeDao>) getFirstInList(daoList);
     }
 
@@ -77,7 +77,7 @@ public class PddaMessageHelper {
         String methodName = "findByCpDocumentName()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbPddaMessageDao> daoList =
-            getPddaMessageRepository().findByCpDocumentName(cpDocumentName);
+            getPddaMessageRepository().findByCpDocumentNameSafe(cpDocumentName);
         return (Optional<XhbPddaMessageDao>) getFirstInList(daoList);
     }
 
@@ -100,7 +100,8 @@ public class PddaMessageHelper {
         LOG.debug(methodName + LOG_CALLED);
         
         // Check a final time to make sure the document doesn't already exist before saving
-        if (getPddaMessageRepository().findByCpDocumentName(dao.getCpDocumentName()).isEmpty()) {
+        if (getPddaMessageRepository().findByCpDocumentNameSafe(dao.getCpDocumentName())
+            .isEmpty()) {
             getPddaMessageRepository().save(dao);
         } else {
             LOG.debug("There is already an entry for the document: {}", dao.getCpDocumentName());

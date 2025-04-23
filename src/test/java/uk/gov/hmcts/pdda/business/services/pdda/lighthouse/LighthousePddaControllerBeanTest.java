@@ -213,7 +213,8 @@ class LighthousePddaControllerBeanTest {
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
 
         Mockito.when(mockXhbCppStagingInboundRepository
-            .findDocumentByDocumentName(Mockito.isA(String.class))).thenReturn(new ArrayList<>());
+            .findDocumentByDocumentNameSafe(Mockito.isA(String.class)))
+            .thenReturn(new ArrayList<>());
         
         Mockito
             .when(mockXhbPddaMessageRepository.update(xhbPddaMessageDaoCapture.capture()))
@@ -307,7 +308,8 @@ class LighthousePddaControllerBeanTest {
             .thenReturn(mockXhbCppStagingInboundRepository);
         
         Mockito.when(mockXhbCppStagingInboundRepository
-            .findDocumentByDocumentName(Mockito.isA(String.class))).thenReturn(xhbCppStagingInboundDaos);
+            .findDocumentByDocumentNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbCppStagingInboundDaos);
         
         
         boolean result = true;

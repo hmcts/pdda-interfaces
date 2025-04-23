@@ -93,7 +93,7 @@ class DisplayStoreControllerBeanTest {
 
     private boolean testDoesEntryExist(Optional<XhbDisplayStoreDao> displayStoreDao,
         boolean isValid) {
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
 
@@ -114,7 +114,7 @@ class DisplayStoreControllerBeanTest {
     void testDeleteEntry() {
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         mockXhbDisplayStoreRepository.delete(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
@@ -137,7 +137,7 @@ class DisplayStoreControllerBeanTest {
             Date.from(NOW.atZone(ZoneId.systemDefault()).toInstant()).getTime() / 1000 * 1000;
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
 
@@ -151,7 +151,7 @@ class DisplayStoreControllerBeanTest {
     void testReadFromDatabase() {
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
-        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCode(RETRIEVAL_CODE))
+        EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
 

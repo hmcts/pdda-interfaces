@@ -40,6 +40,23 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<XhbPddaMessageDao> findByCpDocumentNameSafe(String cpDocumentName) {
+        LOG.debug("findByCpDocumentNameSafe({})", cpDocumentName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_PDDA_MESSAGE.findByCpDocumentName");
+            query.setParameter(CP_DOCUMENT_NAME, Parameter.getPostgresInParameter(cpDocumentName));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCpDocumentNameSafe({}): {}", cpDocumentName, e.getMessage(),
+                e);
+            return List.of(); // Return empty list on failure
+        }
+    }
+
+
     /**
      * findByLighthouse.
      * 

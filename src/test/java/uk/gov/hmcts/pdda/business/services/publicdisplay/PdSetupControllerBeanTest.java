@@ -114,7 +114,8 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
             .andReturn(Optional.of(courtDao));
         EasyMock
-            .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .expect(
+                mockXhbCourtSiteRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courtSiteList);
 
         List<XhbDisplayLocationDao> displayLocationList;
@@ -176,7 +177,7 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
+        EasyMock.expect(mockXhbCourtRepository.findAllSafe()).andReturn(dummyCourtList);
         replayMocks();
 
         // Run
