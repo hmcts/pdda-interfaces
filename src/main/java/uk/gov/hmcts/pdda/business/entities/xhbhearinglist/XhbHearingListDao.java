@@ -84,6 +84,7 @@ public class XhbHearingListDao extends AbstractVersionedDao implements Serializa
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getListId();
     }

@@ -97,6 +97,7 @@ public class XhbCppFormattingDao extends AbstractDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppFormattingId();
     }

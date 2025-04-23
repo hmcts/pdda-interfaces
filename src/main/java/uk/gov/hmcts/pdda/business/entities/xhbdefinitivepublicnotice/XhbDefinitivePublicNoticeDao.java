@@ -61,6 +61,7 @@ public class XhbDefinitivePublicNoticeDao extends AbstractVersionedDao implement
         super.setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDefinitivePnId();
     }

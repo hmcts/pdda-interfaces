@@ -57,6 +57,7 @@ public class XhbRotationSetDdDao extends AbstractVersionedDao implements Seriali
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getRotationSetDdId();
     }

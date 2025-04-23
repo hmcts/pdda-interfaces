@@ -65,6 +65,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getShAttendeeId();
     }

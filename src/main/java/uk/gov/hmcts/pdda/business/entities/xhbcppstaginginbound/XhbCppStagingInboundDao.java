@@ -143,6 +143,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         setVersion(version);
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppStagingInboundId();
     }

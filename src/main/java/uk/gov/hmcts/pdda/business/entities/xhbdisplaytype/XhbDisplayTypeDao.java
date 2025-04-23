@@ -54,6 +54,7 @@ public class XhbDisplayTypeDao extends AbstractVersionedDao implements Serializa
         super.setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDisplayTypeId();
     }

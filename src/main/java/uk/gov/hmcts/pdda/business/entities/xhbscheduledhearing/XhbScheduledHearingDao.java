@@ -116,6 +116,7 @@ public class XhbScheduledHearingDao extends AbstractDao implements Serializable 
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getScheduledHearingId();
     }

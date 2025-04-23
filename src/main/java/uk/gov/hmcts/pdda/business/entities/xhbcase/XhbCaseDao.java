@@ -275,6 +275,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCaseId();
     }

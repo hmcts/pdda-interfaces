@@ -168,6 +168,7 @@ public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
 
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCourtId();
     }
