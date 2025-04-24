@@ -265,9 +265,9 @@ public class ListObjectHelper implements Serializable {
                 firstName = surname.substring(commaPosition + 1).trim();
                 surname = surname.substring(0, commaPosition);
             }
-            String publicDisplayHide = "NO";
+            String publicDisplayHide = "N";
             if (nodesMap.get(ISMASKED) != null) {
-                publicDisplayHide = nodesMap.get(ISMASKED).toUpperCase();
+                publicDisplayHide = nodesMap.get(ISMASKED).toUpperCase().substring(0, 1);
             }
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;

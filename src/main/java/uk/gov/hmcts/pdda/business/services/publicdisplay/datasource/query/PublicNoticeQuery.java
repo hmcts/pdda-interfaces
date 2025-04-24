@@ -70,7 +70,7 @@ public class PublicNoticeQuery extends AbstractControllerBean {
         log.debug("execute({})", courtRoomId);
         List<PublicNoticeValue> results = new ArrayList<>();
         List<XhbConfiguredPublicNoticeDao> cpnDaos =
-            getXhbConfiguredPublicNoticeRepository().findActiveCourtRoomNotices(courtRoomId);
+            getXhbConfiguredPublicNoticeRepository().findActiveCourtRoomNoticesSafe(courtRoomId);
         if (!cpnDaos.isEmpty()) {
             for (XhbConfiguredPublicNoticeDao cpnDao : cpnDaos) {
                 PublicNoticeValue pnValue = getPublicNoticeValue(cpnDao);

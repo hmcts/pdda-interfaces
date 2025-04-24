@@ -405,7 +405,8 @@ class CourtDetailQueryTest extends AbstractQueryTest {
 
         EasyMock
             .expect(
-                mockXhbRefJudgeRepository.findScheduledAttendeeJudge(EasyMock.isA(Integer.class)))
+                mockXhbRefJudgeRepository
+                    .findScheduledAttendeeJudgeSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyJudgeUtil.getXhbRefJudgeDao()));
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbRefJudgeRepository);
@@ -416,7 +417,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
             .add(DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("0"));
         EasyMock
             .expect(mockXhbConfiguredPublicNoticeRepository
-                .findActiveCourtRoomNotices(EasyMock.isA(Integer.class)))
+                .findActiveCourtRoomNoticesSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbConfiguredPublicNoticeDaoList);
 
         EasyMock.expect(mockXhbPublicNoticeRepository.findByIdSafe(EasyMock.isA(Integer.class)))

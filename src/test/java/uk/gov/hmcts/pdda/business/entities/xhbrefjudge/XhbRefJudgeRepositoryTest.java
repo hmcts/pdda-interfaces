@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.entities.xhbrefjudge;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +31,9 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
 
     @Mock
     private EntityManager mockEntityManager;
+
+    @Mock
+    private TypedQuery<XhbRefJudgeDao> mockTypedQuery;
 
     @InjectMocks
     private XhbRefJudgeRepository classUnderTest;
@@ -66,9 +70,15 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
 
     @Test
     void testFindScheduledAttendeeJudgeSuccess() {
-        boolean result = testFindScheduledAttendeeJudge(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            boolean result = testFindScheduledAttendeeJudge(getDummyDao());
+            assertTrue(result, NOT_TRUE);
+        }
     }
+
 
     @Test
     void testFindScheduledAttendeeJudgeFailure() {
@@ -82,14 +92,22 @@ class XhbRefJudgeRepositoryTest extends AbstractRepositoryTest<XhbRefJudgeDao> {
             list.add(dao);
         }
         Integer scheduledHearingId = -1;
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_REF_JUDGE.findScheduledAttendeeJudge"))
+            .thenReturn(mockQuery);
+
+        Mockito.when(mockQuery.setParameter(Mockito.eq("scheduledHearingId"), Mockito.any()))
+            .thenReturn(mockQuery);
+
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        Optional<XhbRefJudgeDao> result = getClassUnderTest().findScheduledAttendeeJudge(scheduledHearingId);
+
+        Optional<XhbRefJudgeDao> result =
+            getClassUnderTest().findScheduledAttendeeJudgeSafe(scheduledHearingId);
         assertNotNull(result, "Result is Null");
         if (dao != null) {
+            assertTrue(result.isPresent(), "Expected value to be present");
             assertSame(dao, result.get(), NOTSAMERESULT);
         } else {
-            assertSame(Optional.empty(), result, NOTSAMERESULT);
+            assertTrue(result.isEmpty(), "Expected Optional to be empty");
         }
         return true;
     }

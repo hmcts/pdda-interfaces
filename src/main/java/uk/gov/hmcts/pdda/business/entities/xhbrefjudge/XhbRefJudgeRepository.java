@@ -11,8 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.util.List;
 import java.util.Optional;
 
-
-
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Repository
 public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
 
@@ -42,6 +41,43 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
             query.getResultList().isEmpty() ? null : (XhbRefJudgeDao) query.getResultList().get(0);
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<XhbRefJudgeDao> findScheduledAttendeeJudgeSafe(Integer scheduledHearingId) {
+        LOG.debug("findScheduledAttendeeJudgeSafe(scheduledHearingId: {})", scheduledHearingId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_REF_JUDGE.findScheduledAttendeeJudge");
+            query.setParameter("scheduledHearingId", scheduledHearingId);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findScheduledAttendeeJudgeSafe - No results found for scheduledHearingId: {}",
+                    scheduledHearingId);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbRefJudgeDao) {
+                LOG.debug(
+                    "findScheduledAttendeeJudgeSafe - Returning result for scheduledHearingId: {}",
+                    scheduledHearingId);
+                return Optional.of((XhbRefJudgeDao) result);
+            } else {
+                LOG.warn("findScheduledAttendeeJudgeSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findScheduledAttendeeJudgeSafe({}): {}", scheduledHearingId,
+                e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
 
     /**
      * findScheduledSittingJudge.

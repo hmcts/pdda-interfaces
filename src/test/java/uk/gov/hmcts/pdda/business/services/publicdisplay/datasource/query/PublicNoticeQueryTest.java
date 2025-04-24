@@ -135,7 +135,9 @@ class PublicNoticeQueryTest {
         Integer courtRoomId = 8112;
 
         // Expects
-        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNotices(courtRoomId))
+        EasyMock
+            .expect(
+                mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNoticesSafe(courtRoomId))
             .andReturn(xhbConfiguredPublicNoticeDaoList);
         if (!xhbConfiguredPublicNoticeDaoList.isEmpty()) {
             EasyMock.expect(mockXhbPublicNoticeRepository.findByIdSafe(EasyMock.isA(Integer.class)))

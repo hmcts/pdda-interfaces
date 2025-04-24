@@ -66,7 +66,7 @@ public class PddaEntityHelper {
 
     public static List<XhbConfiguredPublicNoticeDao> xcpnFindByDefinitivePnCourtRoomValue(
         Integer courtRoomId, Integer definitivePublicNublicNoticeId) {
-        return getXCpnRepo().findByDefinitivePnCourtRoomValue(courtRoomId,
+        return getXCpnRepo().findByDefinitivePnCourtRoomValueSafe(courtRoomId,
             definitivePublicNublicNoticeId);
     }
 

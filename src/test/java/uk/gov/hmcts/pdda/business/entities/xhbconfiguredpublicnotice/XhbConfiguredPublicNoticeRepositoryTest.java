@@ -65,9 +65,15 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
 
     @Test
     void testFindByDefinitivePnCourtRoomValueSuccess() {
-        boolean result = testFindByDefinitivePnCourtRoomValue(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            boolean result = testFindByDefinitivePnCourtRoomValue(getDummyDao());
+            assertTrue(result, NOT_TRUE);
+        }
     }
+
 
     @Test
     void testFindByDefinitivePnCourtRoomValueFailure() {
@@ -83,7 +89,8 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbConfiguredPublicNoticeDao> result = getClassUnderTest()
-            .findByDefinitivePnCourtRoomValue(getDummyDao().getCourtRoomId(), getDummyDao().getPublicNoticeId());
+            .findByDefinitivePnCourtRoomValueSafe(getDummyDao().getCourtRoomId(),
+                getDummyDao().getPublicNoticeId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), NOTSAMERESULT);
@@ -95,9 +102,28 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
 
     @Test
     void testFindActiveCourtRoomNoticesSuccess() {
-        boolean result = testFindActiveCourtRoomNotices(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbConfiguredPublicNoticeDao dummyDao = getDummyDao();
+
+            List<XhbConfiguredPublicNoticeDao> list = new ArrayList<>();
+            list.add(dummyDao);
+
+            Mockito
+                .when(mockEntityManager
+                    .createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findActiveCourtRoomNotices"))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.setParameter(Mockito.eq("courtRoomId"), Mockito.any()))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+            boolean result = testFindActiveCourtRoomNotices(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
+
 
     @Test
     void testFindActiveCourtRoomNoticesFailure() {
@@ -113,7 +139,7 @@ class XhbConfiguredPublicNoticeRepositoryTest extends AbstractRepositoryTest<Xhb
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbConfiguredPublicNoticeDao> result = getClassUnderTest()
-            .findActiveCourtRoomNotices(getDummyDao().getCourtRoomId());
+            .findActiveCourtRoomNoticesSafe(getDummyDao().getCourtRoomId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), NOTSAMERESULT);

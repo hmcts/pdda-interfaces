@@ -343,7 +343,9 @@ class JuryStatusDailyListQueryTest extends AbstractQueryTest {
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantRepository);
         }
-        EasyMock.expect(mockXhbRefJudgeRepository.findScheduledAttendeeJudge(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbRefJudgeRepository
+                .findScheduledAttendeeJudgeSafe(EasyMock.isA(Integer.class)))
             .andReturn(refJudgeDao);
         EasyMock.expectLastCall().anyTimes();
         if (refJudgeDao.isEmpty()) {

@@ -171,7 +171,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         log.debug("getXhbRefJudgeDao({})", scheduledHearingId);
         // Get the judge from the scheduled hearing attendees
         Optional<XhbRefJudgeDao> xhbRefJudgeDao =
-            getXhbRefJudgeRepository().findScheduledAttendeeJudge(scheduledHearingId);
+            getXhbRefJudgeRepository().findScheduledAttendeeJudgeSafe(scheduledHearingId);
         if (xhbRefJudgeDao.isPresent()) {
             log.debug("Found Judge {} in scheduledHearingAttendees",
                 xhbRefJudgeDao.get().getRefJudgeId());
