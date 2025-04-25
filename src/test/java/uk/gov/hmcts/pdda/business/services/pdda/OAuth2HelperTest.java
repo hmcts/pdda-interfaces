@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.core.env.Environment;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
@@ -77,12 +76,27 @@ class OAuth2HelperTest {
         Mockito.mockStatic(HttpRequest.class);
         Mockito.mockStatic(HttpClient.class);
 
-        classUnderTest = new OAuth2Helper(mockEnvironment);
-
-        ReflectionTestUtils.setField(classUnderTest, "tenantId", DUMMY_TENANTID);
-        ReflectionTestUtils.setField(classUnderTest, "clientId", DUMMY_CLIENTID);
-        ReflectionTestUtils.setField(classUnderTest, "clientSecret", DUMMY_CLIENTSECRET);
-        ReflectionTestUtils.setField(classUnderTest, "tokenUrl", DUMMY_TOKENURL);
+        classUnderTest = new OAuth2Helper(mockEnvironment) {
+            @Override
+            protected String getTenantId() {
+                return DUMMY_TENANTID;
+            }
+            
+            @Override
+            protected String getTokenUrl() {
+                return DUMMY_CLIENTSECRET;
+            }
+            
+            @Override
+            protected String getClientId() {
+                return DUMMY_CLIENTID;
+            }
+            
+            @Override
+            protected String getClientSecret() {
+                return DUMMY_CLIENTSECRET;
+            }
+        };
     }
 
     @AfterEach

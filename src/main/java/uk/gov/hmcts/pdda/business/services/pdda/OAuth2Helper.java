@@ -51,27 +51,35 @@ public class OAuth2Helper {
         "spring.cloud.azure.active-directory.credential.client-id";
     private static final String AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
-
-    // Values from application.properties
-    private final String tenantId;
-    private final String clientId;
-    private final String clientSecret;
-    private final String tokenUrl;
+    protected Environment env;
 
     public OAuth2Helper() {
         this(InitializationService.getInstance().getEnvironment());
     }
 
     protected OAuth2Helper(Environment env) {
-        this.tenantId = env.getProperty(AZURE_TENANT_ID);
-        this.clientId = env.getProperty(AZURE_CLIENT_ID);
-        this.clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
-        this.tokenUrl = env.getProperty(AZURE_TOKEN_URL);
+        this.env = env;
+    }
+    
+    protected String getTenantId() {
+        return env.getProperty(AZURE_TENANT_ID);
+    }
+    
+    protected String getTokenUrl() {
+        return env.getProperty(AZURE_TOKEN_URL);
+    }
+    
+    protected String getClientId() {
+        return env.getProperty(AZURE_CLIENT_ID);
+    }
+    
+    protected String getClientSecret() {
+        return env.getProperty(AZURE_CLIENT_SECRET);
     }
 
     public String getAccessToken() {
         LOG.debug("getAccessToken()");
-        String url = String.format(this.tokenUrl, this.tenantId);
+        String url = String.format(getTokenUrl(), getTenantId());
         // Get the authentication request
         HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
@@ -83,7 +91,7 @@ public class OAuth2Helper {
     private HttpRequest getAuthenticationRequest(String url) {
         LOG.debug("getAuthorizationRequest({})", url);
         // Build the encoded clientId / clientSecret key
-        String key = clientId + ":" + clientSecret;
+        String key = getClientId() + ":" + getClientSecret();
         String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
         LOG.debug("encodedKey generated");
         // Build the authentication post request
