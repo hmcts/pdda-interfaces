@@ -4,9 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
-import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,20 +54,14 @@ class DisplayStoreControllerBeanTest {
     @Mock
     protected EntityManager mockEntityManager;
 
-    @TestSubject
-    private final DisplayStoreControllerBean classUnderTest =
-        new DisplayStoreControllerBean(EasyMock.createMock(EntityManager.class));
-
-    @BeforeAll
-    public static void setUp() {
-        // Do nothing
-    }
+    private DisplayStoreControllerBean classUnderTest;
 
     @BeforeEach
-    void setupEntityManager() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
+    void setUp() {
+        classUnderTest =
+            new DisplayStoreControllerBean(mockEntityManager, mockXhbDisplayStoreRepository);
     }
+
 
     @AfterAll
     public static void tearDown() {
@@ -78,6 +70,8 @@ class DisplayStoreControllerBeanTest {
 
     @Test
     void testDoesEntryExistTrue() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
         boolean result = testDoesEntryExist(displayStoreDao, true);
@@ -86,6 +80,8 @@ class DisplayStoreControllerBeanTest {
 
     @Test
     void testDoesEntryExistFalse() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
         Optional<XhbDisplayStoreDao> displayStoreDao = Optional.empty();
         boolean result = testDoesEntryExist(displayStoreDao, false);
         assertTrue(result, TRUE);
@@ -114,10 +110,13 @@ class DisplayStoreControllerBeanTest {
     void testDeleteEntry() {
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
+
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         mockXhbDisplayStoreRepository.delete(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
 
         boolean result = false;
         try {
@@ -137,9 +136,12 @@ class DisplayStoreControllerBeanTest {
             Date.from(NOW.atZone(ZoneId.systemDefault()).toInstant()).getTime() / 1000 * 1000;
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
+
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
 
         long result = classUnderTest.getLastModified(RETRIEVAL_CODE);
 
@@ -151,9 +153,12 @@ class DisplayStoreControllerBeanTest {
     void testReadFromDatabase() {
         Optional<XhbDisplayStoreDao> displayStoreDao =
             Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
+
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
         EasyMock.replay(mockXhbDisplayStoreRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
 
         String result = classUnderTest.readFromDatabase(RETRIEVAL_CODE);
 
@@ -164,10 +169,13 @@ class DisplayStoreControllerBeanTest {
     @Test
     void testWriteToDatabaseSave() {
         final String newContent = "New Test Content";
+
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(Optional.empty());
         mockXhbDisplayStoreRepository.save(EasyMock.isA(XhbDisplayStoreDao.class));
         EasyMock.replay(mockXhbDisplayStoreRepository);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
 
         boolean result = false;
         try {
@@ -184,11 +192,15 @@ class DisplayStoreControllerBeanTest {
     @Test
     void testWriteToDatabaseUpdate() {
         final String newContent = "New Test Content";
-        Optional<XhbDisplayStoreDao> displayStoreDao =
-            Optional.of(getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE));
+        XhbDisplayStoreDao dao = getDummyXhbDisplayStoreDao(DISPLAY_STORE_ID, RETRIEVAL_CODE);
+        Optional<XhbDisplayStoreDao> displayStoreDao = Optional.of(dao);
+
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
-        EasyMock.replay(mockXhbDisplayStoreRepository);
+        mockXhbDisplayStoreRepository.save(dao);
+
+        EasyMock.replay(mockEntityManager, mockXhbDisplayStoreRepository);
 
         boolean result = false;
         try {
@@ -198,9 +210,10 @@ class DisplayStoreControllerBeanTest {
             fail(exception);
         }
 
-        EasyMock.verify(mockXhbDisplayStoreRepository);
+        EasyMock.verify(mockEntityManager, mockXhbDisplayStoreRepository);
         assertTrue(result, TRUE);
     }
+
 
     /**
      * Returns a dummy XhbDisplayStoreDao object for use in testing.

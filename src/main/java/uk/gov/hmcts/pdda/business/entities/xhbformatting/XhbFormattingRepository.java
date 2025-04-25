@@ -11,8 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.io.Serializable;
 import java.util.List;
 
-
-
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Repository
 public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao> implements Serializable {
 
@@ -71,4 +70,28 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
         query.setParameter("courtSiteName", courtSiteName);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbFormattingDao> findByDocumentAndClobSafe(Integer courtId, String documentType,
+        String language, String courtSiteName) {
+
+        LOG.debug(
+            "findByDocumentAndClobSafe(courtId: {}, documentType: {}, language: {}, courtSiteName: {})",
+            courtId, documentType, language, courtSiteName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_FORMATTING.findByDocumentAndClob");
+            query.setParameter("courtId", courtId);
+            query.setParameter("docType", documentType);
+            query.setParameter("language", language);
+            query.setParameter("courtSiteName", courtSiteName);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDocumentAndClobSafe({}, {}, {}, {}): {}", courtId,
+                documentType, language, courtSiteName, e.getMessage(), e);
+            return List.of(); // Safe fallback
+        }
+    }
+
 }

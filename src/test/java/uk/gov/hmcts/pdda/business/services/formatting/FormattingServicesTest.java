@@ -403,9 +403,11 @@ class FormattingServicesTest {
         FormattingValue formattingValue = DummyFormattingUtil
             .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
+        assertNotNull(formattingValue.getCppList(), "CppList should not be null in test setup");
+
         List<XhbCppListDao> existingList = new ArrayList<>();
         existingList.add(xhbCppListDao);
-        Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbCppListRepository.findByClobIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbCppListDao);
         Mockito.when(mockXhbCppListRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCppListDao));
@@ -443,6 +445,8 @@ class FormattingServicesTest {
                 Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(xhbCppFormattingDao);
+        Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.anyLong()))
+            .thenReturn(xhbCppListDao);
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
         Mockito.when(mockXhbClobRepository.update(Mockito.isA(XhbClobDao.class)))
@@ -457,7 +461,7 @@ class FormattingServicesTest {
             .thenReturn(Optional.of(xhbCppFormattingDao));
         mockXhbCppFormattingMergeRepository.save(Mockito.isA(XhbCppFormattingMergeDao.class));
         Mockito
-            .when(mockXhbFormattingRepository.findByDocumentAndClob(Mockito.isA(Integer.class),
+            .when(mockXhbFormattingRepository.findByDocumentAndClobSafe(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
             .thenReturn(formattingDaoLatestClobList);
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))

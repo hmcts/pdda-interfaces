@@ -44,6 +44,14 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         super();
     }
 
+    // JUnit tests constructor
+    public DisplayStoreControllerBean(EntityManager entityManager,
+        XhbDisplayStoreRepository repository) {
+        super(entityManager);
+        this.xhbDisplayStoreRepository = repository;
+    }
+
+
     @Override
     protected void clearRepositories() {
         super.clearRepositories();
@@ -140,12 +148,13 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         Optional<XhbDisplayStoreDao> xds =
             getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode); // uses main EM
         if (xds.isPresent()) {
-            XhbDisplayStoreDao entity = xds.get(); // managed entity
+            XhbDisplayStoreDao entity = xds.get(); // managed and detached entity
             entity.setLastUpdateDate(LocalDateTime.now());
             entity.setLastUpdatedBy("PDDA");
             entity.setContent(contents);
-            // No need to merge if already managed
-            // Just let the transaction commit
+            LOG.debug("Merging entity: displayStoreId={}, version={}", entity.getDisplayStoreId(),
+                entity.getVersion());
+            getXhbDisplayStoreRepository().save(entity); // Force update
         } else {
             XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
             newEntity.setRetrievalCode(retrievalCode);

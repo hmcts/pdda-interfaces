@@ -65,8 +65,13 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
 
     @Test
     void testFindByVipCourtSiteSuccess() {
-        boolean result = testFindByVipCourtSite(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            boolean result = testFindByVipCourtSite(getDummyDao());
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -75,6 +80,7 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         assertTrue(result, NOT_TRUE);
     }
 
+    @SuppressWarnings("PMD.UseCollectionIsEmpty")
     private boolean testFindByVipCourtSite(XhbDisplayLocationDao dao) {
         List<XhbDisplayLocationDao> list = new ArrayList<>();
         if (dao != null) {
@@ -83,13 +89,15 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayLocationDao> result =
-            getClassUnderTest().findByVipCourtSite(getDummyDao().getCourtSiteId());
+            getClassUnderTest().findByVipCourtSiteSafe(getDummyDao().getCourtSiteId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
+            assertTrue(result.size() > 0, "Expected at least one result");
             assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), NOTSAMERESULT);
+            assertTrue(result.isEmpty(), "Expected empty result list");
         }
+
         return true;
     }
 

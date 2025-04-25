@@ -125,14 +125,15 @@ class PdSetupControllerBeanTest {
             displayLocationList = (ArrayList<XhbDisplayLocationDao>) getDummyDisplayLocationList();
             EasyMock
                 .expect(
-                    mockXhbDisplayLocationRepository.findByCourtSite(EasyMock.isA(Integer.class)))
+                    mockXhbDisplayLocationRepository
+                        .findByCourtSiteSafe(EasyMock.isA(Integer.class)))
                 .andReturn(displayLocationList);
 
             for (XhbDisplayLocationDao displayLocation : displayLocationList) {
                 displaysList = (ArrayList<XhbDisplayDao>) getDummyDisplayList();
                 EasyMock
                     .expect(mockXhbDisplayRepository
-                        .findByDisplayLocationId(EasyMock.isA(Integer.class)))
+                        .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(displaysList);
             }
         }

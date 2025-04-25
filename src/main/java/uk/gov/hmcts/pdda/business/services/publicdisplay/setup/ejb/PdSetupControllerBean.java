@@ -88,14 +88,14 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
             List<XhbDisplayLocationDao> xhbDisplayLocations =
                 getXhbDisplayLocationRepository()
-                    .findByCourtSite(xhbCourtSite.getCourtSiteId());
+                    .findByCourtSiteSafe(xhbCourtSite.getCourtSiteId());
 
             CourtSiteDrillDown courtSiteDrillDown = getCourtSiteDrillDown(xhbCourtSite.getDisplayName());
 
             for (XhbDisplayLocationDao xhbDisplayLocation : xhbDisplayLocations) {
 
                 List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository()
-                    .findByDisplayLocationId(xhbDisplayLocation.getDisplayLocationId());
+                    .findByDisplayLocationIdSafe(xhbDisplayLocation.getDisplayLocationId());
 
                 DisplayLocationDrillDown displayLocationDrillDown =
                     getDisplayLocationDrillDown(xhbDisplayLocation.getDescriptionCode());

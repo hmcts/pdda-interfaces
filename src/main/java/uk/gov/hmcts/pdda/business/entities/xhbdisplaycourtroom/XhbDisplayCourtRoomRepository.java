@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplaycourtroom;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -37,4 +38,20 @@ public class XhbDisplayCourtRoomRepository extends AbstractRepository<XhbDisplay
         query.setParameter("displayId", displayId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbDisplayCourtRoomDao> findByDisplayIdSafe(Integer displayId) {
+        LOG.debug("findByDisplayIdSafe(displayId: {})", displayId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_DISPLAY_COURT_ROOM.findByDisplayId");
+            query.setParameter("displayId", displayId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDisplayIdSafe({}): {}", displayId, e.getMessage(), e);
+            return List.of(); // Return empty list to prevent null-related issues
+        }
+    }
+
 }

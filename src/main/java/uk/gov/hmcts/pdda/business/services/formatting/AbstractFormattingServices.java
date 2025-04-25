@@ -70,7 +70,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         final String courtSiteName) {
         Long clobId = null;
         List<XhbFormattingDao> list =
-            getXhbFormattingRepository().findByDocumentAndClob(courtId, documentType, language, courtSiteName);
+            getXhbFormattingRepository().findByDocumentAndClobSafe(courtId, documentType, language,
+                courtSiteName);
         if (!list.isEmpty()) {
             clobId = list.get(0).getXmlDocumentClobId();
         }

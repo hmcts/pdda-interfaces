@@ -11,8 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.io.Serializable;
 import java.util.List;
 
-
-
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Repository
 public class XhbDisplayRepository extends AbstractRepository<XhbDisplayDao> implements Serializable  {
 
@@ -69,4 +68,21 @@ public class XhbDisplayRepository extends AbstractRepository<XhbDisplayDao> impl
         query.setParameter("displayLocationId", displayLocationId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbDisplayDao> findByDisplayLocationIdSafe(Integer displayLocationId) {
+        LOG.debug("findByDisplayLocationIdSafe(displayLocationId: {})", displayLocationId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_DISPLAY.findByDisplayLocationId");
+            query.setParameter("displayLocationId", displayLocationId);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDisplayLocationIdSafe({}): {}", displayLocationId,
+                e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid nulls
+        }
+    }
+
 }

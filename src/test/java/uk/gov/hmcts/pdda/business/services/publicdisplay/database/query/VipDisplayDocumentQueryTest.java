@@ -159,18 +159,24 @@ class VipDisplayDocumentQueryTest {
 
         // Expects
         boolean abortExpects;
-        EasyMock.expect(mockXhbDisplayLocationRepository.findByVipCourtSite(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbDisplayLocationRepository
+                .findByVipCourtSiteSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbDisplayLocationDaoList);
         replayArray.add(mockXhbDisplayLocationRepository);
         abortExpects = xhbDisplayLocationDaoList.isEmpty();
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayRepository.findByDisplayLocationId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayRepository
+                    .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayDaoList);
             replayArray.add(mockXhbDisplayRepository);
             abortExpects = xhbDisplayDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbRotationSetDdRepository.findByRotationSetId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbRotationSetDdRepository
+                    .findByRotationSetIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbRotationSetDdDaoList);
             replayArray.add(mockXhbRotationSetDdRepository);
             abortExpects = xhbRotationSetDdDaoList.isEmpty();

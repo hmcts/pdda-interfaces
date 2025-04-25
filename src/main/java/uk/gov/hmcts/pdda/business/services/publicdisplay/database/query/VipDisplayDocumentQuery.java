@@ -81,7 +81,8 @@ public class VipDisplayDocumentQuery extends AbstractControllerBean {
     public Collection<VipDisplayConfigurationDisplayDocument> getData(Integer courtSiteId) {
         LOG.debug("getData({})", courtSiteId);
         Collection<VipDisplayConfigurationDisplayDocument> results = new ArrayList<>();
-        List<XhbDisplayLocationDao> dlDaos = getXhbDisplayLocationRepository().findByVipCourtSite(courtSiteId);
+        List<XhbDisplayLocationDao> dlDaos =
+            getXhbDisplayLocationRepository().findByVipCourtSiteSafe(courtSiteId);
         if (!dlDaos.isEmpty()) {
             // Loop the VIP courtSites
             for (XhbDisplayLocationDao dlDao : dlDaos) {
@@ -95,12 +96,13 @@ public class VipDisplayDocumentQuery extends AbstractControllerBean {
     private List<VipDisplayConfigurationDisplayDocument> getDisplays(XhbDisplayLocationDao dlDao) {
         LOG.debug("getDisplays({})", dlDao);
         List<VipDisplayConfigurationDisplayDocument> results = new ArrayList<>();
-        List<XhbDisplayDao> daos = getXhbDisplayRepository().findByDisplayLocationId(dlDao.getDisplayLocationId());
+        List<XhbDisplayDao> daos =
+            getXhbDisplayRepository().findByDisplayLocationIdSafe(dlDao.getDisplayLocationId());
         if (!daos.isEmpty()) {
             for (XhbDisplayDao dao : daos) {
                 // Loop the display rotation sets
                 List<XhbRotationSetDdDao> rsDaos =
-                    getXhbRotationSetDdRepository().findByRotationSetId(dao.getRotationSetId());
+                    getXhbRotationSetDdRepository().findByRotationSetIdSafe(dao.getRotationSetId());
                 for (XhbRotationSetDdDao rsDao : rsDaos) {
                     // Get the document
                     Optional<XhbDisplayDocumentDao> ddDao =

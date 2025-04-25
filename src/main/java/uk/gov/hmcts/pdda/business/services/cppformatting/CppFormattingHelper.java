@@ -8,6 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepo
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * <p>
@@ -51,8 +52,11 @@ public class CppFormattingHelper {
         LOG.debug(methodName + " called");
 
         XhbCppFormattingRepository repo = new XhbCppFormattingRepository(entityManager);
+
+        // Make the time element midnight, as otherwise the query will not work and never find
+        // anything
         return repo.getLatestDocumentByCourtIdAndTypeSafe(courtId, DOC_TYPE_PUBLIC_DISPLAY,
-            LocalDateTime.now());
+            LocalDateTime.now().with(LocalTime.MIDNIGHT));
     }
     
     public static XhbFormattingDao createXhbFormattingRecord(Integer courtId, LocalDateTime dateIn,

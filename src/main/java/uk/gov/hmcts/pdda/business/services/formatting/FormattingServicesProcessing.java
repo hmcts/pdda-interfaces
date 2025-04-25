@@ -201,6 +201,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         }
     }
 
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     protected void processListDocument(final FormattingValue formattingValue,
         final String translationXml)
         throws SAXException, IOException, ParserConfigurationException, TransformerException {
@@ -208,7 +209,11 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             formattingValue.getFormattingId());
         try {
             XhbCppListDao cppList =
-                getXhbCppListRepository().findByClobId(formattingValue.getXmlDocumentClobId());
+                getXhbCppListRepository().findByClobIdSafe(formattingValue.getXmlDocumentClobId());
+            if (cppList == null) {
+                throw new FormattingException(
+                    "No cppList found for clobId " + formattingValue.getXmlDocumentClobId());
+            }
 
             // Set In progress (if it isn't already at IP - ie a crash)
             if (!IP.equals(cppList.getStatus())) {

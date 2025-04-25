@@ -90,7 +90,8 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
     public Collection<VipDisplayConfigurationCourtRoom> getData(Integer courtSiteId) {
         LOG.debug("getData({})", courtSiteId);
         List<VipDisplayConfigurationCourtRoom> results = new ArrayList<>();
-        List<XhbDisplayLocationDao> dlDaos = getXhbDisplayLocationRepository().findByVipCourtSite(courtSiteId);
+        List<XhbDisplayLocationDao> dlDaos =
+            getXhbDisplayLocationRepository().findByVipCourtSiteSafe(courtSiteId);
         if (!dlDaos.isEmpty()) {
             // Loop the VIP courtSites
             for (XhbDisplayLocationDao dlDao : dlDaos) {
@@ -112,12 +113,13 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
         LOG.debug("getDisplays({},{})", dlDao, ocsDao);
         List<VipDisplayConfigurationCourtRoom> results = new ArrayList<>();
         // Loop the displays
-        List<XhbDisplayDao> daos = getXhbDisplayRepository().findByDisplayLocationId(dlDao.getDisplayLocationId());
+        List<XhbDisplayDao> daos =
+            getXhbDisplayRepository().findByDisplayLocationIdSafe(dlDao.getDisplayLocationId());
         if (!daos.isEmpty()) {
             for (XhbDisplayDao dao : daos) {
                 // Loop the courtRooms
                 List<XhbDisplayCourtRoomDao> dcrDaos =
-                    getXhbDisplayCourtRoomRepository().findByDisplayId(dao.getDisplayId());
+                    getXhbDisplayCourtRoomRepository().findByDisplayIdSafe(dao.getDisplayId());
                 if (!dcrDaos.isEmpty()) {
                     results.addAll(getCourtRooms(dcrDaos, ocsDao));
                 }
