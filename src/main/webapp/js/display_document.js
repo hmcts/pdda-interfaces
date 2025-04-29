@@ -269,7 +269,11 @@ function attachStylesheets()
     var displayType = trimToNull(getParameterForWindow(self,"displayType"));
     if(displayType != null) {
 		log("Display Stylesheet " + displayType);
-        document.createStyleSheet("css/" + displayType + ".css");
+        const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = "css/" + displayType + ".css";
+		document.head.appendChild(link);
     } else {
         log("Display Stylesheet not found.");
     }
