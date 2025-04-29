@@ -181,8 +181,8 @@ class PddaDlNotifierHelperTest {
         List<XhbCourtDao> courtList = List.of(court1, court2);
 
         XhbPddaDlNotifierDao newDao = DummyPdNotifierUtil.getXhbPddaDlNotifierDao(200, now);
-        when(mockXhbCourtRepository.findAll()).thenReturn(courtList);
-        when(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDate(anyInt(), any()))
+        when(mockXhbCourtRepository.findAllSafe()).thenReturn(courtList);
+        when(mockXhbPddaDlNotifierRepository.findByCourtAndLastRunDateSafe(anyInt(), any()))
             .thenReturn(List.of(new XhbPddaDlNotifierDao())) // court 100 – no notifier
             .thenReturn(List.of(newDao)) // re-fetch after try block
             .thenReturn(List.of(newDao)); // second court

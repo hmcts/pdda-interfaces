@@ -4,50 +4,48 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.services.CsServices;
 
-
-
 /**
- * Factory that returns a pre-configured event type.
- * 
- * @author meekun
+ * Factory that returns a singleton EventStore.
  */
-public class EventStoreFactory {
+public final class EventStoreFactory {
 
-    /** Logger. */
-    private static Logger log = LoggerFactory.getLogger(EventStoreFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventStoreFactory.class);
 
-    /** The name of the property that contains the event store type. */
     private static final String EVENT_STORE_TYPE = "public.display.event.store.type";
 
-    protected EventStoreFactory() {
-        // Protected constructor
+    private static final EventStore EVENT_STORE = createEventStore();
+
+    private EventStoreFactory() {
+        // Prevent instantiation
     }
 
     /**
-     * Creates the event store.
-     * 
-     * @return Event store
+     * Gets the singleton EventStore instance.
+     *
+     * @return EventStore instance
      */
     public static EventStore getEventStore() {
+        return EVENT_STORE;
+    }
 
+    private static EventStore createEventStore() {
         String eventStoreClass = CsServices.getConfigServices().getProperty(EVENT_STORE_TYPE);
         EventStore eventStore;
 
         if (eventStoreClass == null) {
-            // Create the default event store
+            // Default fallback
             eventStore = new DefaultEventStore();
         } else {
             try {
-                // Dynamically instantiate the event store
-                eventStore = (EventStore) Class.forName(eventStoreClass).newInstance();
-            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                log.error(e.getMessage(), e);
+                eventStore = (EventStore) Class.forName(eventStoreClass).getDeclaredConstructor()
+                    .newInstance();
+            } catch (ReflectiveOperationException e) {
+                LOG.error("Failed to create EventStore: {}", eventStoreClass, e);
                 throw new EventStoreException(eventStoreClass, e);
             }
         }
 
-        log.debug("Event store type: " + eventStore.getClass());
+        LOG.info("Event store type created: {}", eventStore.getClass().getName());
         return eventStore;
     }
-
 }

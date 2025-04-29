@@ -99,7 +99,7 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
 
     public void runDailyListNotifier() {
         // Loop through all the active courts
-        List<XhbCourtDao> allCourts = getCourtRepository().findAll();
+        List<XhbCourtDao> allCourts = getCourtRepository().findAllSafe();
         if (allCourts != null) {
             for (XhbCourtDao court : allCourts) {
                 if (!YES.equals(court.getObsInd())) {
@@ -155,7 +155,7 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
         LocalDateTime lastRunDate) {
         XhbPddaDlNotifierDao dao;
         List<XhbPddaDlNotifierDao> daoList =
-            getPddaDlNotifierRepository().findByCourtAndLastRunDate(courtId, lastRunDate);
+            getPddaDlNotifierRepository().findByCourtAndLastRunDateSafe(courtId, lastRunDate);
         if (daoList.isEmpty()) {
             dao = new XhbPddaDlNotifierDao();
             dao.setCourtId(courtId);
