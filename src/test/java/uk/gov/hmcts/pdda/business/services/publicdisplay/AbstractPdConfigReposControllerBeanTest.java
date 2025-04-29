@@ -14,13 +14,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocation
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaytype.XhbDisplayTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsRepository;
-import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayCourtRoomQuery;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDisplayDocumentQuery;
+import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
+@SuppressWarnings({"PMD.SingularField", "PMD.JUnitAssertionsShouldIncludeMessage"})
 class AbstractPdConfigReposControllerBeanTest {
 
     private AbstractPdConfigReposControllerBean beanUnderTest;

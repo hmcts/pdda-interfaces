@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.services.CsServices;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Factory that returns a singleton EventStore.
  */
@@ -13,7 +16,8 @@ public final class EventStoreFactory {
 
     private static final String EVENT_STORE_TYPE = "public.display.event.store.type";
 
-    private static final EventStore EVENT_STORE = createEventStore();
+    private static EventStore instance;
+    private static final Lock LOCK = new ReentrantLock();
 
     private EventStoreFactory() {
         // Prevent instantiation
@@ -24,8 +28,26 @@ public final class EventStoreFactory {
      *
      * @return EventStore instance
      */
+    @SuppressWarnings("PMD.NonThreadSafeSingleton")
     public static EventStore getEventStore() {
-        return EVENT_STORE;
+        LOCK.lock();
+        try {
+            if (instance == null) {
+                instance = createEventStore();
+            }
+            return instance;
+        } finally {
+            LOCK.unlock();
+        }
+    }
+
+    static void resetForTest(EventStore testInstance) {
+        LOCK.lock();
+        try {
+            instance = testInstance;
+        } finally {
+            LOCK.unlock();
+        }
     }
 
     private static EventStore createEventStore() {

@@ -7,11 +7,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Meeraj
- *
- *         Generic thread pool implementation. Original version written by R Oberg for JBoss.
- */
 @SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement", "PMD.LooseCoupling",
     "PMD.ConfusingTernary"})
 public final class ThreadPool {

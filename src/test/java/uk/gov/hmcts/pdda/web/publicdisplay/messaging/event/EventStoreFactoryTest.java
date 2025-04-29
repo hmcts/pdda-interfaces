@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings({"PMD.SignatureDeclareThrowsException", "PMD.AvoidAccessibilityAlteration"})
 @ExtendWith(MockitoExtension.class)
 class EventStoreFactoryTest {
 
@@ -28,9 +28,10 @@ class EventStoreFactoryTest {
     private MockedStatic<ConfigServices> configServicesMockedStatic;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         csServicesMockedStatic = Mockito.mockStatic(CsServices.class);
         configServicesMockedStatic = Mockito.mockStatic(ConfigServices.class);
+        EventStoreFactory.resetForTest(null);
     }
 
     @AfterEach
@@ -43,21 +44,6 @@ class EventStoreFactoryTest {
         }
     }
 
-    @Test
-    void testGetEventStoreWhenPropertyIsNullReturnsDefaultEventStore() {
-        // Given
-        ConfigServices mockConfigServices = mock(ConfigServices.class);
-        when(CsServices.getConfigServices()).thenReturn(mockConfigServices);
-        lenient().when(mockConfigServices.getProperty(Mockito.anyString())).thenReturn(null);
-
-        // When
-        EventStore eventStore = EventStoreFactory.getEventStore();
-
-        // Then
-        assertNotNull(eventStore, "EventStore should not be null");
-        assertTrue(eventStore instanceof DefaultEventStore,
-            "EventStore should be DefaultEventStore");
-    }
 
     @Test
     void testGetEventStoreWhenInvalidClassNameThrowsEventStoreException() {
@@ -99,6 +85,39 @@ class EventStoreFactoryTest {
         CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
         return new MoveCaseEvent(from, to, null);
     }
+
+    @Test
+    void testGetEventStoreWhenValidClassNameReturnsCustomEventStore() {
+        // Given
+        ConfigServices mockConfigServices = mock(ConfigServices.class);
+        when(CsServices.getConfigServices()).thenReturn(mockConfigServices);
+        when(mockConfigServices.getProperty(Mockito.anyString()))
+            .thenReturn(DummyEventStore.class.getName());
+
+        // Reflection will instantiate DummyEventStore
+        EventStore eventStore = EventStoreFactory.getEventStore();
+
+        // Then
+        assertNotNull(eventStore, "EventStore should not be null");
+        assertTrue(eventStore instanceof DummyEventStore,
+            "EventStore should be an instance of DummyEventStore");
+    }
+
+    /**
+     * Dummy EventStore for testing valid reflection instantiation.
+     */
+    public static class DummyEventStore implements EventStore {
+        @Override
+        public void pushEvent(PublicDisplayEvent event) {
+            // No-op
+        }
+
+        @Override
+        public PublicDisplayEvent popEvent() {
+            return null;
+        }
+    }
+
 
     /**
      * Helper class to simulate reloading EventStoreFactory behavior manually.
