@@ -43,6 +43,15 @@ public class AbstractControllerBean {
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
     }
+    
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbClobRepository = null;
+        xhbBlobRepository = null;
+        xhbCourtRepository = null;
+        xhbConfigPropRepository = null;
+        xhbCppFormattingRepository = null;
+    }
 
     protected AbstractControllerBean(EntityManager entityManager) {
         this();
@@ -51,14 +60,6 @@ public class AbstractControllerBean {
 
     protected AbstractControllerBean() {
         // protected constructor
-    }
-    
-    protected void clearRepositories() {
-        this.xhbClobRepository = null;
-        this.xhbBlobRepository = null;
-        this.xhbCourtRepository = null;
-        this.xhbConfigPropRepository = null;
-        this.xhbCppFormattingRepository = null;
     }
 
     protected EntityManager getEntityManager() {
@@ -142,5 +143,8 @@ public class AbstractControllerBean {
         }
         return xhbFormattingRepository;
     }
-
+    
+    protected boolean isEntityManagerActive() {
+        return EntityManagerUtil.isEntityManagerActive(entityManager);
+    }
 }

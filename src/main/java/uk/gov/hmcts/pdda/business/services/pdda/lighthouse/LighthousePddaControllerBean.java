@@ -4,7 +4,6 @@ import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import java.util.Optional;
  */
 @Stateless
 @Service
-@Transactional
 @LocalBean
 @ApplicationException(rollback = true)
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
@@ -75,6 +73,16 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
         writeToLog("About to process file " + dao.getCpDocumentName());
 
+        List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = 
+            getXhbCppStagingInboundRepository().findDocumentByDocumentName(dao.getCpDocumentName());
+        
+        // Check the file hasn't already been processed
+        if (!xhbCppStagingInboundDaos.isEmpty()) {
+            LOG.warn("The file: {}{}", dao.getCpDocumentName(), 
+                " has already been sent for processing, and therefore a duplicate entry has not been added");
+            return;
+        }
+        
         try {
             // First check the filename is valid
             if (!isDocumentNameValid(dao.getCpDocumentName())) {

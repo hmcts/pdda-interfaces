@@ -54,7 +54,7 @@ public final class TransformerUtils {
             }
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
-                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
+                "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
             transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
                 "-//W3C//DTD XHTML 1.0 Strict//EN");
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");

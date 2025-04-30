@@ -43,6 +43,9 @@ import java.time.LocalDateTime;
         + "ORDER by o.cppStagingInboundId")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findByClobId",
     query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.clobId = :clobId")
+@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName",
+    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
+        + "(o.documentName = :documentName) AND (o.obsInd IS NULL OR o.obsInd='N')")
 public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Serializable {
 
     private static final long serialVersionUID = 6619741714613299473L;

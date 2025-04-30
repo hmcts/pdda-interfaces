@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.services.validation.sax.SaxValidationService;
 
 import java.util.List;
 
+@SuppressWarnings("PMD.NullAssignment")
 public class AbstractCppStagingInboundControllerBean extends AbstractControllerBean {
 
     private static final Logger LOG =
@@ -37,7 +38,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     private CppStagingInboundHelper cppStagingInboundHelper;
     private ValidationService validationService;
     private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
-
+    
     public AbstractCppStagingInboundControllerBean() {
         super();
     }
@@ -51,6 +52,12 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
             xhbConfigPropRepository, null);
         this.cppStagingInboundHelper = cppStagingInboundHelper;
         this.validationService = validationService;
+    }
+    
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCppStagingInboundRepository = null;
     }
 
     /**
@@ -161,7 +168,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     }
     
     public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null) {
+        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
             xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
         }
         return xhbCppStagingInboundRepository;

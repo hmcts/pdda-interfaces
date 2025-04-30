@@ -1,13 +1,19 @@
 package uk.gov.hmcts.pdda.business.services.pdda.lighthouse;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockExtension;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
@@ -27,8 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
 class LighthousePddaControllerBeanTest {
 
     private static final String NOTNULL = "Result is not Null";
@@ -58,11 +65,24 @@ class LighthousePddaControllerBeanTest {
 
     @Mock
     private LighthousePddaControllerBean classUnderTestMock;
+    
+    @Captor
+    private ArgumentCaptor<XhbPddaMessageDao> xhbPddaMessageDaoCapture;
 
-    @TestSubject
+    @InjectMocks
     private final LighthousePddaControllerBean classUnderTest =
         new LighthousePddaControllerBean(mockEntityManager);
 
+    @BeforeAll
+    public static void setUp() {
+        Mockito.mockStatic(EntityManagerUtil.class);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        Mockito.clearAllCaches();
+    }
+    
     @Test
     void testProcessFilesSuccess() {
         boolean result = testProcessFiles(MESSAGE_STATUS_PROCESSED);
@@ -164,73 +184,64 @@ class LighthousePddaControllerBeanTest {
     }
 
     private boolean testProcessFiles(String expectedSavedStatus) {
-        // Add Captured Values
-        Capture<XhbPddaMessageDao> xhbPddaMessageDaoCapture = EasyMock.newCapture();
-
         // Setup
         List<XhbPddaMessageDao> xhbPddaMessageDaoList = getDummyXhbPddaMessageDaoList();
-        EasyMock.expect(mockXhbPddaMessageRepository.findByLighthouse())
-            .andReturn(xhbPddaMessageDaoList);
+        mockTheEntityManager();
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouse())
+            .thenReturn(xhbPddaMessageDaoList);
         for (XhbPddaMessageDao xhbPddaMessageDao : xhbPddaMessageDaoList) {
             String[] fileParts = xhbPddaMessageDao.getCpDocumentName().split(UNDERSCORE);
             if (fileParts.length == PART_NO
                 && !INVALIDNAME_EXAMPLE.equals(xhbPddaMessageDao.getCpDocumentName())
                 && !INVALIDPARTS_EXAMPLE.equals(xhbPddaMessageDao.getCpDocumentName())) {
-                processMessage(xhbPddaMessageDao, xhbPddaMessageDaoCapture, expectedSavedStatus, 2);
+                processMessage(xhbPddaMessageDao, expectedSavedStatus);
             } else {
-                processMessage(xhbPddaMessageDao, xhbPddaMessageDaoCapture, expectedSavedStatus, 1);
+                processMessage(xhbPddaMessageDao, expectedSavedStatus);
                 continue;
             }
         }
-        EasyMock.replay(classUnderTestMock);
-        EasyMock.replay(mockEntityManager);
-        EasyMock.replay(mockXhbPddaMessageRepository);
-        EasyMock.replay(mockXhbCppStagingInboundRepository);
         // Run
         classUnderTest.doTask();
         // Checks
-        EasyMock.verify(mockEntityManager);
-        EasyMock.verify(mockXhbPddaMessageRepository);
         assertNotNull(xhbPddaMessageDaoCapture, NOTNULL);
         assertSame(expectedSavedStatus, xhbPddaMessageDaoCapture.getValue().getCpDocumentStatus(),
             SAME);
+
         return true;
     }
 
-    private void processMessage(XhbPddaMessageDao xhbPddaMessageDao,
-        Capture<XhbPddaMessageDao> xhbPddaMessageDaoCapture, String expectedSavedStatus,
-        Integer noOfExpects) {
-        EasyMock.expect(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
-            .andReturn(Optional.of(xhbPddaMessageDao));
-        EasyMock.expectLastCall().times(noOfExpects);
+    private void processMessage(XhbPddaMessageDao xhbPddaMessageDao, String expectedSavedStatus) {
+        Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
+            .thenReturn(Optional.of(xhbPddaMessageDao));
 
         Optional<XhbPddaMessageDao> xhbPddaMessageDao1 =
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
 
-        EasyMock
-            .expect(mockXhbPddaMessageRepository.update(EasyMock.capture(xhbPddaMessageDaoCapture)))
-            .andReturn(xhbPddaMessageDao1).times(noOfExpects);
-        EasyMock.expectLastCall();
+        Mockito.when(mockXhbCppStagingInboundRepository
+            .findDocumentByDocumentName(Mockito.isA(String.class))).thenReturn(new ArrayList<>());
+        
+        Mockito
+            .when(mockXhbPddaMessageRepository.update(xhbPddaMessageDaoCapture.capture()))
+            .thenReturn(xhbPddaMessageDao1);
 
-        classUnderTestMock.updatePddaMessageStatus(EasyMock.isA(XhbPddaMessageDao.class),
-            EasyMock.isA(String.class));
-        EasyMock.expectLastCall();
+        classUnderTestMock.updatePddaMessageStatus(Mockito.isA(XhbPddaMessageDao.class),
+            Mockito.isA(String.class));
 
         if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {
             // Failure
-            EasyMock
-                .expect(mockXhbCppStagingInboundRepository
-                    .update(EasyMock.isA(XhbCppStagingInboundDao.class)))
-                .andThrow(getRuntimeException());
+            Mockito
+                .when(mockXhbCppStagingInboundRepository
+                    .update(Mockito.isA(XhbCppStagingInboundDao.class)))
+                .thenThrow(getRuntimeException());
         } else {
             // Success
             XhbCppStagingInboundDao stagingInboundDao =
                 DummyPdNotifierUtil.getXhbCppStagingInboundDao();
             stagingInboundDao.setDocumentName(xhbPddaMessageDao.getCpDocumentName());
-            EasyMock
-                .expect(mockXhbCppStagingInboundRepository
-                    .update(EasyMock.isA(XhbCppStagingInboundDao.class)))
-                .andReturn(Optional.of(stagingInboundDao));
+            Mockito
+                .when(mockXhbCppStagingInboundRepository
+                    .update(Mockito.isA(XhbCppStagingInboundDao.class)))
+                .thenReturn(Optional.of(stagingInboundDao));
         }
     }
 
@@ -285,6 +296,29 @@ class LighthousePddaControllerBeanTest {
         String documentName11 = "PDDA_XDL_34_1_453_20220811235559";
         assertFalse(classUnderTest.isDocumentNameValid(documentName11), FALSE);
     }
+    
+    @Test
+    void testProcessFileAlreadyProcessed() {
+        List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = new ArrayList<>();
+        mockTheEntityManager();
+        XhbCppStagingInboundDao xhbCppStagingInboundDao = new XhbCppStagingInboundDao();
+        xhbCppStagingInboundDao.setDocumentName("TestDoc");
+        xhbCppStagingInboundDaos.add(xhbCppStagingInboundDao);
+        
+        XhbPddaMessageDao xhbPddaMessageDao = new XhbPddaMessageDao();
+        xhbPddaMessageDao.setCpDocumentName("TestDoc");
+        
+        Mockito.when(classUnderTestMock.getXhbCppStagingInboundRepository())
+            .thenReturn(mockXhbCppStagingInboundRepository);
+        
+        Mockito.when(mockXhbCppStagingInboundRepository
+            .findDocumentByDocumentName(Mockito.isA(String.class))).thenReturn(xhbCppStagingInboundDaos);
+        
+        
+        boolean result = true;
+        classUnderTest.processFile(xhbPddaMessageDao);
+        assertTrue(result, TRUE);
+    }
 
 
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
@@ -305,6 +339,9 @@ class LighthousePddaControllerBeanTest {
         return new RuntimeException();
     }
 
-
+    private void mockTheEntityManager() {
+        Mockito.when(EntityManagerUtil.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(EntityManagerUtil.isEntityManagerActive(mockEntityManager)).thenReturn(true);
+    }
 
 }

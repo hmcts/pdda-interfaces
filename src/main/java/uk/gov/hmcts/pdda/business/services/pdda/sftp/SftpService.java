@@ -27,10 +27,11 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings("PMD.CouplingBetweenObjects")
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -204,8 +205,23 @@ public class SftpService extends XhibitPddaHelper {
             if (!files.isEmpty()) {
                 // Process the files we have retrieved.
                 for (Map.Entry<String, String> entry : files.entrySet()) {
-                    String filename = entry.getKey();
-                    String clobData = entry.getValue();
+                    final String filename = entry.getKey();
+                    final String clobData = entry.getValue();
+                    
+                    // Fetch the remote folder's file list each time a file is processed
+                    LOG.debug("Checking current list of files in remote folder before processing current file: {}",
+                        filename);
+                    List<String> listOfFilesInFolder = getPddaSftpHelperSshj()
+                        .listFilesInFolder(config.getSshjSftpClient(),
+                                          config.getActiveRemoteFolder(),
+                                          baisValidation);
+                    
+                    // If the filename is not in the list then its already been processed and deleted previously
+                    if (!listOfFilesInFolder.contains(filename)) {
+                        continue;
+                    }
+                    LOG.debug("File: {}{}", filename,
+                        ", still exists in remote folder - calling processBaisFile()...");
                     processBaisFile(config, baisValidation, filename, clobData);
                 }
             }
@@ -368,6 +384,16 @@ public class SftpService extends XhibitPddaHelper {
             updatedFilename = getUpdatedFilename(filename, PUBLIC_DISPLAY_DOCUMENT_TYPE);
         }
 
+        // Check for a second time that there is not already a duplicate entry in the pdda_message table
+        Optional<XhbPddaMessageDao> xhbPddaMessageDao = 
+            getPddaMessageHelper().findByCpDocumentName(updatedFilename);
+        
+        if (!xhbPddaMessageDao.isEmpty()) {
+            LOG.warn("The file: {}{}", updatedFilename, 
+                " already has an entry in xhb_pdda_message, and therefore a duplicate entry has not been added");
+            return;
+        }
+        
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
@@ -376,8 +402,7 @@ public class SftpService extends XhibitPddaHelper {
             messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
             NO, errorMessage);
     }
-
-
+    
     /**
      * Applies to lists sent from XHIBIT, update the filename as follows: - Append the text
      * "list_filename = " to the filename - Further append what would be the name of the file were

@@ -308,6 +308,7 @@ class AbstractCppInitialProcessingControllerBeanTest {
         EasyMock.verify(mockXhbCppFormattingRepository);
         EasyMock.verify(mockXhbFormattingRepository);
         EasyMock.verify(mockXhbXmlDocumentRepository);
+        EasyMock.verify(mockEntityManager);
     }
 
 }

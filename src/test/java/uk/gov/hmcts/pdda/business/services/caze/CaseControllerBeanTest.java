@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * <p>
@@ -42,9 +44,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD.TooManyMethods")
 class CaseControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
+    private static final String FALSE = "Results are False";
+    private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final Integer COURT_ROOM_ID = 30;
     private static final Integer COURT_SITE_ID = 40;
     private static final Integer COURT_ID = 50;
@@ -58,6 +63,9 @@ class CaseControllerBeanTest {
 
     @Mock
     private XhbHearingListRepository mockXhbHearingListRepository;
+    
+    @Mock
+    private EntityManager mockEntityManager;
 
     @TestSubject
     private final CaseControllerBean classUnderTest =
@@ -87,6 +95,9 @@ class CaseControllerBeanTest {
         Optional<XhbHearingListDao> oldList =
             Optional.of(getDummyXhbHearingListDao(LIST_ID, ldt.minusDays(1), ldt.minusDays(1)));
 
+        EasyMock.expect(mockXhbHearingRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
 
         EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
@@ -107,6 +118,31 @@ class CaseControllerBeanTest {
         // Checks
         verifyMocks();
         assertEquals(3, result.length, EQUALS);
+    }
+    
+    @Test
+    void testGetXhbHearingRepository() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
+        assertInstanceOf(XhbHearingRepository.class, classUnderTest.getXhbHearingRepository(),
+            NOT_INSTANCE);
+        EasyMock.verify(mockEntityManager);
+    }
+    
+    @Test
+    void testGetXhbHearingListRepository() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
+        assertInstanceOf(XhbHearingListRepository.class, classUnderTest.getXhbHearingListRepository(),
+            NOT_INSTANCE);
+        EasyMock.verify(mockEntityManager);
+    }
+    
+    @Test
+    void testClearRepos() {
+        boolean result = true;
+        classUnderTest.clearRepositories();
+        assertTrue(result, FALSE);
     }
 
     private XhbHearingDao getDummyXhbHearingDao(Integer hearingId, Integer caseId) {
@@ -278,6 +314,7 @@ class CaseControllerBeanTest {
      * Replay the mocked objects.
      */
     private void replayMocks() {
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbHearingRepository);
         EasyMock.replay(mockXhbHearingListRepository);
     }
@@ -286,6 +323,7 @@ class CaseControllerBeanTest {
      * Verify the mocked objects.
      */
     private void verifyMocks() {
+        EasyMock.verify(mockEntityManager);
         EasyMock.verify(mockXhbHearingRepository);
         EasyMock.verify(mockXhbHearingListRepository);
     }
