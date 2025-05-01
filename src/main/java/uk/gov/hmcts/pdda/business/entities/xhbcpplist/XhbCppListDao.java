@@ -104,6 +104,7 @@ public class XhbCppListDao extends AbstractDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppListId();
     }

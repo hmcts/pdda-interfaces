@@ -451,7 +451,7 @@ public class SftpService extends XhibitPddaHelper {
      * A class to validate XHIBIT messages retrieved from BAIS. There should be 6 parts to a valid
      * file from BAIS originating from XHIBIT. 1. PDDA 2. Message Type 3. Batch id 4. Message number
      * in this batch 5. Court ID (crestCourtId) 6. Date and time e.g.
-     * PDDA_XPD_1234_1_453_20200101120000.xml
+     * PDDA_XPD_1234_1_453_20200101120000
      * 
      */
     public static class BaisXhibitValidation extends BaisValidation {

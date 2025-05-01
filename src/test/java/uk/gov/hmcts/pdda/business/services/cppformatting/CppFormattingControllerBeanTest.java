@@ -93,7 +93,7 @@ class CppFormattingControllerBeanTest {
         EasyMock.expect(mockCppFormattingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));
@@ -128,7 +128,7 @@ class CppFormattingControllerBeanTest {
         EasyMock.expect(mockCppFormattingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));

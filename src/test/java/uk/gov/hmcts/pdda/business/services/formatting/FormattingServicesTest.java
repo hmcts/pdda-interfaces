@@ -403,11 +403,13 @@ class FormattingServicesTest {
         FormattingValue formattingValue = DummyFormattingUtil
             .getFormattingValue(xhbClobDao.getClobData(), DOCTYPE_DAILY_LIST, XML, xhbCppListDao);
         formattingValue.setXmlDocumentClobId(xhbClobDao.getPrimaryKey());
+        assertNotNull(formattingValue.getCppList(), "CppList should not be null in test setup");
+
         List<XhbCppListDao> existingList = new ArrayList<>();
         existingList.add(xhbCppListDao);
-        Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbCppListRepository.findByClobIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbCppListDao);
-        Mockito.when(mockXhbCppListRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCppListRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCppListDao));
         Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
             .thenReturn(Optional.of(existingList.get(0)));
@@ -436,19 +438,22 @@ class FormattingServicesTest {
         formattingDaoLatestClobList.add(xhbFormattingDao);
         List<XhbConfigPropDao> propertyList = new ArrayList<>();
         propertyList.add(DummyServicesUtil.getXhbConfigPropDao(MERGE_CUT_OFF_TIME, "23:59:59"));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(MERGE_CUT_OFF_TIME))
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(MERGE_CUT_OFF_TIME))
             .thenReturn(propertyList);
         Mockito.when(
-            mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(Mockito.isA(Integer.class),
+            mockXhbCppFormattingRepository.findLatestByCourtDateInDocSafe(
+                Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(xhbCppFormattingDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.anyLong()))
+            .thenReturn(xhbCppListDao);
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
         Mockito.when(mockXhbClobRepository.update(Mockito.isA(XhbClobDao.class)))
             .thenReturn(Optional.of(xhbClobDao));
-        Mockito.when(mockXhbFormattingRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbFormattingRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbFormattingDao));
-        Mockito.when(mockXhbCppFormattingRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCppFormattingRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCppFormattingDao));
         Mockito.when(mockXhbFormattingRepository.update(Mockito.isA(XhbFormattingDao.class)))
             .thenReturn(Optional.of(xhbFormattingDao));
@@ -456,10 +461,10 @@ class FormattingServicesTest {
             .thenReturn(Optional.of(xhbCppFormattingDao));
         mockXhbCppFormattingMergeRepository.save(Mockito.isA(XhbCppFormattingMergeDao.class));
         Mockito
-            .when(mockXhbFormattingRepository.findByDocumentAndClob(Mockito.isA(Integer.class),
+            .when(mockXhbFormattingRepository.findByDocumentAndClobSafe(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
             .thenReturn(formattingDaoLatestClobList);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
         expectTransformer();
         // Run
@@ -502,7 +507,7 @@ class FormattingServicesTest {
         List<XhbConfigPropDao> propertyList = new ArrayList<>();
         propertyList.add(DummyServicesUtil.getXhbConfigPropDao(PddaSwitcher.PDDA_SWITCH,
             PddaSwitcher.PDDA_ONLY));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(PddaSwitcher.PDDA_SWITCH))
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(PddaSwitcher.PDDA_SWITCH))
             .thenReturn(propertyList);
         Mockito.when(mockTranslationBundles.toXml()).thenReturn(TRANSLATION_BUNDLE_XML);
         if (expectedXmlUtils != null) {

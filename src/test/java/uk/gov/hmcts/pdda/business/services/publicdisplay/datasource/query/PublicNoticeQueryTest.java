@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyPdNotifierUtil;
@@ -46,6 +47,8 @@ class PublicNoticeQueryTest {
 
     private static final String TRUE = "Result is not True";
 
+    private static final String CLEAR_REPOSITORIES_MESSAGE = "Repository has been cleared";
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -66,6 +69,12 @@ class PublicNoticeQueryTest {
     @BeforeAll
     public static void setUp() {
         // Do nothing
+    }
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
     }
 
     @AfterAll
@@ -126,13 +135,17 @@ class PublicNoticeQueryTest {
         Integer courtRoomId = 8112;
 
         // Expects
-        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNotices(courtRoomId))
+        EasyMock
+            .expect(
+                mockXhbConfiguredPublicNoticeRepository.findActiveCourtRoomNoticesSafe(courtRoomId))
             .andReturn(xhbConfiguredPublicNoticeDaoList);
         if (!xhbConfiguredPublicNoticeDaoList.isEmpty()) {
-            EasyMock.expect(mockXhbPublicNoticeRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbPublicNoticeRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbPublicNoticeDao);
             if (xhbPublicNoticeDao.isPresent()) {
-                EasyMock.expect(mockXhbDefinitivePublicNoticeRepository.findById(EasyMock.isA(Integer.class)))
+                EasyMock
+                    .expect(mockXhbDefinitivePublicNoticeRepository
+                        .findByIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(xhbDefinitivePublicNoticeDao);
             }
         }
@@ -157,5 +170,36 @@ class PublicNoticeQueryTest {
             }
         }
         return true;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PublicNoticeQuery.class.getDeclaredField("xhbConfiguredPublicNoticeRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicNoticeQuery.class.getDeclaredField("xhbPublicNoticeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicNoticeQuery.class.getDeclaredField("xhbDefinitivePublicNoticeRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 }

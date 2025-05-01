@@ -95,7 +95,8 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
         XhbCourtRoomRepository xhbCourtRoomRepository) {
         // Get all court-associated rotation sets.
-        List<XhbRotationSetsDao> rotationSetsForCourt = xhbRotationSetsRepository.findByCourtId(court.getCourtId());
+        List<XhbRotationSetsDao> rotationSetsForCourt =
+            xhbRotationSetsRepository.findByCourtIdSafe(court.getCourtId());
         List<DisplayRotationSetData> displayRotationSetDataList = new ArrayList<>();
         if (rotationSetsForCourt != null) {
 
@@ -103,7 +104,8 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
             Iterator<XhbRotationSetsDao> rotationSetIterator = rotationSetsForCourt.iterator();
             while (rotationSetIterator.hasNext()) {
                 XhbRotationSetsDao xrs = rotationSetIterator.next();
-                List<XhbDisplayDao> xhbDisplays = xhbDisplayrepository.findByRotationSetId(xrs.getRotationSetId());
+                List<XhbDisplayDao> xhbDisplays =
+                    xhbDisplayrepository.findByRotationSetIdSafe(xrs.getRotationSetId());
                 addArrayToList(getDataForDisplayRotationSets(court, xrs, xhbDisplays, xhbRotationSetDdRepository,
                     xhbDisplayDocumentRepository, xhbDisplayTypeRepository, xhbDisplayLocationRepository,
                     xhbCourtSiteRepository, xhbCourtRoomRepository), displayRotationSetDataList);
@@ -175,24 +177,27 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         XhbCourtRoomRepository xhbCourtRoomRepository) {
 
         Optional<XhbDisplayLocationDao> xhbDisplayLocation =
-            xhbDisplayLocationRepository.findById(display.getDisplayLocationId());
+            xhbDisplayLocationRepository.findByIdSafe(display.getDisplayLocationId());
         XhbDisplayLocationDao xhbDisplayLocationDao = xhbDisplayLocation.isPresent() ? xhbDisplayLocation.get() : null;
         Integer courtSiteId = xhbDisplayLocationDao != null ? xhbDisplayLocationDao.getCourtSiteId() : null;
-        Optional<XhbCourtSiteDao> xhbCourtSiteDao = xhbCourtSiteRepository.findById(courtSiteId);
+        Optional<XhbCourtSiteDao> xhbCourtSiteDao =
+            xhbCourtSiteRepository.findByIdSafe(courtSiteId);
         XhbCourtSiteDao xhbCourtSite = xhbCourtSiteDao.isPresent() ? xhbCourtSiteDao.get() : null;
-        List<XhbCourtRoomDao> xhbCourtRooms = xhbCourtRoomRepository.findByDisplayId(display.getDisplayId());
+        List<XhbCourtRoomDao> xhbCourtRooms =
+            xhbCourtRoomRepository.findByDisplayIdSafe(display.getDisplayId());
 
         // Construct the URI representing the Display.
         DisplayUri displayUri = getDisplayUri(display, court.getShortName(), xhbDisplayLocationDao, xhbCourtSite);
         int[] courtRoomIds = getCourtRoomIds(xhbCourtRooms, display);
 
         List<XhbRotationSetDdDao> xhbRotationSetDds =
-            xhbRotationSetDdRepository.findByRotationSetId(rotationSet.getRotationSetId());
+            xhbRotationSetDdRepository.findByRotationSetIdSafe(rotationSet.getRotationSetId());
         // Get the RotationSetDisplayDocument[] that will
         // represent the rotation set for the given display.
         RotationSetDisplayDocument[] rotationSetDDs = getDisplayRotationSetElements(court.getCourtId(),
             xhbDisplayDocumentRepository, xhbRotationSetDds, courtRoomIds);
-        Optional<XhbDisplayTypeDao> displayTypeDao = xhbDisplayTypeRepository.findById(display.getDisplayTypeId());
+        Optional<XhbDisplayTypeDao> displayTypeDao =
+            xhbDisplayTypeRepository.findByIdSafe(display.getDisplayTypeId());
         XhbDisplayTypeDao xhbDisplayType = displayTypeDao.isPresent() ? displayTypeDao.get() : null;
         String xhbDisplayTypeDesc = xhbDisplayType != null ? xhbDisplayType.getDescriptionCode() : null;
 
@@ -293,7 +298,7 @@ public class DisplayRotationSetDataHelper extends CsUnrecoverableException {
         // Step over the RotationSetDisplayDocuments.
         for (XhbRotationSetDdDao rotationSetDd : rotationSetDdArray) {
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
-                xhbDisplayDocumentRepository.findById(rotationSetDd.getDisplayDocumentId());
+                xhbDisplayDocumentRepository.findByIdSafe(rotationSetDd.getDisplayDocumentId());
             if (xhbDisplayDocument.isPresent()) {
                 // Add the one or many RotationSetDisplayDocuments
                 result.addAll(getRotationSetDdsForDisplayDocument(courtId, rotationSetDd.getPageDelay(),

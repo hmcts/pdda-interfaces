@@ -169,14 +169,14 @@ class FormattingServicesNextDocumentTest {
         xmlDocumentList.add(xhbXmlDocumentDao);
         if (NEWDOCUMENT.contentEquals(formatStatus)) {
             expectConfigProp(FORMATTING_LIST_DELAY, "3");
-            Mockito.when(mockXhbXmlDocumentRepository.findListByClobId(Mockito.isA(Long.class),
+            Mockito.when(mockXhbXmlDocumentRepository.findListByClobIdSafe(Mockito.isA(Long.class),
                 Mockito.isA(LocalDateTime.class))).thenReturn(xmlDocumentList);
         } else if (FORMATERROR.contentEquals(formatStatus)) {
             List<XhbFormattingDao> emptyList = new ArrayList<>();
-            Mockito.when(mockXhbFormattingRepository.findByFormatStatus(NEWDOCUMENT))
+            Mockito.when(mockXhbFormattingRepository.findByFormatStatusSafe(NEWDOCUMENT))
                 .thenReturn(emptyList);
         }
-        Mockito.when(mockXhbFormattingRepository.findByFormatStatus(formatStatus))
+        Mockito.when(mockXhbFormattingRepository.findByFormatStatusSafe(formatStatus))
             .thenReturn(formattingDaoList);
         Mockito.when(mockXhbBlobRepository.update(Mockito.isA(XhbBlobDao.class)))
             .thenReturn(Optional.of(DummyFormattingUtil.getXhbBlobDao(new byte[0])));
@@ -192,7 +192,7 @@ class FormattingServicesNextDocumentTest {
     private void expectConfigProp(String propertyName, String propertyValue) {
         List<XhbConfigPropDao> daoList = new ArrayList<>();
         daoList.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, propertyValue));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(propertyName))
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(propertyName))
             .thenReturn(daoList);
     }
 }

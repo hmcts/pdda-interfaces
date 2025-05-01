@@ -103,6 +103,7 @@ public class XhbCourtLogEventDescDao extends AbstractDao implements Serializable
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getEventDescId();
     }

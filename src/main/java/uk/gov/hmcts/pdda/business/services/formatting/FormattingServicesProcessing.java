@@ -68,7 +68,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             formattingValue.getFormattingId());
 
         XhbCppFormattingDao val = getXhbCppFormattingRepository()
-            .findLatestByCourtDateInDoc(formattingValue.getCourtId(), IWP, LocalDateTime.now());
+            .findLatestByCourtDateInDocSafe(formattingValue.getCourtId(), IWP, LocalDateTime.now());
         try {
             Document cppDocument = getCppDocument(val);
             List<Node> cppNodes = CourtUtils.getCourtSites(cppDocument);
@@ -201,6 +201,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         }
     }
 
+    @SuppressWarnings("PMD.CyclomaticComplexity")
     protected void processListDocument(final FormattingValue formattingValue,
         final String translationXml)
         throws SAXException, IOException, ParserConfigurationException, TransformerException {
@@ -208,7 +209,11 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
             formattingValue.getFormattingId());
         try {
             XhbCppListDao cppList =
-                getXhbCppListRepository().findByClobId(formattingValue.getXmlDocumentClobId());
+                getXhbCppListRepository().findByClobIdSafe(formattingValue.getXmlDocumentClobId());
+            if (cppList == null) {
+                throw new FormattingException(
+                    "No cppList found for clobId " + formattingValue.getXmlDocumentClobId());
+            }
 
             // Set In progress (if it isn't already at IP - ie a crash)
             if (!IP.equals(cppList.getStatus())) {
@@ -230,7 +235,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
 
             // Set the status as successful
             Optional<XhbCppListDao> optCppList =
-                getXhbCppListRepository().findById(cppList.getCppListId());
+                getXhbCppListRepository().findByIdSafe(cppList.getCppListId());
             if (optCppList.isEmpty()) {
                 LOG.error("Failed to save cppList - Status MS");
                 throw new FormattingException(TRANSFORMATION_ERROR);

@@ -89,7 +89,9 @@ class CppInitialProcessingControllerBeanTest
                 BATCH_USERNAME)).andReturn(true);
             EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
                 .andReturn(mockXhbCppStagingInboundRepository);
-            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCppStagingInboundRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
@@ -103,7 +105,8 @@ class CppInitialProcessingControllerBeanTest
 
             mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
             EasyMock
-                .expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+                .expect(
+                    mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
                 .andReturn(xhbCourtDaoList);
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
 
@@ -185,7 +188,9 @@ class CppInitialProcessingControllerBeanTest
                 BATCH_USERNAME)).andReturn(true);
             EasyMock.expect(mockCppStagingInboundControllerBean.getXhbCppStagingInboundRepository())
                 .andReturn(mockXhbCppStagingInboundRepository);
-            EasyMock.expect(mockXhbCppStagingInboundRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCppStagingInboundRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(unprocessedXcsi));
             EasyMock.expect(
                 mockCppStagingInboundControllerBean.getClobXmlAsString(unprocessedXcsi.getClobId()))
@@ -195,7 +200,7 @@ class CppInitialProcessingControllerBeanTest
                     .getCourtId(Integer.valueOf(unprocessedXcsi.getCourtCode())))
                 .andReturn(courtId);
 
-            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(
+            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDocSafe(
                 EasyMock.isA(Integer.class), EasyMock.isA(String.class),
                 EasyMock.isA(LocalDateTime.class))).andReturn(null);
             mockXhbCppFormattingRepository.save(EasyMock.isA(XhbCppFormattingDao.class));
@@ -217,7 +222,7 @@ class CppInitialProcessingControllerBeanTest
             EasyMock.expect(mockCppStagingInboundControllerBean
                 .getCourtId(Integer.valueOf(validatedXcsi.getCourtCode()))).andReturn(courtId);
 
-            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(
+            EasyMock.expect(mockXhbCppFormattingRepository.findLatestByCourtDateInDocSafe(
                 EasyMock.isA(Integer.class), EasyMock.isA(String.class),
                 EasyMock.isA(LocalDateTime.class))).andReturn(xcf);
             EasyMock.expect(mockXhbCppFormattingRepository.update(xcf)).andReturn(null);
@@ -445,7 +450,8 @@ class CppInitialProcessingControllerBeanTest
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
         mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);

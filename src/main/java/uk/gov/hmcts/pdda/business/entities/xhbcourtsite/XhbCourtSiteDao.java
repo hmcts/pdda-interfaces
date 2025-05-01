@@ -105,6 +105,7 @@ public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializabl
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCourtSiteId();
     }

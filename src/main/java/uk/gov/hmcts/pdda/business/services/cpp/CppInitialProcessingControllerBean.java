@@ -162,7 +162,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
                 // Fetch the document with the new validation status and version from the DB
                 Optional<XhbCppStagingInboundDao> validatedXcsi = getCppStagingInboundControllerBean()
-                    .getXhbCppStagingInboundRepository().findById(updatedXcsi.getCppStagingInboundId());
+                    .getXhbCppStagingInboundRepository()
+                    .findByIdSafe(updatedXcsi.getCppStagingInboundId());
                 
                 // Now attempt to process the validated document - i.e. examine XML and insert
                 // into downstream database tables
@@ -408,7 +409,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 LOG.debug("{} - Doc type found = {}, going to create or update", methodName,
                     documentType);
                 XhbCppFormattingDao docToUpdate =
-                    getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
+                    getXhbCppFormattingRepository().findLatestByCourtDateInDocSafe(courtId,
                         documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
 
                 LOG.debug("{} - Formatting doc to update query has been run, docToUpdate={}",
@@ -518,7 +519,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
                 // Create the xhbFormatting record
                 List<XhbCourtDao> xhbCourtDaoList =
-                    getXhbCourtRepository().findByCrestCourtIdValue(thisDoc.getCourtCode());
+                    getXhbCourtRepository().findByCrestCourtIdValueSafe(thisDoc.getCourtCode());
                 Integer courtId = xhbCourtDaoList.get(0).getCourtId();
                 XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
                     thisDoc.getTimeLoaded(), documentType, "en");

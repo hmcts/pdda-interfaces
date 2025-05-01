@@ -139,7 +139,8 @@ class CreationHelperTest {
 
         XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
         Optional<XhbDefendantOnCaseDao> result =
-            classUnderTest.createDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+            classUnderTest.createDefendantOnCase(dao.getCaseId(), dao.getDefendantId(),
+                dao.getIsMasked());
         assertNotNull(result, NOTNULL);
     }
 
@@ -151,7 +152,8 @@ class CreationHelperTest {
         XhbDefendantDao dao = DummyDefendantUtil.getXhbDefendantDao();
         Optional<XhbDefendantDao> result =
             classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
-                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth(),
+                dao.getPublicDisplayHide());
         assertNotNull(result, NOTNULL);
     }
 

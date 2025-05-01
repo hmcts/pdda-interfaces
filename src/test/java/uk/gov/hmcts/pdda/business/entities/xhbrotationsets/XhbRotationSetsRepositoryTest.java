@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrotationsets;
 
-
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,10 +40,27 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
 
     @Override
     protected XhbRotationSetsRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbRotationSetsRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbRotationSetsRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbRotationSetsDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbRotationSetsDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -65,11 +84,11 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbRotationSetsDao> result =
             getClassUnderTest().findByCourtId(getDummyDao().getRotationSetId());
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -82,7 +101,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         // Run with no updates
         newDao.setData(originalDao);
         // Assert
-        assertNotNull(newDao, NOTNULL);
+        assertNotNull(newDao, NOTNULLRESULT);
     }
 
     @Test
@@ -93,7 +112,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         // Check
         newDao.setData(originalDao);
         // Assert
-        assertNotNull(newDao, NOTNULL);
+        assertNotNull(newDao, NOTNULLRESULT);
     }
 
     @Test
@@ -104,7 +123,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         // Check
         newDao.setData(originalDao);
         // Assert
-        assertNotNull(newDao, NOTNULL);
+        assertNotNull(newDao, NOTNULLRESULT);
     }
 
     @Test
@@ -115,7 +134,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         // Check
         newDao.setData(originalDao);
         // Assert
-        assertNotNull(newDao, NOTNULL);
+        assertNotNull(newDao, NOTNULLRESULT);
     }
 
     private XhbRotationSetsDao testSetData(XhbRotationSetsDao dao, boolean setToNull) {
@@ -161,7 +180,7 @@ class XhbRotationSetsRepositoryTest extends AbstractRepositoryTest<XhbRotationSe
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         rotationSetsId = result.getPrimaryKey();
-        assertNotNull(rotationSetsId, NOTNULL);
+        assertNotNull(rotationSetsId, NOTNULLRESULT);
 
         return new XhbRotationSetsDao(result);
     }

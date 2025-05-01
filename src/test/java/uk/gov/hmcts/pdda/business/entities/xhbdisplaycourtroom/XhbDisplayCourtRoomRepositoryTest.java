@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplaycourtroom;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -36,10 +39,27 @@ class XhbDisplayCourtRoomRepositoryTest extends AbstractRepositoryTest<XhbDispla
 
     @Override
     protected XhbDisplayCourtRoomRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDisplayCourtRoomRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDisplayCourtRoomRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDisplayCourtRoomDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDisplayCourtRoomDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test

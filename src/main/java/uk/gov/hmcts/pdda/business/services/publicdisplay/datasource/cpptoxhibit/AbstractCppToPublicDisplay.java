@@ -112,7 +112,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     protected boolean isCourtCppEnabled(final EntityManager entityManager) {
         boolean isCppSite = false;
 
-        Optional<XhbCourtDao> xhbCourt = getXhbCourtRepository(entityManager).findById(courtId);
+        Optional<XhbCourtDao> xhbCourt = getXhbCourtRepository(entityManager).findByIdSafe(courtId);
         if (xhbCourt.isPresent() && YES.equals(xhbCourt.get().getCppCourt())) {
             isCppSite = true;
 
@@ -257,7 +257,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
                 getCppFormattingHelper().getLatestPublicDisplayDocument(courtId, entityManager);
             if (null != cppFormattBV && null != cppFormattBV.getXmlDocumentClobId()) {
                 xhbClobDao = getXhbClobRepository(entityManager)
-                    .findById(cppFormattBV.getXmlDocumentClobId());
+                    .findByIdSafe(cppFormattBV.getXmlDocumentClobId());
             }
         }
         if (xhbClobDao.isPresent()) {

@@ -58,7 +58,7 @@ public class CppListControllerBean implements Serializable {
         LOG.debug(methodName + ENTERED);
         XhbCppListDao xcl = null;
         List<XhbCppListDao> lists = getXhbListRepository()
-            .findByCourtCodeAndListTypeAndListDate(courtId, listType, listStartDate);
+            .findByCourtCodeAndListTypeAndListDateSafe(courtId, listType, listStartDate);
         if (lists != null && !lists.isEmpty()) {
             xcl = lists.get(0);
         }
@@ -96,7 +96,7 @@ public class CppListControllerBean implements Serializable {
         LOG.debug(methodName + ENTERED);
         XhbCppListDao xcl = null;
         List<XhbCppListDao> lists =
-            getXhbListRepository().findByCourtCodeAndListTypeAndListStartDateAndListEndDate(
+            getXhbListRepository().findByCourtCodeAndListTypeAndListStartDateAndListEndDateSafe(
                 courtCode, listType, listStartDate, listEndDate);
         if (lists != null && !lists.isEmpty()) {
             xcl = lists.get(0);

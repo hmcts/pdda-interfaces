@@ -29,6 +29,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+logs/**
 
 # External tool builders
 .externalToolBuilders/
@@ -62,3 +63,7 @@ README.html
 *.iml
 .idea
 .exercism
+github_personal_access_token.txt
+
+### Test files not to be checked in
+scripts/test/generateTestBaisDocs/*.xml

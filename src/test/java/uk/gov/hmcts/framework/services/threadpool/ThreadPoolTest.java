@@ -1,77 +1,68 @@
 package uk.gov.hmcts.framework.services.threadpool;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD.LambdaCanBeMethodReference")
 class ThreadPoolTest {
 
-    private static final Integer NO_OF_WORKERS = 1;
+    /** Logger. */
+    private static Logger log = LoggerFactory.getLogger(ThreadPoolTest.class);
 
-    @Mock
-    private Runnable mockRunnable;
+    private static final int NO_OF_WORKERS = 2;
+    private static final long TIMEOUT_MS = 2000L;
 
-    @InjectMocks
-    private final ThreadPool classUnderTest = new ThreadPool(NO_OF_WORKERS);
+    private ThreadPool classUnderTest;
 
     @BeforeEach
-    public void setUp() {
-        // Do nothing
+    void setUp() {
+        classUnderTest = new ThreadPool(NO_OF_WORKERS, TIMEOUT_MS);
     }
 
     @AfterEach
-    public void tearDown() {
-        // Do nothing
+    void tearDown() {
+        if (classUnderTest != null) {
+            classUnderTest.shutdown();
+        }
     }
 
     @Test
     void testScheduleWorkSuccess() {
-        boolean result = false;
-        try {
-            classUnderTest.scheduleWork(mockRunnable);
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        assertTrue(result, "Result is not True");
+        assertDoesNotThrow(() -> classUnderTest.scheduleWork(() -> {
+            // Simulate simple work
+            log.debug("Running mock task...");
+        }));
     }
 
     @Test
-    void testThreadPoolInactiveException() {
-        Assertions.assertThrows(ThreadPoolInactiveException.class, () -> {
-            classUnderTest.shutdown();
-            classUnderTest.scheduleWork(mockRunnable);
+    void testScheduleWorkAfterShutdownThrowsException() {
+        classUnderTest.shutdown();
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            classUnderTest.scheduleWork(() -> log.debug("This should fail"));
         });
+        assertEquals("ThreadPool is shut down", exception.getMessage(), "All good");
     }
 
     @Test
-    void testWorkerUnavailableException() {
-        Assertions.assertThrows(WorkerUnavailableException.class, () -> {
-            throw new WorkerUnavailableException(new InterruptedException());
-        });
+    void testShutdownGracefully() {
+        assertDoesNotThrow(() -> classUnderTest.shutdown());
+        // After shutdown, submitting work should throw
+        assertThrows(IllegalStateException.class, () -> classUnderTest.scheduleWork(() -> {
+        }));
     }
 
     @Test
-    void testShutdown() {
-        boolean result = false;
-        try {
-            classUnderTest.shutdown();
-            result = true;
-        } catch (Exception exception) {
-            fail(exception);
-        }
-        assertTrue(result, "Result is not True");
+    void testGetNumFreeWorkersBeforeAndAfterShutdown() {
+        assertEquals(NO_OF_WORKERS, classUnderTest.getNumFreeWorkers(),
+            "Should report full pool size before shutdown");
+        classUnderTest.shutdown();
+        assertEquals(0, classUnderTest.getNumFreeWorkers(), "Should report 0 after shutdown");
     }
 }

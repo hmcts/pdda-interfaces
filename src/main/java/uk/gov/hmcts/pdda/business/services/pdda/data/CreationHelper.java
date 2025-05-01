@@ -150,11 +150,12 @@ public class CreationHelper implements Serializable {
      * Create XhbDefendantOnCaseDao.
      */
     public Optional<XhbDefendantOnCaseDao> createDefendantOnCase(final Integer caseId,
-        final Integer defendantId) {
+        final Integer defendantId, final String isMasked) {
         LOG.info("createDefendantOnCase()");
         XhbDefendantOnCaseDao dao = new XhbDefendantOnCaseDao();
         dao.setCaseId(caseId);
         dao.setDefendantId(defendantId);
+        dao.setIsMasked(NO);
         return getRepositoryHelper().getXhbDefendantOnCaseRepository().update(dao);
     }
 
@@ -163,7 +164,7 @@ public class CreationHelper implements Serializable {
      */
     public Optional<XhbDefendantDao> createDefendant(final Integer courtId, final String firstName,
         final String middleName, final String surname, final Integer gender,
-        final LocalDateTime dateOfBirth) {
+        final LocalDateTime dateOfBirth, final String publicDisplayHide) {
         LOG.info("createDefendant({},{},{})", firstName, middleName, surname);
         XhbDefendantDao dao = new XhbDefendantDao();
         dao.setFirstName(firstName);
@@ -172,6 +173,7 @@ public class CreationHelper implements Serializable {
         dao.setCourtId(courtId);
         dao.setGender(gender);
         dao.setDateOfBirth(dateOfBirth);
+        dao.setPublicDisplayHide(publicDisplayHide);
         return getRepositoryHelper().getXhbDefendantRepository().update(dao);
     }
 

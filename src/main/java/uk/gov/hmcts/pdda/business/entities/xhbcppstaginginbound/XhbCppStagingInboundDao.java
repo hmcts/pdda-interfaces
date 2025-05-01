@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Version;
 import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 
 import java.time.LocalDateTime;
@@ -109,6 +110,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
     @Column(name = "CREATED_BY")
     private String createdBy;
 
+    @Version
     @Column(name = "VERSION")
     private Integer version;
 
@@ -143,6 +145,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         setVersion(version);
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppStagingInboundId();
     }
@@ -270,6 +273,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return version;
     }
 
+    @Version
     @Override
     public void setVersion(Integer version) {
         this.version = version;

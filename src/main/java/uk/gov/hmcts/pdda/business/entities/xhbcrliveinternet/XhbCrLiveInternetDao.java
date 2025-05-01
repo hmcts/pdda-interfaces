@@ -65,10 +65,10 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCrLiveInternetId();
     }
-
 
     public Integer getCrLiveInternetId() {
         return crLiveInternetId;

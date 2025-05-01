@@ -38,7 +38,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     protected Optional<XhbFormattingDao> getXhbFormattingDao(FormattingValue formattingValue) {
         LOG.debug("getXhbFormattingDao({})", formattingValue);
-        Optional<XhbFormattingDao> bvCpp = getXhbFormattingRepository().findById(formattingValue.getFormattingId());
+        Optional<XhbFormattingDao> bvCpp =
+            getXhbFormattingRepository().findByIdSafe(formattingValue.getFormattingId());
         if (bvCpp.isPresent()) {
             Long blobId = createBlob(FormattingServiceUtils.getEmptyByteArray());
             XhbFormattingDao xhbFormatting = new XhbFormattingDao();
@@ -69,7 +70,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         final String courtSiteName) {
         Long clobId = null;
         List<XhbFormattingDao> list =
-            getXhbFormattingRepository().findByDocumentAndClob(courtId, documentType, language, courtSiteName);
+            getXhbFormattingRepository().findByDocumentAndClobSafe(courtId, documentType, language,
+                courtSiteName);
         if (!list.isEmpty()) {
             clobId = list.get(0).getXmlDocumentClobId();
         }
@@ -78,7 +80,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
     }
 
     public Optional<XhbClobDao> getClob(final Long clobId) {
-        return getXhbClobRepository().findById(clobId);
+        return getXhbClobRepository().findByIdSafe(clobId);
     }
 
     protected String getClobData(Long clobId) {
@@ -103,7 +105,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
         // Update the XhbFormatting record with the Clob Id
         Optional<XhbFormattingDao> formattingDao =
-            getXhbFormattingRepository().findById(formattingMergeVal.getFormattingId());
+            getXhbFormattingRepository().findByIdSafe(formattingMergeVal.getFormattingId());
         if (formattingDao.isPresent()) {
             XhbFormattingDao formatting = formattingDao.get();
             formatting.setXmlDocumentClobId(clobId);
@@ -128,7 +130,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      */
     public void updateCppFormatting(Integer cppFormattingId, String formatStatus, String errorMessage) {
         LOG.debug("updateCppFormatting({},{},{})", cppFormattingId, formatStatus, errorMessage);
-        Optional<XhbCppFormattingDao> cppFormattingDao = getXhbCppFormattingRepository().findById(cppFormattingId);
+        Optional<XhbCppFormattingDao> cppFormattingDao =
+            getXhbCppFormattingRepository().findByIdSafe(cppFormattingId);
         if (cppFormattingDao.isPresent()) {
             XhbCppFormattingDao cppFormatting = cppFormattingDao.get();
             cppFormatting.setErrorMessage(errorMessage);
@@ -152,7 +155,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      * @param success Success
      */
     public void updateFormattingStatus(Integer formattingId, boolean success) {
-        Optional<XhbFormattingDao> formattingDao = getXhbFormattingRepository().findById(formattingId);
+        Optional<XhbFormattingDao> formattingDao =
+            getXhbFormattingRepository().findByIdSafe(formattingId);
         if (formattingDao.isPresent()) {
             XhbFormattingDao formatting = formattingDao.get();
 

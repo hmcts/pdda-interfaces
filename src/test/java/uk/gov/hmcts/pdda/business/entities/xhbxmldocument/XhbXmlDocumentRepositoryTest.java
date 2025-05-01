@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbxmldocument;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,10 +40,27 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
 
     @Override
     protected XhbXmlDocumentRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbXmlDocumentRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbXmlDocumentRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbXmlDocumentDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbXmlDocumentDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -103,7 +123,7 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         xmlDocumentId = result.getPrimaryKey();
-        assertNotNull(xmlDocumentId, NOTNULL);
+        assertNotNull(xmlDocumentId, NOTNULLRESULT);
         return new XhbXmlDocumentDao(result);
     }
 

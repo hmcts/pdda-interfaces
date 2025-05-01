@@ -23,6 +23,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class DisplayStoreControllerBean extends AbstractControllerBean implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
@@ -43,6 +44,20 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         super();
     }
 
+    // JUnit tests constructor
+    public DisplayStoreControllerBean(EntityManager entityManager,
+        XhbDisplayStoreRepository repository) {
+        super(entityManager);
+        this.xhbDisplayStoreRepository = repository;
+    }
+
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayStoreRepository = null;
+    }
+
     /**
      * Indicates if a record exists in the database with the retrieval code supplied.
      * 
@@ -55,7 +70,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         boolean exists = false;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             exists = true;
         }
@@ -72,7 +87,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             getXhbDisplayStoreRepository().delete(xds);
         }
@@ -90,7 +105,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         long lastModified;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             lastModified = convertLocalDateTimeToDate(xds.get().getLastUpdateDate()).getTime();
         } else {
@@ -112,7 +127,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         String contents = null;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             contents = xds.get().getContent();
         }
@@ -131,15 +146,22 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode); // uses main EM
         if (xds.isPresent()) {
-            getXhbDisplayStoreRepository().update(xds.get());
+            XhbDisplayStoreDao entity = xds.get(); // managed and detached entity
+            entity.setLastUpdateDate(LocalDateTime.now());
+            entity.setLastUpdatedBy("PDDA");
+            entity.setContent(contents);
+            LOG.debug("Merging entity: displayStoreId={}, version={}", entity.getDisplayStoreId(),
+                entity.getVersion());
+            getXhbDisplayStoreRepository().save(entity); // Force update
         } else {
-            XhbDisplayStoreDao xhbDisplayStore = new XhbDisplayStoreDao();
-            xhbDisplayStore.setRetrievalCode(retrievalCode);
-            xhbDisplayStore.setContent(contents);
-            getXhbDisplayStoreRepository().save(xhbDisplayStore);
+            XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
+            newEntity.setRetrievalCode(retrievalCode);
+            newEntity.setContent(contents);
+            getXhbDisplayStoreRepository().save(newEntity);
         }
+
     }
 
     /**
@@ -161,7 +183,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
      * @return XhbDisplayStoreRepository
      */
     private XhbDisplayStoreRepository getXhbDisplayStoreRepository() {
-        if (xhbDisplayStoreRepository == null) {
+        if (xhbDisplayStoreRepository == null || !isEntityManagerActive()) {
             xhbDisplayStoreRepository = new XhbDisplayStoreRepository(getEntityManager());
         }
         return xhbDisplayStoreRepository;

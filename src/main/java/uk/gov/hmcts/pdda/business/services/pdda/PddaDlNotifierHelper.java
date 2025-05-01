@@ -35,6 +35,7 @@ import java.util.Optional;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings("PMD.NullAssignment")
 public class PddaDlNotifierHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(PddaDlNotifierHelper.class);
 
@@ -45,8 +46,8 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
     private static final DateTimeFormatter EXECUTIONTIMEFORMAT =
         DateTimeFormatter.ofPattern(STR_DATEFORMAT + "HH:mm");
 
-    private XhbPddaDlNotifierRepository pddaDlNotifierRepository;
-    private XhbCourtRepository courtRepository;
+    protected XhbPddaDlNotifierRepository pddaDlNotifierRepository;
+    protected XhbCourtRepository courtRepository;
 
     public PddaDlNotifierHelper(EntityManager entityManager) {
         super(entityManager, InitializationService.getInstance().getEnvironment());
@@ -58,6 +59,14 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
         super(entityManager, xhbConfigPropRepository, environment);
     }
     
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        pddaDlNotifierRepository = null;
+        courtRepository = null;
+    }
+
+
     public boolean isDailyNotifierRequired() {
         return isTimeToExecute() && isSendToPddaOnly();
     }
@@ -90,7 +99,7 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
 
     public void runDailyListNotifier() {
         // Loop through all the active courts
-        List<XhbCourtDao> allCourts = getCourtRepository().findAll();
+        List<XhbCourtDao> allCourts = getCourtRepository().findAllSafe();
         if (allCourts != null) {
             for (XhbCourtDao court : allCourts) {
                 if (!YES.equals(court.getObsInd())) {
@@ -146,7 +155,7 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
         LocalDateTime lastRunDate) {
         XhbPddaDlNotifierDao dao;
         List<XhbPddaDlNotifierDao> daoList =
-            getPddaDlNotifierRepository().findByCourtAndLastRunDate(courtId, lastRunDate);
+            getPddaDlNotifierRepository().findByCourtAndLastRunDateSafe(courtId, lastRunDate);
         if (daoList.isEmpty()) {
             dao = new XhbPddaDlNotifierDao();
             dao.setCourtId(courtId);
@@ -158,16 +167,16 @@ public class PddaDlNotifierHelper extends PddaConfigHelper {
     }
 
 
-    private XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
-        if (pddaDlNotifierRepository == null) {
-            pddaDlNotifierRepository = new XhbPddaDlNotifierRepository(entityManager);
+    protected XhbPddaDlNotifierRepository getPddaDlNotifierRepository() {
+        if (pddaDlNotifierRepository == null || !isEntityManagerActive()) {
+            pddaDlNotifierRepository = new XhbPddaDlNotifierRepository(getEntityManager());
         }
         return pddaDlNotifierRepository;
     }
 
-    private XhbCourtRepository getCourtRepository() {
-        if (courtRepository == null) {
-            courtRepository = new XhbCourtRepository(entityManager);
+    protected XhbCourtRepository getCourtRepository() {
+        if (courtRepository == null || !isEntityManagerActive()) {
+            courtRepository = new XhbCourtRepository(getEntityManager());
         }
         return courtRepository;
     }

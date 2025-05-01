@@ -66,6 +66,7 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCrLiveDisplayId();
     }

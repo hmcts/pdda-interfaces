@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
@@ -47,6 +48,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 class VipDisplayDocumentQueryTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     protected EntityManager mockEntityManager;
@@ -72,6 +75,13 @@ class VipDisplayDocumentQueryTest {
     public static void setUp() {
         // Do nothing
     }
+
+    @BeforeEach
+    void setupEntityManagerExpectations() {
+        EasyMock.expect(mockEntityManager.isOpen()).andStubReturn(true);
+        EasyMock.replay(mockEntityManager);
+    }
+
 
     @AfterAll
     public static void tearDown() {
@@ -149,24 +159,31 @@ class VipDisplayDocumentQueryTest {
 
         // Expects
         boolean abortExpects;
-        EasyMock.expect(mockXhbDisplayLocationRepository.findByVipCourtSite(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbDisplayLocationRepository
+                .findByVipCourtSiteSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbDisplayLocationDaoList);
         replayArray.add(mockXhbDisplayLocationRepository);
         abortExpects = xhbDisplayLocationDaoList.isEmpty();
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayRepository.findByDisplayLocationId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayRepository
+                    .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayDaoList);
             replayArray.add(mockXhbDisplayRepository);
             abortExpects = xhbDisplayDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbRotationSetDdRepository.findByRotationSetId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbRotationSetDdRepository
+                    .findByRotationSetIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbRotationSetDdDaoList);
             replayArray.add(mockXhbRotationSetDdRepository);
             abortExpects = xhbRotationSetDdDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayDocumentRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayDocumentRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayDocumentDao);
             replayArray.add(mockXhbDisplayDocumentRepository);
         }
@@ -184,5 +201,44 @@ class VipDisplayDocumentQueryTest {
             EasyMock.verify(repository);
         }
         return true;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbDisplayDocumentRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayDocumentQuery.class.getDeclaredField("xhbRotationSetDdRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 }

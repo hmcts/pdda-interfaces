@@ -78,6 +78,7 @@ public class XhbConfiguredPublicNoticeDao extends AbstractVersionedDao implement
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getConfiguredPublicNoticeId();
     }

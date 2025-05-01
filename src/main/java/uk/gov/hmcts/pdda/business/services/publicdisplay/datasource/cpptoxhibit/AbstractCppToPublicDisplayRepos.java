@@ -116,7 +116,7 @@ public class AbstractCppToPublicDisplayRepos {
         XhbCourtRoomDao[] courtRoomArray = new XhbCourtRoomDao[0];
         List<XhbCourtSiteDao> courtSitesList = new ArrayList<>();
         List<XhbCourtSiteDao> allCourtSitesForCourt =
-            getXhbCourtSiteRepository(entityManager).findByCourtId(court.getCourtId());
+            getXhbCourtSiteRepository(entityManager).findByCourtIdSafe(court.getCourtId());
         for (XhbCourtSiteDao courtSite : allCourtSitesForCourt) {
             if (YES.equals(courtSite.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtSite");
@@ -140,7 +140,8 @@ public class AbstractCppToPublicDisplayRepos {
         XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
         List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
         List<XhbCourtRoomDao> allCourtRooms =
-            getXhbCourtRoomRepository(entityManager).findByCourtSiteId(courtSite.getCourtSiteId());
+            getXhbCourtRoomRepository(entityManager)
+                .findByCourtSiteIdSafe(courtSite.getCourtSiteId());
         for (XhbCourtRoomDao courtRoom : allCourtRooms) {
             if (YES.equals(courtRoom.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtRoom");

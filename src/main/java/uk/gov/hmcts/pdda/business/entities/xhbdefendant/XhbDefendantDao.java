@@ -70,6 +70,7 @@ public class XhbDefendantDao extends AbstractVersionedDao implements Serializabl
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDefendantId();
     }

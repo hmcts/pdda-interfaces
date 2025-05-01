@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplaystore;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,10 +41,27 @@ class XhbDisplayStoreRepositoryTest extends AbstractRepositoryTest<XhbDisplaySto
 
     @Override
     protected XhbDisplayStoreRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDisplayStoreRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDisplayStoreRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDisplayStoreDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDisplayStoreDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -87,7 +107,7 @@ class XhbDisplayStoreRepositoryTest extends AbstractRepositoryTest<XhbDisplaySto
         XhbDisplayStoreDao result = new XhbDisplayStoreDao(displayStoreId, retrievalCode, content, lastUpdateDate,
             creationDate, lastUpdatedBy, createdBy, version, obsInd);
         displayStoreId = result.getPrimaryKey();
-        assertNotNull(displayStoreId, NOTNULL);
+        assertNotNull(displayStoreId, NOTNULLRESULT);
         return new XhbDisplayStoreDao(result);
     }
 

@@ -50,6 +50,7 @@ public class XhbConfigPropDao extends AbstractDao implements Serializable {
         setPropertyValue(otherData.getPropertyValue());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getConfigPropId();
     }

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppformatting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -41,10 +44,27 @@ class XhbCppFormattingRepositoryTest extends AbstractRepositoryTest<XhbCppFormat
 
     @Override
     protected XhbCppFormattingRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCppFormattingRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCppFormattingRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCppFormattingDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCppFormattingDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -78,8 +98,8 @@ class XhbCppFormattingRepositoryTest extends AbstractRepositoryTest<XhbCppFormat
         XhbCppFormattingDao result = getClassUnderTest().findLatestByCourtDateInDoc(getDummyDao().getCourtId(),
             getDummyDao().getDocumentType(), getDummyDao().getDateIn());
         if (dao != null) {
-            assertNotNull(result, NOTNULL);
-            assertSame(dao, result, SAME);
+            assertNotNull(result, NOTNULLRESULT);
+            assertSame(dao, result, NOTSAMERESULT);
         } else {
             assertNull(result, "Result is not Null");
         }
@@ -120,11 +140,11 @@ class XhbCppFormattingRepositoryTest extends AbstractRepositoryTest<XhbCppFormat
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             List<XhbCppFormattingDao> resultList = getClassUnderTest()
                 .findAllNewByDocType(getDummyDao().getDocumentType(), getDummyDao().getCreationDate());
-            assertNotNull(resultList, NOTNULL);
+            assertNotNull(resultList, NOTNULLRESULT);
             if (dao != null) {
-                assertSame(dao, resultList.get(0), SAME);
+                assertSame(dao, resultList.get(0), NOTSAMERESULT);
             } else {
-                assertSame(0, resultList.size(), SAME);
+                assertSame(0, resultList.size(), NOTSAMERESULT);
             }
         } else if (LATESTDOCBYCOURTID.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
@@ -132,10 +152,10 @@ class XhbCppFormattingRepositoryTest extends AbstractRepositoryTest<XhbCppFormat
             XhbCppFormattingDao result = getClassUnderTest().getLatestDocumentByCourtIdAndType(
                 getDummyDao().getCourtId(), getDummyDao().getDocumentType(), getDummyDao().getCreationDate());
             if (dao != null) {
-                assertNotNull(result, NOTNULL);
-                assertSame(dao, result, SAME);
+                assertNotNull(result, NOTNULLRESULT);
+                assertSame(dao, result, NOTSAMERESULT);
             } else {
-                assertNull(result, "Result is not Null");
+                assertNull(result, NOTNULLRESULT);
             }
         }
         return true;

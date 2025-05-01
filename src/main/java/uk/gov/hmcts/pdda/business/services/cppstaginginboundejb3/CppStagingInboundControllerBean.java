@@ -327,7 +327,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
             // Do a check to make sure the court is a cpp court if not we want to fail
             List<XhbCourtDao> courts = getXhbCourtRepository()
-                .findByCrestCourtIdValue(cppStagingInboundDao.getCourtCode());
+                .findByCrestCourtIdValueSafe(cppStagingInboundDao.getCourtCode());
             if (CourtUtils.isCppCourt(courts)) {
                 if (CppDocumentTypes.WP == CppDocumentTypes
                     .fromString(cppStagingInboundDao.getDocumentType())
@@ -365,7 +365,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         String methodName = "getClobXmlAsString(" + clobId.longValue() + METHOD_NAME_SUFFIX;
         LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
-        Optional<XhbClobDao> clobObj = getXhbClobRepository().findById(clobId);
+        Optional<XhbClobDao> clobObj = getXhbClobRepository().findByIdSafe(clobId);
         if (clobObj.isPresent()) {
             return clobObj.get().getClobData();
         } else {

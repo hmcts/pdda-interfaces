@@ -97,23 +97,24 @@ public class DataHelper extends FinderHelper {
     }
 
     public Optional<XhbDefendantOnCaseDao> validateDefendantOnCase(final Integer caseId,
-        final Integer defendantId) {
+        final Integer defendantId, final String isMasked) {
         LOG.debug("validateDefendantOnCase()");
         Optional<XhbDefendantOnCaseDao> result = findDefendantOnCase(caseId, defendantId);
         if (result.isEmpty()) {
-            result = createDefendantOnCase(caseId, defendantId);
+            result = createDefendantOnCase(caseId, defendantId, isMasked);
         }
         return result;
     }
 
     public Optional<XhbDefendantDao> validateDefendant(final Integer courtId,
         final String firstName, final String middleName, final String surname, final Integer gender,
-        final LocalDateTime dateOfBirth) {
+        final LocalDateTime dateOfBirth, final String publicDisplayHide) {
         LOG.debug("validateDefendant()");
         Optional<XhbDefendantDao> result =
             findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         if (result.isEmpty()) {
-            result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
+            result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth,
+                publicDisplayHide);
         }
         return result;
     }

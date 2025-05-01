@@ -69,6 +69,7 @@ public class XhbDisplayStoreDao extends AbstractVersionedDao implements Serializ
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Long getPrimaryKey() {
         return getDisplayStoreId();
     }

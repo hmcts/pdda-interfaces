@@ -118,6 +118,12 @@ public class AbstractXhbCaseDao extends AbstractVersionedDao implements Serializ
         super();
     }
 
+    @Override
+    public Object getPrimaryKey() {
+        throw new UnsupportedOperationException(
+            "getPrimaryKey() must be implemented by XhbCaseDao");
+    }
+
     protected void setAdditionalData(XhbCaseDao otherData) {
         setIndictment(otherData);
         setDates(otherData);

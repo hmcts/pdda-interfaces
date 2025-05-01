@@ -150,16 +150,18 @@ class AllCourtStatusCppToPublicDisplayTest {
         room2.setCourtRoomName("Court Room " + ROOM_ARRAY[1]);
         courtRoomDaos.add(room2);
 
-        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, COURT_NAME)));
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtId(EasyMock.isA(Integer.class))).andReturn(courtSiteDaos);
-        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteId(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(courtSiteDaos);
+        EasyMock
+            .expect(mockXhbCourtRoomRepository.findByCourtSiteIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(courtRoomDaos);
         EasyMock.expectLastCall().anyTimes();
         EasyMock.expect(mockXhbCppFormattingRepository.getLatestDocumentByCourtIdAndType(EasyMock.isA(Integer.class),
             EasyMock.isA(String.class), EasyMock.isA(LocalDateTime.class))).andReturn(xcfList.get(0));
 
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(Optional.of(DummyFormattingUtil.getXhbClobDao(xcfList.get(0).getXmlDocumentClobId(), CPP_XML)));
 
         EasyMock.expect(mockCppFormattingHelper.getLatestPublicDisplayDocument(EasyMock.isA(Integer.class),

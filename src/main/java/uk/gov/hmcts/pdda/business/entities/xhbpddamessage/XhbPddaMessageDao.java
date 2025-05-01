@@ -100,6 +100,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getPddaMessageId();
     }

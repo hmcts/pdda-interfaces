@@ -111,6 +111,7 @@ public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getRefJudgeId();
     }

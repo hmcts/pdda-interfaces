@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 
 /**
@@ -23,7 +24,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
  * @author Mark Harris
  * @version 1.0
  */
-public class PddaConfigHelper {
+public class PddaConfigHelper extends AbstractControllerBean {
     private static final Logger LOG = LoggerFactory.getLogger(PddaConfigHelper.class);
 
     private static final String CONFIG_PDDA_SWITCHER = "PDDA_SWITCHER";
@@ -66,6 +67,7 @@ public class PddaConfigHelper {
     // Junit constructor
     protected PddaConfigHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
         Environment environment) {
+        super();
         this.entityManager = entityManager;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.environment = environment;

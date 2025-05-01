@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods"})
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -223,7 +223,8 @@ class CppStagingInboundControllerBeanTest {
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
         EasyMock
-            .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
+            .expect(
+                mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + documentType))
             .andReturn(returnList);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockEntityManager);
@@ -245,7 +246,7 @@ class CppStagingInboundControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
@@ -266,7 +267,7 @@ class CppStagingInboundControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
             .andReturn(data);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
@@ -295,12 +296,5 @@ class CppStagingInboundControllerBeanTest {
         // Run
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
-    }
-    
-    @Test
-    void testClearRepos() {
-        boolean result = true;
-        classUnderTest.clearRepositories();
-        assertTrue(result, TRUE);
     }
 }
