@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 
 @SuppressWarnings("PMD.NullAssignment")
@@ -25,6 +26,7 @@ public class AbstractControllerBean {
     private XhbCppFormattingRepository xhbCppFormattingRepository;
     private XhbCppListRepository xhbCppListRepository;
     private XhbFormattingRepository xhbFormattingRepository;
+    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
 
     // For unit tests.
     protected AbstractControllerBean(EntityManager entityManager,
@@ -46,6 +48,7 @@ public class AbstractControllerBean {
         xhbCourtRepository = null;
         xhbConfigPropRepository = null;
         xhbCppFormattingRepository = null;
+        xhbCppStagingInboundRepository = null;
     }
 
     protected AbstractControllerBean(EntityManager entityManager) {
@@ -125,6 +128,18 @@ public class AbstractControllerBean {
         return xhbFormattingRepository;
     }
     
+    /**
+     * Retrieves a reference to the xhbCppStagingInboundRepository.
+     * 
+     * @return XhbCppStagingInboundRepository
+     */
+    public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
+        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
+            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
+        }
+        return xhbCppStagingInboundRepository;
+    }
+
     protected boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
     }
