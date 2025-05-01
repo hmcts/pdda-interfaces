@@ -1,8 +1,8 @@
 SET client_encoding TO 'UTF8';
 
 /* Update XHB_CPP_STAGING_INBOUND trigger */
-/* Replace the trigger for pdda.trigger_fct_xhb_cppstaginginbound_bur_tr */
-DROP TRIGGER IF EXISTS pdda.trigger_fct_xhb_cppstaginginbound_bur_tr ON xhb_cpp_staging_inbound CASCADE;
+/* Replace the trigger for trigger_fct_xhb_cppstaginginbound_bur_tr */
+DROP TRIGGER IF EXISTS trigger_fct_xhb_cppstaginginbound_bur_tr ON xhb_cpp_staging_inbound CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_cppstaginginbound_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -86,8 +86,8 @@ CREATE TRIGGER trigger_fct_xhb_cppstaginginbound_bur_tr
 
 
 /* Update XHB_PDDA_MESSAGE trigger */
-/* Replace the trigger for pdda.trigger_fct_xhb_pdda_message_bur_tr */
-DROP TRIGGER IF EXISTS pdda.trigger_fct_xhb_pdda_message_bur_tr ON xhb_pdda_message CASCADE;
+/* Replace the trigger for trigger_fct_xhb_pdda_message_bur_tr */
+DROP TRIGGER IF EXISTS trigger_fct_xhb_pdda_message_bur_tr ON xhb_pdda_message CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_pdda_message_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -173,8 +173,8 @@ CREATE TRIGGER trigger_fct_xhb_pdda_message_bur_tr
 
 
 /* Update XHB_DISPLAY_STORE trigger */
-/* Replace the trigger for pdda.trigger_fct_xhb_display_store_bur_tr */
-DROP TRIGGER IF EXISTS pdda.trigger_fct_xhb_display_store_bur_tr ON xhb_display_store CASCADE;
+/* Replace the trigger for trigger_fct_xhb_display_store_bur_tr */
+DROP TRIGGER IF EXISTS trigger_fct_xhb_display_store_bur_tr ON xhb_display_store CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_display_store_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -251,8 +251,8 @@ CREATE TRIGGER trigger_fct_xhb_display_store_bur_tr
 
 
 /* Update XHB_CASE trigger */
-/* Replace the trigger for pdda.trigger_fct_xhb_case_bur_tr */
-DROP TRIGGER IF EXISTS pdda.trigger_fct_xhb_case_bur_tr ON xhb_case CASCADE;
+/* Replace the trigger for trigger_fct_xhb_case_bur_tr */
+DROP TRIGGER IF EXISTS trigger_fct_xhb_case_bur_tr ON xhb_case CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_case_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -516,8 +516,8 @@ CREATE TRIGGER trigger_fct_xhb_case_bur_tr
 
 
 /* Update XHB_CR_LIVE_DISPLAY trigger */
-/* Replace the trigger for pdda.trigger_fct_xhb_cr_live_display_bur_tr */
-DROP TRIGGER IF EXISTS pdda.trigger_fct_xhb_cr_live_display_bur_tr ON xhb_cr_live_display CASCADE;
+/* Replace the trigger for trigger_fct_xhb_cr_live_display_bur_tr */
+DROP TRIGGER IF EXISTS trigger_fct_xhb_cr_live_display_bur_tr ON xhb_cr_live_display CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_cr_live_display_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
