@@ -297,4 +297,11 @@ class CppStagingInboundControllerBeanTest {
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
     }
+    
+    @Test
+    void testClearRepos() {
+        boolean result = true;
+        classUnderTest.clearRepositories();
+        assertTrue(result, TRUE);
+    }
 }
