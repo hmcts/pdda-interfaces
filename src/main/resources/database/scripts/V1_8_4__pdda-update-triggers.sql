@@ -2,7 +2,7 @@ SET client_encoding TO 'UTF8';
 
 /* Update XHB_CPP_STAGING_INBOUND trigger */
 /* Replace the trigger for trigger_fct_xhb_cppstaginginbound_bur_tr */
-DROP TRIGGER IF EXISTS trigger_fct_xhb_cppstaginginbound_bur_tr ON xhb_cpp_staging_inbound CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_cppstaginginbound_bur_tr ON pdda.xhb_cpp_staging_inbound CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_cppstaginginbound_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -83,7 +83,7 @@ $$ LANGUAGE plpgsql;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_cppstaginginbound_bur_tr() FROM PUBLIC;
 
 CREATE TRIGGER trigger_fct_xhb_cppstaginginbound_bur_tr
-        BEFORE UPDATE OR DELETE ON xhb_cpp_staging_inbound FOR EACH ROW
+        BEFORE UPDATE OR DELETE ON pdda.xhb_cpp_staging_inbound FOR EACH ROW
         EXECUTE PROCEDURE trigger_fct_xhb_cppstaginginbound_bur_tr();
 
 /* End of XHB_CPP_STAGING_INBOUND trigger */
@@ -92,7 +92,7 @@ CREATE TRIGGER trigger_fct_xhb_cppstaginginbound_bur_tr
 
 /* Update XHB_PDDA_MESSAGE trigger */
 /* Replace the trigger for trigger_fct_xhb_pdda_message_bur_tr */
-DROP TRIGGER IF EXISTS trigger_fct_xhb_pdda_message_bur_tr ON xhb_pdda_message CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_pdda_message_bur_tr ON pdda.xhb_pdda_message CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_pdda_message_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -176,7 +176,7 @@ $$ LANGUAGE plpgsql;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_pdda_message_bur_tr() FROM PUBLIC;
 
 CREATE TRIGGER trigger_fct_xhb_pdda_message_bur_tr
-        BEFORE UPDATE OR DELETE ON xhb_pdda_message FOR EACH ROW
+        BEFORE UPDATE OR DELETE ON pdda.xhb_pdda_message FOR EACH ROW
         EXECUTE PROCEDURE trigger_fct_xhb_pdda_message_bur_tr();
 
 /* End of XHB_PDDA_MESSAGE trigger */
@@ -185,7 +185,7 @@ CREATE TRIGGER trigger_fct_xhb_pdda_message_bur_tr
 
 /* Update XHB_DISPLAY_STORE trigger */
 /* Replace the trigger for trigger_fct_xhb_display_store_bur_tr */
-DROP TRIGGER IF EXISTS trigger_fct_xhb_display_store_bur_tr ON xhb_display_store CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_display_store_bur_tr ON pdda.xhb_display_store CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_display_store_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -258,7 +258,7 @@ $$ LANGUAGE plpgsql;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_display_store_bur_tr() FROM PUBLIC;
 
 CREATE TRIGGER trigger_fct_xhb_display_store_bur_tr
-        BEFORE UPDATE OR DELETE ON xhb_display_store FOR EACH ROW
+        BEFORE UPDATE OR DELETE ON pdda.xhb_display_store FOR EACH ROW
         EXECUTE PROCEDURE trigger_fct_xhb_display_store_bur_tr();
 
 /* End of XHB_DISPLAY_STORE trigger */
@@ -268,7 +268,7 @@ CREATE TRIGGER trigger_fct_xhb_display_store_bur_tr
 
 /* Update XHB_CASE trigger */
 /* Replace the trigger for trigger_fct_xhb_case_bur_tr */
-DROP TRIGGER IF EXISTS trigger_fct_xhb_case_bur_tr ON xhb_case CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_case_bur_tr ON pdda.xhb_case CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_case_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -530,7 +530,7 @@ $$ LANGUAGE plpgsql;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_case_bur_tr() FROM PUBLIC;
 
 CREATE TRIGGER trigger_fct_xhb_case_bur_tr
-        BEFORE UPDATE OR DELETE ON xhb_case FOR EACH ROW
+        BEFORE UPDATE OR DELETE ON pdda.xhb_case FOR EACH ROW
         EXECUTE PROCEDURE trigger_fct_xhb_case_bur_tr();
 
 /* End of XHB_CASE trigger */
@@ -540,7 +540,7 @@ CREATE TRIGGER trigger_fct_xhb_case_bur_tr
 
 /* Update XHB_CR_LIVE_DISPLAY trigger */
 /* Replace the trigger for trigger_fct_xhb_cr_live_display_bur_tr */
-DROP TRIGGER IF EXISTS trigger_fct_xhb_cr_live_display_bur_tr ON xhb_cr_live_display CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_cr_live_display_bur_tr ON pdda.xhb_cr_live_display CASCADE;
 CREATE OR REPLACE FUNCTION pdda.trigger_fct_xhb_cr_live_display_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -625,7 +625,7 @@ $$ LANGUAGE plpgsql;
 -- REVOKE ALL ON FUNCTION trigger_fct_xhb_cr_live_display_bur_tr() FROM PUBLIC;
 
 CREATE TRIGGER trigger_fct_xhb_cr_live_display_bur_tr
-        BEFORE UPDATE OR DELETE ON xhb_cr_live_display FOR EACH ROW
+        BEFORE UPDATE OR DELETE ON pdda.xhb_cr_live_display FOR EACH ROW
         EXECUTE PROCEDURE trigger_fct_xhb_cr_live_display_bur_tr();
 
 /* End of XHB_CR_LIVE_DISPLAY trigger */
