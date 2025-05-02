@@ -105,6 +105,9 @@ class PdSetupControllerBeanTest {
         XhbCourtDao courtDao = DummyCourtUtil.getXhbCourtDao(courtId, "Test Court");
         List<XhbCourtSiteDao> courtSiteList = (ArrayList<XhbCourtSiteDao>) getDummyCourtSiteList();
 
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.of(courtDao));
         EasyMock
             .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
@@ -128,11 +131,8 @@ class PdSetupControllerBeanTest {
                     .andReturn(displaysList);
             }
         }
-        EasyMock.expect(mockXhbCourtRepository.getEntityManager())
-            .andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockXhbDisplayLocationRepository.getEntityManager())
-        .andReturn(mockEntityManager).anyTimes();
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+            .andReturn(mockEntityManager).anyTimes();
 
         replayMocks();
 
@@ -150,9 +150,11 @@ class PdSetupControllerBeanTest {
         Integer courtId = 94;
 
         Assertions.assertThrows(CourtNotFoundException.class, () -> {
-            EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
-            EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager);
+            
+            EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
             EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+            
+            EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
             EasyMock.replay(mockXhbCourtRepository);
             EasyMock.replay(mockEntityManager);
             // Run
@@ -167,9 +169,11 @@ class PdSetupControllerBeanTest {
         dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(1, "TestCourt1"));
         dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(3, "TestCourt3"));
         dummyCourtList.add(DummyCourtUtil.getXhbCourtDao(5, "TestCourt5"));
-        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
-        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager);
+        
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
         replayMocks();
 
         // Run
@@ -197,6 +201,7 @@ class PdSetupControllerBeanTest {
     private void verifyMocks() {
         EasyMock.verify(mockXhbCourtRepository);
         EasyMock.verify(mockXhbCourtSiteRepository);
+        EasyMock.verify(mockEntityManager);
     }
 
     private List<XhbCourtSiteDao> getDummyCourtSiteList() {

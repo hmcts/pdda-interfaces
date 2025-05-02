@@ -243,11 +243,12 @@ class FormattingControllerBeanTest {
         FormattingValue formattingValue = new FormattingValue(distributionTypeIn, mimeTypeIn,
             documentTypeIn, majorVersion, majorVersion, language, country, null,
             new ByteArrayOutputStream(1024), courtId, null);
-        byte[] result = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
+        final byte[] result = classUnderTest.formatDocument(formattingValue, listStartDate, xml);
 
         // Checks
         EasyMock.verify(mockFormattingServices);
         EasyMock.verify(mockXhbCppListRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(result, NOTNULL);
     }
 

@@ -153,6 +153,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(returnString, NOTNULL);
     }
 
@@ -170,6 +171,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         String returnString = classUnderTest.findConfigEntryByPropertyName(TESTING);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertNull(returnString, NULL);
     }
 
@@ -188,6 +190,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         String clobReturnData = classUnderTest.getClobXmlAsString(clobId);
         // Checks
         EasyMock.verify(mockXhbClobRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(clobReturnData, NOTNULL);
     }
 
@@ -204,6 +207,7 @@ class CppStagingInboundControllerBeanIsValidTest {
         String clobReturnData = classUnderTest.getClobXmlAsString(clobId);
         // Checks
         EasyMock.verify(mockXhbClobRepository);
+        EasyMock.verify(mockEntityManager);
         assertNull(clobReturnData, NULL);
     }
     

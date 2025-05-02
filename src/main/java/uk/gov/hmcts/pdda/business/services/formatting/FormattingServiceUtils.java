@@ -108,9 +108,9 @@ public final class FormattingServiceUtils {
      */
     public static String amendGeneratedPage(String inPage) {
         String textToInsert =
-            "\r\n<!--[if IE 7]>\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"http://"
+            "\r\n<!--[if IE 7]>\r\n<link rel=\"stylesheet\" type=\"text/css\" href=\"https://"
                 + "www.justice.gov.uk/css/ie7.css\" />\r\n" + "<![endif]-->\r\n<!--[if IE 6]>\r\n"
-                + "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://www.justice.gov.uk/css/ie6.css"
+                + "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://www.justice.gov.uk/css/ie6.css"
                 + "\" />\r\n<![endif]-->";
 
         StringBuilder amendedPage = new StringBuilder(inPage);
@@ -132,7 +132,7 @@ public final class FormattingServiceUtils {
         synchronized (JAVADATEFORMAT) {
             parameterMap.put("java-date", JAVADATEFORMAT.format(new Date()));
             parameterMap.put("method", "xml");
-            parameterMap.put("doctype-system", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
+            parameterMap.put("doctype-system", "https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
             parameterMap.put("doctype-public", "-//W3C//DTD XHTML 1.0 Strict//EN");
         }
         return parameterMap;

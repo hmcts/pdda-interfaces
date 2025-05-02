@@ -110,4 +110,12 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         List<XhbCppStagingInboundDao> resultList = query.getResultList();
         return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
     }
+    
+    public List<XhbCppStagingInboundDao> findDocumentByDocumentName(String documentName) {
+        LOG.debug("findDocumentByDocumentName({})", documentName);
+        Query query =
+            getEntityManager().createNamedQuery("XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName");
+        query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
+        return query.getResultList();
+    }
 }

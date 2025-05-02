@@ -6,7 +6,7 @@
     <xsl:include href="..\documentdistribution\translation.xsl"/>
     <!-- Default Language -->
     <xsl:variable name="DefaultLang">en</xsl:variable>
-    <xsl:template match="currentcourtstatus" xmlns="http://www.w3.org/1999/xhtml">
+    <xsl:template match="currentcourtstatus" xmlns="https://www.w3.org/1999/xhtml">
         <xsl:param name="language"/>
         <h1>
             <xsl:call-template name="getValue">

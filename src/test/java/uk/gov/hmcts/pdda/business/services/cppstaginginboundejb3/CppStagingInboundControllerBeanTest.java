@@ -229,6 +229,7 @@ class CppStagingInboundControllerBeanTest {
         String result = classUnderTest.getSchemaName(documentType);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(result, NOTNULL);
     }
 
@@ -248,6 +249,7 @@ class CppStagingInboundControllerBeanTest {
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
+        EasyMock.verify(mockEntityManager);
         assertEquals(courtCode, returnedCourtId, EQUALS);
     }
 
@@ -266,6 +268,7 @@ class CppStagingInboundControllerBeanTest {
         int returnedCourtId = classUnderTest.getCourtId(courtCode);
         // Checks
         EasyMock.verify(mockXhbCourtRepository);
+        EasyMock.verify(mockEntityManager);
         assertEquals(0, returnedCourtId, EQUALS);
     }
     
@@ -274,17 +277,27 @@ class CppStagingInboundControllerBeanTest {
         // Create Mock
         XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository =
             EasyMock.createMock(XhbCppStagingInboundRepository.class);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
+        EasyMock.replay(mockEntityManager);
         // Set Mock
         ReflectionTestUtils.setField(classUnderTest, "xhbCppStagingInboundRepository",
             mockXhbCppStagingInboundRepository);
         // Run
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
+        EasyMock.verify(mockEntityManager);
     }
     
     @SuppressWarnings("rawtypes")
     private void expectGetEntityManager(AbstractRepository mockRepository) {
         EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
+    }
+
+    @Test
+    void testClearRepos() {
+        boolean result = true;
+        classUnderTest.clearRepositories();
+        assertTrue(result, TRUE);
     }
 }

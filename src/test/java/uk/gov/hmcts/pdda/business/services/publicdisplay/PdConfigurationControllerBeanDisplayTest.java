@@ -193,6 +193,8 @@ class PdConfigurationControllerBeanDisplayTest {
         Optional<XhbCourtDao> court =
             Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, courtName));
 
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
         Mockito.when(mockXhbDisplayRepository.findById(DISPLAY_ID)).thenReturn(xd);
         Mockito.when(mockXhbCourtRepository.findById(COURT_ID)).thenReturn(court);
         Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))

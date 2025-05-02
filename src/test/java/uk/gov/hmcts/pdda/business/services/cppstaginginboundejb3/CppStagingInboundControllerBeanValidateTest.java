@@ -120,6 +120,7 @@ class CppStagingInboundControllerBeanValidateTest {
             EasyMock.verify(mockXhbClobRepository);
             EasyMock.verify(mockValidationService);
             EasyMock.verify(mockValidationResult);
+            EasyMock.verify(mockEntityManager);
             assertFalse(validDocument, FALSE);
         });
     }
@@ -153,6 +154,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockXhbClobRepository);
         EasyMock.verify(mockValidationService);
         EasyMock.verify(mockValidationResult);
+        EasyMock.verify(mockEntityManager);
         assertFalse(validDocument, FALSE);
     }
 
@@ -171,6 +173,7 @@ class CppStagingInboundControllerBeanValidateTest {
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertFalse(invalidDocument, FALSE);
     }
 
@@ -190,6 +193,7 @@ class CppStagingInboundControllerBeanValidateTest {
         boolean invalidDocument = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
         // Checks
         EasyMock.verify(mockXhbConfigPropRepository);
+        EasyMock.verify(mockEntityManager);
         assertFalse(invalidDocument, FALSE);
     }
 
@@ -228,6 +232,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.verify(mockXhbClobRepository);
         EasyMock.verify(mockValidationService);
         EasyMock.verify(mockValidationResult);
+        EasyMock.verify(mockEntityManager);
         assertTrue(validDocument, TRUE);
     }
 

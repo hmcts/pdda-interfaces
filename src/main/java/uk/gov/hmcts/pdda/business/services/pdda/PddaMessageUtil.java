@@ -30,7 +30,7 @@ public final class PddaMessageUtil {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Optional<XhbPddaMessageDao> createMessage(
+    public static void createMessage(
         final PddaMessageHelper pddaMessageHelper, final Integer courtId, final Integer courtRoomId,
         final Integer pddaMessageTypeId, final Long pddaMessageDataId, final Integer pddaBatchId,
         final String cpDocumentName, final String cpResponseGenerated, final String errorMessage) {
@@ -53,7 +53,7 @@ public final class PddaMessageUtil {
         dao.setErrorMessage(errorMessage);
 
         // Create the record
-        return pddaMessageHelper.savePddaMessage(dao);
+        pddaMessageHelper.savePddaMessage(dao);
     }
 
     public static Optional<XhbRefPddaMessageTypeDao> createMessageType(

@@ -48,8 +48,8 @@ class CppFormattingControllerBeanTest {
     private static final String TRUE = "Result is not True";
 
     @Mock
-    private EntityManager mockEntityManager;
-    
+    protected EntityManager mockEntityManager;
+
     @Mock
     private XhbCppFormattingRepository mockCppFormattingRepo;
 
@@ -102,8 +102,8 @@ class CppFormattingControllerBeanTest {
                 .andReturn(Optional.of(cppFormattingDao));
             EasyMock.replay(mockPublicDisplayNotifier);
             EasyMock.replay(mockCppFormattingRepo);
+            EasyMock.replay(mockEntityManager);
         }
-        EasyMock.replay(mockEntityManager);
         // Run
         boolean result = false;
         try {
@@ -115,6 +115,7 @@ class CppFormattingControllerBeanTest {
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
         EasyMock.verify(mockPublicDisplayNotifier);
+        EasyMock.verify(mockEntityManager);
         assertTrue(result, TRUE);
     }
 
@@ -134,8 +135,8 @@ class CppFormattingControllerBeanTest {
                 .andReturn(Optional.of(cppFormattingDao));
             EasyMock.replay(mockPublicDisplayNotifier);
             EasyMock.replay(mockCppFormattingRepo);
+            EasyMock.replay(mockEntityManager);
         }
-        EasyMock.replay(mockEntityManager);
         // Run
         boolean result = false;
         try {
@@ -147,6 +148,7 @@ class CppFormattingControllerBeanTest {
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
         EasyMock.verify(mockPublicDisplayNotifier);
+        EasyMock.verify(mockEntityManager);
         assertTrue(result, TRUE);
     }
 
@@ -168,6 +170,7 @@ class CppFormattingControllerBeanTest {
             classUnderTest.getLatestPublicDisplayDocument(xhbCppFormattingDao.getCourtId());
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(actualResult, "Result is Null");
         assertSame(xhbCppFormattingDao, actualResult, "Result is not Same");
     }
@@ -190,6 +193,7 @@ class CppFormattingControllerBeanTest {
             classUnderTest.getLatestWebPageDocument(xhbCppFormattingDao.getCourtId());
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
+        EasyMock.verify(mockEntityManager);
         assertNotNull(actualResult, "Result is Null");
         assertSame(xhbCppFormattingDao, actualResult, "Result is not Same");
     }
@@ -214,6 +218,7 @@ class CppFormattingControllerBeanTest {
         }
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
+        EasyMock.verify(mockEntityManager);
         assertTrue(result, TRUE);
     }
 
@@ -237,6 +242,7 @@ class CppFormattingControllerBeanTest {
         }
         // Checks
         EasyMock.verify(mockCppFormattingRepo);
+        EasyMock.verify(mockEntityManager);
         assertTrue(result, TRUE);
     }
 

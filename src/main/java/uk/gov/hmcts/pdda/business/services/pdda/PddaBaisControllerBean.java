@@ -4,7 +4,6 @@ import jakarta.ejb.ApplicationException;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
  */
 @Stateless
 @Service
-@Transactional
 @LocalBean
 @ApplicationException(rollback = true)
 public class PddaBaisControllerBean extends AbstractControllerBean implements RemoteTask {
@@ -40,7 +38,7 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     private static final String TWO_PARAMS = "{}{}";
 
     private SftpService sftpService;
-
+    
     public PddaBaisControllerBean(EntityManager entityManager) {
         super(entityManager);
     }
@@ -58,7 +56,6 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     public void doTask() {
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-
         getSftpService().processBaisMessages(0);
     }
 
