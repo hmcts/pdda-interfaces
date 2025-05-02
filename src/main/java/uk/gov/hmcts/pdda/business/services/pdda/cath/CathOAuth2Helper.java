@@ -21,7 +21,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.OAuth2Helper;
  */
 public class CathOAuth2Helper extends OAuth2Helper {
 
-    private static final String CATH_AZURE_TOKEN_URL = "cath.azure.oauth2.token.url";
+    private static final String CATH_AZURE_TOKEN_URL = "cath.azure.oauth2.token-url";
     private static final String CATH_AZURE_CLIENT_ID =
         "cath.azure.active-directory.credential.client-id";
     private static final String CATH_AZURE_CLIENT_SECRET =
