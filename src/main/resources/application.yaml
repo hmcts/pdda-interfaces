@@ -1,9 +1,34 @@
 server:
   port: 8080
 
+cath:
+	azure:
+		scope: https://pip-ss-kv-stg.vault.azure.net/secrets/app-pip-data-management-scope
+		oauth2:
+			token-uri: ${cath.azure.scope}.default
+		active-directory:
+		  credential:
+	      client-id: ${CATH_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
+	      client-secret: ${CATH_AZURE_CLIENT_SECRET:AAAAAAAAAAAAAAAA}
+		
+	
+pdda:
+  azure:
+    active-directory-justice-auth-uri: https://login.microsoftonline.com
+			
 spring:
   application:
     name: pdda-public-display-data-aggregator
+	cloud:
+		azure:
+			oauth2:
+				token-uri: ${pdda.azure.active-directory-justice-auth-uri}/${PDDA_AZURE_TENANT_ID:00000000-0000-0000-0000-000000000000}/oauth2/v2.0/token
+			active-directory:
+				profile:
+					tenant-id: ${PDDA_AZURE_TENANT_ID:AAAAAAAAAAAAAAAA}
+				credential:
+					client-id: ${PDDA_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
+					client-secret: ${PDDA_AZURE_CLIENT_SECRET:AAAAAAAAAAAAAAAA}				
   config:
     import: "optional:configtree:/mnt/secrets/pdda/"
   dbMigration:
@@ -17,7 +42,7 @@ spring:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:pdda}${DB_OPTIONS:}
     username: ${DB_USER_NAME:postgres}
     password: ${DB_PASSWORD:password}
-    schema: ${DB_SCHEMA:pdda}
+    schema: ${DB_SCHEMA:pdda} 
     type: com.zaxxer.hikari.HikariDataSource
   jpa:
     database: postgresql

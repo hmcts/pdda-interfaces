@@ -44,12 +44,12 @@ public class OAuth2Helper {
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
     private static final String EMPTY_STRING = "";
-    private static final String AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token.url";
-    private static final String AZURE_TENANT_ID =
+    private static final String PDDA_AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token-url";
+    private static final String PDDA_AZURE_TENANT_ID =
         "spring.cloud.azure.active-directory.profile.tenant-id";
-    private static final String AZURE_CLIENT_ID =
+    private static final String PDDA_AZURE_CLIENT_ID =
         "spring.cloud.azure.active-directory.credential.client-id";
-    private static final String AZURE_CLIENT_SECRET =
+    private static final String PDDA_AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
     protected Environment env;
 
@@ -62,24 +62,25 @@ public class OAuth2Helper {
     }
     
     protected String getTenantId() {
-        return env.getProperty(AZURE_TENANT_ID);
+        return env.getProperty(PDDA_AZURE_TENANT_ID);
     }
     
     protected String getTokenUrl() {
-        return env.getProperty(AZURE_TOKEN_URL);
+        String authTokenUrl = env.getProperty(PDDA_AZURE_TOKEN_URL);
+        return String.format(authTokenUrl, getTenantId());
     }
     
     protected String getClientId() {
-        return env.getProperty(AZURE_CLIENT_ID);
+        return env.getProperty(PDDA_AZURE_CLIENT_ID);
     }
     
     protected String getClientSecret() {
-        return env.getProperty(AZURE_CLIENT_SECRET);
+        return env.getProperty(PDDA_AZURE_CLIENT_SECRET);
     }
 
     public String getAccessToken() {
         LOG.debug("getAccessToken()");
-        String url = String.format(getTokenUrl(), getTenantId());
+        String url = getTokenUrl();
         // Get the authentication request
         HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
