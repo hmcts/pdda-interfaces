@@ -198,7 +198,10 @@ class DisplayStoreControllerBeanTest {
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.expect(mockXhbDisplayStoreRepository.findByRetrievalCodeSafe(RETRIEVAL_CODE))
             .andReturn(displayStoreDao);
-        mockXhbDisplayStoreRepository.save(dao);
+
+        // Expect the new saveWithRetry call with any retry count (match exact if needed)
+        mockXhbDisplayStoreRepository.saveWithRetry(EasyMock.eq(dao), EasyMock.anyInt());
+        EasyMock.expectLastCall().once();
 
         EasyMock.replay(mockEntityManager, mockXhbDisplayStoreRepository);
 
@@ -213,6 +216,7 @@ class DisplayStoreControllerBeanTest {
         EasyMock.verify(mockEntityManager, mockXhbDisplayStoreRepository);
         assertTrue(result, TRUE);
     }
+
 
 
     /**

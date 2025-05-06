@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,8 @@ import java.util.Optional;
 import java.util.Random;
 
 
-
+@SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity", "PMD.LawOfDemeter",
+    "PMD.DoNotUseThreads"})
 @Repository
 public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStoreDao> {
 
@@ -62,8 +64,11 @@ public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStor
     }
 
 
+    @SuppressWarnings({"PMD.UnusedAssignment", "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.ExceptionAsFlowControl"})
     public void saveWithRetry(XhbDisplayStoreDao dao, int maxRetries) {
         int attempt = 0;
+        XhbDisplayStoreDao updated = null;
         while (attempt < maxRetries) {
             try (EntityManager em = EntityManagerUtil.getEntityManager()) {
                 em.getTransaction().begin();
@@ -88,7 +93,7 @@ public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStor
                 }
 
                 // Build detached copy with updated fields
-                XhbDisplayStoreDao updated = new XhbDisplayStoreDao(fresh);
+                updated = new XhbDisplayStoreDao(fresh);
                 updated.setContent(dao.getContent());
                 updated.setLastUpdatedBy("PDDA");
                 updated.setLastUpdateDate(LocalDateTime.now());
@@ -116,6 +121,8 @@ public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStor
                         long jitterMs = 100 + new Random().nextInt(200);
                         Thread.sleep(jitterMs);
                     } catch (InterruptedException ignored) {
+                        Thread.currentThread().interrupt();
+                        LOG.debug("Thread interrupted during retry sleep");
                     }
 
                 } else {
