@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Stateless
@@ -141,7 +142,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
      * @param retrievalCode Retrieval Code to search for
      * @param contents Contents to set
      */
-    public void writeToDatabase(final String retrievalCode, final String contents) {
+    public void writeToDatabaseOrig(final String retrievalCode, final String contents) {
         String methodName = "writeToDatabase(" + retrievalCode + "," + contents + METHOD_END;
         LOG.debug(methodName + ENTERED);
 
@@ -163,6 +164,38 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         }
 
     }
+
+
+    public void writeToDatabase(final String retrievalCode, final String contents) {
+        String methodName = "writeToDatabase(" + retrievalCode + "," + contents + METHOD_END;
+        LOG.debug(methodName + ENTERED);
+
+        Optional<XhbDisplayStoreDao> xds =
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
+
+        if (xds.isPresent()) {
+            XhbDisplayStoreDao entity = xds.get();
+            if (Objects.equals(entity.getContent(), contents)) {
+                LOG.info("Content already matches. Skipping update.");
+                return;
+            }
+            entity.setLastUpdateDate(LocalDateTime.now());
+            entity.setLastUpdatedBy("PDDA");
+            entity.setContent(contents);
+
+            LOG.debug("Retrying merge for entity: displayStoreId={}, version={}",
+                entity.getDisplayStoreId(), entity.getVersion());
+
+            getXhbDisplayStoreRepository().saveWithRetry(entity, 3); // try up to 3 times
+
+        } else {
+            XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
+            newEntity.setRetrievalCode(retrievalCode);
+            newEntity.setContent(contents);
+            getXhbDisplayStoreRepository().save(newEntity); // No retry needed for create
+        }
+    }
+
 
     /**
      * Converts a LocalDateTime object to a Date object.
