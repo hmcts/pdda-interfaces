@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationReader;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStoreFactory;
+import uk.gov.hmcts.pdda.web.publicdisplay.messaging.work.EventWorkManager;
 
 import java.util.Locale;
 
@@ -190,13 +193,27 @@ public final class InitializationService {
      */
     private void doInitialize() {
         log.debug("doInitialize()");
-        // Get the court ids
+
+        // Get the shared EventStore instance (singleton)
+        EventStore eventStore = EventStoreFactory.getEventStore();
+        log.info("Shared EventStore instance: {}", System.identityHashCode(eventStore));
+
+        // Start the EventWorkManager (consumer thread)
+        int numWorkers = 5; // or use configurable value
+        EventWorkManager eventWorkManager = new EventWorkManager(eventStore, numWorkers);
+        eventWorkManager.start();
+        log.info("Started EventWorkManager with {} worker(s).", numWorkers);
+
+        // Get the configured court IDs
         int[] courtIds = DisplayConfigurationReader.getInstance().getConfiguredCourtIds();
 
-        // Start initial rendering
+        // Run the startup document initialization (produces events)
         new DocumentInitializer(courtIds, numInitializationWorkers, initializationDelay)
             .initialize();
+
+        log.info("Initialization complete.");
     }
+
 
     /**
      * Method checks whether the publicdisplay is running.

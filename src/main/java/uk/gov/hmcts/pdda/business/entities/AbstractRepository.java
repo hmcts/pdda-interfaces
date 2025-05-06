@@ -162,7 +162,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     /*
      * Create local one off EntityManager for save, update, delete.
      */
-    private EntityManager createEntityManager() {
+    protected EntityManager createEntityManager() {
         return EntityManagerUtil.getEntityManager();
     }
 
