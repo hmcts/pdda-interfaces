@@ -18,7 +18,8 @@ import java.util.Locale;
  * 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement"})
+@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement",
+    "PMD.AvoidProtectedMethodInFinalClassNotExtending"})
 public final class InitializationService {
     /**
      * One second.
@@ -29,6 +30,9 @@ public final class InitializationService {
      * Logger.
      */
     private static Logger log = LoggerFactory.getLogger(InitializationService.class);
+
+    // New setter for mocking
+    private DisplayConfigurationReader displayConfigurationReader;
 
     /**
      * Singleton instance.
@@ -114,59 +118,57 @@ public final class InitializationService {
         this.retryPeriod = retryPeriod;
     }
 
+    public void setDisplayConfigurationReader(DisplayConfigurationReader reader) {
+        this.displayConfigurationReader = reader;
+    }
+
     /**
      * Method to start initialization.
      */
     public void initialize() {
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (log.isDebugEnabled()) {
-                        long startTime = System.currentTimeMillis();
-                        long startTotalMemory = Runtime.getRuntime().totalMemory();
-                        long startFreeMemory = Runtime.getRuntime().freeMemory();
-                        long startUsedMemory = startTotalMemory - startFreeMemory;
-                        runNow();
-                        long endTime = System.currentTimeMillis();
-                        long endTotalMemory = Runtime.getRuntime().totalMemory();
-                        long endFreeMemory = Runtime.getRuntime().freeMemory();
-                        long endUsedMemory = endTotalMemory - endFreeMemory;
-                        log.debug(
-                            "Public display initialisation took {} ms and approximately {} bytes.",
-                            endTime - startTime, endUsedMemory - startUsedMemory);
-                    } else {
-                        runNow();
-                    }
-                } catch (RuntimeException t) {
-                    log.error(t.getMessage(), t);
-                    initialisationFailure = t;
+        Thread th = new Thread(() -> {
+            try {
+                if (log.isDebugEnabled()) {
+                    long startTime = System.currentTimeMillis();
+                    long startTotalMemory = Runtime.getRuntime().totalMemory();
+                    long startFreeMemory = Runtime.getRuntime().freeMemory();
+                    long startUsedMemory = startTotalMemory - startFreeMemory;
+                    runNow();
+                    long endTime = System.currentTimeMillis();
+                    long endTotalMemory = Runtime.getRuntime().totalMemory();
+                    long endFreeMemory = Runtime.getRuntime().freeMemory();
+                    long endUsedMemory = endTotalMemory - endFreeMemory;
+                    log.debug(
+                        "Public display initialisation took {} ms and approximately {} bytes.",
+                        endTime - startTime, endUsedMemory - startUsedMemory);
+                } else {
+                    runNow();
                 }
-            }
-
-            public void runNow() {
-                // Run until initialization is done
-                while (!checkMidtier()) {
-                    try {
-                        Thread.sleep(retryPeriod);
-                    } catch (InterruptedException ex) {
-                        log.error(ex.getMessage(), ex);
-                        Thread.currentThread().interrupt();
-                    }
-                }
-
-                // DO initialization
-                doInitialize();
-
-                // Set the initialization flag
-                synchronized (InitializationService.class) {
-                    initialized = true;
-                }
-
+            } catch (RuntimeException t) {
+                log.error(t.getMessage(), t);
+                initialisationFailure = t;
             }
         });
         th.start();
     }
+
+    protected void runNow() {
+        while (!checkMidtier()) {
+            try {
+                Thread.sleep(retryPeriod);
+            } catch (InterruptedException ex) {
+                log.error(ex.getMessage(), ex);
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        doInitialize();
+
+        synchronized (InitializationService.class) {
+            initialized = true;
+        }
+    }
+
 
     /**
      * Method to destroy.
@@ -191,23 +193,22 @@ public final class InitializationService {
     /**
      * Perform initialization.
      */
-    private void doInitialize() {
+    protected void doInitialize() {
         log.debug("doInitialize()");
 
-        // Get the shared EventStore instance (singleton)
-        EventStore eventStore = EventStoreFactory.getEventStore();
+        EventStore eventStore = EventStoreFactory.getEventStore(); // still static
         log.info("Shared EventStore instance: {}", System.identityHashCode(eventStore));
 
-        // Start the EventWorkManager (consumer thread)
-        int numWorkers = 5; // or use configurable value
-        EventWorkManager eventWorkManager = new EventWorkManager(eventStore, numWorkers);
+        EventWorkManager eventWorkManager =
+            new EventWorkManager(eventStore, numInitializationWorkers);
         eventWorkManager.start();
-        log.info("Started EventWorkManager with {} worker(s).", numWorkers);
+        log.info("Started EventWorkManager with {} worker(s).", numInitializationWorkers);
 
-        // Get the configured court IDs
-        int[] courtIds = DisplayConfigurationReader.getInstance().getConfiguredCourtIds();
+        // Allow mock injection
+        int[] courtIds = (displayConfigurationReader != null)
+            ? displayConfigurationReader.getConfiguredCourtIds()
+            : DisplayConfigurationReader.getInstance().getConfiguredCourtIds();
 
-        // Run the startup document initialization (produces events)
         new DocumentInitializer(courtIds, numInitializationWorkers, initializationDelay)
             .initialize();
 
@@ -220,11 +221,14 @@ public final class InitializationService {
      * 
      * @return boolean
      */
-    private boolean checkMidtier() {
+    protected boolean checkMidtier() {
         try {
-            // Get display configuration reader
-            DisplayConfigurationReader.getInstance();
-            log.info("Initialized display configuration reader");
+            if (displayConfigurationReader != null) {
+                log.info("Initialized display configuration reader (mocked)");
+            } else {
+                DisplayConfigurationReader.getInstance(); // still static
+                log.info("Initialized display configuration reader");
+            }
             return true;
         } catch (RuntimeException ne) {
             log.warn(ne.getMessage(), ne);
