@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
@@ -48,6 +49,7 @@ public class RepositoryHelper implements Serializable {
     private XhbHearingListRepository xhbHearingListRepository;
     private XhbSittingRepository xhbSittingRepository;
     private XhbCaseRepository xhbCaseRepository;
+    private XhbRefJudgeRepository xhbRefJudgeRepository;
     private XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository;
     private XhbDefendantRepository xhbDefendantRepository;
     private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
@@ -126,6 +128,13 @@ public class RepositoryHelper implements Serializable {
             xhbCaseRepository = new XhbCaseRepository(getEntityManager());
         }
         return xhbCaseRepository;
+    }
+    
+    public XhbRefJudgeRepository getXhbRefJudgeRepository() {
+        if (xhbRefJudgeRepository == null || !isEntityManagerActive()) {
+            xhbRefJudgeRepository = new XhbRefJudgeRepository(getEntityManager());
+        }
+        return xhbRefJudgeRepository;
     }
 
     public XhbDefendantOnCaseRepository getXhbDefendantOnCaseRepository() {

@@ -23,6 +23,12 @@ import java.io.Serializable;
     query = "SELECT o from XHB_REF_JUDGE o WHERE "
         + "o.refJudgeId IN (SELECT x1.refJudgeId FROM XHB_SITTING x1, XHB_SCHEDULED_HEARING x2 WHERE x1.sittingId "
         + "= x2.sittingId AND x2.scheduledHearingId = :scheduledHearingId)")
+@NamedQuery(name = "XHB_REF_JUDGE.findJudgeByCourtIdAndNameSafe",
+    query = "SELECT o from XHB_REF_JUDGE o WHERE "
+        + "o.courtId = :courtId AND "
+        + "o.title = :judgeTitle AND "
+        + "o.firstname = :judgeFirstname AND "
+        + "o.surname = :judgeSurname")
 public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable {
     private static final long serialVersionUID = -6788003970955114552L;
     @Id
