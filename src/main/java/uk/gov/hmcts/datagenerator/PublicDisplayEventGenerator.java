@@ -72,7 +72,6 @@ public class PublicDisplayEventGenerator {
                 fos.write(encodedEvent.getBytes());
             } catch (IOException e) {
                 System.err.println("Error writing file: " + file.getName());
-                e.printStackTrace();
             }
         }
 
