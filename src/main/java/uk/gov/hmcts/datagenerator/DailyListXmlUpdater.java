@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -79,9 +80,16 @@ public class DailyListXmlUpdater {
         String docName = "Daily List FINAL v1 " + now.format(docNameFormat).toUpperCase();
         final String todayDate = effectiveDate.format(dateFormat);
 
-        // Load and parse the XML
+        // Load and parse the XML and secure against XXE attacks
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        factory.setXIncludeAware(false);
+        factory.setExpandEntityReferences(false);
         factory.setNamespaceAware(true);
+
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(new File(inputFile));
 
@@ -108,8 +116,12 @@ public class DailyListXmlUpdater {
             outputFileName = "DailyList_" + courtCode + "_" + fileTimestamp + ".xml";
         }
 
-        // Write the updated XML
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        // Write the updated XML and secure against XXE attacks
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+        Transformer transformer = transformerFactory.newTransformer();
+
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
