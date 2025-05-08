@@ -74,10 +74,10 @@ public class DailyListXmlUpdater {
         DateTimeFormatter pubTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         DateTimeFormatter docNameFormat = DateTimeFormatter.ofPattern("dd-MMM-yy");
 
-        String timestamp = now.format(timestampFormat);
+        final String timestamp = now.format(timestampFormat);
         final String pubTime = now.format(pubTimeFormat);
-        String fileTimestamp = now.format(fileTimeFormat);
-        String docName = "Daily List FINAL v1 " + now.format(docNameFormat).toUpperCase();
+        final String fileTimestamp = now.format(fileTimeFormat);
+        final String docName = "Daily List FINAL v1 " + now.format(docNameFormat).toUpperCase();
         final String todayDate = effectiveDate.format(dateFormat);
 
         // Load and parse the XML and secure against XXE attacks
