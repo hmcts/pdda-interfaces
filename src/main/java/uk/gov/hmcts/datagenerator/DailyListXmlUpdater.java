@@ -8,11 +8,11 @@ import org.w3c.dom.NodeList;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Random;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -108,8 +108,8 @@ public class DailyListXmlUpdater {
         // Compose output file path
         String outputFileName;
         if (mode.equals("XHIBIT")) {
-            int fourDigitRand = new Random().nextInt(9000) + 1000;
-            int twoDigitRand = new Random().nextInt(90) + 10;
+            int fourDigitRand = new SecureRandom().nextInt(9000) + 1000;
+            int twoDigitRand = new SecureRandom().nextInt(90) + 10;
             outputFileName = "PDDA_XDL_" + fourDigitRand + "_" + twoDigitRand + "_" + courtCode
                 + "_" + fileTimestamp;
         } else {

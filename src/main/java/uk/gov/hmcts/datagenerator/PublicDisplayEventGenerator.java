@@ -22,9 +22,9 @@ import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Random;
 
 /**
  * Generates random public display events and serializes them to files.
@@ -36,7 +36,7 @@ import java.util.Random;
 @SuppressWarnings("PMD")
 public class PublicDisplayEventGenerator {
 
-    private static final Random RANDOM = new Random();
+    private static final SecureRandom RANDOM = new SecureRandom();
     private static final DateTimeFormatter TIMESTAMP_FORMAT =
         DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     
