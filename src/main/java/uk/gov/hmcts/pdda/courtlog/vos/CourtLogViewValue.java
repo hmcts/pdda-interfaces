@@ -35,7 +35,7 @@ public class CourtLogViewValue extends CourtLogAbstractValue {
             this.value = value;
         }
         
-        private Integer getValue() {
+        public Integer getValue() {
             return value;
         }
         
