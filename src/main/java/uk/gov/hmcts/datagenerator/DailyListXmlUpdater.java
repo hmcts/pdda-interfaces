@@ -5,13 +5,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,20 +13,32 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Random;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 
 /**
  * DailyListXmlUpdater is a utility class that updates an XML file with the current date and time,
  * and saves it to a specified output directory.
  * <p>
- * Usage: java DailyListXmlUpdater <inputFile> <outputFolder> [<overrideDate>] [<mode>] e.g. java
+ * Usage: java DailyListXmlUpdater [inputFile] [outputFolder] [overrideDate] [mode] e.g. java
  * DailyListXmlUpdater /tmp/DailyList.xml /tmp/sftpfolder/output 2025-05-08 CPP
  * </p>
  */
 @SuppressWarnings("PMD")
 public class DailyListXmlUpdater {
 
+    private DailyListXmlUpdater() {
+        // Prevent instantiation
+    }
+
     public static void main(String[] args) throws Exception {
-        String inputFile = args.length > 0 ? args[0] : "DailyList.xml";
+        final String inputFile = args.length > 0 ? args[0] : "DailyList.xml";
         String outputFolder = args.length > 1 ? args[1] : "output";
 
         // Parse override date if provided
@@ -68,11 +73,11 @@ public class DailyListXmlUpdater {
         DateTimeFormatter pubTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         DateTimeFormatter docNameFormat = DateTimeFormatter.ofPattern("dd-MMM-yy");
 
-        String todayDate = effectiveDate.format(dateFormat);
         String timestamp = now.format(timestampFormat);
-        String pubTime = now.format(pubTimeFormat);
+        final String pubTime = now.format(pubTimeFormat);
         String fileTimestamp = now.format(fileTimeFormat);
         String docName = "Daily List FINAL v1 " + now.format(docNameFormat).toUpperCase();
+        final String todayDate = effectiveDate.format(dateFormat);
 
         // Load and parse the XML
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -102,12 +107,13 @@ public class DailyListXmlUpdater {
         } else {
             outputFileName = "DailyList_" + courtCode + "_" + fileTimestamp + ".xml";
         }
-        File outputFile = Paths.get(outputFolder, outputFileName).toFile();
 
         // Write the updated XML
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+        File outputFile = Paths.get(outputFolder, outputFileName).toFile();
 
         // Optional: normalise and remove whitespace nodes to clean DOM
         doc.getDocumentElement().normalize();
