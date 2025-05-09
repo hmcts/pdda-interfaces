@@ -1,19 +1,24 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@SuppressWarnings("PMD.LawOfDemeter")
 @WebServlet("/Cath")
 public class CathServlet extends HttpServlet {
 
     private static final long serialVersionUID = -4477899905926363639L;
+
+    private CathOAuth2Helper cathOAuth2Helper;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -21,11 +26,23 @@ public class CathServlet extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
 
-        ServletOutputStream output = response.getOutputStream();
+        try (ServletOutputStream output = response.getOutputStream()) {
 
-        output.print(
-            documentWrapper(bold("CaTH Token: ") + eol() + linebreak() + bold("Date/Time: ") + now()
-                + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
+            output.print(documentWrapper(bold("CaTH Token: ") + getToken() + eol() + linebreak()
+                + bold("Date/Time: ") + now() + eol() + linebreak()
+                + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
+        }
+    }
+
+    private String getToken() {
+        return getCathOAuth2Helper().getAccessToken();
+    }
+
+    private CathOAuth2Helper getCathOAuth2Helper() {
+        if (cathOAuth2Helper == null) {
+            cathOAuth2Helper = new CathOAuth2Helper();
+        }
+        return cathOAuth2Helper;
     }
 
     private String now() {
