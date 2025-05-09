@@ -1,6 +1,8 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,17 +15,43 @@ public class CathServlet extends HttpServlet {
 
     private static final long serialVersionUID = -4477899905926363639L;
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-        response.setContentType("text/plain;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
 
         ServletOutputStream output = response.getOutputStream();
-        String content = "CaTH";
 
-        output.print(content);
+        output.print(
+            documentWrapper(bold("CaTH Token: ") + eol() + linebreak() + bold("Date/Time: ") + now()
+                + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
     }
+
+    private String now() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+    }
+
+    private String bold(String text) {
+        return "<b>" + text + "</b>";
+    }
+
+    private String linebreak() {
+        return "<br>";
+    }
+
+    private String eol() {
+        return "\r\n";
+    }
+
+    private String hrefLink(String text, String url) {
+        return "<a href=" + url + ">" + text + "</a>";
+    }
+
+    private String documentWrapper(String body) {
+        return "<!DOCTYPE html>" + eol() + "<html>" + eol() + "<body>" + eol() + body + "</body>"
+            + eol() + "</html>";
+    }
+
 
 }
