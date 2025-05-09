@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,8 +13,6 @@ import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 @WebServlet("/Cath")
