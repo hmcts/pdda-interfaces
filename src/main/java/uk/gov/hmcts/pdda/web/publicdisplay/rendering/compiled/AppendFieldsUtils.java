@@ -31,7 +31,7 @@ public final class AppendFieldsUtils {
 
     public static void appendHtmlHeader(StringBuilder buffer, DisplayDocument displayDocument,
         TranslationBundle documentI18n, Date date, String headerImageName, String heading) {
-        AppendUtils.appendln(buffer, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+        AppendUtils.appendln(buffer, "<!DOCTYPE html>");
         AppendUtils.appendHeader(buffer, heading);
         appendHeading(buffer, displayDocument, documentI18n, date, headerImageName, heading);
     }

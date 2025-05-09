@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.imaging;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,21 +45,6 @@ public class HeaderImageServlet extends AbstractImageServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(HeaderImageServlet.class);
-
-    static {
-        LOG.debug(">>> HeaderImageServlet class loaded");
-    }
-
-    @Override
-    public void init() {
-        try {
-            super.init();
-        } catch (ServletException e) {
-            // TODO Auto-generated catch block
-            LOG.error("Error in HeaderImageServlet init", e);
-        }
-        LOG.debug(">>> HeaderImageServlet initialized");
-    }
 
     /**
      * Here we take the loaded image and then write the text upon it.
