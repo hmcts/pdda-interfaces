@@ -1,237 +1,200 @@
-	/* Note: The width specified here must match exactly the
-	         width in TABLE.resultsHeader otherwise the columns
-	         and headers will not line up correctly. */
+/* === GENERAL STRUCTURE === */
 
-DIV.body-area
-{
-   	margin-left: 50;
+DIV.body-area {
+    margin-left: 50px;
 }
 
-.outerScroller
-{
-		margin-top:62;
-		width: 1200;
-		height:705;
-		position:absolute;
-		background-color:transparent;
+.outerScroller {
+    margin-top: 62px;
+    width: 1200px;
+    height: 705px;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: transparent;
 }
 
-	/*The outer scroller on court-detail is for the public-notices*/
-.court-detail .outerScroller
-{
-		height:260;
+/* Public Notices */
+.court-detail .outerScroller {
+    height: 260px;
 }
 
-.scrollArea
-{
-		position:absolute;
+.scrollArea {
+    position: relative;
 }
 
+/* === TABLE STYLES === */
 
-.oddRow
-{
-		background-color: #F4F4A0;
-		position: relative;
+TABLE.results,
+TABLE.non-scrolling-results,
+TABLE.case-progress {
+    width: 1200px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid black;
+    background-color: #F4F4A0;
+    visibility: hidden; /* Initially hidden for transition */
 }
 
-.evenRow
-{
-	background-color: #FBFAC0;
-	position: relative;
+TABLE.results-header {
+    width: 1200px;
+    table-layout: fixed;
+    border-collapse: collapse;
 }
 
-
-
-.reporting-restrictions
-{
-   color: red;
-   font-size: 25pt;
-   left: 100px;
-	top:960;
-   width: 1200;
-   position:absolute;
-	background-color:transparent;
+TABLE.results TD,
+TABLE.non-scrolling-results TD,
+TABLE.case-progress TD {
+    font-size: 14pt;
+    font-weight: bold;
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+    position: relative;
 }
 
+/* === ROW COLORING === */
 
-/*Hidden initially so that it appears smoothly.*/
-TABLE.results
-{
-		visibility: hidden;
-		background-color: #F4F4A0;
+.oddRow {
+    background-color: #F4F4A0;
 }
 
-TD {
-	text-align: center;
+.evenRow {
+    background-color: #FBFAC0;
 }
 
-TABLE.results TD ,TABLE.non-scrolling-results TD, TABLE.case-progress TD
-{
-	font-size: 14pt;
-	font-weight: bold;
-	border: 1px black solid;
-	margin-left: 10px;
-	position: relative;
+/* === HEADER ROWS === */
+
+.results-header-div {
+    position: relative;
+    width: 1200px;
+    height: 56px;
+    border: 1px solid black;
+    overflow: hidden;
 }
 
-TABLE.navbar, TR.navbar
-{
-		HEIGHT: 20px;
-		MARGIN-TOP: 2px;
-		FONT-SIZE: 8pt;
-		COLOR: #ffffff;
-		BACKGROUND-COLOR: #003366
+TR.column-headers TD,
+TABLE.case-progress TD.case-progress-time {
+    font-size: 15pt;
+    font-weight: bold;
+    vertical-align: middle;
+    color: #FAFAD2;
+    background-color: #112244;
+    height: 60px;
+    border: 1px solid black;
+    padding-left: 10px;
 }
 
-DIV.inter-table-padding
-{
-	margin-top:30pt;
-	width:100%;
+/* === PAGE STRUCTURE === */
+
+DIV.inter-table-padding {
+    margin-top: 30pt;
+    width: 100%;
 }
 
+/* === PUBLIC NOTICES === */
 
-TABLE.results, TABLE.non-scrolling-results, TABLE.case-progress
-{
-	  width: 1200;
-	  border: 1px solid Black;
- }
-
-
-TABLE.non-scrolling-results TD
-{
-		border: 1px black solid;
-		margin-left: 10px;
+TABLE.results TD.public-notice {
+    font-size: 20pt;
+    word-break: keep-all;
 }
 
-/* Public Notices in larger font */
-TABLE.results TD.public-notice
-{
-		font-size: 20pt;
-		word-break: keep-all;
+/* === CASE PROGRESS VIEW === */
+
+TABLE.case-progress TD.case-progress-time,
+TABLE.case-progress TD.case-progress-status {
+    width: 50%;
+    font-size: 25px;
+    padding-left: 25px;
 }
 
-/*
-.resultCellRed
-{
-	color: #FF0000;
-}
-*/
-
-/****** THE RESULTS HEADER *******/
-
-.results-header-div
-{
-		position: relative;
-		width: 1200;
-		height: 56;
-		border: 1px solid Black;
+TABLE.case-progress TD.case-progress-status {
+    background-color: #F4F4A0;
 }
 
-TR.column-headers TD, TABLE.case-progress TD.case-progress-time
-{
-	font-size: 15pt;
-	font-weight: bold;
-	vertical-align: middle;
-	color: #FAFAD2;
-	background-color: #112244;
-	height: 60;
-	border: 1px black solid;
-	margin-left: 10px;
+/* === DEFENDANT ROWS === */
+
+TABLE.results TD.scrolling-defendant-name {
+    text-align: center;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
-/** General column tweaks **/
-
-
-
-/*** Court Detail ***/
-TABLE.case-progress TD.case-progress-time
-{
-		width: 50%;
-		font: 25px;
-		padding-left: 25;
+TABLE.results TD.defendant-name,
+TABLE.results TD.case-title,
+TABLE.results TD.defendant-and-case-number,
+TABLE.results TD.defendant-names {
+    text-align: left;
+    padding-left: 5%;
+    font-weight: bolder;
 }
 
-TABLE.case-progress TD.case-progress-status
-{
-		width: 50%;
-		font: 25px;
-		padding-left: 25;
-		background-color: #F4F4A0;
+TABLE.results TD.no-information-row {
+    color: ThreedDarkShadow;
 }
 
-TABLE.results TD.scrolling-defendant-name
-{
-	text-align: center;
+/* === OTHER ELEMENTS === */
+
+.reporting-restrictions {
+    color: red;
+    font-size: 25pt;
+    left: 100px;
+    top: 960px;
+    width: 1200px;
+    position: absolute;
+    background-color: transparent;
 }
 
 .moved-highlight {
-    font: 20px;
+    font-size: 20px;
     font-weight: bold;
     color: #0000FF;
 }
 
-SPAN.asterix, .asterix {
-	color: red;
+SPAN.asterix,
+.asterix {
+    color: red;
     font-family: Verdana, sans-serif;
-	font-weight: bold;
-	font-size: 24px;
-	clear: none;
+    font-weight: bold;
+    font-size: 24px;
 }
 
-TABLE.results TD.defendant-name, TABLE.results TD.case-title, TABLE.results TD.defendant-and-case-number, TABLE.results TD.defendant-names
-{
-	text-align: left;
-	margin-left: 5px;
-	padding-left: 5%;
-	font-weight: bolder;
-}
+/* === DEFENDANT DISPLAY / SCROLLING === */
 
-TABLE.results TD.no-information-row
-{
-	color: ThreedDarkShadow;
-}
-/***** Individual style tweeks ******/
-
-
-/***** Scrolling defendants ******/
-
-.defendant-scrolling-area, .defendant-display-area
-{
-	border-color: red;
-	left: 0;
-	top: 0;
-	width: 450;
-	height: 80;
-	position: absolute;
-	background-color: transparent;
-	z-index: 9000;
-	margin-left:0;
-	padding-left: 0;
-}
-
-
-TABLE.defendant-names TD
-{
-	border: none;
-}
-
-.defendant-names, .case-title
-{
-	width: 450;
-}
-
-TD.scrolling-defendant-name
-{
+.defendant-scrolling-area,
+.defendant-display-area {
     width: 450px;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-	text-align: center;
+    height: 80px;
+    position: absolute;
+    background-color: transparent;
+    z-index: 9000;
+    padding-left: 0;
+    margin-left: 0;
 }
 
-.defendant-place-holder
-{
-	width: 450;
-	height: 80;
-	position: relative;
-	background-color: transparent;
+.defendant-place-holder {
+    width: 450px;
+    height: 80px;
+    position: relative;
+    background-color: transparent;
+}
+
+.defendant-names,
+.case-title {
+    width: 450px;
+}
+
+TABLE.defendant-names TD {
+    border: none;
+}
+
+/* === NAVIGATION === */
+
+TABLE.navbar,
+TR.navbar {
+    height: 20px;
+    margin-top: 2px;
+    font-size: 8pt;
+    color: #ffffff;
+    background-color: #003366;
 }

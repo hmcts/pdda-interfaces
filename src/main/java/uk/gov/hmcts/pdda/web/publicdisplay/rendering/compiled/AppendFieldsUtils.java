@@ -66,7 +66,7 @@ public final class AppendFieldsUtils {
 
         // Start headerImage inline
 
-        AppendUtils.append(buffer, "header/images/");
+        AppendUtils.append(buffer, "header-image/images/");
         AppendUtils.append(buffer, headerImageName);
         AppendUtils.append(buffer, ".gif?x=-1&y=45&size=50&text=");
         try {
@@ -92,7 +92,12 @@ public final class AppendFieldsUtils {
 
         AppendUtils.appendln(buffer, ");margin: 0px\">");
 
-        AppendUtils.appendln(buffer, "<td colspan=\"3\">&nbsp;" + TABLEDATAEND);
+        // AppendUtils.appendln(buffer, "<td colspan=\"3\">&nbsp;" + TABLEDATAEND);
+        AppendUtils.appendln(buffer,
+            "<td colspan=\"3\" style=\"height:58px; width:1280px; background-repeat: no-repeat; "
+                + "background-size: contain; background-position: center;\">&nbsp;"
+                + TABLEDATAEND);
+
         AppendUtils.appendln(buffer, TABLEROWEND);
         AppendUtils.appendln(buffer, "<tr class=\"navbar\">");
 
