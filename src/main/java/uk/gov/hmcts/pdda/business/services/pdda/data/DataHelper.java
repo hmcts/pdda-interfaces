@@ -100,15 +100,14 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbRefJudgeDao> validateJudge(final Integer courtId,
         final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
         LOG.debug("validateJudge()");
-        
         Optional<XhbRefJudgeDao> result =
             findJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         
-        // TODO Handle if result is null i.e a judge was not found
-        // if (result.isEmpty()) {
-        // result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth,
-        // publicDisplayHide);
-        // }
+        // TODO Get the REF_JUDGE_ID for part 2
+        
+        if (result.isEmpty()) {
+            result = createJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
+        }
         return result;
     }
 
