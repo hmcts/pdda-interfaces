@@ -21,8 +21,8 @@ java:
           alias: app-insights-connection-string
         - name: public-display-data-aggregator-authentication-cath-clientID
           alias: CATH_AZURE_CLIENT_ID
-	      - name: public-display-data-aggregator-authentication-cath-clientSecret
-	        alias: CATH_AZURE_CLIENT_SECRET
+        - name: public-display-data-aggregator-authentication-cath-clientSecret
+          alias: CATH_AZURE_CLIENT_SECRET
         - name: public-display-data-aggregator-authentication-clientID
           alias: PDDA_AZURE_CLIENT_ID
         - name: public-display-data-aggregator-authentication-clientSecret
