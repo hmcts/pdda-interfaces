@@ -76,7 +76,7 @@
    </servlet-mapping>
    <servlet-mapping>
        <servlet-name>HeaderImageServlet</servlet-name>
-       <url-pattern>/header/*</url-pattern>
+       <url-pattern>/header-image/*</url-pattern>
    </servlet-mapping>
    <servlet-mapping>
        <servlet-name>HeadingServlet</servlet-name>

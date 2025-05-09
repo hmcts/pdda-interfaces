@@ -51,9 +51,9 @@ public class HeaderImageServlet extends AbstractImageServlet {
      */
     @Override
     protected Image processImage(Image sourceImage, HttpServletRequest req) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("processImage() for " + req.getPathInfo() + "?" + req.getQueryString());
-        }
+
+        LOG.debug("processImage() for " + req.getPathInfo() + "?" + req.getQueryString());
+        LOG.info(">>>> HeaderImageServlet: processImage() called for {}", req.getPathInfo());
 
         int width = AUTOMATIC_WIDTH;
         String widthStr = req.getParameter("width");

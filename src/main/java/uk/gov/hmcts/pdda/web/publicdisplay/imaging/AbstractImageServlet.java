@@ -45,7 +45,13 @@ public abstract class AbstractImageServlet extends AbstractGraphicsServlet {
 
             LOG.debug(getServletContext().getRealPath(request.getPathInfo()));
             URL url = this.getServletContext().getResource("/WEB-INF" + request.getPathInfo());
+            LOG.debug("Resolved image URL: {}", url);
             Image sourceImage = obtainImage(url);
+            if (sourceImage == null) {
+                LOG.warn("Source image is null for URL: {}", url);
+            } else {
+                LOG.debug("Successfully obtained source image");
+            }
 
             // Do our custim processing on the image
             Image resultImage = processImage(sourceImage, request);

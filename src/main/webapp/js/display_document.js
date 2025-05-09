@@ -224,7 +224,7 @@ function Page(number, scrollPosition, cropSize)
  * To keep the HTML code clean we place the div tags used for paging the results in the HTML after it has loaded.
  *
  */
-function insertDivs()
+function insertDivsOrig()
 {
     var divHTML = '<div id="outerdiv" class="results-outer-div"><div id="resultsHeaderDiv" class="results-header-div"/><div id="scroller" class="outerScroller"><div id="displayArea" class="scrollArea">';
     divHTML += resultTable.outerHTML;
@@ -232,12 +232,44 @@ function insertDivs()
     resultTable.outerHTML = divHTML;
 }
 
+function insertDivs() {
+    if (typeof resultTable === "undefined" || !resultTable) {
+        log("insertDivs: resultTable is undefined or not present.");
+        return;
+    }
+
+    // Wrap existing table in structured divs for scrolling
+    const outerDiv = document.createElement('div');
+    outerDiv.id = "outerdiv";
+    outerDiv.className = "results-outer-div";
+
+    const headerDiv = document.createElement('div');
+    headerDiv.id = "resultsHeaderDiv";
+    headerDiv.className = "results-header-div";
+
+    const scrollerDiv = document.createElement('div');
+    scrollerDiv.id = "scroller";
+    scrollerDiv.className = "outerScroller";
+
+    const displayAreaDiv = document.createElement('div');
+    displayAreaDiv.id = "displayArea";
+    displayAreaDiv.className = "scrollArea";
+
+    // Move the resultTable into displayArea
+    resultTable.parentNode.insertBefore(outerDiv, resultTable);
+    displayAreaDiv.appendChild(resultTable);
+    scrollerDiv.appendChild(displayAreaDiv);
+    outerDiv.appendChild(headerDiv);
+    outerDiv.appendChild(scrollerDiv);
+}
+
+
 /*
  * This function takes the columns from two seperate tables
  * (the header table and the result table) and aligns
  * them with each other.
  */
-function alignHeaders()
+function alignHeadersOrig()
 {
     var resultColumns = resultTable.tBodies[0].rows[0].cells;
     // Clone the result table (not the nested rows)
@@ -258,36 +290,78 @@ function alignHeaders()
     }
 }
 
+function alignHeaders() {
+    // Get the original table and first row of data (assumes it's the header)
+    const originalHeaderRow = resultTable.tHead ? resultTable.tHead.rows[0] : resultTable.rows[0];
+
+    if (!originalHeaderRow || originalHeaderRow.cells.length === 0) {
+        log("alignHeaders: No header row found in resultTable.");
+        return;
+    }
+
+    // Create a new header table
+    const headerTable = document.createElement('table');
+    headerTable.id = "headerTable";
+    headerTable.className = "results-header";
+    headerTable.style.tableLayout = "fixed";
+    headerTable.style.width = resultTable.offsetWidth + "px";  // Force match total width
+
+    const thead = headerTable.createTHead();
+    const newHeaderRow = thead.insertRow();
+
+    // Copy each cell and preserve dimensions
+    for (let i = 0; i < originalHeaderRow.cells.length; i++) {
+        const originalCell = originalHeaderRow.cells[i];
+        const newCell = originalCell.cloneNode(true);
+
+        const computedWidth = originalCell.offsetWidth;
+        newCell.style.width = computedWidth + "px";
+        newHeaderRow.appendChild(newCell);
+    }
+
+    // Add the new header table to the resultsHeaderDiv
+    resultsHeaderDiv.innerHTML = "";  // Clear any existing
+    resultsHeaderDiv.appendChild(headerTable);
+}
+
 
 
 /*
  *Attaches a stylesheet to the page which relates to the display type we are using "(eg 42in plasma)" and
  * an optional stylesheet which the user supplies as a stylesheet= parameter
  */
-function attachStylesheets()
-{
-    var displayType = trimToNull(getParameterForWindow(self,"displayType"));
-    if(displayType != null) {
-		log("Display Stylesheet " + displayType);
-        const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = "css/" + displayType + ".css";
-		document.head.appendChild(link);
-    } else {
-        log("Display Stylesheet not found.");
-    }
+ function attachStylesheets() {
+     function addStylesheet(href) {
+         if (typeof document.createStyleSheet === "function") {
+             // For old versions of Internet Explorer
+             document.createStyleSheet(href);
+         } else {
+             // For modern browsers
+             var link = document.createElement("link");
+             link.rel = "stylesheet";
+             link.type = "text/css";
+             link.href = href;
+             document.head.appendChild(link);
+         }
+     }
 
-    var additionalStylesheet = trimToNull(getParameter("stylesheet"));
-    if(additionalStylesheet != null ) {
-        const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = "css/" + additionalStylesheet + ".css";
-		document.head.appendChild(link);
-        log("Additional Stylesheet " + additionalStylesheet + " added.");
-    } else {
-        log("Additional Stylesheet not found.");
-    }
-}
+     var displayType = trimToNull(getParameterForWindow(self, "displayType"));
+     if (displayType != null) {
+         log("Display Stylesheet " + displayType);
+         addStylesheet("css/" + displayType + ".css");
+     } else {
+         log("Display Stylesheet not found.");
+     }
+
+     var additionalStylesheet = trimToNull(getParameter("stylesheet"));
+     if (additionalStylesheet != null) {
+         addStylesheet("css/" + additionalStylesheet + ".css");
+         log("Additional Stylesheet " + additionalStylesheet + " added.");
+     } else {
+         log("Additional Stylesheet not found.");
+     }
+ }
+
 
 /*
  * Set up a document ready for paging. That means it will be shown one sectiom at a time rather than scrollable.
@@ -307,8 +381,19 @@ function initializePagedDocument()
             {
                 listText.innerText=document.forms[0].listTitleText.value + " ";
                 ofText.innerText=" "+ document.forms[0].ofTitleText.value + " ";
-                listInfoDoc.innerText=(window.top.lhs.controller.rotator.documentNumber+1);
-                listInfoDocTotal.innerText=(window.top.lhs.controller.rotator.documentList.length);
+				
+				if (window.top &&
+			        window.top.lhs &&
+			        window.top.lhs.controller &&
+			        window.top.lhs.controller.rotator &&
+			        window.top.lhs.controller.rotator.documentNumber != null &&
+			        window.top.lhs.controller.rotator.documentList != null) {
+
+			        listInfoDoc.innerText = window.top.lhs.controller.rotator.documentNumber + 1;
+			        listInfoDocTotal.innerText = window.top.lhs.controller.rotator.documentList.length;
+			    } else {
+			        log("Rotator or frame hierarchy not fully initialized.");
+			    }
             }
         }
         catch (e)

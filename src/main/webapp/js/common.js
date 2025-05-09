@@ -64,14 +64,43 @@ function isLogActive() {
 
 // Logs a message to wherever we're currently logging to.
 
+function getCallingSourceFile() {
+    try {
+        throw new Error();
+    } catch (e) {
+        const stackLines = e.stack.split('\n');
+
+        // The stack trace format is browser-dependent.
+        // We skip the first line (message), then get the second meaningful call
+        for (let i = 1; i < stackLines.length; i++) {
+            const line = stackLines[i].trim();
+
+            if (!line.includes("log") && !line.includes("error") && !line.includes("fail")) {
+                // Example formats:
+                // Chrome: at funcName (http://localhost:8080/js/myFile.js:10:15)
+                // Firefox: funcName@http://localhost:8080/js/myFile.js:10:15
+                const match = line.match(/(?:at\s+)?(?:.*\()?(.+\/([^/]+\.js)):\d+:\d+\)?$/);
+                if (match && match[2]) {
+                    return match[2]; // Just the filename
+                }
+            }
+        }
+    }
+    return "unknown.js";
+}
+
+
 function log(message)
 {
-    console.log(message);
-    window.status=message;
+	const sourceFile = getCallingSourceFile();
+	const fullMessage = `[${sourceFile}] ${message}`;
+		
+    console.log(fullMessage);
+    window.status=fullMessage;
     if(isLogActive()) {
 		let logEl= window.top.lhs.log.document.body.all['log'];
-		logEl.innerHTML += "<br/><b>" + self.document.title+"</b> : "+(message);
-		window.status=message;
+		logEl.innerHTML += "<br/><b>" + self.document.title+"</b> : "+(fullMessage);
+		window.status=fullMessage;
 		//Opera compatability issue.
 		if(!is_opera) {
 		    window.top.lhs.log.document.body.all['end'].scrollIntoView();
@@ -87,14 +116,16 @@ function log(message)
 
 function error(message)
 {
-    window.status=message;
-    log("ERROR: "+message);
+	const sourceFile = getCallingSourceFile();
+	window.status = `[${sourceFile}] ${message}`;
+	log("ERROR: " + message);
 }
 
 function fail(message)
 {
-    top.document.clear();
-    top.document.write("<h1 style='color:red'>"+message+"<h1>");
+	const sourceFile = getCallingSourceFile();
+	top.document.clear();
+	top.document.write("<h1 style='color:red'>[" + sourceFile + "] " + message + "<h1>");
 }
 
 function initializeDisplay()
