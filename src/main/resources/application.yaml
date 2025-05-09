@@ -1,9 +1,34 @@
 server:
   port: 8080
 
+cath:
+  azure:
+    scope: https://pip-ss-kv-stg.vault.azure.net/secrets/app-pip-data-management-scope
+    oauth2:
+      token-uri: ${cath.azure.scope}.default
+    active-directory:
+      credential:
+        client-id: ${CATH_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
+        client-secret: ${CATH_AZURE_CLIENT_SECRET:AAAAAAAAAAAAAAAA}
+
+
+pdda:
+  azure:
+    active-directory-justice-auth-uri: https://login.microsoftonline.com
+
 spring:
   application:
     name: pdda-public-display-data-aggregator
+  cloud:
+    azure:
+      oauth2:
+        token-uri: ${pdda.azure.active-directory-justice-auth-uri}/${AZURE_TENANT_ID:00000000-0000-0000-0000-000000000000}/oauth2/v2.0/token
+      active-directory:
+        profile:
+          tenant-id: ${AZURE_TENANT_ID:AAAAAAAAAAAAAAAA}
+        credential:
+          client-id: ${AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
+          client-secret: ${AZURE_CLIENT_SECRET:AAAAAAAAAAAAAAAA}
   config:
     import: "optional:configtree:/mnt/secrets/pdda/"
   dbMigration:

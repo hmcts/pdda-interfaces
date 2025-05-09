@@ -20,4 +20,10 @@ public class SetupController {
         return new ModelAndView("redirect:/DisplaySelectorServlet");
     }
 
+    @GetMapping("/Cath")
+    public ModelAndView cathServlet(ModelAndView model) {
+        log.debug("Cath servlet redirect");
+        return new ModelAndView("redirect:/CathServlet");
+    }
+
 }

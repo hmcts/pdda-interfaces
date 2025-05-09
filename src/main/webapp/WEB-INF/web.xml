@@ -39,6 +39,10 @@
        <servlet-name>DisplaySelectorServlet</servlet-name>
        <servlet-class>uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet.DisplaySelectorServlet</servlet-class>
    </servlet>
+      <servlet>
+       <servlet-name>CathServlet</servlet-name>
+       <servlet-class>uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet.CathServlet</servlet-class>
+   </servlet>
    <!-- Servlet used to perform initialization -->
    <servlet>
        <servlet-name>InitServlet</servlet-name>
