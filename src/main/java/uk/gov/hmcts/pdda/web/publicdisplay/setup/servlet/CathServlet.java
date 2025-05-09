@@ -11,31 +11,43 @@ import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 @WebServlet("/Cath")
 public class CathServlet extends HttpServlet {
 
     private static final long serialVersionUID = -4477899905926363639L;
+    private static final Logger LOG = LoggerFactory.getLogger(CathServlet.class);
 
     private CathOAuth2Helper cathOAuth2Helper;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+        LOG.debug("CaTH Servlet");
 
         response.setContentType("text/html;charset=UTF-8");
 
+        String token = getToken();
+
+        LOG.debug("Output Stats");
         try (ServletOutputStream output = response.getOutputStream()) {
 
-            output.print(documentWrapper(bold("CaTH Token: ") + getToken() + eol() + linebreak()
-                + bold("Date/Time: ") + now() + eol() + linebreak()
-                + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
+            output.print(documentWrapper(
+                bold("CaTH Token: ") + token + eol() + linebreak() + bold("Date/Time: ") + now()
+                    + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
         }
     }
 
     private String getToken() {
-        return getCathOAuth2Helper().getAccessToken();
+        LOG.debug("getToken()");
+        try {
+            return getCathOAuth2Helper().getAccessToken();
+        } catch (Exception ex) {
+            return "ERROR: " + ex.getMessage();
+        }
     }
 
     private CathOAuth2Helper getCathOAuth2Helper() {
