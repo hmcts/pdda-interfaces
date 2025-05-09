@@ -67,3 +67,5 @@ github_personal_access_token.txt
 
 ### Test files not to be checked in
 scripts/test/generateTestBaisDocs/*.xml
+dataGenerationTemplates
+output
