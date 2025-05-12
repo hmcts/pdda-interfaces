@@ -134,16 +134,15 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> im
     
     @SuppressWarnings("unchecked")
     public Optional<XhbRefJudgeDao> findJudgeByCourtIdAndNameSafe(Integer courtId, 
-        String judgeTitle, String judgeFirstname, String judgeSurname) {
-        LOG.debug("findJudgeByCourtIdAndNameSafe(courtId: {}, judgeTitle: {}, judgeFirstName: {}, judgeSurname: {} )",
-            courtId, judgeTitle, judgeFirstname, judgeSurname);
+        String judgeFirstname, String judgeSurname) {
+        LOG.debug("findJudgeByCourtIdAndNameSafe(courtId: {}, judgeFirstName: {}, judgeSurname: {} )",
+            courtId, judgeFirstname, judgeSurname);
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_REF_JUDGE.findJudgeByCourtIdAndNameSafe");
             query.setParameter("courtId", courtId);
-            query.setParameter("judgeTitle", judgeTitle);
-            query.setParameter("judgeFirstname", judgeFirstname);
-            query.setParameter("judgeSurname", judgeSurname);
+            query.setParameter("firstname", judgeFirstname);
+            query.setParameter("surname", judgeSurname);
 
             List<?> resultList = query.getResultList();
 

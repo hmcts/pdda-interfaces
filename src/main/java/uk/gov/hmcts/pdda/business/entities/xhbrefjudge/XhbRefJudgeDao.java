@@ -26,9 +26,8 @@ import java.io.Serializable;
 @NamedQuery(name = "XHB_REF_JUDGE.findJudgeByCourtIdAndNameSafe",
     query = "SELECT o from XHB_REF_JUDGE o WHERE "
         + "o.courtId = :courtId AND "
-        + "o.title = :judgeTitle AND "
-        + "o.firstname = :judgeFirstname AND "
-        + "o.surname = :judgeSurname")
+        + "o.firstname = :firstname AND "
+        + "o.surname = :surname")
 public class XhbRefJudgeDao extends AbstractVersionedDao implements Serializable {
     private static final long serialVersionUID = -6788003970955114552L;
     @Id

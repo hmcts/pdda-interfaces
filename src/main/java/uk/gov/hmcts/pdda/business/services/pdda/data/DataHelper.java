@@ -101,7 +101,7 @@ public class DataHelper extends FinderHelper {
         final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
         LOG.debug("validateJudge()");
         Optional<XhbRefJudgeDao> result =
-            findJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
+            findJudge(courtId, judgeFirstname, judgeSurname);
         
         // TODO Get the REF_JUDGE_ID for part 2
         

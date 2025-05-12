@@ -79,10 +79,10 @@ public class FinderHelper extends CreationHelper {
             caseType, caseNumber);
     }
 
-    public Optional<XhbRefJudgeDao> findJudge(final Integer courtId, final String judgeTitle,
+    public Optional<XhbRefJudgeDao> findJudge(final Integer courtId,
         final String judgeFirstname, final String judgeSurname) {
         return getRepositoryHelper().getXhbRefJudgeRepository().findJudgeByCourtIdAndNameSafe(courtId,
-            judgeTitle, judgeFirstname, judgeSurname);
+            judgeFirstname, judgeSurname);
     }
     
     public Optional<XhbDefendantOnCaseDao> findDefendantOnCase(final Integer caseId,

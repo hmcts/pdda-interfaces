@@ -83,9 +83,7 @@ public class ListObjectHelper implements Serializable {
     protected static final String SURNAME = "apd:CitizenNameSurname";
     protected static final String ISMASKED = "cs:IsMasked";
     protected static final String VERSION = "cs:Version";
-    protected static final String JUDGE_TITLE = "Judge/CitizenNameTitle";
-    protected static final String JUDGE_FIRSTNAME = "Judge/CitizenNameForename";
-    protected static final String JUDGE_SURNAME = "Judge/CitizenNameSurname";
+    protected static final String TITLE = "apd:CitizenNameTitle";
     
     private static final String EMPTY_STRING = "";
     private static final String DECIMALS_REGEX = "\\d+";
@@ -265,9 +263,9 @@ public class ListObjectHelper implements Serializable {
         LOG.info("validateJudge()");
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
-            String judgeTitle = nodesMap.get(JUDGE_TITLE);
-            String judgeFirstname = nodesMap.get(JUDGE_FIRSTNAME);
-            String judgeSurname = nodesMap.get(JUDGE_SURNAME);
+            String judgeTitle = nodesMap.get(TITLE);
+            String judgeFirstname = nodesMap.get(FIRSTNAME + ".1");
+            String judgeSurname = nodesMap.get(SURNAME);
             return dataHelper.validateJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return Optional.empty();
