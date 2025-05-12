@@ -1,72 +1,59 @@
-	/* Note: The width specified here must match exactly the
+/* Note: The width specified here must match exactly the
 	         width in TABLE.resultsHeader otherwise the columns
 	         and headers will not line up correctly. */
-
-DIV.body-area
-{
-   	margin-left: 50;
+DIV.body-area {
+	margin-left: 50px;
 }
 
-.outerScroller
-{
-		margin-top:62;
-		width: 1200;
-		height:705;
-		position:absolute;
-		background-color:transparent;
+.outerScroller {
+	margin-top: 62px;
+	width: 1200px;
+	height: 705px;
+	position: absolute;
+	background-color: transparent;
 }
 
-	/*The outer scroller on court-detail is for the public-notices*/
-.court-detail .outerScroller
-{
-		height:260;
+/*The outer scroller on court-detail is for the public-notices*/
+.court-detail .outerScroller {
+	height: 260px;
 }
 
-.scrollArea
-{
-		position:absolute;
+.scrollArea {
+	position: absolute;
 }
 
-
-.oddRow
-{
-		background-color: #F4F4A0;
-		position: relative;
+.oddRow {
+	background-color: #F4F4A0;
+	position: relative;
 }
 
-.evenRow
-{
+.evenRow {
 	background-color: #FBFAC0;
 	position: relative;
 }
 
-
-
-.reporting-restrictions
-{
-   color: red;
-   font-size: 25pt;
-   left: 100px;
-	top:960;
-   width: 1200;
-   position:absolute;
-	background-color:transparent;
+.reporting-restrictions {
+	color: red;
+	font-size: 25pt;
+	left: 100px;
+	top: 960px;
+	width: 1200px;
+	position: absolute;
+	background-color: transparent;
 }
 
-
 /*Hidden initially so that it appears smoothly.*/
-TABLE.results
-{
-		visibility: hidden;
-		background-color: #F4F4A0;
+TABLE.results {
+	visibility: hidden;
+	background-color: #F4F4A0;
 }
 
 TD {
 	text-align: center;
 }
 
-TABLE.results TD ,TABLE.non-scrolling-results TD, TABLE.case-progress TD
-{
+TABLE.results TD, TABLE.non-scrolling-results TD, TABLE.case-progress TD
+	{
 	font-size: 14pt;
 	font-weight: bold;
 	border: 1px black solid;
@@ -74,40 +61,33 @@ TABLE.results TD ,TABLE.non-scrolling-results TD, TABLE.case-progress TD
 	position: relative;
 }
 
-TABLE.navbar, TR.navbar
-{
-		HEIGHT: 20px;
-		MARGIN-TOP: 2px;
-		FONT-SIZE: 8pt;
-		COLOR: #ffffff;
-		BACKGROUND-COLOR: #003366
+TABLE.navbar, TR.navbar {
+	HEIGHT: 20px;
+	MARGIN-TOP: 2px;
+	FONT-SIZE: 8pt;
+	COLOR: #ffffff;
+	BACKGROUND-COLOR: #003366
 }
 
-DIV.inter-table-padding
-{
-	margin-top:30pt;
-	width:100%;
+DIV.inter-table-padding {
+	margin-top: 30pt;
+	width: 100%;
 }
 
+TABLE.results, TABLE.non-scrolling-results, TABLE.case-progress {
+	width: 1200px;
+	border: 1px solid Black;
+}
 
-TABLE.results, TABLE.non-scrolling-results, TABLE.case-progress
-{
-	  width: 1200;
-	  border: 1px solid Black;
- }
-
-
-TABLE.non-scrolling-results TD
-{
-		border: 1px black solid;
-		margin-left: 10px;
+TABLE.non-scrolling-results TD {
+	border: 1px black solid;
+	margin-left: 10px;
 }
 
 /* Public Notices in larger font */
-TABLE.results TD.public-notice
-{
-		font-size: 20pt;
-		word-break: keep-all;
+TABLE.results TD.public-notice {
+	font-size: 20pt;
+	word-break: keep-all;
 }
 
 /*
@@ -118,120 +98,103 @@ TABLE.results TD.public-notice
 */
 
 /****** THE RESULTS HEADER *******/
-
-.results-header-div
-{
-		position: relative;
-		width: 1200;
-		height: 56;
-		border: 1px solid Black;
+.results-header-div {
+	position: relative;
+	width: 1200px;
+	height: 56px;
+	border: 1px solid Black;
 }
 
-TR.column-headers TD, TABLE.case-progress TD.case-progress-time
-{
+TR.column-headers TD, TABLE.case-progress TD.case-progress-time {
 	font-size: 15pt;
 	font-weight: bold;
 	vertical-align: middle;
 	color: #FAFAD2;
 	background-color: #112244;
-	height: 60;
+	height: 60px;
 	border: 1px black solid;
 	margin-left: 10px;
 }
 
 /** General column tweaks **/
 
-
-
 /*** Court Detail ***/
-TABLE.case-progress TD.case-progress-time
-{
-		width: 50%;
-		font: 25px;
-		padding-left: 25;
+TABLE.case-progress TD.case-progress-time {
+	width: 50%;
+	font: 25px;
+	padding-left: 25px;
 }
 
-TABLE.case-progress TD.case-progress-status
-{
-		width: 50%;
-		font: 25px;
-		padding-left: 25;
-		background-color: #F4F4A0;
+TABLE.case-progress TD.case-progress-status {
+	width: 50%;
+	font-size: 25pt;
+	padding-left: 25px;
+	background-color: #F4F4A0;
 }
 
-TABLE.results TD.scrolling-defendant-name
-{
+TABLE.results TD.scrolling-defendant-name {
 	text-align: center;
 }
 
 .moved-highlight {
-    font: 20px;
-    font-weight: bold;
-    color: #0000FF;
+	font: 20px;
+	font-weight: bold;
+	color: #0000FF;
 }
 
 SPAN.asterix, .asterix {
 	color: red;
-    font-family: Verdana, sans-serif;
+	font-family: Verdana, sans-serif;
 	font-weight: bold;
 	font-size: 24px;
 	clear: none;
 }
 
-TABLE.results TD.defendant-name, TABLE.results TD.case-title, TABLE.results TD.defendant-and-case-number, TABLE.results TD.defendant-names
-{
+TABLE.results TD.defendant-name, TABLE.results TD.case-title, TABLE.results TD.defendant-and-case-number,
+	TABLE.results TD.defendant-names {
 	text-align: left;
 	margin-left: 5px;
 	padding-left: 5%;
 	font-weight: bolder;
 }
 
-TABLE.results TD.no-information-row
-{
+TABLE.results TD.no-information-row {
 	color: ThreedDarkShadow;
 }
-/***** Individual style tweeks ******/
-
+/***** Individual style tweaks ******/
 
 /***** Scrolling defendants ******/
-
-.defendant-scrolling-area, .defendant-display-area
-{
+.defendant-scrolling-area, .defendant-display-area {
 	border-color: red;
 	left: 0;
 	top: 0;
-	width: 450;
-	height: 80;
+	width: 450px;
+	height: 80px;
 	position: absolute;
 	background-color: transparent;
 	z-index: 9000;
-	margin-left:0;
+	margin-left: 0;
 	padding-left: 0;
 }
 
-
-TABLE.defendant-names TD
-{
+TABLE.defendant-names TD {
 	border: none;
 }
 
-.defendant-names, .case-title
-{
-	width: 450;
+.defendant-names, .case-title {
+	width: 450px;
 }
 
-TD.scrolling-defendant-name
-{
-    width: 450px;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
+TD.scrolling-defendant-name {
+	width: 450px;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 	text-align: center;
 }
 
-.defendant-place-holder
-{
-	width: 450;
-	height: 80;
+.defendant-place-holder {
+	width: 450px;
+	height: 80px;
 	position: relative;
 	background-color: transparent;
 }
