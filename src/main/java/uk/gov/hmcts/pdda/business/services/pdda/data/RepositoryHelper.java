@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import java.io.Serializable;
@@ -38,7 +39,7 @@ import java.io.Serializable;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList", "PMD.TooManyFields"})
 public class RepositoryHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +52,7 @@ public class RepositoryHelper implements Serializable {
     private XhbSittingRepository xhbSittingRepository;
     private XhbCaseRepository xhbCaseRepository;
     private XhbRefJudgeRepository xhbRefJudgeRepository;
+    private XhbShJudgeRepository xhbShJudgeRepository;
     private XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository;
     private XhbDefendantRepository xhbDefendantRepository;
     private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
@@ -77,6 +79,7 @@ public class RepositoryHelper implements Serializable {
         xhbSittingRepository = null;
         xhbCaseRepository = null;
         xhbRefJudgeRepository = null;
+        xhbShJudgeRepository = null;
         xhbDefendantRepository = null;
         xhbDefendantOnCaseRepository = null;
         xhbRefHearingTypeRepository = null;
@@ -139,6 +142,13 @@ public class RepositoryHelper implements Serializable {
             xhbRefJudgeRepository = new XhbRefJudgeRepository(getEntityManager());
         }
         return xhbRefJudgeRepository;
+    }
+    
+    public XhbShJudgeRepository getXhbShJudgeRepository() {
+        if (xhbShJudgeRepository == null || !isEntityManagerActive()) {
+            xhbShJudgeRepository = new XhbShJudgeRepository(getEntityManager());
+        }
+        return xhbShJudgeRepository;
     }
 
     public XhbDefendantOnCaseRepository getXhbDefendantOnCaseRepository() {
