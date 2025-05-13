@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -106,7 +107,7 @@ public class ListObjectHelper implements Serializable {
     private transient Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private transient Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
     private transient Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
-    private transient Optional<XhbRefJudgeDao> xhbRefJudgeDao = Optional.empty();
+    private transient Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao = Optional.empty();
 
     public ListObjectHelper() {
         // Default constructor
@@ -130,7 +131,14 @@ public class ListObjectHelper implements Serializable {
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
         } else if (breadcrumb.contains(JUDGE_NODE)) {
-            xhbRefJudgeDao = validateJudge(nodesMap);
+            Optional<XhbRefJudgeDao> xhbRefJudgeDao = validateJudge(nodesMap);
+            if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
+                // Create the XhbSchedHearingAttendee Record
+                xhbSchedHearingAttendeeDao = dataHelper.createSchedHearingAttendee(
+                    xhbScheduledHearingDao.get().getScheduledHearingId(),
+                    xhbRefJudgeDao.get().getRefJudgeId());
+                // TODO Create the XhbShJudge record
+            }
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();

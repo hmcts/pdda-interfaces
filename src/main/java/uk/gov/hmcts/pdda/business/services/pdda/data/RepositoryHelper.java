@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
@@ -55,6 +56,7 @@ public class RepositoryHelper implements Serializable {
     private XhbRefHearingTypeRepository xhbRefHearingTypeRepository;
     private XhbHearingRepository xhbHearingRepository;
     private XhbScheduledHearingRepository xhbScheduledHearingRepository;
+    private XhbSchedHearingAttendeeRepository xhbSchedHearingAttendeeRepository;
     private XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository;
     private XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository;
 
@@ -74,11 +76,13 @@ public class RepositoryHelper implements Serializable {
         xhbHearingListRepository = null;
         xhbSittingRepository = null;
         xhbCaseRepository = null;
+        xhbRefJudgeRepository = null;
         xhbDefendantRepository = null;
         xhbDefendantOnCaseRepository = null;
         xhbRefHearingTypeRepository = null;
         xhbHearingRepository = null;
         xhbScheduledHearingRepository = null;
+        xhbSchedHearingAttendeeRepository = null;
         xhbSchedHearingDefendantRepository = null;
         xhbCrLiveDisplayRepository = null;
     }
@@ -170,6 +174,13 @@ public class RepositoryHelper implements Serializable {
             xhbScheduledHearingRepository = new XhbScheduledHearingRepository(getEntityManager());
         }
         return xhbScheduledHearingRepository;
+    }
+    
+    public XhbSchedHearingAttendeeRepository getXhbSchedHearingAttendeeRepository() {
+        if (xhbSchedHearingAttendeeRepository == null || !isEntityManagerActive()) {
+            xhbSchedHearingAttendeeRepository = new XhbSchedHearingAttendeeRepository(getEntityManager());
+        }
+        return xhbSchedHearingAttendeeRepository;
     }
 
     public XhbSchedHearingDefendantRepository getXhbSchedHearingDefendantRepository() {

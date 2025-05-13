@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -148,7 +149,7 @@ public class CreationHelper implements Serializable {
     }
     
     /**
-     * Create XhbJudgeDao.
+     * Create XhbRefJudgeDao.
      */
     public Optional<XhbRefJudgeDao> createJudge(final Integer courtId,
         final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
@@ -159,6 +160,19 @@ public class CreationHelper implements Serializable {
         dao.setSurname(judgeSurname);
         dao.setCourtId(courtId);
         return getRepositoryHelper().getXhbRefJudgeRepository().update(dao);
+    }
+    
+    /**
+     * Create XhbSchedHearingAttendeeDao.
+     */
+    public Optional<XhbSchedHearingAttendeeDao> createSchedHearingAttendee(final Integer scheduledHearingId,
+        final Integer refJudgeId) {
+        LOG.info("createSchedHearingAttendee({},{})", scheduledHearingId, refJudgeId);
+        XhbSchedHearingAttendeeDao dao = new XhbSchedHearingAttendeeDao();
+        dao.setAttendeeType("J");
+        dao.setScheduledHearingId(scheduledHearingId);
+        dao.setRefJudgeId(refJudgeId);
+        return getRepositoryHelper().getXhbSchedHearingAttendeeRepository().update(dao);
     }
     
     /**
