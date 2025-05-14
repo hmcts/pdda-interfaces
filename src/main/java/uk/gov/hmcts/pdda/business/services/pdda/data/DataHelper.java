@@ -103,7 +103,7 @@ public class DataHelper extends FinderHelper {
         Optional<XhbRefJudgeDao> result =
             findJudge(courtId, judgeFirstname, judgeSurname);
         if (result.isEmpty()) {
-            result = createJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
+            result = createRefJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return result;
     }

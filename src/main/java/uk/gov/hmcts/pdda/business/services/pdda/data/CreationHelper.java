@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.io.Serializable;
@@ -151,9 +152,9 @@ public class CreationHelper implements Serializable {
     /**
      * Create XhbRefJudgeDao.
      */
-    public Optional<XhbRefJudgeDao> createJudge(final Integer courtId,
+    public Optional<XhbRefJudgeDao> createRefJudge(final Integer courtId,
         final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
-        LOG.info("createJudge({},{},{},{})", courtId, judgeTitle, judgeFirstname, judgeSurname);
+        LOG.info("createRefJudge({},{},{},{})", courtId, judgeTitle, judgeFirstname, judgeSurname);
         XhbRefJudgeDao dao = new XhbRefJudgeDao();
         dao.setTitle(judgeTitle);
         dao.setFirstname(judgeFirstname);
@@ -163,13 +164,26 @@ public class CreationHelper implements Serializable {
     }
     
     /**
+     * Create XhbShJudgeDao.
+     */
+    public Optional<XhbShJudgeDao> createShJudge(final String deputyHcj, final Integer refJudgeId,
+        final Integer shAttendeeId) {
+        LOG.info("createShJudge({},{},{})", deputyHcj, refJudgeId, shAttendeeId);
+        XhbShJudgeDao dao = new XhbShJudgeDao();
+        dao.setDeputyHcj(deputyHcj);
+        dao.setRefJudgeId(refJudgeId);
+        dao.setShAttendeeId(shAttendeeId);
+        return getRepositoryHelper().getXhbShJudgeRepository().update(dao);
+    }
+    
+    /**
      * Create XhbSchedHearingAttendeeDao.
      */
-    public Optional<XhbSchedHearingAttendeeDao> createSchedHearingAttendee(final Integer scheduledHearingId,
-        final Integer refJudgeId) {
+    public Optional<XhbSchedHearingAttendeeDao> createSchedHearingAttendee(final String attendeeType,
+        final Integer scheduledHearingId, final Integer refJudgeId) {
         LOG.info("createSchedHearingAttendee({},{})", scheduledHearingId, refJudgeId);
         XhbSchedHearingAttendeeDao dao = new XhbSchedHearingAttendeeDao();
-        dao.setAttendeeType("J");
+        dao.setAttendeeType(attendeeType);
         dao.setScheduledHearingId(scheduledHearingId);
         dao.setRefJudgeId(refJudgeId);
         return getRepositoryHelper().getXhbSchedHearingAttendeeRepository().update(dao);

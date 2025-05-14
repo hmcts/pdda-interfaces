@@ -107,7 +107,6 @@ public class ListObjectHelper implements Serializable {
     private transient Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private transient Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
     private transient Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
-    private transient Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao = Optional.empty();
 
     public ListObjectHelper() {
         // Default constructor
@@ -132,13 +131,7 @@ public class ListObjectHelper implements Serializable {
             validateCrLiveDisplay();
         } else if (breadcrumb.contains(JUDGE_NODE)) {
             Optional<XhbRefJudgeDao> xhbRefJudgeDao = validateJudge(nodesMap);
-            if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
-                // Create the XhbSchedHearingAttendee Record
-                xhbSchedHearingAttendeeDao = dataHelper.createSchedHearingAttendee(
-                    xhbScheduledHearingDao.get().getScheduledHearingId(),
-                    xhbRefJudgeDao.get().getRefJudgeId());
-                // TODO Create the XhbShJudge record
-            }
+            processJudgeRecords(xhbRefJudgeDao);
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
@@ -277,6 +270,21 @@ public class ListObjectHelper implements Serializable {
             return dataHelper.validateJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return Optional.empty();
+    }
+    
+    private void processJudgeRecords(final Optional<XhbRefJudgeDao> xhbRefJudgeDao) {
+        if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
+            // Create the XhbSchedHearingAttendee record
+            Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =
+                dataHelper.createSchedHearingAttendee("J",
+                xhbScheduledHearingDao.get().getScheduledHearingId(),
+                xhbRefJudgeDao.get().getRefJudgeId());
+            if (!xhbSchedHearingAttendeeDao.isEmpty()) {
+                // Create the XhbShJudge record
+                dataHelper.createShJudge("N", xhbRefJudgeDao.get().getRefJudgeId(),
+                    xhbSchedHearingAttendeeDao.get().getShAttendeeId());
+            }
+        }
     }
     
     private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
