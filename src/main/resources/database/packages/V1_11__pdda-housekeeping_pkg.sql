@@ -64,7 +64,7 @@ BEGIN
 	)
 	UPDATE pdda.xhb_pdda_message m
 	SET 
-		cp_document_status = 'VP',
+		cp_document_status = 'VF',
 		error_message = p_errortext_in
 	FROM rows_to_update r
 	WHERE m.pdda_message_id = r.pdda_message_id;
@@ -125,103 +125,6 @@ $$;
 -- Procedure: pdda_housekeeping_pkg.clear_audit_tables
 -- Description: Housekeeping for clearing down audit tables
 --------------------------------------
-CREATE OR REPLACE PROCEDURE pdda_housekeeping_pkg.clear_audit_tables (
-    p_env_in VARCHAR DEFAULT 'NON-PROD',
-    p_limit_in INTEGER DEFAULT 5000
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    v_start_time TIMESTAMP := clock_timestamp();
-    v_end_time TIMESTAMP;
-    v_deleted_aud_pdda INTEGER := 0;
-    v_deleted_aud_cpp_inbound INTEGER := 0;
-    v_deleted_aud_cpp_formatting INTEGER := 0;
-    v_deleted_aud_display_store INTEGER := 0;
-    v_hk_result_id INTEGER;
-BEGIN
-    -- Insert housekeeping log entry
-    BEGIN
-        INSERT INTO pdda.pdda_hk_results (job_name, job_start, status)
-        VALUES (
-            'CLEAR AUDIT TABLES (' || p_env_in || ', ' || COALESCE(p_limit_in::TEXT, 'NULL') || ')',
-            v_start_time,
-            'IN_PROGRESS'
-        )
-        RETURNING hk_result_id INTO v_hk_result_id;
-    EXCEPTION WHEN OTHERS THEN
-        RAISE NOTICE 'Failed to insert into pdda_hk_results: %', SQLERRM;
-        RETURN;
-    END;
-
-    -- Part 1: AUD_PDDA_MESSAGE
-    DELETE FROM pdda.aud_pdda_message
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.aud_pdda_message
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_aud_pdda = ROW_COUNT;
-
-    -- Part 2: AUD_CPP_STAGING_INBOUND
-    DELETE FROM pdda.aud_cpp_staging_inbound
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.aud_cpp_staging_inbound
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_aud_cpp_inbound = ROW_COUNT;
-
-    -- Part 3: AUD_CPP_FORMATTING
-    DELETE FROM pdda.aud_cpp_formatting
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.aud_cpp_formatting
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_aud_cpp_formatting = ROW_COUNT;
-
-    -- Part 4: AUD_DISPLAY_STORE
-    DELETE FROM pdda.aud_display_store
-	WHERE ctid IN (
-	    SELECT ctid
-	    FROM pdda.aud_display_store
-	    ORDER BY last_update_date ASC
-	    LIMIT p_limit_in
-	);
-    GET DIAGNOSTICS v_deleted_aud_display_store = ROW_COUNT;
-
-    -- Finalize housekeeping log
-    v_end_time := clock_timestamp();
-    UPDATE pdda.pdda_hk_results
-    SET
-        job_end = v_end_time,
-        job_text = 'Updated:: AUD_PDDA_MESSAGE: ' || v_deleted_aud_pdda ||
-                   ' records; AUD_CPP_STAGING_INBOUND: ' || v_deleted_aud_cpp_inbound ||
-                   ' records; AUD_CPP_FORMATTING: ' || v_deleted_aud_cpp_formatting ||
-                   ' records; AUD_DISPLAY_STORE: ' || v_deleted_aud_display_store || ' records',
-        error_message = NULL,
-        status = 'SUCCESS'
-    WHERE hk_result_id = v_hk_result_id;
-
-EXCEPTION WHEN OTHERS THEN
-    v_end_time := clock_timestamp();
-    UPDATE pdda.pdda_hk_results
-    SET
-        job_end = v_end_time,
-        error_message = SQLERRM,
-        status = 'FAILURE'
-    WHERE hk_result_id = v_hk_result_id;
-END;
-$$;
-
-
-
-
---------------------------------------
--- Procedure: pdda_housekeeping_pkg.clear_old_records
--- Description: Housekeeping for clearing records older than N days
---------------------------------------
 CREATE OR REPLACE PROCEDURE pdda_housekeeping_pkg.clear_old_records (
     p_days_in INTEGER DEFAULT 14,
     p_limit_in INTEGER DEFAULT 100
@@ -241,9 +144,12 @@ DECLARE
     v_deleted_xhb_hearing_list INTEGER := 0;
     v_deleted_xhb_sitting INTEGER := 0;
     v_deleted_xhb_hearing INTEGER := 0;
-    v_deleted_xhb_sched_hearing_defendant INTEGER := 0;
-    v_deleted_xhb_scheduled_hearing INTEGER := 0;
+	v_deleted_xhb_sched_hearing_defendant INTEGER := 0;
+	v_deleted_xhb_scheduled_hearing INTEGER := 0;
+	v_deleted_xhb_sched_hearing_attendee INTEGER := 0;
+	v_deleted_xhb_cpp_list INTEGER := 0;
 BEGIN
+	RAISE NOTICE 'Invoked procedure';
     -- Insert housekeeping log entry
     BEGIN
         INSERT INTO pdda.pdda_hk_results (job_name, job_start, status)
@@ -257,70 +163,90 @@ BEGIN
         RAISE NOTICE 'Failed to insert into pdda_hk_results: %', SQLERRM;
         RETURN;
     END;
-    RAISE NOTICE 'Setup pdda_hk_results record';
+	RAISE NOTICE 'Setup pdda_hk_results record';
 
     -- Delete order based on constraints
 
-    -- 1. XHB_SCHED_HEARING_DEFENDANT
-    DELETE FROM pdda.xhb_sched_hearing_defendant
+	-- 1. XHB_SCHED_HEARING_ATTENDEE
+    DELETE FROM pdda.xhb_sched_hearing_attendee
     WHERE ctid IN (
-        SELECT ctid FROM pdda.xhb_sched_hearing_defendant
-        WHERE last_update_date < CURRENT_DATE - 14
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_xhb_sched_hearing_defendant = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_SCHED_HEARING_DEFENDANT';
-
-    -- 2. XHB_SCHEDULED_HEARING
-    DELETE FROM pdda.xhb_scheduled_hearing
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.xhb_scheduled_hearing
-        WHERE last_update_date < CURRENT_DATE - 14
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_xhb_scheduled_hearing = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_SCHEDULED_HEARING';
-
-    -- 3. XHB_SITTING
-    DELETE FROM pdda.xhb_sitting
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.xhb_sitting
-        WHERE last_update_date < CURRENT_DATE - 14
-        ORDER BY last_update_date ASC
-        LIMIT p_limit_in
-    );
-    GET DIAGNOSTICS v_deleted_xhb_sitting = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_SITTING';
-
-    -- 4. XHB_HEARING
-    DELETE FROM pdda.xhb_hearing
-    WHERE ctid IN (
-        SELECT ctid FROM pdda.xhb_hearing
+        SELECT ctid FROM pdda.xhb_sched_hearing_attendee
         WHERE last_update_date < v_threshold_date
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
-    GET DIAGNOSTICS v_deleted_xhb_hearing = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_HEARING';
+    GET DIAGNOSTICS v_deleted_xhb_sched_hearing_attendee = ROW_COUNT;
+	RAISE NOTICE 'Deleted data from XHB_SCHED_HEARING_ATTENDEE';
 
-    -- 5. XHB_HEARING_LIST
-    DELETE FROM pdda.xhb_hearing_list
+	-- 2. XHB_SCHED_HEARING_DEFENDANT
+    DELETE FROM pdda.xhb_sched_hearing_defendant
     WHERE ctid IN (
-	SELECT ctid
-	FROM pdda.xhb_hearing_list hl
-	WHERE last_update_date < v_threshold_date
-	  AND NOT EXISTS (
-	    SELECT 1 FROM pdda.xhb_sitting s WHERE s.list_id = hl.list_id
-	  )
-	ORDER BY last_update_date ASC
-	LIMIT p_limit_in
+        SELECT ctid FROM pdda.xhb_sched_hearing_defendant
+        WHERE last_update_date < v_threshold_date
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_xhb_sched_hearing_defendant = ROW_COUNT;
+	RAISE NOTICE 'Deleted data from XHB_SCHED_HEARING_DEFENDANT';
+
+	-- 3. XHB_SCHEDULED_HEARING
+    DELETE FROM pdda.xhb_scheduled_hearing
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.xhb_scheduled_hearing xsh
+        WHERE last_update_date < v_threshold_date
+		  AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_sched_hearing_attendee xsha WHERE xsha.scheduled_hearing_id = xsh.scheduled_hearing_id
+	      )
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_xhb_scheduled_hearing = ROW_COUNT;
+	RAISE NOTICE 'Deleted data from XHB_SCHEDULED_HEARING';
+
+    -- 4. XHB_SITTING
+    DELETE FROM pdda.xhb_sitting
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.xhb_sitting xs
+        WHERE last_update_date < v_threshold_date
+		  AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_scheduled_hearing xsh WHERE xsh.sitting_id = xs.sitting_id
+	      )
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_xhb_sitting = ROW_COUNT;
+	RAISE NOTICE 'Deleted data from XHB_SITTING';
+
+    -- 5. XHB_HEARING
+    DELETE FROM pdda.xhb_hearing
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.xhb_hearing xh
+        WHERE last_update_date < v_threshold_date
+		  AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_scheduled_hearing xsh WHERE xsh.hearing_id = xh.hearing_id
+	      )
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_xhb_hearing = ROW_COUNT;
+	RAISE NOTICE 'Deleted data from XHB_HEARING';
+
+    -- 6. XHB_HEARING_LIST
+	DELETE FROM pdda.xhb_hearing_list
+	WHERE ctid IN (
+	    SELECT ctid
+	    FROM pdda.xhb_hearing_list hl
+	    WHERE last_update_date < v_threshold_date
+	      AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_sitting s WHERE s.list_id = hl.list_id
+	      )
+	    ORDER BY last_update_date ASC
+	    LIMIT p_limit_in
 	);
     GET DIAGNOSTICS v_deleted_xhb_hearing_list = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_HEARING_LIST';
+	RAISE NOTICE 'Deleted data from XHB_HEARING_LIST';
 
-    -- 6. XHB_FORMATTING
+    -- 7. XHB_FORMATTING
     DELETE FROM pdda.xhb_formatting
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_formatting
@@ -329,9 +255,9 @@ BEGIN
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_formatting = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_FORMATTING';
+	RAISE NOTICE 'Deleted data from XHB_FORMATTING';
 
-    -- 7. XHB_CPP_FORMATTING
+    -- 8. XHB_CPP_FORMATTING
     DELETE FROM pdda.xhb_cpp_formatting
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_cpp_formatting
@@ -340,9 +266,9 @@ BEGIN
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_cpp_formatting = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_CPP_FORMATTING';
+	RAISE NOTICE 'Deleted data from XHB_CPP_FORMATTING';
 
-    -- 8. XHB_CPP_LIST
+	-- 9. XHB_CPP_LIST
     DELETE FROM pdda.xhb_cpp_list
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_cpp_list
@@ -350,56 +276,57 @@ BEGIN
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
-    GET DIAGNOSTICS v_deleted_xhb_cpp_formatting = ROW_COUNT;
+    GET DIAGNOSTICS v_deleted_xhb_cpp_list = ROW_COUNT;
 	RAISE NOTICE 'Deleted data from XHB_CPP_LIST';
 
-    -- 9. XHB_PDDA_MESSAGE
+    -- 10. XHB_PDDA_MESSAGE
     DELETE FROM pdda.xhb_pdda_message
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_pdda_message pm
         WHERE last_update_date < v_threshold_date
-	  AND NOT EXISTS (
-	    SELECT 1 FROM pdda.xhb_clob c WHERE c.clob_id = pm.pdda_message_data_id
-	  )
+		AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_clob c WHERE c.clob_id = pm.pdda_message_data_id
+	      )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_pdda = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_PDDA_MESSAGE';
+	RAISE NOTICE 'Deleted data from XHB_PDDA_MESSAGE';
 
-    -- 10. XHB_CPP_STAGING_INBOUND
+	-- 11. XHB_CPP_STAGING_INBOUND
     DELETE FROM pdda.xhb_cpp_staging_inbound
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_cpp_staging_inbound csi
         WHERE last_update_date < v_threshold_date
-	  AND NOT EXISTS (
-	    SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.cpp_staging_inbound_id = csi.cpp_staging_inbound_id
-	  )
+		AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.cpp_staging_inbound_id = csi.cpp_staging_inbound_id
+	      )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_cpp_inbound = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_CPP_STAGING_INBOUND';
+	RAISE NOTICE 'Deleted data from XHB_CPP_STAGING_INBOUND';
 
-    -- 11. XHB_CLOB
+    -- 12. XHB_CLOB
     DELETE FROM pdda.xhb_clob
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_clob xc
         WHERE last_update_date < v_threshold_date
-	  AND NOT EXISTS (
-	    SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.pdda_message_data_id = xc.clob_id
-	  )
-	  AND NOT EXISTS (
-	   SELECT 1 FROM pdda.xhb_cpp_staging_inbound xcsi WHERE xcsi.clob_id = xc.clob_id
-	  )
+		AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.pdda_message_data_id = xc.clob_id
+	      )
+		AND NOT EXISTS (
+	        SELECT 1 FROM pdda.xhb_cpp_staging_inbound xcsi WHERE xcsi.clob_id = xc.clob_id
+	      )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_clob = ROW_COUNT;
-    RAISE NOTICE 'Deleted data from XHB_CLOB';
+	RAISE NOTICE 'Deleted data from XHB_CLOB';
 
 
     -- Finalize housekeeping log
+	RAISE NOTICE 'About to update pdda_hk_results with final status';
     v_end_time := clock_timestamp();
     UPDATE pdda.pdda_hk_results
     SET
@@ -409,12 +336,17 @@ BEGIN
                    '; XHB_CLOB: ' || v_deleted_xhb_clob ||
                    '; XHB_FORMATTING: ' || v_deleted_xhb_formatting ||
                    '; XHB_CPP_FORMATTING: ' || v_deleted_xhb_cpp_formatting ||
+				   '; XHB_CPP_LIST: ' || v_deleted_xhb_cpp_list ||
                    '; XHB_HEARING_LIST: ' || v_deleted_xhb_hearing_list ||
                    '; XHB_SITTING: ' || v_deleted_xhb_sitting ||
-                   '; XHB_HEARING: ' || v_deleted_xhb_hearing,
+                   '; XHB_HEARING: ' || v_deleted_xhb_hearing ||
+				   '; XHB_SCHED_HEARING_DEFENDANT: ' || v_deleted_xhb_sched_hearing_defendant ||
+				   '; XHB_SCHEDULED_HEARING: ' || v_deleted_xhb_scheduled_hearing ||
+				   '; XHB_SCHED_HEARING_ATTENDEE: ' || v_deleted_xhb_sched_hearing_attendee,
         error_message = NULL,
         status = 'SUCCESS'
     WHERE hk_result_id = v_hk_result_id;
+	RAISE NOTICE 'Updated PDDA_HK_RESULTS table';
 
 EXCEPTION WHEN OTHERS THEN
     v_end_time := clock_timestamp();
@@ -426,6 +358,7 @@ EXCEPTION WHEN OTHERS THEN
     WHERE hk_result_id = v_hk_result_id;
 END;
 $$;
+
 
 
 
