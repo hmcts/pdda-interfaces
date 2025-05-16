@@ -51,7 +51,6 @@ class CathServletTest {
     @AfterEach
     public void teardown() {
         classUnderTest = new CathServlet();
-        classUnderTest.getCathOAuth2Helper();
     }
 
     @Test

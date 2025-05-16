@@ -21,16 +21,15 @@ public class CathServlet extends HttpServlet {
     private static final long serialVersionUID = -4477899905926363639L;
     private static final Logger LOG = LoggerFactory.getLogger(CathServlet.class);
 
-    private CathOAuth2Helper cathOAuth2Helper;
+    private final CathOAuth2Helper cathOAuth2Helper;
 
     protected CathServlet() {
-        // Default constructor
-        super();
+        this(new CathOAuth2Helper());
     }
     
     // JUnit constructor
     protected CathServlet(CathOAuth2Helper cathOAuth2Helper) {
-        this();
+        super();
         this.cathOAuth2Helper = cathOAuth2Helper;
     }
     
@@ -63,10 +62,7 @@ public class CathServlet extends HttpServlet {
         }
     }
 
-    protected CathOAuth2Helper getCathOAuth2Helper() {
-        if (cathOAuth2Helper == null) {
-            cathOAuth2Helper = new CathOAuth2Helper();
-        }
+    private CathOAuth2Helper getCathOAuth2Helper() {
         return cathOAuth2Helper;
     }
 
