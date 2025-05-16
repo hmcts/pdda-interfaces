@@ -49,6 +49,8 @@ public class CathServlet extends HttpServlet {
             output.print(documentWrapper(
                 bold("CaTH Token: ") + token + eol() + linebreak() + bold("Date/Time: ") + now()
                     + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
+        } catch (IOException ex) {
+            LOG.error("Error: {}", ex.getMessage()); 
         }
     }
 
