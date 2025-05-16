@@ -23,7 +23,7 @@ public class CathServlet extends HttpServlet {
 
     private final CathOAuth2Helper cathOAuth2Helper;
 
-    protected CathServlet() {
+    public CathServlet() {
         this(new CathOAuth2Helper());
     }
     

@@ -90,6 +90,10 @@
        <servlet-name>DisplaySelectorServlet</servlet-name>
        <url-pattern>/setup/DisplaySelectorServlet</url-pattern>
    </servlet-mapping>
+      <servlet-mapping>
+       <servlet-name>CathServlet</servlet-name>
+       <url-pattern>/setup/CathServlet</url-pattern>
+   </servlet-mapping>
    
    <session-config>
        <session-timeout>-2</session-timeout>
