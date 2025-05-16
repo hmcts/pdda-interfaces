@@ -1,61 +1,69 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
-import org.easymock.EasyMock;
-import org.easymock.EasyMockExtension;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-@ExtendWith(EasyMockExtension.class)
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class CathServletTest {
 
     @Mock
-    private HttpServletRequest request;
+    private HttpServletRequest mockRequest;
 
     @Mock
-    private HttpServletResponse response;
+    private HttpServletResponse mockResponse;
 
-    @TestSubject
-    private static CathServlet classUnderTest = new CathServlet();
+    @Mock
+    private ServletOutputStream mockServletOutputStream;
 
-    @BeforeAll
-    public static void setUp() { 
+
+    @InjectMocks
+    private CathServlet classUnderTest = new CathServlet(Mockito.mock(CathOAuth2Helper.class));
+
+    @BeforeEach
+    public void setUp() {
         try {
-            ServletConfig config = EasyMock.createMock(ServletConfig.class);
+            ServletConfig config = Mockito.mock(ServletConfig.class);
             classUnderTest.init(config);
         } catch (ServletException ex) {
             fail(ex.getMessage());
         }
     }
 
-    @AfterAll
-    public static void tearDown() {
-        // Do nothing
+    @AfterEach
+    public void teardown() {
+        classUnderTest = new CathServlet();
+        classUnderTest.getCathOAuth2Helper();
     }
 
     @Test
-    void testServiceDoGet() {
+    void testServiceDoGet() throws IOException {
 
-        EasyMock.expect(request.getMethod()).andReturn("GET");
-        EasyMock.replay(request);
-        
+        Mockito.when(mockRequest.getMethod()).thenReturn("GET");
+        Mockito.when(mockResponse.getOutputStream()).thenReturn(mockServletOutputStream);
+
         try {
-            classUnderTest.service(request, response);
+            classUnderTest.service(mockRequest, mockResponse);
         } catch (ServletException | IOException e) {
             fail(e.getMessage());
         }
-
-        EasyMock.verify(request);
     }
 }

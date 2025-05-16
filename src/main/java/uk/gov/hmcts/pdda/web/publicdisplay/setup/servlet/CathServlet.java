@@ -23,6 +23,17 @@ public class CathServlet extends HttpServlet {
 
     private CathOAuth2Helper cathOAuth2Helper;
 
+    protected CathServlet() {
+        // Default constructor
+        super();
+    }
+    
+    // JUnit constructor
+    protected CathServlet(CathOAuth2Helper cathOAuth2Helper) {
+        this();
+        this.cathOAuth2Helper = cathOAuth2Helper;
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -50,7 +61,7 @@ public class CathServlet extends HttpServlet {
         }
     }
 
-    private CathOAuth2Helper getCathOAuth2Helper() {
+    protected CathOAuth2Helper getCathOAuth2Helper() {
         if (cathOAuth2Helper == null) {
             cathOAuth2Helper = new CathOAuth2Helper();
         }
