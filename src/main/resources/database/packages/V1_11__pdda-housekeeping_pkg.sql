@@ -383,49 +383,64 @@ BEGIN
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_pdda_message pm
         WHERE last_update_date < v_threshold_date
-		AND NOT EXISTS (
-	        SELECT 1 FROM pdda.xhb_clob c WHERE c.clob_id = pm.pdda_message_data_id
-	      )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_clob c WHERE c.clob_id = pm.pdda_message_data_id
+	  )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_pdda = ROW_COUNT;
 	RAISE NOTICE 'Deleted data from XHB_PDDA_MESSAGE';
 
-	-- 11. XHB_CPP_STAGING_INBOUND
+    -- 11. XHB_CPP_STAGING_INBOUND
     DELETE FROM pdda.xhb_cpp_staging_inbound
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_cpp_staging_inbound csi
         WHERE last_update_date < v_threshold_date
-		AND NOT EXISTS (
-	        SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.cpp_staging_inbound_id = csi.cpp_staging_inbound_id
-	      )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.cpp_staging_inbound_id = csi.cpp_staging_inbound_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_formatting xcf WHERE xcf.staging_table_id = csi.cpp_staging_inbound_id
+	  )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_cpp_inbound = ROW_COUNT;
-	RAISE NOTICE 'Deleted data from XHB_CPP_STAGING_INBOUND';
+    RAISE NOTICE 'Deleted data from XHB_CPP_STAGING_INBOUND';
 
     -- 12. XHB_CLOB
     DELETE FROM pdda.xhb_clob
     WHERE ctid IN (
         SELECT ctid FROM pdda.xhb_clob xc
         WHERE last_update_date < v_threshold_date
-		AND NOT EXISTS (
-	        SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.pdda_message_data_id = xc.clob_id
-	      )
-		AND NOT EXISTS (
-	        SELECT 1 FROM pdda.xhb_cpp_staging_inbound xcsi WHERE xcsi.clob_id = xc.clob_id
-	      )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_pdda_message pm WHERE pm.pdda_message_data_id = xc.clob_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_staging_inbound xcsi WHERE xcsi.clob_id = xc.clob_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_formatting xcf WHERE xcf.xml_document_clob_id = xc.clob_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_formatting xcf WHERE xcf.xml_document_clob_id = xc.clob_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_list xcl WHERE xcl.list_clob_id = xc.clob_id
+	  )
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_list xcl WHERE xcl.merged_clob_id = xc.clob_id
+	  )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
     GET DIAGNOSTICS v_deleted_xhb_clob = ROW_COUNT;
-	RAISE NOTICE 'Deleted data from XHB_CLOB';
+    RAISE NOTICE 'Deleted data from XHB_CLOB';
 
 
     -- Finalize housekeeping log
-	RAISE NOTICE 'About to update pdda_hk_results with final status';
+    RAISE NOTICE 'About to update pdda_hk_results with final status';
     v_end_time := clock_timestamp();
     UPDATE pdda.pdda_hk_results
     SET
@@ -435,13 +450,13 @@ BEGIN
                    '; XHB_CLOB: ' || v_deleted_xhb_clob ||
                    '; XHB_FORMATTING: ' || v_deleted_xhb_formatting ||
                    '; XHB_CPP_FORMATTING: ' || v_deleted_xhb_cpp_formatting ||
-				   '; XHB_CPP_LIST: ' || v_deleted_xhb_cpp_list ||
+		   '; XHB_CPP_LIST: ' || v_deleted_xhb_cpp_list ||
                    '; XHB_HEARING_LIST: ' || v_deleted_xhb_hearing_list ||
                    '; XHB_SITTING: ' || v_deleted_xhb_sitting ||
                    '; XHB_HEARING: ' || v_deleted_xhb_hearing ||
-				   '; XHB_SCHED_HEARING_DEFENDANT: ' || v_deleted_xhb_sched_hearing_defendant ||
-				   '; XHB_SCHEDULED_HEARING: ' || v_deleted_xhb_scheduled_hearing ||
-				   '; XHB_SCHED_HEARING_ATTENDEE: ' || v_deleted_xhb_sched_hearing_attendee,
+		   '; XHB_SCHED_HEARING_DEFENDANT: ' || v_deleted_xhb_sched_hearing_defendant ||
+		   '; XHB_SCHEDULED_HEARING: ' || v_deleted_xhb_scheduled_hearing ||
+		   '; XHB_SCHED_HEARING_ATTENDEE: ' || v_deleted_xhb_sched_hearing_attendee,
         error_message = NULL,
         status = 'SUCCESS'
     WHERE hk_result_id = v_hk_result_id;
