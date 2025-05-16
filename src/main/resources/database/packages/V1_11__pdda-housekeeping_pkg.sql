@@ -125,6 +125,102 @@ $$;
 -- Procedure: pdda_housekeeping_pkg.clear_audit_tables
 -- Description: Housekeeping for clearing down audit tables
 --------------------------------------
+CREATE OR REPLACE PROCEDURE pdda_housekeeping_pkg.clear_audit_tables (
+    p_env_in VARCHAR DEFAULT 'NON-PROD',
+    p_limit_in INTEGER DEFAULT 5000
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_start_time TIMESTAMP := clock_timestamp();
+    v_end_time TIMESTAMP;
+    v_deleted_aud_pdda INTEGER := 0;
+    v_deleted_aud_cpp_inbound INTEGER := 0;
+    v_deleted_aud_cpp_formatting INTEGER := 0;
+    v_deleted_aud_display_store INTEGER := 0;
+    v_hk_result_id INTEGER;
+BEGIN
+    -- Insert housekeeping log entry
+    BEGIN
+        INSERT INTO pdda.pdda_hk_results (job_name, job_start, status)
+        VALUES (
+            'CLEAR AUDIT TABLES (' || p_env_in || ', ' || COALESCE(p_limit_in::TEXT, 'NULL') || ')',
+            v_start_time,
+            'IN_PROGRESS'
+        )
+        RETURNING hk_result_id INTO v_hk_result_id;
+    EXCEPTION WHEN OTHERS THEN
+        RAISE NOTICE 'Failed to insert into pdda_hk_results: %', SQLERRM;
+        RETURN;
+    END;
+
+    -- Part 1: AUD_PDDA_MESSAGE
+    DELETE FROM pdda.aud_pdda_message
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.aud_pdda_message
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_aud_pdda = ROW_COUNT;
+
+    -- Part 2: AUD_CPP_STAGING_INBOUND
+    DELETE FROM pdda.aud_cpp_staging_inbound
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.aud_cpp_staging_inbound
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_aud_cpp_inbound = ROW_COUNT;
+
+    -- Part 3: AUD_CPP_FORMATTING
+    DELETE FROM pdda.aud_cpp_formatting
+    WHERE ctid IN (
+        SELECT ctid FROM pdda.aud_cpp_formatting
+        ORDER BY last_update_date ASC
+        LIMIT p_limit_in
+    );
+    GET DIAGNOSTICS v_deleted_aud_cpp_formatting = ROW_COUNT;
+
+    -- Part 4: AUD_DISPLAY_STORE
+    DELETE FROM pdda.aud_display_store
+	WHERE ctid IN (
+	    SELECT ctid
+	    FROM pdda.aud_display_store
+	    ORDER BY last_update_date ASC
+	    LIMIT p_limit_in
+	);
+    GET DIAGNOSTICS v_deleted_aud_display_store = ROW_COUNT;
+
+    -- Finalize housekeeping log
+    v_end_time := clock_timestamp();
+    UPDATE pdda.pdda_hk_results
+    SET
+        job_end = v_end_time,
+        job_text = 'Updated:: AUD_PDDA_MESSAGE: ' || v_deleted_aud_pdda ||
+                   ' records; AUD_CPP_STAGING_INBOUND: ' || v_deleted_aud_cpp_inbound ||
+                   ' records; AUD_CPP_FORMATTING: ' || v_deleted_aud_cpp_formatting ||
+                   ' records; AUD_DISPLAY_STORE: ' || v_deleted_aud_display_store || ' records',
+        error_message = NULL,
+        status = 'SUCCESS'
+    WHERE hk_result_id = v_hk_result_id;
+
+EXCEPTION WHEN OTHERS THEN
+    v_end_time := clock_timestamp();
+    UPDATE pdda.pdda_hk_results
+    SET
+        job_end = v_end_time,
+        error_message = SQLERRM,
+        status = 'FAILURE'
+    WHERE hk_result_id = v_hk_result_id;
+END;
+$$;
+
+
+
+--------------------------------------
+-- Procedure: pdda_housekeeping_pkg.clear_old_records
+-- Description: Housekeeping for clearing records older than N days
+--------------------------------------
 CREATE OR REPLACE PROCEDURE pdda_housekeeping_pkg.clear_old_records (
     p_days_in INTEGER DEFAULT 14,
     p_limit_in INTEGER DEFAULT 100
@@ -260,8 +356,11 @@ BEGIN
     -- 8. XHB_CPP_FORMATTING
     DELETE FROM pdda.xhb_cpp_formatting
     WHERE ctid IN (
-        SELECT ctid FROM pdda.xhb_cpp_formatting
+	SELECT ctid FROM pdda.xhb_cpp_formatting xcf
         WHERE last_update_date < v_threshold_date
+	  AND NOT EXISTS (
+	    SELECT 1 FROM pdda.xhb_cpp_staging_inbound xcsi WHERE xcsi.cpp_staging_inbound_id = xcf.staging_table_id
+	  )
         ORDER BY last_update_date ASC
         LIMIT p_limit_in
     );
