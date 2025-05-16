@@ -64,6 +64,7 @@ README.html
 .idea
 .exercism
 github_personal_access_token.txt
+output
 
 ### Test files not to be checked in
 scripts/test/generateTestBaisDocs/*.xml
