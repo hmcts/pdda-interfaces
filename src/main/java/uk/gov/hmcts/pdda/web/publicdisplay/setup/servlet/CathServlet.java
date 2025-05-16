@@ -1,18 +1,17 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("PMD.LawOfDemeter")
 @WebServlet("/Cath")
@@ -23,7 +22,7 @@ public class CathServlet extends HttpServlet {
 
     private final CathOAuth2Helper cathOAuth2Helper;
 
-    protected CathServlet() {
+    public CathServlet() {
         this(new CathOAuth2Helper());
     }
     
