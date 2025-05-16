@@ -10,6 +10,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -56,6 +58,7 @@ public class ListObjectHelper implements Serializable {
     public static final String COURTLIST_NODE = "CourtLists/CourtList";
     public static final String COURTHOUSE_NODE = "CourtHouse";
     public static final String SITTING_NODE = "Sittings/Sitting";
+    public static final String JUDGE_NODE = "Judiciary/Judge";
     public static final String HEARING_NODE = "Hearings/Hearing";
     public static final String HEARINGDETAILS_NODE = "HearingDetails";
     public static final String DEFENDANT_NODE = "Defendants/Defendant/PersonalDetails";
@@ -81,6 +84,8 @@ public class ListObjectHelper implements Serializable {
     protected static final String SURNAME = "apd:CitizenNameSurname";
     protected static final String ISMASKED = "cs:IsMasked";
     protected static final String VERSION = "cs:Version";
+    protected static final String TITLE = "apd:CitizenNameTitle";
+    
     private static final String EMPTY_STRING = "";
     private static final String DECIMALS_REGEX = "\\d+";
     private static final String TWELVEHOURTIME = "hh:mma";
@@ -124,6 +129,9 @@ public class ListObjectHelper implements Serializable {
             xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
+        } else if (breadcrumb.contains(JUDGE_NODE)) {
+            Optional<XhbRefJudgeDao> xhbRefJudgeDao = validateJudge(nodesMap);
+            processJudgeRecords(xhbRefJudgeDao);
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
@@ -252,6 +260,33 @@ public class ListObjectHelper implements Serializable {
         return Optional.empty();
     }
 
+    private Optional<XhbRefJudgeDao> validateJudge(Map<String, String> nodesMap) {
+        LOG.info("validateJudge()");
+        if (xhbCourtSiteDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            String judgeTitle = nodesMap.get(TITLE);
+            String judgeFirstname = nodesMap.get(FIRSTNAME + ".1");
+            String judgeSurname = nodesMap.get(SURNAME);
+            return dataHelper.validateJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
+        }
+        return Optional.empty();
+    }
+    
+    private void processJudgeRecords(final Optional<XhbRefJudgeDao> xhbRefJudgeDao) {
+        if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
+            // Create the XhbSchedHearingAttendee record
+            Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =
+                dataHelper.createSchedHearingAttendee("J",
+                xhbScheduledHearingDao.get().getScheduledHearingId(),
+                xhbRefJudgeDao.get().getRefJudgeId());
+            if (!xhbSchedHearingAttendeeDao.isEmpty()) {
+                // Create the XhbShJudge record
+                dataHelper.createShJudge("N", xhbRefJudgeDao.get().getRefJudgeId(),
+                    xhbSchedHearingAttendeeDao.get().getShAttendeeId());
+            }
+        }
+    }
+    
     private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
         LOG.info("validateDefendant()");
         if (xhbCourtSiteDao.isPresent() && xhbCaseDao.isPresent()) {
