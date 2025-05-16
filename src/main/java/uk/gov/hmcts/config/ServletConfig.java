@@ -20,7 +20,7 @@ public class ServletConfig {
     @Bean
     public ServletRegistrationBean<CathServlet> cathServlet() {
         ServletRegistrationBean<CathServlet> srb =
-            new ServletRegistrationBean<>(new CathServlet(), "/cath");
+            new ServletRegistrationBean<>(new CathServlet(), "/Cath");
         srb.setLoadOnStartup(1);
         return srb;
     }
