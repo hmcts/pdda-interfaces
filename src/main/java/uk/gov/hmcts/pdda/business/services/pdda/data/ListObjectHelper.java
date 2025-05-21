@@ -273,7 +273,7 @@ public class ListObjectHelper implements Serializable {
         return Optional.empty();
     }
     
-    private void processJudgeRecords() {
+    protected void processJudgeRecords() {
         if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
             // Create the XhbSchedHearingAttendee record
             Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =

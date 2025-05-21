@@ -378,6 +378,27 @@ class ListObjectHelperTest {
     }
 
     @Test
+    void testProcessJudgeRecords() {
+        // Setup
+        final XhbSchedHearingAttendeeDao xhbSchedHearingAttendeeDao = new XhbSchedHearingAttendeeDao();
+        
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefJudgeDao",
+            Optional.of(DummyJudgeUtil.getXhbRefJudgeDao()));
+        
+        // Expects
+        Mockito.when(mockDataHelper.createSchedHearingAttendee(Mockito.isA(String.class),
+            Mockito.isA(Integer.class), Mockito.isA(Integer.class))).thenReturn(
+                Optional.of(xhbSchedHearingAttendeeDao));
+        
+        boolean result = true;
+        classUnderTest.processJudgeRecords();
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
     void testIsNumberedNode() {
         boolean result = classUnderTest.isNumberedNode(classUnderTest.FIRSTNAME);
         assertTrue(result, TRUE);
