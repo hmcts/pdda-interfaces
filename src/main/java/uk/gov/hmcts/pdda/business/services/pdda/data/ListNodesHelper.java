@@ -111,6 +111,15 @@ public class ListNodesHelper implements Serializable {
                     getListObjectHelper().validateNodeMap(sittingNodesMap,
                         ListObjectHelper.SITTING_NODE);
                     
+                    // Judge in the sitting
+                    for (Node judgeNode : getChildNodesArray(ListObjectHelper.JUDGE_NODE,
+                        sittingNode)) {
+                        judgeNodesMap.clear();
+                        judgeNodesMap.putAll(getNodesMap(judgeNode));
+                        getListObjectHelper().validateNodeMap(judgeNodesMap,
+                            ListObjectHelper.JUDGE_NODE);
+                    }
+                    
                     // Hearings in the sitting
                     for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
                         sittingNode)) {
@@ -132,15 +141,6 @@ public class ListNodesHelper implements Serializable {
                             getListObjectHelper().validateNodeMap(defendantNodesMap,
                                 ListObjectHelper.DEFENDANT_NODE);
                         }
-                    }
-                    
-                    // Judge in the sitting
-                    for (Node judgeNode : getChildNodesArray(ListObjectHelper.JUDGE_NODE,
-                        sittingNode)) {
-                        judgeNodesMap.clear();
-                        judgeNodesMap.putAll(getNodesMap(judgeNode));
-                        getListObjectHelper().validateNodeMap(judgeNodesMap,
-                            ListObjectHelper.JUDGE_NODE);
                     }
                 }
             }

@@ -107,6 +107,7 @@ public class ListObjectHelper implements Serializable {
     private transient Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private transient Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
     private transient Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
+    private transient Optional<XhbRefJudgeDao> xhbRefJudgeDao = Optional.empty();
 
     public ListObjectHelper() {
         // Default constructor
@@ -129,9 +130,9 @@ public class ListObjectHelper implements Serializable {
             xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
+            processJudgeRecords();
         } else if (breadcrumb.contains(JUDGE_NODE)) {
-            Optional<XhbRefJudgeDao> xhbRefJudgeDao = validateJudge(nodesMap);
-            processJudgeRecords(xhbRefJudgeDao);
+            xhbRefJudgeDao = validateJudge(nodesMap);
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
@@ -272,7 +273,7 @@ public class ListObjectHelper implements Serializable {
         return Optional.empty();
     }
     
-    private void processJudgeRecords(final Optional<XhbRefJudgeDao> xhbRefJudgeDao) {
+    private void processJudgeRecords() {
         if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
             // Create the XhbSchedHearingAttendee record
             Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =
