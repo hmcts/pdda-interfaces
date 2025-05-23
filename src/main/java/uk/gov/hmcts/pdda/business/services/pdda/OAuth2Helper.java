@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  * @author Mark Harris
  * @version 1.0
  */
+@SuppressWarnings({"PMD.SingularField", "squid:S6813", "squid:S1948"})
 public class OAuth2Helper implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -55,13 +57,21 @@ public class OAuth2Helper implements Serializable {
     private static final String PDDA_AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
     protected Environment env;
+    
+    @Autowired
+    private Environment autowiredEnv;
 
     public OAuth2Helper() {
         this(InitializationService.getInstance().getEnvironment());
     }
 
     protected OAuth2Helper(Environment env) {
+        LOG.info("Environment = {}", env);
         this.env = env;
+        LOG.info("Autowired Environment = {}", autowiredEnv);
+        if (env == null && autowiredEnv != null) {
+            this.env = autowiredEnv; 
+        }
     }
     
     protected String getTenantId() {
