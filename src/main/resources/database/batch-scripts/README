@@ -1,0 +1,4 @@
+This batch script is intended to be run in conjunction with the equivalent XHIBIT Oracle script.
+The outputs from both Postgres and Oracle can be compared using the Solaris script titled: compare_table_stats.sh
+
+For more details see the Jira ticket PDDA-172
