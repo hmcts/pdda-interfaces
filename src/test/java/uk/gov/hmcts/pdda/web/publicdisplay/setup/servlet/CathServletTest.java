@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
 import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 
 import java.io.IOException;
@@ -41,7 +43,9 @@ class CathServletTest {
     @BeforeEach
     public void setUp() {
         try {
+            Mockito.mockStatic(SpringBeanAutowiringSupport.class);
             ServletConfig config = Mockito.mock(ServletConfig.class);
+            Mockito.when(config.getServletContext()).thenReturn(Mockito.mock(ServletContext.class));
             classUnderTest.init(config);
         } catch (ServletException ex) {
             fail(ex.getMessage());
@@ -51,6 +55,7 @@ class CathServletTest {
     @AfterEach
     public void teardown() {
         classUnderTest = new CathServlet();
+        Mockito.clearAllCaches();
     }
 
     @Test
