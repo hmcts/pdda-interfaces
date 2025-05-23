@@ -8,13 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Repository
-public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
+public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbRefJudgeRepository.class);
 
     public XhbRefJudgeRepository(EntityManager em) {
@@ -125,6 +127,43 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> {
 
         } catch (Exception e) {
             LOG.error("Error in findScheduledSittingJudgeSafe({}): {}", scheduledHearingId,
+                e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Optional<XhbRefJudgeDao> findJudgeByCourtIdAndNameSafe(Integer courtId, 
+        String judgeFirstname, String judgeSurname) {
+        LOG.debug("findJudgeByCourtIdAndNameSafe(courtId: {}, judgeFirstName: {}, judgeSurname: {} )",
+            courtId, judgeFirstname, judgeSurname);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_REF_JUDGE.findJudgeByCourtIdAndNameSafe");
+            query.setParameter("courtId", courtId);
+            query.setParameter("firstname", judgeFirstname);
+            query.setParameter("surname", judgeSurname);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findJudgeByCourtIdAndNameSafe - No judge found");
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbRefJudgeDao) {
+                LOG.debug("findJudgeByCourtIdAndNameSafe - Found judge");
+                return Optional.of((XhbRefJudgeDao) result);
+            } else {
+                LOG.warn("findJudgeByCourtIdAndNameSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findJudgeByCourtIdAndNameSafe(): {}",
                 e.getMessage(), e);
             return Optional.empty();
         }

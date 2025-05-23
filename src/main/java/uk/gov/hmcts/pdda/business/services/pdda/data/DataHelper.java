@@ -11,6 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -92,6 +93,17 @@ public class DataHelper extends FinderHelper {
         Optional<XhbCaseDao> result = findCase(courtId, caseType, caseNumber);
         if (result.isEmpty()) {
             result = createCase(courtId, caseType, caseNumber);
+        }
+        return result;
+    }
+
+    public Optional<XhbRefJudgeDao> validateJudge(final Integer courtId,
+        final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
+        LOG.debug("validateJudge()");
+        Optional<XhbRefJudgeDao> result =
+            findJudge(courtId, judgeFirstname, judgeSurname);
+        if (result.isEmpty()) {
+            result = createRefJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return result;
     }

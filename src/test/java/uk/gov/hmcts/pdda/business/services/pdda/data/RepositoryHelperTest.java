@@ -22,8 +22,11 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -177,6 +180,44 @@ class RepositoryHelperTest {
     }
 
     @Test
+    void testGetXhbRefJudgeRepository() {
+        // Check the null condition
+        mockTheEntityManager(false);
+        XhbRefJudgeRepository result = classUnderTest.getXhbRefJudgeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the inactive enitytManager
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefJudgeRepository",
+            Mockito.mock(XhbRefJudgeRepository.class));
+        result = classUnderTest.getXhbRefJudgeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the active entityManager
+        mockTheEntityManager(true);
+        result = classUnderTest.getXhbRefJudgeRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetXhbShJudgeRepository() {
+        // Check the null condition
+        mockTheEntityManager(false);
+        XhbShJudgeRepository result = classUnderTest.getXhbShJudgeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the inactive enitytManager
+        ReflectionTestUtils.setField(classUnderTest, "xhbShJudgeRepository",
+            Mockito.mock(XhbShJudgeRepository.class));
+        result = classUnderTest.getXhbShJudgeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the active entityManager
+        mockTheEntityManager(true);
+        result = classUnderTest.getXhbShJudgeRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
     void testGetXhbDefendantOnCaseRepository() {
         // Check the null condition
         mockTheEntityManager(false);
@@ -268,6 +309,25 @@ class RepositoryHelperTest {
         // Check the active entityManager
         mockTheEntityManager(true);
         result = classUnderTest.getXhbScheduledHearingRepository();
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testGetXhbSchedHearingAttendeeRepository() {
+        // Check the null condition
+        mockTheEntityManager(false);
+        XhbSchedHearingAttendeeRepository result = classUnderTest.getXhbSchedHearingAttendeeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the inactive enitytManager
+        ReflectionTestUtils.setField(classUnderTest, "xhbSchedHearingAttendeeRepository",
+            Mockito.mock(XhbSchedHearingAttendeeRepository.class));
+        result = classUnderTest.getXhbSchedHearingAttendeeRepository();
+        assertNotNull(result, NOTNULL);
+
+        // Check the active entityManager
+        mockTheEntityManager(true);
+        result = classUnderTest.getXhbSchedHearingAttendeeRepository();
         assertNotNull(result, NOTNULL);
     }
 
