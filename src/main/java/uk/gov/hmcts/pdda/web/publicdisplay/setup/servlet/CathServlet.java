@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 
 import java.io.IOException;
@@ -36,6 +38,14 @@ public class CathServlet extends HttpServlet {
     protected CathServlet(CathOAuth2Helper cathOAuth2Helper) {
         super();
         this.cathOAuth2Helper = cathOAuth2Helper;
+    }
+    
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        // Needed to make the servlet do autowi
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+            config.getServletContext());
     }
     
     @Override
