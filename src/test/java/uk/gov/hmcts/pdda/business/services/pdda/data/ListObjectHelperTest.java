@@ -165,7 +165,6 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
-        nodesMap.clear();
         nodesMap.put(classUnderTest.CATEGORY, "Criminal");
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);

@@ -362,7 +362,7 @@ public class ListObjectHelper implements Serializable {
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String hearingTypeCode = nodesMap.get(HEARINGTYPECODE);
-            String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC);
+            String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC).replaceAll("\s{2,}", " ");
             String category = getSubstring(nodesMap.get(CATEGORY), 0, 1);
             if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
                 return dataHelper.validateHearingType(courtId, hearingTypeCode, hearingTypeDesc,
