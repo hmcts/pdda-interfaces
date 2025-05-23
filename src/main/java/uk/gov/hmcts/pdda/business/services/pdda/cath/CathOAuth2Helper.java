@@ -1,6 +1,5 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
-import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.services.pdda.OAuth2Helper;
 
 /**
@@ -28,10 +27,6 @@ public class CathOAuth2Helper extends OAuth2Helper {
         "cath.azure.active-directory.credential.client-id";
     private static final String CATH_AZURE_CLIENT_SECRET =
         "cath.azure.active-directory.credential.client-secret";
-    
-    public CathOAuth2Helper(Environment env) {
-        super(env);
-    }
 
     @Override
     protected String getTokenUrl() {
