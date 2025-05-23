@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 
 import java.io.IOException;
@@ -20,11 +22,14 @@ public class CathServlet extends HttpServlet {
 
     private static final long serialVersionUID = -4477899905926363639L;
     private static final Logger LOG = LoggerFactory.getLogger(CathServlet.class);
+    
+    @Autowired
+    private static Environment env;
 
     private final CathOAuth2Helper cathOAuth2Helper;
 
     public CathServlet() {
-        this(new CathOAuth2Helper());
+        this(new CathOAuth2Helper(env));
     }
     
     // JUnit constructor
