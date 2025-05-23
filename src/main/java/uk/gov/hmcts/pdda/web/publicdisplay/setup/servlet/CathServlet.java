@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
-import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
