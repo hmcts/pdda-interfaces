@@ -145,8 +145,12 @@ public class CreationHelper implements Serializable {
 
     public Optional<XhbCaseDao> updateCase(final XhbCaseDao dao, final String caseTitle) {
         LOG.debug("updateCase({}{})", dao.getCaseType(), dao.getCaseNumber());
-        dao.setCaseTitle(caseTitle);
-        return getRepositoryHelper().getXhbCaseRepository().update(dao);
+        Optional<XhbCaseDao> freshDao = repositoryHelper.getXhbCaseRepository().findByIdSafe(dao.getCaseId());
+        if (freshDao.isPresent()) {
+            freshDao.get().setCaseTitle(caseTitle);
+            return repositoryHelper.getXhbCaseRepository().update(freshDao.get());
+        }
+        return Optional.empty();
     }
     
     /**

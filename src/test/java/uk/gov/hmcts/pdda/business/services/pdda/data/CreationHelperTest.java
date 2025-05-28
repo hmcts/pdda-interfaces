@@ -129,6 +129,7 @@ class CreationHelperTest {
         Mockito.when(mockRepositoryHelper.getXhbCaseRepository()).thenReturn(mockXhbCaseRepository);
         Mockito.when(mockXhbCaseRepository.update(Mockito.isA(XhbCaseDao.class)))
             .thenReturn(Optional.of(dao));
+        Mockito.when(mockXhbCaseRepository.findByIdSafe(dao.getCaseId())).thenReturn(Optional.of(dao));
 
         Optional<XhbCaseDao> result =
             classUnderTest.createCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());

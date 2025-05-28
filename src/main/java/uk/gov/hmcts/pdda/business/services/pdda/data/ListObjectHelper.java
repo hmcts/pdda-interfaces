@@ -337,22 +337,28 @@ public class ListObjectHelper implements Serializable {
     }
 
     private Optional<XhbCaseDao> updateCaseTitle(Map<String, String> nodesMap) {
-        if (xhbCaseDao.isPresent()) {
-            String firstName = nodesMap.get(FIRSTNAME + ".1");
-            String surname = nodesMap.get(SURNAME);
-            if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
-                StringBuilder caseTitleSb = new StringBuilder();
-                caseTitleSb.append(surname);
-                if (firstName != null) {
-                    if (!"U".equals(xhbCaseDao.get().getCaseType())
-                        && !"B".equals(xhbCaseDao.get().getCaseType())) {
-                        caseTitleSb.append(", ");
+        try {
+            if (xhbCaseDao.isPresent()) {
+                String firstName = nodesMap.get(FIRSTNAME + ".1");
+                String surname = nodesMap.get(SURNAME);
+                if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
+                    StringBuilder caseTitleSb = new StringBuilder();
+                    caseTitleSb.append(surname);
+                    if (firstName != null) {
+                        if (!"U".equals(xhbCaseDao.get().getCaseType())
+                            && !"B".equals(xhbCaseDao.get().getCaseType())) {
+                            caseTitleSb.append(", ");
+                        }
+                        caseTitleSb.append(firstName);
                     }
-                    caseTitleSb.append(firstName);
+                    return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
                 }
-                return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
+                return xhbCaseDao;
             }
-            return xhbCaseDao;
+        } catch (Exception e) {
+            // If this fails its not critical, just log it
+            LOG.error("Failed to update case title for caseId: {}",
+                xhbCaseDao.map(XhbCaseDao::getCaseId).orElse(null), e);
         }
         return Optional.empty();
     }
