@@ -46,15 +46,164 @@
 			</cs:CourtHouse>
 			<cs:Sittings>
 				<cs:Sitting>
-					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
 					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
-					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingAt>09:40:00</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:Judiciary>
 						<cs:Judge>
-							<apd:CitizenNameForename>HJKDH</apd:CitizenNameForename>
-							<apd:CitizenNameSurname>BJKSP</apd:CitizenNameSurname>
-							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE HJKDH BJKSP</apd:CitizenNameRequestedName>
+							<apd:CitizenNameForename>JUDGE ONE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING1</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING ONE</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>440</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CBR">
+								<cs:HearingDescription>Committal for Breaches
+                                                                </cs:HearingDescription>
+								<cs:HearingDate>2025-04-29</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>9810178</cs:CRESThearingID>
+							<cs:TimeMarkingNote>SITTING AT 10:30 am</cs:TimeMarkingNote>
+							<cs:CaseNumber>T20249832</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>SOUTH WALES PROBATION SERVICE
+                                                                </cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName> SOUTH WALES PROBATION SERVICE
+                                                                        </cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DEFENDANT1</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NAME</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>1984-03-22</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>21 NIKNION POKOND</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>JBBUIBU</apd:Line>
+											<apd:PostCode>SA12 6LU</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2500NP0004573002901Z</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1663238</cs:CRESTdefendantID>
+									<cs:URN>62WN0309724</cs:URN>
+									<cs:CustodyStatus>On bail</cs:CustodyStatus>
+									<cs:Counsel/>
+									<cs:Charges NumberOfCharges="1">
+										<cs:Charge CJSoffenceCode="PU86003" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004573002901Z001</cs:CRN>
+											<cs:CRESTchargeID>457S07528826</cs:CRESTchargeID>
+											<cs:CaseNumber>S20250029</cs:CaseNumber>
+											<cs:OffenceStatement>Affray</cs:OffenceStatement>
+											<cs:OffenceStartDateTime>2024-05-10T00:00:00.000
+                                                                                        </cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7528826</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CBR">
+								<cs:HearingDescription>Committal for Breaches
+                                                                </cs:HearingDescription>
+								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:ListNote>To be listed after 14:00 </cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>9810179</cs:CRESThearingID>
+							<cs:TimeMarkingNote>SITTING AT 02:00 pm</cs:TimeMarkingNote>
+							<cs:CaseNumber>T20252345</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>ABERYSTWYTH PROBATION OFFICE
+                                                                </cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName> ABERYSTWYTH PROBATION OFFICE
+                                                                        </cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>To be listed after 14:00 </cs:ListNote>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DEFENDANT2</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NAME</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2001-03-27</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>31 JHIUBIDD</apd:Line>
+											<apd:Line>NIEWD DPXP</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>HUHBUIBDD</apd:Line>
+											<apd:PostCode>SY23 3BQ</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2500NP0007563002601Y</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1656275</cs:CRESTdefendantID>
+									<cs:URN>63BA1076823</cs:URN>
+									<cs:CustodyStatus>On bail</cs:CustodyStatus>
+									<cs:Counsel/>
+									<cs:Charges NumberOfCharges="1">
+										<cs:Charge CJSoffenceCode="MD71526" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0007563002601Y001</cs:CRN>
+											<cs:CRESTchargeID>457S07527489</cs:CRESTchargeID>
+											<cs:CaseNumber>S20250026</cs:CaseNumber>
+											<cs:OffenceStatement>Possess with intent to supply a
+                                                                                                controlled drug of Class B - cannabis</cs:OffenceStatement>
+											<cs:OffenceStartDateTime>2023-01-07T00:00:00.000
+                                                                                        </cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7527489</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>2</cs:SittingSequenceNo>
+					<cs:SittingAt>09:50:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>JUDGE TWO</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING2</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING TWO</apd:CitizenNameRequestedName>
 							<cs:CRESTjudgeID>440</cs:CRESTjudgeID>
 						</cs:Judge>
 					</cs:Judiciary>
@@ -82,8 +231,8 @@
 								<cs:Defendant>
 									<cs:PersonalDetails>
 										<cs:Name>
-											<apd:CitizenNameForename>Scxzvg</apd:CitizenNameForename>
-											<apd:CitizenNameSurname>INPIOIN</apd:CitizenNameSurname>
+											<apd:CitizenNameForename>DEFENDANT3</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NAME</apd:CitizenNameSurname>
 										</cs:Name>
 										<cs:IsMasked>no</cs:IsMasked>
 										<cs:DateOfBirth>
@@ -105,7 +254,6 @@
 										<cs:ASN>2500NP0004573002901Z</cs:ASN>
 									</cs:ASNs>
 									<cs:CRESTdefendantID>1663238</cs:CRESTdefendantID>
-									<cs:URN>62WN0309724</cs:URN>
 									<cs:CustodyStatus>On bail</cs:CustodyStatus>
 									<cs:Counsel/>
 									<cs:Charges NumberOfCharges="1">
@@ -149,8 +297,8 @@
 								<cs:Defendant>
 									<cs:PersonalDetails>
 										<cs:Name>
-											<apd:CitizenNameForename>BUIBUNBIO</apd:CitizenNameForename>
-											<apd:CitizenNameSurname>PJIODX</apd:CitizenNameSurname>
+											<apd:CitizenNameForename>DEFENDANT4</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NAME</apd:CitizenNameSurname>
 										</cs:Name>
 										<cs:IsMasked>yes</cs:IsMasked>
 										<cs:DateOfBirth>
@@ -195,15 +343,15 @@
 					</cs:Hearings>
 				</cs:Sitting>
 				<cs:Sitting>
-					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
-					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:CourtRoomNumber>3</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>3</cs:SittingSequenceNo>
 					<cs:SittingAt>10:00:00</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:Judiciary>
 						<cs:Judge>
-							<apd:CitizenNameForename>Sdfsdf KNIO</apd:CitizenNameForename>
-							<apd:CitizenNameSurname>dfsfffsdf</apd:CitizenNameSurname>
-							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE HJKDH BJKSP</apd:CitizenNameRequestedName>
+							<apd:CitizenNameForename>JUDGE THREE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING3</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING THREE</apd:CitizenNameRequestedName>
 						</cs:Judge>
 					</cs:Judiciary>
 					<cs:Hearings>
@@ -214,7 +362,7 @@
 								<cs:HearingDate>2025-04-29</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
-							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:CaseNumber>A20241243</cs:CaseNumber>
 							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
 								<cs:ProsecutingReference>Other Prosecutor
                                                                 </cs:ProsecutingReference>
@@ -227,9 +375,9 @@
 								<cs:Defendant>
 									<cs:PersonalDetails>
 										<cs:Name>
-											<apd:CitizenNameForename>Gcdasdfd</apd:CitizenNameForename>
-											<apd:CitizenNameSurname>JINISSX</apd:CitizenNameSurname>
-											<apd:CitizenNameRequestedName>Gcdasdfd JINISSX</apd:CitizenNameRequestedName>
+											<apd:CitizenNameForename>DEFENDANT5</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NAME</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>DEFENDANT5 NAME</apd:CitizenNameRequestedName>
 										</cs:Name>
 										<cs:IsMasked>no</cs:IsMasked>
 									</cs:PersonalDetails>
@@ -800,13 +948,13 @@
 				<cs:Sitting>
 					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
 					<cs:SittingSequenceNo>2</cs:SittingSequenceNo>
-					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingAt>10:10:00</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:Judiciary>
 						<cs:Judge>
-							<apd:CitizenNameForename>Paul Huw</apd:CitizenNameForename>
-							<apd:CitizenNameSurname>Thomas</apd:CitizenNameSurname>
-							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE H X HJBIDNH KC</apd:CitizenNameRequestedName>
+							<apd:CitizenNameForename>JUDGE FOUR</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING4</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING FOUR KC</apd:CitizenNameRequestedName>
 						</cs:Judge>
 					</cs:Judiciary>
 					<cs:Hearings>
@@ -878,15 +1026,15 @@
 				<cs:Sitting>
 					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
 					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
-					<cs:SittingAt>09:45:00</cs:SittingAt>
+					<cs:SittingAt>10:20:00</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:Judiciary>
 						<cs:Judge>
 							<apd:CitizenNameTitle>HHJ</apd:CitizenNameTitle>
-							<apd:CitizenNameForename>GUDUBID</apd:CitizenNameForename>
-							<apd:CitizenNameSurname>JKNOIX</apd:CitizenNameSurname>
+							<apd:CitizenNameForename>JUDGE FIVE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING5</apd:CitizenNameSurname>
 							<apd:CitizenNameSuffix>K.C.</apd:CitizenNameSuffix>
-							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE H X HJBIDNH KC</apd:CitizenNameRequestedName>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING FIVE KC</apd:CitizenNameRequestedName>
 							<cs:CRESTjudgeID>286</cs:CRESTjudgeID>
 						</cs:Judge>
 					</cs:Judiciary>
@@ -895,13 +1043,13 @@
 				<cs:Sitting>
 					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
 					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
-					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
 					<cs:SittingPriority>T</cs:SittingPriority>
 					<cs:Judiciary>
 						<cs:Judge>
-							<apd:CitizenNameForename>Paul Huw</apd:CitizenNameForename>
-							<apd:CitizenNameSurname>Thomas</apd:CitizenNameSurname>
-							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE H X HJBIDNH KC</apd:CitizenNameRequestedName>
+							<apd:CitizenNameForename>JUDGE SIX</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>SITTING6</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>HIS HONOUR JUDGE SITTING SIX KC</apd:CitizenNameRequestedName>
 						</cs:Judge>
 					</cs:Judiciary>
 					<cs:Hearings>

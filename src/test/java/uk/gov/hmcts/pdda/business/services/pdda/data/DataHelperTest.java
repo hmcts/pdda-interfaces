@@ -11,6 +11,7 @@ import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyHearingUtil;
+import uk.gov.hmcts.DummyJudgeUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
@@ -20,6 +21,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -152,6 +154,26 @@ class DataHelperTest {
         return result.isPresent();
     }
 
+    /**
+     * validateJudge.
+     */
+    @Test
+    void testValidateJudge() {
+        XhbRefJudgeDao dao = DummyJudgeUtil.getXhbRefJudgeDao();
+        boolean result = testValidateJudge(dao, false);
+        assertTrue(result, TRUE);
+        result = testValidateJudge(dao, true);
+        assertTrue(result, TRUE);
+    }
+
+    private boolean testValidateJudge(XhbRefJudgeDao dao, boolean isPresent) {
+        classUnderTest.isPresent = isPresent;
+        Optional<XhbRefJudgeDao> result =
+            classUnderTest.validateJudge(dao.getCourtId(), dao.getTitle(),
+                dao.getFirstname(), dao.getSurname());
+        return result.isPresent();
+    }
+    
     /**
      * validateDefendantOnCase.
      */
@@ -356,6 +378,21 @@ class DataHelperTest {
         public Optional<XhbCaseDao> createCase(final Integer courtId, final String caseType,
             final Integer caseNumber) {
             return Optional.of(new XhbCaseDao());
+        }
+        
+        /**
+         * validateJudge overrides.
+         */
+        @Override
+        public Optional<XhbRefJudgeDao> findJudge(final Integer courtId, final String firstname,
+            final String surname) {
+            return this.isPresent ? Optional.of(new XhbRefJudgeDao()) : Optional.empty();
+        }
+
+        @Override
+        public Optional<XhbRefJudgeDao> createRefJudge(final Integer courtId, final String title,
+            final String firstname, final String surname) {
+            return Optional.of(new XhbRefJudgeDao());
         }
 
         /**

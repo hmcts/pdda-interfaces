@@ -9,6 +9,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -78,6 +79,12 @@ public class FinderHelper extends CreationHelper {
             caseType, caseNumber);
     }
 
+    public Optional<XhbRefJudgeDao> findJudge(final Integer courtId,
+        final String judgeFirstname, final String judgeSurname) {
+        return getRepositoryHelper().getXhbRefJudgeRepository().findJudgeByCourtIdAndNameSafe(courtId,
+            judgeFirstname, judgeSurname);
+    }
+    
     public Optional<XhbDefendantOnCaseDao> findDefendantOnCase(final Integer caseId,
         final Integer defendantId) {
         return getRepositoryHelper().getXhbDefendantOnCaseRepository()
