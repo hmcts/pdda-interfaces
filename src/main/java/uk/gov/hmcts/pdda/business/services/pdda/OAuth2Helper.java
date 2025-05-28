@@ -57,9 +57,6 @@ public class OAuth2Helper implements Serializable {
     private static final String PDDA_AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
     protected Environment env;
-    
-    @Autowired
-    private Environment autowiredEnv;
 
     public OAuth2Helper() {
         this(InitializationService.getInstance().getEnvironment());
@@ -68,11 +65,13 @@ public class OAuth2Helper implements Serializable {
     protected OAuth2Helper(Environment env) {
         LOG.info("Environment = {}", env);
         this.env = env;
-        LOG.info("Autowired Environment = {}", autowiredEnv);
-        if (env == null && autowiredEnv != null) {
-            this.env = autowiredEnv; 
-        }
     }
+    
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.env = environment;
+    }
+
     
     protected String getTenantId() {
         return env.getProperty(PDDA_AZURE_TENANT_ID);
@@ -80,14 +79,37 @@ public class OAuth2Helper implements Serializable {
     
     protected String getTokenUrl() {
         String authTokenUrl = env.getProperty(PDDA_AZURE_TOKEN_URL);
-        return String.format(authTokenUrl, getTenantId());
+        if (authTokenUrl == null) {
+            LOG.error("Token URL property '{}' not found in environment.", PDDA_AZURE_TOKEN_URL);
+            return "";
+        }
+        
+        String tenantId = getTenantId();
+        if (tenantId == null) {
+            LOG.error("Tenant ID property '{}' not found in environment.", PDDA_AZURE_TENANT_ID);
+            return "";
+        }
+
+        return String.format(authTokenUrl, tenantId);
     }
+
     
     protected String getClientId() {
+        String clientId = env.getProperty(PDDA_AZURE_CLIENT_ID);
+        if (clientId == null) {
+            LOG.error("Client ID property '{}' not found in environment.", PDDA_AZURE_CLIENT_ID);
+            return "";
+        }
         return env.getProperty(PDDA_AZURE_CLIENT_ID);
     }
     
     protected String getClientSecret() {
+        String clientSecret = env.getProperty(PDDA_AZURE_CLIENT_SECRET);
+        if (clientSecret == null) {
+            LOG.error("Client Secret property '{}' not found in environment.", PDDA_AZURE_CLIENT_SECRET);
+            return "";
+        }
+        
         return env.getProperty(PDDA_AZURE_CLIENT_SECRET);
     }
 

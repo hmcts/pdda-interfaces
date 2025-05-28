@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +35,7 @@ class CathServletTest {
 
 
     @InjectMocks
-    private CathServlet classUnderTest = new CathServlet(Mockito.mock(CathOAuth2Helper.class));
+    private final CathServlet classUnderTest = new CathServlet(Mockito.mock(CathOAuth2Helper.class));
 
     @BeforeEach
     public void setUp() {
@@ -46,11 +45,6 @@ class CathServletTest {
         } catch (ServletException ex) {
             fail(ex.getMessage());
         }
-    }
-
-    @AfterEach
-    public void teardown() {
-        classUnderTest = new CathServlet();
     }
 
     @Test

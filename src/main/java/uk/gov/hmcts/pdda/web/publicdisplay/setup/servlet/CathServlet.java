@@ -2,7 +2,6 @@ package uk.gov.hmcts.pdda.web.publicdisplay.setup.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @SuppressWarnings("PMD.LawOfDemeter")
-@WebServlet("/Cath")
 public class CathServlet extends HttpServlet {
 
     private static final long serialVersionUID = -4477899905926363639L;
@@ -24,11 +22,12 @@ public class CathServlet extends HttpServlet {
     private final CathOAuth2Helper cathOAuth2Helper;
 
     public CathServlet() {
-        this(new CathOAuth2Helper());
+        super(); // Explicit call to HttpServlet constructor
+        throw new UnsupportedOperationException("CathOAuth2Helper must be injected");
     }
     
     // JUnit constructor
-    protected CathServlet(CathOAuth2Helper cathOAuth2Helper) {
+    public CathServlet(CathOAuth2Helper cathOAuth2Helper) {
         super();
         this.cathOAuth2Helper = cathOAuth2Helper;
     }
