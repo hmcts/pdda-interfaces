@@ -300,6 +300,80 @@ class OAuth2HelperTest {
         assertNotNull(result, NOTNULL);
         assertTrue(result.isEmpty(), "Result should be empty on parse failure");
     }
+    
+    @Test
+    void testGetTokenUrlWhenTokenUrlIsNull() {
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url")).thenReturn(null);
 
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getTokenUrl();
+
+        assertTrue(result.isEmpty(), "Expected empty token URL when property is null");
+    }
+
+    @Test
+    void testGetTokenUrlWhenTenantIdIsNull() {
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url")).thenReturn("https://example.com/%s/oauth2/token");
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id")).thenReturn(null);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getTokenUrl();
+
+        assertTrue(result.isEmpty(), "Expected empty token URL when tenant ID is null");
+    }
+
+    @Test
+    void testGetClientIdWhenPropertyIsNull() {
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-id")).thenReturn(null);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getClientId();
+
+        assertTrue(result.isEmpty(), "Expected empty client ID when property is null");
+    }
+
+    @Test
+    void testGetClientSecretWhenPropertyIsNull() {
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-secret")).thenReturn(null);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getClientSecret();
+
+        assertTrue(result.isEmpty(), "Expected empty client secret when property is null");
+    }
+
+    @Test
+    void testGetAccessTokenFromResponseEmptyInput() throws Exception {
+        var method = OAuth2Helper.class.getDeclaredMethod("getAccessTokenFromResponse", String.class);
+        method.setAccessible(true);
+
+        String result = (String) method.invoke(classUnderTest, "");
+
+        assertNotNull(result, NOTNULL);
+        assertTrue(result.isEmpty(), "Expected empty token from empty response");
+    }
+
+    
+    @Test
+    void testSendAuthenticationRequestWithRuntimeException() throws Exception {
+        try (MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)) {
+            staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
+            Mockito.when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any()))
+                .thenThrow(new RuntimeException("Simulated runtime failure"));
+
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("http://localhost"))
+                .POST(HttpRequest.BodyPublishers.ofString("test"))
+                .build();
+
+            var sendMethod = OAuth2Helper.class.getDeclaredMethod("sendAuthenticationRequest", HttpRequest.class);
+            sendMethod.setAccessible(true);
+
+            String result = (String) sendMethod.invoke(classUnderTest, request);
+
+            assertNotNull(result, NOTNULL);
+            assertTrue(result.isEmpty(), "Expected empty string on runtime exception");
+        }
+    }
 
 }
