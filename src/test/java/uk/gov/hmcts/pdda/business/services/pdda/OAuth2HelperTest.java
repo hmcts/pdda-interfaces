@@ -27,6 +27,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -49,6 +50,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD")
 class OAuth2HelperTest {
 
     private static final String NOTNULL = "Result is null";
@@ -74,9 +76,6 @@ class OAuth2HelperTest {
 
     @InjectMocks
     private OAuth2Helper classUnderTest;
-    
-    private MockedStatic<HttpRequest> httpRequestStaticMock;
-    private MockedStatic<HttpClient> httpClientStaticMock;
 
     @BeforeEach
     public void setUp() {

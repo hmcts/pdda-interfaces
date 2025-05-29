@@ -1,5 +1,6 @@
 package uk.gov.hmcts.config;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
@@ -7,16 +8,15 @@ import uk.gov.hmcts.pdda.web.publicdisplay.imaging.HeaderImageServlet;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
-import org.junit.jupiter.api.BeforeEach;
 
+@SuppressWarnings("PMD")
 class ServletConfigTest {
     
     private ServletConfig config;
-    private CathOAuth2Helper cathOAuth2Helper;
 
     @BeforeEach
     void setUp() {
-        cathOAuth2Helper = mock(CathOAuth2Helper.class);
+        CathOAuth2Helper cathOAuth2Helper = mock(CathOAuth2Helper.class);
         config = new ServletConfig();
 
         // Inject the mock via reflection since cathOAuth2Helper is private and not set via constructor
