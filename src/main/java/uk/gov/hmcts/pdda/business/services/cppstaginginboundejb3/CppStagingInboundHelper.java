@@ -142,6 +142,7 @@ public class CppStagingInboundHelper implements Serializable {
 
         if (docs != null && !docs.isEmpty()) {
             LOG.debug("{} docs were found", docs.size());
+            LOG.debug("Docs to process limit: {}", numberOfDocsToProcess);
             for (int i = 0; i < numberOfDocsToProcess; i++) {
                 if (i >= docs.size()) {
                     break;
