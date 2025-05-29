@@ -125,26 +125,18 @@ class OAuth2HelperTest {
     }
 
     @Test
-    void testGetAccessTokenValid() {
-        try (
-            MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class);
-            MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)
-        ) {
-            staticHttpRequest.when(HttpRequest::newBuilder).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.uri(Mockito.any(URI.class))).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.headers(Mockito.any(String[].class))).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.POST(Mockito.any(BodyPublisher.class))).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.build()).thenReturn(mockHttpRequest);
+    void shouldReturnAccessTokenWhenResponseIsValid() {
+        runAccessTokenScenario(DummyCourtelUtil.getHttpResponse(200, VALID_RESPONSE));
+    }
 
-            staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
-            Mockito.when(mockHttpClient.send(mockHttpRequest, BodyHandlers.ofString()))
-                .thenReturn(DummyCourtelUtil.getHttpResponse(200, VALID_RESPONSE));
+    @Test
+    void shouldHandleInvalidAccessTokenResponseGracefully() {
+        runAccessTokenScenario(DummyCourtelUtil.getHttpResponse(404, INVALID_RESPONSE));
+    }
 
-            String result = classUnderTest.getAccessToken();
-            assertNotNull(result, NOTNULL);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
+    @Test
+    void shouldHandleNullAccessTokenResponseGracefully() {
+        runAccessTokenScenario(DummyCourtelUtil.getHttpResponse(404, null));
     }
 
 
@@ -196,29 +188,28 @@ class OAuth2HelperTest {
     }
 
 
-    @Test
-    private String testGetAccessToken(HttpResponse<String> response) {
-        try {
-            // Expects - getAuthenticationRequest
-            Mockito.when(HttpRequest.newBuilder()).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.uri(Mockito.isA(URI.class))).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.headers(Mockito.isA(String[].class))).thenReturn(mockBuilder);
-            Mockito.when(mockBuilder.POST(Mockito.isA(BodyPublisher.class)))
-                .thenReturn(mockBuilder);
+    private void runAccessTokenScenario(HttpResponse<String> response) {
+        try (
+            MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class);
+            MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)
+        ) {
+            staticHttpRequest.when(HttpRequest::newBuilder).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.uri(Mockito.any(URI.class))).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.headers(Mockito.any(String[].class))).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.POST(Mockito.any(BodyPublisher.class))).thenReturn(mockBuilder);
             Mockito.when(mockBuilder.build()).thenReturn(mockHttpRequest);
 
-            // Expects - sendAuthenticationRequest
-            Mockito.when(HttpClient.newHttpClient()).thenReturn(mockHttpClient);
+            staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
             Mockito.when(mockHttpClient.send(mockHttpRequest, BodyHandlers.ofString()))
                 .thenReturn(response);
 
-            // Run
-            return classUnderTest.getAccessToken();
+            String result = classUnderTest.getAccessToken();
+            assertNotNull(result, NOTNULL);
         } catch (IOException | InterruptedException | RuntimeException exception) {
             fail(exception.getMessage());
-            return null;
         }
     }
+
     
     @Test
     void testGetClientCredentialsForm() throws Exception {
@@ -313,8 +304,10 @@ class OAuth2HelperTest {
 
     @Test
     void testGetTokenUrlWhenTenantIdIsNull() {
-        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url")).thenReturn("https://example.com/%s/oauth2/token");
-        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id")).thenReturn(null);
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url"))
+            .thenReturn("https://example.com/%s/oauth2/token");
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id"))
+            .thenReturn(null);
 
         OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
         String result = helper.getTokenUrl();
@@ -324,7 +317,8 @@ class OAuth2HelperTest {
 
     @Test
     void testGetClientIdWhenPropertyIsNull() {
-        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-id")).thenReturn(null);
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-id"))
+            .thenReturn(null);
 
         OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
         String result = helper.getClientId();
@@ -334,7 +328,8 @@ class OAuth2HelperTest {
 
     @Test
     void testGetClientSecretWhenPropertyIsNull() {
-        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-secret")).thenReturn(null);
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-secret"))
+            .thenReturn(null);
 
         OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
         String result = helper.getClientSecret();
@@ -375,5 +370,63 @@ class OAuth2HelperTest {
             assertTrue(result.isEmpty(), "Expected empty string on runtime exception");
         }
     }
+    
+    @Test
+    void testSetEnvironmentAndGetTenantId() {
+        String expectedTenantId = "realTenant123";
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id"))
+            .thenReturn(expectedTenantId);
+
+        OAuth2Helper helper = new OAuth2Helper();
+        helper.setEnvironment(mockEnvironment);
+
+        String actualTenantId = helper.getTenantId();
+        assertNotNull(actualTenantId);
+        assertTrue(actualTenantId.equals(expectedTenantId));
+    }
+
+    
+    @Test
+    void testGetTokenUrlWithValidValues() {
+        String tokenUrlTemplate = "https://example.com/%s/oauth2/token";
+        String tenantId = "tenant-abc";
+
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url"))
+            .thenReturn(tokenUrlTemplate);
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id"))
+            .thenReturn(tenantId);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getTokenUrl();
+
+        assertTrue(result.equals("https://example.com/tenant-abc/oauth2/token"), "Formatted token URL is incorrect");
+    }
+
+    
+    @Test
+    void testGetClientIdWhenPropertyExists() {
+        String expectedClientId = "client-id-xyz";
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-id"))
+            .thenReturn(expectedClientId);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getClientId();
+
+        assertTrue(result.equals(expectedClientId));
+    }
+
+    
+    @Test
+    void testGetClientSecretWhenPropertyExists() {
+        String expectedSecret = "super-secret";
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.credential.client-secret"))
+            .thenReturn(expectedSecret);
+
+        OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
+        String result = helper.getClientSecret();
+
+        assertTrue(result.equals(expectedSecret));
+    }
+
 
 }
