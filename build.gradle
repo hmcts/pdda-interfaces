@@ -236,7 +236,7 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.41'
 
     // Bytecode / Proxying
-    implementation 'net.bytebuddy:byte-buddy:1.17.0'
+    implementation 'net.bytebuddy:byte-buddy:1.17.5'
     implementation 'org.javassist:javassist:3.30.2-GA'
 
     // JSON
