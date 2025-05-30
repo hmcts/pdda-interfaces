@@ -140,7 +140,7 @@ public class OAuth2Helper implements Serializable {
                 .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
         } catch (Exception ex) {
             throw new RuntimeException(
-                String.format("Error in building HTTP request: {}", ex.getMessage()));
+                String.format("Error in building HTTP request: %s", ex.getMessage()));
         }
     }
 
