@@ -5,7 +5,7 @@ cath:
   azure:
     scope: https://pip-ss-kv-stg.vault.azure.net/secrets/app-pip-data-management-scope
     oauth2:
-      token-uri: ${cath.azure.scope}.default
+      token-url: ${cath.azure.scope}.default
     active-directory:
       credential:
         client-id: ${CATH_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
