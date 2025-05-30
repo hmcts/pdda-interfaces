@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings({"PMD.SingularField", "squid:S6813", "squid:S1948"})
 public class OAuth2Helper implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
@@ -66,24 +66,24 @@ public class OAuth2Helper implements Serializable {
         LOG.info("Environment = {}", env);
         this.env = env;
     }
-    
+
     @Autowired
     public void setEnvironment(Environment environment) {
         this.env = environment;
     }
 
-    
+
     protected String getTenantId() {
         return env.getProperty(PDDA_AZURE_TENANT_ID);
     }
-    
+
     protected String getTokenUrl() {
         String authTokenUrl = env.getProperty(PDDA_AZURE_TOKEN_URL);
         if (authTokenUrl == null) {
             LOG.error("Token URL property '{}' not found in environment.", PDDA_AZURE_TOKEN_URL);
             return "";
         }
-        
+
         String tenantId = getTenantId();
         if (tenantId == null) {
             LOG.error("Tenant ID property '{}' not found in environment.", PDDA_AZURE_TENANT_ID);
@@ -93,7 +93,7 @@ public class OAuth2Helper implements Serializable {
         return String.format(authTokenUrl, tenantId);
     }
 
-    
+
     protected String getClientId() {
         String clientId = env.getProperty(PDDA_AZURE_CLIENT_ID);
         if (clientId == null) {
@@ -102,14 +102,15 @@ public class OAuth2Helper implements Serializable {
         }
         return env.getProperty(PDDA_AZURE_CLIENT_ID);
     }
-    
+
     protected String getClientSecret() {
         String clientSecret = env.getProperty(PDDA_AZURE_CLIENT_SECRET);
         if (clientSecret == null) {
-            LOG.error("Client Secret property '{}' not found in environment.", PDDA_AZURE_CLIENT_SECRET);
+            LOG.error("Client Secret property '{}' not found in environment.",
+                PDDA_AZURE_CLIENT_SECRET);
             return "";
         }
-        
+
         return env.getProperty(PDDA_AZURE_CLIENT_SECRET);
     }
 
@@ -125,16 +126,21 @@ public class OAuth2Helper implements Serializable {
     }
 
     private HttpRequest getAuthenticationRequest(String url) {
-        LOG.debug("getAuthorizationRequest({})", url);
+        LOG.info("getAuthorizationRequest({})", url);
         // Build the encoded clientId / clientSecret key
         String key = getClientId() + ":" + getClientSecret();
         String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
         LOG.debug("encodedKey generated");
         // Build the authentication post request
-        return HttpRequest.newBuilder().uri(URI.create(url))
-            .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
-                "Basic " + encodedKey)
-            .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
+        try {
+            return HttpRequest.newBuilder().uri(URI.create(url))
+                .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
+                    "Basic " + encodedKey)
+                .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                String.format("Error in building HTTP request: {}", ex.getMessage()));
+        }
     }
 
     private String getClientCredentialsForm() {
