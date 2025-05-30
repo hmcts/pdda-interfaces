@@ -155,16 +155,16 @@ public class OAuth2Helper implements Serializable {
 
     @SuppressWarnings("squid:S2142")
     private String sendAuthenticationRequest(HttpRequest request) {
-        LOG.debug("sendAuthorizationRequest()");
+        LOG.info("sendAuthorizationRequest()");
         try {
             // Send the authentication request and get the response
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
 
             Integer statusCode = httpResponse.statusCode();
-            LOG.debug("Response status code: {}", statusCode);
+            LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
-            LOG.debug("Response: {}", response);
+            LOG.info("Response: {}", response);
             return response;
         } catch (IOException | InterruptedException | RuntimeException exception) {
             LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
@@ -173,11 +173,12 @@ public class OAuth2Helper implements Serializable {
     }
 
     private String getAccessTokenFromResponse(String response) {
-        LOG.debug("getAccessTokenFromResponse()");
+        LOG.info("getAccessTokenFromResponse()");
         if (!EMPTY_STRING.equalsIgnoreCase(response)) {
             try {
                 TokenResponse tokenResponse =
                     new ObjectMapper().readValue(response, TokenResponse.class);
+                LOG.info("Fetched token response {}", tokenResponse.toString());
                 return tokenResponse.accessToken();
             } catch (JsonProcessingException exception) {
                 LOG.error("Error in getAccessTokenFromResponse(): {}", exception.getMessage());
