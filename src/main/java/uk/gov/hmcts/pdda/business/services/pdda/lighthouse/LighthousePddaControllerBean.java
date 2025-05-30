@@ -62,10 +62,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     @Override
     public void doTask() {
-
         LOG.debug("Lighthouse -- doTask() - entered");
         List<XhbPddaMessageDao> xhbPddaMessageDaos =
             getXhbPddaMessageRepository().findByLighthouseSafe();
+        LOG.debug("Messages to process: {}", xhbPddaMessageDaos.size());
         xhbPddaMessageDaos.forEach(this::processFile);
         LOG.debug("Lighthouse -- doTask() - completed");
     }

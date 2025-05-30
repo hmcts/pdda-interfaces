@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity(name = "XHB_PDDA_MESSAGE")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByLighthouse",
     query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'VN' AND "
-        + " (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')")
+        + " (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ') ORDER BY o.creationDate ASC LIMIT 5")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByCpDocumentName",
     query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName = :cpDocumentName AND (o.obsInd is null OR "
         + "o.obsInd = 'N' OR o.obsInd = ' ') ORDER BY o.pddaMessageId")
