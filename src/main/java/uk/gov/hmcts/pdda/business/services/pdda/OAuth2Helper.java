@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"PMD.SingularField", "squid:S6813", "squid:S1948", 
+@SuppressWarnings({"PMD.SingularField", "squid:S6813", "squid:S1948", "squid:S112",
     "PMD.PreserveStackTrace", "PMD.AvoidThrowingRawExceptionTypes"})
 public class OAuth2Helper implements Serializable {
 
