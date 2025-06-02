@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class is the controller bean for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
@@ -66,7 +67,14 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         List<XhbPddaMessageDao> xhbPddaMessageDaos =
             getXhbPddaMessageRepository().findByLighthouseSafe();
         LOG.debug("Messages to process: {}", xhbPddaMessageDaos.size());
-        xhbPddaMessageDaos.forEach(this::processFile);
+        
+        AtomicInteger docNumber = new AtomicInteger(1);
+        xhbPddaMessageDaos.forEach(dao -> {
+            LOG.debug("Lighthouse Processing file number: {}: {}", docNumber, dao.getCpDocumentName());
+            processFile(dao);
+            docNumber.incrementAndGet();
+        });
+        
         LOG.debug("Lighthouse -- doTask() - completed");
     }
 
