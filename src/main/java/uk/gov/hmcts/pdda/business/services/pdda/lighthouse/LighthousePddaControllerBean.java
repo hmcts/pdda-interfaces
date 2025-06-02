@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -70,7 +71,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         
         AtomicInteger docNumber = new AtomicInteger(1);
         xhbPddaMessageDaos.forEach(dao -> {
-            LOG.debug("Lighthouse Processing file number: {}: {}", docNumber, dao.getCpDocumentName());
+            LOG.debug("Lighthouse Processing file number: {}: {}, on thread: {}",
+                docNumber, dao.getCpDocumentName(), Thread.currentThread().getName());
             processFile(dao);
             docNumber.incrementAndGet();
         });
@@ -86,12 +88,17 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             getXhbCppStagingInboundRepository()
                 .findDocumentByDocumentNameSafe(dao.getCpDocumentName());
         
+        LOG.debug("Checked for existing entries in XHB_CPP_STAGING_INBOUND for file: {} - found {} entries",
+            dao.getCpDocumentName(), xhbCppStagingInboundDaos.size());
+        
         // Check the file hasn't already been processed
         if (!xhbCppStagingInboundDaos.isEmpty()) {
             LOG.warn("The file: {}{}", dao.getCpDocumentName(), 
                 " has already been sent for processing, and therefore a duplicate entry has not been added");
             return;
         }
+        
+        LOG.debug("File {} has not been processed before, proceeding with processing", dao.getCpDocumentName());
         
         try {
             // First check the filename is valid
@@ -102,11 +109,15 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 return;
             }
 
+            LOG.debug("Processing Filename : {}", dao.getCpDocumentName());
+            
             // First we need to do a further filter on XHIBIT data to:
             // 1. not process public display events from XHIBIT
             // 2. ensure lists from XHIBIT get processed
             String documentName = getDocumentNameToProcess(dao.getCpDocumentName());
 
+            LOG.debug("Document name to process: {}", documentName);
+            
             if (documentName.length() > 0) {
                 // Now add the data into the XHB_CPP_STAGING_INBOUND table
 
