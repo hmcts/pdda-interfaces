@@ -43,8 +43,11 @@ import java.time.LocalDateTime;
         + "AND o.acknowledgmentStatus IS NULL AND (o.obsInd IS NULL OR o.obsInd='N') "
         + "ORDER by o.cppStagingInboundId")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-        + "(o.documentName = :documentName) AND (o.obsInd IS NULL OR o.obsInd='N')")
+    query = "SELECT o FROM XHB_CPP_STAGING_INBOUND o "
+        + "WHERE o.documentName = :documentName "
+        + "AND (o.obsInd IS NULL OR o.obsInd = 'N') "
+        + "AND FUNCTION('date', o.creationDate) = CURRENT_DATE "
+        + "AND o.validationStatus NOT IN ('VF', 'VS')")
 public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Serializable {
 
     private static final long serialVersionUID = 6619741714613299473L;
