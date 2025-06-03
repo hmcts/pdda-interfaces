@@ -42,6 +42,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_INPROGRESS = "IP"; // In Progress
     private static final String MESSAGE_STATUS_PROCESSED = "VP"; // Validated and Processed
     private static final String MESSAGE_STATUS_INVALID = "INV"; // Invalid
+    private static final String MESSAGE_STATUS_VALID_NOT_PROCESSED = "VN"; // PddaMessage status valid not processed
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
 
     @Autowired
@@ -91,11 +92,16 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("Checked for existing entries in XHB_CPP_STAGING_INBOUND for file: {} - found {} entries",
             dao.getCpDocumentName(), xhbCppStagingInboundDaos.size());
         
-        // Check the file hasn't already been processed
+        // Check the file hasn't already got a record in XHB_CPP_STAGING_INBOUND
         if (!xhbCppStagingInboundDaos.isEmpty()) {
-            LOG.warn("The file: {}{}{}", dao.getCpDocumentName(), 
-                " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
-            updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+            // Fetch the latest XHB_PDDA_MESSAGE record for this file
+            XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+            // If the status is VN then this document must be a duplicate
+            if (MESSAGE_STATUS_VALID_NOT_PROCESSED.equals(latest.getCpDocumentStatus())) {
+                LOG.warn("The file: {}{}{}", dao.getCpDocumentName(), 
+                    " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+            }
             return;
         }
         
