@@ -295,26 +295,30 @@ class LighthousePddaControllerBeanTest {
     
     @Test
     void testProcessFileAlreadyProcessed() {
-        List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = new ArrayList<>();
-        mockTheEntityManager();
-        XhbCppStagingInboundDao xhbCppStagingInboundDao = new XhbCppStagingInboundDao();
-        xhbCppStagingInboundDao.setDocumentName("TestDoc");
-        xhbCppStagingInboundDaos.add(xhbCppStagingInboundDao);
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbCppStagingInboundRepository).when(controller).getXhbCppStagingInboundRepository();
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+
+        XhbPddaMessageDao mockXhbPddaMessageDao = Mockito.mock(XhbPddaMessageDao.class);
+        Mockito.when(mockXhbPddaMessageDao.getCpDocumentName()).thenReturn("TestDoc.xml");
         
-        XhbPddaMessageDao xhbPddaMessageDao = new XhbPddaMessageDao();
-        xhbPddaMessageDao.setCpDocumentName("TestDoc");
+        List<XhbCppStagingInboundDao> mockXhbCppStagingInboundList = new ArrayList<>();
+        XhbCppStagingInboundDao mockXhbCppStagingInboundDao = Mockito.mock(XhbCppStagingInboundDao.class);
+        mockXhbCppStagingInboundList.add(mockXhbCppStagingInboundDao);
         
-        Mockito.when(classUnderTestMock.getXhbCppStagingInboundRepository())
-            .thenReturn(mockXhbCppStagingInboundRepository);
-        
-        Mockito.when(mockXhbCppStagingInboundRepository
-            .findDocumentByDocumentNameSafe(Mockito.isA(String.class)))
-            .thenReturn(xhbCppStagingInboundDaos);
-        
-        
-        boolean result = true;
-        classUnderTest.processFile(xhbPddaMessageDao);
-        assertTrue(result, TRUE);
+        // Simulate file already processed
+        Mockito.when(mockXhbCppStagingInboundRepository.findDocumentByDocumentNameSafe("TestDoc.xml"))
+            .thenReturn(mockXhbCppStagingInboundList);
+
+        // Spy updatePddaMessageStatus to verify it's called
+        Mockito.doNothing().when(controller).updatePddaMessageStatus(Mockito.any(), Mockito.any());
+
+        controller.processFile(mockXhbPddaMessageDao);
+
+        Mockito.verify(mockXhbCppStagingInboundRepository).findDocumentByDocumentNameSafe("TestDoc.xml");
+        Mockito.verify(controller).updatePddaMessageStatus(mockXhbPddaMessageDao, "INV");
+        // Ensure no further processing occurs
+        Mockito.verify(controller, Mockito.never()).isDocumentNameValid(Mockito.anyString());
     }
 
 

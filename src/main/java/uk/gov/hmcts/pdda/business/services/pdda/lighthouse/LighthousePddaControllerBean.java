@@ -93,8 +93,9 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         
         // Check the file hasn't already been processed
         if (!xhbCppStagingInboundDaos.isEmpty()) {
-            LOG.warn("The file: {}{}", dao.getCpDocumentName(), 
-                " has already been sent for processing, and therefore a duplicate entry has not been added");
+            LOG.warn("The file: {}{}{}", dao.getCpDocumentName(), 
+                " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
+            updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
             return;
         }
         
