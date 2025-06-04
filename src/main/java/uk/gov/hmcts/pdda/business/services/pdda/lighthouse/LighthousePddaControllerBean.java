@@ -98,12 +98,15 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
             // If the status is VN then this document must be a duplicate
             if (MESSAGE_STATUS_VALID_NOT_PROCESSED.equals(latest.getCpDocumentStatus())) {
-                LOG.warn("The file: {}{}{}", dao.getCpDocumentName(), 
+                LOG.warn("The file: {}{}{}", latest.getCpDocumentName(), 
                     " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
-                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+                updatePddaMessageStatus(latest, MESSAGE_STATUS_INVALID);
             }
             return;
         }
+        
+        // Update the status to indicate it is being processed
+        updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
         
         LOG.debug("File {} has not been processed before, proceeding with processing", dao.getCpDocumentName());
         
@@ -131,9 +134,6 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 // split up the filename into its 3 parts : type_courtCode_dateTime
                 String[] fileParts = documentName.split("_");
                 if (fileParts.length == FILE_PARTS) {
-                    // Update the status to indicate it is being processed
-                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
-
                     String strTimeLoaded = fileParts[2].replaceAll(".xml", "");
                     LocalDateTime timeLoaded =
                         LocalDateTime.parse(strTimeLoaded.trim(), DATETIMEFORMAT);
