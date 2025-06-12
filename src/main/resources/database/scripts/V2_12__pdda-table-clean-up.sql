@@ -9,3 +9,6 @@ DROP TABLE IF EXISTS xhb_hk_cpp_error_log;
 DROP TABLE IF EXISTS xhb_hk_cpp_results;
 DROP TABLE IF EXISTS xhb_hk_error_log;
 DROP TABLE IF EXISTS xhb_hk_results;
+
+-- Remove the Audit tables --
+DROP TABLE IF EXISTS aud_cc_info;
