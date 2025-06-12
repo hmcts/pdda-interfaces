@@ -32,20 +32,6 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
     }
 
     /**
-     * findByCourtIdAndDate.
-     * 
-     * @return list
-     */
-    @SuppressWarnings("unchecked")
-    public List<XhbHearingListDao> findByCourtIdAndDate(Integer courtId, LocalDateTime startDate) {
-        LOG.debug("In XhbHearingRepository.findByCourtIdAndDate");
-        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdAndDate");
-        query.setParameter("courtId", courtId);
-        query.setParameter("startDate", startDate);
-        return query.getResultList();
-    }
-
-    /**
      * findByCourtIdStatusAndDate.
      * 
      * @return XhbHearingListDao

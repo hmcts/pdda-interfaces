@@ -73,56 +73,6 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         }
     }
 
-
-    public List<XhbCppStagingInboundDao> findNextDocumentByProcessingStatus(
-        LocalDateTime timeLoaded, String processingStatus) {
-        LOG.debug("findNextDocumentByProcessingStatus({},{})", timeLoaded, processingStatus);
-        Query query = getEntityManager()
-            .createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocumentByProcessingStatus");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(PROCESSING_STATUS, Parameter.getPostgresInParameter(processingStatus));
-        return query.getResultList();
-    }
-
-    public List<XhbCppStagingInboundDao> findNextDocument(String validationStatus,
-        String processingStatus) {
-        LOG.debug("findNextDocument({},{})", validationStatus, processingStatus);
-        Query query =
-            getEntityManager().createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocument");
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        query.setParameter(PROCESSING_STATUS, Parameter.getPostgresInParameter(processingStatus));
-        return query.getResultList();
-    }
-
-    /**
-     * findNextDocumentByValidationStatus.
-     * 
-     * @param timeLoaded LocalDateTime
-     * @param validationStatus String
-     * @return List
-     */
-    public List<XhbCppStagingInboundDao> findNextDocumentByValidationStatus(
-        LocalDateTime timeLoaded, String validationStatus) {
-        LOG.debug("findNextDocumentByValidationStatus({},{})", timeLoaded, validationStatus);
-        Query query = getEntityManager()
-            .createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationStatus");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        return query.getResultList();
-    }
-
-    public List<XhbCppStagingInboundDao> findNextDocumentTest(LocalDateTime timeLoaded,
-        String validationStatus) {
-        LOG.debug("findNextDocumentTest({},{})", timeLoaded, validationStatus);
-        Query query =
-            getEntityManager().createQuery("SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-                + "o.timeLoaded >= :timeLoaded AND (o.obsInd IS NULL OR o.obsInd='N') "
-                + "AND o.validationStatus = :validationStatus ORDER by o.timeLoaded");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        return query.getResultList();
-    }
-
     public List<XhbCppStagingInboundDao> findUnrespondedCppMessages() {
         LOG.debug("findUnrespondedCppMessages()");
         Query query = getEntityManager()

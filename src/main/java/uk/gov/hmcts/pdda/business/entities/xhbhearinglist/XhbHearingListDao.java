@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_HEARING_LIST")
-@NamedQuery(name = "XHB_HEARING_LIST.findByCourtIdAndDate",
-    query = "SELECT o from XHB_HEARING_LIST o WHERE o.courtId = :courtId AND o.startDate = :startDate")
 @NamedQuery(name = "XHB_HEARING_LIST.findByCourtIdStatusAndDate",
     query = "SELECT o from XHB_HEARING_LIST o WHERE o.courtId = :courtId AND o.status = :status "
         + "AND o.startDate = :startDate")
