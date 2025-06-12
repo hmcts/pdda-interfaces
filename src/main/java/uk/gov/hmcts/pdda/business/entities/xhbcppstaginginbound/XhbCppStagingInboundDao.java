@@ -14,26 +14,10 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_STAGING_INBOUND")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationStatus",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') "
-        + "AND ((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
-        + ":validationStatus)) ORDER by o.timeLoaded")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByProcessingStatus",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') "
-        + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
-        + ":processingStatus)) ORDER by o.timeLoaded")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationAndProcessingStatus",
     query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
         + "AND (o.obsInd IS NULL OR o.obsInd='N') "
         + "AND ((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
-        + ":validationStatus)) "
-        + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
-        + ":processingStatus)) ORDER by o.timeLoaded")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocument",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-        + "((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
         + ":validationStatus)) "
         + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
         + ":processingStatus)) ORDER by o.timeLoaded")
