@@ -123,7 +123,7 @@ class CathUtilsTest {
         assertNotNull(result, NOTNULL);
         HttpHeaders headers = result.headers();
         assertNotNull(headers, NOTNULL);
-        validateHeaderValue(headers, PublicationConfiguration.GOVERNANCE_HEADER, GOVERNANCE);
+        validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
         validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE);
         validateHeaderValue(headers, PublicationConfiguration.LIST_TYPE,
             courtelJson.getListType().toString());

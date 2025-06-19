@@ -50,10 +50,10 @@ public final class CathUtils {
     private static final String BEARER = "Bearer %s";
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
-    private static final String DATETIME_FORMAT = "yyyy-MM-ddHH:mm";
+    private static final String DATETIME_FORMAT = "yyyy-MM-dd";
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
-    private static final String GOVERNANCE = "PDDA";
+    private static final String PROVENANCE = "PDDA";
 
     private CathUtils() {
         // Private constructor
@@ -72,7 +72,7 @@ public final class CathUtils {
         // Return the HttpRequest for the post
         HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
             .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
-            .header(PublicationConfiguration.GOVERNANCE_HEADER, GOVERNANCE)
+            .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
             .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
             .header(PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth)
             .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
