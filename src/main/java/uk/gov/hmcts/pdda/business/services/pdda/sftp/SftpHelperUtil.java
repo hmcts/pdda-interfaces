@@ -147,7 +147,7 @@ public class SftpHelperUtil extends SftpService {
      * 
      * @return The SFTP configuration
      */
-    @SuppressWarnings("PMD.NPathComplexity")
+    @SuppressWarnings({"PMD.NPathComplexity","PMD.CyclomaticComplexity"})
     private SftpConfig getDbConfigParams(SftpConfig sftpConfig) {
 
         methodName = "getDbConfigParams()";
@@ -207,6 +207,15 @@ public class SftpHelperUtil extends SftpService {
             sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
         } catch (Exception ex) {
             sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
+        }
+        
+        // Get excluded court IDs for CP messages
+        try {
+            sftpConfig
+                .setCpExcludedCourtIds(getMandatoryConfigValue(Config.DB_CP_EXCLUDED_COURT_IDS));
+            LOG.debug("SFTP CP Excluded Court Ids: {}", sftpConfig.getCpExcludedCourtIds());
+        } catch (InvalidConfigException ex) {
+            sftpConfig.setErrorMsg(Config.DB_CP_EXCLUDED_COURT_IDS + NOT_FOUND);
         }
 
         // Validate the host and port
