@@ -166,4 +166,42 @@ public class PddaMessageHelper {
     private boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
     }
+
+    /**
+     * Checks if the given document is excluded based on the provided court codes.
+     *
+     * @param inDocument the document identifier in the format "PublicDisplay_XXX_&lt;more chars&gt;".
+     * @param courtsExcluded a comma-separated list of court codes to check against.
+     * @return true if the document's court code is in the excluded list, false otherwise.
+     */
+    public static boolean isCourtExcluded(String inDocument, String courtsExcluded) {
+        if (inDocument == null) {
+            return false;
+        }
+        
+        // Match and extract the 3-digit number after "PublicDisplay_"
+        String regex = "PublicDisplay_(\\d{3})_.*";
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+        java.util.regex.Matcher matcher = pattern.matcher(inDocument);
+
+        if (!matcher.matches()) {
+            return false; // Doesn't match the expected format
+        }
+
+        String courtCode = matcher.group(1);
+
+        if (courtsExcluded == null || courtsExcluded.isEmpty()) {
+            return false; // empty list can't contain anything
+        }
+        
+        // Split and check for match
+        String[] codes = courtsExcluded.split(",");
+        for (String code : codes) {
+            if (courtCode.equals(code.trim())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

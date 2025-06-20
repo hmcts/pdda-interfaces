@@ -36,7 +36,16 @@ public class SftpConfig {
     SSHClient sshClient;
     Session session;
     boolean useKeyVault;
+    String cpExcludedCourtIds;
 
+
+    public String getCpExcludedCourtIds() {
+        return cpExcludedCourtIds;
+    }
+
+    public void setCpExcludedCourtIds(String cpExcludedCourtIds) {
+        this.cpExcludedCourtIds = cpExcludedCourtIds;
+    }
 
     public boolean isUseKeyVault() {
         return useKeyVault;

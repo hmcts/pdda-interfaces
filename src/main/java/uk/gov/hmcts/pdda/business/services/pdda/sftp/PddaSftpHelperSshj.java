@@ -7,6 +7,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,12 +36,12 @@ public class PddaSftpHelperSshj {
      * @throws IOException The IO Exception
      */
     public Map<String, String> sftpFetch(SFTPClient sftpClient, String remoteFolder,
-        BaisValidation validation) throws IOException {
+        BaisValidation validation, String cpCourtsExcluded) throws IOException {
         String methodName = "sftpFetch()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
         // Fetch Files
-        Map<String, String> files = fetchFiles(sftpClient, remoteFolder, validation);
+        Map<String, String> files = fetchFiles(sftpClient, remoteFolder, validation, cpCourtsExcluded);
         LOG.debug("No Of Files Fetched: {}", files.size());
 
         return files;
@@ -86,8 +87,9 @@ public class PddaSftpHelperSshj {
      * @return The files
      * @throws IOException The IO Exception
      */
+    @SuppressWarnings({"PMD.CognitiveComplexity","PMD.ConfusingTernary"})
     private Map<String, String> fetchFiles(SFTPClient sftpClient, String remoteFolder,
-        BaisValidation validation) throws IOException {
+        BaisValidation validation, String cpCourtsExcluded) throws IOException {
         String methodName = "fetchFiles()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
 
@@ -106,17 +108,23 @@ public class PddaSftpHelperSshj {
             }
             if (listOfFilesInFolder != null) {
                 for (String filename : listOfFilesInFolder) {
-                    try (RemoteFile remoteFile =
-                        sftpClient.getSFTPEngine().open(remoteFolder + filename)) {
-                        try (InputStream is = getFile(remoteFile);) {
-                            String fileContents = getFileContents(filename, is);
-                            files.put(filename, fileContents);
-                        } finally {
-                            LOG.debug("File closed: {}", filename);
+                    if (!PddaMessageHelper.isCourtExcluded(filename, cpCourtsExcluded)) {
+                        LOG.debug("Fetching file: {}", filename);
+                        try (RemoteFile remoteFile =
+                            sftpClient.getSFTPEngine().open(remoteFolder + filename)) {
+                            try (InputStream is = getFile(remoteFile);) {
+                                String fileContents = getFileContents(filename, is);
+                                files.put(filename, fileContents);
+                            } finally {
+                                LOG.debug("File closed: {}", filename);
+                            }
+                        } catch (IOException e) {
+                            LOG.error("Error Reading filename {} :: Stacktrace1:: {}", filename,
+                                ExceptionUtils.getStackTrace(e));
                         }
-                    } catch (IOException e) {
-                        LOG.error("Error Reading filename {} :: Stacktrace1:: {}", filename,
-                            ExceptionUtils.getStackTrace(e));
+                    } else {
+                        LOG.debug("Skipping file: {}", filename);
+                        continue;
                     }
                 }
             }
