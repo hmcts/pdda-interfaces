@@ -80,7 +80,7 @@ public class SftpService extends XhibitPddaHelper {
      */
     @SuppressWarnings("PMD")
     public boolean processBaisMessages(int sftpPort) {
-
+        
         boolean error = false;
 
         methodName = "processBaisMessages()";
@@ -91,6 +91,7 @@ public class SftpService extends XhibitPddaHelper {
         // First get the CP data from BAIS
         LOG.debug("About to attempt to connect to BAIS to download any CP files");
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
+            
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
@@ -253,7 +254,7 @@ public class SftpService extends XhibitPddaHelper {
         try {
             // Get the files from BAIS
             return getPddaSftpHelperSshj().sftpFetch(config.getSshjSftpClient(),
-                config.getActiveRemoteFolder(), validation);
+                config.getActiveRemoteFolder(), validation, config.getCpExcludedCourtIds());
         } catch (Exception ex) {
             LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
             return Collections.emptyMap();

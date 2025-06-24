@@ -95,4 +95,17 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
         query.setParameter("shortName", shortName);
         return query.getResultList();
     }
+    
+    /**
+     * Overridden findAll method to return all XhbCourtDao objects that are not marked as obsolete.
+     * @return List of XhbCourtDao objects.
+     */
+    @Override
+    public List<XhbCourtDao> findAllSafe() {
+        try (EntityManager em = createEntityManager()) {
+            String hql = "FROM " + getDaoClass().getName() + " e WHERE e.obsInd IS NULL OR e.obsInd <> 'Y'";
+            Query query = em.createQuery(hql);
+            return query.getResultList();
+        }
+    }
 }
