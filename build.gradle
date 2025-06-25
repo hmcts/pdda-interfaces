@@ -215,7 +215,7 @@ dependencies {
     // File/Config Utilities
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.commons:commons-vfs2:2.10.0'
-    implementation 'org.apache.commons:commons-configuration2:2.11.0'
+    implementation 'org.apache.commons:commons-configuration2:2.12.0'
 
     // YAML
     implementation 'org.yaml:snakeyaml:2.3'
