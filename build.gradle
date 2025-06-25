@@ -267,7 +267,7 @@ dependencies {
 	
     // Optional: SFTP test support
     implementation 'de.ppi:fake-sftp-server-extension:1.0.3'
-    testImplementation 'com.github.stefanbirkner:fake-sftp-server-rule:2.0.0'
+    testImplementation 'com.github.stefanbirkner:fake-sftp-server-rule:2.0.1'
     implementation 'com.jcraft:jsch:0.1.55'
     
 
