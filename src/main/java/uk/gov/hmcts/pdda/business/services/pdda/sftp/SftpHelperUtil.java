@@ -55,9 +55,18 @@ public class SftpHelperUtil extends SftpService {
             sftpConfig.setPort(sftpPort);
             sftpConfig = getTestSftpConfig(sftpConfig);
         } else {
-            // Firstly, are we using Database or Key Vault to lookup credentials?
+            // Are we using Database or Key Vault to lookup credentials?
             // This will be a database lookup. If it is indeterminate, we will use the Database.
             sftpConfig.setUseKeyVault(checkWhetherToUseKeyVault());
+            
+            // Get excluded court IDs for CP messages
+            try {
+                sftpConfig
+                    .setCpExcludedCourtIds(getMandatoryConfigValue(Config.DB_CP_EXCLUDED_COURT_IDS));
+                LOG.debug("SFTP CP Excluded Court Ids: {}", sftpConfig.getCpExcludedCourtIds());
+            } catch (InvalidConfigException ex) {
+                sftpConfig.setErrorMsg(Config.DB_CP_EXCLUDED_COURT_IDS + NOT_FOUND);
+            }
 
             // Set the rest of the params
             sftpConfig = getConfigParams(sftpConfig);
@@ -134,6 +143,7 @@ public class SftpHelperUtil extends SftpService {
      */
     public SftpConfig getConfigParams(SftpConfig sftpConfig) {
 
+        // Now get the rest of the details not already set
         if (sftpConfig.isUseKeyVault()) {
             return getKvConfigParams(sftpConfig);
         } else {
@@ -161,18 +171,17 @@ public class SftpHelperUtil extends SftpService {
             sftpConfig.setErrorMsg(Config.DB_CP_SFTP_USERNAME + NOT_FOUND);
         }
         try {
+            sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
+        } catch (Exception ex) {
+            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
+        }
+        try {
             sftpConfig
                 .setCpRemoteFolder(getMandatoryConfigValue(Config.DB_CP_SFTP_UPLOAD_LOCATION));
             LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_CP_SFTP_UPLOAD_LOCATION + NOT_FOUND);
         }
-        try {
-            sftpConfig.setXhibitPassword(getMandatoryConfigValue(Config.DB_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_PASSWORD + NOT_FOUND);
-        }
-
 
 
         // Next the XHIBIT BAIS properties
@@ -202,20 +211,6 @@ public class SftpHelperUtil extends SftpService {
             LOG.debug(SFTP_LOG_STRING, hostAndPort);
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
-        }
-        try {
-            sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
-        } catch (Exception ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
-        }
-        
-        // Get excluded court IDs for CP messages
-        try {
-            sftpConfig
-                .setCpExcludedCourtIds(getMandatoryConfigValue(Config.DB_CP_EXCLUDED_COURT_IDS));
-            LOG.debug("SFTP CP Excluded Court Ids: {}", sftpConfig.getCpExcludedCourtIds());
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_EXCLUDED_COURT_IDS + NOT_FOUND);
         }
 
         // Validate the host and port
