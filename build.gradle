@@ -11,7 +11,7 @@ buildscript {
 plugins {
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.springframework.boot' version '3.5.0'
+	id 'org.springframework.boot' version '3.5.3'
 	id 'com.github.ben-manes.versions' version '0.51.0'
 	id 'org.owasp.dependencycheck' version '12.1.0'
 	id 'org.sonarqube' version '6.0.1.5171'
@@ -289,7 +289,7 @@ dependencies {
 
     // Compile-only: Jakarta APIs (only for compilation)
     compileOnly 'org.apache.tomee:jakartaee-api:10.0'
-    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.0'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.3'
 
     // Optional: If you're stuck with local jsch for some reason
     // Better to replace this with a Maven version if possible
