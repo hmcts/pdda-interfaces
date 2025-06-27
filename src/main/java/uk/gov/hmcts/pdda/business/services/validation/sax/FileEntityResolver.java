@@ -57,7 +57,7 @@ public class FileEntityResolver implements EntityResolver {
      */
     @Override
     public InputSource resolveEntity(String publicId, String systemId) {
-        LOG.debug("Resolving entity {}", systemId);
+        LOG.debug("Resolving entity: publicId={}, systemId={}", publicId, systemId);
         InputSource inputSource = new InputSource(
             Thread.currentThread().getContextClassLoader().getResourceAsStream(systemId));
         inputSource.setPublicId(publicId);
