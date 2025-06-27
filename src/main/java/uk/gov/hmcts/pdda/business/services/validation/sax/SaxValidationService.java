@@ -99,15 +99,22 @@ public class SaxValidationService implements ValidationService {
     protected SchemaFactory getSchemaFactory() throws SAXNotRecognizedException, SAXNotSupportedException {
         if (schemaFactory == null) {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            // to be compliant, completely disable DOCTYPE declaration:
-            factory.setFeature(DISALLOW_DECL, true);
-            // or prohibit the use of all protocols by external entities:
+
+            // Disallow DOCTYPE declarations to prevent XXE attacks
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+
+            // Allow schema includes from classpath (and optionally local file system)
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "classpath,file");
+
+            // Block all DTDs
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file"); 
-            return factory;
+
+            // Cache for reuse if desired
+            schemaFactory = factory;
         }
         return schemaFactory;
     }
+
 
     protected SAXParserFactory getSaxParserFactory()
         throws SAXNotRecognizedException, SAXNotSupportedException, ParserConfigurationException {
