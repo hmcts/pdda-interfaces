@@ -210,7 +210,7 @@ dependencies {
     implementation 'com.hierynomus:sshj:0.40.0'
     implementation 'org.apache.sshd:sshd-common:2.14.0'
     implementation 'org.apache.sshd:sshd-sftp:2.14.0'
-    implementation 'org.apache.sshd:sshd-core:2.14.0'
+    implementation 'org.apache.sshd:sshd-core:2.15.0'
 
     // File/Config Utilities
     implementation 'org.apache.commons:commons-lang3:3.17.0'
