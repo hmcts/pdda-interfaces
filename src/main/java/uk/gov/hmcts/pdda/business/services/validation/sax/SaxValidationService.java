@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationResult;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,7 +27,7 @@ import javax.xml.validation.SchemaFactory;
  * 
  * @author William Fardell
  */
-@SuppressWarnings({"squid:S2755", "PMD.LawOfDemeter"})
+@SuppressWarnings({"squid:S2755", "PMD.LawOfDemeter","PMD.CloseResource"})
 public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
@@ -58,7 +59,10 @@ public class SaxValidationService implements ValidationService {
             factory.setNamespaceAware(true);
 
             factory.setSchema(
-                getSchemaFactory().newSchema(new SAXSource(entityResolver.resolveEntity(schemaName, schemaName))));
+                getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
+
+            //factory.setSchema(
+            //    getSchemaFactory().newSchema(new SAXSource(entityResolver.resolveEntity(schemaName, schemaName))));
             SAXParser parser = factory.newSAXParser();
 
 
@@ -76,6 +80,21 @@ public class SaxValidationService implements ValidationService {
             throw new ValidationException("An error occurred validating.", e);
         }
     }
+    
+    public SAXSource getSaxSourceFromClasspath(String fullPath) throws SAXException {
+        InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fullPath);
+
+        if (is == null) {
+            throw new SAXException("Unable to find XSD at " + fullPath);
+        }
+
+        InputSource inputSource = new InputSource(is);
+        // This systemId must be a pseudo-URI (classpath URL or similar) to enable relative includes to work.
+        inputSource.setSystemId(this.getClass().getResource("/" + fullPath).toString());
+
+        return new SAXSource(inputSource);
+    }
+
 
     protected SchemaFactory getSchemaFactory() throws SAXNotRecognizedException, SAXNotSupportedException {
         if (schemaFactory == null) {
