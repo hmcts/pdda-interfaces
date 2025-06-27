@@ -44,7 +44,6 @@ public class SftpConfigHelper extends SftpService {
      * 
      * @param entityManager The EntityManager
      */
-    @SuppressWarnings("PMD.UnusedFormalParameter")
     public SftpConfigHelper(EntityManager entityManager) {
         super(entityManager);
         this.entityManager = entityManager;

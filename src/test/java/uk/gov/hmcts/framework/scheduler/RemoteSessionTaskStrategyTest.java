@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 class RemoteSessionTaskStrategyTest {
 
     private static final String TESTSCHEDULENAME = "TestScheduleName";

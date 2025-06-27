@@ -53,7 +53,7 @@ import static org.mockito.Mockito.when;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.SingularField","PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD"})
 class SftpHelperUtilTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpHelperUtilTest.class);

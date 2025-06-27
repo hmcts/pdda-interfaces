@@ -22,7 +22,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
  * @author Rakesh Lakhani
  * @version $Id: Rule.java,v 1.3 2006/06/05 12:32:37 bzjrnl Exp $
  */
-@SuppressWarnings("PMD.ShortClassName")
+@SuppressWarnings({"PMD.ShortClassName","PMD.ImplicitFunctionalInterface"})
 public interface Rule {
     /**
      * isValid.

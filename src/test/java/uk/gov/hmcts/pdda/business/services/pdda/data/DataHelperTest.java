@@ -33,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.UseObjectForClearerAPI",
-    "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 class DataHelperTest {
 
     private static final String TRUE = "Result is False";

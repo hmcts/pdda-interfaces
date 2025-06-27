@@ -38,8 +38,7 @@ import java.util.Optional;
  * 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyFields", "PMD.GodClass",
-    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD")
 public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected static final String EMPTY_STRING = "";

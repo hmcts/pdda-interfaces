@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * 
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PddaBaisControllerBeanTest {
 

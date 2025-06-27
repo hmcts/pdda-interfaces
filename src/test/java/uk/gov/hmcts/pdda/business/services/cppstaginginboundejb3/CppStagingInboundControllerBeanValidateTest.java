@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * CppStagingInboundControllerBeanValidateTest.
  */
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundControllerBeanValidateTest {
 

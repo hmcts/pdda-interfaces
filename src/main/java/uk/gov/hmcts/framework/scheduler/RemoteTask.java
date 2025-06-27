@@ -20,6 +20,7 @@ package uk.gov.hmcts.framework.scheduler;
  * 
  * @author Bob Boothby
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface RemoteTask {
     /**
      * <p>

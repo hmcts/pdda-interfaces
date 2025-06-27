@@ -157,7 +157,6 @@ public class SftpHelperUtil extends SftpService {
      * 
      * @return The SFTP configuration
      */
-    @SuppressWarnings({"PMD.NPathComplexity","PMD.CyclomaticComplexity"})
     private SftpConfig getDbConfigParams(SftpConfig sftpConfig) {
 
         methodName = "getDbConfigParams()";

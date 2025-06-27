@@ -18,7 +18,7 @@ package uk.gov.hmcts.framework.services.audittrail;
  * @author James Powell
  * @version 1.0
  */
-
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface AuditTrailEventFactory {
 
     /**

@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 class VipDisplayCourtRoomQueryTest {
 
     private static final String TRUE = "Result is not True";

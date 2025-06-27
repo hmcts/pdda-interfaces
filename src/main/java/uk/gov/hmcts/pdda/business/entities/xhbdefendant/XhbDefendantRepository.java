@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD"})
 public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
     implements Serializable {
 
@@ -61,7 +61,6 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<XhbDefendantDao> findByDefendantNameSafe(final Integer courtId,
         final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth) {

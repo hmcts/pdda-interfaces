@@ -30,8 +30,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
  * 
  * @author Scott Atwell
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.TestClassWithoutTestCases",
-    "PMD.NonSerializableClass", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD"})
 class TestablePdConfigurationControllerBean extends PdConfigurationControllerBean {
 
     private static final long serialVersionUID = 6593690695126813388L;

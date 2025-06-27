@@ -60,11 +60,7 @@ public class SaxValidationService implements ValidationService {
 
             factory.setSchema(
                 getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
-
-            //factory.setSchema(
-            //    getSchemaFactory().newSchema(new SAXSource(entityResolver.resolveEntity(schemaName, schemaName))));
             SAXParser parser = factory.newSAXParser();
-
 
             XMLReader reader = parser.getXMLReader();
             ErrorHandlerValidationResult result = new ErrorHandlerValidationResult();

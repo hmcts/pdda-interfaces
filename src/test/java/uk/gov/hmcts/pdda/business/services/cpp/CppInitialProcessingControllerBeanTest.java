@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
+@SuppressWarnings("PMD")
 class CppInitialProcessingControllerBeanTest
     extends AbstractCppInitialProcessingControllerBeanTest {
 

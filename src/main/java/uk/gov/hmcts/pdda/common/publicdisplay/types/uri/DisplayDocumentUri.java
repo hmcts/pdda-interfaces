@@ -37,7 +37,6 @@ import java.util.Locale;
  * @author Neil Ellis
  * @version $Revision: 1.21 $
  */
-@SuppressWarnings("PMD.GodClass")
 public final class DisplayDocumentUri extends AbstractUri {
 
     /**

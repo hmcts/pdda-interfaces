@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.isA;
 /**
  * CppStagingInboundHelperTest.
  */
-@SuppressWarnings("PMD.CloseResource")
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class CppStagingInboundHelperTest {

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 class PublicDisplayNotifierTest {
 
