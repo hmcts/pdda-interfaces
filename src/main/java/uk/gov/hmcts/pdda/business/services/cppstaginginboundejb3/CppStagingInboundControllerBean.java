@@ -358,7 +358,8 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             }            
 
         } catch (ValidationException ve) {
-            LOG.error("Validation failed for schema name: {}; root cause: {}", schemaName, ve.getCause().getMessage(), ve);
+            LOG.error("Validation failed for schema name: {}; root cause: {}", schemaName,
+                ve.getCause().getMessage(), ve);
             updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:" + schemaName
                 + "; error::" + ve.getCause().getMessage(), userDisplayName);
         }
