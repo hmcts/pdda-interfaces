@@ -6,7 +6,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 import java.io.File;
-import java.io.InputStream;
 
 /**
  * Resolves the entities name to a file in the entities dir. This uses the last part of the url
@@ -48,53 +47,22 @@ public class FileEntityResolver implements EntityResolver {
         }
         setEntityDir(entityDir);
     }
-    
-    
+
+
     /**
      * Resolve the entity.
      * 
      * @param publicId Public id
      * @param systemId System id
      */
-    @SuppressWarnings("PMD.CloseResource")
     @Override
-    public InputSource resolveEntity(String publicId, String systemId) {
-        LOG.debug("Resolving entity with systemId: {}", systemId);
-
-        String basePath = "config/xsd/";
-        String fileName = systemId.substring(systemId.lastIndexOf('/') + 1);
-
-        InputStream stream = Thread.currentThread()
-            .getContextClassLoader()
-            .getResourceAsStream(basePath + fileName);
-
-        if (stream == null) {
-            LOG.error("Unable to resolve XSD entity: {}", basePath + fileName);
-            return null;
-        }
-
-        InputSource inputSource = new InputSource();
-        inputSource.setByteStream(stream); // Let SAX handle the stream
-        inputSource.setPublicId(publicId);
-        inputSource.setSystemId(systemId);
-        return inputSource;
-    }
-
-
-    /**
-     * Resolve the entity.
-     * 
-     * @param publicId Public id
-     * @param systemId System id
-     */
-    /*@Override
     public InputSource resolveEntity(String publicId, String systemId) {
         LOG.debug("Resolving entity {}", systemId);
         InputSource inputSource = new InputSource(
             Thread.currentThread().getContextClassLoader().getResourceAsStream(systemId));
         inputSource.setPublicId(publicId);
         return inputSource;
-    }*/
+    }
     
     private void setEntityDir(File entityDir) {
         this.entityDir = entityDir;
