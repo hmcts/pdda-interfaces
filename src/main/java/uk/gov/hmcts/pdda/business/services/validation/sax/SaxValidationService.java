@@ -63,14 +63,8 @@ public class SaxValidationService implements ValidationService {
                 .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
             LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
             
-            try {
-                LOG.debug("Creating Schema for: {}", schemaName);
-                factory.setSchema(getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
-            } catch (SAXException e) {
-                LOG.error("Schema compilation failed for {}: {}", schemaName, e.getMessage(), e);
-                throw new ValidationException("Schema compilation failed for: " + schemaName, e);
-            }
-
+            factory = setSchema(schemaName, factory);
+            
             SAXParser parser = factory.newSAXParser();
 
             XMLReader reader = parser.getXMLReader();
@@ -119,7 +113,7 @@ public class SaxValidationService implements ValidationService {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
             // Disallow DOCTYPE declarations to prevent XXE attacks
-            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature(DISALLOW_DECL, true);
 
             // Allow schema includes from classpath (and optionally local file system)
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "jar:*,classpath,file");
@@ -142,5 +136,21 @@ public class SaxValidationService implements ValidationService {
             return factory;
         }
         return saxParserFactory;
+    }
+    
+    @SuppressWarnings("finally")
+    private SAXParserFactory setSchema(String schemaName, SAXParserFactory factory)
+        throws SAXNotRecognizedException, SAXNotSupportedException {
+        try {
+            LOG.debug("Creating Schema for: {}", schemaName);
+            factory.setSchema(getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
+        } catch (SAXException e) {
+            LOG.debug("Schema compilation failed for '{}': {}", schemaName, e.getMessage(), e);
+            throw new ValidationException("Schema compilation failed for: " + schemaName, e);
+        } finally {
+            LOG.debug("Schema set for: {}", schemaName);
+            return factory;
+        }
+
     }
 }
