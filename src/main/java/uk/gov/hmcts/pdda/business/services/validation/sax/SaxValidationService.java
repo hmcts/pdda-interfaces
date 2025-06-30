@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URL;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -57,9 +58,19 @@ public class SaxValidationService implements ValidationService {
         try {
             SAXParserFactory factory = getSaxParserFactory();
             factory.setNamespaceAware(true);
+            
+            URL url = Thread.currentThread().getContextClassLoader()
+                .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
+            LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
+            
+            try {
+                LOG.debug("Creating Schema for: {}", schemaName);
+                factory.setSchema(getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
+            } catch (SAXException e) {
+                LOG.error("Schema compilation failed for {}: {}", schemaName, e.getMessage(), e);
+                throw new ValidationException("Schema compilation failed for: " + schemaName, e);
+            }
 
-            factory.setSchema(
-                getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
             SAXParser parser = factory.newSAXParser();
 
             XMLReader reader = parser.getXMLReader();
@@ -80,11 +91,19 @@ public class SaxValidationService implements ValidationService {
     }
     
     public SAXSource getSaxSourceFromClasspath(String fullPath) throws SAXException {
+        LOG.debug("entered getSaxSourceFromClasspath method");
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fullPath);
 
         if (is == null) {
             throw new SAXException("Unable to find XSD at " + fullPath);
         }
+        
+        String systemId = this.getClass().getResource("/" + fullPath).toString();
+        LOG.debug("Creating InputSource for schema: {}, systemId: {}", fullPath, systemId);
+        
+        URL url = Thread.currentThread().getContextClassLoader()
+            .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
+        LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
 
         InputSource inputSource = new InputSource(is);
         // This systemId must be a pseudo-URI (classpath URL or similar) to enable relative includes to work.
