@@ -16,10 +16,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.SchemaFactory;
 
@@ -33,6 +36,7 @@ public class SaxValidationService implements ValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
     private static final String DISALLOW_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+    private static final String XSD_HOME = "config/xsd/";
 
     private final EntityResolver entityResolver;
 
@@ -58,31 +62,52 @@ public class SaxValidationService implements ValidationService {
         try {
             SAXParserFactory factory = getSaxParserFactory();
             factory.setNamespaceAware(true);
-            
-            URL url = Thread.currentThread().getContextClassLoader()
-                .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
-            LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
-            
-            factory = getSchema(schemaName, factory);
-            
-            SAXParser parser = factory.newSAXParser();
 
+            // Optional: log to confirm schema file is resolvable
+            URL url = Thread.currentThread().getContextClassLoader()
+                .getResource(XSD_HOME + "CourtService_CPP-v1-0.xsd");
+            LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
+
+            // Build schema from multiple XSD files
+            Source[] schemaSources = getSchemaSources(
+                XSD_HOME + "DailyList-v1-0.xsd",
+                XSD_HOME + "CourtService_CPP-v1-0.xsd",
+                XSD_HOME + "AddressTypes-v1-0.xsd",
+                XSD_HOME + "apd-v1-0.xsd",
+                XSD_HOME + "CitizenIdentificationTypes-v1-0.xsd",
+                XSD_HOME + "CommonSimpleTypes_CPP-v1-0.xsd",
+                XSD_HOME + "ContactTypes-v1-0.xsd",
+                XSD_HOME + "CPPX_InternetWebPage-v1-0.xsd",
+                XSD_HOME + "CPPX_PublicDisplay-v1-0.xsd",
+                XSD_HOME + "FirmList-v1-0.xsd",
+                XSD_HOME + "PersonalDetailsTypes-v1-0.xsd",
+                XSD_HOME + "WarnedList-v1-0.xsd"
+            );
+
+            factory.setSchema(getSchemaFactory().newSchema(schemaSources));
+
+            SAXParser parser = factory.newSAXParser();
             XMLReader reader = parser.getXMLReader();
+
+            // Still register entity resolver for validating the actual XML
             reader.setEntityResolver(entityResolver);
-            
+
             ErrorHandlerValidationResult result = new ErrorHandlerValidationResult();
             reader.setErrorHandler(result);
             reader.parse(new InputSource(new StringReader(xml)));
+
             LOG.debug("Valid: {}", result.isValid());
             if (!result.isValid()) {
                 LOG.debug("Validation Failed: {}", result);
             }
+
             return result;
 
         } catch (SAXException | IOException | ParserConfigurationException e) {
             throw new ValidationException("An error occurred validating.", e);
         }
     }
+
     
     public SAXSource getSaxSourceFromClasspath(String fullPath) throws SAXException {
         LOG.debug("entered getSaxSourceFromClasspath method");
@@ -96,7 +121,7 @@ public class SaxValidationService implements ValidationService {
         LOG.debug("Creating InputSource for schema: {}, systemId: {}", fullPath, systemId);
         
         URL url = Thread.currentThread().getContextClassLoader()
-            .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
+            .getResource(XSD_HOME + "CourtService_CPP-v1-0.xsd");
         LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
 
         InputSource inputSource = new InputSource(is);
@@ -149,7 +174,7 @@ public class SaxValidationService implements ValidationService {
      * @throws SAXNotSupportedException   if a feature is not supported.
      * @throws ValidationException        if schema compilation fails.
      */
-    private SAXParserFactory getSchema(String schemaName, SAXParserFactory factory)
+    public SAXParserFactory getSchema(String schemaName, SAXParserFactory factory)
         throws SAXNotRecognizedException, SAXNotSupportedException, ValidationException {
         try {
             LOG.debug("Creating Schema for: {}", schemaName);
@@ -163,4 +188,24 @@ public class SaxValidationService implements ValidationService {
         return factory;
 
     }
+    
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private Source[] getSchemaSources(String... schemaPaths) throws SAXException {
+        List<Source> sources = new ArrayList<>();
+        for (String path : schemaPaths) {
+            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+            if (is == null) {
+                throw new SAXException("Schema file not found on classpath: " + path);
+            }
+
+            String systemId = this.getClass().getResource("/" + path).toString();
+            LOG.debug("Adding schema source: {}, systemId: {}", path, systemId);
+
+            InputSource inputSource = new InputSource(is);
+            inputSource.setSystemId(systemId);
+            sources.add(new SAXSource(inputSource));
+        }
+        return sources.toArray(new Source[0]);
+    }
+
 }
