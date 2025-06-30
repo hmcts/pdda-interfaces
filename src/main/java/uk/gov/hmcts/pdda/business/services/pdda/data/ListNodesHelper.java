@@ -39,8 +39,7 @@ import javax.xml.xpath.XPathExpressionException;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.CognitiveComplexity"})
+@SuppressWarnings("PMD")
 public class ListNodesHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;

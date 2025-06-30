@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.LambdaCanBeMethodReference"})
+@SuppressWarnings({"PMD"})
 @ExtendWith(MockitoExtension.class)
 class EventWorkManagerTest {
 

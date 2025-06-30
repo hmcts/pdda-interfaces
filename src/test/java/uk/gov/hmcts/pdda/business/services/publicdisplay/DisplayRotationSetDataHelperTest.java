@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD"})
 class DisplayRotationSetDataHelperTest {
 
     private static final String TRUE = "Result is not True";

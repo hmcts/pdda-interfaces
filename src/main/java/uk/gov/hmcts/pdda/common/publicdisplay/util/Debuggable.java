@@ -23,6 +23,7 @@ import org.slf4j.Logger;
  * @author Neil Ellis
  * @version $Revision: 1.2 $
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface Debuggable {
     void debug(Logger logger);
 }

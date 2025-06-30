@@ -60,7 +60,6 @@ public class SaxValidationService implements ValidationService {
 
             factory.setSchema(
                 getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
-
             SAXParser parser = factory.newSAXParser();
 
             XMLReader reader = parser.getXMLReader();
@@ -103,7 +102,7 @@ public class SaxValidationService implements ValidationService {
             factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 
             // Allow schema includes from classpath (and optionally local file system)
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "classpath,file");
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "jar:*,classpath,file");
 
             // Block all DTDs
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");

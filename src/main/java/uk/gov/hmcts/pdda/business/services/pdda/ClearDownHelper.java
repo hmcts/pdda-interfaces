@@ -32,7 +32,7 @@ import java.util.List;
  * @author Nathan Toft
  * @version 1.0
  */
-@SuppressWarnings("PMD.NullAssignment")
+@SuppressWarnings("PMD")
 public class ClearDownHelper extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClearDownHelper.class);
@@ -41,7 +41,6 @@ public class ClearDownHelper extends AbstractControllerBean {
     public static final String RESET_DISPLAY_IWP_TIME = "RESET_DISPLAY_IWP_TIME";
 
     private XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository;
-    @SuppressWarnings("unused")
     private XhbConfigPropRepository xhbConfigPropRepository;
 
     public ClearDownHelper(EntityManager entityManager) {

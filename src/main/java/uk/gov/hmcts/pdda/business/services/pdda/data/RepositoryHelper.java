@@ -39,7 +39,7 @@ import java.io.Serializable;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList", "PMD.TooManyFields"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.TooManyFields"})
 public class RepositoryHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;

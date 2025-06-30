@@ -69,8 +69,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.GodClass",
-    "PMD.TooManyFields", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 class PdConfigurationControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";

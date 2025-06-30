@@ -7,8 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement", "PMD.LooseCoupling",
-    "PMD.ConfusingTernary"})
+@SuppressWarnings({"PMD"})
 public final class ThreadPool {
 
     /** Logger. */

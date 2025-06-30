@@ -12,7 +12,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-@SuppressWarnings({"PMD.GodClass", "PMD.CyclomaticComplexity", "PMD.SingularField"})
+@SuppressWarnings({"PMD.GodClass", "PMD.SingularField"})
 public abstract class AbstractXmlMergeUtils extends AbstractXmlUtils {
 
     /**

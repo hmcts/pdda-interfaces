@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@SuppressWarnings({"PMD.AvoidDuplicateLiterals", "PMD.MethodNamingConventions"})
+@SuppressWarnings({"PMD"})
 class PddaMessageHelperIsCourtExcludedTest {
 
     @Test

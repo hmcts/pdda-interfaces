@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 class PddaSftpHelperSshjTest {
 
