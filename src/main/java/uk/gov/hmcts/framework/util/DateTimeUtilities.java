@@ -78,7 +78,6 @@ public class DateTimeUtilities {
         return calendarToDate(cal);
     }
     
-    @SuppressWarnings("PMD.AvoidCalendarDateCreation")
     public static Date calendarToDate(Calendar calendar) {
         return calendar.getTime();
     }

@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"static-access", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods"})
+@SuppressWarnings({"static-access", "PMD"})
 class ListNodesHelperTest {
 
     private static final String TRUE = "Result is False";

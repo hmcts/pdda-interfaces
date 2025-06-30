@@ -68,9 +68,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Scott Atwell
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods"})
 class SftpServiceTest {
 
     @RegisterExtension
@@ -333,7 +332,6 @@ class SftpServiceTest {
 
 
     @Test
-    @SuppressWarnings("PMD")
     void testProcessBaisMessages() {
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
@@ -356,7 +354,6 @@ class SftpServiceTest {
 
 
     @Test
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void testProcessDataFromBais() {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();

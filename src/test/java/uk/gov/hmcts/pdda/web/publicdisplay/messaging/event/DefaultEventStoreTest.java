@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings("PMD")
 class DefaultEventStoreTest {
 
     private DefaultEventStore eventStore;

@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
-
 @Repository
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD"})
 public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
     implements Serializable {
 
@@ -81,7 +79,6 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<XhbHearingDao> findByCaseIdAndStartDateSafe(final Integer courtId,
         final Integer caseId, final LocalDateTime hearingStartDate) {
 

@@ -39,7 +39,7 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LawOfDemeter", "PMD.TooManyMethods",
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.TooManyMethods",
     "PMD.UseObjectForClearerAPI"})
 public class CreationHelper implements Serializable {
 

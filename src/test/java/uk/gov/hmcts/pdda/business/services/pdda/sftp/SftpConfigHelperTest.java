@@ -35,7 +35,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TestClassWithoutTestCases", "PMD.SingularField"})
+@SuppressWarnings({"PMD"})
 class SftpConfigHelperTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpConfigHelperTest.class);

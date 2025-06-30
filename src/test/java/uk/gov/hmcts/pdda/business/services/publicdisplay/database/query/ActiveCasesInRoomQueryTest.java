@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class ActiveCasesInRoomQueryTest {
 
@@ -89,7 +90,6 @@ class ActiveCasesInRoomQueryTest {
     }
 
 
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     @Test
     void testRepositoryCreatedWhenNullAndEntityManagerIsOpen() {
         // Setup
@@ -142,7 +142,6 @@ class ActiveCasesInRoomQueryTest {
         return true;
     }
 
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     @Test
     void testGetXhbScheduledHearingRepositoryCreatesNewWhenNull() {
         // Simulate case where repo is null by using constructor without repo

@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * AbstractCppInitialProcessingControllerBeanTest.
  **/
+@SuppressWarnings("PMD")
 class AbstractCppInitialProcessingControllerBeanTest {
 
     protected static final String FALSE = "Result is not False";

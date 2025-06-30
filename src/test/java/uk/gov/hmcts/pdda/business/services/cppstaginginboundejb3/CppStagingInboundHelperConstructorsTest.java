@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * CppStagingInboundHelperConstructorsTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundHelperConstructorsTest {
 

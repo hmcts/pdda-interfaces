@@ -46,8 +46,7 @@ import java.util.regex.Pattern;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.CyclomaticComplexity", "PMD.UseLocaleWithCaseConversions"})
+@SuppressWarnings("PMD")
 public class ListObjectHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;

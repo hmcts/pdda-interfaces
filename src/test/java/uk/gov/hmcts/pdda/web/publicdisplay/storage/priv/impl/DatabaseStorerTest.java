@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DatabaseStorerTest {

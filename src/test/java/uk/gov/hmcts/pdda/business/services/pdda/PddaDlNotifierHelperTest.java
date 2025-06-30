@@ -51,6 +51,7 @@ import static org.mockito.Mockito.when;
  * 
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 class PddaDlNotifierHelperTest {
 

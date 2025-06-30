@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.UseObjectForClearerAPI", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.TooManyMethods"})
 public class FinderHelper extends CreationHelper {
 
     private static final long serialVersionUID = 1L;

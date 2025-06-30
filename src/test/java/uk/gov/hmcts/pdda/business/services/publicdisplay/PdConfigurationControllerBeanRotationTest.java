@@ -63,8 +63,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods"})
+@SuppressWarnings("PMD")
 class PdConfigurationControllerBeanRotationTest {
     
     private static final Logger LOG =
@@ -317,7 +316,6 @@ class PdConfigurationControllerBeanRotationTest {
         });
     }
 
-    @SuppressWarnings("PMD.ControlStatementBraces")
     @Test
     void testGetRotationSet() {
         // Setup IDs

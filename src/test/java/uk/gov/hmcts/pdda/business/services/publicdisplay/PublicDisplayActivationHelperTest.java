@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings("static-access")
+@SuppressWarnings({"static-access","PMD"})
 @ExtendWith(EasyMockExtension.class)
 class PublicDisplayActivationHelperTest {
 

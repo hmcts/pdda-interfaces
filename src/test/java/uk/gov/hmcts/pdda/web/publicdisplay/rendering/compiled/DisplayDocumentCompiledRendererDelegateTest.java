@@ -46,7 +46,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.GodClass", "PMD.ExcessiveImports"})
 class DisplayDocumentCompiledRendererDelegateTest {
 
     private static final String NO20603 = "20603";

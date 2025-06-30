@@ -68,8 +68,7 @@ import static org.mockito.Mockito.doReturn;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods", "PMD.UseShortArrayInitializer"})
+@SuppressWarnings({"PMD"})
 class PdConfigurationControllerBeanGetTest {
 
     private static final Logger LOG =

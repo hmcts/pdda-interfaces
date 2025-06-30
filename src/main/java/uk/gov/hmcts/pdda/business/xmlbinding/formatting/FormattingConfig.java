@@ -35,7 +35,7 @@ import java.util.List;
  * @author Will Fardell
  * @version 1.0
  */
-@SuppressWarnings({"PMD.GodClass", "PMD.ExcessiveParameterList"})
+@SuppressWarnings({"PMD.ExcessiveParameterList"})
 public class FormattingConfig {
 
     public static final String CONFIG_XML = "/config/xml/xslt_config.xml";

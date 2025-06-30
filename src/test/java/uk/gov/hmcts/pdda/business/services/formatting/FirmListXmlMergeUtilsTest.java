@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class FirmListXmlMergeUtilsTest {
 

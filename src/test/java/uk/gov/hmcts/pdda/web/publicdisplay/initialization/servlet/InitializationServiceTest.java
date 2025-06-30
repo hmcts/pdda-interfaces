@@ -25,10 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.JUnitAssertionsShouldIncludeMessage",
-    "PMD.UnnecessaryBooleanAssertion", "PMD.UseUnderscoresInNumericLiterals",
-    "PMD.DoNotUseThreads", "PMD.SignatureDeclareThrowsException",
-    "PMD.AvoidAccessibilityAlteration", "PMD.LambdaCanBeMethodReference"})
+@SuppressWarnings({"PMD"})
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class InitializationServiceTest {

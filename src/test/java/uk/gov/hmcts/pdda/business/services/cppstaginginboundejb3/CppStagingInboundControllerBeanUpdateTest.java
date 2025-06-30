@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * CppStagingInboundControllerBeanUpdateTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundControllerBeanUpdateTest {
 

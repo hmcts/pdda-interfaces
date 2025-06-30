@@ -22,6 +22,7 @@ import java.io.Serializable;
  * @author Neil Ellis
  * @version $Revision: 1.6 $
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface Renderer extends Serializable {
 
     String BASE_URL_PROPERTY = "publicdisplay.web.base_url";

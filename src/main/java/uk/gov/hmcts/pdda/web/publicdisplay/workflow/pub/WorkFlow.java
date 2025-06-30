@@ -21,6 +21,7 @@ package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub;
  * @author Neil Ellis
  * @version $Revision: 1.2 $
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface WorkFlow {
     void process();
 }

@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"static-access", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods", "PMD.UseConcurrentHashMap"})
+@SuppressWarnings({"static-access", "PMD"})
 class ListObjectHelperTest {
 
     private static final String XHBCOURTSITEDAO = "xhbCourtSiteDao";

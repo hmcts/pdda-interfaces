@@ -22,6 +22,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DisplayDocumentReferenceManagerTest {

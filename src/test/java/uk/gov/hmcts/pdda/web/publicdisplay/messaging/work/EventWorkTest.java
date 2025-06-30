@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class EventWorkTest {
@@ -67,7 +67,7 @@ class EventWorkTest {
     @AfterEach
     public void tearDown() {
         Mockito.clearAllCaches();
-        ErrorGatherer.getInstance().flush(); // 🔄 reset internal error state
+        ErrorGatherer.getInstance().flush(); // reset internal error state
     }
 
 

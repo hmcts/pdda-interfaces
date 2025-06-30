@@ -21,7 +21,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings({"PMD.SingularField", "PMD.JUnitAssertionsShouldIncludeMessage"})
+@SuppressWarnings({"PMD"})
 class AbstractPdConfigReposControllerBeanTest {
 
     private AbstractPdConfigReposControllerBean beanUnderTest;

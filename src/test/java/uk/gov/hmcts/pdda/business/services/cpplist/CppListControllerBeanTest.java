@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CppListControllerBeanTest {
 

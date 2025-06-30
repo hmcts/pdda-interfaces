@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("PMD.NullAssignment")
+@SuppressWarnings("PMD")
 public class PublicDisplayQueryLogEntry extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQueryLogEntry.class);
@@ -27,7 +27,7 @@ public class PublicDisplayQueryLogEntry extends AbstractControllerBean {
     private static final Integer LONG_ADJOURN = 30_200;
     private static final Integer CASE_CLOSED = 30_300;
     private static final Integer RESUME = 10_500;
-    private final Integer[] validEventTypes = {SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME};
+    private static final Integer[] validEventTypes = {SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME};
 
     private XhbCourtLogEntryRepository xhbCourtLogEntryRepository;
     private XhbCourtLogEventDescRepository xhbCourtLogEventDescRepository;

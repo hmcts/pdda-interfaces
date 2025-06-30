@@ -28,7 +28,6 @@ import javax.xml.xpath.XPathFactory;
  * @author groenm
  *
  */
-@SuppressWarnings("PMD.GodClass")
 public class AbstractCppToPublicDisplayRepos {
 
     private static final Logger LOG =

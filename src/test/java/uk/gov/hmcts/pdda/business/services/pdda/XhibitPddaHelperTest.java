@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@SuppressWarnings({"PMD.SingularField", "PMD.JUnitTestsShouldIncludeAssert", "PMD.LawOfDemeter",
-    "PMD.CompareObjectsWithEquals"})
+@SuppressWarnings({"PMD"})
 class XhibitPddaHelperTest {
 
     private static final String CLEAR_REPOSITORIES_MESSAGE = "Repositories have been cleared";

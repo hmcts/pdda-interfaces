@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ReplaceVectorWithList","PMD.UseArrayListInsteadOfVector"})
+@SuppressWarnings({"PMD"})
 class PddaSftpHelperTest {
 
     private static final String NOTNULL = "Result is Null";

@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PdSetupControllerBeanTest {
 
