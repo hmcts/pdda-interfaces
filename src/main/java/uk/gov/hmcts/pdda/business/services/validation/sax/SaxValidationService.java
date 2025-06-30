@@ -114,6 +114,7 @@ public class SaxValidationService implements ValidationService {
 
 
     protected SchemaFactory getSchemaFactory() throws SAXNotRecognizedException, SAXNotSupportedException {
+        LOG.debug("entered getSchemaFactory method");
         if (schemaFactory == null) {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
