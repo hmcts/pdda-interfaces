@@ -63,7 +63,7 @@ public class SaxValidationService implements ValidationService {
                 .getResource("config/xsd/CourtService_CPP-v1-0.xsd");
             LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
             
-            factory = setSchema(schemaName, factory);
+            factory = getSchema(schemaName, factory);
             
             SAXParser parser = factory.newSAXParser();
 
@@ -138,9 +138,19 @@ public class SaxValidationService implements ValidationService {
         return saxParserFactory;
     }
     
-    @SuppressWarnings("finally")
-    private SAXParserFactory setSchema(String schemaName, SAXParserFactory factory)
-        throws SAXNotRecognizedException, SAXNotSupportedException {
+    
+    /**
+     * Sets the schema for the SAXParserFactory.
+     *
+     * @param schemaName the name of the schema to set.
+     * @param factory    the SAXParserFactory to set the schema on.
+     * @return the updated SAXParserFactory with the schema set.
+     * @throws SAXNotRecognizedException if a feature is not recognised.
+     * @throws SAXNotSupportedException   if a feature is not supported.
+     * @throws ValidationException        if schema compilation fails.
+     */
+    private SAXParserFactory getSchema(String schemaName, SAXParserFactory factory)
+        throws SAXNotRecognizedException, SAXNotSupportedException, ValidationException {
         try {
             LOG.debug("Creating Schema for: {}", schemaName);
             factory.setSchema(getSchemaFactory().newSchema(getSaxSourceFromClasspath(schemaName)));
@@ -149,8 +159,8 @@ public class SaxValidationService implements ValidationService {
             throw new ValidationException("Schema compilation failed for: " + schemaName, e);
         } finally {
             LOG.debug("Schema set for: {}", schemaName);
-            return factory;
         }
+        return factory;
 
     }
 }
