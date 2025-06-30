@@ -308,12 +308,16 @@ dependencies {
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
 
 bootJar {
-  archiveFileName = "PDDA-1.0.war"
-
-  manifest {
-    attributes('Implementation-Version': project.version.toString()) 
-  }
+    enabled = false
 }
+
+bootWar {
+    archiveFileName = "PDDA-1.0.war"
+    manifest {
+        attributes('Implementation-Version': project.version.toString())
+    }
+}
+
 
 // Needed to stop eclipse showing errors on org.w3c.dom / org.xml.sax imports
 configurations {
