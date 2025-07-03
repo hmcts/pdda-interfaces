@@ -136,7 +136,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "7.14.0"
+  toolVersion = "7.15.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.smokeTest, sourceSets.functionalTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -176,7 +176,7 @@ ext {
   log4JVersion = "2.20.0"
 }
 
-ext['snakeyaml.version'] = '2.0'
+ext['snakeyaml.version'] = '2.4'
 
 dependencyManagement {
     imports {
@@ -218,7 +218,7 @@ dependencies {
     implementation 'org.apache.commons:commons-configuration2:2.12.0'
 
     // YAML
-    implementation 'org.yaml:snakeyaml:2.3'
+    implementation 'org.yaml:snakeyaml:2.4'
 
     // JSP/Servlet/JSTL (only if actually used)
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
@@ -232,7 +232,7 @@ dependencies {
     }
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
-    implementation 'org.yaml:snakeyaml:2.3'
+    implementation 'org.yaml:snakeyaml:2.4'
     implementation group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
@@ -278,7 +278,7 @@ dependencies {
 	}
 	
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
-    testImplementation 'org.easymock:easymock:5.5.0'
+    testImplementation 'org.easymock:easymock:5.6.0'
     testImplementation 'org.mockito:mockito-core:5.18.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
