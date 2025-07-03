@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '11.9.1'
+  id 'org.flywaydb.flyway' version '11.10.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -299,9 +299,9 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
 
     // Flyway (already pulled via plugins, but OK to be explicit)
-    implementation 'org.flywaydb:flyway-core:10.22.0'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.22.0'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.22.0'
+    implementation 'org.flywaydb:flyway-core:11.10.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.10.1'
+    implementation 'org.flywaydb:flyway-database-hsqldb:11.10.1'
 }
 
 
