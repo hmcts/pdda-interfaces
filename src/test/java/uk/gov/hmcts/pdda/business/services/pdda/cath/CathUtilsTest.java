@@ -76,6 +76,7 @@ class CathUtilsTest {
     private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is not True";
     private static final String GOVERNANCE = "PDDA";
+    private static final String SENSITIVITY = "PRIVATE";
     private static final String TYPE = "LIST";
 
     @Mock
@@ -125,6 +126,7 @@ class CathUtilsTest {
         assertNotNull(headers, NOTNULL);
         validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
         validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE);
+        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY);
         validateHeaderValue(headers, PublicationConfiguration.LIST_TYPE,
             courtelJson.getListType().toString());
         validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
