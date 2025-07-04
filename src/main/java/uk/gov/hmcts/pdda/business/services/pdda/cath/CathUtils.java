@@ -54,6 +54,7 @@ public final class CathUtils {
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
     private static final String PROVENANCE = "PDDA";
+    private static final String SENSITIVITY = "PRIVATE";
 
     private CathUtils() {
         // Private constructor
@@ -72,6 +73,7 @@ public final class CathUtils {
         // Return the HttpRequest for the post
         HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
             .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
+            .header(PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY)
             .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
             .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
             .header(PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth)
