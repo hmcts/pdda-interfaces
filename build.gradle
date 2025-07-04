@@ -200,8 +200,8 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql:42.7.7'
 
     // Logging
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
-    implementation 'org.apache.logging.log4j:log4j-api:2.24.3'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.25.0'
     implementation 'ch.qos.logback:logback-core:1.5.18'
     implementation 'ch.qos.logback:logback-classic:1.5.18'
     implementation 'org.slf4j:slf4j-api:2.0.17'
