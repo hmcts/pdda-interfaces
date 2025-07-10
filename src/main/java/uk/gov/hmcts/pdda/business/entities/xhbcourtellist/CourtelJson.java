@@ -7,6 +7,7 @@ public abstract class CourtelJson {
     private String json;
     private String crestCourtId;
     private LocalDateTime contentDate;
+    private LocalDateTime endDate;
     private String provenance;
     private Language language;
     private ArtefactType artefactType;
@@ -34,6 +35,14 @@ public abstract class CourtelJson {
     
     public void setContentDate(LocalDateTime contentDate) {
         this.contentDate = contentDate;
+    }
+    
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+    
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
     
     public String getProvenance() {

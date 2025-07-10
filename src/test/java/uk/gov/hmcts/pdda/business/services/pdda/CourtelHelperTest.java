@@ -203,8 +203,14 @@ class CourtelHelperTest {
         xhbCourtelListDao.setBlob(xhbBlobDao);
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType(type);
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, 
+              "<cs:ListHeader><cs:EndDate>2020-01-21</cs:EndDate></cs:ListHeader>");
+        
         EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbXmlDocumentDao));
+        EasyMock.expect(mockXhbClobRepository.getEntityManager()).andReturn(mockEntityManager);
+        EasyMock.expect(mockXhbClobRepository.findById(xhbClobDao.getClobId()))
+            .andReturn(Optional.of(xhbClobDao));
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
@@ -218,6 +224,7 @@ class CourtelHelperTest {
 
         EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbXmlDocumentRepository);
+        EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockCathHelper);
         // Run

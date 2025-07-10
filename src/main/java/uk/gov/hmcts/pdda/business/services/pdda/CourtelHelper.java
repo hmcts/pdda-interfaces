@@ -5,6 +5,11 @@ import com.pdda.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
@@ -20,10 +25,17 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * <p>
@@ -42,7 +54,7 @@ import java.util.Optional;
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports"})
 public class CourtelHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourtelHelper.class);
@@ -192,8 +204,42 @@ public class CourtelHelper {
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         jsonObject.setContentDate(LocalDateTime.now());
         jsonObject.setLanguage(Language.ENGLISH);
-
+        
+        // Fetch and populate the end date from the clob
+        try {
+            jsonObject.setEndDate(getEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId()));
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            LOG.debug("Error getting endDate from Clob: {}", e.getMessage());
+        }
         return jsonObject;
+    }
+    
+    private LocalDateTime getEndDateFromClob(Long clobId) 
+        throws ParserConfigurationException, SAXException, IOException {
+        // Get the clob data
+        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findById(clobId);
+        if (!xhbClobDao.isEmpty()) {
+            // Perform a node search across the clob data and find the end date field
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            InputSource inputSource = new InputSource(new StringReader(xhbClobDao.get().getClobData()));
+            Document document = documentBuilder.parse(inputSource);
+
+            // Get the cs:ListHeader nodes. This is the clob before transformation, so it uses the cs namespace
+            Node listHeaderNode = document.getElementsByTagName("cs:ListHeader").item(0);
+            NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
+
+            for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
+                Node node = listHeaderChildNodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE
+                    && Objects.equals("cs:EndDate", node.getNodeName())) {
+                    String endDate = node.getTextContent();
+                    // Convert the end date to LocalDateTime and return it
+                    return LocalDate.parse(endDate).atStartOfDay();
+                }
+            }
+        }
+        return null;
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {

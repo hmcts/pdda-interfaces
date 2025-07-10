@@ -57,6 +57,7 @@ public final class DummyCourtelUtil {
         result.setLanguage(Language.ENGLISH);
         result.setCrestCourtId("999");
         result.setContentDate(LocalDateTime.now());
+        result.setEndDate(LocalDateTime.now().plusDays(1));
         result.setJson("");
         return result;
     }

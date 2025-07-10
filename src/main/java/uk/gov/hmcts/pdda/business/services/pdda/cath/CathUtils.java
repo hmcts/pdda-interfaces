@@ -67,7 +67,7 @@ public final class CathUtils {
     public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
         // Get the times
         String now = getDateTimeAsString(courtelJson.getContentDate());
-        String nextMonth = getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
+        String endDate = getDateTimeAsString(courtelJson.getEndDate());
         // Get the bearer token
         String bearerToken = String.format(BEARER, courtelJson.getToken());
         // Return the HttpRequest for the post
@@ -76,7 +76,7 @@ public final class CathUtils {
             .header(PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY)
             .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
             .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
-            .header(PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth)
+            .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
             .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
             .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
