@@ -137,7 +137,7 @@ class CathUtilsTest {
             courtelJson.getLanguage().toString());
         validateHeaderValue(headers, PublicationConfiguration.DISPLAY_FROM_HEADER, now);
         String nextMonth =
-            CathUtils.getDateTimeAsString(courtelJson.getContentDate().plusMonths(1));
+            CathUtils.getDateTimeAsString(courtelJson.getEndDate());
         validateHeaderValue(headers, PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth);
     }
 
