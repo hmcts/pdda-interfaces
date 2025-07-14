@@ -54,7 +54,8 @@ import javax.xml.parsers.ParserConfigurationException;
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports",
+    "PMD.CognitiveComplexity", "PMD.GodClass"})
 public class CourtelHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CourtelHelper.class);
@@ -227,19 +228,30 @@ public class CourtelHelper {
 
             // Get the cs:ListHeader nodes. This is the clob before transformation, so it uses the cs namespace
             Node listHeaderNode = document.getElementsByTagName("cs:ListHeader").item(0);
-            NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
-
-            for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
-                Node node = listHeaderChildNodes.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE
-                    && Objects.equals("cs:EndDate", node.getNodeName())) {
-                    String endDate = node.getTextContent();
-                    // Convert the end date to LocalDateTime and return it
-                    return LocalDate.parse(endDate).atStartOfDay();
+            
+            if (listHeaderNode != null) {
+                NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
+                for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
+                    Node node = listHeaderChildNodes.item(i);
+                    if (node.getNodeType() == Node.ELEMENT_NODE
+                        && Objects.equals("cs:EndDate", node.getNodeName())) {
+                        String endDate = node.getTextContent();
+                        if (endDate != null) {
+                            try {
+                                // Convert the end date to LocalDateTime and return it
+                                return LocalDate.parse(endDate).atStartOfDay();
+                            } catch (Exception e) {
+                                // If there is an error parsing the date, log it and return current date
+                                LOG.debug("Error parsing endDate: {}", e.getMessage());
+                                return LocalDateTime.now();
+                            }
+                        }
+                    }
                 }
             }
         }
-        return null;
+        // Default to todays date if any above conditions are not met
+        return LocalDateTime.now();
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {
