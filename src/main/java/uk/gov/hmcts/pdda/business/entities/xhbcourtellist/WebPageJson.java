@@ -5,11 +5,12 @@ public class WebPageJson extends CourtelJson {
 
     public WebPageJson() {
         super();
-        setArtefactType(ArtefactType.GENERAL_PUBLICATION);
+        setArtefactType(ArtefactType.LCSU);
     }
     
+    // Return a null ListType for IWP.
     @Override
     public ListType getListType() {
-        return ListType.SJP_PUBLIC_LIST;
+        return null;
     }
 }
