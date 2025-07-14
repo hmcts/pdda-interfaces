@@ -209,7 +209,7 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.7.5'
     implementation 'net.bytebuddy:byte-buddy:1.17.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
-    implementation 'org.json:json:20240303'
+    implementation 'org.json:json:20250517'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'jakarta.el:jakarta.el-api:6.0.1'
     implementation 'org.apache.tomee:openejb-core:9.1.3', {
