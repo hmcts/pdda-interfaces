@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @Repository
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbHearingListRepository extends AbstractRepository<XhbHearingListDao>
     implements Serializable {
 
@@ -29,20 +29,6 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
     @Override
     public Class<XhbHearingListDao> getDaoClass() {
         return XhbHearingListDao.class;
-    }
-
-    /**
-     * findByCourtIdAndDate.
-     * 
-     * @return list
-     */
-    @SuppressWarnings("unchecked")
-    public List<XhbHearingListDao> findByCourtIdAndDate(Integer courtId, LocalDateTime startDate) {
-        LOG.debug("In XhbHearingRepository.findByCourtIdAndDate");
-        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdAndDate");
-        query.setParameter("courtId", courtId);
-        query.setParameter("startDate", startDate);
-        return query.getResultList();
     }
 
     /**

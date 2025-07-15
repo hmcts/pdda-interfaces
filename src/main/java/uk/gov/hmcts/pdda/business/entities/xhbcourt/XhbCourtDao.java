@@ -21,14 +21,6 @@ import java.io.Serializable;
 @Access(AccessType.FIELD)
 @NamedQuery(name = "XHB_COURT.findByCrestCourtIdValue",
     query = "SELECT o from XHB_COURT o WHERE o.crestCourtId = :crestCourtId ")
-@NamedQuery(name = "XHB_COURT.findNonObsoleteByCrestCourtIdValue",
-    query = "SELECT o from XHB_COURT o WHERE o.crestCourtId = :crestCourtId "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') ")
-@NamedQuery(name = "XHB_COURT.findByShortName",
-    query = "SELECT o from XHB_COURT o WHERE o.shortName = :shortName ")
-@NamedQuery(name = "XHB_COURT.findNonObsoleteByShortName",
-    query = "SELECT o from XHB_COURT o WHERE o.shortName = :shortName "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') ")
 public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = 6619741714677299473L;
