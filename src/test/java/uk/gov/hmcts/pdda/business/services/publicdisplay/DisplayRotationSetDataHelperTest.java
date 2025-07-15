@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports"})
+@SuppressWarnings({"PMD"})
 class DisplayRotationSetDataHelperTest {
 
     private static final String TRUE = "Result is not True";
@@ -77,8 +76,8 @@ class DisplayRotationSetDataHelperTest {
     @Mock
     private XhbDisplayDocumentRepository mockXhbDisplayDocumentRepository;
 
-    @InjectMocks
     private final DisplayRotationSetDataHelper classUnderTest = new DisplayRotationSetDataHelper();
+
 
     @BeforeAll
     public static void setUp() {

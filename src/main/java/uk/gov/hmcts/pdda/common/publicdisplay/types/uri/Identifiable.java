@@ -20,6 +20,7 @@ package uk.gov.hmcts.pdda.common.publicdisplay.types.uri;
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface Identifiable {
     /**
      * Return the AbstractURI that identifies the Identifiable.

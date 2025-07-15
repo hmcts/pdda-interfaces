@@ -15,7 +15,7 @@ import java.util.Optional;
 
 
 @Repository
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.LawOfDemeter")
 public class XhbHearingListRepository extends AbstractRepository<XhbHearingListDao>
     implements Serializable {
 

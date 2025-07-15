@@ -53,7 +53,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -297,4 +297,32 @@ class CppStagingInboundControllerBeanTest {
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
     }
+    
+    
+    @Test
+    void testValidateDocumentWithEmptySchema() throws Exception {
+        // Setup
+        String invalidDocumentType = "INVALID_TYPE";
+        XhbCppStagingInboundDao dao = new XhbCppStagingInboundDao();
+        dao.setDocumentType(invalidDocumentType);
+
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + invalidDocumentType))
+                .andReturn(new ArrayList<>());
+        
+        EasyMock.expect(mockCppStagingInboundHelper.updateCppStagingInbound(dao, USERDISPLAYNAME))
+                .andReturn(Optional.of(dao));
+        
+        EasyMock.replay(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+
+        // Run
+        boolean result = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
+
+        // Verify
+        EasyMock.verify(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+        assertEquals(false, result, EQUALS);
+    }
+
+
 }

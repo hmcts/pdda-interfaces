@@ -11,16 +11,16 @@ buildscript {
 plugins {
 	id 'application'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.springframework.boot' version '3.5.0'
-	id 'com.github.ben-manes.versions' version '0.51.0'
-	id 'org.owasp.dependencycheck' version '12.1.0'
+	id 'org.springframework.boot' version '3.5.3'
+	id 'com.github.ben-manes.versions' version '0.52.0'
+	id 'org.owasp.dependencycheck' version '12.1.3'
 	id 'org.sonarqube' version '6.0.1.5171'
 	id 'checkstyle'
   	id 'pmd'
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '10.22.0'
+  id 'org.flywaydb.flyway' version '11.10.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -136,7 +136,7 @@ checkstyle {
 }
 
 pmd {
-  toolVersion = "7.6.0"
+  toolVersion = "7.15.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.smokeTest, sourceSets.functionalTest]
   reportsDir = file("$project.buildDir/reports/pmd")
   // https://github.com/pmd/pmd/issues/876
@@ -173,10 +173,16 @@ repositories {
 }
 
 ext {
-  log4JVersion = "2.20.0"
+  log4JVersion = "2.25.0"
 }
 
-ext['snakeyaml.version'] = '2.0'
+ext['snakeyaml.version'] = '2.4'
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework:spring-framework-bom:6.2.8"
+    }
+}
 
 dependencies {
     // Spring Boot Starters
@@ -191,28 +197,28 @@ dependencies {
     implementation 'org.glassfish:jakarta.el:4.0.2'
 
     // JDBC + PostgreSQL
-    runtimeOnly 'org.postgresql:postgresql:42.7.6'
+    runtimeOnly 'org.postgresql:postgresql:42.7.7'
 
     // Logging
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
-    implementation 'org.apache.logging.log4j:log4j-api:2.24.3'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.25.0'
     implementation 'ch.qos.logback:logback-core:1.5.18'
     implementation 'ch.qos.logback:logback-classic:1.5.18'
     implementation 'org.slf4j:slf4j-api:2.0.17'
 
     // SSH/SFTP
     implementation 'com.hierynomus:sshj:0.40.0'
-    implementation 'org.apache.sshd:sshd-common:2.14.0'
-    implementation 'org.apache.sshd:sshd-sftp:2.14.0'
-    implementation 'org.apache.sshd:sshd-core:2.14.0'
+    implementation 'org.apache.sshd:sshd-common:2.15.0'
+    implementation 'org.apache.sshd:sshd-sftp:2.15.0'
+    implementation 'org.apache.sshd:sshd-core:2.15.0'
 
     // File/Config Utilities
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.commons:commons-vfs2:2.10.0'
-    implementation 'org.apache.commons:commons-configuration2:2.11.0'
+    implementation 'org.apache.commons:commons-configuration2:2.12.0'
 
     // YAML
-    implementation 'org.yaml:snakeyaml:2.3'
+    implementation 'org.yaml:snakeyaml:2.4'
 
     // JSP/Servlet/JSTL (only if actually used)
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
@@ -226,22 +232,23 @@ dependencies {
     }
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
-    implementation 'org.yaml:snakeyaml:2.3'
-    implementation group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0', {
+    implementation 'org.yaml:snakeyaml:2.4'
+    compileOnly group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
 	
     // Optional embedded JSP support (if actually using JSPs)
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.41'
-
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.8'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.8'
+    
     // Bytecode / Proxying
-    implementation 'net.bytebuddy:byte-buddy:1.17.5'
+    implementation 'net.bytebuddy:byte-buddy:1.17.6'
     implementation 'org.javassist:javassist:3.30.2-GA'
 
     // JSON
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.19.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.19.1'
 
     // Hadoop Client (only if required)
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
@@ -260,7 +267,7 @@ dependencies {
 	
     // Optional: SFTP test support
     implementation 'de.ppi:fake-sftp-server-extension:1.0.3'
-    testImplementation 'com.github.stefanbirkner:fake-sftp-server-rule:2.0.0'
+    testImplementation 'com.github.stefanbirkner:fake-sftp-server-rule:2.0.1'
     implementation 'com.jcraft:jsch:0.1.55'
     
 
@@ -270,41 +277,47 @@ dependencies {
     	exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
-    testImplementation 'org.easymock:easymock:5.5.0'
-    testImplementation 'org.mockito:mockito-core:5.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
+    testImplementation 'org.easymock:easymock:5.6.0'
+    testImplementation 'org.mockito:mockito-core:5.18.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.12.2'
+    
     testImplementation 'jakarta.ejb:jakarta.ejb-api:4.0.1'
     
 
     // Compile-only: Jakarta APIs (only for compilation)
     compileOnly 'org.apache.tomee:jakartaee-api:10.0'
-    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.0'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.3'
 
     // Optional: If you're stuck with local jsch for some reason
     // Better to replace this with a Maven version if possible
     // implementation files('lib/jsch-0.1.54.jar')
 
     // Security
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
 
     // Flyway (already pulled via plugins, but OK to be explicit)
-    implementation 'org.flywaydb:flyway-core:10.22.0'
-    implementation 'org.flywaydb:flyway-database-postgresql:10.22.0'
-    implementation 'org.flywaydb:flyway-database-hsqldb:10.22.0'
+    implementation 'org.flywaydb:flyway-core:11.10.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.10.1'
+    implementation 'org.flywaydb:flyway-database-hsqldb:11.10.1'
 }
 
 
 mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
 
 bootJar {
-  archiveFileName = "PDDA-1.0.war"
-
-  manifest {
-    attributes('Implementation-Version': project.version.toString()) 
-  }
+    enabled = false
 }
+
+bootWar {
+    archiveFileName = "PDDA-1.0.war"
+    manifest {
+        attributes('Implementation-Version': project.version.toString())
+    }
+}
+
 
 // Needed to stop eclipse showing errors on org.w3c.dom / org.xml.sax imports
 configurations {

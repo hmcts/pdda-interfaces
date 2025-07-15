@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD"})
 @Entity(name = "XHB_COURT_SITE")
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtId",
     query = "SELECT o from XHB_COURT_SITE o WHERE o.courtId = :courtId ")

@@ -49,6 +49,8 @@ public class PddaConfigHelper extends AbstractControllerBean {
         public static final String DB_CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
         public static final String DB_CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
         public static final String DB_CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+        public static final String DB_CP_EXCLUDED_COURT_IDS = "PDDA_CP_EXCLUDED_COURT_IDS";
+        
 
         // Key vault values
         public static final String KV_SFTP_HOST = "pdda.bais_sftp_hostname";

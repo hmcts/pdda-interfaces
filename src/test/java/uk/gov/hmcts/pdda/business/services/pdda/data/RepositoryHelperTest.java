@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD"})
 class RepositoryHelperTest {
 
     private static final String NOTNULL = "Result is Null";

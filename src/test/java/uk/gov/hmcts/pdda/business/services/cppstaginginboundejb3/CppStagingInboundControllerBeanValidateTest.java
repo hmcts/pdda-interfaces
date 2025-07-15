@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * CppStagingInboundControllerBeanValidateTest.
  */
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundControllerBeanValidateTest {
 
@@ -143,7 +143,7 @@ class CppStagingInboundControllerBeanValidateTest {
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
 
-        EasyMock.expect(mockValidationResult.isValid()).andReturn(false);
+        EasyMock.expect(mockValidationResult.isValid()).andReturn(false).anyTimes();
 
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbClobRepository);
@@ -226,7 +226,7 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock
             .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courts);
-        EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
+        EasyMock.expect(mockValidationResult.isValid()).andReturn(true).anyTimes();
 
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbCourtRepository);

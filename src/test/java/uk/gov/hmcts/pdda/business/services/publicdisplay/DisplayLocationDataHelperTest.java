@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 class DisplayLocationDataHelperTest {
 
     private static final String NOT_TRUE = "Result is not True";

@@ -75,8 +75,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
-    "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD"})
 class FormattingServicesTest {
 
     private static final String TRUE = "Result is not True";

@@ -74,8 +74,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
-    "PMD.ExcessiveParameterList", "PMD.NcssCount", "PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD"})
 class CourtDetailQueryTest extends AbstractQueryTest {
 
     protected static final String TRUE = "Result is not True";
