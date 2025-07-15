@@ -66,7 +66,7 @@ public class SaxValidationService implements ValidationService {
             // Optional: log to confirm schema file is resolvable
             URL url = Thread.currentThread().getContextClassLoader()
                 .getResource(XSD_HOME + "CourtService_CPP-v1-0.xsd");
-            LOG.debug("Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
+            LOG.debug("Test:: Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
 
             // Build schema from multiple XSD files
             Source[] schemaSources = getSchemaSources(
