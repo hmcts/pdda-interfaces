@@ -280,6 +280,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
      * 
      */
     @Override
+    @SuppressWarnings("PMD")
     public boolean validateDocument(XhbCppStagingInboundDao cppStagingInboundDao,
         String userDisplayName) throws ValidationException {
         String methodName =
@@ -318,19 +319,25 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             LOG.debug("About to validate XML for clobId: {}", cppStagingInboundDao.getClobId());
             String xmlToValidate = getClobXmlAsString(cppStagingInboundDao.getClobId());
 
-            // Validate the XML
-            ValidationResult validDoc =
-                getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
-            LOG.debug("Document validation result: {}", validDoc.isValid());
-            if (validDoc.isValid()) {
-                LOG.debug("{} - Document XML is valid", methodName);
-            } else {
-                updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
-                    + schemaName + "; error::" + validDoc.toString(), userDisplayName);
-                return false;
-            }
+            // Validate the XML - only for WP and PD document types
+            CppDocumentTypes docType = CppDocumentTypes.fromString(cppStagingInboundDao.getDocumentType());
+            boolean shouldValidateXml = (docType == CppDocumentTypes.WP || docType == CppDocumentTypes.PD);
 
-            LOG.debug("Document XML is valid against schema: {}", schemaName);
+            if (shouldValidateXml) {
+                ValidationResult validDoc =
+                    getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
+                LOG.debug("Document validation result: {}", validDoc.isValid());
+                if (validDoc.isValid()) {
+                    LOG.debug("{} - Document XML is valid", methodName);
+                } else {
+                    updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
+                        + schemaName + "; error::" + validDoc.toString(), userDisplayName);
+                    return false;
+                }
+            } else {
+                LOG.debug("{} - Document Type is not WP or PD, skipping XML validation", methodName);
+            }
+            
             // Do a check to make sure the court is a cpp court if not we want to fail
             List<XhbCourtDao> courts = getXhbCourtRepository()
                 .findByCrestCourtIdValueSafe(cppStagingInboundDao.getCourtCode());
