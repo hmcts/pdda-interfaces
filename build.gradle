@@ -213,7 +213,7 @@ dependencies {
     implementation 'org.apache.sshd:sshd-core:2.15.0'
 
     // File/Config Utilities
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
     implementation 'org.apache.commons:commons-vfs2:2.10.0'
     implementation 'org.apache.commons:commons-configuration2:2.12.0'
 
