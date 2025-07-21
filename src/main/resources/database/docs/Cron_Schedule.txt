@@ -1,0 +1,43 @@
+Scheduled jobs on a Postgres database are managed by enabling the pg_cron extension. This is done in postgres.tf and managed by the DevOps world.
+Once enabled, the scheduler (cron) must run in the default postgres schema.
+Therefore grants must be given from the pdda procedures called by the cron schedule in the pdda database. There is a flyway script for this.
+What also must happen is that the scheduled jobs themselves must be setup - this is a manual process, and only needs done once.
+
+To do this:
+- Logon to the postgres schema
+- Check that the pg_cron extension is enabled, run this command: SELECT * FROM cron.job;
+-- It should not error, and no rows will be shown
+- Now add cron entries:
+
+1. Call clear_obsolete_messages at 5am every day, delete up to 5000 messages. Not supplying a message to label these records, so use the default.
+SELECT cron.schedule(
+  'pdda_clear_obsolete_messages',
+  '0 5 * * *',
+  $$CALL pdda.pdda_housekeeping_pkg.clear_obsolete_messages('', 5000);$$
+);
+
+
+2. Call clear_obsolete_messages at 5am every day, delete the 50 oldest records. Label as Staging, Demo or Prod as appropriate.
+SELECT cron.schedule(
+  'pdda_clear_audit_tables',
+  '0 5 * * *',
+  $$CALL pdda.pdda_housekeeping_pkg.clear_audit_tables('STAGING', 50);$$
+);
+
+
+3. Call clear_old_records at 5am every day. Delete up to 100 records that all must be older than 365 days.
+SELECT cron.schedule(
+  'pdda_clear_old_records',
+  '0 5 * * *',
+  $$CALL pdda.pdda_housekeeping_pkg.clear_old_records(365, 100);$$
+);
+
+
+4. Call nullify_live_display_fields at 5am every day.
+SELECT cron.schedule(
+  'pdda_nullify_live_display_fields',
+  '0 5 * * *',
+  $$CALL pdda.pdda_housekeeping_pkg.nullify_live_display_fields();$$
+);
+
+- 
