@@ -8,6 +8,7 @@ public abstract class CourtelJson {
     private String crestCourtId;
     private LocalDateTime contentDate;
     private LocalDateTime endDate;
+    private String sensitivity;
     private String provenance;
     private Language language;
     private ArtefactType artefactType;
@@ -45,6 +46,14 @@ public abstract class CourtelJson {
         this.endDate = endDate;
     }
     
+    public String getSensitivity() {
+        return sensitivity;
+    }
+
+    public void setSensitivity(String sensitivity) {
+        this.sensitivity = sensitivity;
+    }
+
     public String getProvenance() {
         return provenance;
     }

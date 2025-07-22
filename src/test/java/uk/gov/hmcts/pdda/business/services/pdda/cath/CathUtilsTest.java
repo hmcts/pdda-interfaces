@@ -76,7 +76,7 @@ class CathUtilsTest {
     private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is not True";
     private static final String GOVERNANCE = "PDDA";
-    private static final String SENSITIVITY = "PRIVATE";
+    private static final String SENSITIVITY = "CLASSIFIED";
     private static final String TYPE = "LIST";
 
     @Mock
