@@ -28,7 +28,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentReposito
 import java.io.IOException;
 import java.io.StringReader;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -203,7 +204,7 @@ public class CourtelHelper {
         }
         // Populate shared fields
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
-        jsonObject.setContentDate(LocalDateTime.now());
+        jsonObject.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
         jsonObject.setLanguage(Language.ENGLISH);
         
         // Fetch and populate the end date from the clob
@@ -215,7 +216,7 @@ public class CourtelHelper {
         return jsonObject;
     }
     
-    private LocalDateTime getEndDateFromClob(Long clobId) 
+    private ZonedDateTime getEndDateFromClob(Long clobId) 
         throws ParserConfigurationException, SAXException, IOException {
         // Get the clob data
         Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findById(clobId);
@@ -239,11 +240,11 @@ public class CourtelHelper {
                         if (endDate != null) {
                             try {
                                 // Convert the end date to LocalDateTime and return it
-                                return LocalDate.parse(endDate).atStartOfDay();
+                                return LocalDate.parse(endDate).atTime(23, 59).atZone(ZoneOffset.UTC);
                             } catch (Exception e) {
                                 // If there is an error parsing the date, log it and return current date
                                 LOG.debug("Error parsing endDate: {}", e.getMessage());
-                                return LocalDateTime.now();
+                                return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
                             }
                         }
                     }
@@ -251,7 +252,7 @@ public class CourtelHelper {
             }
         }
         // Default to todays date if any above conditions are not met
-        return LocalDateTime.now();
+        return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
     }
 
     protected ConfigPropMaintainer getConfigPropMaintainer() {

@@ -1,13 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public abstract class CourtelJson {
 
     private String json;
     private String crestCourtId;
-    private LocalDateTime contentDate;
-    private LocalDateTime endDate;
+    private ZonedDateTime contentDate;
+    private ZonedDateTime endDate;
     private String sensitivity;
     private String provenance;
     private Language language;
@@ -30,19 +30,19 @@ public abstract class CourtelJson {
         this.crestCourtId = crestCourtId;
     }
     
-    public LocalDateTime getContentDate() {
+    public ZonedDateTime getContentDate() {
         return contentDate;
     }
     
-    public void setContentDate(LocalDateTime contentDate) {
+    public void setContentDate(ZonedDateTime contentDate) {
         this.contentDate = contentDate;
     }
     
-    public LocalDateTime getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
     
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
     }
     

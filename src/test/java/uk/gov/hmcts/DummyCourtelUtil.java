@@ -3,6 +3,7 @@ package uk.gov.hmcts;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListType;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.WebPageJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 
 import java.net.URI;
@@ -10,7 +11,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import javax.net.ssl.SSLSession;
 
@@ -56,8 +59,18 @@ public final class DummyCourtelUtil {
         result.setListType(ListType.CROWN_DAILY_PDDA_LIST);
         result.setLanguage(Language.ENGLISH);
         result.setCrestCourtId("999");
-        result.setContentDate(LocalDateTime.now());
-        result.setEndDate(LocalDateTime.now().plusDays(1));
+        result.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
+        result.setEndDate(LocalDate.now().plusDays(1).atTime(23, 59).atZone(ZoneOffset.UTC));
+        result.setJson("");
+        return result;
+    }
+    
+    public static WebPageJson getWebPageJson() {
+        WebPageJson result = new WebPageJson();
+        result.setLanguage(Language.ENGLISH);
+        result.setCrestCourtId("999");
+        result.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
+        result.setEndDate(LocalDate.now().plusDays(1).atTime(23, 59).atZone(ZoneOffset.UTC));
         result.setJson("");
         return result;
     }
