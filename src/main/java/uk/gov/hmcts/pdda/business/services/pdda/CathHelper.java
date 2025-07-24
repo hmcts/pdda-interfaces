@@ -19,7 +19,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,8 +95,6 @@ public class CathHelper {
         LOG.info("send()");
         // Get the authentication token
         courtelJson.setToken(getToken());
-        // Set the content date
-        courtelJson.setContentDate(LocalDateTime.now());
         // Post the json to CaTH
         String errorMessage = postJsonToCath(courtelJson);
         if (!EMPTY_STRING.equals(errorMessage)) {

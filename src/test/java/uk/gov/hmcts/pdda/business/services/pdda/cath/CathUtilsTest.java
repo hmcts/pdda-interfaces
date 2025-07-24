@@ -37,7 +37,8 @@ import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -76,8 +77,11 @@ class CathUtilsTest {
     private static final String NOTNULL = "Result is null";
     private static final String TRUE = "Result is not True";
     private static final String GOVERNANCE = "PDDA";
-    private static final String SENSITIVITY = "PRIVATE";
-    private static final String TYPE = "LIST";
+    private static final String SENSITIVITY_CLASSIFIED = "CLASSIFIED";
+    private static final String SENSITIVITY_PUBLIC = "PUBLIC";
+    private static final String TYPE_LIST = "LIST";
+    private static final String TYPE_NON_LIST = "LCSU";
+    
 
     @Mock
     private Environment mockEnvironment;
@@ -110,7 +114,7 @@ class CathUtilsTest {
 
     @Test
     void testGetDateTimeAsString() {
-        String result = CathUtils.getDateTimeAsString(LocalDateTime.now());
+        String result = CathUtils.getDateTimeAsString(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
         assertNotNull(result, NOTNULL);
     }
 
@@ -125,10 +129,35 @@ class CathUtilsTest {
         HttpHeaders headers = result.headers();
         assertNotNull(headers, NOTNULL);
         validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
-        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE);
-        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY);
+        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_LIST);
+        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_CLASSIFIED);
         validateHeaderValue(headers, PublicationConfiguration.LIST_TYPE,
             courtelJson.getListType().toString());
+        validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
+            courtelJson.getCrestCourtId());
+        String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
+        validateHeaderValue(headers, PublicationConfiguration.CONTENT_DATE, now);
+        validateHeaderValue(headers, PublicationConfiguration.LANGUAGE_HEADER,
+            courtelJson.getLanguage().toString());
+        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_FROM_HEADER, now);
+        String nextMonth =
+            CathUtils.getDateTimeAsString(courtelJson.getEndDate());
+        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth);
+    }
+    
+    @Test
+    void testGetHttpPostRequestNonListJson() {
+        // Setup
+        CourtelJson courtelJson = DummyCourtelUtil.getWebPageJson();
+        String url = "https://dummy.com/url";
+        // Run
+        HttpRequest result = CathUtils.getHttpPostRequest(url, courtelJson);
+        assertNotNull(result, NOTNULL);
+        HttpHeaders headers = result.headers();
+        assertNotNull(headers, NOTNULL);
+        validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
+        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_NON_LIST);
+        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_PUBLIC);
         validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
             courtelJson.getCrestCourtId());
         String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());

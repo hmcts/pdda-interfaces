@@ -8,6 +8,7 @@ public class ListJson extends CourtelJson {
     public ListJson() {
         super();
         setArtefactType(ArtefactType.LIST);
+        setSensitivity("CLASSIFIED");
     }
     
     @Override

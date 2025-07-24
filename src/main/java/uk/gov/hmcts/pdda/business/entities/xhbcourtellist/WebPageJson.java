@@ -6,6 +6,7 @@ public class WebPageJson extends CourtelJson {
     public WebPageJson() {
         super();
         setArtefactType(ArtefactType.LCSU);
+        setSensitivity("PUBLIC");
     }
     
     // Return a null ListType for IWP.
