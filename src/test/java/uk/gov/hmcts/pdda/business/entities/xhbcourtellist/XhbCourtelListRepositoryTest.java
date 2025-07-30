@@ -2,9 +2,9 @@ package uk.gov.hmcts.pdda.business.entities.xhbcourtellist;
 
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -21,23 +21,26 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.isA;
 
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD")
 class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelListDao> {
 
     private static final String QUERY_XMLDOCUMENTID = "xmlDocumentId";
     private static final String QUERY_FINDCOURTELLIST = "findCourtelList";
+    private static final String QUERY_FIND_BY_XML_DOCUMENT_CLOB_ID = "findByXmlDocumentClobId";
     private static final Integer DUMMY_COURTEL_LIST_AMOUNT = 5;
     private static final Integer DUMMY_INTERVAL = 5;
     private static final Integer DUMMY_COURTEL_MAX_RETRY = 5;
 
     @Mock
     private EntityManager mockEntityManager;
+    
+    @Mock
+    private Query mockQuery;
 
-    @InjectMocks
     private XhbCourtelListRepository classUnderTest;
 
     @Override
@@ -54,10 +57,10 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
     }
 
     @Override
-    protected boolean testfindById(XhbCourtelListDao dao) {
+    protected boolean testFindById(XhbCourtelListDao dao) {
         Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId()))
             .thenReturn(dao);
-        Optional<XhbCourtelListDao> result = getClassUnderTest().findById(getDummyLongId());
+        Optional<XhbCourtelListDao> result = getClassUnderTest().findByIdSafe(getDummyLongId());
         assertNotNull(result, NOTNULL);
         if (dao != null) {
             assertSame(dao, result.get(), SAME);
@@ -105,7 +108,23 @@ class XhbCourtelListRepositoryTest extends AbstractRepositoryTest<XhbCourtelList
     }
 
     private boolean testFindBy(String query, List<XhbCourtelListDao> list) {
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+        // Force instantiation before mocking, to avoid accidental nulls
+        getClassUnderTest(); // ensures classUnderTest is not null
+        
+        if (QUERY_XMLDOCUMENTID.equals(query)) {
+            Mockito.when(mockEntityManager.createNamedQuery("XHB_COURTEL_LIST.findByXmlDocumentId"))
+                   .thenReturn(mockQuery);
+        } else if (QUERY_FINDCOURTELLIST.equals(query)) {  
+            Mockito.when(mockEntityManager.createNamedQuery("XHB_COURTEL_LIST.findCourtelList"))
+                   .thenReturn(mockQuery);
+        } else if (QUERY_FIND_BY_XML_DOCUMENT_CLOB_ID.equals(query)) {
+            Mockito.when(mockEntityManager.createNamedQuery("XHB_COURTEL_LIST.findByXmlDocumentClobId"))
+                   .thenReturn(mockQuery);
+        } else {
+            throw new IllegalArgumentException("Unknown query type: " + query);
+        }
+
+        Mockito.when(mockQuery.setParameter(Mockito.anyString(), Mockito.any())).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         Optional<XhbCourtelListDao> result = Optional.empty();
         if (QUERY_XMLDOCUMENTID.equals(query)) {

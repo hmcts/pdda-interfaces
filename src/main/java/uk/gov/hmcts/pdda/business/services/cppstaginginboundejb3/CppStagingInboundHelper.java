@@ -76,6 +76,15 @@ public class CppStagingInboundHelper implements Serializable {
         super();
     }
 
+    // For testing
+    public CppStagingInboundHelper(EntityManager entityManager,
+        XhbConfigPropRepository xhbConfigPropRepository,
+        XhbCppStagingInboundRepository cppStagingInboundRepository) {
+        this(entityManager, xhbConfigPropRepository);
+        this.cppStagingInboundRepository = cppStagingInboundRepository;
+    }
+
+
     // This is called dynamically
     public CppStagingInboundHelper(EntityManager entityManager) {
         this(entityManager, new XhbConfigPropRepository(entityManager));
@@ -88,7 +97,7 @@ public class CppStagingInboundHelper implements Serializable {
         List<XhbConfigPropDao> properties = null;
         try {
             properties = xhbConfigPropRepository
-                .findByPropertyName("STAGING_DOCS_TO_PROCESS");
+                .findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS");
         } catch (Exception e) {
             LOG.debug("Error...{}", e.getMessage());
         }
@@ -126,18 +135,21 @@ public class CppStagingInboundHelper implements Serializable {
         List<XhbCppStagingInboundDao> toReturn = new ArrayList<>();
 
         List<XhbCppStagingInboundDao> docs =
-            new XhbCppStagingInboundRepository(em).findNextDocumentByValidationAndProcessingStatus(
+            getCppStagingInboundRepository()
+                .findNextDocumentByValidationAndProcessingStatusSafe(
                 LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT), validationStatus,
                 processingStatus);
 
         if (docs != null && !docs.isEmpty()) {
             LOG.debug("{} docs were found", docs.size());
+            LOG.debug("Docs to process limit: {}", numberOfDocsToProcess);
             for (int i = 0; i < numberOfDocsToProcess; i++) {
                 if (i >= docs.size()) {
                     break;
                 }
                 Optional<XhbCppStagingInboundDao> cppSI =
-                    getCppStagingInboundRepository().findById(docs.get(i).getCppStagingInboundId());
+                    getCppStagingInboundRepository()
+                        .findByIdSafe(docs.get(i).getCppStagingInboundId());
                 if (cppSI.isPresent()) {
                     toReturn.add(cppSI.get());
                 }

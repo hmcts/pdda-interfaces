@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.data.impl;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -21,6 +23,8 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayDocumentUri;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mockStatic;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -52,20 +56,27 @@ class GenericPublicDisplayDataSourceTest {
 
     @Test
     void testRetrieveSuccess() {
-        boolean result = testRetrieve(Optional.of(getDummyXhbCourtDao()));
-        assertTrue(result, TRUE);
+        try (MockedStatic<EntityManagerUtil> staticMock = mockStatic(EntityManagerUtil.class)) {
+            staticMock.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            boolean result = testRetrieve(Optional.of(getDummyXhbCourtDao()));
+            assertTrue(result, TRUE);
+        }
     }
 
     @Test
     void testRetrieveNoCourt() {
-        Assertions.assertThrows(CourtNotFoundException.class, () -> {
-            testRetrieve(Optional.empty());
-        });
+        try (MockedStatic<EntityManagerUtil> staticMock = mockStatic(EntityManagerUtil.class)) {
+            staticMock.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            Assertions.assertThrows(CourtNotFoundException.class, () -> {
+                testRetrieve(Optional.empty());
+            });
+        }
     }
 
     private boolean testRetrieve(Optional<XhbCourtDao> xhbCourtDao) {
         Mockito.when(mockDisplayDocumentUri.getDocumentType()).thenReturn(DisplayDocumentType.ALL_COURT_STATUS);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class))).thenReturn(xhbCourtDao);
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(xhbCourtDao);
         classUnderTest.retrieve(mockEntityManager);
         return true;
     }

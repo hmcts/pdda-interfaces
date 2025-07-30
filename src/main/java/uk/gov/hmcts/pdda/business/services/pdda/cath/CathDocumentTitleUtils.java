@@ -23,7 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD.CyclomaticComplexity")
 public final class CathDocumentTitleUtils {
 
     private static final Map<String, String> DOC_TYPES =
@@ -42,7 +42,7 @@ public final class CathDocumentTitleUtils {
 
         // Fetch courtel_list record from cath_document_Link original Xml Id
         Optional<XhbCourtelListDao> xhbCourtelListDao =
-            xhbCourtelListRepository.findById(xhbCathDocumentLinkDao.getOrigCourtelListDocId());
+            xhbCourtelListRepository.findByIdSafe(xhbCathDocumentLinkDao.getOrigCourtelListDocId());
 
         if (xhbCourtelListDao.isPresent()) {
             // Fetch cppStagingInboundDao from courtel_list xmlDocumentClobId

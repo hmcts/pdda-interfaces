@@ -80,7 +80,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
      * @return String
      */
     public PublicNoticeValue[] getPublicNotices() {
-        return publicNotices.clone();
+        return publicNotices != null ? publicNotices.clone() : new PublicNoticeValue[0];
     }
 
     public boolean hasPublicNotices() {

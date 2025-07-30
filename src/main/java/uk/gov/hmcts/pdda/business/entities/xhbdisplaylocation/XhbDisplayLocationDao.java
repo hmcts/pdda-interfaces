@@ -71,6 +71,7 @@ public class XhbDisplayLocationDao extends AbstractVersionedDao implements Seria
         super.setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDisplayLocationId();
     }

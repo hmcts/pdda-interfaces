@@ -75,7 +75,8 @@ public class FormattingServices extends FormattingServicesProcessing {
      */
     public void processDocument(FormattingValue formattingValue, final EntityManager entityManager) {
         setEntityManager(entityManager);
-        if (FormattingServiceUtils.isPddaOnly(getXhbConfigPropRepository().findByPropertyName(PDDA_SWITCHER))) {
+        if (FormattingServiceUtils
+            .isPddaOnly(getXhbConfigPropRepository().findByPropertyNameSafe(PDDA_SWITCHER))) {
             LOG.debug("isPDDAOnly() - true");
         } else {
             LOG.debug("isPDDAOnly() - false");
@@ -172,12 +173,14 @@ public class FormattingServices extends FormattingServicesProcessing {
     }
 
     private XhbFormattingDao getNextDocumentFromList(String formatStatus) {
-        List<XhbFormattingDao> formattingDaoList = getXhbFormattingRepository().findByFormatStatus(formatStatus);
+        List<XhbFormattingDao> formattingDaoList =
+            getXhbFormattingRepository().findByFormatStatusSafe(formatStatus);
         if (!formattingDaoList.isEmpty()) {
             LocalDateTime timeDelay = null;
             // Get the timeDelay for new documents
             if (NEWDOCUMENT.equals(formatStatus)) {
-                List<XhbConfigPropDao> configs = getXhbConfigPropRepository().findByPropertyName(FORMATTING_LIST_DELAY);
+                List<XhbConfigPropDao> configs =
+                    getXhbConfigPropRepository().findByPropertyNameSafe(FORMATTING_LIST_DELAY);
                 timeDelay = FormattingServiceUtils.getTimeDelay(configs);
             }
             // Loop through and get the first valid document
@@ -198,7 +201,8 @@ public class FormattingServices extends FormattingServicesProcessing {
             // Get the lists by their xmlDocumentClobId
             if (formattingDao.getXmlDocumentClobId() != null) {
                 List<XhbXmlDocumentDao> xmlDocumentDaoList =
-                    getXhbXmlDocumentRepository().findDocumentByClobId(formattingDao.getXmlDocumentClobId(), timeDelay);
+                    getXhbXmlDocumentRepository()
+                        .findListByClobIdSafe(formattingDao.getXmlDocumentClobId(), timeDelay);
                 if (!xmlDocumentDaoList.isEmpty()) {
                     // Document is valid
                     return true;
@@ -209,10 +213,6 @@ public class FormattingServices extends FormattingServicesProcessing {
         // Document is invalid
         return false;
     }
-
-    //
-    // Utiltity classes
-    //
 
     /**
      * This is a public method so that it can be used by other areas of the CPP interface.
@@ -238,4 +238,5 @@ public class FormattingServices extends FormattingServicesProcessing {
             throw new FormattingException(" An error has occured during the setup of the xmlUtils process", e);
         }
     }
+
 }

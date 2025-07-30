@@ -82,6 +82,7 @@ public class XhbHearingDao extends AbstractVersionedDao implements Serializable 
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getHearingId();
     }

@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdefendant;
 
-
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -18,12 +20,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class XhbDefendantRepositoryTest extends AbstractRepositoryTest<XhbDefendantDao> {
 
     @Mock
@@ -39,10 +40,27 @@ class XhbDefendantRepositoryTest extends AbstractRepositoryTest<XhbDefendantDao>
 
     @Override
     protected XhbDefendantRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDefendantRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDefendantRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDefendantDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDefendantDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
 
@@ -56,13 +74,13 @@ class XhbDefendantRepositoryTest extends AbstractRepositoryTest<XhbDefendantDao>
         Optional<XhbDefendantDao> result =
             classUnderTest.findByDefendantName(dao.getCourtId(), dao.getFirstName(),
                 dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
     }
 
     @Override
     protected XhbDefendantDao getDummyDao() {
         XhbDefendantDao result = DummyDefendantUtil.getXhbDefendantDao();
-        assertNotNull(result.getPrimaryKey(), NOTNULL);
+        assertNotNull(result.getPrimaryKey(), NOTNULLRESULT);
         return new XhbDefendantDao(result);
     }
 

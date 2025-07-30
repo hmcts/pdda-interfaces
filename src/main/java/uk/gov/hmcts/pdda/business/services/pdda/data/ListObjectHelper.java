@@ -10,6 +10,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
@@ -44,8 +46,7 @@ import java.util.regex.Pattern;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.CyclomaticComplexity"})
+@SuppressWarnings("PMD")
 public class ListObjectHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,6 +57,7 @@ public class ListObjectHelper implements Serializable {
     public static final String COURTLIST_NODE = "CourtLists/CourtList";
     public static final String COURTHOUSE_NODE = "CourtHouse";
     public static final String SITTING_NODE = "Sittings/Sitting";
+    public static final String JUDGE_NODE = "Judiciary/Judge";
     public static final String HEARING_NODE = "Hearings/Hearing";
     public static final String HEARINGDETAILS_NODE = "HearingDetails";
     public static final String DEFENDANT_NODE = "Defendants/Defendant/PersonalDetails";
@@ -79,7 +81,10 @@ public class ListObjectHelper implements Serializable {
     protected static final String STARTDATE = "cs:StartDate";
     protected static final String ENDDATE = "cs:EndDate";
     protected static final String SURNAME = "apd:CitizenNameSurname";
+    protected static final String ISMASKED = "cs:IsMasked";
     protected static final String VERSION = "cs:Version";
+    protected static final String TITLE = "apd:CitizenNameTitle";
+    
     private static final String EMPTY_STRING = "";
     private static final String DECIMALS_REGEX = "\\d+";
     private static final String TWELVEHOURTIME = "hh:mma";
@@ -101,6 +106,7 @@ public class ListObjectHelper implements Serializable {
     private transient Optional<XhbHearingDao> xhbHearingDao = Optional.empty();
     private transient Optional<XhbSittingDao> xhbSittingDao = Optional.empty();
     private transient Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = Optional.empty();
+    private transient Optional<XhbRefJudgeDao> xhbRefJudgeDao = Optional.empty();
 
     public ListObjectHelper() {
         // Default constructor
@@ -123,6 +129,9 @@ public class ListObjectHelper implements Serializable {
             xhbHearingDao = validateHearing(nodesMap);
             xhbScheduledHearingDao = validateScheduledHearing(nodesMap);
             validateCrLiveDisplay();
+            processJudgeRecords();
+        } else if (breadcrumb.contains(JUDGE_NODE)) {
+            xhbRefJudgeDao = validateJudge(nodesMap);
         } else if (breadcrumb.contains(DEFENDANT_NODE)) {
             xhbDefendantDao = validateDefendant(nodesMap);
             xhbDefendantOnCaseDao = validateDefendantOnCase();
@@ -251,6 +260,33 @@ public class ListObjectHelper implements Serializable {
         return Optional.empty();
     }
 
+    private Optional<XhbRefJudgeDao> validateJudge(Map<String, String> nodesMap) {
+        LOG.info("validateJudge()");
+        if (xhbCourtSiteDao.isPresent()) {
+            Integer courtId = xhbCourtSiteDao.get().getCourtId();
+            String judgeTitle = nodesMap.get(TITLE);
+            String judgeFirstname = nodesMap.get(FIRSTNAME + ".1");
+            String judgeSurname = nodesMap.get(SURNAME);
+            return dataHelper.validateJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
+        }
+        return Optional.empty();
+    }
+    
+    protected void processJudgeRecords() {
+        if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
+            // Create the XhbSchedHearingAttendee record
+            Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =
+                dataHelper.createSchedHearingAttendee("J",
+                xhbScheduledHearingDao.get().getScheduledHearingId(),
+                xhbRefJudgeDao.get().getRefJudgeId());
+            if (!xhbSchedHearingAttendeeDao.isEmpty()) {
+                // Create the XhbShJudge record
+                dataHelper.createShJudge("N", xhbRefJudgeDao.get().getRefJudgeId(),
+                    xhbSchedHearingAttendeeDao.get().getShAttendeeId());
+            }
+        }
+    }
+    
     private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
         LOG.info("validateDefendant()");
         if (xhbCourtSiteDao.isPresent() && xhbCaseDao.isPresent()) {
@@ -264,6 +300,10 @@ public class ListObjectHelper implements Serializable {
                 firstName = surname.substring(commaPosition + 1).trim();
                 surname = surname.substring(0, commaPosition);
             }
+            String publicDisplayHide = "N";
+            if (nodesMap.get(ISMASKED) != null) {
+                publicDisplayHide = nodesMap.get(ISMASKED).toUpperCase().substring(0, 1);
+            }
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;
             if (MALE.equalsIgnoreCase(genderAsString)) {
@@ -276,7 +316,7 @@ public class ListObjectHelper implements Serializable {
                 parseDateTime(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
             if (firstName != null && surname != null) {
                 return dataHelper.validateDefendant(courtId, firstName, middleName, surname, gender,
-                    dateOfBirth);
+                    dateOfBirth, publicDisplayHide);
             }
         }
         return Optional.empty();
@@ -287,30 +327,37 @@ public class ListObjectHelper implements Serializable {
         if (xhbCaseDao.isPresent() && xhbDefendantDao.isPresent()) {
             Integer caseId = xhbCaseDao.get().getCaseId();
             Integer defendantId = xhbDefendantDao.get().getDefendantId();
+            String publicDisplayHide = xhbDefendantDao.get().getPublicDisplayHide();
             if (caseId != null && defendantId != null) {
-                return dataHelper.validateDefendantOnCase(caseId, defendantId);
+                return dataHelper.validateDefendantOnCase(caseId, defendantId, publicDisplayHide);
             }
         }
         return Optional.empty();
     }
 
     private Optional<XhbCaseDao> updateCaseTitle(Map<String, String> nodesMap) {
-        if (xhbCaseDao.isPresent()) {
-            String firstName = nodesMap.get(FIRSTNAME + ".1");
-            String surname = nodesMap.get(SURNAME);
-            if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
-                StringBuilder caseTitleSb = new StringBuilder();
-                caseTitleSb.append(surname);
-                if (firstName != null) {
-                    if (!"U".equals(xhbCaseDao.get().getCaseType())
-                        && !"B".equals(xhbCaseDao.get().getCaseType())) {
-                        caseTitleSb.append(", ");
+        try {
+            if (xhbCaseDao.isPresent()) {
+                String firstName = nodesMap.get(FIRSTNAME + ".1");
+                String surname = nodesMap.get(SURNAME);
+                if (xhbCaseDao.get().getCaseTitle() == null && surname != null) {
+                    StringBuilder caseTitleSb = new StringBuilder();
+                    caseTitleSb.append(surname);
+                    if (firstName != null) {
+                        if (!"U".equals(xhbCaseDao.get().getCaseType())
+                            && !"B".equals(xhbCaseDao.get().getCaseType())) {
+                            caseTitleSb.append(", ");
+                        }
+                        caseTitleSb.append(firstName);
                     }
-                    caseTitleSb.append(firstName);
+                    return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
                 }
-                return dataHelper.updateCase(xhbCaseDao.get(), caseTitleSb.toString());
+                return xhbCaseDao;
             }
-            return xhbCaseDao;
+        } catch (Exception e) {
+            // If this fails its not critical, just log it
+            LOG.error("Failed to update case title for caseId: {}",
+                xhbCaseDao.map(XhbCaseDao::getCaseId).orElse(null), e);
         }
         return Optional.empty();
     }
@@ -320,7 +367,7 @@ public class ListObjectHelper implements Serializable {
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String hearingTypeCode = nodesMap.get(HEARINGTYPECODE);
-            String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC);
+            String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC).replaceAll("\s{2,}", " ");
             String category = getSubstring(nodesMap.get(CATEGORY), 0, 1);
             if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
                 return dataHelper.validateHearingType(courtId, hearingTypeCode, hearingTypeDesc,

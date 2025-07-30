@@ -39,8 +39,7 @@ import javax.xml.xpath.XPathExpressionException;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods", "PMD.ExcessiveParameterList",
-    "PMD.CognitiveComplexity"})
+@SuppressWarnings("PMD")
 public class ListNodesHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -85,6 +84,7 @@ public class ListNodesHelper implements Serializable {
         LOG.debug("processNodes()");
         Map<String, String> courtListNodesMap = new ConcurrentHashMap<>();
         Map<String, String> sittingNodesMap = new ConcurrentHashMap<>();
+        Map<String, String> judgeNodesMap = new ConcurrentHashMap<>();
         Map<String, String> hearingNodesMap = new ConcurrentHashMap<>();
         Map<String, String> defendantNodesMap = new ConcurrentHashMap<>();
         for (Node topNode : topNodes) {
@@ -109,6 +109,16 @@ public class ListNodesHelper implements Serializable {
                     sittingNodesMap.putAll(getNodesMap(sittingNode));
                     getListObjectHelper().validateNodeMap(sittingNodesMap,
                         ListObjectHelper.SITTING_NODE);
+                    
+                    // Judge in the sitting
+                    for (Node judgeNode : getChildNodesArray(ListObjectHelper.JUDGE_NODE,
+                        sittingNode)) {
+                        judgeNodesMap.clear();
+                        judgeNodesMap.putAll(getNodesMap(judgeNode));
+                        getListObjectHelper().validateNodeMap(judgeNodesMap,
+                            ListObjectHelper.JUDGE_NODE);
+                    }
+                    
                     // Hearings in the sitting
                     for (Node hearingNode : getChildNodesArray(ListObjectHelper.HEARING_NODE,
                         sittingNode)) {

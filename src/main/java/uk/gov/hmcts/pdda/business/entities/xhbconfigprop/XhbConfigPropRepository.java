@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbconfigprop;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -38,5 +39,15 @@ public class XhbConfigPropRepository extends AbstractRepository<XhbConfigPropDao
         Query query = getEntityManager().createNamedQuery("XHB_CONFIG_PROP.findByPropertyName");
         query.setParameter("propertyName", propertyName);
         return query.getResultList();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<XhbConfigPropDao> findByPropertyNameSafe(String propertyName) {
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CONFIG_PROP.findByPropertyName");
+            query.setParameter("propertyName", propertyName);
+            return query.getResultList();
+        }
     }
 }

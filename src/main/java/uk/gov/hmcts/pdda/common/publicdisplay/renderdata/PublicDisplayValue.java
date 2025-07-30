@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Common superclass for public display data classes.
@@ -97,6 +99,11 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
      * Gets the Court Log Event Time.
      */
     public LocalDateTime getEventTime() {
+        // For XHIBIT events there may not be an event time, so assume the event time is midnight
+        if (eventTime == null) {
+            LOG.debug("Event time is null. Defaulting to 00:01.");
+            return LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 1));
+        }
         return eventTime;
     }
 

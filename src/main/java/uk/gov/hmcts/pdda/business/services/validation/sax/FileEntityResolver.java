@@ -19,7 +19,7 @@ public class FileEntityResolver implements EntityResolver {
     private static final Logger LOG = LoggerFactory.getLogger(FileEntityResolver.class);
 
     /**
-     * The dir containing the entitites.
+     * The dir containing the entities.
      */
     public File entityDir;
 
@@ -30,7 +30,7 @@ public class FileEntityResolver implements EntityResolver {
     /**
      * Construct a new instance to resolve entities to files in the specified dir.
      * 
-     * @param entityDir the dir containing the entitites.
+     * @param entityDir the dir containing the entities.
      */
     public FileEntityResolver(final String entityDir) {
         this(entityDir == null ? null : new File(entityDir));
@@ -39,7 +39,7 @@ public class FileEntityResolver implements EntityResolver {
     /**
      * Construct a new instance to resolve entities to files in the specified dir.
      * 
-     * @param entityDir the dir containing the entitites.
+     * @param entityDir the dir containing the entities.
      */
     public FileEntityResolver(final File entityDir) {
         if (entityDir == null) {
@@ -57,7 +57,7 @@ public class FileEntityResolver implements EntityResolver {
      */
     @Override
     public InputSource resolveEntity(String publicId, String systemId) {
-        LOG.debug("Resolving entity {}", systemId);
+        LOG.debug("Resolving entity: publicId={}, systemId={}", publicId, systemId);
         InputSource inputSource = new InputSource(
             Thread.currentThread().getContextClassLoader().getResourceAsStream(systemId));
         inputSource.setPublicId(publicId);

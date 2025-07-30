@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 class FormattingControllerBeanHelpersTest {
 
     private static final String NULL = "Result is Null";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.courtservice.gov.uk/schemas/courtservice" elementFormDefault="qualified" attributeFormDefault="unqualified" version="5.3" id="WarnedList">
-	<xsd:include schemaLocation="src/main/resources/config/xsd/CourtService_CPP-v1-0.xsd"/>
+	<xsd:include schemaLocation="CourtService_CPP-v1-0.xsd"/>
 	<xsd:annotation>
 		<xsd:appinfo>
 			<Metadata xmlns="http://www.govtalk.gov.uk/metadata/egms">

@@ -1,9 +1,14 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -12,10 +17,10 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class XhbDisplayDocumentRepositoryTest extends AbstractRepositoryTest<XhbDisplayDocumentDao> {
 
     @Mock
@@ -31,10 +36,27 @@ class XhbDisplayDocumentRepositoryTest extends AbstractRepositoryTest<XhbDisplay
 
     @Override
     protected XhbDisplayDocumentRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDisplayDocumentRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDisplayDocumentRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDisplayDocumentDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDisplayDocumentDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Override
@@ -63,7 +85,7 @@ class XhbDisplayDocumentRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         displayDocumentId = result.getPrimaryKey();
-        assertNotNull(displayDocumentId, NOTNULL);
+        assertNotNull(displayDocumentId, NOTNULLRESULT);
         return new XhbDisplayDocumentDao(result);
     }
 

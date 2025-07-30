@@ -97,7 +97,7 @@ public class CourtelHelper {
 
     public void writeToCourtel(final Long xmlDocumentClobId, final Long blobId) {
         // Get the clob data
-        Optional<XhbClobDao> clobDao = getXhbClobRepository().findById(xmlDocumentClobId);
+        Optional<XhbClobDao> clobDao = getXhbClobRepository().findByIdSafe(xmlDocumentClobId);
         if (clobDao.isPresent()) {
             LOG.debug("Fetched clob for xmlDocumentClobId {}", xmlDocumentClobId);
             // Get the xmlDocumentId
@@ -176,13 +176,13 @@ public class CourtelHelper {
 
     private CourtelJson getJsonObjectByDocType(XhbCourtelListDao xhbCourtelListDao) {
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
-            getXhbXmlDocumentRepository().findById(xhbCourtelListDao.getXmlDocumentId());
+            getXhbXmlDocumentRepository().findByIdSafe(xhbCourtelListDao.getXmlDocumentId());
         if (xhbXmlDocumentDao.isEmpty()) {
             LOG.debug("No XhbXmlDocumentDao found for id {}", xhbCourtelListDao.getXmlDocumentId());
             return null;
         }
         Optional<XhbCourtDao> xhbCourtDao =
-            getXhbCourtRepository().findById(xhbXmlDocumentDao.get().getCourtId());
+            getXhbCourtRepository().findByIdSafe(xhbXmlDocumentDao.get().getCourtId());
         if (xhbCourtDao.isEmpty()) {
             LOG.debug("No XhbCourtDao found for id {}", xhbXmlDocumentDao.get().getCourtId());
             return null;
@@ -219,7 +219,7 @@ public class CourtelHelper {
     private ZonedDateTime getEndDateFromClob(Long clobId) 
         throws ParserConfigurationException, SAXException, IOException {
         // Get the clob data
-        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findById(clobId);
+        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
         if (!xhbClobDao.isEmpty()) {
             // Perform a node search across the clob data and find the end date field
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();

@@ -28,28 +28,33 @@ import java.util.Optional;
 public class BlobHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlobHelper.class);
-    
+
     private final XhbBlobRepository xhbBlobRepository;
-    
+
     public BlobHelper(XhbBlobRepository xhbBlobRepository) {
         this.xhbBlobRepository = xhbBlobRepository;
     }
-    
+
     public Long createBlob(byte[] blobData) {
         LOG.debug("createBlob({})", blobData);
         XhbBlobDao dao = FormattingServiceUtils.createXhbBlobDao(blobData);
         Optional<XhbBlobDao> savedDao = xhbBlobRepository.update(dao);
         return savedDao.isPresent() ? savedDao.get().getBlobId() : null;
     }
+
+    public byte[] getBlobData(Long blobId) {
+        Optional<XhbBlobDao> savedDao = xhbBlobRepository.findByIdSafe(blobId);
+        return savedDao.isPresent() ? savedDao.get().getBlobData() : null;
+    }
     
     public XhbBlobDao getBlob(Long blobId) {
-        Optional<XhbBlobDao> savedDao = xhbBlobRepository.findById(blobId);
+        Optional<XhbBlobDao> savedDao = xhbBlobRepository.findByIdSafe(blobId);
         return savedDao.isPresent() ? savedDao.get() : null;
     }
 
     public void updateBlob(Long blobId, byte[] blobData) {
         LOG.debug("updateBlob({})", blobData);
-        Optional<XhbBlobDao> dao = xhbBlobRepository.findById(blobId);
+        Optional<XhbBlobDao> dao = xhbBlobRepository.findByIdSafe(blobId);
         if (dao.isPresent()) {
             dao.get().setBlobData(blobData);
             xhbBlobRepository.update(dao.get());

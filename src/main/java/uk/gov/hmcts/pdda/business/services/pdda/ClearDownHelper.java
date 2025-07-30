@@ -3,13 +3,14 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository;
-import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DateUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -31,19 +32,19 @@ import java.util.List;
  * @author Nathan Toft
  * @version 1.0
  */
-public class ClearDownHelper {
+@SuppressWarnings("PMD")
+public class ClearDownHelper extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClearDownHelper.class);
     public static final DateTimeFormatter DATETIME_FORMAT =
         DateTimeFormatter.ofPattern("yyyyMMddHHmm");
     public static final String RESET_DISPLAY_IWP_TIME = "RESET_DISPLAY_IWP_TIME";
 
-    private final EntityManager entityManager;
     private XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository;
     private XhbConfigPropRepository xhbConfigPropRepository;
 
     public ClearDownHelper(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        super(entityManager);
     }
 
     // JUnit Constructor
@@ -54,17 +55,37 @@ public class ClearDownHelper {
         this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        LOG.info("clearRepositories()");
+        xhbCrLiveDisplayRepository = null;
+    }
+
     /**
      * isClearDownRequired.
      */
     public boolean isClearDownRequired() {
         LocalDateTime clearDownTime = getClearDownTime();
+        if (clearDownTime == null) {
+            return false;
+        }
+
+        LOG.debug("Clear down time: " + clearDownTime);
+        LOG.debug("Current time: " + LocalDateTime.now());
+        LOG.debug("Comparison result: " + LocalDateTime.now().isAfter(clearDownTime));
+
         return clearDownTime != null && LocalDateTime.now().isAfter(clearDownTime);
     }
 
     private LocalDateTime getClearDownTime() {
+        if (xhbConfigPropRepository == null) {
+            xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
+        }
         List<XhbConfigPropDao> xhbConfigPropDaoList =
-            getXhbConfigPropRepository().findByPropertyName(RESET_DISPLAY_IWP_TIME);
+            xhbConfigPropRepository.findByPropertyNameSafe(RESET_DISPLAY_IWP_TIME);
+
         if (!xhbConfigPropDaoList.isEmpty()) {
             String propertyValue = xhbConfigPropDaoList.get(0).getPropertyValue();
             return getClearDownTime(propertyValue);
@@ -75,16 +96,24 @@ public class ClearDownHelper {
     /**
      * getClearDownTime.
      */
+    @SuppressWarnings("PMD.UnnecessaryLocalBeforeReturn")
     public LocalDateTime getClearDownTime(String propertyValue) {
-        LOG.debug("getclearDownTime({})", propertyValue);
-        String todaysDate = DateUtils.getDate(LocalDateTime.now());
-        String todaysTime = propertyValue.replace(":", "").substring(0, 4);
+        LOG.debug("getClearDownTime({})", propertyValue);
         try {
-            return LocalDateTime.parse(todaysDate + todaysTime, DATETIME_FORMAT);
-        } catch (DateTimeParseException ex) {
+            LocalTime parsedTime =
+                LocalTime.parse(propertyValue, DateTimeFormatter.ofPattern("HH:mm"));
+
+            // Parse to LocalTime (safe way to handle HH:mm)
+            LocalDateTime candidateTime =
+                LocalDateTime.of(LocalDateTime.now().toLocalDate(), parsedTime
+                );
+            return candidateTime;
+        } catch (DateTimeParseException | NullPointerException ex) {
+            LOG.warn("Invalid clear down time format: {}", propertyValue);
             return null;
         }
     }
+
 
     /**
      * resetLiveDisplays.
@@ -114,15 +143,9 @@ public class ClearDownHelper {
 
     private XhbCrLiveDisplayRepository getXhbCrLiveDisplayRepository() {
         if (xhbCrLiveDisplayRepository == null) {
-            xhbCrLiveDisplayRepository = new XhbCrLiveDisplayRepository(entityManager);
+            xhbCrLiveDisplayRepository = new XhbCrLiveDisplayRepository(getEntityManager());
         }
         return xhbCrLiveDisplayRepository;
     }
 
-    private XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (xhbConfigPropRepository == null) {
-            xhbConfigPropRepository = new XhbConfigPropRepository(entityManager);
-        }
-        return xhbConfigPropRepository;
-    }
 }

@@ -190,7 +190,7 @@ public class CathHelper {
 
     private String getDocumentClob(XhbXmlDocumentDao document) {
         Optional<XhbClobDao> xhbClobDao =
-            getXhbClobRepository().findById(document.getXmlDocumentClobId());
+            getXhbClobRepository().findByIdSafe(document.getXmlDocumentClobId());
         if (xhbClobDao.isPresent()) {
             return xhbClobDao.get().getClobData();
         }

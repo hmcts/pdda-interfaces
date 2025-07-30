@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestMethodOrder(OrderAnnotation.class)
+@SuppressWarnings("PMD")
 class RepositoryUtilTest {
 
     private static final String FALSE = "Result is True";

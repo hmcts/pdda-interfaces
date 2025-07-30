@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD"})
 class PddaMessageHelperTest {
 
     private static final String NOTNULL = "Result is Null";
@@ -109,7 +109,7 @@ class PddaMessageHelperTest {
     void testFindByPddaMessageId() {
         // Setup
         XhbPddaMessageDao xhbPddaMessageDao = DummyPdNotifierUtil.getXhbPddaMessageDao();
-        Mockito.when(mockXhbPddaMessageRepository.findById(xhbPddaMessageDao.getPrimaryKey()))
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDao.getPrimaryKey()))
             .thenReturn(Optional.of(xhbPddaMessageDao));
         mockTheEntityManager(true);
         // Run
@@ -134,7 +134,7 @@ class PddaMessageHelperTest {
         xhbRefPddaMessageTypeDaoList.add(DummyPdNotifierUtil.getXhbRefPddaMessageTypeDao());
         Mockito
             .when(mockXhbRefPddaMessageTypeRepository
-                .findByMessageType(xhbRefPddaMessageTypeDaoList.get(0).getPddaMessageType()))
+                .findByMessageTypeSafe(xhbRefPddaMessageTypeDaoList.get(0).getPddaMessageType()))
             .thenReturn(xhbRefPddaMessageTypeDaoList);
         mockTheEntityManager(true);
         // Run
@@ -151,19 +151,24 @@ class PddaMessageHelperTest {
         // Setup
         List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
         xhbPddaMessageDaoList.add(DummyPdNotifierUtil.getXhbPddaMessageDao());
+
         Mockito
             .when(mockXhbPddaMessageRepository
-                .findByCpDocumentName(xhbPddaMessageDaoList.get(0).getCpDocumentName()))
+                .findByCpDocumentNameSafe(xhbPddaMessageDaoList.get(0).getCpDocumentName()))
             .thenReturn(xhbPddaMessageDaoList);
+
         mockTheEntityManager(true);
+
         // Run
         Optional<XhbPddaMessageDao> actualResult =
             classUnderTest.findByCpDocumentName(xhbPddaMessageDaoList.get(0).getCpDocumentName());
+
         // Checks
         assertNotNull(actualResult, NOTNULL);
         assertTrue(actualResult.isPresent(), TRUE);
         assertSame(xhbPddaMessageDaoList.get(0), actualResult.get(), SAME);
     }
+
 
     @Test
     void testFindUnrespondedCpMessages() {

@@ -7,32 +7,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Version;
 import uk.gov.hmcts.pdda.business.entities.AbstractDao;
 
 import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.TooManyFields", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CPP_STAGING_INBOUND")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationStatus",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') "
-        + "AND ((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
-        + ":validationStatus)) ORDER by o.timeLoaded")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByProcessingStatus",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
-        + "AND (o.obsInd IS NULL OR o.obsInd='N') "
-        + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
-        + ":processingStatus)) ORDER by o.timeLoaded")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationAndProcessingStatus",
     query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.timeLoaded >= :timeLoaded "
         + "AND (o.obsInd IS NULL OR o.obsInd='N') "
         + "AND ((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
-        + ":validationStatus)) "
-        + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
-        + ":processingStatus)) ORDER by o.timeLoaded")
-@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findNextDocument",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-        + "((o.validationStatus IS NULL AND :validationStatus IS NULL) OR (o.validationStatus = "
         + ":validationStatus)) "
         + "AND ((o.processingStatus IS NULL AND :processingStatus IS NULL) OR (o.processingStatus = "
         + ":processingStatus)) ORDER by o.timeLoaded")
@@ -44,8 +29,11 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findByClobId",
     query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.clobId = :clobId")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName",
-    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-        + "(o.documentName = :documentName) AND (o.obsInd IS NULL OR o.obsInd='N')")
+    query = "SELECT o FROM XHB_CPP_STAGING_INBOUND o "
+        + "WHERE o.documentName = :documentName "
+        + "AND (o.obsInd IS NULL OR o.obsInd = 'N') "
+        + "AND FUNCTION('date', o.creationDate) = CURRENT_DATE "
+        + "AND o.validationStatus NOT IN ('VF', 'VS')")
 public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Serializable {
 
     private static final long serialVersionUID = 6619741714613299473L;
@@ -111,6 +99,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
     @Column(name = "CREATED_BY")
     private String createdBy;
 
+    @Version
     @Column(name = "VERSION")
     private Integer version;
 
@@ -145,6 +134,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         setVersion(version);
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppStagingInboundId();
     }
@@ -272,6 +262,7 @@ public class XhbCppStagingInboundDao extends AbstractDao implements java.io.Seri
         return version;
     }
 
+    @Version
     @Override
     public void setVersion(Integer version) {
         this.version = version;

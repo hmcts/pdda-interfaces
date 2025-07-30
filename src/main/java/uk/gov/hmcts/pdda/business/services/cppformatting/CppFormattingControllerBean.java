@@ -24,7 +24,6 @@ import java.util.List;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.LawOfDemeter")
 public class CppFormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(CppFormattingControllerBean.class);
@@ -67,7 +66,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
         // Get a list of CPP_FORMATTING objects that have a type of 'PD', a format status of 'ND'
         // and
         // a date in of today
-        List<XhbCppFormattingDao> cppList = getXhbCppFormattingRepository().findAllNewByDocType(
+        List<XhbCppFormattingDao> cppList = getXhbCppFormattingRepository().findAllNewByDocTypeSafe(
             DOC_TYPE_PUBLIC_DISPLAY, LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         for (XhbCppFormattingDao dao : cppList) {
             // For each CPP_FORMATTING object, extract the court Id, use it to refresh all pages for

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -20,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -40,10 +42,27 @@ class XhbSchedHearingDefendantRepositoryTest
 
     @Override
     protected XhbSchedHearingDefendantRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbSchedHearingDefendantRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbSchedHearingDefendantRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbSchedHearingDefendantDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbSchedHearingDefendantDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -85,13 +104,13 @@ class XhbSchedHearingDefendantRepositoryTest
         XhbSchedHearingDefendantDao dao = getDummyDao();
         Optional<XhbSchedHearingDefendantDao> result = classUnderTest
             .findByHearingAndDefendant(dao.getScheduledHearingId(), dao.getDefendantOnCaseId());
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
     }
 
     @Override
     protected XhbSchedHearingDefendantDao getDummyDao() {
         XhbSchedHearingDefendantDao result = DummyHearingUtil.getXhbSchedHearingDefendantDao();
-        assertNotNull(result.getPrimaryKey(), NOTNULL);
+        assertNotNull(result.getPrimaryKey(), NOTNULLRESULT);
         return new XhbSchedHearingDefendantDao(result);
     }
 

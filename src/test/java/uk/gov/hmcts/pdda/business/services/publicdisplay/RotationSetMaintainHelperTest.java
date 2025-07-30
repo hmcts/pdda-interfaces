@@ -34,7 +34,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings("static-access")
+@SuppressWarnings({"static-access","PMD"})
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class RotationSetMaintainHelperTest {
@@ -71,7 +71,7 @@ class RotationSetMaintainHelperTest {
         // Setup
         RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
         // Expects
-        Mockito.when(mockXhbCourtRepository.findById(rotationSetComplexValue.getCourtId()))
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(rotationSetComplexValue.getCourtId()))
             .thenReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(-453, "Test1")));
         Mockito.when(mockXhbRotationSetsRepository.update(rotationSetComplexValue.getRotationSetsDao()))
             .thenReturn(Optional.of(rotationSetComplexValue.getRotationSetsDao()));
@@ -95,7 +95,7 @@ class RotationSetMaintainHelperTest {
         xhbRotationSetDds.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
         RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
         // Expects
-        Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbRotationSetDao));
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetDds);
@@ -119,7 +119,7 @@ class RotationSetMaintainHelperTest {
             xhbRotationSetDao.setDefaultYn("Y");
             RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
             // Expects
-            Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
+            Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
             // Run
             classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue, mockPublicDisplayNotifier,
@@ -132,7 +132,7 @@ class RotationSetMaintainHelperTest {
         // Setup
         RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
         // Expects
-        Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(DummyPublicDisplayUtil.getXhbRotationSetsDao()));
         // Run
         boolean result = false;
@@ -154,7 +154,7 @@ class RotationSetMaintainHelperTest {
             xhbRotationSetDao.setDefaultYn("Y");
             RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
             // Expects
-            Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
+            Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
             // Run
             classUnderTest.deleteRotationSet(rotationSetComplexValue, mockXhbRotationSetsRepository,
@@ -171,7 +171,7 @@ class RotationSetMaintainHelperTest {
             xhbDisplayDaos.add(DummyPublicDisplayUtil.getXhbDisplayDao());
             RotationSetComplexValue rotationSetComplexValue = getDummyRotationSetComplexValue();
             // Expects
-            Mockito.when(mockXhbRotationSetsRepository.findById(Mockito.isA(Long.class)))
+            Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
             Mockito.when(mockXhbDisplayRepository.findByRotationSetId(rotationSetComplexValue.getRotationSetId()))
                 .thenReturn(xhbDisplayDaos);

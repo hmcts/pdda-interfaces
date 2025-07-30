@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 class CaseControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -98,15 +98,15 @@ class CaseControllerBeanTest {
         EasyMock.expect(mockXhbHearingRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdSafe(CASE_ID)).andReturn(xhList);
 
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(oldList);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
 
         replayMocks();

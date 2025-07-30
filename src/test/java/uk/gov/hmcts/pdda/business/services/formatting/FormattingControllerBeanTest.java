@@ -45,8 +45,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
 class FormattingControllerBeanTest {
 
     private static final String NOTNULL = "Result is Null";
@@ -229,7 +229,7 @@ class FormattingControllerBeanTest {
 
         expectGetEntityManager(mockXhbCppListRepository);
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDate(
+        EasyMock.expect(mockXhbCppListRepository.findByCourtCodeAndListTypeAndListDateSafe(
             EasyMock.isA(Integer.class), EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(dummyList);
         mockFormattingServices.processDocument(EasyMock.isA(FormattingValue.class),

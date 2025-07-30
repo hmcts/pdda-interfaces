@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
  * 
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class MergeListUtilsTest {
 

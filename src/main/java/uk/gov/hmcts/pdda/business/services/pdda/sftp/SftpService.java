@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD.CyclomaticComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -80,7 +80,7 @@ public class SftpService extends XhibitPddaHelper {
      */
     @SuppressWarnings("PMD")
     public boolean processBaisMessages(int sftpPort) {
-
+        
         boolean error = false;
 
         methodName = "processBaisMessages()";
@@ -91,6 +91,7 @@ public class SftpService extends XhibitPddaHelper {
         // First get the CP data from BAIS
         LOG.debug("About to attempt to connect to BAIS to download any CP files");
         try (SSHClient ssh = getSftpConfigHelper().getNewSshClient()) {
+            
             ssh.connect(sftpConfig.getHost(), sftpConfig.getPort());
 
             // Do the authentication based on the configuration; CP first, then XHIBIT
@@ -253,7 +254,7 @@ public class SftpService extends XhibitPddaHelper {
         try {
             // Get the files from BAIS
             return getPddaSftpHelperSshj().sftpFetch(config.getSshjSftpClient(),
-                config.getActiveRemoteFolder(), validation);
+                config.getActiveRemoteFolder(), validation, config.getCpExcludedCourtIds());
         } catch (Exception ex) {
             LOG.error(SFTP_ERROR + " {} ", ExceptionUtils.getStackTrace(ex));
             return Collections.emptyMap();
@@ -451,7 +452,7 @@ public class SftpService extends XhibitPddaHelper {
      * A class to validate XHIBIT messages retrieved from BAIS. There should be 6 parts to a valid
      * file from BAIS originating from XHIBIT. 1. PDDA 2. Message Type 3. Batch id 4. Message number
      * in this batch 5. Court ID (crestCourtId) 6. Date and time e.g.
-     * PDDA_XPD_1234_1_453_20200101120000.xml
+     * PDDA_XPD_1234_1_453_20200101120000
      * 
      */
     public static class BaisXhibitValidation extends BaisValidation {

@@ -41,8 +41,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
 class CppFormattingControllerBeanTest {
 
     private static final String TRUE = "Result is not True";
@@ -94,7 +94,7 @@ class CppFormattingControllerBeanTest {
         expectGetEntityManager(mockCppFormattingRepo);
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));
@@ -127,7 +127,7 @@ class CppFormattingControllerBeanTest {
         cppFormattingList.add(xhbCppFormattingDao);
         expectGetEntityManager(mockCppFormattingRepo);
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocType(EasyMock.isA(String.class),
+        EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
             mockPublicDisplayNotifier.sendMessage(EasyMock.isA(ConfigurationChangeEvent.class));

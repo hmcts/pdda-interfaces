@@ -68,7 +68,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.ExcessiveImports"})
+@SuppressWarnings("PMD")
 class CathUtilsTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtilsTest.class);
@@ -224,7 +224,7 @@ class CathUtilsTest {
 
         Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
         Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbXmlDocumentDao);
@@ -261,17 +261,17 @@ class CathUtilsTest {
         Optional<XhbCppStagingInboundDao> xhbCppStagingInboundDao =
             Optional.of(DummyPdNotifierUtil.getXhbCppStagingInboundDao());
 
-        Mockito.when(mockXhbXmlDocumentRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbXmlDocumentDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDaoTransformedXml);
-        Mockito.when(mockXhbCourtelListRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtelListRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbCppStagingInboundRepository.findByClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCppStagingInboundDao);
         Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbXmlDocumentDao);
-        Mockito.when(mockXhbCathDocumentLinkRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCathDocumentLinkRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCathDocumentLinkDao));
 
         boolean result = true;

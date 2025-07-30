@@ -37,7 +37,6 @@ import java.util.Locale;
  * @author Neil Ellis
  * @version $Revision: 1.21 $
  */
-@SuppressWarnings("PMD.GodClass")
 public final class DisplayDocumentUri extends AbstractUri {
 
     /**
@@ -298,15 +297,4 @@ public final class DisplayDocumentUri extends AbstractUri {
         return values;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        LOG.debug("equals()");
-        return super.equals(obj);
-    }
-
-    @Override
-    public int hashCode() {
-        LOG.debug("hashCode()");
-        return super.hashCode();
-    }
 }

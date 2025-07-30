@@ -12,7 +12,6 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  * WarnedListMergeUtils.
  */
-@SuppressWarnings("PMD.ExcessiveParameterList")
 public final class WarnedListUtils {
 
     private WarnedListUtils() {

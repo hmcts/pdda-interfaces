@@ -199,8 +199,10 @@ public class CourtListValue extends PublicDisplayValue {
      * 
      * @return true if the entry is currently listed in the court room.
      */
+    @SuppressWarnings("PMD.UnnecessaryBoxing")
     public boolean isListedInThisCourtRoom() {
-        return listCourtRoomId == this.getCourtRoomId();
+        Integer courtRoomId = this.getCourtRoomId();
+        return courtRoomId != null && courtRoomId.intValue() == listCourtRoomId;
     }
 
     @Override

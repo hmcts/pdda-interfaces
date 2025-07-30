@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * CppStagingInboundHelperConstructorsTest.
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CppStagingInboundHelperConstructorsTest {
 
@@ -36,10 +37,10 @@ class CppStagingInboundHelperConstructorsTest {
         xhbConfigPropDaos
             .add(DummyServicesUtil.getXhbConfigPropDao("STAGING_DOCS_TO_PROCESS", "1"));
 
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
-            .andReturn(null);
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbConfigPropRepository.findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS"))
             .andReturn(xhbConfigPropDaos);
+
         EasyMock.replay(mockXhbConfigPropRepository);
 
         boolean result = true;

@@ -27,6 +27,9 @@ public class EventWorkManager extends Thread {
     /** Thread pool used by the event manager. */
     private ThreadPool threadPool;
 
+    // Sleep a little if no event is available
+    private static final long IDLE_SLEEP_MS = 1000L; // 1 second
+
     /**
      * If we need event coalesce, set the num workers to one.
      * 
@@ -75,6 +78,21 @@ public class EventWorkManager extends Thread {
             log.debug("Event received: {}", event);
             threadPool.scheduleWork(new EventWork(event));
             log.debug("Event processed: {}", event);
+        } else {
+            // No event received, back off a bit to avoid tight loop
+            try {
+                log.debug("No event available. Sleeping for {} ms.", IDLE_SLEEP_MS);
+                sleep(IDLE_SLEEP_MS);
+            } catch (InterruptedException e) {
+                log.error("EventWorkManager interrupted during idle sleep.", e);
+                currentThread().interrupt(); // Preserve interrupt status
+            }
         }
     }
+
+    /*
+     * public void runOnce() { PublicDisplayEvent event = eventStore.popEvent(); if (event != null)
+     * { log.debug("Event received: {}", event); threadPool.scheduleWork(new EventWork(event));
+     * log.debug("Event processed: {}", event); } }
+     */
 }

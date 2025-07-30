@@ -41,7 +41,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.AssignmentInOperand", "PMD.CouplingBetweenObjects",
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
     "PMD.ExcessiveImports"})
 public final class CathUtils {
 
@@ -147,7 +147,7 @@ public final class CathUtils {
 
         if (xhbCourtelListDao.isPresent()) {
             // Fetch the original xml clob and xml document records
-            Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findById(clobId);
+            Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findByIdSafe(clobId);
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
                 xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
             if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
@@ -209,12 +209,12 @@ public final class CathUtils {
 
         // Fetch the xml_document record
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
-            xhbXmlDocumentRepository.findById(xhbCathDocumentLinkDao.getCathXmlId());
+            xhbXmlDocumentRepository.findByIdSafe(xhbCathDocumentLinkDao.getCathXmlId());
 
         if (xhbXmlDocumentDaoTransformedXml.isPresent()) {
             // Fetch the clob record
             Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository
-                .findById(xhbXmlDocumentDaoTransformedXml.get().getXmlDocumentClobId());
+                .findByIdSafe(xhbXmlDocumentDaoTransformedXml.get().getXmlDocumentClobId());
 
             if (xhbClobDaoTransformedXml.isPresent()) {
                 // Generate the Json and save it to the clob_table
@@ -254,7 +254,7 @@ public final class CathUtils {
         XhbCathDocumentLinkDao xhbCathDocumentLinkDao, XhbXmlDocumentDao xhbXmlDocumentDaoJson) {
         // Fetch the existing cath_document_link record
         Optional<XhbCathDocumentLinkDao> xhbCathDocumentLinkDaoNoJsonId =
-            xhbCathDcoumentLlinkRepository.findById(xhbCathDocumentLinkDao.getCathDocumentLinkId());
+            xhbCathDcoumentLlinkRepository.findByIdSafe(xhbCathDocumentLinkDao.getCathDocumentLinkId());
 
         if (xhbCathDocumentLinkDaoNoJsonId.isPresent()) {
             // Update the existing record with the cathJsonId

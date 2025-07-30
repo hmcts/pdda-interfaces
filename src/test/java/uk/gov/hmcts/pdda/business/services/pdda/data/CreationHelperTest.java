@@ -13,6 +13,7 @@ import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyDisplayUtil;
 import uk.gov.hmcts.DummyHearingUtil;
+import uk.gov.hmcts.DummyJudgeUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -31,10 +32,16 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
@@ -45,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 class CreationHelperTest {
 
     private static final String EQUALS = "Result is not Equal";
@@ -122,6 +129,7 @@ class CreationHelperTest {
         Mockito.when(mockRepositoryHelper.getXhbCaseRepository()).thenReturn(mockXhbCaseRepository);
         Mockito.when(mockXhbCaseRepository.update(Mockito.isA(XhbCaseDao.class)))
             .thenReturn(Optional.of(dao));
+        Mockito.when(mockXhbCaseRepository.findByIdSafe(dao.getCaseId())).thenReturn(Optional.of(dao));
 
         Optional<XhbCaseDao> result =
             classUnderTest.createCase(dao.getCourtId(), dao.getCaseType(), dao.getCaseNumber());
@@ -131,6 +139,39 @@ class CreationHelperTest {
         assertNotNull(result, NOTNULL);
         assertEquals(caseTitle, result.get().getCaseTitle(), EQUALS);
     }
+    
+    @Test
+    void testCreateRefJudge() {
+        Mockito.when(mockRepositoryHelper.getXhbRefJudgeRepository())
+            .thenReturn(Mockito.mock(XhbRefJudgeRepository.class));
+        
+        XhbRefJudgeDao dao = DummyJudgeUtil.getXhbRefJudgeDao();
+        Optional<XhbRefJudgeDao> result = classUnderTest.createRefJudge(dao.getCourtId(),
+            dao.getTitle(), dao.getFirstname(), dao.getSurname());
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testCreateShJudge() {
+        Mockito.when(mockRepositoryHelper.getXhbShJudgeRepository())
+            .thenReturn(Mockito.mock(XhbShJudgeRepository.class));
+        
+        XhbShJudgeDao dao = new XhbShJudgeDao();
+        Optional<XhbShJudgeDao> result = classUnderTest.createShJudge(dao.getDeputyHcj(),
+            dao.getRefJudgeId(), dao.getShAttendeeId());
+        assertNotNull(result, NOTNULL);
+    }
+    
+    @Test
+    void testCreateSchedHearingAttendee() {
+        Mockito.when(mockRepositoryHelper.getXhbSchedHearingAttendeeRepository())
+            .thenReturn(Mockito.mock(XhbSchedHearingAttendeeRepository.class));
+        
+        XhbSchedHearingAttendeeDao dao = new XhbSchedHearingAttendeeDao();
+        Optional<XhbSchedHearingAttendeeDao> result = classUnderTest.createSchedHearingAttendee(dao.getAttendeeType(),
+            dao.getScheduledHearingId(), dao.getRefJudgeId());
+        assertNotNull(result, NOTNULL);
+    }
 
     @Test
     void testCreateDefendantOnCase() {
@@ -139,7 +180,8 @@ class CreationHelperTest {
 
         XhbDefendantOnCaseDao dao = DummyDefendantUtil.getXhbDefendantOnCaseDao();
         Optional<XhbDefendantOnCaseDao> result =
-            classUnderTest.createDefendantOnCase(dao.getCaseId(), dao.getDefendantId());
+            classUnderTest.createDefendantOnCase(dao.getCaseId(), dao.getDefendantId(),
+                dao.getIsMasked());
         assertNotNull(result, NOTNULL);
     }
 
@@ -151,7 +193,8 @@ class CreationHelperTest {
         XhbDefendantDao dao = DummyDefendantUtil.getXhbDefendantDao();
         Optional<XhbDefendantDao> result =
             classUnderTest.createDefendant(dao.getCourtId(), dao.getFirstName(),
-                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth());
+                dao.getMiddleName(), dao.getSurname(), dao.getGender(), dao.getDateOfBirth(),
+                dao.getPublicDisplayHide());
         assertNotNull(result, NOTNULL);
     }
 

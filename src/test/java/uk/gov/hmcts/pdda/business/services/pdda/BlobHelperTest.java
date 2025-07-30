@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class BlobHelperTest {
@@ -80,7 +81,7 @@ class BlobHelperTest {
         byte[] dummyByteArray = {'1', '2', '3'};
         Optional<XhbBlobDao> dummyBlobDao =
             Optional.of(DummyFormattingUtil.getXhbBlobDao(dummyByteArray));
-        Mockito.when(mockXhbBlobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbBlobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(dummyBlobDao);
         // Run
         XhbBlobDao result = classUnderTest.getBlob(dummyId);
@@ -95,7 +96,7 @@ class BlobHelperTest {
         byte[] dummyByteArray = {'1', '2', '3'};
         Optional<XhbBlobDao> dummyBlobDao =
             Optional.of(DummyFormattingUtil.getXhbBlobDao(dummyByteArray));
-        Mockito.when(mockXhbBlobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbBlobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(dummyBlobDao);
         Mockito.when(mockXhbBlobRepository.update(Mockito.isA(XhbBlobDao.class)))
             .thenReturn(dummyBlobDao);

@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD"})
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -220,7 +220,8 @@ class CppStagingInboundControllerBeanTest {
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
         EasyMock
-            .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
+            .expect(
+                mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + documentType))
             .andReturn(returnList);
         expectGetEntityManager(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbConfigPropRepository);
@@ -239,10 +240,11 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
         data.add(DummyCourtUtil.getXhbCourtDao(courtCode, "TestCourt1"));
-
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
-            .andReturn(data);
+        
         expectGetEntityManager(mockXhbCourtRepository);
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
+            .andReturn(data);
+        
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -259,9 +261,11 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
 
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
-            .andReturn(data);
         expectGetEntityManager(mockXhbCourtRepository);
+
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
+            .andReturn(data);
+
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -295,9 +299,29 @@ class CppStagingInboundControllerBeanTest {
     }
 
     @Test
-    void testClearRepos() {
-        boolean result = true;
-        classUnderTest.clearRepositories();
-        assertTrue(result, TRUE);
+    void testValidateDocumentWithEmptySchema() throws Exception {
+        // Setup
+        String invalidDocumentType = "INVALID_TYPE";
+        XhbCppStagingInboundDao dao = new XhbCppStagingInboundDao();
+        dao.setDocumentType(invalidDocumentType);
+
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + invalidDocumentType))
+                .andReturn(new ArrayList<>());
+        
+        EasyMock.expect(mockCppStagingInboundHelper.updateCppStagingInbound(dao, USERDISPLAYNAME))
+                .andReturn(Optional.of(dao));
+        
+        EasyMock.replay(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+
+        // Run
+        boolean result = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
+
+        // Verify
+        EasyMock.verify(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+        assertEquals(false, result, EQUALS);
     }
+
+
 }

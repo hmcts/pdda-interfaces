@@ -78,7 +78,7 @@ public class DisplayLocationDataHelper {
         List<CourtSitePdComplexValue> results = new ArrayList<>();
 
         CourtSitePdComplexValue sitePdComplex;
-        List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtId(courtId);
+        List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtIdSafe(courtId);
         Iterator<XhbCourtSiteDao> siteIter = siteCol.iterator();
         while (siteIter.hasNext()) {
             // Create an instance of the court site complex value
@@ -238,7 +238,8 @@ public class DisplayLocationDataHelper {
             // for every rotation set DD, get the display document and
             // create a complex VO
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
-                xhbDisplayDocumentRepository.findById(rotationSetDdLocal.getDisplayDocumentId());
+                xhbDisplayDocumentRepository
+                    .findByIdSafe(rotationSetDdLocal.getDisplayDocumentId());
             XhbDisplayDocumentDao xhbDisplayDocumentDao =
                 xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
             ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);

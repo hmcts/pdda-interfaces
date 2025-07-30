@@ -72,6 +72,7 @@ public class XhbRefPddaMessageTypeDao extends AbstractVersionedDao implements Se
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getPddaMessageTypeId();
     }

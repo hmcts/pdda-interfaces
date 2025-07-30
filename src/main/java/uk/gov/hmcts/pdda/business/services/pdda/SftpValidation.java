@@ -8,12 +8,10 @@ import java.util.List;
 /**
  * SftpValidation.
  **/
-@SuppressWarnings("PMD.LawOfDemeter")
 public class SftpValidation {
     
     protected static final String EMPTY_STRING = "";
-    
-    private final boolean includeDirs;
+    protected final boolean includeDirs;
 
     public SftpValidation(boolean includeDirs) {
         this.includeDirs = includeDirs;

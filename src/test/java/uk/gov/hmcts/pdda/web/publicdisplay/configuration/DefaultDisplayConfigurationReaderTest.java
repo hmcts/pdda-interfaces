@@ -60,7 +60,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 class DefaultDisplayConfigurationReaderTest {
 
     private static final Integer COURT_ID = 20;
@@ -189,7 +189,7 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(courtDao);
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
             .thenReturn(new int[] {80});
@@ -249,11 +249,11 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbDisplayRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(displayDao);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCourtDao));
-        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
+        Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Long.valueOf(ROTATION_SET_ID)))
             .thenReturn(xrs);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
@@ -314,9 +314,9 @@ class DefaultDisplayConfigurationReaderTest {
 
         Mockito.when(mockXhbCourtRepository.findAll()).thenReturn(dummyCourtList);
         Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(xrsList);
-        Mockito.when(mockXhbRotationSetsRepository.findById(Long.valueOf(ROTATION_SET_ID)))
+        Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Long.valueOf(ROTATION_SET_ID)))
             .thenReturn(xrs);
-        Mockito.when(mockXhbCourtRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCourtDao));
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);

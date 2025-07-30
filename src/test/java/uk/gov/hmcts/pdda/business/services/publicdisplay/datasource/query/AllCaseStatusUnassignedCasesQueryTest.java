@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class AllCaseStatusUnassignedCasesQueryTest extends AllCaseStatusQueryTest {
 

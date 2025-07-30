@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbhearinglist;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -31,20 +32,6 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
     }
 
     /**
-     * findByCourtIdAndDate.
-     * 
-     * @return list
-     */
-    @SuppressWarnings("unchecked")
-    public List<XhbHearingListDao> findByCourtIdAndDate(Integer courtId, LocalDateTime startDate) {
-        LOG.debug("In XhbHearingRepository.findByCourtIdAndDate");
-        Query query = getEntityManager().createNamedQuery("XHB_HEARING_LIST.findByCourtIdAndDate");
-        query.setParameter("courtId", courtId);
-        query.setParameter("startDate", startDate);
-        return query.getResultList();
-    }
-
-    /**
      * findByCourtIdStatusAndDate.
      * 
      * @return XhbHearingListDao
@@ -61,4 +48,61 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
             query.getResultList().isEmpty() ? null : (XhbHearingListDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
+
+    @SuppressWarnings("unchecked")
+    public Optional<XhbHearingListDao> findByCourtIdStatusAndDateSafe(Integer courtId,
+        String status, LocalDateTime startDate) {
+        LOG.debug("findByCourtIdStatusAndDateSafe(courtId: {}, status: {}, startDate: {})", courtId,
+            status, startDate);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
+            query.setParameter("courtId", courtId);
+            query.setParameter("status", status);
+            query.setParameter("startDate", startDate);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findByCourtIdStatusAndDateSafe - No results for courtId: {}, status: {}, startDate: {}",
+                    courtId, status, startDate);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbHearingListDao) {
+                LOG.debug(
+                    "findByCourtIdStatusAndDateSafe - Returning result for courtId: {}, status: {}, startDate: {}",
+                    courtId, status, startDate);
+                return Optional.of((XhbHearingListDao) result);
+            } else {
+                LOG.warn("findByCourtIdStatusAndDateSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdStatusAndDateSafe({}, {}, {}): {}", courtId, status,
+                startDate, e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public List<XhbHearingListDao> findByCourtIdAndDateSafe(Integer courtId,
+        LocalDateTime startDate) {
+        LOG.debug("In XhbHearingListRepository.findByCourtIdAndDateSafe");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_HEARING_LIST.findByCourtIdAndDate");
+            query.setParameter("courtId", courtId);
+            query.setParameter("startDate", startDate);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdAndDateSafe: {}", e.getMessage(), e);
+            return List.of();
+        }
+    }
+
 }

@@ -93,7 +93,8 @@ class PddaHelperValidationTest {
         List<FileResults> dummyFiles = getAllValidCpFiles(true);
         String filename = dummyFiles.get(0).filename;
         List<XhbCourtDao> xhbCourtDaoList = isSuccessTest ? getXhbCourtDaoList() : new ArrayList<>();
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);
         EasyMock.replay(mockXhbCourtRepository);
         // Run

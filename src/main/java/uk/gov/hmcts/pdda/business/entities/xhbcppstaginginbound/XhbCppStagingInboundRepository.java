@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -47,53 +48,30 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         return query.getResultList();
     }
 
-    public List<XhbCppStagingInboundDao> findNextDocumentByProcessingStatus(
-        LocalDateTime timeLoaded, String processingStatus) {
-        LOG.debug("findNextDocumentByProcessingStatus({},{})", timeLoaded, processingStatus);
-        Query query = getEntityManager()
-            .createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocumentByProcessingStatus");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(PROCESSING_STATUS, Parameter.getPostgresInParameter(processingStatus));
-        return query.getResultList();
-    }
+    @SuppressWarnings("unchecked")
+    public List<XhbCppStagingInboundDao> findNextDocumentByValidationAndProcessingStatusSafe(
+        LocalDateTime timeLoaded, String validationStatus, String processingStatus) {
 
-    public List<XhbCppStagingInboundDao> findNextDocument(String validationStatus,
-        String processingStatus) {
-        LOG.debug("findNextDocument({},{})", validationStatus, processingStatus);
-        Query query =
-            getEntityManager().createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocument");
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        query.setParameter(PROCESSING_STATUS, Parameter.getPostgresInParameter(processingStatus));
-        return query.getResultList();
-    }
+        LOG.debug("findNextDocumentByValidationAndProcessingStatusSafe({},{},{})", timeLoaded,
+            validationStatus, processingStatus);
 
-    /**
-     * findNextDocumentByValidationStatus.
-     * 
-     * @param timeLoaded LocalDateTime
-     * @param validationStatus String
-     * @return List
-     */
-    public List<XhbCppStagingInboundDao> findNextDocumentByValidationStatus(
-        LocalDateTime timeLoaded, String validationStatus) {
-        LOG.debug("findNextDocumentByValidationStatus({},{})", timeLoaded, validationStatus);
-        Query query = getEntityManager()
-            .createNamedQuery("XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationStatus");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        return query.getResultList();
-    }
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery(
+                "XHB_CPP_STAGING_INBOUND.findNextDocumentByValidationAndProcessingStatus");
 
-    public List<XhbCppStagingInboundDao> findNextDocumentTest(LocalDateTime timeLoaded,
-        String validationStatus) {
-        LOG.debug("findNextDocumentTest({},{})", timeLoaded, validationStatus);
-        Query query =
-            getEntityManager().createQuery("SELECT o from XHB_CPP_STAGING_INBOUND o WHERE "
-                + "o.timeLoaded >= :timeLoaded AND (o.obsInd IS NULL OR o.obsInd='N') "
-                + "AND o.validationStatus = :validationStatus ORDER by o.timeLoaded");
-        query.setParameter(TIME_LOADED, timeLoaded);
-        query.setParameter(VALIDATION_STATUS, Parameter.getPostgresInParameter(validationStatus));
-        return query.getResultList();
+            query.setParameter("timeLoaded", timeLoaded);
+            query.setParameter("validationStatus",
+                Parameter.getPostgresInParameter(validationStatus));
+            query.setParameter("processingStatus",
+                Parameter.getPostgresInParameter(processingStatus));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error(
+                "Error in findNextDocumentByValidationAndProcessingStatusSafe({}, {}, {}): {}",
+                timeLoaded, validationStatus, processingStatus, e.getMessage(), e);
+            return List.of(); // Safe fallback to prevent nulls or crashes
+        }
     }
 
     public List<XhbCppStagingInboundDao> findUnrespondedCppMessages() {
@@ -118,4 +96,21 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbCppStagingInboundDao> findDocumentByDocumentNameSafe(String documentName) {
+        LOG.debug("findDocumentByDocumentNameSafe({})", documentName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName");
+            query.setParameter("documentName", Parameter.getPostgresInParameter(documentName));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findDocumentByDocumentNameSafe({}): {}", documentName,
+                e.getMessage(), e);
+            return List.of(); // Empty list to safely handle failure
+        }
+    }
+
 }

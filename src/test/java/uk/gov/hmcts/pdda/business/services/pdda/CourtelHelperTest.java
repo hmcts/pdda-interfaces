@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Luke Gittins
  */
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CourtelHelperTest {
 
@@ -112,16 +112,16 @@ class CourtelHelperTest {
             Optional.of(DummyCourtelUtil.getXhbCourtelListDao());
 
         // Expect - 1st run (No clob)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(Optional.empty());
         // Expect - 2nd run (No XmlDocument)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
             .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
             .andReturn(Optional.empty());
         // Expect - 3rd run (With CourtelList)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
             .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
@@ -130,7 +130,7 @@ class CourtelHelperTest {
             .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelList);
         // Expect - 4th run (No CourtelList - FINAL SUCCESSFUL VERSION)
-        EasyMock.expect(mockXhbClobRepository.findById(EasyMock.isA(Long.class)))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
             .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
@@ -206,10 +206,10 @@ class CourtelHelperTest {
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, 
               "<cs:ListHeader><cs:EndDate>2020-01-21</cs:EndDate></cs:ListHeader>");
         
-        EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbXmlDocumentRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbXmlDocumentDao));
         EasyMock.expect(mockXhbClobRepository.getEntityManager()).andReturn(mockEntityManager);
-        EasyMock.expect(mockXhbClobRepository.findById(xhbClobDao.getClobId()))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(xhbClobDao.getClobId()))
             .andReturn(Optional.of(xhbClobDao));
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
@@ -242,9 +242,9 @@ class CourtelHelperTest {
         xhbCourtelListDao.setBlob(xhbBlobDao);
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType("DL");
-        EasyMock.expect(mockXhbXmlDocumentRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbXmlDocumentRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbXmlDocumentDao));
-        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.empty());
         expectGetEntityManager(mockXhbXmlDocumentRepository);
         expectGetEntityManager(mockXhbCourtRepository);
@@ -293,7 +293,7 @@ class CourtelHelperTest {
     }
 
     private void expectFindByCourtId() {
-        EasyMock.expect(mockXhbCourtRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtDao(1, "Court1"))).anyTimes();
     }
 

@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.database.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 
@@ -30,8 +31,8 @@ import java.util.List;
  * @author Rakesh Lakhani
  * @version $Id: ActiveCasesInRoomQuery.java,v 1.3 2005/11/17 10:55:48 bzjrnl Exp $
  */
-
-public class ActiveCasesInRoomQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class ActiveCasesInRoomQuery extends AbstractControllerBean {
     /** Logger object. */
     private static final Logger LOG = LoggerFactory.getLogger(ActiveCasesInRoomQuery.class);
 
@@ -40,6 +41,7 @@ public class ActiveCasesInRoomQuery {
     private XhbScheduledHearingRepository xhbScheduledHearingRepository;
 
     public ActiveCasesInRoomQuery(final EntityManager entityManager) {
+        super();
         this.entityManager = entityManager;
     }
 
@@ -47,6 +49,12 @@ public class ActiveCasesInRoomQuery {
         XhbScheduledHearingRepository xhbScheduledHearingRepository) {
         this(entityManager);
         this.xhbScheduledHearingRepository = xhbScheduledHearingRepository;
+    }
+
+    @Override
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbScheduledHearingRepository = null;
     }
 
     /**
@@ -74,7 +82,7 @@ public class ActiveCasesInRoomQuery {
     }
 
     private XhbScheduledHearingRepository getXhbScheduledHearingRepository() {
-        if (xhbScheduledHearingRepository == null) {
+        if (xhbScheduledHearingRepository == null || !isEntityManagerActive()) {
             xhbScheduledHearingRepository = new XhbScheduledHearingRepository(entityManager);
         }
         return xhbScheduledHearingRepository;

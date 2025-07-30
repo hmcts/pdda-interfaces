@@ -14,7 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings("PMD.ConstructorCallsOverridableMethod")
 @Entity(name = "XHB_COURTEL_LIST")
 @NamedQuery(name = "XHB_COURTEL_LIST.findByXmlDocumentId",
     query = "SELECT o from XHB_COURTEL_LIST o WHERE o.xmlDocumentId = :xmlDocumentId "
@@ -80,6 +80,7 @@ public class XhbCourtelListDao extends AbstractVersionedDao implements Serializa
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCourtelListId();
     }

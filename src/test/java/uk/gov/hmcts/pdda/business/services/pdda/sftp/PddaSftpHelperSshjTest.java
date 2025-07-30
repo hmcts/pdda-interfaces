@@ -24,6 +24,7 @@ import java.nio.charset.Charset;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 class PddaSftpHelperSshjTest {
 
@@ -74,11 +75,11 @@ class PddaSftpHelperSshjTest {
         setupFiles();
         try {
             pddaSftpHelperSshj.sftpFetch(sftpConfig2.getSshjSftpClient(),
-                sftpConfig2.getActiveRemoteFolder(), new BaisXhibitValidation(null));
+                sftpConfig2.getActiveRemoteFolder(), new BaisXhibitValidation(null), null);
             assertNotNull(sftpConfig2.getSshjSftpClient(), "SFTPClient should not be null");
 
             pddaSftpHelperSshj.sftpFetch(sftpConfig2.getSshjSftpClient(),
-                sftpConfig2.getActiveRemoteFolder(), new BaisCpValidation(null));
+                sftpConfig2.getActiveRemoteFolder(), new BaisCpValidation(null), null);
             assertNotNull(sftpConfig2.getSshjSftpClient(), "SFTPClient should not be null");
         } catch (IOException e) {
             LOG.error("Error fetching files", e);

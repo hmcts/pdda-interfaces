@@ -5,6 +5,7 @@ import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -40,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * 
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PublicDisplayQueryLogEntryTest {
 
@@ -47,6 +49,8 @@ class PublicDisplayQueryLogEntryTest {
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
     private static final String TEST_XML =
         "<testNode><testChildNode>courtroomname</testChildNode></testNode>";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private PublicDisplayValue mockPublicDisplayValue;
@@ -57,9 +61,18 @@ class PublicDisplayQueryLogEntryTest {
     @Mock
     private XhbCourtLogEventDescRepository mockXhbCourtLogEventDescRepository;
 
+    @Mock
+    protected EntityManager mockEntityManager;
+
     @TestSubject
     private final PublicDisplayQueryLogEntry classUnderTest =
         new PublicDisplayQueryLogEntry(EasyMock.createMock(EntityManager.class));
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
+    }
 
     @Test
     void testPopulateEventData() {
@@ -71,13 +84,15 @@ class PublicDisplayQueryLogEntryTest {
         xhbCourtLogEntryDaos.add(xhbCourtLogEntryDao);
         xhbCourtLogEntryDaos.add(xhbCourtLogEntryDao);
 
-        EasyMock.expect(mockXhbCourtLogEntryRepository.findByCaseId(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbCourtLogEntryRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtLogEntryDaos);
 
         XhbCourtLogEventDescDao xhbCourtLogEventDescDao = new XhbCourtLogEventDescDao();
         xhbCourtLogEventDescDao.setEventType(30_300);
 
-        EasyMock.expect(mockXhbCourtLogEventDescRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbCourtLogEventDescRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbCourtLogEventDescDao));
         EasyMock.expectLastCall().times(2);
 
@@ -109,6 +124,54 @@ class PublicDisplayQueryLogEntryTest {
     void testGetXhbCourtRoomRepository() {
         assertInstanceOf(XhbCourtRoomRepository.class, classUnderTest.getXhbCourtRoomRepository(),
             NOT_INSTANCE);
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtLogEntryRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtLogEventDescRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCaseRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+
+        // Use reflection to check the private field
+        field = PublicDisplayQueryLogEntry.class.getDeclaredField("xhbCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 
 }

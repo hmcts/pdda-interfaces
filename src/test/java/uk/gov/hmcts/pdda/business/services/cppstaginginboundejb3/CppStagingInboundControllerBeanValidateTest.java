@@ -38,8 +38,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * CppStagingInboundControllerBeanValidateTest.
  */
+@SuppressWarnings({"PMD"})
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
 class CppStagingInboundControllerBeanValidateTest {
 
     private static final String EMPTY_STRING = "";
@@ -140,7 +140,7 @@ class CppStagingInboundControllerBeanValidateTest {
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
 
-        EasyMock.expect(mockValidationResult.isValid()).andReturn(false);
+        EasyMock.expect(mockValidationResult.isValid()).andReturn(false).anyTimes();
 
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbClobRepository);
@@ -215,9 +215,10 @@ class CppStagingInboundControllerBeanValidateTest {
         EasyMock.expect(
             mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courts);
-        EasyMock.expect(mockValidationResult.isValid()).andReturn(true);
+        EasyMock.expect(mockValidationResult.isValid()).andReturn(true).anyTimes();
 
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbCourtRepository);
@@ -276,7 +277,8 @@ class CppStagingInboundControllerBeanValidateTest {
         expectGetEntityManager(mockXhbConfigPropRepository);
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
-        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyName(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbConfigPropRepository.findByPropertyNameSafe(EasyMock.isA(String.class)))
             .andReturn(returnList);
     }
 
@@ -284,7 +286,7 @@ class CppStagingInboundControllerBeanValidateTest {
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
         expectGetEntityManager(mockXhbClobRepository);
-        EasyMock.expect(mockXhbClobRepository.findById(dao.getClobId()))
+        EasyMock.expect(mockXhbClobRepository.findByIdSafe(dao.getClobId()))
             .andReturn(Optional.of(clobObj));
     }
     

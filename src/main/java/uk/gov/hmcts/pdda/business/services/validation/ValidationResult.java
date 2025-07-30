@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.validation;
 
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface ValidationResult {
     /**
      * isValid.

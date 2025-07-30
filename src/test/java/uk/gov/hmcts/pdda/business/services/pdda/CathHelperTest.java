@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 class CathHelperTest {
 
     private static final String EMPTY_STRING = "";
@@ -202,7 +202,7 @@ class CathHelperTest {
         Optional<XhbClobDao> xhbClobDao =
             Optional.of(DummyFormattingUtil.getXhbClobDao(1L, "test"));
 
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
         // Run
         boolean result = testUpdateAndSend(xhbXmlDocumentDaoList);

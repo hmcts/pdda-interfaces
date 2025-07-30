@@ -61,6 +61,7 @@ public class XhbCppFormattingMergeDao extends AbstractVersionedDao implements Se
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCppFormattingMergeId();
     }

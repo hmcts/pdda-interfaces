@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
@@ -17,7 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class PublicDisplayQueryLogEntry {
+@SuppressWarnings("PMD")
+public class PublicDisplayQueryLogEntry extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQueryLogEntry.class);
     
@@ -25,9 +27,8 @@ public class PublicDisplayQueryLogEntry {
     private static final Integer LONG_ADJOURN = 30_200;
     private static final Integer CASE_CLOSED = 30_300;
     private static final Integer RESUME = 10_500;
-    private final Integer[] validEventTypes = {SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME};
+    private static final Integer[] validEventTypes = {SHORT_ADJOURN, LONG_ADJOURN, CASE_CLOSED, RESUME};
 
-    private EntityManager entityManager;
     private XhbCourtLogEntryRepository xhbCourtLogEntryRepository;
     private XhbCourtLogEventDescRepository xhbCourtLogEventDescRepository;
     protected XhbCaseRepository xhbCaseRepository;
@@ -35,7 +36,7 @@ public class PublicDisplayQueryLogEntry {
     protected XhbCourtRoomRepository xhbCourtRoomRepository;
 
     protected PublicDisplayQueryLogEntry(EntityManager entityManager) {
-        setEntityManager(entityManager);
+        super(entityManager);
     }
 
     protected PublicDisplayQueryLogEntry(EntityManager entityManager,
@@ -46,17 +47,20 @@ public class PublicDisplayQueryLogEntry {
         this.xhbCourtLogEventDescRepository = xhbCourtLogEventDescRepository;
     }
 
-    private void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
-    protected EntityManager getEntityManager() {
-        return entityManager;
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCourtLogEntryRepository = null;
+        xhbCourtLogEventDescRepository = null;
+        xhbCaseRepository = null;
+        xhbCourtSiteRepository = null;
+        xhbCourtRoomRepository = null;
     }
 
     protected void populateEventData(PublicDisplayValue result, Integer caseId) {
         LOG.debug("populateEventData({},{})", result, caseId);
-        List<XhbCourtLogEntryDao> courtLogEntryDaos = getXhbCourtLogEntryRepository().findByCaseId(caseId);
+        List<XhbCourtLogEntryDao> courtLogEntryDaos =
+            getXhbCourtLogEntryRepository().findByCaseIdSafe(caseId);
         if (!courtLogEntryDaos.isEmpty()) {
             XhbCourtLogEntryDao courtLogEntryDao = getLogEntry(courtLogEntryDaos);
             if (courtLogEntryDao != null) {
@@ -101,40 +105,40 @@ public class PublicDisplayQueryLogEntry {
 
     private Integer getCourtLogEventType(XhbCourtLogEntryDao courtLogEntryDao) {
         Optional<XhbCourtLogEventDescDao> courtLogEventDescDao =
-            getXhbCourtLogEventDescRepository().findById(courtLogEntryDao.getEventDescId());
+            getXhbCourtLogEventDescRepository().findByIdSafe(courtLogEntryDao.getEventDescId());
         return courtLogEventDescDao.isPresent() ? courtLogEventDescDao.get().getEventType() : null;
     }
 
     private XhbCourtLogEntryRepository getXhbCourtLogEntryRepository() {
-        if (xhbCourtLogEntryRepository == null) {
-            xhbCourtLogEntryRepository = new XhbCourtLogEntryRepository(entityManager);
+        if (xhbCourtLogEntryRepository == null || !isEntityManagerActive()) {
+            xhbCourtLogEntryRepository = new XhbCourtLogEntryRepository(getEntityManager());
         }
         return xhbCourtLogEntryRepository;
     }
 
     private XhbCourtLogEventDescRepository getXhbCourtLogEventDescRepository() {
-        if (xhbCourtLogEventDescRepository == null) {
+        if (xhbCourtLogEventDescRepository == null || !isEntityManagerActive()) {
             xhbCourtLogEventDescRepository = new XhbCourtLogEventDescRepository(getEntityManager());
         }
         return xhbCourtLogEventDescRepository;
     }
 
     protected final XhbCaseRepository getXhbCaseRepository() {
-        if (xhbCaseRepository == null) {
+        if (xhbCaseRepository == null || !isEntityManagerActive()) {
             xhbCaseRepository = new XhbCaseRepository(getEntityManager());
         }
         return xhbCaseRepository;
     }
 
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
     }
 
     protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
             xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;

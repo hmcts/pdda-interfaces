@@ -50,11 +50,14 @@ import static org.junit.jupiter.api.Assertions.fail;
  * 
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PdSetupControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private EntityManager mockEntityManager;
@@ -108,9 +111,11 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.of(courtDao));
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+            .andReturn(Optional.of(courtDao));
         EasyMock
-            .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .expect(
+                mockXhbCourtSiteRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courtSiteList);
 
         List<XhbDisplayLocationDao> displayLocationList;
@@ -120,14 +125,15 @@ class PdSetupControllerBeanTest {
             displayLocationList = (ArrayList<XhbDisplayLocationDao>) getDummyDisplayLocationList();
             EasyMock
                 .expect(
-                    mockXhbDisplayLocationRepository.findByCourtSite(EasyMock.isA(Integer.class)))
+                    mockXhbDisplayLocationRepository
+                        .findByCourtSiteSafe(EasyMock.isA(Integer.class)))
                 .andReturn(displayLocationList);
 
             for (XhbDisplayLocationDao displayLocation : displayLocationList) {
                 displaysList = (ArrayList<XhbDisplayDao>) getDummyDisplayList();
                 EasyMock
                     .expect(mockXhbDisplayRepository
-                        .findByDisplayLocationId(EasyMock.isA(Integer.class)))
+                        .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(displaysList);
             }
         }
@@ -154,7 +160,8 @@ class PdSetupControllerBeanTest {
             EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
             EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             
-            EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
+            EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+                .andReturn(Optional.empty());
             EasyMock.replay(mockXhbCourtRepository);
             EasyMock.replay(mockEntityManager);
             // Run
@@ -173,7 +180,7 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
+        EasyMock.expect(mockXhbCourtRepository.findAllSafe()).andReturn(dummyCourtList);
         replayMocks();
 
         // Run
@@ -223,5 +230,37 @@ class PdSetupControllerBeanTest {
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         return xdList;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
     }
 }

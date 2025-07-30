@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 
@@ -26,18 +27,16 @@ import java.util.List;
  * @author unascribed
  * @version $Id: VipCourtRoomsQuery.java,v 1.4 2006/06/05 12:29:45 bzjrnl Exp $
  */
-
-public class VipCourtRoomsQuery {
+@SuppressWarnings("PMD")
+public class VipCourtRoomsQuery extends AbstractControllerBean {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(VipCourtRoomsQuery.class);
-
-    private EntityManager entityManager;
     private XhbCourtRoomRepository xhbCourtRoomRepository;
     private boolean multiSite;
 
     public VipCourtRoomsQuery(EntityManager entityManager, boolean multiSite) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.multiSite = multiSite;
     }
 
@@ -45,6 +44,12 @@ public class VipCourtRoomsQuery {
         XhbCourtRoomRepository xhbCourtRoomRepository) {
         this(entityManager, multiSite);
         this.xhbCourtRoomRepository = xhbCourtRoomRepository;
+    }
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCourtRoomRepository = null;
     }
 
     /**
@@ -71,10 +76,11 @@ public class VipCourtRoomsQuery {
         return results.toArray(new XhbCourtRoomDao[0]);
     }
 
-    private XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
-            xhbCourtRoomRepository = new XhbCourtRoomRepository(entityManager);
+    protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
+            xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
     }
+
 }

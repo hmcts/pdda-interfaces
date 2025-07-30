@@ -125,6 +125,7 @@ public class XhbRotationSetsDao extends AbstractVersionedDao implements Serializ
             || otherData.getVersion() == null && getVersion() != null;
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getRotationSetId();
     }

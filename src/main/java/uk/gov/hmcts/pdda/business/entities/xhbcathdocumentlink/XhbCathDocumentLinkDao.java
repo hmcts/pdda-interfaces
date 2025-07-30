@@ -53,6 +53,7 @@ public class XhbCathDocumentLinkDao extends AbstractVersionedDao implements Seri
         setCathJsonId(otherData.getCathJsonId());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCathDocumentLinkId();
     }

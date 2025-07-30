@@ -2,9 +2,13 @@
 package uk.gov.hmcts.pdda.business.services.cpp;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
+import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -16,6 +20,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -32,6 +38,12 @@ class AbstractCppInitialProcessingControllerBeanHelpersTest {
     private XhbCourtRepository mockXhbCourtRepository;
     private XhbClobRepository mockXhbClobRepository;
     private XhbBlobRepository mockXhbBlobRepository;
+
+    @Mock
+    private EntityTransaction mockTransaction;
+
+    @Mock
+    private Query mockQuery;
 
     @TestSubject
     protected final CppInitialProcessingControllerBean classUnderTest = getClassUnderTest();
@@ -59,9 +71,23 @@ class AbstractCppInitialProcessingControllerBeanHelpersTest {
         return classUnderTest;
     }
 
+    @BeforeEach
+    void setUp() {
+        EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTransaction).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes(); // <== moved here
+        EasyMock.expect(mockEntityManager.createNamedQuery("XHB_CONFIG_PROP.findByPropertyName"))
+            .andReturn(mockQuery).anyTimes();
+
+        EasyMock.expect(mockTransaction.isActive()).andReturn(false).anyTimes();
+        EasyMock.expect(mockQuery.getResultList()).andReturn(Collections.emptyList()).anyTimes();
+
+        EasyMock.replay(mockEntityManager, mockTransaction);
+    }
+
+
+
     @Test
     void testGetCppStagingInboundControllerBean() {
-        expectEntityManagerIsOpen();
         expectRepositoryIsOpen(mockXhbConfigPropRepository);
         expectRepositoryIsOpen(mockXhbCourtRepository);
         expectRepositoryIsOpen(mockXhbClobRepository);
@@ -72,14 +98,8 @@ class AbstractCppInitialProcessingControllerBeanHelpersTest {
 
     @Test
     void testGetCppListControllerBean() {
-        expectEntityManagerIsOpen();
         assertInstanceOf(CppListControllerBean.class, classUnderTest.getCppListControllerBean(),
             NOT_INSTANCE);
-    }
-
-    private void expectEntityManagerIsOpen() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
     }
     
     @SuppressWarnings("rawtypes")

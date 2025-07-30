@@ -71,6 +71,7 @@ public class XhbPublicNoticeDao extends AbstractVersionedDao implements Serializ
         super.setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getPublicNoticeId();
     }
