@@ -42,8 +42,7 @@ import java.util.stream.Collectors;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings({"squid:S6813", "squid:S1948", "squid:S112",
-    "PMD.PreserveStackTrace", "PMD.AvoidThrowingRawExceptionTypes"})
+@SuppressWarnings("PMD")
 public class OAuth2Helper implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -175,10 +174,14 @@ public class OAuth2Helper implements Serializable {
             String response = httpResponse.body().toString();
             LOG.info("Response: {}", response);
             return response;
-        } catch (IOException | InterruptedException | RuntimeException exception) {
-            LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Re-interrupt
+            LOG.error("Thread was interrupted during sendAuthenticationRequest()", e);
+            return EMPTY_STRING;
+        } catch (IOException | RuntimeException e) {
+            LOG.error("Error in sendAuthenticationRequest()", e);
+            return EMPTY_STRING;
         }
-        return EMPTY_STRING;
     }
 
     private String getAccessTokenFromResponse(String response) {
