@@ -90,6 +90,56 @@
 								</cs:Defendant>
 							</cs:Defendants>
 						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2020-01-21</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>92AD685737</cs:ProsecutingReference>
+							</cs:Prosecution>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameSurname>Van</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Sri</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>86GD2873322</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="0">
+											<cs:OffenceStatement>Attempted theft</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="HC57001" IndictmentCountNumber="0">
+											<cs:CRESTchargeID>453S00649408</cs:CRESTchargeID>
+											<cs:OffenceStatement>Manslaughter on grounds of diminished responsibility</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameSurname>CPPSECOND</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>Another</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="0">
+											<cs:OffenceStatement>Attempted theft</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="HC57001" IndictmentCountNumber="0">
+											<cs:CRESTchargeID>453S00649408</cs:CRESTchargeID>
+											<cs:OffenceStatement>Manslaughter on grounds of diminished responsibility</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
 					</cs:Hearings>
 				</cs:Sitting>
 			</cs:Sittings>
