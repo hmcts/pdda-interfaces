@@ -42,26 +42,21 @@ import java.util.stream.Collectors;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"squid:S6813", "squid:S1948", "squid:S112",
+    "PMD.PreserveStackTrace", "PMD.AvoidThrowingRawExceptionTypes"})
 public class OAuth2Helper implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
     private static final String EMPTY_STRING = "";
-    private static final String AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token.url";
-    private static final String AZURE_TENANT_ID =
+    private static final String PDDA_AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token-url";
+    private static final String PDDA_AZURE_TENANT_ID =
         "spring.cloud.azure.active-directory.profile.tenant-id";
-    private static final String AZURE_CLIENT_ID =
+    private static final String PDDA_AZURE_CLIENT_ID =
         "spring.cloud.azure.active-directory.credential.client-id";
-    private static final String AZURE_CLIENT_SECRET =
+    private static final String PDDA_AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
-
-    // Values from application.properties
-    //private final String tenantId;
-    //private final String clientId;
-    //private final String clientSecret;
-    //private final String tokenUrl;
     protected Environment env;
 
     public OAuth2Helper() {
@@ -70,10 +65,6 @@ public class OAuth2Helper implements Serializable {
 
     protected OAuth2Helper(Environment env) {
         LOG.info("Environment = {}", env);
-        //this.tenantId = env.getProperty(AZURE_TENANT_ID);
-        //this.clientId = env.getProperty(AZURE_CLIENT_ID);
-        //this.clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
-        //this.tokenUrl = env.getProperty(AZURE_TOKEN_URL);
         this.env = env;
     }
 
@@ -84,19 +75,19 @@ public class OAuth2Helper implements Serializable {
 
 
     protected String getTenantId() {
-        return env.getProperty(AZURE_TENANT_ID);
+        return env.getProperty(PDDA_AZURE_TENANT_ID);
     }
 
     protected String getTokenUrl() {
-        String authTokenUrl = env.getProperty(AZURE_TOKEN_URL);
+        String authTokenUrl = env.getProperty(PDDA_AZURE_TOKEN_URL);
         if (authTokenUrl == null) {
-            LOG.error("Token URL property '{}' not found in environment.", AZURE_TOKEN_URL);
+            LOG.error("Token URL property '{}' not found in environment.", PDDA_AZURE_TOKEN_URL);
             return "";
         }
 
         String tenantId = getTenantId();
         if (tenantId == null) {
-            LOG.error("Tenant ID property '{}' not found in environment.", AZURE_TENANT_ID);
+            LOG.error("Tenant ID property '{}' not found in environment.", PDDA_AZURE_TENANT_ID);
             return "";
         }
 
@@ -105,23 +96,23 @@ public class OAuth2Helper implements Serializable {
 
 
     protected String getClientId() {
-        String clientId = env.getProperty(AZURE_CLIENT_ID);
+        String clientId = env.getProperty(PDDA_AZURE_CLIENT_ID);
         if (clientId == null) {
-            LOG.error("Client ID property '{}' not found in environment.", AZURE_CLIENT_ID);
+            LOG.error("Client ID property '{}' not found in environment.", PDDA_AZURE_CLIENT_ID);
             return "";
         }
-        return env.getProperty(AZURE_CLIENT_ID);
+        return env.getProperty(PDDA_AZURE_CLIENT_ID);
     }
 
     protected String getClientSecret() {
-        String clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
+        String clientSecret = env.getProperty(PDDA_AZURE_CLIENT_SECRET);
         if (clientSecret == null) {
             LOG.error("Client Secret property '{}' not found in environment.",
-                AZURE_CLIENT_SECRET);
+                PDDA_AZURE_CLIENT_SECRET);
             return "";
         }
 
-        return env.getProperty(AZURE_CLIENT_SECRET);
+        return env.getProperty(PDDA_AZURE_CLIENT_SECRET);
     }
 
     public String getAccessToken() {
@@ -162,6 +153,7 @@ public class OAuth2Helper implements Serializable {
             .collect(Collectors.joining("&"));
     }
 
+    @SuppressWarnings("squid:S2142")
     private String sendAuthenticationRequest(HttpRequest request) {
         LOG.info("sendAuthorizationRequest()");
         try {
@@ -174,14 +166,10 @@ public class OAuth2Helper implements Serializable {
             String response = httpResponse.body().toString();
             LOG.info("Response: {}", response);
             return response;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Re-interrupt
-            LOG.error("Thread was interrupted during sendAuthenticationRequest()", e);
-            return EMPTY_STRING;
-        } catch (IOException | RuntimeException e) {
-            LOG.error("Error in sendAuthenticationRequest()", e);
-            return EMPTY_STRING;
+        } catch (IOException | InterruptedException | RuntimeException exception) {
+            LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
         }
+        return EMPTY_STRING;
     }
 
     private String getAccessTokenFromResponse(String response) {

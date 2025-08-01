@@ -7,13 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
-import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerException;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
@@ -105,23 +103,16 @@ class CppInitialProcessingControllerBeanTest
                     EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
                 .andReturn(null);
 
-            mockEntityManager.clear();
-            EasyMock.expectLastCall().anyTimes();
-            expectGetEntityManager(mockXhbCppListRepository);
-            expectGetEntityManager(mockXhbCourtRepository);
-            expectGetEntityManager(mockXhbFormattingRepository);
-            expectGetEntityManager(mockXhbXmlDocumentRepository);
             mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
             EasyMock
                 .expect(
                     mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
                 .andReturn(xhbCourtDaoList);
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
-            mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
-
+            
             mockListNodesHelper.processClobData(EasyMock.isA(String.class));
             EasyMock.expectLastCall().anyTimes();
 
@@ -140,7 +131,7 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
                 BATCH_USERNAME);
-
+            
         } catch (CppStagingInboundControllerException | ValidationException exception) {
             fail(exception);
         }
@@ -182,11 +173,12 @@ class CppInitialProcessingControllerBeanTest
         XhbCppFormattingDao xcf = DummyFormattingUtil.getXhbCppFormattingDao();
 
         try {
+            EasyMock.expect(mockXhbCppStagingInboundRepository.getEntityManager())
+                .andReturn(mockEntityManager).anyTimes();
             EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             mockEntityManager.clear();
-            EasyMock.expectLastCall().anyTimes();
-            expectGetEntityManager(mockXhbCppFormattingRepository);
-            expectGetEntityManager(mockXhbFormattingRepository);
+            EasyMock.expectLastCall().times(2);
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
             EasyMock.expect(mockCppStagingInboundControllerBean
@@ -218,10 +210,10 @@ class CppInitialProcessingControllerBeanTest
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
-
+            
             mockListNodesHelper.processClobData(EasyMock.isA(String.class));
             EasyMock.expectLastCall().anyTimes();
-
+            
             EasyMock.expect(mockCppStagingInboundControllerBean.getNextValidatedDocument())
                 .andReturn(validatedDocList);
             EasyMock.expect(
@@ -350,9 +342,10 @@ class CppInitialProcessingControllerBeanTest
         invalidXcsi.setValidationStatus(CppStagingInboundHelper.VALIDATION_STATUS_NOTPROCESSED);
         invalidXcsi.setProcessingStatus(null);
 
+        EasyMock.expect(mockXhbCppStagingInboundRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         mockEntityManager.clear();
-        EasyMock.expectLastCall().anyTimes();
+        EasyMock.expectLastCall();
         EasyMock
             .expect(mockCppStagingInboundControllerBean.getClobXmlAsString(invalidXcsi.getClobId()))
             .andReturn(DAILY_LIST_XML);
@@ -452,21 +445,19 @@ class CppInitialProcessingControllerBeanTest
                 EasyMock.isA(Integer.class), EasyMock.isA(String.class),
                 EasyMock.isA(LocalDateTime.class), EasyMock.isA(LocalDateTime.class)))
             .andReturn(null);
-        expectGetEntityManager(mockXhbCppListRepository);
-        expectGetEntityManager(mockXhbCourtRepository);
-        expectGetEntityManager(mockXhbFormattingRepository);
-        expectGetEntityManager(mockXhbXmlDocumentRepository);
+        
+        EasyMock.expect(mockXhbCppListRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         mockXhbCppListRepository.save(EasyMock.isA(XhbCppListDao.class));
         EasyMock
             .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
-        mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
         mockListNodesHelper.processClobData(EasyMock.isA(String.class));
         EasyMock.expectLastCall().anyTimes();
-
+        
         replayMocks();
 
         // Run
@@ -480,9 +471,5 @@ class CppInitialProcessingControllerBeanTest
         verifyMocks();
     }
 
-    @SuppressWarnings("rawtypes")
-    private void expectGetEntityManager(AbstractRepository mockRepository) {
-        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
-    }
 
 }

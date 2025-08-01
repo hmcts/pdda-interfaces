@@ -12,7 +12,6 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @SuppressWarnings("unchecked")
 @Repository
@@ -79,14 +78,6 @@ public class XhbCppStagingInboundRepository extends AbstractRepository<XhbCppSta
         Query query = getEntityManager()
             .createNamedQuery("XHB_CPP_STAGING_INBOUND.findUnrespondedCPPMessages");
         return query.getResultList();
-    }
-    
-    public Optional<XhbCppStagingInboundDao> findByClobId(Long clobId) {
-        LOG.debug("findByClobId({})", clobId);
-        Query query = getEntityManager().createNamedQuery("XHB_CPP_STAGING_INBOUND.findByClobId");
-        query.setParameter("clobId", clobId);
-        List<XhbCppStagingInboundDao> resultList = query.getResultList();
-        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
     }
     
     public List<XhbCppStagingInboundDao> findDocumentByDocumentName(String documentName) {

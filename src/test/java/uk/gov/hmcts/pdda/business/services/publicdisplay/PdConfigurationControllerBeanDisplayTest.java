@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
-import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -49,6 +47,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -72,7 +71,7 @@ class PdConfigurationControllerBeanDisplayTest {
     private static final Integer DISPLAY_DOCUMENT_ID = 90;
     private static final String YES = "Y";
     private static final String DAILYLIST = "DailyList";
-    
+
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
@@ -134,31 +133,8 @@ class PdConfigurationControllerBeanDisplayTest {
         // Force override of the helper with your mock
         Mockito.doReturn(mockDisplayRotationSetDataHelper).when(classUnderTest)
             .getDisplayRotationSetDataHelper();
-        Mockito.doReturn(mockXhbDisplayDocumentRepository)
-            .when(classUnderTest)
-            .getXhbDisplayDocumentRepository();
-        Mockito.when(mockXhbDisplayDocumentRepository.getEntityManager())
-            .thenReturn(mockEntityManager);
-        Mockito.when(mockXhbDisplayDocumentRepository.findAll()).thenReturn(List.of(
-            DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
-            DummyPublicDisplayUtil.getXhbDisplayDocumentDao()
-        ));
-
-        
-        @SuppressWarnings("unchecked")
-        TypedQuery<XhbDisplayDocumentDao> mockQuery = Mockito.mock(TypedQuery.class);
-
-        List<XhbDisplayDocumentDao> dummyList = List.of(
-            DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
-            DummyPublicDisplayUtil.getXhbDisplayDocumentDao()
-        );
-
-        Mockito.when(mockXhbDisplayDocumentRepository.getEntityManager())
-               .thenReturn(mockEntityManager);
-        Mockito.when(mockEntityManager.createQuery(Mockito.anyString(), Mockito.eq(XhbDisplayDocumentDao.class)))
-               .thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(dummyList);
     }
+
 
     @BeforeAll
     public static void setUp() {
@@ -166,6 +142,16 @@ class PdConfigurationControllerBeanDisplayTest {
         Mockito.mockStatic(RotationSetMaintainHelper.class);
         Mockito.mockStatic(DisplayConfigurationHelper.class);
         Mockito.mockStatic(PublicDisplayActivationHelper.class);
+    }
+
+    @BeforeEach
+    public void stubCreateQuery() {
+        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList())
+            .thenReturn(List.of(DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
+                DummyPublicDisplayUtil.getXhbDisplayDocumentDao()));
+
     }
 
     @AfterAll
@@ -192,20 +178,21 @@ class PdConfigurationControllerBeanDisplayTest {
 
     @Test
     void testGetDisplayDocuments() {
-        XhbDisplayDocumentDao doc = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
-        List<XhbDisplayDocumentDao> dummyList = List.of(doc, doc);
+        // Setup
+        List<XhbDisplayDocumentDao> dummyList = new ArrayList<>();
+        dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
+        dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
 
-        Mockito.when(mockXhbDisplayDocumentRepository.findAll()).thenReturn(dummyList);
+        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(dummyList);
 
+        // Run method
         XhbDisplayDocumentDao[] displayDocsArray = classUnderTest.getDisplayDocuments();
 
-        System.out.println("Display documents: " + displayDocsArray.length);
-
-        assertEquals(2, displayDocsArray.length);
-        assertEquals(doc, displayDocsArray[0]);
-        assertEquals(doc, displayDocsArray[1]);
+        // Check results
+        assertArrayEquals(dummyList.toArray(), displayDocsArray, EQUALS);
     }
-
 
 
     @SuppressWarnings("PMD.UnnecessaryVarargsArrayCreation")
@@ -236,10 +223,6 @@ class PdConfigurationControllerBeanDisplayTest {
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
         xhbRotationSetsDao.setCourtId(COURT_ID);
 
-        expectGetEntityManager(mockXhbDisplayRepository);
-        expectGetEntityManager(mockXhbCourtRepository);
-        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
-        
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
         String courtName = "Test Court Name";
@@ -305,9 +288,5 @@ class PdConfigurationControllerBeanDisplayTest {
         assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
     }
 
-    @SuppressWarnings("rawtypes")
-    private void expectGetEntityManager(AbstractRepository mockRepository) {
-        Mockito.when(mockRepository.getEntityManager()).thenReturn(mockEntityManager);
-    }
 
 }
