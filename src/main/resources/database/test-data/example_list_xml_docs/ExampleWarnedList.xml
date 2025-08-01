@@ -45,7 +45,7 @@
 					<cs:Notes>TEST</cs:Notes>
 					<cs:Cases>
 						<cs:Case>
-							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:CaseNumber>1234567890</cs:CaseNumber>
 							<cs:CaseArrivedFrom>
 								<cs:OriginatingCourt>
 									<cs:CourtHouseCode>TEST</cs:CourtHouseCode>
@@ -141,7 +141,7 @@
 										</apd:CitizenNameRequestedName>
 										<cs:IsMasked>no</cs:IsMasked>
 									</cs:PersonalDetails>
-									<cs:URN>TEST</cs:URN>
+									<cs:URN>0987654321</cs:URN>
 									<cs:PrisonerID>TEST</cs:PrisonerID>
 									<cs:PrisonLocation>
 										<cs:Location>TEST</cs:Location>
