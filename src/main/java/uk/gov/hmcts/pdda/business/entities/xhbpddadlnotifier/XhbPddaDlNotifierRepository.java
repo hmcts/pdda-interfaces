@@ -31,7 +31,7 @@ public class XhbPddaDlNotifierRepository extends AbstractRepository<XhbPddaDlNot
 
     /**
      * findByCourtAndLastRunDate.
-     * 
+
      * @return List
      */
     @SuppressWarnings("unchecked")

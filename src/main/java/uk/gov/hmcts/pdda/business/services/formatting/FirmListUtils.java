@@ -92,7 +92,7 @@ public final class FirmListUtils {
     
     /**
      * Sorts the court list items depending on their sitting date.
-     * 
+
      * @param results original array
      * @return the sorted results
      */

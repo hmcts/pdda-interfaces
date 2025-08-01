@@ -5,22 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
+
  * Title: CSExceptionImpl.
- * </p>
- * <p>
+
+
  * Description: Implementation class for CSExeption interface. Base exception class for
  * CSRecoverableException and CSUnrecoverableException in CS Hub framework. Contains implementations
  * for interface methods which can be overidden by exception sub classes. Allows additional messages
  * to be provided both for the user (use of Message class) and the developer (String errorMessage).
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version 1.0
  */
@@ -46,7 +45,7 @@ public class CsExceptionImpl implements CsException, Serializable {
     /**
      * This requires implementation but not called. Potential calling classes extend Exception so
      * deal with cause differently.
-     * 
+
      * @return Throwable
      */
     @Override
@@ -64,7 +63,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get message.
-     * 
+
      * @return String: This is a temp implement and will be overridden
      */
     @Override
@@ -74,7 +73,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get user message.
-     * 
+
      * @return String the message for user of application
      */
     @Override
@@ -84,7 +83,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get user message.
-     * 
+
      * @return String[] the message for user of application
      */
     @Override
@@ -100,7 +99,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get user message.
-     * 
+
      * @return Message the message for user of application or null if not present
      */
     @Override
@@ -113,7 +112,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get user message.
-     * 
+
      * @return Message[] the messages for user of application
      */
     @Override
@@ -127,7 +126,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Add additional message.
-     * 
+
      * @param message Message
      */
     public void addMessage(Message message) {
@@ -136,7 +135,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Add additional message.
-     * 
+
      * @param errorKey String
      */
     public void addMessage(String errorKey) {
@@ -145,7 +144,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Add additional message.
-     * 
+
      * @param errorKey String
      * @param parameters ObjectArray
      */
@@ -155,7 +154,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Gets the logged flag.
-     * 
+
      * @return boolean
      */
     @Override
@@ -165,7 +164,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Sets the logged flag.
-     * 
+
      * @param isLogged true indicates that the exception has been logged
      */
     @Override
@@ -175,7 +174,7 @@ public class CsExceptionImpl implements CsException, Serializable {
 
     /**
      * Get error Id.
-     * 
+
      * @return the error ID of this exception instance
      */
     @Override

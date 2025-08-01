@@ -43,19 +43,18 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * <p>
+
  * Title: DefaultDisplayConfigurationReaderTest Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @ExtendWith(MockitoExtension.class)

@@ -32,7 +32,7 @@ public class XhbRefHearingTypeRepository extends AbstractRepository<XhbRefHearin
 
     /**
      * findByHearingType.
-     * 
+
      * @return XhbRefHearingTypeDao
      */
     public Optional<XhbRefHearingTypeDao> findByHearingType(Integer courtId, String hearingTypeCode,

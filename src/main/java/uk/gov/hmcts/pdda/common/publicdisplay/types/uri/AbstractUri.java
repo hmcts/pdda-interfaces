@@ -6,30 +6,27 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * <p>
+
  * Title: AbstractURI.
- * </p>
- * <p>
+
+
  * Description: A Unique Resource Identifier is used for accessing a specific item of data in a
  * manner which can be identified as a String. In the case of Public Displays this string is of the
  * format (in extended BNF notation):
- * </p>
- * 
+
  * <pre>
  *         pd://document:&lt;courtId&gt;/&lt;documentType&gt;/&lt;locale&gt;:[&lt;courtRoomId&gt;,]+
  *         pd://display/&lt;courthouseName&gt;/&lt;courtSiteCode&gt;/&lt;location&gt;/&lt;display&gt;
  * </pre>
- * 
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.9 $
  */
@@ -43,7 +40,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Creates a new AbstractURI object.
-     * 
+
      * @param cachedUri String
      * @pre uriType != null
      */
@@ -56,7 +53,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Returns the cached String representation of this URI.
-     * 
+
      * @return the cached String representation of this URI.
      */
     protected String getCachedUri() {
@@ -65,7 +62,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Returns the type of uri this is as a String.
-     * 
+
      * @return the type of URI this is.
      * @post return != null
      */
@@ -74,14 +71,14 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
     /**
      * Returns the locale if any of the URI. Subclasses should either return the default locale or
      * the locale relevant to the URI.
-     * 
+
      * @return the localization of the object this URI points to.
      */
     public abstract Locale getLocale();
 
     /**
      * Comparison method.
-     * 
+
      * @param object object to compare to.
      * @return see Object.compareTo()
      * @pre cachedURI != null
@@ -93,7 +90,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Returns a hashcode for the URI.
-     * 
+
      * @return a hashcode for the URI.
      * @pre cachedURI != null
      */
@@ -104,7 +101,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Returns the URI in String format.
-     * 
+
      * @return the URI as a string.
      * @pre cachedURI != null
      */
@@ -115,7 +112,7 @@ public abstract class AbstractUri implements Serializable, Comparable<Object> {
 
     /**
      * Provides object comparison.
-     * 
+
      * @param obj the object to compare with.
      * @return true if they are semantically equal.
      * @pre obj instanceof AbstractURI

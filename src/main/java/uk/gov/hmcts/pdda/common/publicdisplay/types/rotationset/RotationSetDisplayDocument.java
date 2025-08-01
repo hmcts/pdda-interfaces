@@ -5,28 +5,19 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayDocumentUri;
 import java.io.Serializable;
 
 /**
- * <p>
+
  * Title: A Display Document as part of a Rotation Set.
- * </p>
- * 
- * <p>
+
  * Description:
- * </p>
- * 
- * <p>
+
  * When a Display Document 'becomes' part of a rotation set it has a page delay associated with it.
  * This page delay is how long that the page(s) of the Display Document are (each) displayed on the
  * browser when it is part of the Rotation Set.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -43,7 +34,7 @@ public class RotationSetDisplayDocument implements Serializable {
     /**
      * Construct an instance of this class for inclusion in a <code>DisplayRotationSetData</code>
      * instance.
-     * 
+
      * @param displayDocumentUri The display document.
      * @param pageDelay The time that a page of the document is displayed.
      */
@@ -54,7 +45,7 @@ public class RotationSetDisplayDocument implements Serializable {
 
     /**
      * Get details of the Display Document.
-     * 
+
      * @return An instance of DisplayDocumentURI with details of the Display Document as part of the
      *         overall Display Rotation Set.
      */
@@ -64,7 +55,7 @@ public class RotationSetDisplayDocument implements Serializable {
 
     /**
      * Get how long each page of the document as rendered should be shown.
-     * 
+
      * @return the time in ?seconds?
      */
     public long getPageDelay() {
@@ -73,9 +64,9 @@ public class RotationSetDisplayDocument implements Serializable {
 
     /**
      * Indicates whether some other object is "equal to" this one.
-     * 
+
      * @param obj the reference object with which to compare.
-     * 
+
      * @return true if this object is the same as the obj argument; false otherwise.
      */
     @Override
@@ -90,9 +81,9 @@ public class RotationSetDisplayDocument implements Serializable {
 
     /**
      * Get the hashcode for this object.
-     * 
+
      * @return This object's hashcode.
-     * 
+
      * @see java.lang.Object.hashCode
      */
     @Override
@@ -102,7 +93,7 @@ public class RotationSetDisplayDocument implements Serializable {
 
     /**
      * Get an human readable string representation of the rotation set display document.
-     * 
+
      * @return String
      */
     @Override
@@ -115,7 +106,7 @@ public class RotationSetDisplayDocument implements Serializable {
     /**
      * For the purposes of more efficient debugging, appends the string representation to the supplied
      * buffer.
-     * 
+
      * @param buffer The buffer to append to.
      * @param lineIndent The indent to prepend to the string representation.
      */

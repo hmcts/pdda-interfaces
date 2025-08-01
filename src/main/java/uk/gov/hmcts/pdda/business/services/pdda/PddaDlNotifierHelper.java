@@ -19,19 +19,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: PDDADlNotifierHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */

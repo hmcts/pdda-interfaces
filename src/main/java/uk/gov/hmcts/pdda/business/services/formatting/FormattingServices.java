@@ -24,20 +24,19 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.xpath.XPathExpressionException;
 
 /**
- * <p>
+
  * Title: Formatting of xml using passed in parameters consisting of a number of xsls.
- * </p>
- * <p>
+
+
  * Description: An XML pipeline is created to transform the inputted xml into formatted xml/pdf
  * depending on the MimeType parameter.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2004
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version $Id: FormattingServices.java,v 1.14 2014/06/20 16:49:28 atwells Exp $
  */
@@ -60,7 +59,7 @@ public class FormattingServices extends FormattingServicesProcessing {
     /**
      * This method is responsible for transforming the information from the reader using xslts dependant
      * on the FormattingParameters and writes the result to Output stream.
-     * 
+
      * @param formattingValue FormattingValue
      * @throws FormattingException Exception
      */
@@ -98,7 +97,7 @@ public class FormattingServices extends FormattingServicesProcessing {
    
     /**
      * Get the next document for processing.
-     * 
+
      * @return XhbFormattingDAO
      */
     public XhbFormattingDao getNextFormattingDocument() {
@@ -178,7 +177,7 @@ public class FormattingServices extends FormattingServicesProcessing {
 
     /**
      * This is a public method so that it can be used by other areas of the CPP interface.
-     * 
+
      * @param documentType String
      * @return AbstractXmlMergeUtils
      */
@@ -199,7 +198,7 @@ public class FormattingServices extends FormattingServicesProcessing {
 
     /**
      * Returns true if merge is allowed i.e. the time is before the cut off time defined in the db.
-     * 
+
      * @return boolean
      */
     private boolean isMergeAllowed() {

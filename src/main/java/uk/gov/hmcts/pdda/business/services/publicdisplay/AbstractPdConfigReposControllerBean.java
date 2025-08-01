@@ -87,7 +87,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the publicDisplayNotifier object, initialising if currently null.
-     * 
+
      * @return PublicDisplayNotifier
      */
     protected PublicDisplayNotifier getPublicDisplayNotifier() {
@@ -99,7 +99,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbRotationSetsRepository object, initialising if currently null.
-     * 
+
      * @return XhbRotationSetsRepository
      */
     protected XhbRotationSetsRepository getXhbRotationSetsRepository() {
@@ -111,7 +111,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbRotationSetDdRepository object, initialising if currently null.
-     * 
+
      * @return XhbRotationSetDdRepository
      */
     protected XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
@@ -123,7 +123,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayDocumentRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayDocumentRepository
      */
     protected XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
@@ -135,7 +135,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayTypeRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayTypeRepository
      */
     protected XhbDisplayTypeRepository getXhbDisplayTypeRepository() {
@@ -147,7 +147,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayRepository
      */
     protected XhbDisplayRepository getXhbDisplayRepository() {
@@ -159,7 +159,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbCourtSiteRepository object, initialising if currently null.
-     * 
+
      * @return XhbCourtSiteRepository
      */
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
@@ -171,7 +171,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbCourtRoomRepository object, initialising if currently null.
-     * 
+
      * @return XhbCourtRoomRepository
      */
     protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
@@ -183,7 +183,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayLocationRepository
      */
     protected XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
@@ -195,7 +195,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the displayRotationSetDataHelper object, initialising if currently null.
-     * 
+
      * @return DisplayRotationSetDataHelper
      */
     protected DisplayRotationSetDataHelper getDisplayRotationSetDataHelper() {

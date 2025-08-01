@@ -25,7 +25,7 @@ public final class AttributesUtils {
     
     /**
      * getTable.
-     * 
+
      * @param displayDocument DisplayDocument
      * @return the table from the display document data
      */
@@ -143,7 +143,7 @@ public final class AttributesUtils {
 
     /**
      * getNameWithSurnameFirst.
-     * 
+
      * @param item the SummaryByNameValue to check
      * @return get the name with surname first
      */
@@ -162,9 +162,9 @@ public final class AttributesUtils {
 
     /**
      * getDefendantName.
-     * 
+
      * @param item Object
-     * 
+
      * @return the defendant name.
      */
     public static String getDefendantName(Object item) {

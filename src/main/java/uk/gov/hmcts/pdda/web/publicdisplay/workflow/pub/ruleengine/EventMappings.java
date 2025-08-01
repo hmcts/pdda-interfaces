@@ -7,19 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
+
  * Title: Event Mappings.
- * </p>
- * <p>
+
+
  * Description: This class stores arrays of ConditionalDocuments keyed by EventType
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version 1.0
  */
@@ -33,7 +32,7 @@ public class EventMappings {
 
     /**
      * Returns the arrays of Conditional Documents for the given event.
-     * 
+
      * @param eventType EventType
      * @return ConditionalDocument[]. This may be empty but never null.
      */
@@ -46,7 +45,7 @@ public class EventMappings {
 
     /**
      * Add the ConditionalDocument array to the map.
-     * 
+
      * @param eventType EventType
      * @param conditionalDocuments ConditionalDocumentArray
      */

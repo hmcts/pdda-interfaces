@@ -6,20 +6,19 @@ import java.util.Collection;
 /**
  * <p/>
  * Title: Data.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.10 $
  */
@@ -38,7 +37,7 @@ public class Data implements Serializable {
 
     /**
      * Returns true if there is no data in this instance.
-     * 
+
      * @return true if there is no data in this instance.
      */
     public boolean isEmpty() {
@@ -57,7 +56,7 @@ public class Data implements Serializable {
     /**
      * Adds a collection to the data item using the standard key. This method should be used if
      * there is only one iterative data item to store. An example is for the Daily List.
-     * 
+
      * @param table the Collection to store as the simple table.
      */
     public void setTable(Collection<?> table) {
@@ -66,9 +65,9 @@ public class Data implements Serializable {
 
     /**
      * Returns a Collection used to hold simple iterative data.
-     * 
+
      * @return a Collection.
-     * 
+
      * @see #setTable
      */
     public Collection<?> getTable() {

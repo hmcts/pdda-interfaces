@@ -15,7 +15,7 @@ import java.util.Locale;
  * <p/>
  * To change the template for this generated type comment go to Window - Preferences - Java - Code
  * Generation - Code and Comments.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement",
@@ -82,7 +82,7 @@ public final class InitializationService {
 
     /**
      * Whether the service has been initialized.
-     * 
+
      * @return boolean
      */
     public boolean isInitialized() {
@@ -93,7 +93,7 @@ public final class InitializationService {
 
     /**
      * Set the number of workers for initialization.
-     * 
+
      * @param numInitializationWorkers int
      */
     public void setNumInitializationWorkers(int numInitializationWorkers) {
@@ -102,7 +102,7 @@ public final class InitializationService {
 
     /**
      * Set the delay after each initialization.
-     * 
+
      * @param initializationDelay long
      */
     public void setInitializationDelay(long initializationDelay) {
@@ -111,7 +111,7 @@ public final class InitializationService {
 
     /**
      * Set the retry period.
-     * 
+
      * @param retryPeriod long
      */
     public void setRetryPeriod(long retryPeriod) {
@@ -179,7 +179,7 @@ public final class InitializationService {
 
     /**
      * Singleton accessor.
-     * 
+
      * @return InitializationService
      */
     public static InitializationService getInstance() {
@@ -218,7 +218,7 @@ public final class InitializationService {
 
     /**
      * Method checks whether the publicdisplay is running.
-     * 
+
      * @return boolean
      */
     protected boolean checkMidtier() {

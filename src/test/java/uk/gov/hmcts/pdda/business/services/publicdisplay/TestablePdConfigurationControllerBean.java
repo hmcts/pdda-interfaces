@@ -15,19 +15,18 @@ import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDispl
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 /**
- * <p>
+
  * Title: TestablePdConfigurationControllerBean.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2025
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Scott Atwell
  */
 @SuppressWarnings({"PMD"})

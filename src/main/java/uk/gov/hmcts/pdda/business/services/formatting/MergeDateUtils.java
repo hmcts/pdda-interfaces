@@ -31,7 +31,7 @@ public final class MergeDateUtils {
 
     /**
      * Create a calendar object with specific date and time.
-     * 
+
      * @param time String
      * @param date String
      * @return Calendar
@@ -59,7 +59,7 @@ public final class MergeDateUtils {
 
     /**
      * Returns the day in String format.
-     * 
+
      * @param calendar Calendar
      * @return day
      */
@@ -84,7 +84,7 @@ public final class MergeDateUtils {
 
     /**
      * Returns the month in string forward.
-     * 
+
      * @param calendar Calendar
      * @return month
      */
@@ -104,7 +104,7 @@ public final class MergeDateUtils {
 
     /**
      * Method used in IWP that replaces the date section with the date/time that the merge is done.
-     * 
+
      * @param baseDocument Document
      * @throws XPathExpressionException Exception
      */
@@ -141,7 +141,7 @@ public final class MergeDateUtils {
 
     /**
      * Returns true is cpp is after xhibit in iwp and can therefore be replaced.
-     * 
+
      * @param insertBeforeNode Node
      * @param childNodeToMerge Node
      * @return boolean

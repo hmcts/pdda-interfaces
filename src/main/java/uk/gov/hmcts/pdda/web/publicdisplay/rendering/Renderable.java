@@ -6,20 +6,19 @@ import uk.gov.hmcts.pdda.common.publicdisplay.util.Debuggable;
 /**
  * <p/>
  * Title: Something that implements Renderable can be rendered by the rendering component.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  * @see Renderer
@@ -31,9 +30,9 @@ public interface Renderable extends Identifiable, Debuggable {
 
     /**
      * Returns a string name for the type of the renderable.
-     * 
+
      * @return a string name for they type of the renderable.
-     * 
+
      * @post return != null
      * @post return.equals(DOCUMENT) || return.equals(ROTATION_SET)
      */
@@ -41,9 +40,9 @@ public interface Renderable extends Identifiable, Debuggable {
 
     /**
      * A callback for renderers.
-     * 
+
      * @param renderedString the result of the rendering.
-     * 
+
      * @pre renderedString != null
      */
     void setRenderedString(String renderedString);

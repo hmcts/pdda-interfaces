@@ -17,20 +17,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: CppStagingInboundHelper.
- * </p>
- * <p>
+
+
  * Description: Provides and abstract layer between the session facade and the maintainer class. It
  * is used to construct the necessary value objects and contains any business logic.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2019
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Scott Atwell
  * @version 1.0
  */
@@ -123,7 +122,7 @@ public class CppStagingInboundHelper implements Serializable {
 
     /**
      * Description: Returns the latest unprocessed XHB_CPP_STAGING_INBOUND record.
-     * 
+
      * @return List
      * @throws CppStagingInboundControllerException Exception
      */
@@ -164,7 +163,7 @@ public class CppStagingInboundHelper implements Serializable {
 
     /**
      * findUnrespondedCPPMessages.
-     * 
+
      * @return List
      */
     public List<XhbCppStagingInboundDao> findUnrespondedCppMessages() {
@@ -176,7 +175,7 @@ public class CppStagingInboundHelper implements Serializable {
     /**
      * Description: Updates the XHB_CPP_STAGING_INBOUND object provided with a new status for either
      * or both of: ValidationStatus and ProcessingStatus.
-     * 
+
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */

@@ -75,7 +75,7 @@ public final class AppendAttributeFieldsUtils {
 
     /**
      * Append the not before time text.
-     * 
+
      * @param buffer StringBuilder
      * @param time String
      */
@@ -87,7 +87,7 @@ public final class AppendAttributeFieldsUtils {
 
     /**
      * Append the not before judges name.
-     * 
+
      * @param buffer StringBuilder
      * @param name String
      */
@@ -107,7 +107,7 @@ public final class AppendAttributeFieldsUtils {
 
     /**
      * Append the hearing progress.
-     * 
+
      * @param buffer StringBuilder
      * @param hearingProgress int
      */

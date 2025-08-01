@@ -5,7 +5,7 @@ package uk.gov.hmcts.framework.exception;
  * chaining, maintaining the cause and providing getCause() method. Allows additional messages to be
  * provided both for the user (use of Message class) and the developer (String errorMessage).
  * Creation date: (10/4/01 1:15:43 PM)
- * 
+
  * @author: Pete Raymond
  * @author: Kevin Buckthorpe
  * @author: Bal Bhamra
@@ -23,7 +23,7 @@ public class CsRecoverableException extends AbstractCsException {
 
     /**
      * CsRecoverableException.
-     * 
+
      * @param errorKey message for user of application
      * @param logMessage error message for log
      * @param cause original exception caught
@@ -37,7 +37,7 @@ public class CsRecoverableException extends AbstractCsException {
 
     /**
      * CsRecoverableException.
-     * 
+
      * @param errorKey message for user of application
      * @param logMessage error message for log
      */
@@ -50,7 +50,7 @@ public class CsRecoverableException extends AbstractCsException {
 
     /**
      * CsRecoverableException.
-     * 
+
      * @param errorKey message for user of application
      * @param logMessage error message for log
      */
@@ -63,7 +63,7 @@ public class CsRecoverableException extends AbstractCsException {
 
     /**
      * CsRecoverableException.
-     * 
+
      * @param errorKey message for user of application
      * @param logMessage error message for log
      * @param cause original exception caught
@@ -78,7 +78,7 @@ public class CsRecoverableException extends AbstractCsException {
 
     /**
      * Get message.
-     * 
+
      * @return String: the error message for logging
      */
     @Override

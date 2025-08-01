@@ -1,19 +1,18 @@
 package uk.gov.hmcts.framework.jdbc.core;
 
 /**
- * <p>
+
  * Title: Parameter.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author XHIBIT User
  * @version $Id: Parameter.java,v 1.4 2006/06/05 12:30:16 bzjrnl Exp $
  */
@@ -38,7 +37,7 @@ public final class Parameter {
 
     /**
      * Private constructor.
-     * 
+
      * @param sqlType int
      * @param parameterType int
      * @param value Object
@@ -51,7 +50,7 @@ public final class Parameter {
 
     /**
      * Creates an IN parameter for the SQL type.
-     * 
+
      * @param sqlType int
      * @param value Object
      * @return Parameter
@@ -62,7 +61,7 @@ public final class Parameter {
 
     /**
      * Creates an OUT parameter for the SQL type.
-     * 
+
      * @param sqlType int
      * @return Parameter
      */
@@ -72,7 +71,7 @@ public final class Parameter {
 
     /**
      * Creates an IN OUT parameter for the SQL type.
-     * 
+
      * @param sqlType int
      * @param value Object
      * @return Parameter
@@ -83,7 +82,7 @@ public final class Parameter {
 
     /**
      * Returns the SQL type.
-     * 
+
      * @return int
      */
     public int getSqlType() {
@@ -92,7 +91,7 @@ public final class Parameter {
 
     /**
      * Returns the value.
-     * 
+
      * @return Object
      */
     public Object getValue() {
@@ -101,7 +100,7 @@ public final class Parameter {
 
     /**
      * Checks whether a parameter is in type.
-     * 
+
      * @return boolean
      */
     public boolean isIn() {
@@ -110,7 +109,7 @@ public final class Parameter {
 
     /**
      * Checks whether a parameter is out type.
-     * 
+
      * @return boolean
      */
     public boolean isOut() {
@@ -120,7 +119,7 @@ public final class Parameter {
     /**
      * Hibernate needs to be able to handle the Postgres db equivalent of "IS (NOT) DISTINCT TO" so
      * that Strings that are null or empty can be handled correctly.
-     * 
+
      * @param inParam String
      * @return String
      */

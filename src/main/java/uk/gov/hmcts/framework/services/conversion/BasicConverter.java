@@ -13,9 +13,9 @@ import java.util.Locale;
 
 /**
  * Basic Parser implementation.
- * 
- * <p>Other implementations could use this as a base to provide defaults.</p>
- * 
+
+ * Other implementations could use this as a base to provide defaults.</p>
+
  */
 public class BasicConverter extends BasicNumericConverter implements ValueConverter, Serializable {
 
@@ -45,7 +45,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Extract a boolean value from a String. Accepts "true" or "false".
-     * 
+
      * @param value the String to parse.
      */
     @Override
@@ -61,7 +61,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Extract a byte value from a String. Uses Byte.parseByte.
-     * 
+
      * @param value the String to parse.
      */
     @Override
@@ -77,7 +77,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Extract a date value from a String. Uses a SimpleDataFormat("dd/MM/yyyy")
-     * 
+
      * @param value the String to parse.
      */
     @Override
@@ -93,7 +93,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Format a boolean as a String. Returns "true" or "false".
-     * 
+
      * @param value the boolean to format.
      */
     @Override
@@ -103,7 +103,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Format a byte as a String. Returns String.valueOf(value).
-     * 
+
      * @param value the byte to format.
      */
     @Override
@@ -113,7 +113,7 @@ public class BasicConverter extends BasicNumericConverter implements ValueConver
 
     /**
      * Format a Date as a String. Uses a SimpleDataFormat("dd/MM/yyyy")
-     * 
+
      * @param value the Date to format.
      */
     @Override

@@ -25,19 +25,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: RemoteSessionTaskStrategyTest Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
@@ -68,7 +67,7 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Tests RemoteSessionTaskStrategy.init to ensure that the controllerBean is setup as a
-     * FormattingControllerBean
+     * FormattingControllerBean.
      */
     @Test
     void testInitFormattingControllerBean() {
@@ -97,7 +96,7 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Tests RemoteSessionTaskStrategy.init to ensure that the controllerBean is setup as a
-     * CPPInitialProcessingControllerBean
+     * CPPInitialProcessingControllerBean.
      */
     @Test
     void testInitCppInitialProcessingControllerBean() {
@@ -126,7 +125,7 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Tests RemoteSessionTaskStrategy.init to ensure that the controllerBean is setup as a
-     * CppFormattingControllerBean
+     * CppFormattingControllerBean.
      */
     @Test
     void testInitCppFormattingControllerBean() {
@@ -156,7 +155,7 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Tests RemoteSessionTaskStrategy.init to ensure that the controllerBean is setup as a
-     * DailyListNotifierControllerBean
+     * DailyListNotifierControllerBean.
      */
     @Test
     void testInitDailyListNotifierControllerBean() {
@@ -245,9 +244,9 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Creates a Properties object for the purposes of testing.
-     * 
-     * @param remoteHomeClass Value to use for the remoteHome property
-     * @return Properties object
+
+     * @param remoteHomeClass Value to use for the remoteHome property.
+     * @return Properties object.
      */
     private Properties createTestProperties(String remoteHomeClass, String onceADay) {
         Properties testProperties = new Properties();
@@ -266,7 +265,7 @@ class RemoteSessionTaskStrategyTest {
 
     /**
      * Runs the mock tests for executeTask taking in different mocked objects.
-     * 
+
      * @param rt Mocked RemoteTask object.
      */
     private boolean testExecuteTask(RemoteTask rt) {

@@ -32,69 +32,46 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 /**
- * <p>
+
  * Title: XMLServices.
- * </p>
- * <p>
+
+
  * Description: This class handles loading and creation of xml documents.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- *
+
  * @author Faisal Shoukat
  * @version $Id: XMLServicesImpl.java,v 1.42 2009/06/17 10:05:12 hewittm Exp $
- *
+
  *          Change History -
- * 
- *          <p>
+
  *          01/11/02 - JB - generateXMLFromPropSet now handles embedded property sets.
- *          </p>
- * 
- *          <p>
+
  *          22/11/02 - KB - added public Document createDocFromValue( CSValueObject obj ) throws
  *          CSXMLServicesException
- *          </p>
- * 
- *          <p>
+
  *          17/02/03 - AWD - Fixed bug Test Obs Id 49, Test Case 51994
- *          </p>
- * 
- *          <p>
+
  *          17/02/03 - AWD - generateXMLFromPropSet modified to build up an XML DOM document rather
  *          than a StringBuilder. Advantage is that substitution of special markup characters into
  *          entities is handled.
- *          </p>
- *
- *          <P>
+
  *          03/03/03 - AWD - Method added to provide support for XML transformations
- *          </P>
- *          <P>
  *          05/03/03 - JB - Added addCollectionToXMLDoc to generate XML from collections
- *          </P>
- *          <P>
  *          03/04/03 - JB - The transformer now ouputs the XML header
- *          </P>
- *          <P>
  *          03/04/03 - JB - Backed out last change
- *          </P>
- *          <P>
  *          08/04/03 - JB - Another attempt to get the transformXML to output the header without
  *          affecting getStringXML
- *          </P>
- *          <P>
  *          08/05/03 - JB - Various changes to deal with special characters in the XML. Applying
  *          ISO-8859-1 encoding as this handles special chars better.
- *          </P>
- *          <P>
  *          19/11/03 - RL - Changing encoding to UTF-8 as this handles special chars even
  *          better!<br>
  *          Removing XMLTransform as XSLServices should be used
- *          </P>
- *
+
  */
 
 public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
@@ -113,7 +90,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Get singleton instance of XMLServicesImpl.
-     *
+
      * @return XmlServicesImpl
      */
     public static XmlServicesImpl getInstance() {
@@ -122,7 +99,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Convert a object implementing the CSValueObject interface to an xml document.
-     *
+
      * @param obj To work effectively the CSValueObject requires a default public constructor and public
      *        get methods for all vos that are required in the resulting xml document
      * @return Document xml representation of the CSValueObject
@@ -151,7 +128,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Add a collection to the XML document being created.
-     *
+
      * @param doc Document
      * @param xmlToConvert Collection
      * @param tag String
@@ -177,7 +154,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Recursive method to handle embedded property sets.
-     *
+
      * @param doc document that the property map will be added to
      * @param xmlToConvert the properties object which contains the key value pairs
      * @param tag The root element of the xml document
@@ -234,7 +211,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * createDocFromString.
-     *
+
      * @param xmlContent String
      * @return Document
      * @throws CsXmlServicesException Exception
@@ -259,7 +236,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Retrieves the value of an xpath from an xml string.
-     *
+
      * @param xmlString The xml to search
      * @param xpath The xpath to search for
      * @return The value of the xpath
@@ -299,7 +276,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Adds the specified element before the beforeTag in the passed document.
-     *
+
      * @param document Document to which the element is added
      * @param tagName Name of the element that is added
      * @param value Node value of the element

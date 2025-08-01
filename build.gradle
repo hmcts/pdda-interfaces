@@ -21,6 +21,7 @@ plugins {
   id 'war'
   id 'jacoco'
   id 'org.flywaydb.flyway' version '11.10.3'
+  id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'uk.gov.hmcts'
@@ -131,7 +132,7 @@ dependencyCheck {
 
 checkstyle {
   maxWarnings = 0
-  toolVersion = '10.12.7'
+  toolVersion = '10.26.1'
   getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
@@ -143,6 +144,23 @@ pmd {
   ruleSets = []
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
+
+spotless {
+    java {
+        target 'src/**/*.java'
+
+        custom('FixJavadocPtagsAndBlanks', { text ->
+            // 1. Remove lines that only contain * <p> or * </p>
+            text = text.replaceAll(/(?m)^\s*\*\s*<\/?p>\s*$/, '')
+
+            // 2. Remove lines inside JavaDoc blocks that are blank (either truly blank or just `*`)
+            text = text.replaceAll(/(?m)^\s*\*\s*$/, '')
+
+            return text
+        })
+    }
+}
+
 
 
 jacocoTestReport {

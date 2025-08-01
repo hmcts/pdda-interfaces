@@ -19,19 +19,18 @@ import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
- * <p>
+
  * Title: AbstractFormattingRepositories Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)

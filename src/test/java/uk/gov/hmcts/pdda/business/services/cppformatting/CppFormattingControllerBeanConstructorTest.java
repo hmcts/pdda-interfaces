@@ -11,19 +11,18 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
- * <p>
+
  * Title: Cpp List Controller Bean Constructor Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)

@@ -32,14 +32,14 @@ import java.util.Optional;
 
 /**
  * This class wraps the stored procedure that provides the data for the court list document.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
 public class CourtListQuery extends PublicDisplayQuery {
 
     /**
-     * Constructor compiles the query (originally called XHB_PUBLIC_DISPLAY_PKG.GET_COURT_LIST)
+     * Constructor compiles the query (originally called XHB_PUBLIC_DISPLAY_PKG.GET_COURT_LIST).
      */
     public CourtListQuery(EntityManager entityManager) {
         super(entityManager);
@@ -61,11 +61,11 @@ public class CourtListQuery extends PublicDisplayQuery {
 
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param date LocalDateTime
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-     * 
+
      * @return Summary by name data for the specified court rooms
      */
     @Override

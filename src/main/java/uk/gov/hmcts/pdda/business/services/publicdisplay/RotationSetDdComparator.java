@@ -7,23 +7,22 @@ import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 import java.util.Comparator;
 
 /**
- * <p>
+
  * Title: Comparator used to sort RotationSetDisplayDocuments.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * This comparator sorts arrays of <code>RotationSetDisplayDocuments</code> by their 'Ordering'
  * field.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -38,7 +37,7 @@ public final class RotationSetDdComparator implements Comparator<XhbRotationSetD
 
     /**
      * Get a comparator to sort court rooms.
-     * 
+
      * @return A class implementing Comparator able to sort by <code>XhbCourtRoom</code>.
      */
     public static Comparator<XhbRotationSetDdDao> getInstance() {
@@ -48,7 +47,7 @@ public final class RotationSetDdComparator implements Comparator<XhbRotationSetD
     /**
      * Compares two instances of <code>XhbRotationSetDd</code> in order to provide a natural order
      * based on their ordering fields.
-     * 
+
      * @param o1 First instance of <code>XhbRotationSetDd</code> to compare.
      * @param o2 Second instance of <code>XhbRotationSetDd</code> to compare
      * @return as per spec of Comparator interface.
@@ -61,7 +60,7 @@ public final class RotationSetDdComparator implements Comparator<XhbRotationSetD
 
     /**
      * Checks whether the object passed in is equivalent to this class.
-     * 
+
      * @param obj The object check equivalence on.
      * @return true if equivalent.
      */

@@ -11,20 +11,19 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * <p/>
  * Title: The Factory class used to obtain a Renderer.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  * @see Renderer
@@ -47,11 +46,11 @@ public class RendererFactory {
 
     /**
      * Obtain a renderer for a particular Renderable.
-     * 
+
      * @param type a Renderable document.
-     * 
+
      * @return a renderer.
-     * 
+
      * @pre type instanceof DisplayDocument || type instanceof DisplayRotationSet
      * @post type instanceof DisplayDocument implies return instanceof DisplayDocumentRenderer
      * @post type instanceof DisplayRotationSet implies return instanceof RotationSetRenderer

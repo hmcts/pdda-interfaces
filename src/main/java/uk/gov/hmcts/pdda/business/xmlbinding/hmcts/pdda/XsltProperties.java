@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 /**
  * Class XsltProperties.
- * 
+
  * @version $Revision$ $Date$
  */
 public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implements java.io.Serializable {
@@ -29,9 +29,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method addXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @param xsltTransform XsltTransform
      */
     public void addXsltTransform(XsltTransform xsltTransform) {
@@ -40,7 +40,7 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Note: hashCode() has not been overriden.
-     * 
+
      * @param obj Object
      * @return boolean
      */
@@ -72,9 +72,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method getXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @param index int
      * @return XsltTransform
      */
@@ -90,9 +90,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method getXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @return XsltTransform
      */
     public XsltTransform[] getXsltTransform() {
@@ -106,9 +106,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method getXsltTransformCount.
-     * 
-     * 
-     * 
+
+
+
      * @return int
      */
     public int getXsltTransformCount() {
@@ -117,7 +117,7 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method removeAllXsltTransform.
-     * 
+
      */
     public void removeAllXsltTransform() {
         getList().clear();
@@ -125,9 +125,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method removeXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @param index int
      * @return XsltTransform
      */
@@ -139,9 +139,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method setXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @param index int
      * @param xsltTransform XsltTransform
      */
@@ -156,9 +156,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method setXsltTransform.
-     * 
-     * 
-     * 
+
+
+
      * @param xsltTransformArray XsltTransformArray
      */
     public void setXsltTransform(XsltTransform... xsltTransformArray) {
@@ -169,9 +169,9 @@ public class XsltProperties extends AbstractTypeMarshal<XsltTransform> implement
 
     /**
      * Method unmarshal.
-     * 
-     * 
-     * 
+
+
+
      * @param reader Reader
      * @return XsltProperties
      */

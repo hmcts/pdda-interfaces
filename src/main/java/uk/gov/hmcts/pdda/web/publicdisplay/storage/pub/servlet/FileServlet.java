@@ -23,24 +23,23 @@ import java.util.Date;
 /**
  * <p/>
  * Title: The file servlet is responsible for serving up an object for a URI.
- * </p>
+
  * <p/>
  * <p/>
  * Description: The FileServlet is used by the thin client application to retrieve both
  * DisplayRotationSets and DisplayDocuments from the store and display them in their appropriate
  * frames.
- * </p>
+
  * <p/>
  * There are two main methods on the FileServlet, getLas:wq
  * <p/>
- * </p>
+
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.11 $
  */
@@ -57,7 +56,7 @@ public class FileServlet extends HttpServlet {
 
     /**
      * Initialize the servlet.
-     * 
+
      * @throws ServletException (shouldn't be thrown).
      */
     @Override
@@ -73,7 +72,7 @@ public class FileServlet extends HttpServlet {
      * browsers cache.
      * <p/>
      * In this case we look for the object that re
-     * 
+
      * @param request the servlet request.
      * @return a long representation of the object the uri species modification time.
      */
@@ -103,7 +102,7 @@ public class FileServlet extends HttpServlet {
 
     /**
      * The standard request from a browser is the only method currently supported.
-     * 
+
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      * @throws ServletException Exception

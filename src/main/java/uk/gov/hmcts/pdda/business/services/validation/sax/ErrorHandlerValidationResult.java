@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * SAX Error handler for collating and printing errors.
- * 
+
  * @author Fardellwi
  */
 @SuppressWarnings("PMD.LawOfDemeter")

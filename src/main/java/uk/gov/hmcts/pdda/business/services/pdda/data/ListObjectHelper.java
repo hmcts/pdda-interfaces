@@ -30,19 +30,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * <p>
+
  * Title: ListObjectHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author HarrisM
  * @version 1.0
  */
@@ -290,9 +289,7 @@ public class ListObjectHelper implements Serializable {
     private Optional<XhbDefendantDao> validateDefendant(Map<String, String> nodesMap) {
         LOG.info("validateDefendant()");
         if (xhbCourtSiteDao.isPresent() && xhbCaseDao.isPresent()) {
-            Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String firstName = nodesMap.get(FIRSTNAME + ".1");
-            String middleName = nodesMap.get(FIRSTNAME + ".2");
             String surname = nodesMap.get(SURNAME);
             // Correct any invalid data with only a surname populated
             if (firstName == null && surname != null && surname.contains(",")) {
@@ -315,6 +312,8 @@ public class ListObjectHelper implements Serializable {
             LocalDateTime dateOfBirth =
                 parseDateTime(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
             if (firstName != null && surname != null) {
+                Integer courtId = xhbCourtSiteDao.get().getCourtId();
+                String middleName = nodesMap.get(FIRSTNAME + ".2");
                 return dataHelper.validateDefendant(courtId, firstName, middleName, surname, gender,
                     dateOfBirth, publicDisplayHide);
             }

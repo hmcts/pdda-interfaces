@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * <p/>
  * Title: ImageLoader.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
@@ -28,16 +28,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * <code>IMAGE_LOAD_TIMEOUT</code> milliseconds then the thread continues execution and the return
  * value of isImageLoaded() will be false until the image completes loading. If isImageLoaded() is
  * false then the return value of getImage() is undefined.
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  */
@@ -64,7 +63,7 @@ public class ImageLoader implements ImageObserver {
      * Attempt to load an image at the URL supplied, if the image can't be loaded within
      * IMAGE_LOAD_TIMEOUT then return null otherwise return the loaded image. If the useCaching
      * parameter is set then use the internal cache were appropriate.
-     * 
+
      * @param url the URL at which the image can be found.
      * @param useCaching should we use the in built caching.
      */
@@ -77,7 +76,7 @@ public class ImageLoader implements ImageObserver {
      * Attempt to load an image at the URL supplied, if the image can't be loaded within
      * IMAGE_LOAD_TIMEOUT then return null otherwise return the loaded image. If the useCaching
      * parameter is set then use the internal cache were appropriate.
-     * 
+
      * @param url the URL at which the image can be found.
      * @param useCaching should we use the in built caching.
      * @return the loaded image or null if it wasn't loaded.

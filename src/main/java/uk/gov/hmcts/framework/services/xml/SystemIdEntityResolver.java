@@ -5,14 +5,14 @@ import org.xml.sax.InputSource;
 
 /**
  * Entity resolver based on system id.
- * 
+
  * @author pznwc5
  */
 public class SystemIdEntityResolver implements EntityResolver {
 
     /**
      * The method loads resource from the classpath using the system is.
-     * 
+
      * @param publicId Public id
      * @param systemId System id
      */

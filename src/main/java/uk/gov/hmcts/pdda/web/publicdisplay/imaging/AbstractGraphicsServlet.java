@@ -25,20 +25,19 @@ import java.util.Date;
 /**
  * <p/>
  * Title: Abstract Graphics Servlet.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.24 $
  */
@@ -67,9 +66,9 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
      * system is initialized we return the current time and then always return that time for the
      * life of the JVM. This means that we only serve an image to a given browser once in the JVMs
      * lifetime. Our images are not dynamically changing so this suffices.
-     * 
+
      * @param request the HttpServletRequest
-     * 
+
      * @return the modified date as specifed above in milliseconds since 1970 as a long value.
      */
     @Override
@@ -92,7 +91,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
     /**
      * Standard support for doGet(), we only support the GET method. This calls the abstract method
      * doImage() which does all the work, exceptions are caught and rethrown as a ServletException.
-     * 
+
      * @see super#doGet(jakarta.servlet.http.HttpServletRequest,
      *      jakarta.servlet.http.HttpServletResponse)
      */
@@ -109,10 +108,10 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
 
     /**
      * The abstract business method.
-     * 
+
      * @param req Servlet Request
      * @param res Servlet Response
-     * 
+
      * @throws ServletException Exception
      * @throws IOException Exception
      */
@@ -121,11 +120,11 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
 
     /**
      * Load an Image from the given url, waiting until the entire image is loaded.
-     * 
+
      * @param url the URL to use to find the image.
-     * 
+
      * @return the image at the URL
-     * 
+
      * @throws ImageLoadingException if the image could not be loaded.
      */
     Image obtainImage(final URL url) {
@@ -140,7 +139,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
 
     /**
      * Write text on to an image.
-     * 
+
      * @param image the image to write on top of.
      * @param text the text to write.
      * @param xposition offset from the left.
@@ -148,7 +147,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
      * @param size the font size.
      * @param width the width of the produced image.
      * @param fontColor the color of the text.
-     * 
+
      * @return the produced image.
      */
     BufferedImage writeTextOnImage(final Image image, final String text, final int xposition,
@@ -210,7 +209,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
     /**
      * Draws an Image onto a Graphics object at the top left corner and waits until the image is
      * drawn before returning.
-     * 
+
      * @param graphics the Graphics object.
      * @param image the Image to be drawn.
      */

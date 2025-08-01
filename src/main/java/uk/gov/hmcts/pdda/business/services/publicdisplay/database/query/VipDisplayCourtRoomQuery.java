@@ -23,20 +23,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: VIP court rooms for court site query.
- * </p>
- * <p>
+
+
  * Description: This runs the stored procedure that for a given court site, it finds all court rooms
  * configured for the View Information Pages. Information on unassigned cases is also provided.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2005
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version $Id: VIPDisplayCourtRoomQuery.java,v 1.2 2005/11/17 10:55:48 bzjrnl Exp $
  */
@@ -82,9 +81,9 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
 
     /**
      * Returns an array of VIPDisplayConfigurationCourtRoom objects.
-     * 
+
      * @param courtSiteId court site id
-     * 
+
      * @return Collection
      */
     public Collection<VipDisplayConfigurationCourtRoom> getData(Integer courtSiteId) {
@@ -153,7 +152,7 @@ public class VipDisplayCourtRoomQuery extends AbstractControllerBean {
 
     /**
      * Returns boolean for Unassigned Cases.
-     * 
+
      * @return boolean
      */
     public boolean isShowUnassignedCases() {

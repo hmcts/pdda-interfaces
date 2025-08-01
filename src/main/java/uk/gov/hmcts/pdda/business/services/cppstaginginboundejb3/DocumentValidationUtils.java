@@ -101,9 +101,9 @@ public final class DocumentValidationUtils {
      * DailyList_CourtCode_SendDate.xml 2. Firm List: FirmList_CourtCode_SendDate.xml 3. Warned List:
      * WarnedList_CourtCode_SendDate.xml 4. Web Page: WebPage_CourtCode_SendDate.xml. Where: CourtCode
      * is a 3 digit number between 400 and 500 SendDate is a date of the format YYYYMMDDHH24MISS
-     * 
+
      * @param documentName String
-     * 
+
      */
     public static boolean isValidDocumentName(String documentName) {
         String methodName = "isValidDocumentName(" + documentName + METHOD_NAME_SUFFIX;
@@ -156,9 +156,9 @@ public final class DocumentValidationUtils {
 
     /**
      * The incoming CPP document type must be valid, i.e. WP, PD, DL, FL or WL
-     * 
+
      * @param documentType String
-     * 
+
      */
     public static boolean isValidDocumentType(String documentType) {
         String methodName = "isValidDocumentType(" + documentType + METHOD_NAME_SUFFIX;

@@ -36,7 +36,7 @@ public abstract class DisplayDocumentCompiledRendererDelegate
 
     /**
      * This method is implemented by the concret documents to create the html.
-     * 
+
      * @param buffer StringBuilder
      * @param displayDocument DisplayDocument
      */
@@ -45,7 +45,7 @@ public abstract class DisplayDocumentCompiledRendererDelegate
 
     /**
      * Get the html for the display document.
-     * 
+
      * @param displayDocument DisplayDocument
      * @return the html
      */

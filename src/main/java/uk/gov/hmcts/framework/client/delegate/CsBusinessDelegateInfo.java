@@ -1,19 +1,18 @@
 package uk.gov.hmcts.framework.client.delegate;
 
 /**
- * <p>
+
  * Title: CsBusinessDelegateInfo.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Framework Team
  * @version 1.0
  */

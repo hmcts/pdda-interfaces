@@ -54,7 +54,7 @@ public final class CourtUtils {
     
     /**
      * Bring back all the court sites. This is used for merging CPP to XHIBIT documents.
-     * 
+
      * @param document Document containing the court sites
      * @return a list of courtsites
      * @throws XPathExpressionException Exception

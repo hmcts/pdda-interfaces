@@ -37,9 +37,9 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  * The AbstractCppToPublicDisplay class is used to retrieve CPP XML, extract data from the CPP XML
  * and update the XHB_CPP_FORMATTING table's STATUS column.
- * 
+
  * @author groenm
- *
+
  */
 @SuppressWarnings({"PMD.GodClass", "PMD.CouplingBetweenObjects", "PMD.NullAssignment"})
 public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisplayRepos {
@@ -105,7 +105,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * isCourtCppEnabled.
-     * 
+
      * @param entityManager EntityManager
      * @return boolean representing if the court id defined as being CPP ready
      */
@@ -127,7 +127,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Populates the PublicDisplayValue object with data from the courtroom XML element.
-     * 
+
      * @param value PublicDisplayValue
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception
@@ -156,7 +156,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCppClobAsDocument.
-     * 
+
      * @return the cppClob as a document for manipulation.
      */
     public Document getCppClobAsDocument(final EntityManager entityManager) {
@@ -190,7 +190,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCppData.
-     * 
+
      * @return Collection of the relevant display objects.
      * @throws XPathExpressionException Exception
      */
@@ -200,7 +200,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getDate.
-     * 
+
      * @return the date
      */
     public Date getDate() {
@@ -209,7 +209,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtId.
-     * 
+
      * @return the courtId
      */
     public int getCourtId() {
@@ -218,7 +218,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtRoomIds.
-     * 
+
      * @return the courtRoomIds
      */
     public int[] getCourtRoomIds() {
@@ -227,7 +227,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCourtName.
-     * 
+
      * @return the courtName
      */
     public String getCourtName() {
@@ -236,7 +236,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * setCourtName.
-     * 
+
      * @param courtName the courtName to set
      */
     public void setCourtName(String courtName) {
@@ -245,7 +245,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * getCppClob.
-     * 
+
      * @return the cppClob
      */
     public XhbClobDao getCppClob(final EntityManager entityManager) {
@@ -269,7 +269,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Returns a XhbCourtRoomDAO object that matches the courtRoomId specified.
-     * 
+
      * @param courtRoomId Court Room Id to search for
      * @return XhbCourtRoomDAO
      */
@@ -288,7 +288,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Returns a XhbCourtRoomDAO object that matches the courtRoomName specified.
-     * 
+
      * @param courtRoomName Court Room Name to search for
      * @return XhbCourtRoomDAO
      */
@@ -309,7 +309,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Returns a XhbCourtSiteDAO object that matches the courtSiteId specified.
-     * 
+
      * @param courtSiteId Court Site Id to search for
      * @return XhbCourtSiteDAO
      */
@@ -348,7 +348,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Returns a XhbCourtSiteDAO object that matches the court site name specified.
-     * 
+
      * @param courtSiteName Court Site Name to search for
      * @return XhbCourtSiteDAO
      */
@@ -368,7 +368,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
 
     /**
      * Populate court details on the PublicDisplayValue.
-     * 
+
      * @param value PublicDisplayValue
      * @param room XhbCourtRoomDao
      * @param site XhbCourtSiteDao
@@ -401,7 +401,7 @@ public abstract class AbstractCppToPublicDisplay extends AbstractCppToPublicDisp
     /**
      * Retrieves the boolean value of the Defendant reportingrestriction node which should be 1 if
      * restricted, else 0.
-     * 
+
      * @param defNode Defendant parent node
      * @return true if the reporting is restricted else false.
      * @throws XPathExpressionException Exception

@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Allow multiple content handlers to process the same stream of events.
- * 
+
  * @author Will Fardell
  */
 public class ForkContentHandler extends ForkContentDocumentHandler implements ContentHandler {

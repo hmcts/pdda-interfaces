@@ -3,23 +3,16 @@ package uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
 /**
- * <p>
+
  * Title: VIP Display Configuration Display Document.
- * </p>
- * 
- * <p>
+
  * Description: A VIPDisplayConfigurationDisplayDocument defines a display document assigned to the
  * VIP screen.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version $Id: VIPDisplayConfigurationDisplayDocument.java,v 1.2 2005/11/16 14:02:33 szfnvt Exp $
  */

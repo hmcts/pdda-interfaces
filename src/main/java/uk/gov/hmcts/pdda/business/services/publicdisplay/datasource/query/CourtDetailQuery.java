@@ -39,7 +39,7 @@ import java.util.Optional;
 
 /**
  * This class wraps the stored procedure that provides the data for the court detail document.
- * 
+
  * @author
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ExcessiveImports",
@@ -51,7 +51,7 @@ public class CourtDetailQuery extends PublicDisplayQuery {
     /**
      * Registers the parameter types and SQL (originally called
      * XHB_PUBLIC_DISPLAY_PKG.GET_COURT_DETAIL).
-     * 
+
      */
     public CourtDetailQuery(EntityManager entityManager) {
         super(entityManager);

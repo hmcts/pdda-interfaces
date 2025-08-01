@@ -7,19 +7,18 @@ import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 import java.util.Date;
 
 /**
- * <p>
+
  * Title: CourtLogAbstractValue.
- * </p>
- * <p>
+
+
  * Description: Value Object containing Court Log event information
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Joseph Babad / Paul Fitton
  * @version $Revision: 1.6 $
  */
@@ -60,7 +59,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Set the entry's case Id.
-     * 
+
      * @param caseId Integer representing the relevant Case Id.
      */
     public void setCaseId(Integer caseId) {
@@ -69,7 +68,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the entry's case Id.
-     * 
+
      * @return Integer
      */
     public Integer getCaseId() {
@@ -78,7 +77,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the defendant id for defendant level events.
-     * 
+
      * @return Integer
      */
     public Integer getDefendantOnCaseId() {
@@ -87,7 +86,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the DefendantOnOffence id for CRN level events.
-     * 
+
      * @return Integer
      */
     public Integer getDefendantOnOffenceId() {
@@ -96,7 +95,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Set the DefendantOnOffence id for CRN level events.
-     * 
+
      * @param defendantOnOffenceId Integer
      */
     public void setDefendantOnOffenceId(Integer defendantOnOffenceId) {
@@ -105,7 +104,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Set the Defendant id for CRN level events.
-     * 
+
      * @param defendantOnCaseId Integer
      */
     public void setDefendantOnCaseId(Integer defendantOnCaseId) {
@@ -121,7 +120,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the scheduled hearing id.
-     * 
+
      * @return Integer the scheduled hearing id
      */
     public Integer getScheduledHearingId() {
@@ -130,7 +129,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Sets the event type for the entry.
-     * 
+
      * @param eventType One of a set of known vos.
      */
     public void setEventType(Integer eventType) {
@@ -139,7 +138,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the event type of the entry.
-     * 
+
      * @return Integer
      */
     public Integer getEventType() {
@@ -148,7 +147,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Set the date and time.
-     * 
+
      * @param date Date
      */
     public void setEntryDate(Date date) {
@@ -157,7 +156,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     /**
      * Get the entry date.
-     * 
+
      * @return Date
      */
     public Date getEntryDate() {
@@ -190,7 +189,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     /**
      * Implemented method of the <code>Comparable</code> interface, used to allow sorting of the court
      * value objects. By default the value objects are sorted in an ascending order by the entry date.
-     * 
+
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      * @see #getEntryDate()
      */

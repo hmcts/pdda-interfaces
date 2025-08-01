@@ -11,20 +11,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: PublicNoticeMaintainer.
- * </p>
- * <p>
+
+
  * Description: A helper class to manipulate DisplayablePublicNoticeValue's so that they can be
  * written into the database with necessary optimistic lock checking.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2005
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: PublicNoticeMaintainer.java,v 1.1 2005/02/15 14:58:36 sz0t7n Exp $
  */

@@ -20,19 +20,18 @@ import java.io.Reader;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * <p>
+
  * Title: FormattingServicesProcessing Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)

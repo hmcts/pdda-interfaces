@@ -29,7 +29,7 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
 
     /**
      * findListByClobId.
-     * 
+
      * @return list
      */
     @SuppressWarnings("unchecked")

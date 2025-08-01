@@ -9,19 +9,18 @@ import uk.gov.hmcts.pdda.business.services.formatting.FormattingServiceUtils;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: BlobHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  * @version 1.0
  */

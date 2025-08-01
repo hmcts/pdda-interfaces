@@ -18,19 +18,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: PublicNoticeWorkFlow - 'nerve centre' of the Public Notice Subsystem.
- * </p>
- * <p>
+
+
  * Description: see title
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Pat Fox, Bob Boles
  * @version $Id: PublicNoticeWorkFlow.java,v 1.3 2006/06/05 12:29:54 bzjrnl Exp $
  */
@@ -52,7 +51,7 @@ public class PublicNoticeWorkFlow {
 
     /**
      * Gets the allPublicNoticesForCourtRoom attribute of the PublicNoticeWorkFlow object.
-     * 
+
      * @param xhbCourtRoomId Description of the Parameter
      * @return The allPublicNoticesForCourtRoom value
      */
@@ -85,15 +84,13 @@ public class PublicNoticeWorkFlow {
      * Sets the Acivation Status on the Configured Public Notices which correspond to the Displayable
      * Public notices passed in. If an activation status is updated it sends a notification to the
      * Public Display System.
-     * 
+
      * @param publicNotices Array of displayablePublicNotices with updated isactive status
      * @param xhbCourtRoomId the target court room ID
      */
     public static void setAllPublicNoticesForCourtRoom(DisplayablePublicNoticeValue[] publicNotices,
         int xhbCourtRoomId) {
-        boolean isNotificationReqd = false;
-        boolean reportingRestrictionsChanged = false;
-
+        
         LOG.debug(" 01 Enter the setAllPublicNoticesForCourtRoom method");
 
         // need to check the PublicNoticeInvalidSelection does not encroach on
@@ -102,6 +99,8 @@ public class PublicNoticeWorkFlow {
 
         LOG.debug("02 public notices are validated");
 
+        boolean isNotificationReqd = false;
+        boolean reportingRestrictionsChanged = false;
         // iterate through the array of displayable are validated public Notices
         for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
 
@@ -110,6 +109,7 @@ public class PublicNoticeWorkFlow {
                 updateConfiguredPublicNoticeActivationState(publicNotice);
                 // if any of the ActivationStates are updated need to send a
                 // notification to Public displays.
+                
                 isNotificationReqd = true;
                 Integer definitiveNotice = publicNotice.getDefinitivePublicNotice();
 
@@ -134,7 +134,7 @@ public class PublicNoticeWorkFlow {
      * Based on the CourlogSubscriptions event type it decides what configured public notices Activation
      * Status is updated(If any ). When an Activation status is updated a notification is sent to the
      * public Displays subsystem.
-     * 
+
      * @param courtLogSubscriptionValue The new publicNoticeforCourtRoom value
      * @throws PublicNoticeException Description of the Exception
      */
@@ -154,7 +154,7 @@ public class PublicNoticeWorkFlow {
     /**
      * updateConfiguredPublicNoticeActivationState updates the Activation State based on the contents of
      * the DisplayablePublicNotice Value.
-     * 
+
      * @param publicNotice parameter for updateConfiguredPublicNoticeActivationState
      */
     private static void updateConfiguredPublicNoticeActivationState(DisplayablePublicNoticeValue publicNotice) {
@@ -163,7 +163,7 @@ public class PublicNoticeWorkFlow {
 
     /**
      * updateConfiguredPublicNoticeActivationState.
-     * 
+
      * @param courtLogSubscriptionValue parameter for updateConfiguredPublicNoticeActivationState
      * @return the returned boolean
      * @throws PublicNoticeException Exception
@@ -175,7 +175,7 @@ public class PublicNoticeWorkFlow {
 
     /**
      * sendNotification sends a notification to the public display system.
-     * 
+
      * @param courtLogSubscriptionValue parameter for sendNotification
      */
     private static void sendNotification(CourtLogSubscriptionValue courtLogSubscriptionValue) {
@@ -185,7 +185,7 @@ public class PublicNoticeWorkFlow {
 
     /**
      * sendNotification sends a notification to the public display system.
-     * 
+
      * @param xhbCourtRoomId parameter for sendNotification
      */
     private static void sendNotification(int xhbCourtRoomId, boolean reportingRestrictionsChanged) {
@@ -195,7 +195,7 @@ public class PublicNoticeWorkFlow {
 
     /**
      * constructs the Array of DisplayablePublicNoticeValue objects given an Xhibit Court Room Id.
-     * 
+
      * @return Array of DisplayPublicNotices
      */
 

@@ -9,19 +9,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: RuleFlyweightPool.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version 1.0
  */
@@ -48,7 +47,7 @@ public final class RuleFlyweightPool {
 
     /**
      * Returns a singleton instance of the pool.
-     * 
+
      * @return RuleFlyweightPool
      */
     public static RuleFlyweightPool getInstance() {
@@ -63,7 +62,7 @@ public final class RuleFlyweightPool {
      * For the attributes passed in remove an instance of the rule and store in the hashmap. This
      * method will not check if the key is already used or if the class has previosly been created.
      * It will just replace it in the map.
-     * 
+
      * @param attributes Attributes
      * @throws RulesConfigurationException Exception
      */
@@ -100,7 +99,7 @@ public final class RuleFlyweightPool {
 
     /**
      * Get the rule for the rule Id passed in.
-     * 
+
      * @param ruleId String
      * @return Rule
      * @throws RulesConfigurationException if the rule has not been declared.

@@ -20,19 +20,18 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: DataHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author HarrisM
  * @version 1.0
  */

@@ -25,19 +25,18 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
- * <p>
+
  * Title: InitServlet Test.
- * </p>
- * <p>
+
+
  * Description: Tests for the InitServlet class
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @SuppressWarnings("PMD")

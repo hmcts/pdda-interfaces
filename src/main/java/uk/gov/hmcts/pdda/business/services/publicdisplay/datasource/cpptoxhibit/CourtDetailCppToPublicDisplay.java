@@ -120,7 +120,7 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
 
     /**
      * Populates the CourtDetailValue object with data from the courtroom XML element.
-     * 
+
      * @param value CourtDetailValue
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception
@@ -138,7 +138,7 @@ public class CourtDetailCppToPublicDisplay extends AllCourtStatusCppToPublicDisp
 
     /**
      * Adds all public notices to the CourtDetailValue.
-     * 
+
      * @param value CourtDetailValue
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception

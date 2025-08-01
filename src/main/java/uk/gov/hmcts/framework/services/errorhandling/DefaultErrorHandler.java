@@ -6,23 +6,22 @@ import uk.gov.hmcts.framework.exception.CsException;
 import uk.gov.hmcts.framework.services.ErrorHandler;
 
 /**
- * <p>
+
  * Title: DefaultErrorHandler.
- * </p>
- * <p>
+
+
  * Description: Default handler to handle the logging of errors and exceptions. The output is
  * configured in the log4j.properties file.
- * </p>
- * <p>
+
+
  * DefaultErrorHandler is a singleton; use getInstance() to obtain a reference.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Pete Raymond
  * @author Kevin Buckthorpe 20/09/2002
  * @version 1.0
@@ -44,7 +43,7 @@ public final class DefaultErrorHandler implements ErrorHandler {
 
     /**
      * Handle the logging/notification of the exception raised.
-     * 
+
      * @param exception The exception being logged
      * @param klass The calling class name
      * @return Error message for user if available or null
@@ -56,7 +55,7 @@ public final class DefaultErrorHandler implements ErrorHandler {
 
     /**
      * Handle the logging/notification of the exception raised.
-     * 
+
      * @param exception The exception being logged
      * @param klass The calling class name
      * @param errMsg Addition information to be logged

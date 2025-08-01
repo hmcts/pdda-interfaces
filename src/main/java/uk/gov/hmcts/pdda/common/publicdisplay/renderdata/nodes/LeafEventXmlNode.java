@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Object representing a value of a leaf node of a processed xml document.
- * 
+
  * @author szfnvt
  */
 public class LeafEventXmlNode extends EventXmlNode {
@@ -21,7 +21,7 @@ public class LeafEventXmlNode extends EventXmlNode {
 
     /**
      * Constructor taking in Name and Value of node.
-     * 
+
      * @param nameIn String
      * @param valueIn String
      */
@@ -32,7 +32,7 @@ public class LeafEventXmlNode extends EventXmlNode {
 
     /**
      * Retrieve leaf node value.
-     * 
+
      * @return String
      */
     public String getValue() {
@@ -47,7 +47,7 @@ public class LeafEventXmlNode extends EventXmlNode {
 
     /**
      * Get Day component of date.
-     * 
+
      * @return String
      */
     public String getDay() {
@@ -61,7 +61,7 @@ public class LeafEventXmlNode extends EventXmlNode {
 
     /**
      * Get Month component of date.
-     * 
+
      * @return String
      */
     public String getMonth() {
@@ -75,7 +75,7 @@ public class LeafEventXmlNode extends EventXmlNode {
 
     /**
      * Get Year component of date.
-     * 
+
      * @return String
      */
     public String getYear() {

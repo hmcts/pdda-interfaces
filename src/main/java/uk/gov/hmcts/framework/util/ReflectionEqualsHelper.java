@@ -13,32 +13,27 @@ import java.lang.reflect.Method;
 
 
 /**
- * <p>
+
  * Title:ReflectionEqualsHelper.
- * </p>
- * <p>
+
+
  * Description: Provides a reflection implementation of the 'equals' method. This helper is intended
  * to be used for equating actual and expected test result objects.
- * </p>
- * 
- * <p>
+
  * This helper could also be called from the 'equals' method on a CSAbstractValue object. This
  * helper could then be used to equate actual and expected values objects.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company:
- * </p>
- * 
+
  * @author AW Daley
  * @version 1.0
  */
 /*
  * Ref Date Author Description
- * 
+
  * 17-10-2003 AW Daley Initial Version
  */
 public class ReflectionEqualsHelper {

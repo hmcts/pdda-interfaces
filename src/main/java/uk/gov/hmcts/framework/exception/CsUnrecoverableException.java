@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * maintaining the cause and providing getCause() method. Allows additional messages to be provided
  * both for the user (use of Message class) and the developer (String errorMessage). Creation date:
  * (10/4/01 1:15:43 PM)
- * 
+
  * @author: Pete Raymond
  * @author: Kevin Buckthorpe
  * @author: Bal Bhamra
@@ -34,7 +34,7 @@ public class CsUnrecoverableException extends AbstractCsException {
 
     /**
      * Overloaded constructor, taking in a Message and a string log message as arguments.
-     * 
+
      * @param newUserMessage a Message object
      * @param newLogMsg String
      */
@@ -47,7 +47,7 @@ public class CsUnrecoverableException extends AbstractCsException {
     /**
      * Overloaded constructor, taking in a Message, Throwable object and a string with the error
      * message as arguments.
-     * 
+
      * @param newUserMessage a Message object
      * @param cause Throwable
      * @param newLogMsg String
@@ -61,7 +61,7 @@ public class CsUnrecoverableException extends AbstractCsException {
 
     /**
      * CsUnrecoverableException.
-     * 
+
      * @param logMessage String
      */
     public CsUnrecoverableException(String logMessage) {
@@ -71,7 +71,7 @@ public class CsUnrecoverableException extends AbstractCsException {
 
     /**
      * CsUnrecoverableException.
-     * 
+
      * @param cause original exception caught
      */
     public CsUnrecoverableException(Throwable cause) {
@@ -82,7 +82,7 @@ public class CsUnrecoverableException extends AbstractCsException {
 
     /**
      * CsUnrecoverableException.
-     * 
+
      * @param cause original exception caught
      */
     public CsUnrecoverableException(String logMessage, Throwable cause) {

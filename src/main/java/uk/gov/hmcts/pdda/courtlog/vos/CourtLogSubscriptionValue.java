@@ -3,19 +3,18 @@ package uk.gov.hmcts.pdda.courtlog.vos;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
 /**
- * <p>
+
  * Title: CourtLogSubscriptionValue.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Joseph Babad
  * @version $Id: CourtLogSubscriptionValue.java,v 1.3 2004/04/22 06:51:49 tz0d5m Exp $
  */

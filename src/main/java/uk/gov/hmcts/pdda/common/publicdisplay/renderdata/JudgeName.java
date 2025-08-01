@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * JudgeName.
- * 
+
  * @author pznwc5 The class represents a judge name.
  */
 public class JudgeName implements Serializable {
@@ -15,11 +15,11 @@ public class JudgeName implements Serializable {
 
     /**
      * Column name for judge first name.
-     * 
+
      * private static final String JUDGE_FIRST_NAME = "JUDGE_FIRST_NAME";
-     * 
+
      * /** Column name for judge middle name
-     * 
+
      * private static final String JUDGE_MIDDLE_NAME = "JUDGE_MIDDLE_NAME";
      */
 
@@ -41,7 +41,7 @@ public class JudgeName implements Serializable {
 
     /**
      * Judge name.
-     * 
+
      * @param row Current row
      */
     public JudgeName(PddaRow row) {
@@ -50,7 +50,7 @@ public class JudgeName implements Serializable {
 
     /**
      * Judge name.
-     * 
+
      * @param fullListTitle1 String
      * @param judgeSurname String
      */
@@ -66,7 +66,7 @@ public class JudgeName implements Serializable {
 
     /**
      * Sets up a JudgeName object from a String value.
-     * 
+
      * @param judgeName String
      */
     public JudgeName(String judgeName) {
@@ -78,7 +78,7 @@ public class JudgeName implements Serializable {
 
     /**
      * Returns the name.
-     * 
+
      * @return String
      */
     public String getName() {
@@ -87,7 +87,7 @@ public class JudgeName implements Serializable {
     
     /**
      * Set the name.
-     * 
+
      * @param name String
      */
     private void setName(String name) {

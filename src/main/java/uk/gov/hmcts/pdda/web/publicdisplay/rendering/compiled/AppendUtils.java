@@ -70,7 +70,7 @@ public final class AppendUtils {
 
     /**
      * Append the text followed by an asterix.
-     * 
+
      * @param buffer StringBuilder
      * @param text Object
      */
@@ -90,7 +90,7 @@ public final class AppendUtils {
 
     /**
      * Append the document header.
-     * 
+
      * @param buffer StringBuilder
      */
     public static void appendHeader(StringBuilder buffer, String heading) {
@@ -120,7 +120,7 @@ public final class AppendUtils {
 
     /**
      * Append the document footer.
-     * 
+
      * @param buffer StringBuilder
      */
     public static void appendFooter(StringBuilder buffer) {

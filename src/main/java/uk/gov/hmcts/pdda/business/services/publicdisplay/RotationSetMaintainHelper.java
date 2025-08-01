@@ -24,19 +24,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: Rotation Set Maintain Helper.
- * </p>
- * <p>
+
+
  * Description: Helper methods for creating and editting a rotation set.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- *
+
  * @author unascribed
  * @version $Id: RotationSetMaintainHelper.java,v 1.8 2006/04/12 13:18:29 bzjrnl Exp $
  */
@@ -52,7 +51,7 @@ public class RotationSetMaintainHelper {
 
     /**
      * Creates a new rotation set with associated documents.
-     *
+
      * @param newRotationSet This object must contain a RotationSetBasic value with court Id populated
      *        and a list of RotationSetDDComplex values with RotationSetDDBasicValues and valid
      *        DisplayDocumentBasicValues
@@ -87,9 +86,9 @@ public class RotationSetMaintainHelper {
 
     /**
      * Updates the rotation set with display documents that have been selected.
-     * 
-     * <p>Note: sends a RotationSet changed JMS configuration message
-     *
+
+     * Note: sends a RotationSet changed JMS configuration message
+
      * @param rotationSet The rotation set being updated and an array of display documents with ordering
      *        and delay information
      * @throws PublicDisplayCheckedException Thrown if rotation set does not exist in the DB
@@ -142,7 +141,7 @@ public class RotationSetMaintainHelper {
     /**
      * This deletes a rotation set only if it is not a system rotation set and is not assigned to any
      * displays.
-     *
+
      * @param rotationSet RotationSetComplexValue
      * @throws PublicDisplayCheckedException Exception
      */
@@ -192,9 +191,9 @@ public class RotationSetMaintainHelper {
 
     /**
      * Adds new rotation set dds to the rotation sets.
-     *
-     * <p>src/main/java/uk.gov.hmcts.pdda/business/services/publicdisplay/RotationSetMaintainHelper.java
-     * 
+
+     * src/main/java/uk.gov.hmcts.pdda/business/services/publicdisplay/RotationSetMaintainHelper.java
+
      * @param rotationSet Rotation set DDs to be added
      * @return boolean
      */
@@ -254,7 +253,7 @@ public class RotationSetMaintainHelper {
 
     /**
      * Sends a JMS notification.
-     *
+
      * @param rotationSet The rotation set that has been changed
      */
     private static void sendNotification(RotationSetComplexValue rotationSet, PublicDisplayNotifier notifier) {

@@ -11,19 +11,18 @@ import java.net.URL;
 
 
 /**
- * <p>
+
  * Title: DiscoveryServices.
- * </p>
- * <p>
+
+
  * Description: Used to find concrete impelementations of services
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: DiscoveryServices.java,v 1.3 2006/06/05 12:30:18 bzjrnl Exp $
  */
@@ -35,7 +34,7 @@ public class DiscoveryServices {
 
     /**
      * Get the singleton instance of the service.
-     * 
+
      * @return the DiscoveryServices
      */
     public static DiscoveryServices getInstance() {
@@ -45,7 +44,7 @@ public class DiscoveryServices {
     /**
      * Discover the concrete instance of the class, returns null if cant be found. This allows a
      * default to be created in a type safe manor.
-     * 
+
      * @param clazz the cla
      * @return a new instance of the clazz or null if cant be found
      */

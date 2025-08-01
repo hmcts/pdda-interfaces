@@ -61,7 +61,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Indicates if a record exists in the database with the retrieval code supplied.
-     * 
+
      * @param retrievalCode Retrieval Code
      * @return true if exists, else false
      */
@@ -80,7 +80,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Deletes a record using the retrieval code supplied.
-     * 
+
      * @param retrievalCode Retrieval Code
      */
     public void deleteEntry(final String retrievalCode) {
@@ -96,7 +96,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Retrieves the last modified value as milliseconds.
-     * 
+
      * @param retrievalCode Retrieval Code of the value to retrieve
      * @return last modified in milliseconds
      */
@@ -118,7 +118,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Retrieve the contents of the XhbDisplayStore record.
-     * 
+
      * @param retrievalCode Retrieval Code to retrieve the record
      * @return The record contents
      */
@@ -138,7 +138,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
     /**
      * If the XhbDisplayStore record exists, update the contents with the value supplied. If no
      * record exists with the Retrieval Code supplied, create it.
-     * 
+
      * @param retrievalCode Retrieval Code to search for
      * @param contents Contents to set
      */
@@ -199,7 +199,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Converts a LocalDateTime object to a Date object.
-     * 
+
      * @param ldt LocalDateTime object
      * @return Date object
      */
@@ -212,7 +212,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Returns the xhbDisplayStoreRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayStoreRepository
      */
     private XhbDisplayStoreRepository getXhbDisplayStoreRepository() {

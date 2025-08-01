@@ -24,7 +24,7 @@ public class AbstractXmlUtils {
     
     /**
      * Create a serializer to write to the output stream.
-     *
+
      * @param out the stream to create the serializer from
      * @return the new serializer
      */
@@ -36,7 +36,7 @@ public class AbstractXmlUtils {
 
     /**
      * Create a serializer to write to the character stream.
-     *
+
      * @param writer the character stream to create the serializer from
      * @return the new serializer
      */
@@ -48,7 +48,7 @@ public class AbstractXmlUtils {
 
     /**
      * Create a serializer to write to the output stream.
-     *
+
      * @param out the stream to create the serializer from
      * @return the new serializer
      */
@@ -60,7 +60,7 @@ public class AbstractXmlUtils {
 
     /**
      * Create a serializer to write to the character stream.
-     *
+
      * @param writer the character stream to create the serializer from
      * @return the new serializer
      */
@@ -72,7 +72,7 @@ public class AbstractXmlUtils {
 
     /**
      * Creates a Serializer for the give mime type.
-     *
+
      * @param mimeType The mime type e.g. HTML, XML etc.
      * @return the Serializer for the given mimeType
      */

@@ -6,19 +6,18 @@ import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundle;
 import java.util.Locale;
 
 /**
- * <p>
+
  * Title: AbstractTranslationBundle.
- * </p>
- * <p>
+
+
  * Description: Common translation bundle functionality
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: AbstractTranslationBundle.java,v 1.1 2005/11/23 16:13:38 bzjrnl Exp $
  */
@@ -29,7 +28,7 @@ public abstract class AbstractTranslationBundle implements TranslationBundle {
 
     /**
      * Create a new default translation bundle.
-     * 
+
      * @param locale Locale
      */
     protected AbstractTranslationBundle(Locale locale) {

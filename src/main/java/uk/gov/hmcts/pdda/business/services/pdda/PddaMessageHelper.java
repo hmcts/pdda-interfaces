@@ -13,19 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: PDDAMessageHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
@@ -169,7 +168,7 @@ public class PddaMessageHelper {
 
     /**
      * Checks if the given document is excluded based on the provided court codes.
-     *
+
      * @param inDocument the document identifier in the format "PublicDisplay_XXX_&lt;more chars&gt;".
      * @param courtsExcluded a comma-separated list of court codes to check against.
      * @return true if the document's court code is in the excluded list, false otherwise.

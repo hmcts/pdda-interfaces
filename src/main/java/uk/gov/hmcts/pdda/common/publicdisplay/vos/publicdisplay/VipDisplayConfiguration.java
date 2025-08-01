@@ -3,22 +3,15 @@ package uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
 /**
- * <p>
+
  * Title: VIP Display Configuration Display Document.
- * </p>
- * 
- * <p>
+
  * Description: A VIPDisplayConfiguration defines configuration for VIP Launcher screen.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version $Id: VIPDisplayConfiguration.java,v 1.1 2005/08/02 13:37:11 szfnvt Exp $
  */
@@ -34,8 +27,8 @@ public class VipDisplayConfiguration extends CsAbstractValue {
 
     /**
      * VIPDisplayConfiguration.
-     * 
-     * <p>Constructor takes in VIPDisplayConfigurationDisplayDocument[],
+
+     * Constructor takes in VIPDisplayConfigurationDisplayDocument[],
      * VIPDisplayConfigurationCourtRoom[]. unassignedCases
      */
     public VipDisplayConfiguration(

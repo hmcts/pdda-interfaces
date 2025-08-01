@@ -4,7 +4,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeExc
 
 /**
  * WorkerUnavailableException.
- * 
+
  * @author pznwc5 The exception is thrown when the thread pool is inactive
  */
 public class WorkerUnavailableException extends PublicDisplayRuntimeException {
@@ -13,7 +13,7 @@ public class WorkerUnavailableException extends PublicDisplayRuntimeException {
 
     /**
      * WorkerUnavailableException.
-     * 
+
      * @param ex Interrupted exception
      */
     public WorkerUnavailableException(InterruptedException ex) {

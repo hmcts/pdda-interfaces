@@ -18,20 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
+
  * Title: FormattingConfig.
- * </p>
- * <p>
+
+
  * Description: Abstraction of the XML config file. This class simplifies the use of the castor
  * generated xmlbinding.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2004
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Will Fardell
  * @version 1.0
  */
@@ -51,7 +50,7 @@ public class FormattingConfig {
 
     /**
      * Construct a FormattingConfig for the given resource.
-     * 
+
      * @param name The name of the resource
      */
     FormattingConfig(final String name) {
@@ -63,7 +62,7 @@ public class FormattingConfig {
 
     /**
      * Load the configuration from the stream.
-     * 
+
      * @param in InputStream
      */
     private void init(final InputStream in) {
@@ -142,7 +141,7 @@ public class FormattingConfig {
     /**
      * Looks through the xsl properties looking for the schema that match the criteria specified in
      * value. Note nulls in the properties are treated as wild cards and match eveything.
-     * 
+
      * @param value the value to get the transforms for.
      * @return An array containing the names of the xsl transforms to use.
      */

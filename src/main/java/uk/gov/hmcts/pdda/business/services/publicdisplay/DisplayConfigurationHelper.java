@@ -30,21 +30,20 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: Display Configuration Helper.
- * </p>
- * <p>
+
+
  * Description: Helper class to update a display configuration<br>
  * A display corresponds to one physical screen and the configuration includes the assigned rotation
  * set and the court rooms it covers.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: DisplayConfigurationHelper.java,v 1.6 2005/11/17 10:55:46 bzjrnl Exp $
  */
@@ -148,9 +147,9 @@ public class DisplayConfigurationHelper {
 
     /**
      * Updates the display configuration with changes.
-     * 
-     * <p>Note: sends a DisplayConfigurationChanged JMS configuration message
-     * 
+
+     * Note: sends a DisplayConfigurationChanged JMS configuration message
+
      * @param displayConfiguration The updated display configuration to be stored
      */
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
@@ -207,7 +206,7 @@ public class DisplayConfigurationHelper {
 
     /**
      * Sets the court rooms.
-     * 
+
      * @param displayConfiguration Display configuration
      * @param displayLocal Display local reference
      */
@@ -240,7 +239,7 @@ public class DisplayConfigurationHelper {
 
     /**
      * Set the rotation set.
-     * 
+
      * @param displayConfiguration Display configuration
      * @param displayLocal Display local reference
      * @throws RotationSetNotFoundCheckedException If the rotation set is not found
@@ -258,7 +257,7 @@ public class DisplayConfigurationHelper {
 
     /**
      * Sends a JMS notification.
-     * 
+
      * @param displayId Dipslay Id
      * @param courtId court Id.
      * @param displayLocal Display local reference
