@@ -14,21 +14,20 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
- * <p>
+
  * ConfigServicesImpl.
- * </p>
- * <p>
+
+
  * Description: Insulates the application components from knowedge of property storage. Some
  * properties may be stored in XML configuration files and some in name=value properties files or a
  * database.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Pete Raymond
  * @author Paul Grove - completely changed configuration
  * @version 1.1
@@ -68,7 +67,7 @@ public final class ConfigServicesImpl implements ConfigServices {
     /**
      * Returns a property from the default CS Hub properties file called cshub.properties which is
      * stored at "classpath root"/config.
-     * 
+
      * @param key the key for which you want he property
      * @return String object of the property for the given key
      */
@@ -79,7 +78,7 @@ public final class ConfigServicesImpl implements ConfigServices {
 
     /**
      * The method checks the system property, then the application bundle and then the default value.
-     * 
+
      * @param key the key for which you want he property
      * @param def Default value
      * @return String object of the property for the given key
@@ -92,7 +91,7 @@ public final class ConfigServicesImpl implements ConfigServices {
     /**
      * The method checks the system property, then the specified property file and then the default
      * value.
-     * 
+
      * @param props the property file to search in
      * @param key the key for which you want he property
      * @param def The default value
@@ -111,7 +110,7 @@ public final class ConfigServicesImpl implements ConfigServices {
      * Provides a name/value properties file as a properties object to minimise required changed to
      * to other parts of the application while ensuring that configuration data is loaded from a
      * central location.
-     * 
+
      * @param componentName the String for the component type e.g. listimport
      * @return Properties object based on the file loaded
      * @throws CSconfigurationException if configuration files cannot be correctly read
@@ -187,7 +186,7 @@ public final class ConfigServicesImpl implements ConfigServices {
      * locates the correct prperties file and then calls ResourcrBundle.getResource with the correct
      * file. This is done to minimise required changes to other parts of the application while
      * ensuring that configuration data is loaded from a central location.
-     * 
+
      * @param baseName see {@link java.util.ResourceBundle ResourceBundle} class description.
      * @return The correct {@link java.util.ResourceBundle ResourceBundle} from the central
      *         repository
@@ -204,7 +203,7 @@ public final class ConfigServicesImpl implements ConfigServices {
      * locates the correct prperties file and then calls ResourcrBundle.getResource with the correct
      * file. This is done to minimise required changes to other parts of the application while
      * ensuring that configuration data is loaded from a central location.
-     * 
+
      * @param baseName see {@link java.util.ResourceBundle ResourceBundle} class description.
      * @param locale see {@link java.util.ResourceBundle ResourceBundle} class description.
      * @return The correct {@link java.util.ResourceBundle ResourceBundle} from the central
@@ -231,7 +230,7 @@ public final class ConfigServicesImpl implements ConfigServices {
      * locates the correct prperties file and then calls ResourcrBundle.getResource with the correct
      * file. This is done to minimise required changes to other parts of the application while
      * ensuring that configuration data is loaded from a central location.
-     * 
+
      * @param baseName see {@link java.util.ResourceBundle ResourceBundle} class description.
      * @param locale see {@link java.util.ResourceBundle ResourceBundle} class description.
      * @param loader the ClassLoader to load the resource from.

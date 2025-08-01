@@ -6,19 +6,18 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.pdda.business.services.pdda.OAuth2Helper;
 
 /**
- * <p>
+
  * Title: CathOAuth2Helper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2025
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */

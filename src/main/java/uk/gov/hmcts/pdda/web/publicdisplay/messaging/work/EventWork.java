@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowManager;
 
 /**
  * The class represents a unit of work involved in processing an event.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -31,7 +31,7 @@ public class EventWork implements Runnable {
 
     /**
      * EventWork.
-     * 
+
      * @param event Event that needs to be processed.
      */
     public EventWork(PublicDisplayEvent event) {
@@ -40,7 +40,7 @@ public class EventWork implements Runnable {
 
     /**
      * EventWork.
-     * 
+
      * @param event Event that needs to be processed
      * @param delay Delay after initialization
      */

@@ -15,20 +15,19 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 /**
- * <p>
+
  * Title: Rule Configuration.
- * </p>
- * <p>
+
+
  * Description: This class Creates conditional documents containing a display document type, the
  * associated rules for a event type.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: RulesConfiguration.java,v 1.4 2006/06/05 12:32:37 bzjrnl Exp $
  */
@@ -66,7 +65,7 @@ public class RulesConfiguration {
 
     /**
      * Creates a populated rules configuration.
-     * 
+
      * @return RulesConfiguration
      * @throws RulesConfigurationException Exception
      */
@@ -79,7 +78,7 @@ public class RulesConfiguration {
     /**
      * Returns the conditional documents that can be effected by the passed in event. The
      * conditional documents may not be valid for the generated event and will need to be checked.
-     * 
+
      * @param eventType EventType
      * @return ConditionalDocument array. May be empty but never null.
      */
@@ -93,7 +92,7 @@ public class RulesConfiguration {
 
     /**
      * Reads the XML and populates the HashMaps.
-     * 
+
      * @throws RulesConfigurationException Exception
      */
     public void loadConfiguration() {
@@ -118,7 +117,7 @@ public class RulesConfiguration {
 
     /**
      * Get the Rule configuration XML file as an Input Stream.
-     * 
+
      * @return InputStream
      */
     private InputStream getXmlStream() {
@@ -127,7 +126,7 @@ public class RulesConfiguration {
 
     /**
      * Get the SAXParserFactory.
-     * 
+
      * @return SAXParserFactory
      */
     private SAXParserFactory getSaxParserFactory()
@@ -140,7 +139,7 @@ public class RulesConfiguration {
 
     /**
      * Get an instance of the SAXParser.
-     * 
+
      * @return SAXParser
      * @throws RulesConfigurationException Exception
      */

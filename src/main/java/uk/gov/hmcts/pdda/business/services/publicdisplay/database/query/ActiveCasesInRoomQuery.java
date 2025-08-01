@@ -13,21 +13,20 @@ import java.util.List;
 
 
 /**
- * <p>
+
  * Title: Active Cases in Court Room query.
- * </p>
- * <p>
+
+
  * Description: This runs the stored procedure that for a given list, it finds all the active cases
  * in the court room except for the case supplied (identified by its scheduled hearing id). I would
  * expect that in most cases this will only be zero or one record.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: ActiveCasesInRoomQuery.java,v 1.3 2005/11/17 10:55:48 bzjrnl Exp $
  */
@@ -59,11 +58,11 @@ public class ActiveCasesInRoomQuery extends AbstractControllerBean {
 
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param listId Id
      * @param courtRoomId room id for which the data is required
      * @param scheduledHearingId Scheduled Hearing id
-     * 
+
      * @return Summary by name data for the specified court rooms
      */
     public Collection<Integer> getData(Integer listId, Integer courtRoomId,

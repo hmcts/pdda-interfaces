@@ -17,19 +17,18 @@ import javax.naming.NamingException;
 
 /**
  * This is a privileged class for performing JNDI lookup.
- * <p>
+
  * Title:
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -58,7 +57,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * Initializes the JNDI environment.
-     * 
+
      * @param newEnv Properties
      */
     public LookupHelper(Properties newEnv) {
@@ -68,7 +67,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * Initializes the JNDI environment.
-     * 
+
      * @param newEnv Properties
      * @PARAM newJndiName String
      */
@@ -80,7 +79,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * PrivilegedExceptionAction implementation.
-     * 
+
      * @return Object
      * @throws NamingException Exception
      */
@@ -98,7 +97,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * Eager loads the JNDI tree.
-     * 
+
      * @return HashMap
      * @throws NamingException Exception
      */
@@ -116,7 +115,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * Looks up the object.
-     * 
+
      * @return Object
      * @throws NamingException Exception
      */
@@ -134,7 +133,7 @@ public class LookupHelper implements PrivilegedExceptionAction<Object> {
 
     /**
      * This method recursively looks up the objects bound in the JNDI tree.
-     * 
+
      * @param ctx context
      * @param name String
      * @return HashMap of name-to-object bindings in the sub context

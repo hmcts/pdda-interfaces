@@ -9,7 +9,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.messaging.event.EventStore;
 /**
  * The class is responsible for pulling an event from the event store and assigning it to the thread
  * pool. If we need event coalesce, set the num workers to one.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -32,7 +32,7 @@ public class EventWorkManager extends Thread {
 
     /**
      * If we need event coalesce, set the num workers to one.
-     * 
+
      * @param eventStore Event store that is used
      * @param numWorkers Number of worker threads used by the event manager
      */
@@ -51,7 +51,7 @@ public class EventWorkManager extends Thread {
 
     /**
      * Shuts down the work manager.
-     * 
+
      */
     public void shutDown() {
         active = false;

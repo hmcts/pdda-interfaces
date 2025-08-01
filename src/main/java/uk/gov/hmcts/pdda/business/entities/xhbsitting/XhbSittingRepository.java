@@ -34,7 +34,7 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
     /**
      * findByNonFloatingHearingList.
-     * 
+
      * @param listId Integer
      * @return List
      */
@@ -66,7 +66,7 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
     /**
      * findByListId.
-     * 
+
      * @param listId Integer
      * @return List
      */
@@ -96,7 +96,7 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
     /**
      * findByCourtRoomAndSittingTime.
-     * 
+
      * @param courtSiteId Integer
      * @param courtRoomId Integer
      * @param sittingTime LocalDateTime

@@ -16,19 +16,18 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 /**
- * <p>
+
  * Title: ClearDownHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Nathan Toft
  * @version 1.0
  */

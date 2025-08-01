@@ -6,19 +6,18 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.document.DisplayDocumentType
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.rules.Rule;
 
 /**
- * <p>
+
  * Title: Conditional Document.
- * </p>
- * <p>
+
+
  * Description: This class represents a document for an event and the associated rules.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: ConditionalDocument.java,v 1.4 2006/06/05 12:32:37 bzjrnl Exp $
  */
@@ -34,7 +33,7 @@ public class ConditionalDocument {
 
     /**
      * Create a conditional document.
-     * 
+
      * @param docTypes The associated documents
      * @param rules The associated rules
      * @param eventType The event type
@@ -47,7 +46,7 @@ public class ConditionalDocument {
 
     /**
      * Checks that each rule associated with the document and event passes.
-     * 
+
      * @param event PublicDisplayEvent
      * @return boolean
      */
@@ -76,7 +75,7 @@ public class ConditionalDocument {
 
     /**
      * Returns the effected documents.
-     * 
+
      * @return DisplayDocumentTypeArray
      */
     public DisplayDocumentType[] getDisplayDocumentTypes() {

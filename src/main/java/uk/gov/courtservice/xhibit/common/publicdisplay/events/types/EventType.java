@@ -4,22 +4,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: Event Type.
- * </p>
- * 
- * <p>
+
  * Description: Identifier used to easily identify the type of Event generated
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: EventType.java,v 1.3 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -89,7 +82,7 @@ public final class EventType {
     /**
      * Creates an event type with a string identifier External objects should use the static
      * variables.
-     * 
+
      * @param value This is one of the public static values
      */
     protected EventType(String value) {
@@ -98,9 +91,9 @@ public final class EventType {
 
     /**
      * Returns the event type. Where possible use the static strings for requesting the EventType.
-     * 
+
      * @param eventType This is one of the public static values
-     * 
+
      * @return the EventType identifier. Illegal Arguement thrown if invalid parameter supplied
      */
     public static EventType getEventType(String eventType) {
@@ -113,9 +106,9 @@ public final class EventType {
 
     /**
      * Method delegated to String.
-     * 
+
      * @param anObject Must be an EventType
-     * 
+
      * @return checks equality with the string identifier
      */
     @Override
@@ -125,7 +118,7 @@ public final class EventType {
 
     /**
      * Method delegated to String.
-     * 
+
      * @return Hash code of the string identifier
      */
     @Override
@@ -135,7 +128,7 @@ public final class EventType {
 
     /**
      * Method delegated to String.
-     * 
+
      * @return The string identifier used in the constructor
      */
     @Override

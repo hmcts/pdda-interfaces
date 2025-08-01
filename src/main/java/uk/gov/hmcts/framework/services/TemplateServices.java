@@ -18,19 +18,18 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXTransformerFactory;
 
 /**
- * <p>
+
  * Title: XSL Services.
- * </p>
- * <p>
+
+
  * Description: Insulates the application components from knowedge of XSL.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -52,7 +51,7 @@ public class TemplateServices {
 
     /**
      * Get XMLFilter array pipeline for templates array passed in.
-     * 
+
      * @param templates TemplatesArray
      * @return XMLFilterArray
      * @throws TransformerException Exception
@@ -77,7 +76,7 @@ public class TemplateServices {
 
     /**
      * Get an Templates array for String array of xsl names and locale passed in.
-     * 
+
      * @param xslNames StringArray
      * @param locale Locale
      * @return TemplatesArray
@@ -99,11 +98,11 @@ public class TemplateServices {
     /**
      * Gets the templates for the xsl name and resolver, private because xsl classes should not be used
      * outside this class.
-     * 
+
      * @param systemId the name of the xsl
      * @param resolver the resolver used to create the transform
      * @param parameterMap Map
-     * 
+
      * @return the templates
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -138,7 +137,7 @@ public class TemplateServices {
     /**
      * Create the templates for the xsl name and resolver, private because xsl classes should not be
      * used outside this class.
-     * 
+
      * @param systemId the name of the xsl
      * @param resolver the resolver used to create the transform
      * @return the templates for the xsl using the given resolver
@@ -162,7 +161,7 @@ public class TemplateServices {
     /**
      * Get the transformer factory for the resolver, private because xsl classes should not be used
      * outside this class.
-     * 
+
      * @param resolver the resolver used to by the transform factory to create templates
      * @return the transformer factory for the resolver
      * @throws CsUnrecoverableException if an error occures creating the transform
@@ -186,7 +185,7 @@ public class TemplateServices {
      * and strip out any localisation that was added so when it gets passed into the
      * LocalisedURIResolver it behaves properly, the reason we cant just create a stream from the
      * resource we find is we need the URI for the system id to work out any relative uri's.
-     * 
+
      * @param locale Locale
      * @return the uri of the resource name
      */
@@ -202,7 +201,7 @@ public class TemplateServices {
 
     /**
      * Get the URI resolver for the locale.
-     * 
+
      * @param locale if null use default
      * @return the resolver
      */
@@ -214,7 +213,7 @@ public class TemplateServices {
     /**
      * Get the transformer factory for the resolver, private because xsl classes should not be used
      * outside this class.
-     * 
+
      * @param resolver the resolver used by the transform factory
      * @return the transformer factory for the resolver
      * @throws CsUnrecoverableException if an error occures creating the transform

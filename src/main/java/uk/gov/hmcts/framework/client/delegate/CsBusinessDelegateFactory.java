@@ -25,7 +25,7 @@ public final class CsBusinessDelegateFactory {
 
     /**
      * Gets the business delegate factory instance.
-     * 
+
      * @return CsBusinessDelegateFactory
      */
     public static CsBusinessDelegateFactory getInstance() {
@@ -34,7 +34,7 @@ public final class CsBusinessDelegateFactory {
 
     /**
      * Retrieve a business delegate from supplied delegate and home class names.
-     * 
+
      * @param delegateClass the name of the delegate class eg "com.xyz.thing.MyDelegate"
      * @param homeClass the name of the home class eg "com.xyz.thing.MyDelegate"
      * @return a valid business delegate

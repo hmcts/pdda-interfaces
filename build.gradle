@@ -149,22 +149,15 @@ spotless {
     java {
         target 'src/**/*.java'
 
-        // 1. Remove <p> and </p> lines inside JavaDoc
-        custom('RemoveRedundantPTags', {
-            it.replaceAll(/(?m)^\s*\*\s*<\/?p>\s*$/, '')
-        })
+        custom('FixJavadocPtagsAndBlanks', { text ->
+            // 1. Remove lines that only contain * <p> or * </p>
+            text = text.replaceAll(/(?m)^\s*\*\s*<\/?p>\s*$/, '')
 
-        // 2. Remove consecutive empty `*` lines inside /** ... */ blocks
-        custom('RemoveEmptyJavadocLines', {
-            it.replaceAll(/(?ms)(\/\*\*(?:\R(?: \* ?\R)+)+)/, "/**")
-              .replaceAll(/(?m)^ \* \s*$/, '') // Remove empty `*` lines
+            // 2. Remove lines inside JavaDoc blocks that are blank (either truly blank or just `*`)
+            text = text.replaceAll(/(?m)^\s*\*\s*$/, '')
+
+            return text
         })
-        
-        // 3. Remove empty Javadocs entirely
-        custom('RemoveEmptyJavadocs', {
-		    it.replaceAll(/(?ms)\/\*\*\s*\*\/\s*/, '')
-		})
-        
     }
 }
 

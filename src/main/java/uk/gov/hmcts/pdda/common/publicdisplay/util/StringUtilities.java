@@ -3,19 +3,18 @@ package uk.gov.hmcts.pdda.common.publicdisplay.util;
 import java.util.Locale;
 
 /**
- * <p>
+
  * Title: StringUtilities.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2004
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: StringUtilities.java,v 1.5 2006/06/05 12:28:26 bzjrnl Exp $
  */
@@ -26,7 +25,7 @@ public final class StringUtilities {
 
     /**
      * Converts a string into Sentence Case.
-     * 
+
      * @param value String
      * @return String
      */

@@ -15,10 +15,10 @@ import java.time.format.DateTimeParseException;
 /**
  * DailyListXmlUpdater is a utility class that updates an XML file with the current date and time,
  * and saves it to a specified output directory.
- * <p>
+
  * Usage: java DailyListXmlUpdater [inputFile] [outputFolder] [overrideDate] [mode] e.g. java
  * DailyListXmlUpdater /tmp/DailyList.xml /tmp/sftpfolder/output 2025-05-08 CPP
- * </p>
+
  */
 @SuppressWarnings("PMD")
 public class DailyListXmlUpdater {

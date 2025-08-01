@@ -33,7 +33,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
 
     /**
      * findByCrestCourtIdValue.
-     * 
+
      * @param crestCourtId String
      * @return List
      */
@@ -64,7 +64,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
 
     /**
      * findByCourtSiteName.
-     * 
+
      * @param courtSiteName String
      * @param crestCourtId String
      * @return XhbCourtSiteDao
@@ -119,7 +119,7 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
 
     /**
      * findByCourtId.
-     * 
+
      * @param courtId Integer
      * @return List
      */

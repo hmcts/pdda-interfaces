@@ -19,19 +19,18 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
 /**
- * <p>
+
  * Title: PddaHelperBaisTest.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)

@@ -123,7 +123,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     /**
      * Update the CppFormatting with the formatStatus and errorMessage.
-     * 
+
      * @param cppFormattingId CPP Formatting Id
      * @param formatStatus Format Status
      * @param errorMessage Error Message
@@ -150,7 +150,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
 
     /**
      * Update the Formatting with the formatStatus and errorMessage.
-     * 
+
      * @param formattingId Formatting Id
      * @param success Success
      */

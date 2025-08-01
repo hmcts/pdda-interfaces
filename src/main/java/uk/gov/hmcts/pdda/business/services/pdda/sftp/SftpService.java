@@ -54,7 +54,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * JUnit constructor.
-     * 
+
      * @param entityManager The EntityManager
      * @param xhbConfigPropRepository The XhbConfigPropRepository
      * @param environment The Environment
@@ -74,7 +74,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Retrieve messages from BAIS.
-     * 
+
      * @param sftpPort The SFTP port - will be 0 unless we are testing
      * @return True if there was an error
      */
@@ -143,7 +143,7 @@ public class SftpService extends XhibitPddaHelper {
     /**
      * Setup the SFTP client. The call to get the data from BAIS is made here too as it must happen
      * within the try with resources call.
-     * 
+
      * @param config The SFTP configuration
      */
     void setupSftpClientAndProcessBaisData(SftpConfig config, SSHClient ssh,
@@ -163,7 +163,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Get the data from BAIS, and do the processing.
-     * 
+
      * @param config The SFTP configuration
      */
     private void processDataFromBais(SftpConfig config, boolean isCpConnection) {
@@ -187,7 +187,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Retrieve events from BAIS.
-     * 
+
      * @param config The SFTP configuration
      * @param baisValidation The validation class
      * @throws IOException The IOException
@@ -242,7 +242,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Get a list of files on BAIS.
-     * 
+
      * @param config The SFTP configuration
      * @param validation The validation class
      * @return The list of files
@@ -264,7 +264,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Process a file from BAIS.
-     * 
+
      * @param config The SFTP configuration
      * @param validation The validation class
      * @param filename The filename
@@ -347,7 +347,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Add a message retrieved from BAIS into the PDDA database.
-     * 
+
      * @param courtId The court ID
      * @param messageType The message type
      * @param filename The filename
@@ -408,7 +408,7 @@ public class SftpService extends XhibitPddaHelper {
      * Applies to lists sent from XHIBIT, update the filename as follows: - Append the text
      * "list_filename = " to the filename - Further append what would be the name of the file were
      * it originating from CPP.
-     * 
+
      * @param filename The original filename
      * @return The updated filename
      */
@@ -430,7 +430,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * We know this is a list so determine if it is a daily, firm or warned list.
-     * 
+
      * @param clobData The CLOB data
      * @return The list type
      */
@@ -453,7 +453,7 @@ public class SftpService extends XhibitPddaHelper {
      * file from BAIS originating from XHIBIT. 1. PDDA 2. Message Type 3. Batch id 4. Message number
      * in this batch 5. Court ID (crestCourtId) 6. Date and time e.g.
      * PDDA_XPD_1234_1_453_20200101120000
-     * 
+
      */
     public static class BaisXhibitValidation extends BaisValidation {
 
@@ -463,7 +463,7 @@ public class SftpService extends XhibitPddaHelper {
          * There should be 5 parts to a valid file from BAIS originating from XHIBIT. 1. PDDA 2.
          * Message Type 3. Batch id 4. Message number in this batch 5. Court ID (crestCourtId) 6.
          * Date and time
-         * 
+
          * @param courtRepository The court repository
          */
         public BaisXhibitValidation(XhbCourtRepository courtRepository) {
@@ -478,7 +478,6 @@ public class SftpService extends XhibitPddaHelper {
         @Override
         @SuppressWarnings("PMD.InefficientStringBuffering")
         public String validateFilename(String filename, PublicDisplayEvent event, boolean isList) {
-            String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
             int expectedMaxErrorMessageSize = 150;
             StringBuilder errorMessages = new StringBuilder(expectedMaxErrorMessageSize);
@@ -514,7 +513,7 @@ public class SftpService extends XhibitPddaHelper {
                 }
             }
 
-
+            String debugErrorPrefix = filename + " error: {}";
             if (errorMessages.length() > 0) {
                 LOG.debug(debugErrorPrefix, errorMessages.toString());
                 return errorMessages.toString();
@@ -610,7 +609,6 @@ public class SftpService extends XhibitPddaHelper {
         @Override
         @SuppressWarnings("PMD.InefficientStringBuffering")
         public String validateFilename(String filename, PublicDisplayEvent event) {
-            String debugErrorPrefix = filename + " error: {}";
             String errorMessage = super.validateFilename(filename);
             int expectedMaxErrorMessageSize = 150;
             StringBuilder errorMessages = new StringBuilder(expectedMaxErrorMessageSize);
@@ -644,6 +642,7 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append("Invalid filename - DateTime\n");
             }
 
+            String debugErrorPrefix = filename + " error: {}";
             if (errorMessages.length() > 0) {
                 LOG.debug(debugErrorPrefix, errorMessages.toString());
                 return errorMessages.toString();

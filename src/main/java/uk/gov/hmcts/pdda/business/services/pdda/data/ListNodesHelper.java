@@ -23,19 +23,18 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 /**
- * <p>
+
  * Title: ListNodesHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author HarrisM
  * @version 1.0
  */
@@ -77,7 +76,7 @@ public class ListNodesHelper implements Serializable {
 
     /**
      * Process the nodes.
-     * 
+
      * @param topNodes Nodes
      */
     protected void processNodes(List<Node> topNodes) {
@@ -157,7 +156,7 @@ public class ListNodesHelper implements Serializable {
 
     /**
      * Loop through the child nodes.
-     * 
+
      * @param rootNode String
      * @param node Node
      * @return list
@@ -181,7 +180,7 @@ public class ListNodesHelper implements Serializable {
 
     /**
      * Return the node map of name and value.
-     * 
+
      * @param node Node
      * @return nodesMap
      */
@@ -220,7 +219,7 @@ public class ListNodesHelper implements Serializable {
 
     /**
      * Return the node attributes as a map prefix with the nodeName.
-     * 
+
      * @param node Node return nodesMap
      */
     protected Map<String, String> getNodeAttributes(Node node) {

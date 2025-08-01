@@ -8,19 +8,18 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import java.util.List;
 
 /**
- * <p>
+
  * Title: Config Property Maintainer.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */

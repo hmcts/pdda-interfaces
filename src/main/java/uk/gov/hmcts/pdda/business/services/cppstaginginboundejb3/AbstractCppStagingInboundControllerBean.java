@@ -53,10 +53,10 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
 
     /**
      * Get courtId from XHB_COURT using crest court id (aka court code).
-     * 
+
      * @param courtCode Integer
      * @return int
-     * 
+
      */
     public int getCourtId(Integer courtCode) {
         String methodName = "getCourtId(" + courtCode.intValue() + METHOD_NAME_SUFFIX;
@@ -79,10 +79,10 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record such that all status values are reset back to when
      * there initial values This is useful for testing.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     public void resetDocumentStatus(XhbCppStagingInboundDao cppStagingInboundDao,
         String userDisplayName) {
@@ -103,10 +103,10 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
      * Based on the document type return the (name of the) schema that is to be used to validate the
      * XML The schema document itself will be picked up from SCHEMA_DIR as defined at the top of the
      * class.
-     * 
+
      * @param documentType String
      * @return String
-     * 
+
      */
     public String getSchemaName(String documentType) {
         String methodName = "getSchemaName(" + documentType + METHOD_NAME_SUFFIX;

@@ -21,19 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: FirmListXMLMergeUtils Second Test Class.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @SuppressWarnings("PMD")
@@ -59,7 +58,7 @@ class FirmListXmlMergeUtilsNodesTest {
         throws SAXException, IOException, ParserConfigurationException {
         List<String> documentXmls = new ArrayList<>();
         List<String> documentXmlsToMerge = new ArrayList<>();
-        boolean result = true;
+        
         // Insert before Data
         documentXmls.add(
             "<cs:CourtList><cs:CourtHouse>TestCourtHouse</cs:CourtHouse><cs:FirmList>"
@@ -73,7 +72,7 @@ class FirmListXmlMergeUtilsNodesTest {
         // First Node Reserved Data
         documentXmls.add("<cs:ReserveList></cs:ReserveList>");
         documentXmlsToMerge.add("<cs:ReserveList></cs:ReserveList>");
-
+        boolean result = true;
         for (int i = 0; i < documentXmls.size(); i++) {
             testMergeNode(documentXmls.get(i), documentXmlsToMerge.get(i));
             assertTrue(result, NOT_TRUE);

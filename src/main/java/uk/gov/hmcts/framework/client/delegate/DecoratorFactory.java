@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
  *         To change the template for this generated type comment go to Window - Preferences - Java
  *         - Code Generation - Code and Comments.
  * @author pznwc5
- * 
+
  */
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.LooseCoupling"})
 public final class DecoratorFactory {
@@ -37,7 +37,7 @@ public final class DecoratorFactory {
 
     /**
      * Private constructor to stop instantiation.
-     * 
+
      */
     private DecoratorFactory() {
 
@@ -73,7 +73,7 @@ public final class DecoratorFactory {
 
     /**
      * createDecorator.
-     * 
+
      * @param decorator String
      * @param decoratorClass String
      * @return DecoratingHandler
@@ -107,7 +107,7 @@ public final class DecoratorFactory {
 
     /**
      * Gets a decorated invocation handler.
-     * 
+
      * @param base Base invocation handler
      * @return Decorated invocation handler
      */

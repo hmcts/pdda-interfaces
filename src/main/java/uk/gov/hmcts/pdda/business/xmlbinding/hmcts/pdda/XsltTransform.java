@@ -11,7 +11,7 @@ import uk.gov.hmcts.pdda.business.xmlbinding.hmcts.pdda.types.MimeTypeType;
 
 /**
  * Class XsltTransform.
- * 
+
  * @version $Revision$ $Date$
  */
 public class XsltTransform extends AbstractTypeMarshal<String> implements java.io.Serializable {
@@ -70,7 +70,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Method deleteMajorVersion.
-     * 
+
      */
     public void deleteMajorVersion() {
         this.isMajorVersion = false;
@@ -78,7 +78,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Method deleteMinorVersion.
-     * 
+
      */
     public void deleteMinorVersion() {
         this.isMinorVersion = false;
@@ -92,7 +92,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Note: hashCode() has not been overriden.
-     * 
+
      * @param obj Object
      * @return boolean
      */
@@ -118,7 +118,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'distributionType'.
-     * 
+
      * @return DistributionTypeType the value of field 'distributionType'.
      */
     public DistributionTypeType getDistributionType() {
@@ -127,7 +127,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'documentType'.
-     * 
+
      * @return DocumentTypeType the value of field 'documentType'.
      */
     public DocumentTypeType getDocumentType() {
@@ -136,7 +136,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'majorVersion'.
-     * 
+
      * @return int the value of field 'majorVersion'.
      */
     public int getMajorVersion() {
@@ -145,7 +145,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'mimeType'.
-     * 
+
      * @return MimeTypeType the value of field 'mimeType'.
      */
     public MimeTypeType getMimeType() {
@@ -154,7 +154,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'minorVersion'.
-     * 
+
      * @return int the value of field 'minorVersion'.
      */
     public int getMinorVersion() {
@@ -163,7 +163,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Returns the value of field 'xsltFileList'.
-     * 
+
      * @return XsltFileList the value of field 'xsltFileList'.
      */
     public XsltFileList getXsltFileList() {
@@ -172,9 +172,9 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Method hasMajorVersion.
-     * 
-     * 
-     * 
+
+
+
      * @return boolean
      */
     public boolean hasMajorVersion() {
@@ -183,9 +183,9 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Method hasMinorVersion.
-     * 
-     * 
-     * 
+
+
+
      * @return boolean
      */
     public boolean hasMinorVersion() {
@@ -194,7 +194,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'distributionType'.
-     * 
+
      * @param distributionType the value of field 'distributionType'
      */
     public void setDistributionType(DistributionTypeType distributionType) {
@@ -203,7 +203,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'documentType'.
-     * 
+
      * @param documentType the value of field 'documentType'.
      */
     public void setDocumentType(DocumentTypeType documentType) {
@@ -212,7 +212,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'majorVersion'.
-     * 
+
      * @param majorVersion the value of field 'majorVersion'.
      */
     public void setMajorVersion(int majorVersion) {
@@ -222,7 +222,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'mimeType'.
-     * 
+
      * @param mimeType the value of field 'mimeType'.
      */
     public void setMimeType(MimeTypeType mimeType) {
@@ -231,7 +231,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'minorVersion'.
-     * 
+
      * @param minorVersion the value of field 'minorVersion'.
      */
     public void setMinorVersion(int minorVersion) {
@@ -241,7 +241,7 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Sets the value of field 'xsltFileList'.
-     * 
+
      * @param xsltFileList the value of field 'xsltFileList'.
      */
     public void setXsltFileList(XsltFileList xsltFileList) {
@@ -250,9 +250,9 @@ public class XsltTransform extends AbstractTypeMarshal<String> implements java.i
 
     /**
      * Method unmarshal.
-     * 
-     * 
-     * 
+
+
+
      * @param reader Reader
      * @return XsltTransform
      */

@@ -25,22 +25,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * <p>
+
  * Title: EJBServicesImpl.
- * </p>
- * <p>
+
+
  * Description: Implementation of the <code>EJBServices</code> interface. Provides a range of
  * Utilities for finding and using EJBs. In certain circumstances this can be used instead of the
  * framework ServiceLocator and is designed to provided additional functionality to the
  * erviceLocator.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Pete Raymond much code taken from the work of Nick Lawson
  * @version 1.0
  */
@@ -65,7 +64,7 @@ public final class EjbServicesImpl implements EjbServices {
 
     /**
      * Singleton accessor.
-     * 
+
      */
     public static EjbServicesImpl getInstance() {
         return instance;
@@ -153,7 +152,7 @@ public final class EjbServicesImpl implements EjbServices {
     /**
      * Calculates the jndi name for a class base don the convention that each class is bound to the jndi
      * tree with the same name as its class.
-     * 
+
      * @param klass the Class to find the name for
      * @returns the String for the JNDI name
      */
@@ -210,7 +209,7 @@ public final class EjbServicesImpl implements EjbServices {
 
     /**
      * Utility method for logging.
-     * 
+
      * @param msg String
      */
     private void log(String msg) {
@@ -221,7 +220,7 @@ public final class EjbServicesImpl implements EjbServices {
 
     /**
      * Utility method for handling exception.
-     * 
+
      * @param th Throwable
      * @return CsUnrecoverableException Exception
      */

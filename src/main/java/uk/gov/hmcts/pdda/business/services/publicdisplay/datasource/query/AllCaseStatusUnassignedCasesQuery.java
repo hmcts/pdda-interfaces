@@ -17,7 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
 /**
  * This class wraps the stored procedure that provides the data for the all case status document.
- * 
+
  * @author Rakesh Lakhani
  */
 @SuppressWarnings("PMD.ExcessiveParameterList")

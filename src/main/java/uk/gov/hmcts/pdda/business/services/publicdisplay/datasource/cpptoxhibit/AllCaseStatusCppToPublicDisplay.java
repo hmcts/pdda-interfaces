@@ -180,7 +180,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
 
     /**
      * Populates the AllCaseStatusValue object with data from the courtroom XML element.
-     * 
+
      * @param value AllCaseStatusValue
      * @param defNode XML element for the defendant
      * @throws XPathExpressionException Exception

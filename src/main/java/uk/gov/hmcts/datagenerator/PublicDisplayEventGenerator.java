@@ -28,10 +28,10 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Generates random public display events and serializes them to files.
- * <p>
+
  * Usage: java PublicDisplayEventGenerator [outputPath] [count] [courtId] [courtRoomId] e.g. java
  * PublicDisplayEventGenerator /tmp/sftpfolder/xhibit/ 10 80 457 8107
- * </p>
+
  */
 @SuppressWarnings("PMD")
 public class PublicDisplayEventGenerator {

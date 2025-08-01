@@ -7,27 +7,24 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.exceptions.InvalidUriFor
 import java.util.Locale;
 
 /**
- * <p>
+
  * Title: DisplayURI.
- * </p>
- * <p>
+
+
  * Description: The following is the format of the DisplayURI:
- * </p>
- * 
+
  * <pre>
  *         pd://display/&lt;courthouseName&gt;/&lt;courtSiteCode&gt;/&lt;location&gt;/&lt;display&gt;
  * </pre>
- * 
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.11 $
  */
@@ -66,9 +63,9 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Creates a new DisplayURI object.
-     * 
+
      * @param uri the displayURI as a string (see class comments).
-     * 
+
      * @pre uri != null
      * @post getCourthouseName() != null && getCourtsiteCode() != null && getLocation() != null &&
      *       getDisplay() != null
@@ -143,7 +140,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Creates a new DisplayURI object.
-     * 
+
      * @pre courthouseName != null
      * @pre courtsiteCode != null
      * @pre location != null
@@ -165,7 +162,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Displays do not support Localization so they just return the current locale.
-     * 
+
      * @return the default Locale.
      */
     @Override
@@ -175,7 +172,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Returns the type of uri this is as a String.
-     * 
+
      * @return the type of URI this is.
      * @post return != null
      */
@@ -186,7 +183,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Returns the court house name from the URI.
-     * 
+
      * @return the court house name from the URI.
      */
     public String getCourthouseName() {
@@ -195,7 +192,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Returns the court site name from the URI.
-     * 
+
      * @return the court site name from the URI.
      */
     public String getCourtsiteCode() {
@@ -204,7 +201,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Returns the display name from the URI.
-     * 
+
      * @return the display name from the URI.
      */
     public String getDisplay() {
@@ -213,7 +210,7 @@ public class DisplayUri extends AbstractUri {
 
     /**
      * Returns the location name from the URI.
-     * 
+
      * @return the location name from the URI.
      */
     public String getLocation() {

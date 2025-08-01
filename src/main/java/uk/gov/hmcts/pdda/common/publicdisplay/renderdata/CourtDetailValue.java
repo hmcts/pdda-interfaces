@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *  CourtDetailValue.
- * 
+
  * @author pznwc5 Value object for court detail.
  */
 public class CourtDetailValue extends AllCourtStatusValue {
@@ -31,7 +31,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * setJudgeName.
-     * 
+
      * @param judgeName JudgeName
      */
     public void setJudgeName(JudgeName judgeName) {
@@ -40,7 +40,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * getJudgeName.
-     * 
+
      * @return JudgeName
      */
     public JudgeName getJudgeName() {
@@ -49,7 +49,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * setHearingDescription.
-     * 
+
      * @param hearingDescription String
      */
     public void setHearingDescription(String hearingDescription) {
@@ -58,7 +58,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * getHearingDescription.
-     * 
+
      * @return String
      */
     public String getHearingDescription() {
@@ -67,7 +67,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * setPublicNotices.
-     * 
+
      * @param publicNotices PublicNoticeValueArray
      */
     public void setPublicNotices(PublicNoticeValue... publicNotices) {
@@ -76,7 +76,7 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     /**
      * getPublicNotices.
-     * 
+
      * @return String
      */
     public PublicNoticeValue[] getPublicNotices() {

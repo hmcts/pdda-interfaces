@@ -6,33 +6,22 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * <p>
+
  * Title: Rotation Set data for a Display.
- * </p>
- * 
- * <p>
+
  * Description:
- * </p>
- * 
- * <p>
+
  * This class encapsulates the data about how a Display is configured with respect to a Rotation
  * Set. It is explicitly designed to provide the view of the configuration data most suitable for
  * driving the presentation tier.
- * </p>
- * 
- * <p>
+
  * This class is designed to be immutable and so makes certain assumptions about caching a
  * pre-calculated hash. If this class should be made mutable please remove the hash pre-calculation.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -54,12 +43,12 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Constructor for the data element of a Display Rotation Set.
-     * 
+
      * @param displayUri The URI of the display it is associated with.
      * @param rotationSetDisplayDocuments The URI(s) of the Display Documents.
      * @param displayId The database ID of the display.
      * @param rotationSetId The database ID of the Rotation Set.
-     * 
+
      * @pre displayDocumentURIs != null
      * @pre forall RotationSetDisplayDocument doc in displayDocumentURIs | doc != null
      * @pre displayURI != null
@@ -77,7 +66,7 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Get the ID of the Display 'embodied' by this class.
-     * 
+
      * @return the database ID of the Display
      */
     public int getDisplayId() {
@@ -86,7 +75,7 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Get the URI of the display for which this Display Rotation Set applies.
-     * 
+
      * @return The instance of <code>DisplayURI</code> for the particular Display.
      */
     public DisplayUri getDisplayUri() {
@@ -96,7 +85,7 @@ public class DisplayRotationSetData implements Serializable {
     /**
      * Gets the objects representing the Display Documents making up the rotation set as applied to
      * the Display.
-     * 
+
      * @return an array of <code>RotationSetDisplayDocument</code> representing the Display
      *         Documents in this Display Rotation Set.
      */
@@ -114,7 +103,7 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Get the ID of the Rotation Set 'embodied' by this class.
-     * 
+
      * @return the database ID of the Rotation Set
      */
     public int getRotationSetId() {
@@ -123,7 +112,7 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Get the code representing the type of the display.
-     * 
+
      * @return the code representing the type of the display.
      */
     public String getDisplayType() {
@@ -132,9 +121,9 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Indicates whether some other object is "equal to" this one.
-     * 
+
      * @param obj the reference object with which to compare.
-     * 
+
      * @return true if this object is the same as the obj argument; false otherwise.
      */
     @Override
@@ -150,9 +139,9 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Get the hashcode for this object.
-     * 
+
      * @return This object's hashcode.
-     * 
+
      * @see java.lang.Object.hashCode
      */
     @Override
@@ -162,9 +151,9 @@ public class DisplayRotationSetData implements Serializable {
 
     /**
      * Calculate the hashcode for this object.
-     * 
+
      * @return the calculated hash code.
-     * 
+
      * @pre forall RotationSetDisplayDocument doc in _rotationSetDisplayDocuments | doc != null
      */
     private int calculateHashcode() {

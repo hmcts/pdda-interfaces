@@ -6,21 +6,20 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: Implementation of HashMap with strongly typed get and put methods.
- * </p>
- * <p>
+
+
  * Description: This is a suggested class to use when implementing CSUserSession. to store the
  * session properties. You will need to implement SessionPropertyKey. This will allow you to define
  * a strongly typed key for the map.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: SessionPropertiesMap.java,v 1.3 2006/06/05 12:30:14 bzjrnl Exp $
  */

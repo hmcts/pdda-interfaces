@@ -7,23 +7,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: DisplayDocumentType.
- * </p>
- * 
- * <p>
+
  * Description: An identifier that can be used to get the appropriate column from the
  * DISPLAY_DOCUMENT table
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis, Rakesh Lakhani
  * @version $Revision: 1.7 $
  */
@@ -210,11 +203,11 @@ public final class DisplayDocumentType implements Serializable {
     /**
      * Return an array of DisplayDocumentType(contain all variances) for a basic Display document
      * type.
-     * 
+
      * @param documentId is the shortName of the description_code from the DISPLAY_DOCUMENT table
-     * 
+
      * @return DisplayDocumentTypeArray
-     * 
+
      * @pre typeMaps.get(documentId) instanceof DisplayDocumentType[]
      */
     public static DisplayDocumentType[] getDisplayDocumentTypes(final String documentId) {
@@ -223,9 +216,9 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * getCasesRequired.
-     * 
+
      * @return CasesRequired
-     * 
+
      * @post return != null
      */
     public CasesRequired getCasesRequired() {
@@ -234,11 +227,11 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Equals implementation.
-     * 
+
      * @param anObject object (of type DisplayDocumentType) to compare with.
-     * 
+
      * @return true if the same.
-     * 
+
      * @pre shortName != null
      * @pre anObject instanceof DisplayDocumentType
      */
@@ -263,7 +256,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Hashcode implementation.
-     * 
+
      * @return hashcode.
      * @pre shortName != null
      */
@@ -274,7 +267,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * toString() implementation.
-     * 
+
      * @return the string shortName+language_country of the DisplayDocumentType
      * @post return != null
      */
@@ -291,7 +284,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * getShortName.
-     * 
+
      * @return the string shortName of the DisplayDocumentType
      */
     public String getShortName() {
@@ -300,7 +293,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Returns the long name of the document type.
-     * 
+
      * @post return != null
      * @return the long name of the document type.
      */
@@ -316,7 +309,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Returns the lower case version of the shortname. This is useful for building filenames from.
-     * 
+
      * @return the lower cased short name.
      * @pre shortName != null
      */
@@ -326,7 +319,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Returns the language of the document type.
-     * 
+
      * @post return != null
      * @return the language of the document type.
      */
@@ -339,7 +332,7 @@ public final class DisplayDocumentType implements Serializable {
 
     /**
      * Returns the country of the document type.
-     * 
+
      * @post return != null
      * @return the country of the document type.
      */

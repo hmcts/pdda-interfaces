@@ -41,15 +41,14 @@ public class CppListControllerBean implements Serializable {
     }
 
     /**
-     * <p>
+
      * Returns the latest unprocessed XHB_CPP_LIST.
-     * </p>
-     * 
+
      * @param courtId ID of the court
      * @param listType List Type
      * @param listStartDate List Start Date
      * @return CppListComplexValue
-     * 
+
      */
     public XhbCppListDao getLatestCppList(final Integer courtId, final String listType,
         final LocalDateTime listStartDate) {
@@ -66,12 +65,11 @@ public class CppListControllerBean implements Serializable {
     }
 
     /**
-     * <p>
+
      * Update the XHB_CPP_LIST record.
-     * </p>
-     * 
+
      * @param xcl XhbCppListDao
-     * 
+
      */
     public void updateCppList(XhbCppListDao xcl) {
         String methodName = "updateCppList() ";
@@ -87,7 +85,7 @@ public class CppListControllerBean implements Serializable {
      * @param listType String
      * @param listStartDate LocalDateTime
      * @return XhbCppListDAO
-     * 
+
      */
     public XhbCppListDao checkForExistingCppListRecord(Integer courtCode, String listType,
         LocalDateTime listStartDate, LocalDateTime listEndDate) {

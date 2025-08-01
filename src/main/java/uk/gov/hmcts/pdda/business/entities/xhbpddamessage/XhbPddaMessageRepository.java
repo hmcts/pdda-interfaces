@@ -30,7 +30,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
 
     /**
      * findByCpDocumentName.
-     * 
+
      * @return List
      */
     public List<XhbPddaMessageDao> findByCpDocumentName(String cpDocumentName) {
@@ -59,7 +59,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
 
     /**
      * findByLighthouse.
-     * 
+
      * @return List
      */
     public List<XhbPddaMessageDao> findByLighthouse() {
@@ -81,7 +81,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
 
     /**
      * findUnrespondedCPMessages.
-     * 
+
      * @return List
      */
     public List<XhbPddaMessageDao> findUnrespondedCpMessages() {

@@ -33,7 +33,7 @@ public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStor
 
     /**
      * findByRetrievalCode.
-     * 
+
      * @param retrievalCode String
      * @return XhbDisplayStoreDao
      */

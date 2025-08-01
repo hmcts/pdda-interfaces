@@ -28,7 +28,7 @@ public class XhbRotationSetsRepository extends AbstractRepository<XhbRotationSet
 
     /**
      * findByCourtId.
-     * 
+
      * @param courtId Integer
      * @return List
      */

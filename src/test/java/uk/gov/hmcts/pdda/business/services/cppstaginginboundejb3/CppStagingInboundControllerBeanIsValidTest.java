@@ -183,7 +183,7 @@ class CppStagingInboundControllerBeanIsValidTest {
     /*
      * @Test void testFindConfigEntryByPropertyNameNullArray() { CppStagingInboundControllerBean
      * testClass = new TestableCppStagingInboundControllerBean(...); // pass required mocks
-     * 
+
      * String result = testClass.findConfigEntryByPropertyName("Testing"); assertNull(result,
      * "Expected null when config entry list is empty"); }
      */

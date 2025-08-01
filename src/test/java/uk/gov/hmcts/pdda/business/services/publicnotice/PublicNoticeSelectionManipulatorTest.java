@@ -10,19 +10,18 @@ import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
- * <p>
+
  * Title: PublicNoticeSelectionManipulatorTest.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)

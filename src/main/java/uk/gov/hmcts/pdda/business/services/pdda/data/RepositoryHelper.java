@@ -23,19 +23,18 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import java.io.Serializable;
 
 /**
- * <p>
+
  * Title: RepositoryHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author HarrisM
  * @version 1.0
  */

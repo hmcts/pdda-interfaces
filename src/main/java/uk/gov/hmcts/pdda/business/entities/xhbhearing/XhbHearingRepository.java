@@ -32,7 +32,7 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
 
     /**
      * findByCaseId.
-     * 
+
      * @return list
      */
     @SuppressWarnings("unchecked")
@@ -61,7 +61,7 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
 
     /**
      * findByCaseIdAndStartDate.
-     * 
+
      * @param courtId Integer
      * @param caseId Integer
      * @param hearingStartDate LocalDateTime

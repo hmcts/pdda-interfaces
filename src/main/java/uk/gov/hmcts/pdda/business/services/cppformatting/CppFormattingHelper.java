@@ -11,19 +11,18 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * <p>
+
  * Title: CppFormattingHelper.
- * </p>
- * <p>
+
+
  * Description: Helper class for CppFormatting
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris
  * @version 1.0
  */
@@ -41,7 +40,7 @@ public class CppFormattingHelper {
 
     /**
      * Description: Returns the latest unprocessed XHB_CPP_FORMATTING record for Public Display.
-     * 
+
      * @param courtId Integer 
      * @return XhbCppFormattingDAO 
      * @throws CppFormattingControllerException Exception

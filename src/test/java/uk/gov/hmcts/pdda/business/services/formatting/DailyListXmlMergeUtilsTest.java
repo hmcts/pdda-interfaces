@@ -23,19 +23,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: DailyListXMLMergeUtils Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
@@ -225,7 +224,7 @@ class DailyListXmlMergeUtilsTest {
 
     /**
      * Converts a String into a Document object.
-     * 
+
      * @param xml XML String
      * @return Document
      */

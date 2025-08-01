@@ -18,34 +18,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * <p>
+
  * Title: Display Configuration Worker.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * 
- * <p>A Display Configuration Worker is concerned with managing the configuration on the thin client
+
+ * A Display Configuration Worker is concerned with managing the configuration on the thin client
  * side of the displays in the court room. It is aware of Displays, Rotation Sets and is responsible
  * for populating <code>RenderChanges</code> instances with details of documents that need to start
  * rendering, stop rendering or be re-rendered in reponse to configuration changes or in response to
  * data changes.
- * <p>
+
  * This class defers knowledge of Display Documents to an internally held instance of
  * DisplayDocumentReferenceManager that has specialist knowledge of Display Documents.
- * </p>
- * <p>
+
+
  * Please note that this class is locked such that according to the semantic of the
  * <code>RWLock</code> class, to ensure the internal consistency of the data.
- * </p>
- * </p>
- * <p>
+
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis, Bob Boothby.
  * @version $Revision: 1.6 $
  * @see uk.gov.hmcts.pdda.web.publicdisplay.configuration.RwLock
@@ -69,7 +67,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     /**
      * This method updates the cached configuration data by adding an old Display Rotation Set and
      * populates the RenderChanges in order to start rendering of the Display Rotation Set.
-     * 
+
      * @param renderChanges The instance of <code>RenderChanges</code> to populate.
      * @param displayRotationSetData The Display Rotation Set to add.
      * @param forceRecreate Whether all the documents in the new Display Rotation Set should be
@@ -93,7 +91,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     /**
      * This method updates the cached configuration data by removing an old Display Rotation Set and
      * populates the RenderChanges in order to finish rendering of the Display Rotation Set.
-     * 
+
      * @param renderChanges The instance of <code>RenderChanges</code> to populate.
      * @param displayRotationSetData The Display Rotation Set to remove.
      * @param removeDisplayRotationSet Whether to stop rendering the display rotation set. Only to
@@ -116,7 +114,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     /**
      * This method intelligently handles the replacement of a Display Rotation Set with a new one
      * and copes with the force remove flag.
-     * 
+
      * @param renderChanges The instance of <code>RenderChanges</code> to populate.
      * @param oldDisplayRotationSetData The old Display Rotation Set.
      * @param newDisplayRotationSetData The new Display Rotation Set.
@@ -140,7 +138,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     /**
      * Used as part of force remove to add all display documents in a Display Rotatoin Set to the
      * set of documents to render regardless of whether they are currently rendered.
-     * 
+
      * @param renderChanges The instance of <code>RenderChanges</code> to populate.
      * @param displayRotationSetData The Display Rotation Set whose Display Documents <i>must</i> be
      *        rendered.
@@ -158,7 +156,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     /**
      * This method is written to encompass the logic around retrieving the set of Display Rotation
      * Sets for a given Rotation Set.
-     * 
+
      * @param rotationSetId The ID of the Rotation Set.
      * @return A Set of types <code>DisplayRotationSetData</code> representing all the Display
      *         Rotation Sets associated with the Rotation Set.

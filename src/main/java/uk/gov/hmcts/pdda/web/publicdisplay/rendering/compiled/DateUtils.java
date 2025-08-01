@@ -23,7 +23,7 @@ public final class DateUtils {
     /**
      * Get the date, this is added to the velocity context in AbstractTemplateRenderer. Should be
      * called once per render.
-     * 
+
      * @return the current date
      */
     public static Date getDate() {

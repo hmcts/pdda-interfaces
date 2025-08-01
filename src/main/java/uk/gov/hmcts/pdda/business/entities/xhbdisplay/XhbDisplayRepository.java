@@ -29,7 +29,7 @@ public class XhbDisplayRepository extends AbstractRepository<XhbDisplayDao> impl
 
     /**
      * findByRotationSetId.
-     * 
+
      * @param rotationSetId Integer
      * @return List
      */
@@ -57,7 +57,7 @@ public class XhbDisplayRepository extends AbstractRepository<XhbDisplayDao> impl
 
     /**
      * findByDisplayLocationId.
-     * 
+
      * @param displayLocationId Integer
      * @return List
      */

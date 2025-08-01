@@ -3,20 +3,19 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 import uk.gov.hmcts.framework.exception.CsBusinessException;
 
 /**
- * <p>
+
  * Title:PublicNoticeCourtRoomUnknownException :- thrown if courtRoom is not known in the public
  * Notice Subsystem.
- * </p>
- * <p>
+
+
  * Description: see title
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @authors Pat Fox
  * @version 1.0
  */

@@ -26,7 +26,7 @@ public class SftpConfigHelper extends SftpService {
 
     /**
      * JUnit constructor.
-     * 
+
      * @param entityManager The EntityManager
      * @param xhbConfigPropRepository The XhbConfigPropRepository
      * @param environment The Environment
@@ -41,7 +41,7 @@ public class SftpConfigHelper extends SftpService {
 
     /**
      * JUnit constructor.
-     * 
+
      * @param entityManager The EntityManager
      */
     public SftpConfigHelper(EntityManager entityManager) {
@@ -52,7 +52,7 @@ public class SftpConfigHelper extends SftpService {
 
     /**
      * Get a new SSHClient.
-     * 
+
      * @return The SSHClient
      */
     public SSHClient getNewSshClient() {

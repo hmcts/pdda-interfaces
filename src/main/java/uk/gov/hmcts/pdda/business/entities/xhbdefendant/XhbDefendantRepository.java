@@ -34,7 +34,7 @@ public class XhbDefendantRepository extends AbstractRepository<XhbDefendantDao>
 
     /**
      * findByDefendantName.
-     * 
+
      * @param firstName String
      * @param middleName String
      * @param surname String

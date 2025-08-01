@@ -31,7 +31,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the Cause.
-     * 
+
      * @return Throwable: exception wrapped by this instance.
      */
     @Override
@@ -43,7 +43,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the logged flag.
-     * 
+
      * @return boolean: true indicates that the exception has been logged
      */
     @Override
@@ -53,7 +53,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Sets the logged flag.
-     * 
+
      * @param isLogged true indicates that the exception has been logged
      */
     @Override
@@ -70,7 +70,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the user message.
-     * 
+
      * @return String the message for user of application
      */
     @Override
@@ -80,7 +80,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the user message.
-     * 
+
      * @return String[] the message for user of application
      */
     @Override
@@ -91,7 +91,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the user message as a message.
-     * 
+
      * @return Message the message for user of application or null if not present
      */
     @Override
@@ -101,7 +101,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets the user message as a message.
-     * 
+
      * @return Message[] the messages for user of application
      */
     @Override
@@ -111,7 +111,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Gets error Id.
-     * 
+
      * @return the id number of this exception instance
      */
     @Override
@@ -122,7 +122,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Add additional message.
-     * 
+
      * @param message Message
      */
     public void addMessage(Message message) {
@@ -131,7 +131,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Add additional message.
-     * 
+
      * @param errorKey String
      */
     public void addMessage(String errorKey) {
@@ -140,7 +140,7 @@ public abstract class AbstractCsException extends RuntimeException implements Cs
 
     /**
      * Add additional message.
-     * 
+
      * @param errorKey String
      * @param parameters ObjectArray
      */

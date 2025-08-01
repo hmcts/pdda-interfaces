@@ -15,20 +15,19 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * <p>
+
  * Title: Locale Services.
- * </p>
- * <p>
+
+
  * Description: Prvoides services for localising URL and resource streams
- * </p>
+
  * <p/>
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -64,7 +63,7 @@ public final class LocaleServices {
 
     /**
      * Get the singleton.
-     * 
+
      * @return the ResourceServices singleton instance
      */
     public static LocaleServices getInstance() {
@@ -80,7 +79,7 @@ public final class LocaleServices {
     /**
      * Get the url for the resource using the given locale for name resolution see getCandidates,
      * this is a localised version of ClassLoader.getResource(String).
-     * 
+
      * @param locale the required locale
      * @param name the name to find
      */
@@ -108,10 +107,10 @@ public final class LocaleServices {
 
     /**
      * Opens the stream for the url in the given locale for name resolution see getCandidates, this
-     * is a localised version of URL.openStream()
-     * 
-     * @param locale the required locale
-     * @param url the url to open
+     * is a localised version of URL.openStream().
+
+     * @param locale the required locale.
+     * @param url the url to open.
      */
     public InputStream openStream(Locale locale, String url) {
         Iterator<?> candidates = getCandidates(locale, url);
@@ -144,7 +143,7 @@ public final class LocaleServices {
     /**
      * Get the base name, strip any localise info from the name, this requires the locale as
      * otherwise not possible to determine reliably what localisation was added.
-     * 
+
      * @param locale the locale the name was localised with
      * @param name the name
      * @return the base name
@@ -172,12 +171,12 @@ public final class LocaleServices {
 
     /**
      * Get a list of possible names given the locale and name.
-     * 
-     * <p>The LAST file extension (if any) is seperated from the base, the extension is the part after
+
+     * The LAST file extension (if any) is seperated from the base, the extension is the part after
      * and including the file extension seperator '.'
      * <p/>
-     * 
-     * <p>The resource bundle lookup searches for classes with various paterns on the basis of (1) the
+
+     * The resource bundle lookup searches for classes with various paterns on the basis of (1) the
      * desired locale and (2) the current default locale as returned by Locale.getDefault(), and (3)
      * the root resource bundle (base), in the following order from lower-level (more specific) to
      * parent-level (less specific):
@@ -190,7 +189,7 @@ public final class LocaleServices {
      * <li>base + "_" + language2 + extension
      * <li>base + extension
      * </ul>
-     * 
+
      * @param locale the locale to use (the desired locale)
      * @param name the name to get candidates for
      * @return the list of names

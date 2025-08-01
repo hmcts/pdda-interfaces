@@ -10,21 +10,20 @@ import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNot
 import java.util.Properties;
 
 /**
- * <p>
+
  * Title: Takes care of Validation rules for the Public Notices.
- * </p>
- * <p>
+
+
  * Description: Currently there is only one rule to do with the number of configured Displayable
  * public notices that can be selected to be at Activation Level "true" at once. But in the future
  * any other rules can be plugged in here.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author: Pat Fox.
  */
 
@@ -54,7 +53,7 @@ public final class PublicNoticeSelectionValidator {
     /**
      * This method will check against a set of rules that specify which Public notices can be
      * selected at once. If the rule is broken then PublicNoticeInvalidSelectionException is thrown.
-     * 
+
      * @param displayablePublicNoticeValues Description of the Parameter
      * @exception PublicNoticeInvalidSelectionException Description of the Exception
      */

@@ -24,9 +24,9 @@ import javax.xml.xpath.XPathFactory;
 /**
  * The AbstractCppToPublicDisplay class is used to retrieve CPP XML, extract data from the CPP XML
  * and update the XHB_CPP_FORMATTING table's STATUS column.
- * 
+
  * @author groenm
- *
+
  */
 public class AbstractCppToPublicDisplayRepos {
 
@@ -65,7 +65,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * Converts a String in the format dd-MM-yyyy HH:mm to a Timestamp object.
-     * 
+
      * @param dateTime Timestamp string
      * @return Timestamp
      */
@@ -84,7 +84,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * Returns the XPath object reference.
-     * 
+
      * @return XPath
      */
     protected XPath getXPath() {
@@ -97,7 +97,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * getXhbCourtStructure.
-     * 
+
      * @return the xhbCourtStructure
      */
     public CourtStructureValue getXhbCourtStructure() {
@@ -158,7 +158,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * setXhbCourtStructure.
-     * 
+
      * @param xhbCourtStructure the xhbCourtStructure to set
      */
     public void setXhbCourtStructure(CourtStructureValue xhbCourtStructure) {

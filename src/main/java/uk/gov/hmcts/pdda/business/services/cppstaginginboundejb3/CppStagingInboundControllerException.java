@@ -3,19 +3,18 @@ package uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3;
 import uk.gov.hmcts.framework.exception.CsBusinessException;
 
 /**
- * <p>
+
  * Title: CppStagingInboundControllerException.
- * </p>
- * <p>
+
+
  * Description: Specific Exception for the CPP Staging Inbound controller.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2019
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Scott Atwell
  * @version 1.0
  */
@@ -29,7 +28,7 @@ public class CppStagingInboundControllerException extends CsBusinessException {
 
     /**
      * CppStagingInboundControllerException.
-     * 
+
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param logMessage error message for log
      * @param cause original exception caught
@@ -41,7 +40,7 @@ public class CppStagingInboundControllerException extends CsBusinessException {
 
     /**
      * CppStagingInboundControllerException.
-     * 
+
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param parameters the parameters for the error message
      * @param logMessage error message for log
@@ -54,7 +53,7 @@ public class CppStagingInboundControllerException extends CsBusinessException {
 
     /**
      * CppStagingInboundControllerException.
-     * 
+
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param logMessage error message for log
      */
@@ -64,7 +63,7 @@ public class CppStagingInboundControllerException extends CsBusinessException {
 
     /**
      * CppStagingInboundControllerException.
-     * 
+
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param parameters the parameters for the error message
      * @param logMessage error message for log
