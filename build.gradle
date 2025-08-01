@@ -198,7 +198,7 @@ ext['snakeyaml.version'] = '2.4'
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework:spring-framework-bom:6.2.8"
+        mavenBom "org.springframework:spring-framework-bom:6.2.9"
     }
 }
 
