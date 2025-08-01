@@ -195,7 +195,6 @@ class PdConfigurationControllerBeanRotationTest {
 
         Mockito.when(DisplayLocationDataHelper.getRotationSetsDetailForCourt(COURT_ID, Locale.UK,
             mockEntityManager)).thenReturn(rotationSetComplexValue);
-        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         // Run Method
         boolean result = false;
@@ -427,7 +426,6 @@ class PdConfigurationControllerBeanRotationTest {
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
-        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         // Run Method
         classUnderTest.createRotationSets(rsComplex);
@@ -491,7 +489,6 @@ class PdConfigurationControllerBeanRotationTest {
 
             mockXhbRotationSetDdRepository.delete(Optional.of(rsddComplex.getRotationSetDdDao()));
             mockXhbRotationSetsRepository.delete(rotationSetsDao);
-            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
             // Run Method
             classUnderTest.deleteRotationSets(rsComplex);
@@ -502,5 +499,4 @@ class PdConfigurationControllerBeanRotationTest {
         }
         assertTrue(result, TRUE);
     }
-   
 }

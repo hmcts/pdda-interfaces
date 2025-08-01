@@ -20,7 +20,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListHelper;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppDocumentTypes;
@@ -447,12 +446,12 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     // Also need to add 2 new records to XHB_FORMATTING
                     // Create the "en" version
                     XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc, documentType, "en");
+                        thisDoc.getTimeLoaded(), documentType, "en");
                     getXhbFormattingRepository().save(xfbv);
 
                     // Create the "cy" version
                     xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc, documentType, "cy");
+                        thisDoc.getTimeLoaded(), documentType, "cy");
                     getXhbFormattingRepository().save(xfbv);
                 }
 
@@ -523,13 +522,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     getXhbCourtRepository().findByCrestCourtIdValueSafe(thisDoc.getCourtCode());
                 Integer courtId = xhbCourtDaoList.get(0).getCourtId();
                 XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                    thisDoc, documentType, "en");
+                    thisDoc.getTimeLoaded(), documentType, "en");
                 getXhbFormattingRepository().save(xfbv);
-
-                // Create the xhbXmlDocument record
-                XhbXmlDocumentDao xhbXmlDocumentDao =
-                    CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, docToCreate, thisDoc);
-                getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
             }
 
             // If all successful then we need to set record in XHB_STAGING_INBOUND to

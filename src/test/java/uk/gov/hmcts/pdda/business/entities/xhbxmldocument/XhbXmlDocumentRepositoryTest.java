@@ -83,7 +83,7 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbXmlDocumentDao> result = getClassUnderTest()
-            .findDocumentByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
+            .findListByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
             assertSame(dao, result.get(0), "Result is not Same");

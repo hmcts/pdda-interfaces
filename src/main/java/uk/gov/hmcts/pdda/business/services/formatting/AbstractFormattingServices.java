@@ -25,7 +25,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
     private static final String NF = "NF";
 
     protected final BlobHelper blobHelper;
-
+    
     public AbstractFormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
         super(entityManager);
         this.blobHelper = blobHelper;
@@ -66,8 +66,8 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         return Optional.empty();
     }
 
-    protected Long getLatestXhibitClobId(final Integer courtId, final String documentType,
-        final String language, final String courtSiteName) {
+    protected Long getLatestXhibitClobId(final Integer courtId, final String documentType, final String language,
+        final String courtSiteName) {
         Long clobId = null;
         List<XhbFormattingDao> list =
             getXhbFormattingRepository().findByDocumentAndClobSafe(courtId, documentType, language,
@@ -95,8 +95,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
         return result.isPresent() ? result.get().getClobId() : null;
     }
 
-    protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal,
-        final String clobData) {
+    protected void updatePostMerge(final XhbCppFormattingMergeDao formattingMergeVal, final String clobData) {
         LOG.debug("updatePostMerge({},{})", formattingMergeVal, clobData);
         // Create new XhbClob record and return the ClobId
         XhbClobDao clobVal = new XhbClobDao();
@@ -129,8 +128,7 @@ public class AbstractFormattingServices extends AbstractFormattingRepositories {
      * @param formatStatus Format Status
      * @param errorMessage Error Message
      */
-    public void updateCppFormatting(Integer cppFormattingId, String formatStatus,
-        String errorMessage) {
+    public void updateCppFormatting(Integer cppFormattingId, String formatStatus, String errorMessage) {
         LOG.debug("updateCppFormatting({},{},{})", cppFormattingId, formatStatus, errorMessage);
         Optional<XhbCppFormattingDao> cppFormattingDao =
             getXhbCppFormattingRepository().findByIdSafe(cppFormattingId);

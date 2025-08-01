@@ -1,5 +1,0 @@
-SET client_encoding TO 'UTF8';
-
-DROP SEQUENCE IF EXISTS xhb_courtel_list_seq CASCADE;
-
-CREATE SEQUENCE xhb_courtel_list_seq INCREMENT 1 MINVALUE 1 NO MAXVALUE START 1;

@@ -84,7 +84,7 @@ class BlobHelperTest {
         Mockito.when(mockXhbBlobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(dummyBlobDao);
         // Run
-        XhbBlobDao result = classUnderTest.getBlob(dummyId);
+        byte[] result = classUnderTest.getBlobData(dummyId);
         // Checks
         assertNotNull(result, NOTNULL);
     }

@@ -24,8 +24,6 @@ public abstract class AbstractRepositoryTest<T extends AbstractDao> {
     protected static final String NOTSAMERESULT = "Result is not Same";
     protected static final String NULLRESULT = "Result is Null";
     protected static final String NOTNULLRESULT = "Result is not Null";
-    protected static final String NOTNULL = "Result is not Null";
-    protected static final String SAME = "Result is Same";
 
     @Mock
     private EntityManager mockEntityManager;

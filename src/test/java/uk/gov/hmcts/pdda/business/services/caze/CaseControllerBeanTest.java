@@ -122,20 +122,14 @@ class CaseControllerBeanTest {
     
     @Test
     void testGetXhbHearingRepository() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
         assertInstanceOf(XhbHearingRepository.class, classUnderTest.getXhbHearingRepository(),
             NOT_INSTANCE);
-        EasyMock.verify(mockEntityManager);
     }
     
     @Test
     void testGetXhbHearingListRepository() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
         assertInstanceOf(XhbHearingListRepository.class, classUnderTest.getXhbHearingListRepository(),
             NOT_INSTANCE);
-        EasyMock.verify(mockEntityManager);
     }
     
     @Test

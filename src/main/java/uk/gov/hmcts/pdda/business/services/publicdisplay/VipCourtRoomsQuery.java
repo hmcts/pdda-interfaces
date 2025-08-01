@@ -27,7 +27,7 @@ import java.util.List;
  * @author unascribed
  * @version $Id: VipCourtRoomsQuery.java,v 1.4 2006/06/05 12:29:45 bzjrnl Exp $
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings("PMD.NullAssignment")
 public class VipCourtRoomsQuery extends AbstractControllerBean {
 
 
@@ -76,11 +76,10 @@ public class VipCourtRoomsQuery extends AbstractControllerBean {
         return results.toArray(new XhbCourtRoomDao[0]);
     }
 
-    protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
+    private XhbCourtRoomRepository getXhbCourtRoomRepository() {
         if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
             xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
     }
-
 }
