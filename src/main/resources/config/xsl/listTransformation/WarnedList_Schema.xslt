@@ -102,4 +102,26 @@
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:DateOfInstigation"/>
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseClassNumber"/>
 
+	<!--  Insert the new CaseNumberCaTH field -->
+    <xsl:template match="cs:Fixture/cs:Cases/cs:Case">
+      <xsl:copy>
+        <!-- Copy the existing fields in the Case section -->
+        <xsl:apply-templates select="@*|node()"/>
+        <!-- If CPP Case then use <cs:URN> value, else if XHIBIT case then use <cs:CaseNumber> field -->
+        <xsl:choose>
+          <xsl:when test="cs:CaseNumber = 'CPP'">
+            <CaseNumberCaTH>
+              <xsl:value-of select="cs:Defendants/cs:Defendant/cs:URN"/>
+            </CaseNumberCaTH>
+          </xsl:when>
+          <xsl:otherwise>
+            <CaseNumberCaTH>
+              <xsl:value-of select="cs:CaseNumber"/>
+            </CaseNumberCaTH>
+          </xsl:otherwise>
+        </xsl:choose>
+
+      </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>
