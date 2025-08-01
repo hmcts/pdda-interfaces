@@ -5,18 +5,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
+import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -45,21 +47,28 @@ import javax.xml.xpath.XPathExpressionException;
 public class FormattingServices extends FormattingServicesProcessing {
     // Logging
     private static final Logger LOG = LoggerFactory.getLogger(FormattingServices.class);
+    private final CourtelHelper courtelHelper;
+
 
     // Date Format for java date
-    private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
     private static final String PDDA_SWITCHER = "PDDA_SWITCHER";
     private static final String FORMATTING_LIST_DELAY = "FORMATTING_LIST_DELAY";
     private static final String NEWDOCUMENT = "ND";
     private static final String FORMATERROR = "FE";
-    
-    public FormattingServices(EntityManager entityManager, BlobHelper blobHelper) {
+
+    // Matching list types from CourtelHelper.VALID_LISTS
+    private static final Map<String, String> DOC_TYPES =
+        Map.of("DL", "DailyList_Schema.xslt", "DLP", "DailyList_Schema.xslt", "FL",
+            "FirmList_Schema.xslt", "WL", "WarnedList_Schema.xslt");
+
+    public FormattingServices(EntityManager entityManager, CourtelHelper courtelHelper, BlobHelper blobHelper) {
         super(entityManager, blobHelper);
+        this.courtelHelper = courtelHelper;
     }
-    
+
     /**
-     * This method is responsible for transforming the information from the reader using xslts dependant
-     * on the FormattingParameters and writes the result to Output stream.
+     * This method is responsible for transforming the information from the reader using xslts
+     * dependant on the FormattingParameters and writes the result to Output stream.
      * 
      * @param formattingValue FormattingValue
      * @throws FormattingException Exception
@@ -78,9 +87,7 @@ public class FormattingServices extends FormattingServicesProcessing {
             // Get the xmlUtils type
             setXmlUtils(getXmlUtils(formattingValue.getDocumentType()));
 
-            if (FormattingServiceUtils.isInactiveOnPdda(formattingValue)) {
-                LOG.debug("{} is flagged as Inactive on PDDA", formattingValue.getDocumentType());
-            } else if (IWP.equals(formattingValue.getDocumentType()) && isMergeAllowed()) {
+            if (IWP.equals(formattingValue.getDocumentType())) {
                 processIwpDocument(formattingValue, getTranslationBundles().toXml());
             } else if (FormattingServiceUtils.isProcessingList(formattingValue)) {
                 processListDocument(formattingValue, getTranslationBundles().toXml());
@@ -93,9 +100,44 @@ public class FormattingServices extends FormattingServicesProcessing {
             | SAXException | IOException e) {
             throw new FormattingException(TRANSFORMATION_ERROR, e);
         }
+        
+        if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
+            courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
+                formattingValue.getFormattedDocumentBlobId());
+            transformXmlAndGenerateJson(formattingValue);
+        }
     }
+    
+    private void transformXmlAndGenerateJson(FormattingValue formattingValue) {
+        // Get the Path for the xslt schema to use
+        StringBuilder xsltSchemaPath = new StringBuilder(100);
+        xsltSchemaPath.append("config/xsl/listTransformation/");
 
-   
+        for (Map.Entry<String, String> entry : DOC_TYPES.entrySet()) {
+            if (formattingValue.getDocumentType().equals(entry.getKey())) {
+                xsltSchemaPath.append(entry.getValue());
+                try {
+                    // Transform the xml and return the cath_document_link record
+                    XhbCathDocumentLinkDao xhbCathDocumentLinkDao = CathUtils.transformXmlUsingSchema(
+                        formattingValue.getXmlDocumentClobId(), getXhbCourtelListRepository(),
+                        getXhbClobRepository(), getXhbXmlDocumentRepository(),
+                        getXhbCathDocumentLinkRepository(), xsltSchemaPath.toString());
+
+                    // Generate the json from the transformed xml
+                    CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao,
+                        getXhbCathDocumentLinkRepository(), getXhbXmlDocumentRepository(),
+                        getXhbClobRepository(), getXhbCourtelListRepository(),
+                        getXhbCppStagingInboundRepository());
+
+                } catch (ParserConfigurationException | SAXException | IOException
+                    | TransformerException e) {
+                    LOG.debug("Error Transforming and generating Json for document: ", e);
+                }
+                break;
+            }
+        }
+    }
+    
     /**
      * Get the next document for processing.
      * 
@@ -172,10 +214,6 @@ public class FormattingServices extends FormattingServicesProcessing {
         return false;
     }
 
-    //
-    // Utiltity classes
-    //
-
     /**
      * This is a public method so that it can be used by other areas of the CPP interface.
      * 
@@ -187,6 +225,10 @@ public class FormattingServices extends FormattingServicesProcessing {
             AbstractXmlMergeUtils xmlUtils = null;
             if (FormattingServiceUtils.isDailyList(documentType)) {
                 xmlUtils = new DailyListXmlMergeUtils();
+            } else if (FormattingServiceUtils.isFirmList(documentType)) {
+                xmlUtils = new FirmListXmlMergeUtils();
+            } else if (FormattingServiceUtils.isWarnedList(documentType)) {
+                xmlUtils = new WarnedListXmlMergeUtils();
             } else if (IWP.equals(documentType)) {
                 xmlUtils = new IwpXmlMergeUtils();
             }
@@ -197,27 +239,4 @@ public class FormattingServices extends FormattingServicesProcessing {
         }
     }
 
-    /**
-     * Returns true if merge is allowed i.e. the time is before the cut off time defined in the db.
-     * 
-     * @return boolean
-     */
-    private boolean isMergeAllowed() {
-        LOG.debug("About to check if a merge is allowed");
-        String[] mergeCutOffTime =
-            getXhbConfigPropRepository().findByPropertyNameSafe(MERGE_CUT_OFF_TIME).get(0)
-                .getPropertyValue().split(":");
-        if (mergeCutOffTime != null && mergeCutOffTime.length == 3) {
-            final Calendar now = Calendar.getInstance();
-            Calendar mergeCutOff = Calendar.getInstance();
-            mergeCutOff.set(Calendar.HOUR_OF_DAY, Integer.parseInt(mergeCutOffTime[0]));
-            mergeCutOff.set(Calendar.MINUTE, Integer.parseInt(mergeCutOffTime[1]));
-            mergeCutOff.set(Calendar.SECOND, Integer.parseInt(mergeCutOffTime[2]));
-
-            LOG.debug("Is {} after {}", DateTimeUtilities.calendarToDate(mergeCutOff),
-                DateTimeUtilities.calendarToDate(now));
-            return mergeCutOff.after(now);
-        }
-        return false;
-    }
 }

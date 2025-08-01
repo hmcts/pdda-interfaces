@@ -60,6 +60,9 @@ class PdSetupControllerBeanTest {
         "Repository should be null after clearRepositories()";
 
     @Mock
+    private EntityManager mockEntityManager;
+
+    @Mock
     private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
@@ -70,13 +73,10 @@ class PdSetupControllerBeanTest {
 
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
-    
-    @Mock
-    private static EntityManager mockEntityManager;
 
     @TestSubject
     private final PdSetupControllerBean classUnderTest =
-        new PdSetupControllerBean(EasyMock.createMock(EntityManager.class));
+        new PdSetupControllerBean(mockEntityManager);
 
     @BeforeAll
     public static void setUp() {
@@ -137,6 +137,8 @@ class PdSetupControllerBeanTest {
                     .andReturn(displaysList);
             }
         }
+        EasyMock.expect(mockXhbDisplayLocationRepository.getEntityManager())
+            .andReturn(mockEntityManager).anyTimes();
 
         replayMocks();
 

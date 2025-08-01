@@ -190,10 +190,13 @@ class SftpServiceTest {
 
     @Test
     void testProcessBaisMessagesCp() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager); 
         // Setup
         setupCpFiles();
         Optional<XhbPddaMessageDao> pddaMessageDao =
             Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao());
+        
         EasyMock
             .expect(
                 mockPddaMessageHelper

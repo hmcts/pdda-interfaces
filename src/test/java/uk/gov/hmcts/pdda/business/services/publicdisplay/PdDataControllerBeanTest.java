@@ -71,6 +71,7 @@ class PdDataControllerBeanTest {
         mockDataSource.retrieve(mockEntityManager);
         EasyMock.expectLastCall();
         EasyMock.expect(mockDataSource.getData()).andReturn(null);
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
         // Replays
         EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockDataSource);
