@@ -62,8 +62,10 @@ class EntityManagerUtilTest extends AbstractJUnit {
     @Order(1)
     void testEntityManager() {
         // Setup
-        try (EntityManagerFactory mockEntityManagerFactory =
-            Mockito.mock(EntityManagerFactory.class)) {
+        EntityManagerFactory mockEntityManagerFactory = null;
+        try {
+            mockEntityManagerFactory =
+                Mockito.mock(EntityManagerFactory.class);
             InitializationService mockInitializationService =
                 Mockito.mock(InitializationService.class);
             Mockito.mockStatic(InitializationService.class);
@@ -73,8 +75,14 @@ class EntityManagerUtilTest extends AbstractJUnit {
                 .thenReturn(mockEntityManagerFactory);
             Mockito.when(mockEntityManagerFactory.createEntityManager())
                 .thenReturn(Mockito.mock(EntityManager.class));
-            try (EntityManager mockEntityManager = Mockito.mock(EntityManager.class)) {
+            EntityManager mockEntityManager = null;
+            try {
+                mockEntityManager = Mockito.mock(EntityManager.class);
                 Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+            } finally {
+                if (mockEntityManager != null && mockEntityManager.isOpen()) {
+                    mockEntityManager.close();
+                }
             }
             // Run
             EntityManager result = null;
@@ -87,6 +95,10 @@ class EntityManagerUtilTest extends AbstractJUnit {
                 }
             }
             Mockito.clearAllCaches();
+        } finally {
+            if (mockEntityManagerFactory != null && mockEntityManagerFactory.isOpen()) {
+                mockEntityManagerFactory.close();
+            }
         }
     }
 
@@ -100,20 +112,32 @@ class EntityManagerUtilTest extends AbstractJUnit {
     @Test
     @Order(3)
     void testEntityManagerActiveClosed() {
-        try (EntityManager mockEntityManager = Mockito.mock(EntityManager.class)) {
+        EntityManager mockEntityManager = null;
+        try {
+            mockEntityManager = Mockito.mock(EntityManager.class);
             Mockito.when(mockEntityManager.isOpen()).thenReturn(false);
             boolean result = EntityManagerUtil.isEntityManagerActive(mockEntityManager);
             assertFalse(result, FALSE);
+        } finally {
+            if (mockEntityManager != null && mockEntityManager.isOpen()) {
+                mockEntityManager.close();
+            }
         }
     }
 
     @Test
     @Order(4)
     void testEntityManagerActiveOpen() {
-        try (EntityManager mockEntityManager = Mockito.mock(EntityManager.class)) {
+        EntityManager mockEntityManager = null;
+        try {
+            mockEntityManager = Mockito.mock(EntityManager.class);
             Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             boolean result = EntityManagerUtil.isEntityManagerActive(mockEntityManager);
             assertTrue(result, TRUE);
+        } finally {
+            if (mockEntityManager != null && mockEntityManager.isOpen()) {
+                mockEntityManager.close();
+            }
         }
     }
 
