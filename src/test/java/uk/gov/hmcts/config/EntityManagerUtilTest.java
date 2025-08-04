@@ -77,8 +77,14 @@ class EntityManagerUtilTest extends AbstractJUnit {
                 Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             }
             // Run
-            try (EntityManager result = EntityManagerUtil.getEntityManager()) {
+            EntityManager result = null;
+            try {
+                result = EntityManagerUtil.getEntityManager();
                 assertNotNull(result, NOTNULL);
+            } finally {
+                if (result != null && result.isOpen()) {
+                    result.close();
+                }
             }
             Mockito.clearAllCaches();
         }
