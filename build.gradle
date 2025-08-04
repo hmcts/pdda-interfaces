@@ -322,8 +322,10 @@ dependencies {
     implementation 'org.flywaydb:flyway-database-hsqldb:11.10.3'
 }
 
-
-mainClassName = 'uk.gov.hmcts.PddaSpringbootApplication'
+application {
+    // Define the main class for the application
+    mainClass = 'uk.gov.hmcts.PddaSpringbootApplication'
+}
 
 bootJar {
     enabled = false
