@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:11.10.2")
+    classpath("org.flywaydb:flyway-database-postgresql:11.10.5")
   }
 }
 
@@ -20,8 +20,8 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '11.10.3'
-  id 'com.diffplug.spotless' version '6.25.0'
+  id 'org.flywaydb.flyway' version '11.10.5'
+  id 'com.diffplug.spotless' version '7.2.1'
 }
 
 group = 'uk.gov.hmcts'
@@ -198,7 +198,7 @@ ext['snakeyaml.version'] = '2.4'
 
 dependencyManagement {
     imports {
-        mavenBom "org.springframework:spring-framework-bom:6.2.8"
+        mavenBom "org.springframework:spring-framework-bom:6.2.9"
     }
 }
 
@@ -295,7 +295,7 @@ dependencies {
     	exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
     testImplementation 'org.easymock:easymock:5.6.0'
     testImplementation 'org.mockito:mockito-core:5.18.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
@@ -317,9 +317,9 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
 
     // Flyway (already pulled via plugins, but OK to be explicit)
-    implementation 'org.flywaydb:flyway-core:11.10.3'
-    implementation 'org.flywaydb:flyway-database-postgresql:11.10.3'
-    implementation 'org.flywaydb:flyway-database-hsqldb:11.10.3'
+    implementation 'org.flywaydb:flyway-core:11.10.5'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.10.5'
+    implementation 'org.flywaydb:flyway-database-hsqldb:11.10.5'
 }
 
 application {
