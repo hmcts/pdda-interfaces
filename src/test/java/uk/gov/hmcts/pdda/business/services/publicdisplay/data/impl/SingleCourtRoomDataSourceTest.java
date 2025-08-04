@@ -33,7 +33,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class SingleCourtRoomDataSourceTest {
@@ -72,14 +71,23 @@ class SingleCourtRoomDataSourceTest {
         // Do nothing
     }
 
-
-    @SuppressWarnings("PMD.CloseResource")
     @BeforeAll
     public static void mockEntityManagerFactory() {
-        EntityManagerFactory emf = Mockito.mock(EntityManagerFactory.class);
-        EntityManager em = Mockito.mock(EntityManager.class);
-        Mockito.when(emf.createEntityManager()).thenReturn(em);
-        EntityManagerUtil.setEntityManagerFactory(emf);
+        EntityManager em = null;
+        EntityManagerFactory emf = null;
+        try {
+            emf = Mockito.mock(EntityManagerFactory.class);
+            em = Mockito.mock(EntityManager.class);
+            Mockito.when(emf.createEntityManager()).thenReturn(em);
+            EntityManagerUtil.setEntityManagerFactory(emf);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+            if (emf != null && emf.isOpen()) {
+                emf.close();
+            }
+        }
     }
 
     @AfterAll

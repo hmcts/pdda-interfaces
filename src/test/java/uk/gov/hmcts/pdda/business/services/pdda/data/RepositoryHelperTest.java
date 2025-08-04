@@ -73,8 +73,14 @@ class RepositoryHelperTest {
 
     private boolean testGetEntityManager(boolean isActive) {
         mockTheEntityManager(isActive);
-        try (EntityManager entityManager = classUnderTest.getEntityManager()) {
+        EntityManager entityManager = null;
+        try {
+            entityManager = classUnderTest.getEntityManager();
             assertNotNull(entityManager, NOTNULL);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
         return true;
     }
