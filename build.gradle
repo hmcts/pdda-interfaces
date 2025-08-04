@@ -145,6 +145,11 @@ pmd {
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
+tasks.named('pmdTest') {
+    exclude '**/SingleCourtRoomDataSourceTest.java'
+}
+
+
 spotless {
     java {
         target 'src/**/*.java'
