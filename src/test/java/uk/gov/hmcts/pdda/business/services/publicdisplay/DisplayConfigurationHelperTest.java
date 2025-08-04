@@ -76,7 +76,6 @@ class DisplayConfigurationHelperTest {
     private final DisplayConfigurationHelper classUnderTest = new DisplayConfigurationHelper();
 
     @BeforeEach
-    @SuppressWarnings("PMD.CloseResource")
     void setup() {
         EntityManagerFactory mockFactory = Mockito.mock(EntityManagerFactory.class);
         Mockito.when(mockFactory.createEntityManager()).thenReturn(mockEntityManager);

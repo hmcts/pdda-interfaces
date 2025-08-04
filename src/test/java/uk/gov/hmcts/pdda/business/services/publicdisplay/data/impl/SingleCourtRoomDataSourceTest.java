@@ -73,7 +73,6 @@ class SingleCourtRoomDataSourceTest {
     }
 
 
-    @SuppressWarnings("PMD.CloseResource")
     @BeforeAll
     public static void mockEntityManagerFactory() {
         EntityManagerFactory emf = Mockito.mock(EntityManagerFactory.class);
