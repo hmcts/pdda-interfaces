@@ -151,7 +151,7 @@
 	  <xsl:text></xsl:text>
 	</xsl:template>
 	
-	<!-- EXCEPTION: retain the value of cs:IsMasked -->
+	<!-- Retain the value of cs:IsMasked -->
     <xsl:template match="cs:IsMasked" mode="mask">
       <xsl:copy>
         <!-- Use default copy on the cs:IsMasked field every time here -->
