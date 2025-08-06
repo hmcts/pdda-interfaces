@@ -3,19 +3,18 @@ package uk.gov.hmcts.framework.services.audittrail;
 import java.util.Date;
 
 /**
- * <p>
+
  * Title: AuditTrailEvent.
- * </p>
- * <p>
+
+
  * Description: This is the interface for an AuditTRailEvent, from which all events will inherit
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2008
- * </p>
- * <p>
+
+
  * Company: Logica
- * </p>
- * 
+
  * @author James Powell
  * @version 1.0
  */

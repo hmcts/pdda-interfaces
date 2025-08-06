@@ -24,7 +24,6 @@ import java.util.List;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.LawOfDemeter")
 public class CppFormattingControllerBean extends AbstractControllerBean implements RemoteTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(CppFormattingControllerBean.class);
@@ -52,7 +51,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Implementation of RemoteTask so that this process is called by the timer process.
-     * 
+
      */
     @Override
     public void doTask() {
@@ -61,13 +60,13 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Implementation of RemoteTask so that this process is called by the timer process.
-     * 
+
      */
     public void processCppPublicDisplayDocs() {
         // Get a list of CPP_FORMATTING objects that have a type of 'PD', a format status of 'ND'
         // and
         // a date in of today
-        List<XhbCppFormattingDao> cppList = getXhbCppFormattingRepository().findAllNewByDocType(
+        List<XhbCppFormattingDao> cppList = getXhbCppFormattingRepository().findAllNewByDocTypeSafe(
             DOC_TYPE_PUBLIC_DISPLAY, LocalDateTime.now().truncatedTo(ChronoUnit.DAYS));
         for (XhbCppFormattingDao dao : cppList) {
             // For each CPP_FORMATTING object, extract the court Id, use it to refresh all pages for
@@ -81,13 +80,12 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
     }
 
     /**
-     * <p>
+
      * Returns the latest unprocessed XHB_CPP_FORMATTING record for Public Display.
-     * </p>
-     * 
+
      * @param courtId ID of the court
      * @return XhbCppFormattingDAO
-     * 
+
      */
     public XhbCppFormattingDao getLatestPublicDisplayDocument(Integer courtId) {
         String methodName = "getLatestPublicDisplayDocument(" + courtId + METHOD_END;
@@ -98,13 +96,12 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
     }
 
     /**
-     * <p>
+
      * Returns the latest unprocessed XHB_CPP_FORMATTING record for Internet Web Pages.
-     * </p>
-     * 
+
      * @param courtId ID of the court
      * @return XhbCppFormattingDAO
-     * 
+
      */
     public XhbCppFormattingDao getLatestWebPageDocument(Integer courtId) {
         String methodName = "getLatestWebPageDocument(" + courtId + METHOD_END;
@@ -116,9 +113,9 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Updates an XHB_CPP_FORMATTING record with a status of successfully merged/processed.
-     * 
+
      * @param dao XhbCppFormattingDao
-     * 
+
      */
     public void updateStatusSuccess(XhbCppFormattingDao dao) {
         String methodName = "updateStatusSuccess(" + dao + METHOD_END;
@@ -129,9 +126,9 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Updates an XHB_CPP_FORMATTING record with a status of merge failed.
-     * 
+
      * @param dao XhbCppFormattingDao
-     * 
+
      */
     public void updateStatusFailed(XhbCppFormattingDao dao) {
         String methodName = "updateStatusFailed(" + dao + METHOD_END;
@@ -142,7 +139,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Refreshes all public displays for the court specified.
-     * 
+
      * @param courtId Court Id
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {

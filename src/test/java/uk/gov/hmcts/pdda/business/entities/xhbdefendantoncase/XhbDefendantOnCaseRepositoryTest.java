@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -15,11 +18,10 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class XhbDefendantOnCaseRepositoryTest extends AbstractRepositoryTest<XhbDefendantOnCaseDao> {
 
     @Mock
@@ -35,10 +37,27 @@ class XhbDefendantOnCaseRepositoryTest extends AbstractRepositoryTest<XhbDefenda
 
     @Override
     protected XhbDefendantOnCaseRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDefendantOnCaseRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDefendantOnCaseRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDefendantOnCaseDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDefendantOnCaseDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Override
@@ -50,7 +69,7 @@ class XhbDefendantOnCaseRepositoryTest extends AbstractRepositoryTest<XhbDefenda
     void testDefandantName() {
         PddaRow mockPddaRow = Mockito.mock(PddaRow.class);
         DefendantName result = new DefendantName(mockPddaRow);
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
     }
 
 }

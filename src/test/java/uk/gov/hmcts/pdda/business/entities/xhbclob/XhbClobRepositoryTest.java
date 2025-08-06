@@ -1,9 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbclob;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -15,10 +19,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class XhbClobRepositoryTest extends AbstractRepositoryTest<XhbClobDao> {
 
     @Mock
@@ -34,21 +38,38 @@ class XhbClobRepositoryTest extends AbstractRepositoryTest<XhbClobDao> {
 
     @Override
     protected XhbClobRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbClobRepository(getEntityManager());
-        }
         return classUnderTest;
     }
 
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbClobRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbClobDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbClobDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
+    }
+
     @Override
-    protected boolean testfindById(XhbClobDao dao) {
-        Mockito.when(getEntityManager().find(getClassUnderTest().getDaoClass(), getDummyLongId())).thenReturn(dao);
-        Optional<XhbClobDao> result = getClassUnderTest().findById(getDummyLongId());
+    protected boolean testFindById(XhbClobDao dao) {
+        Mockito.when(getEntityManager().find(XhbClobDao.class, getDummyLongId())).thenReturn(dao);
+        Optional<XhbClobDao> result = getClassUnderTest().findByIdSafe(getDummyLongId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(), SAME);
+            assertSame(dao, result.get(), NOTSAMERESULT);
         } else {
-            assertSame(Optional.empty(), result, SAME);
+            assertSame(Optional.empty(), result, NOTSAMERESULT);
         }
         return true;
     }
@@ -66,7 +87,7 @@ class XhbClobRepositoryTest extends AbstractRepositoryTest<XhbClobDao> {
         XhbClobDao result =
             new XhbClobDao(clobId, clobData, lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         clobId = result.getPrimaryKey();
-        assertNotNull(clobId, NOTNULL);
+        assertNotNull(clobId, NOTNULLRESULT);
         return new XhbClobDao(result);
     }
 

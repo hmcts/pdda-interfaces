@@ -35,7 +35,7 @@ import java.util.Optional;
 
 /**
  * This class wraps the stored procedure that provides the data for the all case status document.
- * 
+
  * @author Rakesh Lakhani
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
@@ -65,11 +65,11 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param date Id
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-     * 
+
      * @return Suumary by name data for the specified court rooms
      */
     @Override
@@ -145,7 +145,6 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         List<AllCaseStatusValue> results = new ArrayList<>();
         for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
 
-            boolean isHidden = false;
             AllCaseStatusValue result = getAllCaseStatusValue();
             populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
                 scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
@@ -156,12 +155,14 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
             result.setListCourtRoomId(sittingDao.getCourtRoomId());
 
             // Get the hearing
+            boolean isHidden = false;
             Optional<XhbHearingDao> hearingDao = getXhbHearingDao(scheduledHearingDao.getHearingId());
             if (hearingDao.isPresent()) {
                 result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
                 // Get the case
-                Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+                Optional<XhbCaseDao> caseDao =
+                    getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
                 if (caseDao.isPresent()) {
                     result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                     result.setCaseTitle(caseDao.get().getCaseTitle());
@@ -177,12 +178,14 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
             // Get the defendant on case
             Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-                getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
+                getXhbDefendantOnCaseRepository()
+                    .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
             if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
                 // Get the defendant
                 Optional<XhbDefendantDao> defendantDao =
-                    getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                    getXhbDefendantRepository()
+                        .findByIdSafe(defendantOnCaseDao.get().getDefendantId());
                 if (defendantDao.isPresent()) {
                     DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
                         defendantDao.get().getMiddleName(), defendantDao.get().getSurname(),
@@ -206,7 +209,8 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
     private String getRefHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
         if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository().findById(hearingDao.get().getRefHearingTypeId());
+                getXhbRefHearingTypeRepository()
+                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
             if (refHearingTypeDao.isPresent()) {
                 return refHearingTypeDao.get().getHearingTypeDesc();
             }

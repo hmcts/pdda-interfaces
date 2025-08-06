@@ -34,7 +34,7 @@ public class ClassAndMethodHelper {
 
     /**
      * Generic method to execute a method on an executor object passing the specified parameter.
-     *
+
      * @param parameter Object
      * @param methodName Striing
      * @param executor Object
@@ -123,16 +123,14 @@ public class ClassAndMethodHelper {
     /**
      * determineMethodParameter: This returns an Object which will be passed as a parameter to set the
      * appropriate property data structure.
-     *
-     * <p>
+
      * This method is quite specialized and the following must be true: 1. The Class argument has
      * exactly one method with a name matching the methodName argument 2. The method matching the
      * methodName argument has itself exactly one argument 3. The original property class determined
      * from the propertyValue argument will be one of: (a) Be an instance of the method argument in (2)
      * (b) Be applicable to be passed into a single argument constructor of the method argument's class
      * (c) Be a formatted (Oracle dates only) Date String when the method argument is a Calendar
-     * </p>
-     *
+
      * @param clazz Class
      * @param methodName String
      * @param propertyValue String

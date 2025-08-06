@@ -3,6 +3,7 @@ package uk.gov.hmcts;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtlogeventdesc.XhbCourtLogEventDescDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.AllCourtStatusComp
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -151,6 +153,19 @@ public final class DummyCourtUtil {
     }
 
 
+    public static XhbCourtLogEventDescDao getXhbCourtLogEventDescDao() {
+        XhbCourtLogEventDescDao dao = new XhbCourtLogEventDescDao();
+        dao.setEventDescId(-5);
+        dao.setEventDescription("Test Description");
+        dao.setCreationDate(LocalDateTime.now().minusMinutes(5));
+        dao.setLastUpdateDate(LocalDateTime.now());
+        dao.setCreatedBy("Test1");
+        dao.setLastUpdatedBy("Test2");
+        dao.setVersion(1);
+        return dao;
+    }
+
+
     public static XhbCourtDao getXhbCourtDao(final Integer courtId, final String courtName) {
         String shortName = "SHORT";
         String probationOfficeName = courtName + " PROBATION OFFICE";
@@ -281,4 +296,11 @@ public final class DummyCourtUtil {
         Calendar calendar) {
         return new AllCourtStatusCompiledRendererDelegate(calendar.getTime());
     }
+
+    public static XhbCourtSiteDao getXhbCourtSiteDaoWithRooms(List<XhbCourtRoomDao> courtRooms) {
+        XhbCourtSiteDao site = getXhbCourtSiteDao();
+        site.setXhbCourtRooms(courtRooms);
+        return site;
+    }
+
 }

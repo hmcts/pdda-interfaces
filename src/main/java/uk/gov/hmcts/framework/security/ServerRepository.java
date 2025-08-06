@@ -11,22 +11,21 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: ServerRepository.
- * </p>
- * <p>
+
+
  * Description: This class provides utility methods to get information on
- * </p>
- * <p>
+
+
  * servers to which a client can connect.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -98,7 +97,7 @@ public final class ServerRepository {
 
     /**
      * getServers - This method returns the list of servers.
-     *  
+
      * @return StringSet
      */
     public static Set<String> getServers() {
@@ -107,7 +106,7 @@ public final class ServerRepository {
 
     /**
      * getAuthenticationURL - This method returns the authentication URL for the named server.
-     * 
+
      * @param serverName String
      * @return String
      */
@@ -123,7 +122,7 @@ public final class ServerRepository {
 
     /**
      * getProviderURL - This method returns the provider URL for the named server.
-     * 
+
      * @param serverName String
      * @return String
      */
@@ -139,7 +138,7 @@ public final class ServerRepository {
 
     /**
      * getInitialContextFactory - This method returns the initial context factory for the named server.
-     * 
+
      * @param serverName String
      * @return String
      */
@@ -158,19 +157,18 @@ public final class ServerRepository {
 
     /**
      * The private inner class represents a server.
-     * <p>
+
      * Title:
-     * </p>
-     * <p>
+
+
      * Description:
-     * </p>
-     * <p>
+
+
      * Copyright: Copyright (c) 2002
-     * </p>
-     * <p>
+
+
      * Company: EDS
-     * </p>
-     * 
+
      * @author Meeraj Kunnumpurath
      * @version 1.0
      */
@@ -194,7 +192,7 @@ public final class ServerRepository {
         /**
          * Accepts the server name and initializes the authentication and provider URLs and initial
          * context factory.
-         * 
+
          * @param serverName String
          */
         public Server(String serverName) {
@@ -223,7 +221,7 @@ public final class ServerRepository {
 
         /**
          * Returns the authentication URL for the server.
-         * 
+
          * @return String
          */
         public String getAuthenticationUrl() {
@@ -232,7 +230,7 @@ public final class ServerRepository {
 
         /**
          * Returns the provider URL for the server.
-         * 
+
          * @return String
          */
         public String getProviderUrl() {
@@ -241,7 +239,7 @@ public final class ServerRepository {
 
         /**
          * Returns the initial context factory for the server.
-         * 
+
          * @return String
          */
         public String getInitialContextFactory() {

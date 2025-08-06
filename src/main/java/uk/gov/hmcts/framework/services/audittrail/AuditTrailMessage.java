@@ -7,19 +7,18 @@ import java.util.Date;
 
 
 /**
- * <p>
+
  * Title: AuditTrailMessage.
- * </p>
- * <p>
+
+
  * Description: This class is responsible for creating the formatted message from an AuditTrailEvent
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2008
- * </p>
- * <p>
+
+
  * Company: Logica
- * </p>
- * 
+
  * @author James Powell
  * @version 1.0
  */
@@ -30,7 +29,7 @@ public class AuditTrailMessage {
 
     /**
      * The constructor accepts a format String which will be used to format the message.
-     * 
+
      * @param messageFormat - Format String
      */
     public AuditTrailMessage(String messageFormat) {
@@ -52,7 +51,7 @@ public class AuditTrailMessage {
      * <li>7. Case Identifier</li>
      * <li>8. Event Specific Data</li>
      * </ul>
-     * 
+
      * @param evt - AuditTrailEvent
      * @return String - the formatted message
      */

@@ -113,6 +113,7 @@ public class XhbFormattingDao extends AbstractDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getFormattingId();
     }

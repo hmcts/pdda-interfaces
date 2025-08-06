@@ -25,21 +25,20 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * <p/>
  * Title: A factory for DataSource objects.
- * </p>
+
  * <p/>
  * <p/>
  * Description: Use this factory to obtain an instance of a DataSource on the
  * uk.gov.hmcts.pdda.business.services.publicdisplay.
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.11 $
  */
@@ -118,11 +117,11 @@ public final class DataSourceFactory {
     
     /**
      * Returns a DataSource for the document specified by the uri.
-     * 
+
      * @param uri the uri of the document we need the data for.
-     * 
+
      * @return a DataSource.
-     * 
+
      * @post return != null
      * @pre uri != null
      * @pre uri.getDocumentType() != null

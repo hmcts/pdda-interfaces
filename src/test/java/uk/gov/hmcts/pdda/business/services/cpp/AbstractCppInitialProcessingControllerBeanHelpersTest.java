@@ -1,21 +1,19 @@
-
 package uk.gov.hmcts.pdda.business.services.cpp;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
+import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListControllerBean;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
-import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -27,64 +25,41 @@ class AbstractCppInitialProcessingControllerBeanHelpersTest {
 
     private static final String NOT_INSTANCE = "Result is Not An Instance of";
 
-    private EntityManager mockEntityManager;
-    private XhbConfigPropRepository mockXhbConfigPropRepository;
-    private XhbCourtRepository mockXhbCourtRepository;
-    private XhbClobRepository mockXhbClobRepository;
-    private XhbBlobRepository mockXhbBlobRepository;
+    @Mock
+    protected EntityManager mockEntityManager;
+
+    @Mock
+    private EntityTransaction mockTransaction;
+
+    @Mock
+    private Query mockQuery;
 
     @TestSubject
-    protected final CppInitialProcessingControllerBean classUnderTest = getClassUnderTest();
+    protected final CppInitialProcessingControllerBean classUnderTest =
+        new CppInitialProcessingControllerBean(mockEntityManager);
 
-    private CppInitialProcessingControllerBean getClassUnderTest() {
-        mockEntityManager = EasyMock.createMock(EntityManager.class);
-        mockXhbConfigPropRepository = EasyMock.createMock(XhbConfigPropRepository.class);
-        mockXhbCourtRepository = EasyMock.createMock(XhbCourtRepository.class);
-        mockXhbClobRepository = EasyMock.createMock(XhbClobRepository.class);
-        mockXhbBlobRepository = EasyMock.createMock(XhbBlobRepository.class);
-        
-        CppInitialProcessingControllerBean classUnderTest =
-            new CppInitialProcessingControllerBean(mockEntityManager);
+    @BeforeEach
+    void setUp() {
+        EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTransaction).anyTimes();
+        EasyMock.expect(mockTransaction.isActive()).andReturn(false).anyTimes();
 
-        ReflectionTestUtils.setField(classUnderTest, "cppStagingInboundHelper",
-            EasyMock.createMock(CppStagingInboundHelper.class));
-        ReflectionTestUtils.setField(classUnderTest, "xhbClobRepository",
-            mockXhbClobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbBlobRepository",
-            mockXhbBlobRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRepository",
-            mockXhbCourtRepository);
-        ReflectionTestUtils.setField(classUnderTest, "xhbConfigPropRepository",
-            mockXhbConfigPropRepository);
-        return classUnderTest;
+        EasyMock.expect(mockEntityManager.createNamedQuery("XHB_CONFIG_PROP.findByPropertyName"))
+            .andReturn(mockQuery).anyTimes();
+        EasyMock.expect(mockQuery.getResultList()).andReturn(Collections.emptyList()).anyTimes();
+
+        EasyMock.replay(mockEntityManager, mockTransaction);
     }
 
     @Test
     void testGetCppStagingInboundControllerBean() {
-        expectEntityManagerIsOpen();
-        expectRepositoryIsOpen(mockXhbConfigPropRepository);
-        expectRepositoryIsOpen(mockXhbCourtRepository);
-        expectRepositoryIsOpen(mockXhbClobRepository);
-        expectRepositoryIsOpen(mockXhbBlobRepository);
         assertInstanceOf(CppStagingInboundControllerBean.class,
             classUnderTest.getCppStagingInboundControllerBean(), NOT_INSTANCE);
     }
 
     @Test
     void testGetCppListControllerBean() {
-        expectEntityManagerIsOpen();
         assertInstanceOf(CppListControllerBean.class, classUnderTest.getCppListControllerBean(),
             NOT_INSTANCE);
     }
 
-    private void expectEntityManagerIsOpen() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
-    }
-    
-    @SuppressWarnings("rawtypes")
-    private void expectRepositoryIsOpen(AbstractRepository mockRepository) {
-        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager);
-        EasyMock.replay(mockRepository);
-    }
 }

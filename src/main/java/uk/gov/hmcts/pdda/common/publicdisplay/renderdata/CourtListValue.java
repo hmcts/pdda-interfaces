@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * This class provides the data for daily list and jury status document.
- * 
+
  * @author pznwc5
  */
 public class CourtListValue extends PublicDisplayValue {
@@ -56,7 +56,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Sets the case title.
-     * 
+
      * @param val the Case title
      */
     public void setCaseTitle(String val) {
@@ -65,7 +65,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Sets the case number.
-     * 
+
      * @param val number
      */
     public void setCaseNumber(String val) {
@@ -74,7 +74,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Gets the case title.
-     * 
+
      * @return val the Case title
      */
     public String getCaseTitle() {
@@ -83,7 +83,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Returns the case number.
-     * 
+
      * @return DCAse number
      */
     public String getCaseNumber() {
@@ -92,7 +92,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Returns defendant name.
-     * 
+
      * @return Defendant name
      */
     public List<DefendantName> getDefendantNames() {
@@ -101,7 +101,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Sets the hearing type.
-     * 
+
      * @param val Hearing type
      */
     public void setHearingDescription(String val) {
@@ -110,7 +110,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Returns the hearing type.
-     * 
+
      * @return Hearing type
      */
     public String getHearingDescription() {
@@ -119,7 +119,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Sets the hearing progress.
-     * 
+
      * @param val Hearing progress
      */
     public void setHearingProgress(int val) {
@@ -128,7 +128,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Returns the hearing progress.
-     * 
+
      * @return hearingProgress Hearing progress
      */
     public int getHearingProgress() {
@@ -137,7 +137,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Sets reporting restriction.
-     * 
+
      * @param val Reporting restriction
      */
     public void setReportingRestricted(boolean val) {
@@ -146,7 +146,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Returns reporting restriction.
-     * 
+
      * @return Reporting restriction
      */
     public boolean isReportingRestricted() {
@@ -155,7 +155,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Adds a defendant name.
-     * 
+
      * @param defendantName Defendant name
      */
     public void addDefendantName(DefendantName defendantName) {
@@ -164,7 +164,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Whether this entry has defendants.
-     * 
+
      * @return true if this entry has defendants.
      */
     public boolean hasDefendants() {
@@ -177,7 +177,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Get the id of the court room that the list entry is for.
-     * 
+
      * @return The id of the court room that the list entry is for.
      */
     public int getListCourtRoomId() {
@@ -186,7 +186,7 @@ public class CourtListValue extends PublicDisplayValue {
 
     /**
      * Set the id of the court room that the list entry is for.
-     * 
+
      * @param listCourtRoomId The id of the court room that the list entry is for. moved to.
      */
     public void setListCourtRoomId(int listCourtRoomId) {
@@ -196,11 +196,13 @@ public class CourtListValue extends PublicDisplayValue {
     /**
      * Indicates whether this entry is either in the court room being listed or whether it was listed in
      * the court room but was then moved to another.
-     * 
+
      * @return true if the entry is currently listed in the court room.
      */
+    @SuppressWarnings("PMD.UnnecessaryBoxing")
     public boolean isListedInThisCourtRoom() {
-        return listCourtRoomId == this.getCourtRoomId();
+        Integer courtRoomId = this.getCourtRoomId();
+        return courtRoomId != null && courtRoomId.intValue() == listCourtRoomId;
     }
 
     @Override

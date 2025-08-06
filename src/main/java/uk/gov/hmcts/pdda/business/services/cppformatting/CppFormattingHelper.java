@@ -5,27 +5,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
- * <p>
+
  * Title: CppFormattingHelper.
- * </p>
- * <p>
+
+
  * Description: Helper class for CppFormatting
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris
  * @version 1.0
  */
@@ -43,9 +40,9 @@ public class CppFormattingHelper {
 
     /**
      * Description: Returns the latest unprocessed XHB_CPP_FORMATTING record for Public Display.
-     * 
-     * @param courtId Integer
-     * @return XhbCppFormattingDAO
+
+     * @param courtId Integer 
+     * @return XhbCppFormattingDAO 
      * @throws CppFormattingControllerException Exception
      */
     public XhbCppFormattingDao getLatestPublicDisplayDocument(final Integer courtId,
@@ -54,36 +51,25 @@ public class CppFormattingHelper {
         LOG.debug(methodName + " called");
 
         XhbCppFormattingRepository repo = new XhbCppFormattingRepository(entityManager);
-        return repo.getLatestDocumentByCourtIdAndType(courtId, DOC_TYPE_PUBLIC_DISPLAY,
-            LocalDateTime.now());
-    }
 
-    public static XhbFormattingDao createXhbFormattingRecord(Integer courtId,
-        XhbCppStagingInboundDao xhbCppStagingInboundDao, String documentType, String language) {
+        // Make the time element midnight, as otherwise the query will not work and never find
+        // anything
+        return repo.getLatestDocumentByCourtIdAndTypeSafe(courtId, DOC_TYPE_PUBLIC_DISPLAY,
+            LocalDateTime.now().with(LocalTime.MIDNIGHT));
+    }
+    
+    public static XhbFormattingDao createXhbFormattingRecord(Integer courtId, LocalDateTime dateIn,
+        String documentType, String language) {
         XhbFormattingDao xfbv = new XhbFormattingDao();
         xfbv.setCourtId(courtId);
-        xfbv.setDateIn(xhbCppStagingInboundDao.getTimeLoaded());
+        xfbv.setDateIn(dateIn);
         xfbv.setDistributionType("FTP");
         xfbv.setDocumentType(documentType);
         xfbv.setFormatStatus(FORMAT_STATUS_NOT_PROCESSED);
         xfbv.setMimeType("HTM");
-        xfbv.setXmlDocumentClobId(xhbCppStagingInboundDao.getClobId());
+        xfbv.setXmlDocumentClobId(Long.valueOf(0));
         xfbv.setCountry("GB");
         xfbv.setLanguage(language);
         return xfbv;
-    }
-
-    public static XhbXmlDocumentDao createXhbXmlDDocumentRecord(XhbFormattingDao xhbFormattingDao,
-        XhbCppListDao xhbCppListDao, XhbCppStagingInboundDao xhbCppStagingInboundDao) {
-        XhbXmlDocumentDao xhbXmlDocumentDao = new XhbXmlDocumentDao();
-        xhbXmlDocumentDao.setDateCreated(xhbFormattingDao.getDateIn());
-        xhbXmlDocumentDao.setDocumentTitle(xhbCppStagingInboundDao.getDocumentName());
-        xhbXmlDocumentDao.setXmlDocumentClobId(xhbFormattingDao.getXmlDocumentClobId());
-        xhbXmlDocumentDao.setStatus(xhbFormattingDao.getFormatStatus());
-        xhbXmlDocumentDao.setDocumentType(xhbFormattingDao.getDocumentType());
-        // This field is null on production Xhibit so setting null here too.
-        xhbXmlDocumentDao.setExpiryDate(null);
-        xhbXmlDocumentDao.setCourtId(xhbFormattingDao.getCourtId());
-        return xhbXmlDocumentDao;
     }
 }

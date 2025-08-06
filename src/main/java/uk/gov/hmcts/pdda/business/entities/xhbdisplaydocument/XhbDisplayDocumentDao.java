@@ -57,6 +57,7 @@ public class XhbDisplayDocumentDao extends AbstractVersionedDao implements Seria
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDisplayDocumentId();
     }

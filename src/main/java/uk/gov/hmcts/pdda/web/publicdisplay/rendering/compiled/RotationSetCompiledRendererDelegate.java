@@ -13,7 +13,7 @@ public class RotationSetCompiledRendererDelegate extends AbstractCompiledRendere
 
     /**
      * Get the html for the rotation set.
-     * 
+
      * @param rotationSet DisplayRotationSet
      * @return the html
      */
@@ -32,14 +32,16 @@ public class RotationSetCompiledRendererDelegate extends AbstractCompiledRendere
 
     /**
      * Append the html generated for the rotation set to the buffer.
-     * 
+
      * @param buffer the buffer to populate
      * @param rotationSet the rotation set to process
-     * 
+
      */
     protected void appendDisplayRotationSetHtml(StringBuilder buffer,
         DisplayRotationSet rotationSet) {
-        AppendUtils.appendln(buffer, "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+        // AppendUtils.appendln(buffer, "<!DOCTYPE html>");
+        AppendUtils.appendln(buffer,
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
         AppendUtils.appendln(buffer, "<html>");
         AppendUtils.appendln(buffer, "<head>");
         AppendUtils.appendln(buffer, "<script type=\"text/javascript\" src=\"js/common.js\">");

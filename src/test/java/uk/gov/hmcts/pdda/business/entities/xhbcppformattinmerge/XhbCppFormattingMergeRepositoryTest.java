@@ -1,9 +1,14 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppformattinmerge;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -14,10 +19,11 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformattingmerge.XhbCppFormattin
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class XhbCppFormattingMergeRepositoryTest extends AbstractRepositoryTest<XhbCppFormattingMergeDao> {
 
     @Mock
@@ -33,10 +39,26 @@ class XhbCppFormattingMergeRepositoryTest extends AbstractRepositoryTest<XhbCppF
 
     @Override
     protected XhbCppFormattingMergeRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCppFormattingMergeRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCppFormattingMergeRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCppFormattingMergeDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCppFormattingMergeDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Override
@@ -67,7 +89,7 @@ class XhbCppFormattingMergeRepositoryTest extends AbstractRepositoryTest<XhbCppF
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         cppFormattingMergeId = result.getPrimaryKey();
-        assertNotNull(cppFormattingMergeId, NOTNULL);
+        assertNotNull(cppFormattingMergeId, NOTNULLRESULT);
         return new XhbCppFormattingMergeDao(result);
     }
 

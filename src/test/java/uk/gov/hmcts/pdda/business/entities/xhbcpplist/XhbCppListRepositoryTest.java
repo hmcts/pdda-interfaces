@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcpplist;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -42,10 +46,27 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
 
     @Override
     protected XhbCppListRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCppListRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCppListRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCppListDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCppListDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -89,35 +110,55 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         if (dao != null) {
             list.add(dao);
         }
+
         List<XhbCppListDao> resultList = null;
+
         if (BYLISTDATE.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+            // Standard method – no static mocking needed
+            Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             resultList = getClassUnderTest().findByCourtCodeAndListTypeAndListDate(
                 getDummyDao().getCourtCode(), getDummyDao().getListType(), LocalDateTime.now());
+
         } else if (BYSTARTDATE.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            resultList = getClassUnderTest()
-                .findByCourtCodeAndListTypeAndListStartDateAndListEndDate(getDummyDao().getCourtCode(),
-                    getDummyDao().getListType(), LocalDateTime.now(), LocalDateTime.now());
-        } else if (BYCLOBID.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            XhbCppListDao result = getClassUnderTest().findByClobId(getDummyDao().getListClobId());
-            if (dao != null) {
-                assertNotNull(result, "Result is Null");
-                assertSame(dao, result, SAME);
-            } else {
-                assertNull(result, SAME);
+            // Safe method – needs static mocking of EntityManagerUtil
+            try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                resultList = getClassUnderTest()
+                    .findByCourtCodeAndListTypeAndListStartDateAndListEndDateSafe(
+                        getDummyDao().getCourtCode(),
+                        getDummyDao().getListType(),
+                        LocalDateTime.now().minusMinutes(5),
+                        LocalDateTime.now());
             }
-            return true;
+
+        } else if (BYCLOBID.equals(whichTest)) {
+            // Safe method – needs static mocking of EntityManagerUtil
+            try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+                mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+                Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
+                Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+                XhbCppListDao result = getClassUnderTest().findByClobIdSafe(getDummyDao().getListClobId());
+                if (dao != null) {
+                    assertNotNull(result, "Result is Null");
+                    assertSame(dao, result, NOTSAMERESULT);
+                } else {
+                    assertNull(result, NOTSAMERESULT);
+                }
+                return true;
+            }
         }
+
         assertNotNull(resultList, "Result is Null");
         if (dao != null) {
-            assertSame(dao, resultList.get(0), SAME);
+            assertFalse(resultList.isEmpty(), "Result list is empty");
+            assertSame(dao, resultList.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, resultList.size(), SAME);
+            assertTrue(resultList.isEmpty(), NOTSAMERESULT);
         }
         return true;
     }
@@ -159,7 +200,7 @@ class XhbCppListRepositoryTest extends AbstractRepositoryTest<XhbCppListDao> {
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         cppListId = result.getPrimaryKey();
-        assertNotNull(cppListId, NOTNULL);
+        assertNotNull(cppListId, NOTNULLRESULT);
         return new XhbCppListDao(result);
     }
 

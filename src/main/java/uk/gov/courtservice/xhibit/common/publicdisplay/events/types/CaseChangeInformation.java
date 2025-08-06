@@ -3,23 +3,16 @@ package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 import java.io.Serializable;
 
 /**
- * <p>
+
  * Title: Case Change Information.
- * </p>
- * 
- * <p>
+
  * Description: When an event occurs for a case this class is created to contain information as to
  * whether the case is active.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: CaseChangeInformation.java,v 1.4 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -31,7 +24,7 @@ public class CaseChangeInformation implements Serializable {
 
     /**
      * Set whether the case is active.
-     * 
+
      * @param caseActive Whether the case is active
      */
     public CaseChangeInformation(boolean caseActive) {
@@ -40,7 +33,7 @@ public class CaseChangeInformation implements Serializable {
 
     /**
      * Set whether the case is active.
-     * 
+
      * @param caseActive Whether the case is active
      */
     public final void setCaseActive(boolean caseActive) {
@@ -49,7 +42,7 @@ public class CaseChangeInformation implements Serializable {
 
     /**
      * Whether the case is active.
-     * 
+
      * @return Whether the case is active.
      */
     public boolean isCaseActive() {

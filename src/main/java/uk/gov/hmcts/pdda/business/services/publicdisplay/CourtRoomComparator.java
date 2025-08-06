@@ -7,23 +7,22 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import java.util.Comparator;
 
 /**
- * <p>
+
  * Title: Comparator used to sort court rooms.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Initial naive implementation that sorts purely based on the court room name. Implemented as a
  * 'factory' style singleton so that we can easily change implementation in the future.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -37,7 +36,7 @@ public final class CourtRoomComparator implements Comparator<XhbCourtRoomDao> {
 
     /**
      * Get a comparator to sort court rooms.
-     * 
+
      * @return A class implementing Comparator able to sort by <code>XhbCourtRoom</code>.
      */
     public static Comparator<XhbCourtRoomDao> getInstance() {
@@ -47,7 +46,7 @@ public final class CourtRoomComparator implements Comparator<XhbCourtRoomDao> {
     /**
      * Compares two instances of <code>XhbCourtRoom</code> in order to provide a natural order based
      * on their CREST court room numbers.
-     * 
+
      * @param o1 First instance of <code>XhbCourtRoom</code> to compare.
      * @param o2 Second instance of <code>XhbCourtRoom</code> to compare
      * @return as per spec of Comparator interface.
@@ -60,7 +59,7 @@ public final class CourtRoomComparator implements Comparator<XhbCourtRoomDao> {
 
     /**
      * Checks whether the object passed in is equivalent to this class.
-     * 
+
      * @param obj The object check equivalence on.
      * @return true if equivalent.
      */

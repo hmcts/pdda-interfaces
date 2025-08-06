@@ -13,6 +13,8 @@ import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyHearingUtil;
+import uk.gov.hmcts.DummyJudgeUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -25,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"static-access", "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods", "PMD.UseConcurrentHashMap"})
+@SuppressWarnings({"static-access", "PMD"})
 class ListObjectHelperTest {
 
     private static final String XHBCOURTSITEDAO = "xhbCourtSiteDao";
@@ -113,7 +114,7 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.COURTROOMNO, "1");
         nodesMap.put(classUnderTest.SITTINGTIME, "23:40");
         // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
             Optional.of(DummyHearingUtil.getXhbHearingListDao()));
@@ -147,7 +148,7 @@ class ListObjectHelperTest {
         // Setup
         nodesMap.put(classUnderTest.CASENUMBER, "T123321");
         // Set
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         // Expects
         Mockito.when(mockDataHelper.validateCase(Mockito.isA(Integer.class),
@@ -163,7 +164,6 @@ class ListObjectHelperTest {
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
-        nodesMap.clear();
         nodesMap.put(classUnderTest.CATEGORY, "Criminal");
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
@@ -295,7 +295,7 @@ class ListObjectHelperTest {
         Mockito
             .when(mockDataHelper.validateDefendant(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class),
-                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class)))
+                Mockito.isA(Integer.class), Mockito.isA(LocalDateTime.class), Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
     }
 
@@ -310,8 +310,9 @@ class ListObjectHelperTest {
         // Expects
         Mockito
             .when(mockDataHelper.validateDefendantOnCase(Mockito.isA(Integer.class),
-                Mockito.isA(Integer.class)))
+                Mockito.isA(Integer.class), Mockito.isA(String.class)))
             .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()));
+
         // Run
         boolean result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
@@ -337,7 +338,64 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
+    
+    @Test
+    void testJudge() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        expectJudge(nodesMap);
+        // Run
+        boolean result = testNodeMap(nodesMap, true, ListObjectHelper.JUDGE_NODE);
+        assertTrue(result, TRUE);
+        result = testNodeMap(nodesMap, false, ListObjectHelper.JUDGE_NODE);
+        assertTrue(result, TRUE);
+    }
+    
+    private void expectJudge(Map<String, String> nodesMap) {
+        // Setup
+        final XhbSchedHearingAttendeeDao xhbSchedHearingAttendeeDao = new XhbSchedHearingAttendeeDao();
+        nodesMap.put(classUnderTest.TITLE, "TEST_TITLE");
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "TEST_FIRSTNAME");
+        nodesMap.put(classUnderTest.SURNAME, "TEST_SURNAME");
+        
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+        
+        // Expects
+        Mockito
+            .when(mockDataHelper.validateJudge(Mockito.isA(Integer.class),
+                Mockito.isA(String.class), Mockito.isA(String.class),
+                Mockito.isA(String.class)))
+            .thenReturn(Optional.of(DummyJudgeUtil.getXhbRefJudgeDao()));
+        Mockito.when(mockDataHelper.createSchedHearingAttendee(Mockito.isA(String.class),
+            Mockito.isA(Integer.class), Mockito.isA(Integer.class))).thenReturn(
+                Optional.of(xhbSchedHearingAttendeeDao));
+    }
 
+    @Test
+    void testProcessJudgeRecords() {
+        // Setup
+        final XhbSchedHearingAttendeeDao xhbSchedHearingAttendeeDao = new XhbSchedHearingAttendeeDao();
+        
+        // Set
+        ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbRefJudgeDao",
+            Optional.of(DummyJudgeUtil.getXhbRefJudgeDao()));
+        
+        // Expects
+        Mockito.when(mockDataHelper.createSchedHearingAttendee(Mockito.isA(String.class),
+            Mockito.isA(Integer.class), Mockito.isA(Integer.class))).thenReturn(
+                Optional.of(xhbSchedHearingAttendeeDao));
+        
+        boolean result = true;
+        classUnderTest.processJudgeRecords();
+        assertTrue(result, TRUE);
+    }
+    
     @Test
     void testIsNumberedNode() {
         boolean result = classUnderTest.isNumberedNode(classUnderTest.FIRSTNAME);

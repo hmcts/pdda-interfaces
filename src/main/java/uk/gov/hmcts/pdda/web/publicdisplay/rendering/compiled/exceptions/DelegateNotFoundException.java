@@ -5,20 +5,19 @@ import uk.gov.hmcts.pdda.web.publicdisplay.rendering.exceptions.RenderingExcepti
 /**
  * <p/>
  * Title: DelegateNotFoundException.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Will Fardell
  * @version $Revision: 1.3 $
  */
@@ -27,7 +26,7 @@ public class DelegateNotFoundException extends RenderingException {
 
     /**
      * Could not locate delegate.
-     * 
+
      * @param documentType the document type we are looking for
      */
     public DelegateNotFoundException(String documentType) {

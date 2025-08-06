@@ -31,19 +31,18 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * <p>
+
  * Title: Display Location Helper.
- * </p>
- * <p>
+
+
  * Description: Helper methods to get relevant information regarding locations and displays
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: DisplayLocationDataHelper.java,v 1.9 2005/11/17 10:55:46 bzjrnl Exp $
  */
@@ -62,7 +61,7 @@ public class DisplayLocationDataHelper {
 
     /**
      * Returns the Court Sites, Locations within the Site and Displays within the Site.
-     * 
+
      * @param courtId The court being maintained
      * @return Details of site, location and screen within a court
      */
@@ -78,7 +77,7 @@ public class DisplayLocationDataHelper {
         List<CourtSitePdComplexValue> results = new ArrayList<>();
 
         CourtSitePdComplexValue sitePdComplex;
-        List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtId(courtId);
+        List<XhbCourtSiteDao> siteCol = xhbCourtSiteRepository.findByCourtIdSafe(courtId);
         Iterator<XhbCourtSiteDao> siteIter = siteCol.iterator();
         while (siteIter.hasNext()) {
             // Create an instance of the court site complex value
@@ -183,7 +182,7 @@ public class DisplayLocationDataHelper {
 
     /**
      * Adds display locations.
-     * 
+
      * @param sitePdComplex CourtSitePDComplexValue
      * @param siteLocal XhbCourtSiteDao
      */
@@ -220,7 +219,7 @@ public class DisplayLocationDataHelper {
 
     /**
      * Adds rotation set dd to the rotation set.
-     * 
+
      * @param complex RotationSetComplexValue
      * @param xhbRotationSetDdRepository xhbRotationSetDdRepository.
      */
@@ -238,7 +237,8 @@ public class DisplayLocationDataHelper {
             // for every rotation set DD, get the display document and
             // create a complex VO
             Optional<XhbDisplayDocumentDao> xhbDisplayDocument =
-                xhbDisplayDocumentRepository.findById(rotationSetDdLocal.getDisplayDocumentId());
+                xhbDisplayDocumentRepository
+                    .findByIdSafe(rotationSetDdLocal.getDisplayDocumentId());
             XhbDisplayDocumentDao xhbDisplayDocumentDao =
                 xhbDisplayDocument.isPresent() ? xhbDisplayDocument.get() : null;
             ddComplex = getRotationSetDdComplexValue(rotationSetDdLocal, xhbDisplayDocumentDao);

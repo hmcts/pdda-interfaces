@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.services.cppformatting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -18,21 +20,22 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.mockStatic;
+
 
 /**
- * <p>
+
  * Title: CppFormattingHelper Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
@@ -52,19 +55,20 @@ class CppFormattingHelperTest {
 
     @Test
     void testGetLatestPublicDisplayDocument() {
-        // Setup
         List<XhbCppFormattingDao> xhbCppFormattingDaos = new ArrayList<>();
         xhbCppFormattingDaos.add(DummyFormattingUtil.getXhbCppFormattingDao());
 
         Mockito.when(mockEntityManager.createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(xhbCppFormattingDaos);
 
-        // Run
-        XhbCppFormattingDao result =
-            classUnderTest.getLatestPublicDisplayDocument(0, mockEntityManager);
+        try (MockedStatic<EntityManagerUtil> staticMock = mockStatic(EntityManagerUtil.class)) {
+            staticMock.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
 
-        // Checks
-        assertNotNull(result, NULL);
+            XhbCppFormattingDao result =
+                classUnderTest.getLatestPublicDisplayDocument(0, mockEntityManager);
+
+            assertNotNull(result, NULL);
+        }
     }
 
 }

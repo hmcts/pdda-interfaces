@@ -69,6 +69,7 @@ public class XhbRefHearingTypeDao extends AbstractVersionedDao implements Serial
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getRefHearingTypeId();
     }

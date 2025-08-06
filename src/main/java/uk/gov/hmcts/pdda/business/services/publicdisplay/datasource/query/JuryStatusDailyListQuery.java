@@ -39,7 +39,7 @@ import java.util.Optional;
 /**
  * This class wraps the stored procedure that provides the data for the daily list and jury status
  * document.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
@@ -70,11 +70,11 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     /**
      * Returns an collection of JuryStatusDailyListValue.
-     * 
+
      * @param date LocaldateTime
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-     * 
+
      * @return Suumary by name data for the specified court rooms
      */
     @Override
@@ -144,7 +144,6 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     private JuryStatusDailyListValue getJuryStatusDailyListValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao, String floating) {
         JuryStatusDailyListValue result = new JuryStatusDailyListValue();
-        boolean isCaseHidden = false;
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
             scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
         result.setFloating(floating);
@@ -153,15 +152,18 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         result.setListCourtRoomId(sittingDao.getCourtRoomId());
 
         // Get the hearing
+        boolean isCaseHidden = false;
         Optional<XhbHearingDao> hearingDao = getXhbHearingDao(scheduledHearingDao.getHearingId());
         if (hearingDao.isPresent()) {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                 result.setCaseTitle(caseDao.get().getCaseTitle());
+                
                 isCaseHidden = YES.equals(caseDao.get().getPublicDisplayHide());
 
                 // Populate the event
@@ -190,12 +192,13 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     private DefendantName getDefendantNameFromSchedule(XhbSchedHearingDefendantDao schedHearingDefendantDao,
         boolean isCaseHidden) {
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-            getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
+            getXhbDefendantOnCaseRepository()
+                .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
         if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
             // Get the defendant
             Optional<XhbDefendantDao> defendantDao =
-                getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
             if (defendantDao.isPresent()) {
                 return getDefendantName(defendantDao.get().getFirstName(), defendantDao.get().getMiddleName(),
                     defendantDao.get().getSurname(), isDefendantHidden(defendantDao, defendantOnCaseDao, isCaseHidden));
@@ -226,7 +229,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     private String getHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
         if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository().findById(hearingDao.get().getRefHearingTypeId());
+                getXhbRefHearingTypeRepository()
+                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
             if (refHearingTypeDao.isPresent()) {
                 return refHearingTypeDao.get().getHearingTypeDesc();
             }

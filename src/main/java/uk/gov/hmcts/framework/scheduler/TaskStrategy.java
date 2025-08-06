@@ -4,21 +4,20 @@ import java.util.Properties;
 
 /**
  * Interface for Strategy Pattern implementation of task scheduler.
- * <p>
+
  * Title: Interface to be implemented to create a strategy for Schedulable execution.
- * </p>
- * <p>
+
+
  * Description: Classes implementing this interface configure and initialise tasks for execution.
  * Implementations can be written to perform a particular specialised task or be written more
  * generically such as JavaTaskStrategy.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  */
 public interface TaskStrategy {

@@ -59,7 +59,7 @@ public class CathConnectionServiceBean implements RemoteTask {
 
     /**
      * Check the status of a URL given an expected http response code.
-     * 
+
      * @param url The URL to check
      * @param expectedStatusCode The expected http response code
      * @return True if the response code matches the expected code, false

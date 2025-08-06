@@ -12,7 +12,6 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
-import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 
 import java.io.OutputStream;
@@ -21,19 +20,18 @@ import java.io.Reader;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * <p>
+
  * Title: FormattingServicesProcessing Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
@@ -50,9 +48,8 @@ class FormattingServicesProcessingTest {
 
 
     @InjectMocks
-    private final FormattingServices classUnderTest =
-        new FormattingServices(EasyMock.createMock(EntityManager.class),
-            EasyMock.createMock(CourtelHelper.class), EasyMock.createMock(BlobHelper.class));
+    private final FormattingServices classUnderTest = new FormattingServices(
+        EasyMock.createMock(EntityManager.class), EasyMock.createMock(BlobHelper.class));
 
     @Test
     void testGetFormattingValue() {

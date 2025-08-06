@@ -19,12 +19,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class is the controller bean for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
  * updating XHB_PDDA_MESSAGE.
- *
- * <p>It will check for the existence of (unprocessed) records in the database -
+
+ * It will check for the existence of (unprocessed) records in the database -
  *  for each record it will add an entry to XHB_CPP_STAGING_INBOUND - once processed it will then update the
  * message record to show it has been processed.
  */
@@ -32,6 +33,7 @@ import java.util.Optional;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -40,6 +42,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_INPROGRESS = "IP"; // In Progress
     private static final String MESSAGE_STATUS_PROCESSED = "VP"; // Validated and Processed
     private static final String MESSAGE_STATUS_INVALID = "INV"; // Invalid
+    private static final String MESSAGE_STATUS_VALID_NOT_PROCESSED = "VN"; // PddaMessage status valid not processed
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
 
     @Autowired
@@ -62,10 +65,19 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     @Override
     public void doTask() {
-
         LOG.debug("Lighthouse -- doTask() - entered");
-        List<XhbPddaMessageDao> xhbPddaMessageDaos = getXhbPddaMessageRepository().findByLighthouse();
-        xhbPddaMessageDaos.forEach(this::processFile);
+        List<XhbPddaMessageDao> xhbPddaMessageDaos =
+            getXhbPddaMessageRepository().findByLighthouseSafe();
+        LOG.debug("Messages to process: {}", xhbPddaMessageDaos.size());
+        
+        AtomicInteger docNumber = new AtomicInteger(1);
+        xhbPddaMessageDaos.forEach(dao -> {
+            LOG.debug("Lighthouse Processing file number: {}: {}, on thread: {}",
+                docNumber, dao.getCpDocumentName(), Thread.currentThread().getName());
+            processFile(dao);
+            docNumber.incrementAndGet();
+        });
+        
         LOG.debug("Lighthouse -- doTask() - completed");
     }
 
@@ -74,14 +86,29 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         writeToLog("About to process file " + dao.getCpDocumentName());
 
         List<XhbCppStagingInboundDao> xhbCppStagingInboundDaos = 
-            getXhbCppStagingInboundRepository().findDocumentByDocumentName(dao.getCpDocumentName());
+            getXhbCppStagingInboundRepository()
+                .findDocumentByDocumentNameSafe(dao.getCpDocumentName());
         
-        // Check the file hasn't already been processed
+        LOG.debug("Checked for existing entries in XHB_CPP_STAGING_INBOUND for file: {} - found {} entries",
+            dao.getCpDocumentName(), xhbCppStagingInboundDaos.size());
+        
+        // Check the file hasn't already got a record in XHB_CPP_STAGING_INBOUND
         if (!xhbCppStagingInboundDaos.isEmpty()) {
-            LOG.warn("The file: {}{}", dao.getCpDocumentName(), 
-                " has already been sent for processing, and therefore a duplicate entry has not been added");
+            // Fetch the latest XHB_PDDA_MESSAGE record for this file
+            XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+            // If the status is VN then this document must be a duplicate
+            if (MESSAGE_STATUS_VALID_NOT_PROCESSED.equals(latest.getCpDocumentStatus())) {
+                LOG.warn("The file: {}{}{}", latest.getCpDocumentName(), 
+                    " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
+                updatePddaMessageStatus(latest, MESSAGE_STATUS_INVALID);
+            }
             return;
         }
+        
+        // Update the status to indicate it is being processed
+        updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
+        
+        LOG.debug("File {} has not been processed before, proceeding with processing", dao.getCpDocumentName());
         
         try {
             // First check the filename is valid
@@ -92,20 +119,21 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 return;
             }
 
+            LOG.debug("Processing Filename : {}", dao.getCpDocumentName());
+            
             // First we need to do a further filter on XHIBIT data to:
             // 1. not process public display events from XHIBIT
             // 2. ensure lists from XHIBIT get processed
             String documentName = getDocumentNameToProcess(dao.getCpDocumentName());
 
+            LOG.debug("Document name to process: {}", documentName);
+            
             if (documentName.length() > 0) {
                 // Now add the data into the XHB_CPP_STAGING_INBOUND table
 
                 // split up the filename into its 3 parts : type_courtCode_dateTime
                 String[] fileParts = documentName.split("_");
                 if (fileParts.length == FILE_PARTS) {
-                    // Update the status to indicate it is being processed
-                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
-
                     String strTimeLoaded = fileParts[2].replaceAll(".xml", "");
                     LocalDateTime timeLoaded =
                         LocalDateTime.parse(strTimeLoaded.trim(), DATETIMEFORMAT);
@@ -143,7 +171,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Write to the debug log if debug is enabled.
-     *
+
      * @param string Debug message to write to the log
      */
     private void writeToLog(final String string) {
@@ -154,13 +182,23 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     private XhbPddaMessageDao fetchLatestXhbPddaMessageDao(XhbPddaMessageDao dao) {
         LOG.debug("fetchLatestXhbPddaMessageDao()");
-        Optional<XhbPddaMessageDao> opt = getXhbPddaMessageRepository().findById(dao.getPrimaryKey());
-        return opt.isPresent() ? opt.get() : dao;
+        Optional<XhbPddaMessageDao> opt =
+            getXhbPddaMessageRepository().findByIdSafe(dao.getPrimaryKey());
+
+        if (opt.isPresent()) {
+            return opt.get();
+        } else {
+            String message = "DAO not found in DB for ID: " + dao.getPrimaryKey()
+                + ". Original document name: " + dao.getCpDocumentName();
+            LOG.error(message);
+            throw new IllegalStateException(message);
+        }
     }
+
 
     /**
      * Insert the row into XHB_CPP_STAGING_INBOUND.
-     *
+
      * @param docName - Document name e.g. DailyList_453_20200101123213.xml
      * @param courtCode from the document name
      * @param documentType e.g. DL
@@ -189,35 +227,56 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Update the XHB_PDA_MESSAGE record.
-     *
+
      * @param stagingInboundId - cpp staging inbound id
      * @throws SQLException Exception
      */
     private void updatePddaMessage(final Integer stagingInboundId, XhbPddaMessageDao dao) {
-
-        writeToLog("doc " + dao.getCpDocumentName() + " docStatus: " + MESSAGE_STATUS_PROCESSED + " messageId: "
-                + dao.getPddaMessageId());
+        writeToLog("Updating doc " + dao.getCpDocumentName() + " with status: "
+            + MESSAGE_STATUS_PROCESSED + " and messageId: " + dao.getPddaMessageId());
 
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+        LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
+            latest.getVersion());
+
         latest.setCpDocumentStatus(MESSAGE_STATUS_PROCESSED);
         latest.setCppStagingInboundId(stagingInboundId);
-        getXhbPddaMessageRepository().update(latest);
 
+        getXhbPddaMessageRepository().update(latest)
+            .ifPresentOrElse(updated -> LOG
+                .debug("Successfully updated message with new staging ID: {}", stagingInboundId),
+                () -> {
+                    LOG.error("Failed to update DAO with staging ID: {}", stagingInboundId);
+                    throw new IllegalStateException(
+                        "Update failed for DAO: " + latest.getPrimaryKey());
+                });
     }
+
 
     /**
      * Updates the XHB_PDDA_MESSAGE record.
      */
     void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
-        LOG.debug("updatePddaMessageStatus");
+        LOG.debug("updatePddaMessageStatus for DAO ID: {}", dao.getPrimaryKey());
+
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
+        LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
+            latest.getVersion());
+
         latest.setCpDocumentStatus(messageStatus);
-        getXhbPddaMessageRepository().update(latest);
+        getXhbPddaMessageRepository().update(latest).ifPresentOrElse(
+            updated -> LOG.debug("Successfully updated status to {} for DAO ID: {}", messageStatus,
+                updated.getPrimaryKey()),
+            () -> {
+                LOG.error("Failed to update status for DAO ID: {}", latest.getPrimaryKey());
+                throw new IllegalStateException("Update failed for DAO: " + latest.getPrimaryKey());
+            });
     }
+
 
     /**
      * Return the document type depending on what's been used in the file name.
-     *
+
      * @param fileType portion of the filename
      * @return shorthand documentType
      */
@@ -236,7 +295,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     /**
      * Get the document name to process. If the document name is invalid then return an empty
      * string.
-     * 
+
      * @param documentName document name
      * @return the document name to process
      */
@@ -265,7 +324,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Use a regular expression to check if the document name is valid.
-     * 
+
      * @param documentName The document name to check
      * @return true if the document name is valid
      */

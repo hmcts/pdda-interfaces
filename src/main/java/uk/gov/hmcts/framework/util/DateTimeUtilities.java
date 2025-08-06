@@ -12,20 +12,19 @@ import java.util.Locale;
 
 
 /**
- * <p>
+
  * Title: DateTimeUtilities.
- * </p>
- * <p>
+
+
  * Description: This class is used as a repositiry for common functions and utilities relating to
  * dates and time
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Ian Hannaford / Marie Holmberg
  * @version 1.0
  */
@@ -41,7 +40,7 @@ public class DateTimeUtilities {
 
     /**
      * Retrieve only the "date" part of a LocalDateTime.
-     * 
+
      * @param date the LocalDateTime without the time portion
      */
     public static LocalDateTime stripTime(LocalDateTime date) {
@@ -57,7 +56,7 @@ public class DateTimeUtilities {
     /**
      * Converts a formatted String to a Calendar in the Oracle date format Expected format of Oracle
      * Date is yyyy-mm-ddTHH:mm:ss.
-     * 
+
      * @param timeStamp String
      * @return Calendar
      */
@@ -67,7 +66,7 @@ public class DateTimeUtilities {
 
     /**
      * Converts a formatted String to a Date in the Oracle date format.
-     * 
+
      * @param timeStamp String
      * @return Date
      * @throws ParseException Exception
@@ -78,14 +77,13 @@ public class DateTimeUtilities {
         return calendarToDate(cal);
     }
     
-    @SuppressWarnings("PMD.AvoidCalendarDateCreation")
     public static Date calendarToDate(Calendar calendar) {
         return calendar.getTime();
     }
 
     /**
      * Converts a formatted String to a Calendar.
-     * 
+
      * @param timeStamp String (mandatory and non-null)
      * @param format SimpleDateFormat (mandatory and non-null)
      * @return Calendar

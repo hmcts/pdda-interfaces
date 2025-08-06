@@ -27,19 +27,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * <p>
+
  * Title: Reads in the XML file and creates a Map which is used in PublicNoticeManipulator.
- * </p>
- * <p>
+
+
  * Description: see title
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Pat Fox, Bob Boles
  * @created 24 February 2003
  */
@@ -64,7 +63,7 @@ public final class PublicNoticeXmlHelper {
 
     /**
      * Gets the instance attribute of the PublicNoticeXmlHelper class.
-     * 
+
      * @return The instance value
      */
     public static PublicNoticeXmlHelper getInstance() {
@@ -95,7 +94,7 @@ public final class PublicNoticeXmlHelper {
 
     /**
      * Gets the manipulatorMap attribute of the PublicNoticeXmlHelper object.
-     * 
+
      * @return The manipulatorMap value
      */
     public Map<Integer, List<DefinitivePublicNoticeStatusValue>> getManipulatorMap() {
@@ -104,7 +103,7 @@ public final class PublicNoticeXmlHelper {
 
     /**
      * Description of the Method.
-     * 
+
      * @param xmlSourceFile Description of the Parameter
      */
     private void loadXmlToMap(String xmlSourceFile) throws ParserConfigurationException {
@@ -143,7 +142,7 @@ public final class PublicNoticeXmlHelper {
      * Traverses the XML tree, fore each courtlogEvet tag it builds an arrayList of objects that are
      * keyed on the EventId each element in the array list contains an {definitivePNId &
      * isActive/status}.
-     * 
+
      * @param node Description of the Parameter
      */
     private void traverse(Node node) {
@@ -190,7 +189,7 @@ public final class PublicNoticeXmlHelper {
 
     /**
      * Description of the Method.
-     * 
+
      * @param node Description of the Parameter
      * @return Description of the Return Value
      */

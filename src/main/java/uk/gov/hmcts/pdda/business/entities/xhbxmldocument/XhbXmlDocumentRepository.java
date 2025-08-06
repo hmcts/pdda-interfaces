@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbxmldocument;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -9,7 +10,6 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
 
@@ -17,7 +17,6 @@ import java.util.Optional;
 public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbXmlDocumentRepository.class);
-    private static final String UNCHECKED = "unchecked";
 
     public XhbXmlDocumentRepository(EntityManager em) {
         super(em);
@@ -29,44 +28,34 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
     }
 
     /**
-     * findDocumentByClobId.
-     * 
+     * findListByClobId.
+
      * @return list
      */
-    @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findDocumentByClobId(Long xmlDocumentClobId,
+    @SuppressWarnings("unchecked")
+    public List<XhbXmlDocumentDao> findListByClobId(Long xmlDocumentClobId,
         LocalDateTime timeDelay) {
-        LOG.debug("In XhbXmlDocumentRepository.findDocumentByClobId");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findDocumentByClobId");
+        //LOG.debug("In XhbXmlDocumentRepository.XhbXmlDocumentRepository");
+        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findListByClobId");
         query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
         query.setParameter("timeDelay", timeDelay);
         return query.getResultList();
     }
 
-    /**
-     * findByXmlDocumentClobId.
-     * 
-     * @return XhbXmlDocumentDao
-     */
-    public Optional<XhbXmlDocumentDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
-        LOG.debug("In XhbXmlDocumentRepository.findByXmlDocumentClobId");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
-        query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
-        @SuppressWarnings("unchecked")
-        List<XhbXmlDocumentDao> resultList = query.getResultList();
-        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+    @SuppressWarnings("unchecked")
+    public List<XhbXmlDocumentDao> findListByClobIdSafe(Long xmlDocumentClobId,
+        LocalDateTime timeDelay) {
+        // LOG.debug("findListByClobIdSafe({}, {})", xmlDocumentClobId, timeDelay);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_XML_DOCUMENT.findListByClobId");
+            query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+            query.setParameter("timeDelay", timeDelay);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findListByClobIdSafe({}, {}): {}", xmlDocumentClobId, timeDelay,
+                e.getMessage(), e);
+            return List.of(); // Defensive fallback
+        }
     }
-    
-    /**
-     * findJsonDocuments.
-     * 
-     * @return XhbXmlDocumentDao
-     */
-    @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findJsonDocuments(String status) {
-        LOG.debug("In XhbXmlDocumentRepository.findJsonDocuments");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
-        query.setParameter("status", status);
-        return query.getResultList();
-    }
+
 }

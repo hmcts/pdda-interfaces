@@ -15,8 +15,11 @@ import java.time.LocalDateTime;
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_PDDA_MESSAGE")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByLighthouse",
-    query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'VN' AND "
-        + " (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')")
+    query = "SELECT o from XHB_PDDA_MESSAGE o"
+        + " WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'VN'"
+        + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
+        + " AND FUNCTION('date', o.creationDate) = CURRENT_DATE"
+        + " ORDER BY o.creationDate ASC LIMIT 5")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByCpDocumentName",
     query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName = :cpDocumentName AND (o.obsInd is null OR "
         + "o.obsInd = 'N' OR o.obsInd = ' ') ORDER BY o.pddaMessageId")
@@ -100,6 +103,7 @@ public class XhbPddaMessageDao extends AbstractVersionedDao implements Serializa
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getPddaMessageId();
     }

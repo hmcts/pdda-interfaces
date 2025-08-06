@@ -64,7 +64,7 @@ public final class FormattingServiceUtils {
 
     /**
      * Uses the values from the listdistribution.properties file.
-     * 
+
      * @param docType String
      * @return boolean
      */
@@ -102,7 +102,7 @@ public final class FormattingServiceUtils {
     /**
      * Add amendments as part of 2787 web page redesign that the transform is not picking up (but
      * should!!).
-     * 
+
      * @param inPage String
      * @return String
      */
@@ -158,7 +158,7 @@ public final class FormattingServiceUtils {
 
     /**
      * Get the time minus any delays.
-     * 
+
      * @return LocalDateTime Time minus any delay
      */
     public static LocalDateTime getTimeDelay(List<XhbConfigPropDao> configs) {
@@ -176,10 +176,13 @@ public final class FormattingServiceUtils {
 
     public static boolean isProcessingList(FormattingValue formattingValue) {
         return !isListLetterDocType(formattingValue.getDocumentType())
-            && (isDailyList(formattingValue.getDocumentType())
-                || isWarnedList(formattingValue.getDocumentType())
-                || isFirmList(formattingValue.getDocumentType()))
+            && isDailyList(formattingValue.getDocumentType())
             && formattingValue.getXmlDocumentClobId() != null
             && formattingValue.getXmlDocumentClobId() != 0;
+    }
+
+    public static boolean isInactiveOnPdda(FormattingValue formattingValue) {
+        return isFirmList(formattingValue.getDocumentType())
+            || isWarnedList(formattingValue.getDocumentType());
     }
 }

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,10 +40,27 @@ class XhbPddaDlNotifierRepositoryTest extends AbstractRepositoryTest<XhbPddaDlNo
 
     @Override
     protected XhbPddaDlNotifierRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbPddaDlNotifierRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbPddaDlNotifierRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbPddaDlNotifierDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbPddaDlNotifierDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -99,7 +119,7 @@ class XhbPddaDlNotifierRepositoryTest extends AbstractRepositoryTest<XhbPddaDlNo
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         pddaDlNotifierId = result.getPrimaryKey();
-        assertNotNull(pddaDlNotifierId, NOTNULL);
+        assertNotNull(pddaDlNotifierId, NOTNULLRESULT);
         return new XhbPddaDlNotifierDao(result);
     }
 

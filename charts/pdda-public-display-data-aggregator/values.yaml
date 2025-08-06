@@ -19,6 +19,10 @@ java:
           alias: DB_SCHEMA
         - name: app-insights-connection-string
           alias: app-insights-connection-string
+        - name: public-display-data-aggregator-authentication-cath-clientID
+          alias: CATH_AZURE_CLIENT_ID
+        - name: public-display-data-aggregator-authentication-cath-clientSecret
+          alias: CATH_AZURE_CLIENT_SECRET
         - name: public-display-data-aggregator-authentication-clientID
           alias: AZURE_CLIENT_ID
         - name: public-display-data-aggregator-authentication-clientSecret
@@ -41,4 +45,3 @@ java:
           alias: PDDA_BAIS_SFTP_UPLOAD_LOCATION
   environment:
     RUN_DB_MIGRATION_ON_STARTUP: false
-    APIM_URI: https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management

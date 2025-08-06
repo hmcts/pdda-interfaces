@@ -21,21 +21,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: PDDataControllerBean Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PdDataControllerBeanTest {
 
@@ -70,7 +70,6 @@ class PdDataControllerBeanTest {
         mockDataSource.retrieve(mockEntityManager);
         EasyMock.expectLastCall();
         EasyMock.expect(mockDataSource.getData()).andReturn(null);
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
         // Replays
         EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockDataSource);

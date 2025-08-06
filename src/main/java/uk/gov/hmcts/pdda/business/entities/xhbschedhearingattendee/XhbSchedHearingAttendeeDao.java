@@ -13,13 +13,14 @@ import java.io.Serializable;
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_SCHED_HEARING_ATTENDEE")
 public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements Serializable {
+    
     private static final long serialVersionUID = -6788003970955114552L;
+    
     @Id
-    @GeneratedValue(generator = "xhb_sched_hearing_attendee_seq",
+    @GeneratedValue(generator = "xhb_sched_hearing_attend_seq",
         strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "xhb_sched_hearing_attendee_seq",
-        sequenceName = "xhb_sched_hearing_attendee_seq", allocationSize = 1)
-
+    @SequenceGenerator(name = "xhb_sched_hearing_attend_seq",
+        sequenceName = "xhb_sched_hearing_attend_seq", allocationSize = 1)
     @Column(name = "SH_ATTENDEE_ID")
     private Integer shAttendeeId;
 
@@ -65,6 +66,7 @@ public class XhbSchedHearingAttendeeDao extends AbstractVersionedDao implements 
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getShAttendeeId();
     }

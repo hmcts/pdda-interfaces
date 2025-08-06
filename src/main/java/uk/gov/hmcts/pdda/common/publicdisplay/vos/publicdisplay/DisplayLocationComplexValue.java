@@ -7,22 +7,15 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation.XhbDisplayLocationDao;
 
 /**
- * <p>
+
  * Title: Display Location Complex Value.
- * </p>
- * 
- * <p>
+
  * Description: VO that holds information about the location and the display within that location
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: DisplayLocationComplexValue.java,v 1.1 2004/01/15 10:34:19 rz3jq5 Exp $
  */
@@ -38,7 +31,7 @@ public class DisplayLocationComplexValue extends CsAbstractValue {
 
     /**
      * Get the list of displays in the location.
-     * 
+
      * @return array of display basic values
      */
     public XhbDisplayDao[] getDisplayDao() {
@@ -47,7 +40,7 @@ public class DisplayLocationComplexValue extends CsAbstractValue {
 
     /**
      * Set the displays in the location.
-     * 
+
      * @param displayDao array of display basic values
      */
     public void setDisplayDaos(XhbDisplayDao... displayDao) {
@@ -56,7 +49,7 @@ public class DisplayLocationComplexValue extends CsAbstractValue {
 
     /**
      * Set a location.
-     * 
+
      * @param displayLocationDao the location basic value
      */
     public void setDisplayLocationDao(XhbDisplayLocationDao displayLocationDao) {
@@ -65,7 +58,7 @@ public class DisplayLocationComplexValue extends CsAbstractValue {
 
     /**
      * Get information about the location.
-     * 
+
      * @return XhbDisplayLocationDAO
      */
     public XhbDisplayLocationDao getDisplayLocationDao() {
@@ -74,9 +67,9 @@ public class DisplayLocationComplexValue extends CsAbstractValue {
 
     /**
      * Override the equals method to compare the id's of the associated basic value.
-     * 
+
      * @param complexValue A DisplayLocationComplexValue
-     * 
+
      * @return boolean
      */
     @Override

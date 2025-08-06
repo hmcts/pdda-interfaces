@@ -12,19 +12,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: Translation Bundles.
- * </p>
- * <p>
+
+
  * Description: A translation
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: TranslationBundles.java,v 1.4 2006/06/05 12:28:29 bzjrnl Exp $
  */
@@ -48,7 +47,7 @@ public class TranslationBundles implements Serializable {
 
     /**
      * Get the translation bundle for the given locale, else return null.
-     * 
+
      * @param locale the locale to fetch
      * @return the translation bundle
      */
@@ -71,7 +70,7 @@ public class TranslationBundles implements Serializable {
 
     /**
      * Add a translation to the bundles.
-     * 
+
      * @param key String
      * @param translation String
      * @param context String

@@ -8,26 +8,25 @@ import java.util.Properties;
 
 
 /**
- * <p>
+
  * Title: TaskStrategy implementation allowing the execution of plain java classes implementing the
  * JavaTask interface.
- * </p>
- * <p>
+
+
  * Description: Handles the execution of a java class that implements the JavaTask interface and has
  * a no arguments constructor. In future, more complex TaskStrategy implementation that support
  * complex constructor may be implemented.
- * </p>
- * <p>
+
+
  * To use this strategy it must be supplied with the required property defined in JAVA_TASK_CLASS,
  * otherwise it will not be valid after initialisation.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  */
 public class JavaTaskStrategy implements TaskStrategy {

@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * Class XsltFileList.
- * 
+
  * @version $Revision$ $Date$
  */
 public class XsltFileList extends AbstractTypeMarshal<String> implements Serializable {
@@ -31,9 +31,9 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method addXsltFileName.
-     * 
-     * 
-     * 
+
+
+
      * @param xsltFileName String
      */
     public void addXsltFileName(String xsltFileName) {
@@ -42,7 +42,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Note: hashCode() has not been overridden.
-     * 
+
      * @param obj Object
      * @return boolean
      */
@@ -75,9 +75,9 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method getXsltFileName.
-     * 
-     * 
-     * 
+
+
+
      * @param index int
      * @return String
      */
@@ -93,9 +93,9 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method getXsltFileName.
-     * 
-     * 
-     * 
+
+
+
      * @return String
      */
     public String[] getXsltFileName() {
@@ -109,9 +109,9 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method getXsltFileNameCount.
-     * 
-     * 
-     * 
+
+
+
      * @return int
      */
     public int getXsltFileNameCount() {
@@ -120,7 +120,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method removeAllXsltFileName.
-     * 
+
      */
     public void removeAllXsltFileName() {
         getList().clear();
@@ -128,9 +128,9 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method removeXsltFileName.
-     * 
-     * 
-     * 
+
+
+
      * @param index int
      * @return String
      */
@@ -142,7 +142,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method setXsltFileName.
-     * 
+
      * @param index int
      * @param xsltFileName String
      */
@@ -157,7 +157,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method setXsltFileName.
-     * 
+
      * @param xsltFileNameArray StringArray
      */
     public void setXsltFileName(String... xsltFileNameArray) {
@@ -168,7 +168,7 @@ public class XsltFileList extends AbstractTypeMarshal<String> implements Seriali
 
     /**
      * Method unmarshal.
-     * 
+
      * @param reader Reader
      * @return XsltFileList XsltFileList
      */

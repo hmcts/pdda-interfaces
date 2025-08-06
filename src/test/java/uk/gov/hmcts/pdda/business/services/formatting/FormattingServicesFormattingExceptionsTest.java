@@ -34,7 +34,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
-import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import uk.gov.hmcts.pdda.business.xmlbinding.formatting.FormattingConfig;
@@ -49,12 +48,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -62,25 +58,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * <p>
+
  * Title: FormattingServicesFormattingExceptions Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
-    "PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD"})
 class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestHelper {
 
     private static final String COURTSITE_END_TAG = "      </courtsite>\r\n";
@@ -245,6 +239,8 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     private static final String TRANSLATION_BUNDLE_XML = "";
     private static final String XML = "XML";
 
+    private static final String MERGE_CUT_OFF_TIME = "MERGE_CUT_OFF_TIME";
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -288,8 +284,8 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
     private XhbCppFormattingMergeRepository mockXhbCppFormattingMergeRepository;
 
     @InjectMocks
-    private final FormattingServices classUnderTest = new FormattingServices(mockEntityManager,
-        EasyMock.createMock(CourtelHelper.class), EasyMock.createMock(BlobHelper.class));
+    private final FormattingServices classUnderTest =
+        new FormattingServices(mockEntityManager, EasyMock.createMock(BlobHelper.class));
 
     public static class PddaSwitcher {
         static final String PDDA_SWITCH = "PDDA_SWITCHER";
@@ -339,7 +335,7 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
         existingList.add(xhbCppListDao);
         Mockito.when(mockXhbCppListRepository.findByClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCppListDao);
-        Mockito.when(mockXhbCppListRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCppListRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.empty());
         Mockito.when(mockXhbCppListRepository.update(Mockito.isA(XhbCppListDao.class)))
             .thenReturn(Optional.of(existingList.get(0)));
@@ -374,7 +370,7 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
 
     @Test
     void testProcessIwpDocumentFormattingException()
-        throws IOException, TransformerException {
+        throws TransformerConfigurationException, IOException {
         // Setup
         XhbClobDao xhbClobDao =
             DummyFormattingUtil.getXhbClobDao(Long.valueOf(1), INTERNET_WEBPAGE);
@@ -385,17 +381,22 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
         xhbCppFormattingDao.setXmlDocumentClobId(xhbClobDao.getClobId());
         List<XhbFormattingDao> formattingDaoLatestClobList = new ArrayList<>();
         formattingDaoLatestClobList.add(xhbFormattingDao);
+        List<XhbConfigPropDao> propertyList = new ArrayList<>();
+        propertyList.add(DummyServicesUtil.getXhbConfigPropDao(MERGE_CUT_OFF_TIME, "23:59:59"));
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(MERGE_CUT_OFF_TIME))
+            .thenReturn(propertyList);
         Mockito.when(
-            mockXhbCppFormattingRepository.findLatestByCourtDateInDoc(Mockito.isA(Integer.class),
+            mockXhbCppFormattingRepository.findLatestByCourtDateInDocSafe(
+                Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(LocalDateTime.class)))
             .thenReturn(xhbCppFormattingDao);
-        Mockito.when(mockXhbClobRepository.findById(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
         Mockito.when(mockXhbClobRepository.update(Mockito.isA(XhbClobDao.class)))
             .thenReturn(Optional.of(xhbClobDao));
-        Mockito.when(mockXhbFormattingRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbFormattingRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbFormattingDao));
-        Mockito.when(mockXhbCppFormattingRepository.findById(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCppFormattingRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCppFormattingDao));
         Mockito.when(mockXhbFormattingRepository.update(Mockito.isA(XhbFormattingDao.class)))
             .thenReturn(Optional.of(xhbFormattingDao));
@@ -406,16 +407,21 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
             .when(mockXhbFormattingRepository.findByDocumentAndClob(Mockito.isA(Integer.class),
                 Mockito.isA(String.class), Mockito.isA(String.class), Mockito.isA(String.class)))
             .thenReturn(new ArrayList<>(0));
-        Mockito.doThrow(TransformerException.class).when(mockTransformer)
-            .transform(Mockito.isA(Source.class), Mockito.isA(Result.class));
         expectTransformer();
         AbstractXmlMergeUtils abstractXmlMergeUtils =
-            FormattingServices.getXmlUtils(DOCTYPE_INTERNET_WEBPAGE);
+            FormattingServices.getXmlUtils(DOCTYPE_DAILY_LIST);
         FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue(
             xhbClobDao.getClobData(), DOCTYPE_INTERNET_WEBPAGE, XML, xhbCppListDao);
         Assertions.assertThrows(FormattingException.class, () -> {
             // Run
             testProcessDocuments(abstractXmlMergeUtils, formattingValue);
+        });
+    }
+
+    @Test
+    void testProcessIwpCppFormattingNoDocs() {
+        Assertions.assertThrows(FormattingException.class, () -> {
+            classUnderTest.processIwpCppFormatting(null, null, null, null, null);
         });
     }
 
@@ -451,7 +457,7 @@ class FormattingServicesFormattingExceptionsTest extends FormattingServicesTestH
         List<XhbConfigPropDao> propertyList = new ArrayList<>();
         propertyList.add(DummyServicesUtil.getXhbConfigPropDao(PddaSwitcher.PDDA_SWITCH,
             PddaSwitcher.PDDA_ONLY));
-        Mockito.when(mockXhbConfigPropRepository.findByPropertyName(PddaSwitcher.PDDA_SWITCH))
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(PddaSwitcher.PDDA_SWITCH))
             .thenReturn(propertyList);
         Mockito.when(mockTranslationBundles.toXml()).thenReturn(TRANSLATION_BUNDLE_XML);
         if (expectedXmlUtils != null) {

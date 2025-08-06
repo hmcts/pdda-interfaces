@@ -8,19 +8,18 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import java.util.List;
 
 /**
- * <p>
+
  * Title: Config Property Maintainer.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
@@ -35,7 +34,8 @@ public class ConfigPropMaintainer {
 
     public XhbConfigPropDao getConfigPropBasicValue(String propertyName) {
         LOG.debug("getConfigPropBasicValue()");
-        List<XhbConfigPropDao> properties = xhbConfigPropRepository.findByPropertyName(propertyName);
+        List<XhbConfigPropDao> properties =
+            xhbConfigPropRepository.findByPropertyNameSafe(propertyName);
         if (properties != null && !properties.isEmpty()) {
             return properties.get(0);
         }

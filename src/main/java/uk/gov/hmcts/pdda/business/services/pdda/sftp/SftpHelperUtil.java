@@ -41,7 +41,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Populate the SFTP configuration.
-     * 
+
      * @return The SFTP configuration
      */
     protected SftpConfig populateSftpConfig(int sftpPort) {
@@ -55,9 +55,18 @@ public class SftpHelperUtil extends SftpService {
             sftpConfig.setPort(sftpPort);
             sftpConfig = getTestSftpConfig(sftpConfig);
         } else {
-            // Firstly, are we using Database or Key Vault to lookup credentials?
+            // Are we using Database or Key Vault to lookup credentials?
             // This will be a database lookup. If it is indeterminate, we will use the Database.
             sftpConfig.setUseKeyVault(checkWhetherToUseKeyVault());
+            
+            // Get excluded court IDs for CP messages
+            try {
+                sftpConfig
+                    .setCpExcludedCourtIds(getMandatoryConfigValue(Config.DB_CP_EXCLUDED_COURT_IDS));
+                LOG.debug("SFTP CP Excluded Court Ids: {}", sftpConfig.getCpExcludedCourtIds());
+            } catch (InvalidConfigException ex) {
+                sftpConfig.setErrorMsg(Config.DB_CP_EXCLUDED_COURT_IDS + NOT_FOUND);
+            }
 
             // Set the rest of the params
             sftpConfig = getConfigParams(sftpConfig);
@@ -69,7 +78,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Get and set the data for testing.
-     * 
+
      * @param sftpConfig The SFTP Config
      * @return Updated SFTP Config
      */
@@ -102,7 +111,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Check whether to use Key Vault.
-     * 
+
      * @return True if using Key Vault, false otherwise
      */
     private boolean checkWhetherToUseKeyVault() {
@@ -128,12 +137,13 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params.
-     * 
+
      * @param sftpConfig The SFTP configuration
      * @return The SFTP configuration
      */
     public SftpConfig getConfigParams(SftpConfig sftpConfig) {
 
+        // Now get the rest of the details not already set
         if (sftpConfig.isUseKeyVault()) {
             return getKvConfigParams(sftpConfig);
         } else {
@@ -144,10 +154,9 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params from the DB.
-     * 
+
      * @return The SFTP configuration
      */
-    @SuppressWarnings("PMD.NPathComplexity")
     private SftpConfig getDbConfigParams(SftpConfig sftpConfig) {
 
         methodName = "getDbConfigParams()";
@@ -161,18 +170,17 @@ public class SftpHelperUtil extends SftpService {
             sftpConfig.setErrorMsg(Config.DB_CP_SFTP_USERNAME + NOT_FOUND);
         }
         try {
+            sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
+        } catch (Exception ex) {
+            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
+        }
+        try {
             sftpConfig
                 .setCpRemoteFolder(getMandatoryConfigValue(Config.DB_CP_SFTP_UPLOAD_LOCATION));
             LOG.debug("SFTP Cp Remote Folder: {}", sftpConfig.getCpRemoteFolder());
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_CP_SFTP_UPLOAD_LOCATION + NOT_FOUND);
         }
-        try {
-            sftpConfig.setXhibitPassword(getMandatoryConfigValue(Config.DB_SFTP_PASSWORD));
-        } catch (InvalidConfigException ex) {
-            sftpConfig.setErrorMsg(Config.DB_SFTP_PASSWORD + NOT_FOUND);
-        }
-
 
 
         // Next the XHIBIT BAIS properties
@@ -203,11 +211,6 @@ public class SftpHelperUtil extends SftpService {
         } catch (InvalidConfigException ex) {
             sftpConfig.setErrorMsg(Config.DB_SFTP_HOST + NOT_FOUND);
         }
-        try {
-            sftpConfig.setCpPassword(getMandatoryConfigValue(Config.DB_CP_SFTP_PASSWORD));
-        } catch (Exception ex) {
-            sftpConfig.setErrorMsg(Config.DB_CP_SFTP_PASSWORD + NOT_FOUND);
-        }
 
         // Validate the host and port
         return validateAndSetHostAndPort(sftpConfig, hostAndPort);
@@ -215,7 +218,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Validate and set the host and port.
-     * 
+
      * @param sftpConfig The SFTP configuration
      * @param hostAndPort The host and port
      * @return The SFTP configuration
@@ -243,7 +246,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params from the Key Vault.
-     * 
+
      * @return The SFTP configuration
      */
     @SuppressWarnings("PMD.UnusedAssignment")

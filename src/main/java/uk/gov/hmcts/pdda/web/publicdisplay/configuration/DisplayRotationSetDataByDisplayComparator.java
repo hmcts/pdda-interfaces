@@ -5,19 +5,18 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.rotationset.DisplayRotationS
 import java.util.Comparator;
 
 /**
- * <p>
+
  * Title: Comparator for sorting <code>DisplayRotationSetData</code> by display ID.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -27,7 +26,7 @@ public final class DisplayRotationSetDataByDisplayComparator implements Comparat
 
     /**
      * Get an instance of the comparator.
-     * 
+
      * @return An instance of the comparator.
      */
     public static DisplayRotationSetDataByDisplayComparator getInstance() {
@@ -40,7 +39,7 @@ public final class DisplayRotationSetDataByDisplayComparator implements Comparat
     /**
      * Returns an ordering for two instances of <code>DisplayRotationSetData</code> based on the
      * Display's ID.
-     * 
+
      * @param o1 The first instance of <code>DisplayRotationSetData</code>.
      * @param o2 The second instance of <code>DisplayRotationSetData</code>.
      * @return -1 if the o1's display ID is less than o2's, 0 if they are the same and +1 if o1's
@@ -65,7 +64,7 @@ public final class DisplayRotationSetDataByDisplayComparator implements Comparat
 
     /**
      * Checks whether the passed in object is equivalent to this one.
-     * 
+
      * @param obj The object to check for equality.
      * @return true if obj is equivalent to this one.
      */

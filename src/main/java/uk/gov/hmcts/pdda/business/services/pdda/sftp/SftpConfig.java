@@ -5,19 +5,18 @@ import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.sftp.SFTPClient;
 
 /**
- * <p>
+
  * Title: Sftp Config.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
@@ -36,7 +35,16 @@ public class SftpConfig {
     SSHClient sshClient;
     Session session;
     boolean useKeyVault;
+    String cpExcludedCourtIds;
 
+
+    public String getCpExcludedCourtIds() {
+        return cpExcludedCourtIds;
+    }
+
+    public void setCpExcludedCourtIds(String cpExcludedCourtIds) {
+        this.cpExcludedCourtIds = cpExcludedCourtIds;
+    }
 
     public boolean isUseKeyVault() {
         return useKeyVault;

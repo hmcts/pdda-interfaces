@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrotationsets;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class XhbRotationSetsRepository extends AbstractRepository<XhbRotationSet
 
     /**
      * findByCourtId.
-     * 
+
      * @param courtId Integer
      * @return List
      */
@@ -38,4 +39,18 @@ public class XhbRotationSetsRepository extends AbstractRepository<XhbRotationSet
         query.setParameter("courtId", courtId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbRotationSetsDao> findByCourtIdSafe(Integer courtId) {
+        LOG.debug("findByCourtIdSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_ROTATION_SETS.findByCourtId");
+            query.setParameter("courtId", courtId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdSafe({}): {}", courtId, e.getMessage(), e);
+            return List.of(); // return empty list on failure
+        }
+    }
+
 }

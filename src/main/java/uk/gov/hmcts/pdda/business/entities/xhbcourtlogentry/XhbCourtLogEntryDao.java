@@ -85,6 +85,7 @@ public class XhbCourtLogEntryDao extends AbstractDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getEntryId();
     }

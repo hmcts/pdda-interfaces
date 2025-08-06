@@ -52,7 +52,7 @@ public final class DocumentUtils {
     /**
      * Get the resouce bundle to use, this is added to the velocity context in
      * AbstractTemplateRenderer. Should be called once per render.
-     * 
+
      * @return the resource bundle
      */
     public static TranslationBundle geDocumentI18n(DisplayDocument displayDocument) {

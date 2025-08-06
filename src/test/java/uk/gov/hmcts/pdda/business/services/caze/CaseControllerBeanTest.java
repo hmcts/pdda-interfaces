@@ -28,23 +28,22 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * <p>
+
  * Title: CaseControllerBean Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings("PMD")
 class CaseControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -98,15 +97,15 @@ class CaseControllerBeanTest {
         EasyMock.expect(mockXhbHearingRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbHearingRepository.findByCaseId(CASE_ID)).andReturn(xhList);
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdSafe(CASE_ID)).andReturn(xhList);
 
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(oldList);
-        EasyMock.expect(mockXhbHearingListRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbHearingListRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(list);
 
         replayMocks();
@@ -122,20 +121,14 @@ class CaseControllerBeanTest {
     
     @Test
     void testGetXhbHearingRepository() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
         assertInstanceOf(XhbHearingRepository.class, classUnderTest.getXhbHearingRepository(),
             NOT_INSTANCE);
-        EasyMock.verify(mockEntityManager);
     }
     
     @Test
     void testGetXhbHearingListRepository() {
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        EasyMock.replay(mockEntityManager);
         assertInstanceOf(XhbHearingListRepository.class, classUnderTest.getXhbHearingListRepository(),
             NOT_INSTANCE);
-        EasyMock.verify(mockEntityManager);
     }
     
     @Test

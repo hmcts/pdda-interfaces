@@ -18,19 +18,18 @@ import java.util.Iterator;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: Helper class for query and setting the is_case_active flag.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: PublicDisplayActivationHelper.java,v 1.5 2004/07/16 14:57:13 tz0d5m Exp $
  */
@@ -60,7 +59,7 @@ public class PublicDisplayActivationHelper {
 
     /**
      * Check the Public display activation status for this particular scheduled hearing.
-     * 
+
      * @param schedHearingId Integer
      * @return boolean true if scheduled hearing is active
      */
@@ -68,7 +67,7 @@ public class PublicDisplayActivationHelper {
         XhbScheduledHearingRepository xhbScheduledHearingRepository) {
         boolean result = false;
         Optional<XhbScheduledHearingDao> scheduledHearing =
-            xhbScheduledHearingRepository.findById(schedHearingId);
+            xhbScheduledHearingRepository.findByIdSafe(schedHearingId);
         if (scheduledHearing.isPresent()) {
             result = DISPLAY_ACTIVE.equals(scheduledHearing.get().getIsCaseActive());
         }
@@ -86,7 +85,7 @@ public class PublicDisplayActivationHelper {
 
     /**
      * Sets the public display for this scheduling hearing to Activate.
-     * 
+
      * @param schedHearingId Integer
      */
     public static void activatePublicDisplay(final PublicDisplayNotifier notifier,
@@ -96,7 +95,7 @@ public class PublicDisplayActivationHelper {
         LOG.debug("activatePublicDisplay() with schedHearingId: " + schedHearingId);
 
         Optional<XhbScheduledHearingDao> scheduledHearing =
-            xhbScheduledHearingRepository.findById(schedHearingId);
+            xhbScheduledHearingRepository.findByIdSafe(schedHearingId);
         if (scheduledHearing.isPresent()) {
             if (activate) {
                 CrLiveStatusHelper.activatePublicDisplay(scheduledHearing.get(),
@@ -123,7 +122,7 @@ public class PublicDisplayActivationHelper {
 
     /**
      * Send JMS message notifying of change in status.
-     * 
+
      * @param notifier notifer to use
      * @param courtId The court event occurred in
      * @param courtRoomId The court room the event occurred in
@@ -140,7 +139,7 @@ public class PublicDisplayActivationHelper {
 
     /**
      * Set whether the scheduled hearing is activated or deactived.
-     * 
+
      * @param schedHearing XhbScheduledHearingDao
      * @param isActive boolean
      */
@@ -153,7 +152,7 @@ public class PublicDisplayActivationHelper {
     /**
      * For the sched hearing that is passed in, check that all other hearings in the same court room
      * have their public displays turned off.
-     * 
+
      * @param schedHearing XhbScheduledHearingDao
      * @throws PublicDisplayControllerException Exception
      */
@@ -175,7 +174,7 @@ public class PublicDisplayActivationHelper {
             LOG.debug("Deactivating SH ID: " + thisSchedHearingId);
 
             Optional<XhbScheduledHearingDao> xsh =
-                xhbScheduledHearingRepository.findById(thisSchedHearingId);
+                xhbScheduledHearingRepository.findByIdSafe(thisSchedHearingId);
             if (xsh.isPresent()) {
                 setActivationOfPDforSchedHearing(xsh.get(), false, xhbScheduledHearingRepository);
             }

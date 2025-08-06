@@ -239,6 +239,7 @@ public class XhbDefendantOnCaseDao extends AbstractVersionedDao implements Seria
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDefendantOnCaseId();
     }

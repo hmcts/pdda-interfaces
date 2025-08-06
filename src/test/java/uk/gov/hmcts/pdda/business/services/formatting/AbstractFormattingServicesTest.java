@@ -20,21 +20,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * <p>
+
  * Title: AbstractFormattingServices Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class AbstractFormattingServicesTest {
 
@@ -74,7 +74,7 @@ class AbstractFormattingServicesTest {
         // Setup
         XhbFormattingDao xhbFormattingDao = DummyFormattingUtil.getXhbFormattingDao();
 
-        EasyMock.expect(mockXhbFormattingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbFormattingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbFormattingDao));
         EasyMock.expect(mockXhbFormattingRepository.update(EasyMock.isA(XhbFormattingDao.class)))
             .andReturn(Optional.of(xhbFormattingDao));
@@ -96,7 +96,7 @@ class AbstractFormattingServicesTest {
         XhbFormattingDao xhbFormattingDao = DummyFormattingUtil.getXhbFormattingDao();
         xhbFormattingDao.setFormatStatus("FD");
 
-        EasyMock.expect(mockXhbFormattingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbFormattingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbFormattingDao));
         EasyMock.expect(mockXhbFormattingRepository.update(EasyMock.isA(XhbFormattingDao.class)))
             .andReturn(Optional.of(xhbFormattingDao));
@@ -118,7 +118,7 @@ class AbstractFormattingServicesTest {
         XhbFormattingDao xhbFormattingDao = DummyFormattingUtil.getXhbFormattingDao();
         xhbFormattingDao.setFormatStatus("NF");
 
-        EasyMock.expect(mockXhbFormattingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbFormattingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbFormattingDao));
         EasyMock.expect(mockXhbFormattingRepository.update(EasyMock.isA(XhbFormattingDao.class)))
             .andReturn(Optional.of(xhbFormattingDao));

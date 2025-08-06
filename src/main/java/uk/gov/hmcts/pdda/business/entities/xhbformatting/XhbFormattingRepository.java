@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbformatting;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -10,8 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.io.Serializable;
 import java.util.List;
 
-
-
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 @Repository
 public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao> implements Serializable {
 
@@ -29,7 +29,7 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
 
     /**
      * findByFormatStatus.
-     * 
+
      * @return list
      */
     @SuppressWarnings("unchecked")
@@ -40,9 +40,23 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
         return query.getResultList();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<XhbFormattingDao> findByFormatStatusSafe(String formatStatus) {
+        LOG.debug("findByFormatStatusSafe({})", formatStatus);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_FORMATTING.findByFormatStatus");
+            query.setParameter("formatStatus", formatStatus);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByFormatStatusSafe({}): {}", formatStatus, e.getMessage(), e);
+            return List.of(); // Return empty list to avoid nulls and maintain stability
+        }
+    }
+
+
     /**
      * findByDocumentAndClob.
-     * 
+
      * @return List
      */
     @SuppressWarnings("unchecked")
@@ -56,4 +70,28 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
         query.setParameter("courtSiteName", courtSiteName);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbFormattingDao> findByDocumentAndClobSafe(Integer courtId, String documentType,
+        String language, String courtSiteName) {
+
+        LOG.debug(
+            "findByDocumentAndClobSafe(courtId: {}, documentType: {}, language: {}, courtSiteName: {})",
+            courtId, documentType, language, courtSiteName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_FORMATTING.findByDocumentAndClob");
+            query.setParameter("courtId", courtId);
+            query.setParameter("docType", documentType);
+            query.setParameter("language", language);
+            query.setParameter("courtSiteName", courtSiteName);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDocumentAndClobSafe({}, {}, {}, {}): {}", courtId,
+                documentType, language, courtSiteName, e.getMessage(), e);
+            return List.of(); // Safe fallback
+        }
+    }
+
 }

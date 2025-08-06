@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.database.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocumentDao;
@@ -19,29 +20,26 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: VIP display documents for court site query.
- * </p>
- * <p>
+
+
  * Description: This runs the stored procedure that for a given court site, it finds all display
  * documents configured for the View Information Pages.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2005
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bal Bhamra
  * @version $Id: VIPDisplayDocumentQuery.java,v 1.2 2005/11/17 10:55:48 bzjrnl Exp $
  */
-
-public class VipDisplayDocumentQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class VipDisplayDocumentQuery extends AbstractControllerBean {
     /** Logger object. */
     private static final Logger LOG = LoggerFactory.getLogger(VipDisplayDocumentQuery.class);
-
-    private final EntityManager entityManager;
 
     private XhbDisplayRepository xhbDisplayRepository;
     private XhbDisplayLocationRepository xhbDisplayLocationRepository;
@@ -49,31 +47,41 @@ public class VipDisplayDocumentQuery {
     private XhbRotationSetDdRepository xhbRotationSetDdRepository;
 
     public VipDisplayDocumentQuery(EntityManager entityManager) {
-        this.entityManager = entityManager;
+        super(entityManager);
     }
 
     public VipDisplayDocumentQuery(EntityManager entityManager, XhbDisplayRepository xhbDisplayRepository,
         XhbDisplayLocationRepository xhbDisplayLocationRepository,
         XhbDisplayDocumentRepository xhbDisplayDocumentRepository,
         XhbRotationSetDdRepository xhbRotationSetDdRepository) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.xhbDisplayLocationRepository = xhbDisplayLocationRepository;
         this.xhbDisplayDocumentRepository = xhbDisplayDocumentRepository;
         this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;
     }
 
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayDocumentRepository = null;
+        xhbRotationSetDdRepository = null;
+    }
+
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param courtSiteId court site id
-     * 
+
      * @return Summary by name data for the specified court rooms
      */
     public Collection<VipDisplayConfigurationDisplayDocument> getData(Integer courtSiteId) {
         LOG.debug("getData({})", courtSiteId);
         Collection<VipDisplayConfigurationDisplayDocument> results = new ArrayList<>();
-        List<XhbDisplayLocationDao> dlDaos = getXhbDisplayLocationRepository().findByVipCourtSite(courtSiteId);
+        List<XhbDisplayLocationDao> dlDaos =
+            getXhbDisplayLocationRepository().findByVipCourtSiteSafe(courtSiteId);
         if (!dlDaos.isEmpty()) {
             // Loop the VIP courtSites
             for (XhbDisplayLocationDao dlDao : dlDaos) {
@@ -87,16 +95,18 @@ public class VipDisplayDocumentQuery {
     private List<VipDisplayConfigurationDisplayDocument> getDisplays(XhbDisplayLocationDao dlDao) {
         LOG.debug("getDisplays({})", dlDao);
         List<VipDisplayConfigurationDisplayDocument> results = new ArrayList<>();
-        List<XhbDisplayDao> daos = getXhbDisplayRepository().findByDisplayLocationId(dlDao.getDisplayLocationId());
+        List<XhbDisplayDao> daos =
+            getXhbDisplayRepository().findByDisplayLocationIdSafe(dlDao.getDisplayLocationId());
         if (!daos.isEmpty()) {
             for (XhbDisplayDao dao : daos) {
                 // Loop the display rotation sets
                 List<XhbRotationSetDdDao> rsDaos =
-                    getXhbRotationSetDdRepository().findByRotationSetId(dao.getRotationSetId());
+                    getXhbRotationSetDdRepository().findByRotationSetIdSafe(dao.getRotationSetId());
                 for (XhbRotationSetDdDao rsDao : rsDaos) {
                     // Get the document
                     Optional<XhbDisplayDocumentDao> ddDao =
-                        getXhbDisplayDocumentRepository().findById(rsDao.getDisplayDocumentId());
+                        getXhbDisplayDocumentRepository()
+                            .findByIdSafe(rsDao.getDisplayDocumentId());
                     if (ddDao.isPresent()) {
                         VipDisplayConfigurationDisplayDocument result = getVipDisplayConfigurationDisplayDocument(
                             ddDao.get().getDescriptionCode(), "Y".equals(ddDao.get().getMultipleCourtYn()),
@@ -115,29 +125,29 @@ public class VipDisplayDocumentQuery {
     }
 
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
-            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(entityManager);
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
+            xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
     }
 
     private XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
-            xhbDisplayRepository = new XhbDisplayRepository(entityManager);
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
+            xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;
     }
 
     private XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
-        if (xhbDisplayDocumentRepository == null) {
-            xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(entityManager);
+        if (xhbDisplayDocumentRepository == null || !isEntityManagerActive()) {
+            xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(getEntityManager());
         }
         return xhbDisplayDocumentRepository;
     }
 
     private XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
-        if (xhbRotationSetDdRepository == null) {
-            xhbRotationSetDdRepository = new XhbRotationSetDdRepository(entityManager);
+        if (xhbRotationSetDdRepository == null || !isEntityManagerActive()) {
+            xhbRotationSetDdRepository = new XhbRotationSetDdRepository(getEntityManager());
         }
         return xhbRotationSetDdRepository;
     }

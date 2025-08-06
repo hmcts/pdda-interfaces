@@ -43,7 +43,7 @@ public class AllCourtStatusCppToPublicDisplay extends AbstractCppToPublicDisplay
 
     /**
      * Returns a collection of AllCourtStatusValue CPP Data.
-     * 
+
      * @throws XPathExpressionException Exception
      */
     @Override
@@ -138,7 +138,7 @@ public class AllCourtStatusCppToPublicDisplay extends AbstractCppToPublicDisplay
 
     /**
      * Populates the AllCourtStatusValue object with data from the courtroom XML element.
-     * 
+
      * @param value AllCourtStatusValue
      * @param caseNode XML element for the case
      * @throws XPathExpressionException Exception

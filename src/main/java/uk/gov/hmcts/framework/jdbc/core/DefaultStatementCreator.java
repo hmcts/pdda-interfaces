@@ -18,19 +18,18 @@ import javax.sql.rowset.serial.SerialClob;
 
 
 /**
- * <p>
+
  * Title: DefaultStatementCreator.
- * </p>
- * <p>
+
+
  * Description: The default implementation for the statement creator
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author XHIBIT User
  * @version 1.0
  */
@@ -57,7 +56,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Returns a statement creator instance.
-     * 
+
      * @return StatementCreator
      */
     public static StatementCreator getInstance() {
@@ -66,7 +65,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Creates a prepared statement.
-     * 
+
      * @connection con
      * @param sql String
      * @param params ParameterArray
@@ -95,7 +94,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Creates a callable statement.
-     * 
+
      * @connection con
      * @param call String
      * @param params ParameterArray
@@ -125,15 +124,15 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Sets the in parameters.
-     * 
-     * <p>Note: CLOBs and BLOBs have different processing as going via the normal mechanism leads to
+
+     * Note: CLOBs and BLOBs have different processing as going via the normal mechanism leads to
      * database exceptions (ORA-01460) when inserting CLOBs or BLOBs of larger than 3k that contain
      * National Characters (eg �) due to an Oracle bug
-     * 
-     * <p>This CLOB and BLOB processing can be enabled via configurable properties, however only the
+
+     * This CLOB and BLOB processing can be enabled via configurable properties, however only the
      * CLOB processing is enabled by default (as this is required for XHIBIT 8.1 requirements)
      * whereas BLOB processing is not enabled by default although it can be if required
-     * 
+
      * @param ps Prepared statement
      * @param params ParametersArray
      * @throws SQLException Exception
@@ -186,7 +185,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Builds the CLOB.
-     * 
+
      * @param xmlData String
      * @return Clob
      * @throws SQLException Exception
@@ -219,7 +218,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Builds the BLOB.
-     * 
+
      * @param xmlData String
      * @return Blob
      * @throws SQLException Exception
@@ -253,7 +252,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
     /**
      * Returns the encoding required. Defaults to UTF-8 which is used for ORACLE 9i.
-     *
+
      * @return String
      */
     private String getCharacterEncoding() {
@@ -269,11 +268,11 @@ public class DefaultStatementCreator implements StatementCreator {
      * Return true if we require additional CLOB processing to occur to ensure National Characters
      * are processed and do not error (CLOBs larger than 3k that contain National Characters (eg �)
      * fail with an ORA-01460 error due to an Oracle bug).
-     * 
-     * <p>Will be TRUE by default as this functionality is definitely required in XHIBIT Rel 8.1
+
+     * Will be TRUE by default as this functionality is definitely required in XHIBIT Rel 8.1
      * onwards (due to Reqs 1492 and 1669 which have direct JDBC commits of CLOBs to an Oracle 9i
      * database)
-     *
+
      * @return boolean
      */
     private boolean isClobProcessingEnabled() {
@@ -288,14 +287,14 @@ public class DefaultStatementCreator implements StatementCreator {
     /**
      * Return true if we require additional BLOB processing to occur to ensure National Characters
      * are processed and do not error.
-     * 
-     * <p>Will be FALSE by default as this functionality is not definitely required in Rel 8.1 onwards
+
+     * Will be FALSE by default as this functionality is not definitely required in Rel 8.1 onwards
      * and so BLOBs will be processing like normal fields
-     * 
-     * <p>If BLOBs are inserted in future requirements and they are < 3k and contain national
+
+     * If BLOBs are inserted in future requirements and they are < 3k and contain national
      * characters (eg �) then this property should be enabled and the BLOBs tested using this
      * functionality
-     *
+
      * @return boolean
      */
     private boolean isBlobProcessingEnabled() {

@@ -13,20 +13,19 @@ import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: Looks after the Notification coming from Public Notices susbsytem.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
- * 
+
+
  * @author Pat Fox,Bob Boles
  * @created 17 February 2003
  * @version 1.0 This Object is responsibe for firing the correct event to the correct Queue which
@@ -49,7 +48,7 @@ public final class PublicNoticeChangeNotifier {
     /**
      * This takes in a CourtRoom Id and sends an PublicNoticeSubscriptionValue to the correct JMS Queue
      * which Public Displays is listening on.
-     * 
+
      * @param xhbCourtRoomId Description of the Parameter
      */
     public static void sendNotificationtoPublicDisplays(int xhbCourtRoomId, boolean reportingRestrictionsChanged) {
@@ -59,7 +58,7 @@ public final class PublicNoticeChangeNotifier {
     /**
      * This takes in a CourtLogSubscriptionValue Id and sends an PublicNoticeSubscriptionValue to the
      * correct JMS Queue which Public Displays is listening on.
-     * 
+
      * @param courtLogSubscriptionValue Description of the Parameter
      */
     public static void sendNotificationtoPublicDisplays(CourtLogSubscriptionValue courtLogSubscriptionValue) {

@@ -53,6 +53,7 @@ public class XhbClobDao extends AbstractVersionedDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Long getPrimaryKey() {
         return getClobId();
     }

@@ -27,20 +27,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p/>
  * Title: DisplayDocumentCompiledRenderer is the renderer supplied by the RenderFactory for a
  * display document if template rendering is NOT being used.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Will Fardell
  * @version $Revision: 1.3 $
  */
@@ -66,9 +65,9 @@ public class DisplayDocumentCompiledRenderer implements Renderer, Serializable {
 
     /**
      * Render the display document.
-     * 
+
      * @param renderable the rotation set (cast to Renderable) to render.
-     * 
+
      * @throws RenderingException if the renderer fails to render.
      * @see uk.gov.hmcts.pdda.web.publicdisplay.rendering.Renderer#render(
      *      uk.gov.hmcts.pdda.web.publicdisplay.rendering.Renderable)
@@ -81,8 +80,7 @@ public class DisplayDocumentCompiledRenderer implements Renderer, Serializable {
     /**
      * Process a display document set and provide a RenderedRotationSet. Please note the template
      * name is not supplied this is decided by the engine itself.
-     * </p>
-     * 
+
      * @param displayDocument set the rotation set to be processed.
      */
     private void renderDisplayDocument(final DisplayDocument displayDocument) {

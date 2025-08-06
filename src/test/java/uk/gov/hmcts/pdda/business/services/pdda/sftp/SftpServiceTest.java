@@ -53,24 +53,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: PDDA Helper Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Scott Atwell
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.GodClass", "PMD.CouplingBetweenObjects",
-    "PMD.TooManyMethods"})
 class SftpServiceTest {
 
     @RegisterExtension
@@ -145,9 +143,6 @@ class SftpServiceTest {
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
-    // @Mock
-    // private SftpConfigHelper mockSftpConfigHelper;
-
     @Mock
     private SFTPClient mockSftpClient;
 
@@ -168,8 +163,9 @@ class SftpServiceTest {
 
     @TestSubject
     private final SftpService classUnderTest =
-        new SftpService(EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository,
+        new SftpService(mockEntityManager, mockXhbConfigPropRepository,
             mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository);
+
 
     @TestSubject
     private final SftpHelperUtil subClassUnderTest = new SftpHelperUtil(mockEntityManager);
@@ -211,7 +207,8 @@ class SftpServiceTest {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courtDaos);
 
         EasyMock.replay(mockXhbCourtRepository);
@@ -258,7 +255,8 @@ class SftpServiceTest {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 
         EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
@@ -285,6 +283,9 @@ class SftpServiceTest {
         EasyMock.replay(mockPddaMessageHelper);
         EasyMock.replay(mockXhbClobRepository);
         EasyMock.replay(mockXhbPddaMessageRepository);
+
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
 
         // Run
         boolean result = false;
@@ -330,17 +331,18 @@ class SftpServiceTest {
 
 
     @Test
-    @SuppressWarnings("PMD")
     void testProcessBaisMessages() {
-
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
         
         mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
         EasyMock.expectLastCall();
 
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockPddaMessageHelper);
 
@@ -349,13 +351,14 @@ class SftpServiceTest {
         assertFalse(result, "Expected processBaisMessages to return false");
     }
 
+
     @Test
-    @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
     void testProcessDataFromBais() {
 
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 
         EasyMock.replay(mockXhbCourtRepository);
@@ -485,7 +488,8 @@ class SftpServiceTest {
         // Setup
         List<XhbCourtDao> courtDaos = new ArrayList<>();
         courtDaos.add(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+        EasyMock
+            .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andStubReturn(courtDaos);
 
         EasyMock.replay(mockXhbCourtRepository);

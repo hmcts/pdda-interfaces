@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -19,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
-
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -38,10 +40,27 @@ class XhbRefPddaMessageTypeRepositoryTest extends AbstractRepositoryTest<XhbRefP
 
     @Override
     protected XhbRefPddaMessageTypeRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbRefPddaMessageTypeRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbRefPddaMessageTypeRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbRefPddaMessageTypeDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbRefPddaMessageTypeDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -65,11 +84,11 @@ class XhbRefPddaMessageTypeRepositoryTest extends AbstractRepositoryTest<XhbRefP
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbRefPddaMessageTypeDao> result =
             getClassUnderTest().findByMessageType(getDummyDao().getPddaMessageType());
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }

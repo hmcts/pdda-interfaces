@@ -39,6 +39,11 @@ public class XhbDisplayCourtRoomDao extends AbstractDao implements Serializable 
         setCourtRoomId(otherData.getCourtRoomId());
     }
 
+    @Override
+    public Object getPrimaryKey() {
+        return getCourtRoomId();
+    }
+
     public Integer getDisplayId() {
         return displayId;
     }

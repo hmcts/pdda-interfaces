@@ -5,23 +5,16 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.exceptions.UnrecognizedE
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl.DefaultWorkFlowManager;
 
 /**
- * <p>
+
  * Title: The entry point into the Workflow component.
- * </p>
- * 
- * <p>
+
  * Description: The WorkFlowManager provides the functionality to remove
  * <code>PublicDisplayEvent</code>
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
@@ -32,7 +25,7 @@ public abstract class WorkFlowManager {
 
     /**
      * Creates a new WorkFlowManager object.
-     * 
+
      * @param context WorkFlowContext
      */
     protected WorkFlowManager(WorkFlowContext context) {
@@ -41,7 +34,7 @@ public abstract class WorkFlowManager {
 
     /**
      * Get context.
-     * 
+
      * @return context
      */
     public WorkFlowContext getContext() {
@@ -50,7 +43,7 @@ public abstract class WorkFlowManager {
 
     /**
      * Get workflow manager instance.
-     * 
+
      * @return workflowManager
      */
     public static WorkFlowManager getInstance(WorkFlowContext context) {
@@ -60,7 +53,7 @@ public abstract class WorkFlowManager {
 
     /**
      * Process all the supplied workflows for the event that has occured.
-     * 
+
      * @param event the event that occured.
      */
     public void process(PublicDisplayEvent event) {
@@ -73,11 +66,11 @@ public abstract class WorkFlowManager {
 
     /**
      * Get a list of workflows for the event that occured.
-     * 
+
      * @param event the event.
-     * 
+
      * @return an array of WorkFlow-s to remove.
-     * 
+
      * @throws UnrecognizedEventException if the event is not recognized.
      */
     protected abstract WorkFlow[] getWorkFlowsForEvent(PublicDisplayEvent event);

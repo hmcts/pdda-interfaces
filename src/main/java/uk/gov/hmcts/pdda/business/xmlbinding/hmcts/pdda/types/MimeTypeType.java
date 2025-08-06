@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * Class MimeTypeType.
- * 
+
  * @version $Revision$ $Date$
  */
 public final class MimeTypeType implements Serializable {
@@ -84,7 +84,7 @@ public final class MimeTypeType implements Serializable {
 
     /**
      * Returns an enumeration of all possible instances of MimeTypeType.
-     * 
+
      * @return Enumeration
      */
     public static Enumeration enumerate() {
@@ -93,7 +93,7 @@ public final class MimeTypeType implements Serializable {
 
     /**
      * Returns the type of this MimeTypeType.
-     * 
+
      * @return int
      */
     public int getType() {
@@ -102,7 +102,7 @@ public final class MimeTypeType implements Serializable {
 
     /**
      * Method init.
-     * 
+
      * @return Properties
      */
     private static Properties init() {
@@ -116,7 +116,7 @@ public final class MimeTypeType implements Serializable {
     /**
      * Called during deserialization to replace the deserialized object with the correct
      * constant instance.
-     * 
+
      * @return Object
      */
     private Object readResolve() {
@@ -125,7 +125,7 @@ public final class MimeTypeType implements Serializable {
 
     /**
      * Returns the String representation of this MimeTypeType.
-     * 
+
      * @return String
      */
     @Override
@@ -135,7 +135,7 @@ public final class MimeTypeType implements Serializable {
 
     /**
      * Returns a new MimeTypeType based on the given String value.
-     * 
+
      * @param string String
      * @return MimeTypeType
      */

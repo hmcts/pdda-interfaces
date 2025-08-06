@@ -3,19 +3,18 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.exceptions;
 import uk.gov.hmcts.framework.exception.CsRecoverableException;
 
 /**
- * <p>
+
  * Title: PublicDisplayCheckedException.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: PublicDisplayCheckedException.java,v 1.1 2004/01/15 10:38:16 pznwc5 Exp $
  */

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SuppressWarnings("static-access")
+@SuppressWarnings({"static-access","PMD"})
 @ExtendWith(EasyMockExtension.class)
 class PublicDisplayActivationHelperTest {
 
@@ -75,7 +75,7 @@ class PublicDisplayActivationHelperTest {
         // Setup
         XhbScheduledHearingDao xhbScheduledHearingDao =
             DummyHearingUtil.getXhbScheduledHearingDao();
-        EasyMock.expect(mockXhbScheduledHearingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbScheduledHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbScheduledHearingDao));
         EasyMock.replay(mockXhbScheduledHearingRepository);
 
@@ -93,7 +93,7 @@ class PublicDisplayActivationHelperTest {
         XhbScheduledHearingDao xhbScheduledHearingDao =
             DummyHearingUtil.getXhbScheduledHearingDao();
         xhbScheduledHearingDao.setIsCaseActive("N");
-        EasyMock.expect(mockXhbScheduledHearingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbScheduledHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(xhbScheduledHearingDao));
         EasyMock.replay(mockXhbScheduledHearingRepository);
 
@@ -130,7 +130,7 @@ class PublicDisplayActivationHelperTest {
         List<Integer> shIds = new ArrayList<>();
         shIds.add(1);
 
-        EasyMock.expect(mockXhbScheduledHearingRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbScheduledHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbScheduledHearingDao).times(2);
         EasyMock.expect(mockXhbScheduledHearingRepository.update(xhbScheduledHearingDao.get()))
             .andReturn(xhbScheduledHearingDao).times(2);
@@ -165,7 +165,8 @@ class PublicDisplayActivationHelperTest {
         shIds.add(1);
 
         for (int i = 0; i < 2; i++) {
-            EasyMock.expect(mockXhbScheduledHearingRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbScheduledHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(xhbScheduledHearingDao));
             EasyMock.expect(mockXhbScheduledHearingRepository.update(xhbScheduledHearingDao))
                 .andReturn(Optional.of(xhbScheduledHearingDao));

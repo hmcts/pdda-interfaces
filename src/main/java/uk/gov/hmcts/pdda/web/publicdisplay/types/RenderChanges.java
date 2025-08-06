@@ -11,27 +11,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * <p>
+
  * Title: Changes to rendering.
- * </p>
- * 
- * <p>
+
  * Description:
- * </p>
- * 
- * <p>
+
  * This class is used to carry details of changes to rendering, usually resulting from changes to
  * the display/rotation set configuration made by the end user.
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -46,7 +37,7 @@ public class RenderChanges {
 
     /**
      * The new display rotation sets to render.
-     * 
+
      * @return an array of DisplayRotationSet-s which need rendering.
      */
     public DisplayRotationSet[] getDisplayRotationSetsToStartRendering() {
@@ -55,7 +46,7 @@ public class RenderChanges {
 
     /**
      * The display rotation that no longer need rendering.
-     * 
+
      * @return an array of DisplayRotationSet-s which no longer need rendering.
      */
     public DisplayRotationSet[] getDisplayRotationSetsToStopRendering() {
@@ -64,7 +55,7 @@ public class RenderChanges {
 
     /**
      * The documents that need to be rendererd.
-     * 
+
      * @return The documents that need to be rendererd.
      */
     public DisplayDocument[] getDocumentsToStartRendering() {
@@ -73,7 +64,7 @@ public class RenderChanges {
 
     /**
      * The documents that need to be removed from the rendering remove.
-     * 
+
      * @return an array of DisplayDocument-s that need to be removed from the rendering remove.
      */
     public DisplayDocument[] getDocumentsToStopRendering() {
@@ -82,10 +73,10 @@ public class RenderChanges {
 
     /**
      * Adds a document to the list of documents that need to be rendered.
-     * 
+
      * @param doc document to be rendered.
      * @param pdDataControllerBean PdDataControllerBean
-     * 
+
      * @return true if the document was not already in the list.
      */
     public boolean addStartDocument(final DisplayDocumentUri doc,
@@ -97,9 +88,9 @@ public class RenderChanges {
 
     /**
      * Adds a set to the list of rotation sets that need to be rendered.
-     * 
+
      * @param set the rotation set.
-     * 
+
      * @return true if the set was not already in the list.
      */
     public boolean addStartRotationSet(final DisplayRotationSetData set,
@@ -110,9 +101,9 @@ public class RenderChanges {
 
     /**
      * Adds a document to the list of documents that should nolonger be rendered.
-     * 
+
      * @param doc document to stop rendereding.
-     * 
+
      * @return true if the document was not already in the list.
      */
     public boolean addStopDocument(final DisplayDocumentUri doc,
@@ -124,9 +115,9 @@ public class RenderChanges {
 
     /**
      * Adds a set to the list of rotation sets that should nolonger be rendered.
-     * 
+
      * @param set the rotation set.
-     * 
+
      * @return true if the set was not already in the list.
      */
     public boolean addStopRotationSet(final DisplayRotationSetData set,
@@ -137,7 +128,7 @@ public class RenderChanges {
 
     /**
      * Produce a string representation of the render changes.
-     * 
+
      * @return a string representation of the render changes.
      */
     @Override
@@ -150,7 +141,7 @@ public class RenderChanges {
     /**
      * For the purposes of more efficient debugging, appends the string representation to the
      * supplied buffer.
-     * 
+
      * @param buffer The buffer to append to.
      * @param lineIndent The indent to prepend to the string representation.
      */

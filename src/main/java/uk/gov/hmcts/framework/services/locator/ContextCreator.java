@@ -7,19 +7,18 @@ import javax.naming.NamingException;
 
 /**
  * This is a privileged class for creating initial contextx. I wish Java had method pointers.
- * <p>
+
  * Title:
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -32,7 +31,7 @@ public class ContextCreator implements PrivilegedExceptionAction<Object> {
 
     /**
      * Initializes the JNDI environment.
-     * 
+
      * @param env Properties
      */
     public ContextCreator(Properties env) {
@@ -41,7 +40,7 @@ public class ContextCreator implements PrivilegedExceptionAction<Object> {
 
     /**
      * PrivilegedExceptionAction implementation.
-     * 
+
      * @return Object
      * @throws NamingException Exception
      */
@@ -52,7 +51,7 @@ public class ContextCreator implements PrivilegedExceptionAction<Object> {
 
     /**
      * Gets the context.
-     * 
+
      * @return InitialContext
      * @throws NamingException Exception
      */

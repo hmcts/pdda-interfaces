@@ -4,11 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Common superclass for public display data classes.
- * 
+
  * @author pznwc5
  */
 public class PublicDisplayValue extends AbstractValue implements Comparable<PublicDisplayValue> {
@@ -86,7 +88,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets the Court Log Event Node.
-     * 
+
      * @param val BranchEventXMLNode
      */
     public void setEvent(BranchEventXmlNode val) {
@@ -97,6 +99,11 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
      * Gets the Court Log Event Time.
      */
     public LocalDateTime getEventTime() {
+        // For XHIBIT events there may not be an event time, so assume the event time is midnight
+        if (eventTime == null) {
+            LOG.debug("Event time is null. Defaulting to 00:01.");
+            return LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 1));
+        }
         return eventTime;
     }
 
@@ -114,7 +121,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets the Court Log Event Node.
-     * 
+
      * @param timeIn LocalDateTime
      */
     public void setEventTime(LocalDateTime timeIn) {
@@ -123,7 +130,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court site name.
-     * 
+
      * @return Court Site Name
      */
     public String getCourtSiteName() {
@@ -132,7 +139,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court site short name.
-     * 
+
      * @return Court Site Short Name
      */
     public String getCourtSiteShortName() {
@@ -141,7 +148,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court site code.
-     * 
+
      * @return Court Site Code
      */
     public String getCourtSiteCode() {
@@ -150,7 +157,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets the Court Site Name.
-     * 
+
      * @param courtSiteName String
      */
     public void setCourtSiteName(String courtSiteName) {
@@ -159,7 +166,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets the Court Site Short Name.
-     * 
+
      * @param courtSiteShortName String
      */
     public void setCourtSiteShortName(String courtSiteShortName) {
@@ -168,7 +175,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets the Court Site Code.
-     * 
+
      * @param courtSiteCode String
      */
     public void setCourtSiteCode(String courtSiteCode) {
@@ -177,7 +184,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room in which the case is heard.
-     * 
+
      * @param val Court room in which the case is heard
      */
     public void setCourtRoomId(int val) {
@@ -186,7 +193,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room in which the case is heard.
-     * 
+
      * @return Court room in which the case is heard
      */
     public Integer getCourtRoomId() {
@@ -195,7 +202,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the moved court room in which the case is heard.
-     * 
+
      * @param val Court room in which the case is heard
      */
     public void setMovedFromCourtRoomId(Integer val) {
@@ -204,7 +211,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the moved court room in which the case is heard.
-     * 
+
      * @return Court room in which the case is heard
      */
     public Integer getMovedFromCourtRoomId() {
@@ -213,7 +220,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room in which the case is heard.
-     * 
+
      * @param val Court room in which the case is heard
      */
     public void setCourtRoomName(String val) {
@@ -222,7 +229,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room in which the case is heard.
-     * 
+
      * @return Court room in which the case is heard
      */
     public String getCourtRoomName() {
@@ -238,7 +245,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court site short name from where the case is moved.
-     * 
+
      * @return Court site short name from where the case is moved
      */
     public String getMovedFromCourtSiteShortName() {
@@ -247,7 +254,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room from where the case is moved.
-     * 
+
      * @param val Court room from where the case is moved
      */
     public void setMovedFromCourtRoomName(String val) {
@@ -256,7 +263,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the court room from where the case is moved.
-     * 
+
      * @return Court room from where the case is moved
      */
     public String getMovedFromCourtRoomName() {
@@ -265,7 +272,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the time of hearing.
-     * 
+
      * @param val Time of hearing
      */
     public void setNotBeforeTime(LocalDateTime val) {
@@ -274,7 +281,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Gets the time of hearing.
-     * 
+
      * @return Time of hearing
      */
     public LocalDateTime getNotBeforeTime() {
@@ -283,7 +290,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Returns not before time as a formatted string.
-     * 
+
      * @return String
      */
     public String getNotBeforeTimeAsString() {
@@ -297,7 +304,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Returns Crest Court Room Number.
-     * 
+
      * @return Integer Crest Court Room Number
      */
     public Integer getCrestCourtRoomNo() {
@@ -306,7 +313,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Sets Crest Court Room Number.
-     * 
+
      * @param crestCourtRoomNo Integer
      */
     public void setCrestCourtRoomNo(Integer crestCourtRoomNo) {
@@ -344,7 +351,7 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     /**
      * Method used to compare two timestamps which could potentially be null.
-     * 
+
      * @param ts1 LocalDateTime 1
      * @param ts2 LocalDateTime 2
      * @return comparison result

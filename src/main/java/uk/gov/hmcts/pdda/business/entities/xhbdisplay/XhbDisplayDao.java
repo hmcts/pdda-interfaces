@@ -66,6 +66,7 @@ public class XhbDisplayDao extends AbstractVersionedDao implements Serializable 
         setShowUnassignedYn(otherData.getShowUnassignedYn());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getDisplayId();
     }

@@ -16,21 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * <p>
+
  * Title: RemoteSessionTaskStrategyTest Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class RemoteSessionTaskStrategyFailureTest {
 
@@ -100,7 +100,7 @@ class RemoteSessionTaskStrategyFailureTest {
 
     /**
      * Creates a Properties object for the purposes of testing.
-     * 
+
      * @param remoteHomeClass Value to use for the remoteHome property
      * @return Properties object
      */

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class XhbPddaDlNotifierRepository extends AbstractRepository<XhbPddaDlNot
 
     /**
      * findByCourtAndLastRunDate.
-     * 
+
      * @return List
      */
     @SuppressWarnings("unchecked")
@@ -43,4 +44,24 @@ public class XhbPddaDlNotifierRepository extends AbstractRepository<XhbPddaDlNot
         query.setParameter(LAST_RUN_DATE, lastRunDate);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbPddaDlNotifierDao> findByCourtAndLastRunDateSafe(Integer courtId,
+        LocalDateTime lastRunDate) {
+        LOG.debug("findByCourtAndLastRunDateSafe(courtId: {}, lastRunDate: {})", courtId,
+            lastRunDate);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_PDDA_DL_NOTIFIER.findByCourtAndLastRunDate");
+            query.setParameter(COURT_ID, courtId);
+            query.setParameter(LAST_RUN_DATE, lastRunDate);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtAndLastRunDateSafe({}, {}): {}", courtId, lastRunDate,
+                e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid null-related issues
+        }
+    }
+
 }

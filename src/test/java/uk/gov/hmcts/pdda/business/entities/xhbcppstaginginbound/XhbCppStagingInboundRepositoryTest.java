@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -20,15 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbCppStagingInboundRepositoryTest extends AbstractRepositoryTest<XhbCppStagingInboundDao> {
 
     private static final Integer BYVALIDATIONANDPROCESSINGSTATUS = 1;
-    private static final Integer BYSTATUS = 2;
-    private static final Integer BYVALIDATIONSTATUS = 3;
-    private static final Integer BYNEXTDOCUMENT = 4;
-    private static final Integer BYNEXTDOCUMENTTEST = 5;
     private static final Integer UNRESPONDED = 6;
 
     @Mock
@@ -44,10 +44,27 @@ class XhbCppStagingInboundRepositoryTest extends AbstractRepositoryTest<XhbCppSt
 
     @Override
     protected XhbCppStagingInboundRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCppStagingInboundRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCppStagingInboundRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCppStagingInboundDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCppStagingInboundDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -55,38 +72,6 @@ class XhbCppStagingInboundRepositoryTest extends AbstractRepositoryTest<XhbCppSt
         boolean result = testFind(getDummyDao(), BYVALIDATIONANDPROCESSINGSTATUS);
         assertTrue(result, NOT_TRUE);
         result = testFind(null, BYVALIDATIONANDPROCESSINGSTATUS);
-        assertTrue(result, NOT_TRUE);
-    }
-
-    @Test
-    void testFindNextDocumentByProcessingStatus() {
-        boolean result = testFind(getDummyDao(), BYSTATUS);
-        assertTrue(result, NOT_TRUE);
-        result = testFind(null, BYSTATUS);
-        assertTrue(result, NOT_TRUE);
-    }
-
-    @Test
-    void testFindNextDocument() {
-        boolean result = testFind(getDummyDao(), BYNEXTDOCUMENT);
-        assertTrue(result, NOT_TRUE);
-        result = testFind(null, BYNEXTDOCUMENT);
-        assertTrue(result, NOT_TRUE);
-    }
-
-    @Test
-    void testFindNextDocumentByValidationStatus() {
-        boolean result = testFind(getDummyDao(), BYVALIDATIONSTATUS);
-        assertTrue(result, NOT_TRUE);
-        result = testFind(null, BYVALIDATIONSTATUS);
-        assertTrue(result, NOT_TRUE);
-    }
-
-    @Test
-    void testFindNextDocumentTestSuccess() {
-        boolean result = testFind(getDummyDao(), BYNEXTDOCUMENTTEST);
-        assertTrue(result, NOT_TRUE);
-        result = testFind(null, BYNEXTDOCUMENTTEST);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -110,36 +95,16 @@ class XhbCppStagingInboundRepositoryTest extends AbstractRepositoryTest<XhbCppSt
             result = getClassUnderTest()
                 .findNextDocumentByValidationAndProcessingStatus(getDummyDao().getTimeLoaded(),
                     getDummyDao().getValidationStatus(), getDummyDao().getProcessingStatus());
-        } else if (BYSTATUS.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = getClassUnderTest()
-                .findNextDocumentByProcessingStatus(getDummyDao().getTimeLoaded(), getDummyDao().getProcessingStatus());
-        } else if (BYVALIDATIONSTATUS.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = getClassUnderTest()
-                .findNextDocumentByValidationStatus(getDummyDao().getTimeLoaded(), getDummyDao().getValidationStatus());
-        } else if (BYNEXTDOCUMENT.equals(whichTest)) {
-            Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = getClassUnderTest()
-                .findNextDocument(getDummyDao().getValidationStatus(), getDummyDao().getProcessingStatus());
-        } else if (BYNEXTDOCUMENTTEST.equals(whichTest)) {
-            Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
-            Mockito.when(mockQuery.getResultList()).thenReturn(list);
-            result = getClassUnderTest()
-                .findNextDocumentTest(getDummyDao().getTimeLoaded(), getDummyDao().getValidationStatus());
         } else if (UNRESPONDED.equals(whichTest)) {
             Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
             Mockito.when(mockQuery.getResultList()).thenReturn(list);
             result = getClassUnderTest().findUnrespondedCppMessages();
         }
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }

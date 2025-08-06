@@ -4,19 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>
+
  * Title: AllCaseStatusValue.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2004
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version $Id: AllCaseStatusValue.java,v 1.5 2006/06/05 12:28:24 bzjrnl Exp $
  */
@@ -56,7 +55,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Sets the case title.
-     * 
+
      * @param val the Case title
      */
     public void setCaseTitle(String val) {
@@ -65,7 +64,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Sets the case number.
-     * 
+
      * @param val number
      */
     public void setCaseNumber(String val) {
@@ -74,7 +73,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Gets the case title.
-     * 
+
      * @return val the Case title
      */
     public String getCaseTitle() {
@@ -83,7 +82,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Returns the case number.
-     * 
+
      * @return DCAse number
      */
     public String getCaseNumber() {
@@ -92,7 +91,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Sets the hearing type.
-     * 
+
      * @param val Hearing type
      */
     public void setHearingDescription(String val) {
@@ -101,7 +100,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Returns the hearing type.
-     * 
+
      * @return Hearing type
      */
     public String getHearingDescription() {
@@ -110,7 +109,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Sets the hearing progress.
-     * 
+
      * @param val Hearing progress
      */
     public void setHearingProgress(Integer val) {
@@ -119,7 +118,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Returns the hearing progress.
-     * 
+
      * @return hearingProgress Hearing progress
      */
     public Integer getHearingProgress() {
@@ -128,7 +127,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Whether this entry has defendants.
-     * 
+
      * @return true if this entry has defendants.
      */
     public boolean hasDefendant() {
@@ -141,7 +140,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Get the id of the court room that the list entry is for.
-     * 
+
      * @return The id of the court room that the list entry is for.
      */
     public Integer getListCourtRoomId() {
@@ -150,7 +149,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     /**
      * Set the id of the court room that the list entry is for.
-     * 
+
      * @param listCourtRoomId The id of the court room that the list entry is for. moved to.
      */
     public void setListCourtRoomId(Integer listCourtRoomId) {
@@ -160,7 +159,7 @@ public class AllCaseStatusValue extends SummaryByNameValue {
     /**
      * Indicates whether this entry is either in the court room being listed or whether it was
      * listed in the court room but was then moved to another.
-     * 
+
      * @return true if the entry is currently listed in the court room.
      */
     public boolean isListedInThisCourtRoom() {

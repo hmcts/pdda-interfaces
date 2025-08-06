@@ -13,7 +13,7 @@ import javax.xml.transform.TransformerConfigurationException;
 
 /**
  * Allows the values of a template to be adapted.
- * 
+
  * @author Will Fardell
  */
 public class ParameterTemplatesAdapter extends TemplatesAdapter {
@@ -23,7 +23,7 @@ public class ParameterTemplatesAdapter extends TemplatesAdapter {
 
     /**
      * Construct a new adapter.
-     * 
+
      * @author Will Fardell
      */
     public ParameterTemplatesAdapter(Templates delegate, Map<?, ?> parameterMap) {

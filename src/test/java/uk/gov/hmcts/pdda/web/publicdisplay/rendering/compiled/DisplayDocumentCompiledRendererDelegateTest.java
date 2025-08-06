@@ -26,27 +26,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * <p>
+
  * Title: DisplayDocumentCompiledRendererDelegateTest Test.
- * </p>
- * <p>
+
+
  * Description: Tests the DisplayDocumentCompiledRendererDelegateTest classes. It was hoped that the
  * resulting HTML could be compared with a prepared string, but attempts at getting the two to pass
  * an AssertEquals have failed. This can potentially be plugged in at a later date if more time
  * allows.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD.GodClass", "PMD.ExcessiveImports"})
 class DisplayDocumentCompiledRendererDelegateTest {
 
     private static final String NO20603 = "20603";

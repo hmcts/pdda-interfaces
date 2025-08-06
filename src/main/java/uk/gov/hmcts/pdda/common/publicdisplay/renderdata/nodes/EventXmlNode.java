@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Abstract class representing a value of a node of in processed xml document.
- * 
+
  * @author szfnvt
  */
 public abstract class EventXmlNode implements Serializable {
@@ -19,7 +19,7 @@ public abstract class EventXmlNode implements Serializable {
 
     /**
      * Constructor taking in node name. Called by child nodes.
-     * 
+
      * @param nameIn String
      */
     protected EventXmlNode(String nameIn) {
@@ -28,7 +28,7 @@ public abstract class EventXmlNode implements Serializable {
 
     /**
      * Returns name of node.
-     * 
+
      * @return String
      */
     public String getName() {
@@ -37,7 +37,7 @@ public abstract class EventXmlNode implements Serializable {
 
     /**
      * Append contents of node for debug.
-     * 
+
      * @return String
      */
     public String toDebug() {
