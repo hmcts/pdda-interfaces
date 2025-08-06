@@ -68,7 +68,7 @@
 										<apd:CitizenNameSurname>data</apd:CitizenNameSurname>
 										<apd:CitizenNameRequestedName>check data
 										</apd:CitizenNameRequestedName>
-										<cs:IsMasked>no</cs:IsMasked>
+										<cs:IsMasked>yes</cs:IsMasked>
 									</cs:PersonalDetails>
 									<cs:URN>TEST</cs:URN>
 									<cs:PrisonerID>TEST</cs:PrisonerID>
