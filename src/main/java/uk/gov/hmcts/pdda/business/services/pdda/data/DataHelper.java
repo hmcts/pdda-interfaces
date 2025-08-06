@@ -69,6 +69,10 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateHearingList({},{})", status, startDate);
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbHearingList for courtId:{}, crestListId:{}, listType:{},"
+                + "status:{}, startDate:{}, publishedTime:{}, printReference:{}, editionNo:{}, listCourtType:{}",
+                courtId, crestListId, listType, status, startDate, publishedTime, printReference,
+                editionNo, listCourtType);
             result = createHearingList(courtId, crestListId, listType, status, startDate,
                 publishedTime, printReference, editionNo, listCourtType);
         }
@@ -81,6 +85,9 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateSitting({})", sittingTime);
         Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbSitting for courtSiteId:{}, courtRoomId:{}, isFloating:{},"
+                + "sittingTime:{}, listId:{}",
+                courtSiteId, courtRoomId, isFloating, sittingTime, listId);
             result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime, listId);
         }
         return result;
@@ -91,6 +98,8 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateCase({}{})", caseType, caseNumber);
         Optional<XhbCaseDao> result = findCase(courtId, caseType, caseNumber);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbCase for courtId:{}, caseType:{}, caseNumber:{}",
+                courtId, caseType, caseNumber);
             result = createCase(courtId, caseType, caseNumber);
         }
         return result;
@@ -102,6 +111,8 @@ public class DataHelper extends FinderHelper {
         Optional<XhbRefJudgeDao> result =
             findJudge(courtId, judgeFirstname, judgeSurname);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbRefJudge for courtId:{}, judgeTitle:{}, judgeFirstname:{}, judgeSurname:{}",
+                courtId, judgeTitle, judgeFirstname, judgeSurname);
             result = createRefJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return result;
@@ -112,6 +123,8 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateDefendantOnCase()");
         Optional<XhbDefendantOnCaseDao> result = findDefendantOnCase(caseId, defendantId);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbDefendantOnCase for caseId:{}, defendantId:{}, isMasked:{}",
+                caseId, defendantId, isMasked);
             result = createDefendantOnCase(caseId, defendantId, isMasked);
         }
         return result;
@@ -124,6 +137,9 @@ public class DataHelper extends FinderHelper {
         Optional<XhbDefendantDao> result =
             findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbDefendant for courtId:{}, firstName:{}, middleName:{}, surname:{}, "
+                + "gender:{}, dateOfBirth:{}, publicDisplayHide:{}",
+                courtId, firstName, middleName, surname, gender, dateOfBirth, publicDisplayHide);
             result = createDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth,
                 publicDisplayHide);
         }
@@ -136,6 +152,9 @@ public class DataHelper extends FinderHelper {
         Optional<XhbRefHearingTypeDao> result =
             findHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbRefHearingType for courtId:{}, hearingTypeCode:{}, "
+                + "hearingTypeDesc:{}, category:{}", courtId, hearingTypeCode, hearingTypeDesc,
+                category);
             result = createHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
         }
         return result;
@@ -147,6 +166,9 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateHearing()");
         Optional<XhbHearingDao> result = findHearing(courtId, caseId, hearingStartDate);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbHearing for courtId:{}, caseId:{}, refHearingTypeId:{}, "
+                + "hearingStartDate:{}, hearingEndDate:{}", courtId, caseId, refHearingTypeId,
+                hearingStartDate, hearingEndDate);
             result =
                 createHearing(courtId, caseId, refHearingTypeId, hearingStartDate, hearingEndDate);
         }
@@ -159,6 +181,8 @@ public class DataHelper extends FinderHelper {
         Optional<XhbScheduledHearingDao> result =
             findScheduledHearing(sittingId, hearingId, notBeforeTime);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbScheduledHearing for sittingId:{}, hearingId:{}, notBeforeTime:{}",
+                sittingId, hearingId, notBeforeTime);
             result = createScheduledHearing(sittingId, hearingId, notBeforeTime);
         }
         return result;
@@ -170,6 +194,8 @@ public class DataHelper extends FinderHelper {
         Optional<XhbSchedHearingDefendantDao> result =
             findSchedHearingDefendant(scheduledHearingId, defendantId);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbSchedHearingDefendant for scheduledHearingId:{}, defendantId:{}",
+                scheduledHearingId, defendantId);
             result = createSchedHearingDefendant(scheduledHearingId, defendantId);
         }
         return result;
@@ -180,8 +206,12 @@ public class DataHelper extends FinderHelper {
         LOG.debug("validateCrLiveDisplay()");
         Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId);
         if (result.isEmpty()) {
+            LOG.debug("Creating new XhbCrLiveDisplay for courtRoomId:{}, scheduledHearingId:{}, timeStatusSet:{}",
+                courtRoomId, scheduledHearingId, timeStatusSet);
             result = createCrLiveDisplay(courtRoomId, scheduledHearingId, timeStatusSet);
         } else if (!scheduledHearingId.equals(result.get().getScheduledHearingId())) {
+            LOG.debug("Updating existing XhbCrLiveDisplay for courtRoomId:{}, scheduledHearingId:{}, timeStatusSet:{}",
+                courtRoomId, scheduledHearingId, timeStatusSet);
             result.get().setScheduledHearingId(scheduledHearingId);
             result.get().setTimeStatusSet(timeStatusSet);
             result = updateCrLiveDisplay(result.get());
