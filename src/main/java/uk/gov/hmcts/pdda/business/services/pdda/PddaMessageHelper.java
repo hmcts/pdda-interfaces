@@ -13,19 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: PDDAMessageHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
@@ -50,7 +49,7 @@ public class PddaMessageHelper {
     public Optional<XhbPddaMessageDao> findByPddaMessageId(final Integer pddaMessageId) {
         String methodName = "findByPddaMessageId()";
         LOG.debug(methodName + LOG_CALLED);
-        return getPddaMessageRepository().findById(pddaMessageId);
+        return getPddaMessageRepository().findByIdSafe(pddaMessageId);
     }
 
     /**
@@ -63,7 +62,7 @@ public class PddaMessageHelper {
         String methodName = "findByMessageType()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbRefPddaMessageTypeDao> daoList =
-            getRefPddaMessageTypeRepository().findByMessageType(messageType);
+            getRefPddaMessageTypeRepository().findByMessageTypeSafe(messageType);
         return (Optional<XhbRefPddaMessageTypeDao>) getFirstInList(daoList);
     }
 
@@ -77,7 +76,7 @@ public class PddaMessageHelper {
         String methodName = "findByCpDocumentName()";
         LOG.debug(methodName + LOG_CALLED);
         List<XhbPddaMessageDao> daoList =
-            getPddaMessageRepository().findByCpDocumentName(cpDocumentName);
+            getPddaMessageRepository().findByCpDocumentNameSafe(cpDocumentName);
         return (Optional<XhbPddaMessageDao>) getFirstInList(daoList);
     }
 
@@ -100,7 +99,8 @@ public class PddaMessageHelper {
         LOG.debug(methodName + LOG_CALLED);
         
         // Check a final time to make sure the document doesn't already exist before saving
-        if (getPddaMessageRepository().findByCpDocumentName(dao.getCpDocumentName()).isEmpty()) {
+        if (getPddaMessageRepository().findByCpDocumentNameSafe(dao.getCpDocumentName())
+            .isEmpty()) {
             getPddaMessageRepository().save(dao);
         } else {
             LOG.debug("There is already an entry for the document: {}", dao.getCpDocumentName());
@@ -164,5 +164,43 @@ public class PddaMessageHelper {
     
     private boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
+    }
+
+    /**
+     * Checks if the given document is excluded based on the provided court codes.
+
+     * @param inDocument the document identifier in the format "PublicDisplay_XXX_&lt;more chars&gt;".
+     * @param courtsExcluded a comma-separated list of court codes to check against.
+     * @return true if the document's court code is in the excluded list, false otherwise.
+     */
+    public static boolean isCourtExcluded(String inDocument, String courtsExcluded) {
+        if (inDocument == null) {
+            return false;
+        }
+        
+        // Match and extract the 3-digit number after "PublicDisplay_"
+        String regex = "PublicDisplay_(\\d{3})_.*";
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+        java.util.regex.Matcher matcher = pattern.matcher(inDocument);
+
+        if (!matcher.matches()) {
+            return false; // Doesn't match the expected format
+        }
+
+        String courtCode = matcher.group(1);
+
+        if (courtsExcluded == null || courtsExcluded.isEmpty()) {
+            return false; // empty list can't contain anything
+        }
+        
+        // Split and check for match
+        String[] codes = courtsExcluded.split(",");
+        for (String code : codes) {
+            if (courtCode.equals(code.trim())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

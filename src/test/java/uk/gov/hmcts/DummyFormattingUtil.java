@@ -168,7 +168,7 @@ public final class DummyFormattingUtil {
         Integer xmlDocumentId = Double.valueOf(Math.random()).intValue();
         LocalDateTime dateCreated = LocalDateTime.now();
         String documentTitle = "";
-        Long xmlDocumentClobId = 1L;
+        Long xmlDocumentClobId = null;
         String status = "";
         LocalDateTime expiryDate = LocalDateTime.now().plusDays(30);
         String documentType = "";

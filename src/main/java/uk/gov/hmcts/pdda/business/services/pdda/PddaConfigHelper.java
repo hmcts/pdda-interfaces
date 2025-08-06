@@ -4,26 +4,26 @@ import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 
 /**
- * <p>
+
  * Title: Config Helper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
-public class PddaConfigHelper {
+public class PddaConfigHelper extends AbstractControllerBean {
     private static final Logger LOG = LoggerFactory.getLogger(PddaConfigHelper.class);
 
     private static final String CONFIG_PDDA_SWITCHER = "PDDA_SWITCHER";
@@ -48,6 +48,8 @@ public class PddaConfigHelper {
         public static final String DB_CP_SFTP_USERNAME = "PDDA_BAIS_CP_SFTP_USERNAME";
         public static final String DB_CP_SFTP_PASSWORD = "PDDA_BAIS_CP_SFTP_PASSWORD";
         public static final String DB_CP_SFTP_UPLOAD_LOCATION = "PDDA_BAIS_CP_SFTP_UPLOAD_LOCATION";
+        public static final String DB_CP_EXCLUDED_COURT_IDS = "PDDA_CP_EXCLUDED_COURT_IDS";
+        
 
         // Key vault values
         public static final String KV_SFTP_HOST = "pdda.bais_sftp_hostname";
@@ -66,16 +68,17 @@ public class PddaConfigHelper {
     // Junit constructor
     protected PddaConfigHelper(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
         Environment environment) {
+        super();
         this.entityManager = entityManager;
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.environment = environment;
     }
 
     /**
-     * <p>
+
      * Description: Get the PDDA Switcher value 1 = Send to PDDA only 2 = Send to PDDA and process
      * in Xhibit 3 = Do not send to PDDA only process in Xhibit (DEFAULT).
-     * </p>
+
      */
     public String getPddaSwitcher() {
         if (pddaSwitcher == null) {

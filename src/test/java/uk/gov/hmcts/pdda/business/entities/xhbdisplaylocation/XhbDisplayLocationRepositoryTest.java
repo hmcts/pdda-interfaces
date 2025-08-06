@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbdisplaylocation;
 
-
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,16 +40,38 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
 
     @Override
     protected XhbDisplayLocationRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbDisplayLocationRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbDisplayLocationRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbDisplayLocationDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbDisplayLocationDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
     void testFindByVipCourtSiteSuccess() {
-        boolean result = testFindByVipCourtSite(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            boolean result = testFindByVipCourtSite(getDummyDao());
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -56,6 +80,7 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         assertTrue(result, NOT_TRUE);
     }
 
+    @SuppressWarnings("PMD.UseCollectionIsEmpty")
     private boolean testFindByVipCourtSite(XhbDisplayLocationDao dao) {
         List<XhbDisplayLocationDao> list = new ArrayList<>();
         if (dao != null) {
@@ -64,13 +89,15 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
         List<XhbDisplayLocationDao> result =
-            getClassUnderTest().findByVipCourtSite(getDummyDao().getCourtSiteId());
+            getClassUnderTest().findByVipCourtSiteSafe(getDummyDao().getCourtSiteId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertTrue(result.size() > 0, "Expected at least one result");
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertTrue(result.isEmpty(), "Expected empty result list");
         }
+
         return true;
     }
 
@@ -97,9 +124,9 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
             getClassUnderTest().findByCourtSite(getDummyDao().getCourtSiteId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -117,7 +144,7 @@ class XhbDisplayLocationRepositoryTest extends AbstractRepositoryTest<XhbDisplay
         XhbDisplayLocationDao result = new XhbDisplayLocationDao(displayLocationId, descriptionCode, courtSiteId,
             lastUpdateDate, creationDate, lastUpdatedBy, createdBy, version);
         displayLocationId = result.getPrimaryKey();
-        assertNotNull(displayLocationId, NOTNULL);
+        assertNotNull(displayLocationId, NOTNULLRESULT);
         return new XhbDisplayLocationDao(result);
     }
 

@@ -2,7 +2,7 @@ package uk.gov.hmcts.pdda.common.publicdisplay.renderdata;
 
 /**
  * PublicNoticeValue.
- * 
+
  * @author pznwc5 Public notices value object.
  */
 public class PublicNoticeValue extends AbstractValue {
@@ -26,7 +26,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * setPublicNoticeDesc.
-     * 
+
      * @param publicNoticeDesc String
      */
     public void setPublicNoticeDesc(String publicNoticeDesc) {
@@ -35,7 +35,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * getPublicNoticeDesc.
-     * 
+
      * @return String
      */
     public String getPublicNoticeDesc() {
@@ -44,7 +44,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * setActive.
-     * 
+
      * @param active boolean
      */
     public void setActive(boolean active) {
@@ -53,7 +53,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * isActive.
-     * 
+
      * @return boolean
      */
     public boolean isActive() {
@@ -62,7 +62,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * setPriority.
-     * 
+
      * @param priority int
      */
     public void setPriority(int priority) {
@@ -71,7 +71,7 @@ public class PublicNoticeValue extends AbstractValue {
 
     /**
      * getPriority.
-     * 
+
      * @return int
      */
     public int getPriority() {

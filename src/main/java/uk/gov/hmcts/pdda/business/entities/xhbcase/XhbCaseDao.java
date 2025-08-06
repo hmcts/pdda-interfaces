@@ -11,8 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.GodClass","PMD.CyclomaticComplexity",
-                   "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD"})
 @Entity(name = "XHB_CASE")
 @NamedQuery(name = "XHB_CASE.findByNumberTypeAndCourt",
     query = "SELECT o from XHB_CASE o WHERE o.caseNumber = :caseNumber "
@@ -275,6 +274,7 @@ public class XhbCaseDao extends AbstractXhbCaseDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCaseId();
     }

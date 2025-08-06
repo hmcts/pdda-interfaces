@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * Class DocumentTypeType.
- * 
+
  * @version $Revision$ $Date$
  */
 public final class DocumentTypeType implements java.io.Serializable {
@@ -182,9 +182,9 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method enumerate.
-     * 
-     * <p>Returns an enumeration of all possible instances of DocumentTypeType
-     * 
+
+     * Returns an enumeration of all possible instances of DocumentTypeType
+
      * @return Enumeration
      */
     public static Enumeration enumerate() {
@@ -193,9 +193,9 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method getType.
-     * 
-     * <p>Returns the type of this DocumentTypeType
-     * 
+
+     * Returns the type of this DocumentTypeType
+
      * @return int
      */
     public int getType() {
@@ -204,9 +204,9 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method init.
-     * 
-     * 
-     * 
+
+
+
      * @return Properties
      */
     private static Properties init() {
@@ -229,10 +229,10 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method readResolve.
-     * 
-     * <p>will be called during deserialization to replace the deserialized object with the correct
+
+     * will be called during deserialization to replace the deserialized object with the correct
      * constant instance. <br/>
-     * 
+
      * @return Object
      */
     private Object readResolve() {
@@ -241,9 +241,9 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method toString.
-     * 
-     * <p>Returns the String representation of this DocumentTypeType
-     * 
+
+     * Returns the String representation of this DocumentTypeType
+
      * @return String
      */
     @Override
@@ -253,9 +253,9 @@ public final class DocumentTypeType implements java.io.Serializable {
 
     /**
      * Method valueOf.
-     * 
-     * <p>Returns a new DocumentTypeType based on the given String value.
-     * 
+
+     * Returns a new DocumentTypeType based on the given String value.
+
      * @param string String
      * @return DocumentTypeType
      */

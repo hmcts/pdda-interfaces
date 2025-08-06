@@ -32,6 +32,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class PdSetupControllerBean extends AbstractControllerBean implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
@@ -55,9 +56,17 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         super();
     }
 
+    @Override
+    public void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayLocationRepository = null;
+        xhbDisplayRepository = null;
+        xhbCourtSiteRepository = null;
+    }
+
     /**
      * Returns a CourtDrillDown object for the court Id supplied.
-     * 
+
      * @param courtId Integer
      * @return CourtDrillDown object
      * @throws uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException Exception
@@ -66,27 +75,27 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
         String methodName = "getDrillDownForCourt(" + courtId + ") - ";
         LOG.debug(methodName + ENTERED);
 
-        Optional<XhbCourtDao> court = getXhbCourtRepository().findById(courtId);
+        Optional<XhbCourtDao> court = getXhbCourtRepository().findByIdSafe(courtId);
         if (!court.isPresent()) {
             throw new uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException(courtId);
         }
 
         List<XhbCourtSiteDao> xhbCourtSites = getXhbCourtSiteRepository()
-            .findByCrestCourtIdValue(court.get().getCrestCourtId());
+            .findByCrestCourtIdValueSafe(court.get().getCrestCourtId());
 
         CourtDrillDown courtDrillDown = new CourtDrillDown(court.get().getDisplayName());
         for (XhbCourtSiteDao xhbCourtSite : xhbCourtSites) {
 
             List<XhbDisplayLocationDao> xhbDisplayLocations =
                 getXhbDisplayLocationRepository()
-                    .findByCourtSite(xhbCourtSite.getCourtSiteId());
+                    .findByCourtSiteSafe(xhbCourtSite.getCourtSiteId());
 
             CourtSiteDrillDown courtSiteDrillDown = getCourtSiteDrillDown(xhbCourtSite.getDisplayName());
 
             for (XhbDisplayLocationDao xhbDisplayLocation : xhbDisplayLocations) {
 
                 List<XhbDisplayDao> xhbDisplays = getXhbDisplayRepository()
-                    .findByDisplayLocationId(xhbDisplayLocation.getDisplayLocationId());
+                    .findByDisplayLocationIdSafe(xhbDisplayLocation.getDisplayLocationId());
 
                 DisplayLocationDrillDown displayLocationDrillDown =
                     getDisplayLocationDrillDown(xhbDisplayLocation.getDescriptionCode());
@@ -130,25 +139,25 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
     
     /**
      * getAllCourts.
-     * 
+
      * @return XhbCourtDaoArray
      */
     public XhbCourtDao[] getAllCourts() {
         String methodName = "getAllCourts() - ";
         LOG.debug(methodName + ENTERED);
 
-        List<XhbCourtDao> courts = getXhbCourtRepository().findAll();
+        List<XhbCourtDao> courts = getXhbCourtRepository().findAllSafe();
         courts.sort(Comparator.comparing(XhbCourtDao::getCourtName));
         return courts.toArray(new XhbCourtDao[0]);
     }
 
     /**
      * Returns the xhbCourtSiteRepository object, initialising if currently null.
-     * 
+
      * @return XhbCourtSiteRepository
      */
     private XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
@@ -156,11 +165,11 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
             xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
@@ -168,11 +177,11 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
             xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;

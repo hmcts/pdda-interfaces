@@ -14,6 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHear
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 
+@SuppressWarnings({"PMD.NullAssignment", "PMD.TooManyMethods"})
 public abstract class PublicDisplayQueryRepo extends PublicDisplayQueryLogEntry {
 
     protected XhbCaseReferenceRepository xhbCaseReferenceRepository;
@@ -27,6 +28,20 @@ public abstract class PublicDisplayQueryRepo extends PublicDisplayQueryLogEntry 
     protected XhbScheduledHearingRepository xhbScheduledHearingRepository;
     protected XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository;
 
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCaseReferenceRepository = null;
+        xhbDefendantRepository = null;
+        xhbDefendantOnCaseRepository = null;
+        xhbHearingRepository = null;
+        xhbHearingListRepository = null;
+        xhbRefJudgeRepository = null;
+        xhbRefHearingTypeRepository = null;
+        xhbSittingRepository = null;
+        xhbScheduledHearingRepository = null;
+        xhbSchedHearingDefendantRepository = null;
+    }
 
     protected PublicDisplayQueryRepo(EntityManager entityManager) {
         super(entityManager);
@@ -39,56 +54,56 @@ public abstract class PublicDisplayQueryRepo extends PublicDisplayQueryLogEntry 
     }
 
     protected final XhbDefendantRepository getXhbDefendantRepository() {
-        if (xhbDefendantRepository == null) {
+        if (xhbDefendantRepository == null || !isEntityManagerActive()) {
             xhbDefendantRepository = new XhbDefendantRepository(getEntityManager());
         }
         return xhbDefendantRepository;
     }
 
     protected final XhbRefHearingTypeRepository getXhbRefHearingTypeRepository() {
-        if (xhbRefHearingTypeRepository == null) {
+        if (xhbRefHearingTypeRepository == null || !isEntityManagerActive()) {
             xhbRefHearingTypeRepository = new XhbRefHearingTypeRepository(getEntityManager());
         }
         return xhbRefHearingTypeRepository;
     }
 
     protected XhbHearingRepository getXhbHearingRepository() {
-        if (xhbHearingRepository == null) {
+        if (xhbHearingRepository == null || !isEntityManagerActive()) {
             xhbHearingRepository = new XhbHearingRepository(getEntityManager());
         }
         return xhbHearingRepository;
     }
 
     protected XhbHearingListRepository getXhbHearingListRepository() {
-        if (xhbHearingListRepository == null) {
+        if (xhbHearingListRepository == null || !isEntityManagerActive()) {
             xhbHearingListRepository = new XhbHearingListRepository(getEntityManager());
         }
         return xhbHearingListRepository;
     }
 
     protected XhbRefJudgeRepository getXhbRefJudgeRepository() {
-        if (xhbRefJudgeRepository == null) {
+        if (xhbRefJudgeRepository == null || !isEntityManagerActive()) {
             xhbRefJudgeRepository = new XhbRefJudgeRepository(getEntityManager());
         }
         return xhbRefJudgeRepository;
     }
 
     protected XhbSittingRepository getXhbSittingRepository() {
-        if (xhbSittingRepository == null) {
+        if (xhbSittingRepository == null || !isEntityManagerActive()) {
             xhbSittingRepository = new XhbSittingRepository(getEntityManager());
         }
         return xhbSittingRepository;
     }
 
     protected XhbScheduledHearingRepository getXhbScheduledHearingRepository() {
-        if (xhbScheduledHearingRepository == null) {
+        if (xhbScheduledHearingRepository == null || !isEntityManagerActive()) {
             xhbScheduledHearingRepository = new XhbScheduledHearingRepository(getEntityManager());
         }
         return xhbScheduledHearingRepository;
     }
 
     protected XhbSchedHearingDefendantRepository getXhbSchedHearingDefendantRepository() {
-        if (xhbSchedHearingDefendantRepository == null) {
+        if (xhbSchedHearingDefendantRepository == null || !isEntityManagerActive()) {
             xhbSchedHearingDefendantRepository =
                 new XhbSchedHearingDefendantRepository(getEntityManager());
         }
@@ -96,14 +111,14 @@ public abstract class PublicDisplayQueryRepo extends PublicDisplayQueryLogEntry 
     }
 
     protected XhbCaseReferenceRepository getXhbCaseReferenceRepository() {
-        if (xhbCaseReferenceRepository == null) {
+        if (xhbCaseReferenceRepository == null || !isEntityManagerActive()) {
             xhbCaseReferenceRepository = new XhbCaseReferenceRepository(getEntityManager());
         }
         return xhbCaseReferenceRepository;
     }
 
     protected final XhbDefendantOnCaseRepository getXhbDefendantOnCaseRepository() {
-        if (xhbDefendantOnCaseRepository == null) {
+        if (xhbDefendantOnCaseRepository == null || !isEntityManagerActive()) {
             xhbDefendantOnCaseRepository = new XhbDefendantOnCaseRepository(getEntityManager());
         }
         return xhbDefendantOnCaseRepository;

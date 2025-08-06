@@ -48,7 +48,7 @@ public class PdDataControllerBean extends AbstractControllerBean implements Seri
 
     /**
      * Retrieve data for a given document.
-     * 
+
      * @param uri the URi of the document to obtain data for.
      * @return the Data.
      */

@@ -20,34 +20,33 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: Display Document reference managing class.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * This class is responsible for the management of references to Display Documents as represented as
  * <code>DisplayDocumentURI</code>.
- * </p>
- * <p>
+
+
  * For data changes it provides information about which documents need to be rerendered.
- * </p>
- * <p>
+
+
  * For configuration changes it keeps track of how many Display Rotation Sets refer to the document
  * and provides information about which Display Document need to either be rendered for the first
  * time or stop being rendered at all. It does this by accumulating both information on the
  * reference counts and the fact that it has not yet been asked to populate a RenderChanges. The
  * RenderChanges is populated with all documents that need to stop rendering and all documents that
  * are marked as 'new', when this population is done, the documents marked as new are unmarked.
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -82,7 +81,7 @@ public class DisplayDocumentReferenceManager {
     /**
      * Return the set of Display Documents currently held in configuration for the given combination
      * of document types and court room.
-     * 
+
      * @param documentTypes The different types of Display Document to find.
      * @param courtRoom The court room for which to find relevant Display Documents.
      * @return A RenderChanges instance containing the relevant Display Documents.
@@ -113,16 +112,16 @@ public class DisplayDocumentReferenceManager {
     /**
      * This method is used to register a an 'interest' in the Display Documents of a Display
      * Rotation Set.
-     * 
-     * <p>This increments the internal count of references against the display document as long as the
+
+     * This increments the internal count of references against the display document as long as the
      * count remains above zero it means that the document is relevant in the current configuration.
-     * 
-     * <p>Please note that the counts are the only thing that are updated as part of this method. Until
+
+     * Please note that the counts are the only thing that are updated as part of this method. Until
      * the fillInRenderChanges() method is called any new Display Documents are not available for
      * address by the
      * <code>getRenderChanges(DisplayDocumentType[] documentTypes, CourtRoomIdentifier courtRoom)</code>
      * method.
-     * 
+
      * @param displayRotationSetData The Display Rotation Set whose Display Documents must be
      *        registered.
      */
@@ -138,10 +137,10 @@ public class DisplayDocumentReferenceManager {
     /**
      * This method is used to deregister a an 'interest' in the Display Documents of a Display
      * Rotation Set.
-     * 
-     * <p>This decrements the internal count of references against the display document as long as the
+
+     * This decrements the internal count of references against the display document as long as the
      * count remains above zero it means that the document is relevant in the current configuration.
-     * 
+
      * @param displayRotationSetData The Display Rotation Set whose Display Documents must be
      *        deregistered.
      */
@@ -159,7 +158,7 @@ public class DisplayDocumentReferenceManager {
      * <code>removeDisplayDocumentReferences</code> have been used, in order to populate the
      * <code>RenderChanges</code> with Display Documents that need to be rendered for the first time
      * or no longer be rendered.
-     * 
+
      * @param renderChanges RenderChanges
      */
     public void fillInRenderChanges(RenderChanges renderChanges) {
@@ -207,7 +206,7 @@ public class DisplayDocumentReferenceManager {
      * This method is used to store a Display Document for later retrieval by the combination of
      * court room and document type. If a document is of type "Court List" for court rooms 2 and 3
      * it will be stored by "Court List for court room 2" and by "Court List for court room 3".
-     * 
+
      * @param displayDocumentUri The Display Document to store.
      */
     @SuppressWarnings({"rawtypes", UNCHECKED})
@@ -223,7 +222,7 @@ public class DisplayDocumentReferenceManager {
     /**
      * This document is used to remove a Display Document that has been stored by the combination of
      * court room and document type.
-     * 
+
      * @param displayDocumentUri The Display Document to remove.
      */
     private void removeDocumentByTypeAndCourts(DisplayDocumentUri displayDocumentUri) {
@@ -238,7 +237,7 @@ public class DisplayDocumentReferenceManager {
     /**
      * This method gets the set of Display Documents of a given type and stored against a particular
      * court room.
-     * 
+
      * @param documentType The type of the Display Documents we are after.
      * @param courtRoomId The court rooms to which the relevant to.
      * @return A Set containing <code>DisplayDocumentURI</code>s representing the Display Documents
@@ -253,7 +252,7 @@ public class DisplayDocumentReferenceManager {
 
     /**
      * Generate a String key from the document type and court room id.
-     * 
+
      * @param documentType The document type.
      * @param courtRoomId The ID of the court room/
      * @return A String key for use in a map.
@@ -267,7 +266,7 @@ public class DisplayDocumentReferenceManager {
 
     /**
      * Get the reference counter for a Display Document.
-     * 
+
      * @param displayDocumentUri The Display Document for which to retrieve the counter.
      * @return the relevant reference counter.
      */
@@ -286,28 +285,27 @@ public class DisplayDocumentReferenceManager {
     }
 
     /**
-     * <p>
+
      * Title: Display document reference counting class.
-     * </p>
-     * <p>
+
+
      * Description:
-     * </p>
-     * <p>
+
+
      * This class is used to keep count of registered references to a display document. When the
      * references drop to zero, the document is no longer relevant.
-     * </p>
-     * <p>
+
+
      * This class is also responsible for keeping track of the fact of initial creation until
      * queried about it. This allows the reference counter to be used to keep track of references
      * before any decision has to be made about initial rendering.
-     * </p>
-     * <p>
+
+
      * Copyright: Copyright (c) 2003
-     * </p>
-     * <p>
+
+
      * Company: EDS
-     * </p>
-     * 
+
      * @author Bob Boothby
      * @version 1.0
      */
@@ -338,7 +336,7 @@ public class DisplayDocumentReferenceManager {
          * Checks whether the document needs an initial rendering. This is effectively an one way
          * flip- flop, when first called this method will return true to signal that the Display
          * Document needs a first render, thereafter it will return false.
-         * 
+
          * @return true if a document needs an initial render.
          */
         private boolean isNeedsInitialRender() {
@@ -352,7 +350,7 @@ public class DisplayDocumentReferenceManager {
 
         /**
          * Used to check whether there are any outstanding references to the document.
-         * 
+
          * @return true is the Display Document is still relevant for rendering, false otherwise.
          */
         private boolean isRelevant() {

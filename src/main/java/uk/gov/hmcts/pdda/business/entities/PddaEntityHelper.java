@@ -56,7 +56,7 @@ public class PddaEntityHelper {
     // XHB_CONFIGURED_PUBLIC_NOTICE
     public static Optional<XhbConfiguredPublicNoticeDao> xcpnFindByPrimaryKey(
         Integer configuredPublicNoticeId) {
-        return getXCpnRepo().findById(configuredPublicNoticeId);
+        return getXCpnRepo().findByIdSafe(configuredPublicNoticeId);
     }
 
     public static Optional<XhbConfiguredPublicNoticeDao> cpnUpdate(
@@ -66,18 +66,18 @@ public class PddaEntityHelper {
 
     public static List<XhbConfiguredPublicNoticeDao> xcpnFindByDefinitivePnCourtRoomValue(
         Integer courtRoomId, Integer definitivePublicNublicNoticeId) {
-        return getXCpnRepo().findByDefinitivePnCourtRoomValue(courtRoomId,
+        return getXCpnRepo().findByDefinitivePnCourtRoomValueSafe(courtRoomId,
             definitivePublicNublicNoticeId);
     }
 
     // XHB_COURT_SITE
     public static Optional<XhbCourtSiteDao> xcstFindByPrimaryKey(Integer courtSiteId) {
-        return getXCstrmRepo().findById(courtSiteId);
+        return getXCstrmRepo().findByIdSafe(courtSiteId);
     }
     
     // XHB_COURT_ROOM
     public static Optional<XhbCourtRoomDao> xcrtFindByPrimaryKey(Integer courtRoomId) {
-        return getXCrtrmRepo().findById(courtRoomId);
+        return getXCrtrmRepo().findByIdSafe(courtRoomId);
     }
 
     public static Optional<XhbCrLiveDisplayDao> xcldSave(XhbCrLiveDisplayDao objToSave) {
@@ -86,6 +86,6 @@ public class PddaEntityHelper {
 
     // XHB_SCHEDULED_HEARING
     public static Optional<XhbScheduledHearingDao> xshFindByPrimaryKey(Integer scheduledHearingId) {
-        return getXshRepo().findById(scheduledHearingId);
+        return getXshRepo().findByIdSafe(scheduledHearingId);
     }
 }

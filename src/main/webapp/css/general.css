@@ -19,6 +19,10 @@ body {
 	height:40pt;
 }
 
+.header-image {
+	background-repeat: no-repeat;
+}
+
 .pageInfo {
 		color: #FFFFFF;
 		font-size: 8pt;

@@ -18,20 +18,19 @@ import java.util.Optional;
 /**
  * <p/>
  * Title: SingleCourtRoomDataSource.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.8 $
  */
@@ -56,7 +55,7 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
 
     /**
      * If there is any data for the query place it into the data object otherwise leave it empty.
-     * 
+
      * @pre getUri() != null
      * @pre getData() != null
      */
@@ -69,12 +68,13 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
 
     /**
      * Sets the court name in the data object for the court that we're retrieving data for.
-     * 
+
      * @param courtRoomId int
      */
     private void setCourtRoomNumber(final int courtRoomId, final EntityManager entityManager) {
         LOG.debug("setCourtRoomNumber({},{})", courtRoomId, entityManager);
-        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository(entityManager).findById(courtRoomId);
+        Optional<XhbCourtRoomDao> courtRoom =
+            getXhbCourtRoomRepository(entityManager).findByIdSafe(courtRoomId);
         if (!courtRoom.isPresent()) {
             throw new CourtRoomNotFoundException(courtRoomId);
         }
@@ -93,7 +93,8 @@ public class SingleCourtRoomDataSource extends GenericPublicDisplayDataSource {
         LOG.debug("getCourtSite({},{})", courtRoom, entityManager);
         Optional<XhbCourtSiteDao> courtSite = Optional.empty();
         if (courtRoom.isPresent()) {
-            courtSite = getXhbCourtSiteRepository(entityManager).findById(courtRoom.get().getCourtSiteId());
+            courtSite = getXhbCourtSiteRepository(entityManager)
+                .findByIdSafe(courtRoom.get().getCourtSiteId());
         }
         return courtSite;
     }

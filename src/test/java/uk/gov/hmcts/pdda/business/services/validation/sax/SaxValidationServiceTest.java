@@ -22,6 +22,7 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.SchemaFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class SaxValidationServiceTest {
@@ -124,6 +126,49 @@ class SaxValidationServiceTest {
             fail("Failed on exception" + exception.getMessage());
         }
     }
+    
+    @Test
+    void testGetSaxSourceFromClasspath_validPath() {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        try {
+            SAXSource source = localClassUnderTest.getSaxSourceFromClasspath("config/xsd/DailyList-v1-0.xsd");
+            assertNotNull(source, "SAXSource is null");
+            assertNotNull(source.getInputSource(), "InputSource is null");
+            assertNotNull(source.getInputSource().getSystemId(), "SystemId is null");
+        } catch (SAXException e) {
+            fail("Unexpected SAXException: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetSaxSourceFromClasspath_invalidPath() {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        Assertions.assertThrows(SAXException.class, () -> {
+            localClassUnderTest.getSaxSourceFromClasspath("config/xsd/NonExistentFile.xsd");
+        });
+    }
+
+    @Test
+    void testGetSchema_successful() {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParserFactory result = localClassUnderTest.getSchema("config/xsd/DailyList-v1-0.xsd", factory);
+            assertNotNull(result, "Resulting SAXParserFactory is null");
+        } catch (Exception e) {
+            fail("Unexpected exception in testGetSchema_successful: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetSchema_invalidSchema() {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        Assertions.assertThrows(ValidationException.class, () -> {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            localClassUnderTest.getSchema("config/xsd/NonExistentFile.xsd", factory);
+        });
+    }
+
 
     private FileEntityResolver getDummyFileEntityResolver() {
         return new FileEntityResolver();

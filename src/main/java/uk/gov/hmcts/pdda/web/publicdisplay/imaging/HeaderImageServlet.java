@@ -12,11 +12,11 @@ import java.awt.Image;
 /**
  * <p/>
  * Title: Servlet used to supply the header image at the top of each public display list.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * Pass the path to the image as the part of the url after the servlet path. <br/>
  * <p/>
@@ -32,12 +32,11 @@ import java.awt.Image;
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.8 $
  */
@@ -51,9 +50,9 @@ public class HeaderImageServlet extends AbstractImageServlet {
      */
     @Override
     protected Image processImage(Image sourceImage, HttpServletRequest req) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("processImage() for " + req.getPathInfo() + "?" + req.getQueryString());
-        }
+
+        LOG.debug("processImage() for " + req.getPathInfo() + "?" + req.getQueryString());
+        LOG.info(">>>> HeaderImageServlet: processImage() called for {}", req.getPathInfo());
 
         int width = AUTOMATIC_WIDTH;
         String widthStr = req.getParameter("width");

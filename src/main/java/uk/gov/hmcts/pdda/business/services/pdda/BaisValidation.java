@@ -85,14 +85,15 @@ public abstract class BaisValidation extends SftpValidation {
 
     /**
      * Given a 3 digit crest court id, return the court id.
-     * 
+
      * @param crestCourtId crest court id
      * @return court id
      */
     protected int getCourtIdFromCrestCourtId(String crestCourtId) {
         int courtId = 0;
         if (!EMPTY_STRING.equals(crestCourtId)) {
-            List<XhbCourtDao> courtDao = xhbCourtRepository.findByCrestCourtIdValue(crestCourtId);
+            List<XhbCourtDao> courtDao =
+                xhbCourtRepository.findByCrestCourtIdValueSafe(crestCourtId);
             if (courtDao.isEmpty()) {
                 LOG.debug("No court exists for crestCourtId {}", crestCourtId);
             } else {

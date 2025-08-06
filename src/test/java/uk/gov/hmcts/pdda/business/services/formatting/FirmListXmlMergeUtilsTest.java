@@ -25,21 +25,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: FirmListXMLMergeUtils Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class FirmListXmlMergeUtilsTest {
 
@@ -153,7 +153,7 @@ class FirmListXmlMergeUtilsTest {
 
     /**
      * Converts a String into a Document object.
-     * 
+
      * @param xml XML String
      * @return Document
      */

@@ -20,7 +20,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListHelper;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppDocumentTypes;
@@ -133,7 +132,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     /**
      * Process a document from XHB_CPP_STAGING_INBOUND that has been added but not yet validated or
      * processed.
-     * 
+
      * @param xcsi The cpp staging inbound record to process
      */
     private void processDocument(XhbCppStagingInboundDao xcsi) {
@@ -163,7 +162,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
                 // Fetch the document with the new validation status and version from the DB
                 Optional<XhbCppStagingInboundDao> validatedXcsi = getCppStagingInboundControllerBean()
-                    .getXhbCppStagingInboundRepository().findById(updatedXcsi.getCppStagingInboundId());
+                    .getXhbCppStagingInboundRepository()
+                    .findByIdSafe(updatedXcsi.getCppStagingInboundId());
                 
                 // Now attempt to process the validated document - i.e. examine XML and insert
                 // into downstream database tables
@@ -226,10 +226,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      * Get the earliest document that has been validated but not yet processed and attempt to
      * process it. Processing means that based on the document type data is extracted from the XML
      * and used to populate records in XHB_CPP_LIST or XHB_CPP_FORMATTING.
-     * 
-     * <p>If a process fails then the status needs to be updated accordingly so that it doesn't get
+
+     * If a process fails then the status needs to be updated accordingly so that it doesn't get
      * picked up again until it has been fixed
-     * 
+
      * @throws CppInitialProcessingControllerException Exception
      */
     @Override
@@ -281,7 +281,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getListStartDate.
-     * 
+
      * @param xml String
      * @param documentType String
      * @return LocalDateTime
@@ -316,7 +316,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getListEndDate.
-     * 
+
      * @param xml String
      * @param documentType String
      * @return LocalDateTime
@@ -351,7 +351,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getCourtHouseCode.
-     * 
+
      * @param xml String
      * @param documentType String
      * @return String
@@ -386,7 +386,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * createUpdateNonListRecords.
-     * 
+
      * @param thisDoc XhbCppStagingInboundDao
      */
     public void createUpdateNonListRecords(XhbCppStagingInboundDao thisDoc) {
@@ -409,7 +409,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 LOG.debug("{} - Doc type found = {}, going to create or update", methodName,
                     documentType);
                 XhbCppFormattingDao docToUpdate =
-                    getXhbCppFormattingRepository().findLatestByCourtDateInDoc(courtId,
+                    getXhbCppFormattingRepository().findLatestByCourtDateInDocSafe(courtId,
                         documentType, LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT));
 
                 LOG.debug("{} - Formatting doc to update query has been run, docToUpdate={}",
@@ -446,12 +446,12 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     // Also need to add 2 new records to XHB_FORMATTING
                     // Create the "en" version
                     XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc, documentType, "en");
+                        thisDoc.getTimeLoaded(), documentType, "en");
                     getXhbFormattingRepository().save(xfbv);
 
                     // Create the "cy" version
                     xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                        thisDoc, documentType, "cy");
+                        thisDoc.getTimeLoaded(), documentType, "cy");
                     getXhbFormattingRepository().save(xfbv);
                 }
 
@@ -478,7 +478,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * createUpdateListRecords.
-     * 
+
      * @param thisDoc XhbCppStagingInboundDao
      */
     public void createUpdateListRecords(XhbCppStagingInboundDao thisDoc, String clobXml) {
@@ -519,16 +519,11 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
                 // Create the xhbFormatting record
                 List<XhbCourtDao> xhbCourtDaoList =
-                    getXhbCourtRepository().findByCrestCourtIdValue(thisDoc.getCourtCode());
+                    getXhbCourtRepository().findByCrestCourtIdValueSafe(thisDoc.getCourtCode());
                 Integer courtId = xhbCourtDaoList.get(0).getCourtId();
                 XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                    thisDoc, documentType, "en");
+                    thisDoc.getTimeLoaded(), documentType, "en");
                 getXhbFormattingRepository().save(xfbv);
-
-                // Create the xhbXmlDocument record
-                XhbXmlDocumentDao xhbXmlDocumentDao =
-                    CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, docToCreate, thisDoc);
-                getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
             }
 
             // If all successful then we need to set record in XHB_STAGING_INBOUND to

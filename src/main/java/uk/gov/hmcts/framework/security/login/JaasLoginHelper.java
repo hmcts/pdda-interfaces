@@ -8,19 +8,18 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 /**
- * <p>
+
  * Title: JAASLoginHelper.
- * </p>
- * <p>
+
+
  * This is a helper class for performing JAAS login
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -46,7 +45,7 @@ public class JaasLoginHelper {
 
     /**
      * Initializes the callback handler and JAAS configuration file.
-     * 
+
      * @param callbackHandler CallbackHandler
      */
     public JaasLoginHelper(CallbackHandler callbackHandler) throws LoginException {
@@ -55,7 +54,7 @@ public class JaasLoginHelper {
 
     /**
      * Initializes the callback handler and JAAS configuration file.
-     * 
+
      * @param callbackHandler CallbackHandler
      * @param loginConfig String
      */
@@ -71,7 +70,7 @@ public class JaasLoginHelper {
 
     /**
      * The method performs a login and returns the authenticated subject.
-     * 
+
      * @return Subject
      * @throws LoginException Exception
      */
@@ -84,7 +83,7 @@ public class JaasLoginHelper {
 
     /**
      * The method performs a logout.
-     * 
+
      * @throws LoginException Exception
      */
     public void logout() throws LoginException {

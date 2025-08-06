@@ -6,10 +6,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -24,54 +26,97 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * <p>
+
  * Title: OAuth2Helper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
-public class OAuth2Helper {
+@SuppressWarnings({"squid:S6813", "squid:S1948", "squid:S112",
+    "PMD.PreserveStackTrace", "PMD.AvoidThrowingRawExceptionTypes"})
+public class OAuth2Helper implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOG = LoggerFactory.getLogger(OAuth2Helper.class);
     private static final String EMPTY_STRING = "";
-    private static final String AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token.url";
-    private static final String AZURE_TENANT_ID =
+    private static final String PDDA_AZURE_TOKEN_URL = "spring.cloud.azure.oauth2.token-url";
+    private static final String PDDA_AZURE_TENANT_ID =
         "spring.cloud.azure.active-directory.profile.tenant-id";
-    private static final String AZURE_CLIENT_ID =
+    private static final String PDDA_AZURE_CLIENT_ID =
         "spring.cloud.azure.active-directory.credential.client-id";
-    private static final String AZURE_CLIENT_SECRET =
+    private static final String PDDA_AZURE_CLIENT_SECRET =
         "spring.cloud.azure.active-directory.credential.client-secret";
-
-    // Values from application.properties
-    private final String tenantId;
-    private final String clientId;
-    private final String clientSecret;
-    private final String tokenUrl;
+    protected Environment env;
 
     public OAuth2Helper() {
         this(InitializationService.getInstance().getEnvironment());
     }
 
     protected OAuth2Helper(Environment env) {
-        this.tenantId = env.getProperty(AZURE_TENANT_ID);
-        this.clientId = env.getProperty(AZURE_CLIENT_ID);
-        this.clientSecret = env.getProperty(AZURE_CLIENT_SECRET);
-        this.tokenUrl = env.getProperty(AZURE_TOKEN_URL);
+        LOG.info("Environment = {}", env);
+        this.env = env;
+    }
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.env = environment;
+    }
+
+
+    protected String getTenantId() {
+        return env.getProperty(PDDA_AZURE_TENANT_ID);
+    }
+
+    protected String getTokenUrl() {
+        String authTokenUrl = env.getProperty(PDDA_AZURE_TOKEN_URL);
+        if (authTokenUrl == null) {
+            LOG.error("Token URL property '{}' not found in environment.", PDDA_AZURE_TOKEN_URL);
+            return "";
+        }
+
+        String tenantId = getTenantId();
+        if (tenantId == null) {
+            LOG.error("Tenant ID property '{}' not found in environment.", PDDA_AZURE_TENANT_ID);
+            return "";
+        }
+
+        return String.format(authTokenUrl, tenantId);
+    }
+
+
+    protected String getClientId() {
+        String clientId = env.getProperty(PDDA_AZURE_CLIENT_ID);
+        if (clientId == null) {
+            LOG.error("Client ID property '{}' not found in environment.", PDDA_AZURE_CLIENT_ID);
+            return "";
+        }
+        return env.getProperty(PDDA_AZURE_CLIENT_ID);
+    }
+
+    protected String getClientSecret() {
+        String clientSecret = env.getProperty(PDDA_AZURE_CLIENT_SECRET);
+        if (clientSecret == null) {
+            LOG.error("Client Secret property '{}' not found in environment.",
+                PDDA_AZURE_CLIENT_SECRET);
+            return "";
+        }
+
+        return env.getProperty(PDDA_AZURE_CLIENT_SECRET);
     }
 
     public String getAccessToken() {
         LOG.debug("getAccessToken()");
-        String url = String.format(this.tokenUrl, this.tenantId);
+        String url = getTokenUrl();
         // Get the authentication request
         HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
@@ -81,16 +126,21 @@ public class OAuth2Helper {
     }
 
     private HttpRequest getAuthenticationRequest(String url) {
-        LOG.debug("getAuthorizationRequest({})", url);
+        LOG.info("getAuthorizationRequest({})", url);
         // Build the encoded clientId / clientSecret key
-        String key = clientId + ":" + clientSecret;
+        String key = getClientId() + ":" + getClientSecret();
         String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
         LOG.debug("encodedKey generated");
         // Build the authentication post request
-        return HttpRequest.newBuilder().uri(URI.create(url))
-            .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
-                "Basic " + encodedKey)
-            .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
+        try {
+            return HttpRequest.newBuilder().uri(URI.create(url))
+                .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
+                    "Basic " + encodedKey)
+                .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                String.format("Error in building HTTP request: %s", ex.getMessage()));
+        }
     }
 
     private String getClientCredentialsForm() {
@@ -104,16 +154,16 @@ public class OAuth2Helper {
 
     @SuppressWarnings("squid:S2142")
     private String sendAuthenticationRequest(HttpRequest request) {
-        LOG.debug("sendAuthorizationRequest()");
+        LOG.info("sendAuthorizationRequest()");
         try {
             // Send the authentication request and get the response
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
 
             Integer statusCode = httpResponse.statusCode();
-            LOG.debug("Response status code: {}", statusCode);
+            LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
-            LOG.debug("Response: {}", response);
+            LOG.info("Response: {}", response);
             return response;
         } catch (IOException | InterruptedException | RuntimeException exception) {
             LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
@@ -122,11 +172,12 @@ public class OAuth2Helper {
     }
 
     private String getAccessTokenFromResponse(String response) {
-        LOG.debug("getAccessTokenFromResponse()");
+        LOG.info("getAccessTokenFromResponse()");
         if (!EMPTY_STRING.equalsIgnoreCase(response)) {
             try {
                 TokenResponse tokenResponse =
                     new ObjectMapper().readValue(response, TokenResponse.class);
+                LOG.info("Fetched token response {}", tokenResponse.toString());
                 return tokenResponse.accessToken();
             } catch (JsonProcessingException exception) {
                 LOG.error("Error in getAccessTokenFromResponse(): {}", exception.getMessage());

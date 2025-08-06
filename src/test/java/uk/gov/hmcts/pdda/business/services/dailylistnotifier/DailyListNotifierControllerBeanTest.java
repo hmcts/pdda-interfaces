@@ -17,19 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * <p>
+
  * Title: DailyListNotifierControllerBean Test.
- * </p>
- * <p>
+
+
  * Description: Unit tests for the DailyListNotifierControllerBean class
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Nathan Toft
  */
 @ExtendWith(MockitoExtension.class)

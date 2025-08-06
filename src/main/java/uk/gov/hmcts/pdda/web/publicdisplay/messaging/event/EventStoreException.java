@@ -1,23 +1,16 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.messaging.event;
 
-import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
-
-/**
- * EventStoreException.
- * 
- * @author pznwc5 The exception is thrown when we can't create the event store
- */
-public class EventStoreException extends PublicDisplayRuntimeException {
+public class EventStoreException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
+    private final String className;
 
-    /**
-     * EventStoreException.
-     * 
-     * @param eventStoreClass Event store class
-     * @param th Root exception
-     */
-    public EventStoreException(String eventStoreClass, Throwable th) {
-        super("Invalid event store type: " + eventStoreClass, th);
+    public EventStoreException(String className, Throwable cause) {
+        super("Invalid event store type: " + className, cause);
+        this.className = className;
+    }
+
+    public String getClassName() {
+        return className;
     }
 }

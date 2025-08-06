@@ -23,21 +23,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: Cpp List Controller Bean Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CppListControllerBeanTest {
 
@@ -70,7 +70,8 @@ class CppListControllerBeanTest {
         xhbCppListDaoList.add(xhbCppListDao);
         EasyMock
             .expect(
-                mockcppListRepo.findByCourtCodeAndListTypeAndListDate(xhbCppListDao.getCourtCode(),
+                mockcppListRepo.findByCourtCodeAndListTypeAndListDateSafe(
+                    xhbCppListDao.getCourtCode(),
                     xhbCppListDao.getListType(), xhbCppListDao.getListStartDate()))
             .andReturn(xhbCppListDaoList);
         EasyMock.replay(mockcppListRepo);
@@ -110,7 +111,7 @@ class CppListControllerBeanTest {
         List<XhbCppListDao> xhbCppListDaoList = new ArrayList<>();
         xhbCppListDaoList.add(xhbCppListDao);
         EasyMock
-            .expect(mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDate(
+            .expect(mockcppListRepo.findByCourtCodeAndListTypeAndListStartDateAndListEndDateSafe(
                 xhbCppListDao.getCourtCode(), xhbCppListDao.getListType(),
                 xhbCppListDao.getListStartDate(), xhbCppListDao.getListEndDate()))
             .andReturn(xhbCppListDaoList);

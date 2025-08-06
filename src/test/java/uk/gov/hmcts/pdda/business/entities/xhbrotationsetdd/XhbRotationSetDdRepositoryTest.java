@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,10 +40,27 @@ class XhbRotationSetDdRepositoryTest extends AbstractRepositoryTest<XhbRotationS
 
     @Override
     protected XhbRotationSetDdRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbRotationSetDdRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbRotationSetDdRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbRotationSetDdDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbRotationSetDdDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -97,7 +117,7 @@ class XhbRotationSetDdRepositoryTest extends AbstractRepositoryTest<XhbRotationS
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         rotationSetDdId = result.getPrimaryKey();
-        assertNotNull(rotationSetDdId, NOTNULL);
+        assertNotNull(rotationSetDdId, NOTNULLRESULT);
         result.setDisplayDocumentId(result.getDisplayDocumentId());
         return new XhbRotationSetDdDao(result);
     }

@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbconfigprop;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -36,25 +39,42 @@ class XhbConfigPropRepositoryTest extends AbstractRepositoryTest<XhbConfigPropDa
 
     @Override
     protected XhbConfigPropRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbConfigPropRepository(getEntityManager());
-        }
         return classUnderTest;
     }
 
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbConfigPropRepository(mockEntityManager);
+    }
+
     @Test
-    void testfindByPropertyNameSuccess() {
-        boolean result = testfindByPropertyName(getDummyDao());
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbConfigPropDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbConfigPropDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
+    }
+
+    @Test
+    void testFindByPropertyNameSuccess() {
+        boolean result = testFindByPropertyName(getDummyDao());
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
     void testfindByPropertyNameFailure() {
-        boolean result = testfindByPropertyName(null);
+        boolean result = testFindByPropertyName(null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testfindByPropertyName(XhbConfigPropDao dao) {
+    private boolean testFindByPropertyName(XhbConfigPropDao dao) {
         List<XhbConfigPropDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
@@ -80,7 +100,7 @@ class XhbConfigPropRepositoryTest extends AbstractRepositoryTest<XhbConfigPropDa
 
         XhbConfigPropDao result = new XhbConfigPropDao(configPropId, propertyName, propertyValue);
         configPropId = result.getPrimaryKey();
-        assertNotNull(configPropId, NOTNULL);
+        assertNotNull(configPropId, NOTNULLRESULT);
         return new XhbConfigPropDao(result);
     }
 

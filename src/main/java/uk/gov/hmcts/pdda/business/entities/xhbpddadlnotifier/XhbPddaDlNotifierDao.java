@@ -63,6 +63,7 @@ public class XhbPddaDlNotifierDao extends AbstractVersionedDao implements Serial
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getPddaDlNotifierId();
     }

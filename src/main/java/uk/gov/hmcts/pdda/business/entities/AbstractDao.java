@@ -5,4 +5,7 @@ public abstract class AbstractDao {
     public abstract Integer getVersion();
 
     public abstract void setVersion(Integer version);
+
+    public abstract Object getPrimaryKey();
+
 }

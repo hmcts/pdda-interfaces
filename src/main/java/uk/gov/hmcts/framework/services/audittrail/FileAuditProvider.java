@@ -5,20 +5,19 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * <p>
+
  * Title: FileAuditProvider.
- * </p>
- * <p>
+
+
  * Description: This File AuditProvider is only intended for development. It simply logs the message
  * to a file
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2008
- * </p>
- * <p>
+
+
  * Company: Logica
- * </p>
- * 
+
  * @author James Powell
  * @version 1.0
  */

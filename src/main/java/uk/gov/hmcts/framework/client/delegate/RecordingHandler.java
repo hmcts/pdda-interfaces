@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
  *         Class Array    --> Identifies the method parameter types on the remote session bean
  *         Object Array   --> Identifies the method parameters on the remote session bean
  *         </code>
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -44,7 +44,7 @@ public class RecordingHandler extends DecoratingHandler {
 
     /*
      * (non-Javadoc)
-     * 
+
      * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method,
      * java.lang.Object[])
      */
@@ -71,7 +71,7 @@ public class RecordingHandler extends DecoratingHandler {
 
     /**
      * Sets the recording file.
-     * 
+
      * @param fileName String
      */
     public void setFileName(String fileName) {

@@ -54,6 +54,7 @@ public class XhbBlobDao extends AbstractVersionedDao implements Serializable {
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Long getPrimaryKey() {
         return getBlobId();
     }

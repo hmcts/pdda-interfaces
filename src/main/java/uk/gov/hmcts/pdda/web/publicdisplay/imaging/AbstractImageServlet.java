@@ -17,20 +17,19 @@ import javax.imageio.ImageIO;
 /**
  * <p/>
  * Title: THe abstract superclass for any servlet that modifies images.
- * </p>
+
  * <p/>
  * <p/>
  * Description:
- * </p>
+
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
- * </p>
+
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  */
@@ -45,7 +44,13 @@ public abstract class AbstractImageServlet extends AbstractGraphicsServlet {
 
             LOG.debug(getServletContext().getRealPath(request.getPathInfo()));
             URL url = this.getServletContext().getResource("/WEB-INF" + request.getPathInfo());
+            LOG.debug("Resolved image URL: {}", url);
             Image sourceImage = obtainImage(url);
+            if (sourceImage == null) {
+                LOG.warn("Source image is null for URL: {}", url);
+            } else {
+                LOG.debug("Successfully obtained source image");
+            }
 
             // Do our custim processing on the image
             Image resultImage = processImage(sourceImage, request);

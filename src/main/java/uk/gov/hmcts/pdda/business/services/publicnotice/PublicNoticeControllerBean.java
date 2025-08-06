@@ -16,20 +16,19 @@ import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 
 /**
- * <p>
+
  * Title: Thin delgation layer to the PublicNoticeWorkFlow.
- * </p>
- * <p>
+
+
  * Description: see title
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
- * 
+
+
  * @author Pat Fox, RLakhani
  * @created 20 February 2003
  */
@@ -56,8 +55,8 @@ public class PublicNoticeControllerBean extends CsSessionBean implements Session
 
     /**
      * Gets the allPublicNoticesForCourtRoom attribute of the PublicNoticeControllerBean object.
-     * 
-     * 
+
+
      * @param courtRoomID Description of the Parameter
      * @return The allPublicNoticesForCourtRoom value
      */
@@ -77,8 +76,8 @@ public class PublicNoticeControllerBean extends CsSessionBean implements Session
 
     /**
      * Sets the allPublicNoticesForCourtRoom attribute of the PublicNoticeControllerBean object.
-     * 
-     * 
+
+
      * @param publicNotices The new allPublicNoticesForCourtRoom value
      * @param courtRoomID The new allPublicNoticesForCourtRoom value
      * @exception PublicNoticeCourtRoomUnknownException Description of the Exception
@@ -101,8 +100,8 @@ public class PublicNoticeControllerBean extends CsSessionBean implements Session
 
     /**
      * Sets the publicNoticeforCourtRoom attribute of the PublicNoticeControllerBean object.
-     * 
-     * 
+
+
      * @param courtLogSubscriptionValue The new publicNoticeforCourtRoom value
      * @exception PublicNoticeInvalidSelectionException Description of the Exception
      * @exception PublicNoticeException Description of the Exception

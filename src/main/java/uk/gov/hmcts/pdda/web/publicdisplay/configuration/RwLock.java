@@ -6,22 +6,16 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * <p>
+
  * Title: Read/Write lock class.
- * </p>
- * 
- * <p>
+
  * Description:
- * </p>
- * 
- * <p>
+
  * This class is intended to handle the locking semantic of data that can be both read from and
  * written to, in order to prevent inconsistent data being returned at read.
- * </p>
- * 
- * <p>
+
  * The rules behind this lock are:
- * 
+
  * <ul>
  * <li>Read locks and Write locks are mutually exclusive.</li>
  * <li>There can only ever be one Write lock outstanding, but pending Write locks are queued and
@@ -29,17 +23,13 @@ import org.slf4j.LoggerFactory;
  * <li>There can be arbitrarily many Read locks.</li>
  * <li>One can't get a Read lock until all pending Write locks have been issued and returned.</li>
  * </ul>
- * </p>
+
  * 00000000000000000000000000000000
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby, Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -72,7 +62,7 @@ public class RwLock {
     /**
      * Gets the locks given out. Only for debugging purposes, as may change <i>immediately</i> after
      * read.
-     * 
+
      * @return -1 if a write lock given, 0 if no locks, greater than zero is the number of read
      *         locks outstanding.
      */
@@ -82,7 +72,7 @@ public class RwLock {
 
     /**
      * Gets a read lock.
-     * 
+
      * @return true if lock successfully achieved, false in the event of a failure.
      */
     public boolean isReadLockObtained() {
@@ -114,7 +104,7 @@ public class RwLock {
      * Gets the number of threads waiting for a write lock. As there can only ever be one write
      * lock, we have to 'enqueue' writing threads until the lock becomes available. Only for
      * debugging purposes, as may change <i>immediately</i> after read.
-     * 
+
      * @return outstanding threads waiting to lock for writing.
      */
     public int getWaitingWriters() {
@@ -123,7 +113,7 @@ public class RwLock {
 
     /**
      * Gets a write lock.
-     * 
+
      * @return true if lock successfully achieved, false in the event of a failure.
      */
     public boolean isWriteLockObtained() {
@@ -153,7 +143,7 @@ public class RwLock {
 
     /**
      * Release read lock.
-     * 
+
      * @return true if a read lock was present to be released.
      */
     public boolean isReadLockReleased() {
@@ -171,7 +161,7 @@ public class RwLock {
 
     /**
      * Release write lock.
-     * 
+
      * @return true if a write lock was present to be released.
      */
     public boolean isWriteLockReleased() {

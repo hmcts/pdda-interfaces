@@ -167,7 +167,7 @@ public class SummaryByNameCppToPublicDisplay extends AbstractCppToPublicDisplay 
 
     /**
      * Populates the SummaryByNameValue object with data from the courtroom XML element.
-     * 
+
      * @param value SummaryByNameValue
      * @param defNode XML element for the defendant
      * @throws XPathExpressionException Exception

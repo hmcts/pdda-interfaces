@@ -4,19 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>
+
  * Title: CourtLogViewValue.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Joseph Babad / Paul Fitton
  * @version $Id: CourtLogViewValue.java,v 1.5 2011/05/25 14:11:44 atwells Exp $
  */
@@ -35,7 +34,7 @@ public class CourtLogViewValue extends CourtLogAbstractValue {
             this.value = value;
         }
         
-        private Integer getValue() {
+        public Integer getValue() {
             return value;
         }
         

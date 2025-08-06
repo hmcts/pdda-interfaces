@@ -37,7 +37,7 @@ import java.util.Optional;
  * Even though the instance is not thread safe, you can still cache this in a session bean as the
  * container serializes invocations on a given session bean instance. In short, stateless session
  * bean instances are pooled and wouldn't allow concurrent invocations.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
@@ -160,7 +160,8 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 isHidden = YES.equals(caseDao.get().getPublicDisplayHide());
             }
@@ -168,12 +169,13 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
 
         // Get the defendant on case
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-            getXhbDefendantOnCaseRepository().findById(schedHearingDefendantDao.getDefendantOnCaseId());
+            getXhbDefendantOnCaseRepository()
+                .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
         if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
             // Get the defendant
             Optional<XhbDefendantDao> defendantDao =
-                getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
             if (defendantDao.isPresent()) {
                 isHidden = isHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
                     || YES.contentEquals(defendantDao.get().getPublicDisplayHide());

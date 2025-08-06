@@ -19,23 +19,22 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
 /**
- * <p>
+
  * Title: PddaHelperBaisTest.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TestClassWithoutTestCases", "PMD.SingularField"})
+@SuppressWarnings({"PMD"})
 class SftpConfigHelperTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpConfigHelperTest.class);

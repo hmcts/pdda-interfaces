@@ -14,22 +14,19 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
- * <p>
+
  * Title: PrintServicesImpl.
- * </p>
- * <p>
+
+
  * Description: Implementation of the print service
- * </p>
- * 
- * <p>This is a replacement for the PrintController
- * 
- * <p>
+
+ * This is a replacement for the PrintController
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
+
  * Company: EDS
- * </p>
- * 
+
  * @author Will Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -52,7 +49,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Get the singleton.
-     * 
+
      * @return the singleton instance
      */
     public static PrintServicesImpl getInstance() {
@@ -74,11 +71,11 @@ public final class PrintServicesImpl implements PrintServices {
      * printxslschemas.properties should be the fully qualified class name of the value object. The
      * value in printxslschemas.properties is the filename of the xsl file (without the .xsl
      * extention).
-     * 
+
      * @param data contains the data required to generate the document. To work effectively the
      *        CSValueObject requires a default public constructor and public get methods for all vos
      *        that are required in the resulting xml document.
-     * 
+
      * @return String: transformed document of value object
      * @throws PrintServiceException if an error occurs
      */
@@ -90,7 +87,7 @@ public final class PrintServicesImpl implements PrintServices {
     /**
      * Performs a similar function to 'getFormattedDocument'. Instead of looking up the
      * corresponding xsl file for a Document, it is specified by the caller.
-     * 
+
      * @param xml the document to be transformed
      * @param xslName XSL to use for transform
      * @return transformed document, as a string
@@ -102,7 +99,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Format the Document.
-     * 
+
      * @param document the document to format
      * @param xslName the name of the transform to use
      * @param locale Locale
@@ -120,7 +117,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Create an XML document from the data.
-     * 
+
      * @param data the data to generate the document from
      */
     private static Document getXmlDocument(CsValueObject data)  {
@@ -135,7 +132,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Get the name of the xsl transform to use for the data.
-     * 
+
      * @param data the object to look up the transform form
      * @return the (resource) name of the transform
      * @throws CsConfigurationException if an error occures
@@ -146,7 +143,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Get the name of the xsl transform to use for the data.
-     * 
+
      * @param dataClassName String
      * @return the (resource) name of the transform
      * @throws CsConfigurationException if an error occures
@@ -169,7 +166,7 @@ public final class PrintServicesImpl implements PrintServices {
 
     /**
      * Get the PrintServiceProperties (class xsl map).
-     * 
+
      * @return the properties collection
      * @throws CsConfigurationException if an error occures
      */

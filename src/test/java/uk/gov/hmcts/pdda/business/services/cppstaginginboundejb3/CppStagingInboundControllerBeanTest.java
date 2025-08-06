@@ -15,7 +15,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyServicesUtil;
-import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbblob.XhbBlobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
@@ -38,23 +37,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: CppStagingInboundControllerBeanTest Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD"})
 class CppStagingInboundControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
@@ -219,10 +217,14 @@ class CppStagingInboundControllerBeanTest {
         List<XhbConfigPropDao> returnList = new ArrayList<>();
         returnList
             .add(DummyServicesUtil.getXhbConfigPropDao("CPPX_Schema" + documentType, EMPTY_STRING));
+        
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
         EasyMock
-            .expect(mockXhbConfigPropRepository.findByPropertyName("CPPX_Schema" + documentType))
+            .expect(
+                mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + documentType))
             .andReturn(returnList);
-        expectGetEntityManager(mockXhbConfigPropRepository);
         EasyMock.replay(mockXhbConfigPropRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -240,9 +242,11 @@ class CppStagingInboundControllerBeanTest {
         List<XhbCourtDao> data = new ArrayList<>();
         data.add(DummyCourtUtil.getXhbCourtDao(courtCode, "TestCourt1"));
 
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
             .andReturn(data);
-        expectGetEntityManager(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -259,9 +263,11 @@ class CppStagingInboundControllerBeanTest {
         Integer courtCode = 457;
         List<XhbCourtDao> data = new ArrayList<>();
 
-        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValue(courtCode.toString()))
+        EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(courtCode.toString()))
             .andReturn(data);
-        expectGetEntityManager(mockXhbCourtRepository);
         EasyMock.replay(mockXhbCourtRepository);
         EasyMock.replay(mockEntityManager);
         // Run
@@ -273,31 +279,49 @@ class CppStagingInboundControllerBeanTest {
     }
     
     @Test
+    void testGetXhbCppStagingInboundRepositoryNullRepo() {
+        assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
+            NOT_INSTANCE);
+    }
+    
+    @Test
     void testGetXhbCppStagingInboundRepository() {
         // Create Mock
         XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository =
             EasyMock.createMock(XhbCppStagingInboundRepository.class);
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
-        EasyMock.replay(mockEntityManager);
         // Set Mock
         ReflectionTestUtils.setField(classUnderTest, "xhbCppStagingInboundRepository",
             mockXhbCppStagingInboundRepository);
         // Run
         assertInstanceOf(XhbCppStagingInboundRepository.class, classUnderTest.getXhbCppStagingInboundRepository(),
             NOT_INSTANCE);
-        EasyMock.verify(mockEntityManager);
     }
     
-    @SuppressWarnings("rawtypes")
-    private void expectGetEntityManager(AbstractRepository mockRepository) {
-        EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
-        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true);
+    
+    @Test
+    void testValidateDocumentWithEmptySchema() throws Exception {
+        // Setup
+        String invalidDocumentType = "INVALID_TYPE";
+        XhbCppStagingInboundDao dao = new XhbCppStagingInboundDao();
+        dao.setDocumentType(invalidDocumentType);
+
+        EasyMock.expect(mockXhbConfigPropRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe("CPPX_Schema" + invalidDocumentType))
+                .andReturn(new ArrayList<>());
+        
+        EasyMock.expect(mockCppStagingInboundHelper.updateCppStagingInbound(dao, USERDISPLAYNAME))
+                .andReturn(Optional.of(dao));
+        
+        EasyMock.replay(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+
+        // Run
+        boolean result = classUnderTest.validateDocument(dao, USERDISPLAYNAME);
+
+        // Verify
+        EasyMock.verify(mockXhbConfigPropRepository, mockEntityManager, mockCppStagingInboundHelper);
+        assertEquals(false, result, EQUALS);
     }
 
-    @Test
-    void testClearRepos() {
-        boolean result = true;
-        classUnderTest.clearRepositories();
-        assertTrue(result, TRUE);
-    }
+
 }

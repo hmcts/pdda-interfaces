@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 
@@ -10,34 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
+
  * Title: Query to return all court rooms linked to the VIP Screen.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2004
- * </p>
- * <p>
+
+
  * Company:
- * </p>
- * 
+
  * @author unascribed
  * @version $Id: VipCourtRoomsQuery.java,v 1.4 2006/06/05 12:29:45 bzjrnl Exp $
  */
-
-public class VipCourtRoomsQuery {
+@SuppressWarnings("PMD.NullAssignment")
+public class VipCourtRoomsQuery extends AbstractControllerBean {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(VipCourtRoomsQuery.class);
-
-    private EntityManager entityManager;
     private XhbCourtRoomRepository xhbCourtRoomRepository;
     private boolean multiSite;
 
     public VipCourtRoomsQuery(EntityManager entityManager, boolean multiSite) {
-        this.entityManager = entityManager;
+        super(entityManager);
         this.multiSite = multiSite;
     }
 
@@ -47,11 +45,17 @@ public class VipCourtRoomsQuery {
         this.xhbCourtRoomRepository = xhbCourtRoomRepository;
     }
 
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbCourtRoomRepository = null;
+    }
+
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param courtId room ids for which the data is required
-     * 
+
      * @return Summary by name data for the specified court rooms
      */
     public XhbCourtRoomDao[] getData(Integer courtId) {
@@ -72,8 +76,8 @@ public class VipCourtRoomsQuery {
     }
 
     private XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
-            xhbCourtRoomRepository = new XhbCourtRoomRepository(entityManager);
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
+            xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
     }

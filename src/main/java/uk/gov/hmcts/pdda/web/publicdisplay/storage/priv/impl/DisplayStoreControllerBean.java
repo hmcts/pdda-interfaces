@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Stateless
@@ -23,6 +24,7 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
+@SuppressWarnings("PMD.NullAssignment")
 public class DisplayStoreControllerBean extends AbstractControllerBean implements Serializable {
 
     private static final long serialVersionUID = -1482124759093214736L;
@@ -43,9 +45,23 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         super();
     }
 
+    // JUnit tests constructor
+    public DisplayStoreControllerBean(EntityManager entityManager,
+        XhbDisplayStoreRepository repository) {
+        super(entityManager);
+        this.xhbDisplayStoreRepository = repository;
+    }
+
+
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        xhbDisplayStoreRepository = null;
+    }
+
     /**
      * Indicates if a record exists in the database with the retrieval code supplied.
-     * 
+
      * @param retrievalCode Retrieval Code
      * @return true if exists, else false
      */
@@ -55,7 +71,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         boolean exists = false;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             exists = true;
         }
@@ -64,7 +80,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Deletes a record using the retrieval code supplied.
-     * 
+
      * @param retrievalCode Retrieval Code
      */
     public void deleteEntry(final String retrievalCode) {
@@ -72,7 +88,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             getXhbDisplayStoreRepository().delete(xds);
         }
@@ -80,7 +96,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Retrieves the last modified value as milliseconds.
-     * 
+
      * @param retrievalCode Retrieval Code of the value to retrieve
      * @return last modified in milliseconds
      */
@@ -90,7 +106,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         long lastModified;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             lastModified = convertLocalDateTimeToDate(xds.get().getLastUpdateDate()).getTime();
         } else {
@@ -102,7 +118,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Retrieve the contents of the XhbDisplayStore record.
-     * 
+
      * @param retrievalCode Retrieval Code to retrieve the record
      * @return The record contents
      */
@@ -112,7 +128,7 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
         String contents = null;
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
         if (xds.isPresent()) {
             contents = xds.get().getContent();
         }
@@ -122,29 +138,68 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
     /**
      * If the XhbDisplayStore record exists, update the contents with the value supplied. If no
      * record exists with the Retrieval Code supplied, create it.
-     * 
+
      * @param retrievalCode Retrieval Code to search for
      * @param contents Contents to set
      */
+    public void writeToDatabaseOrig(final String retrievalCode, final String contents) {
+        String methodName = "writeToDatabase(" + retrievalCode + "," + contents + METHOD_END;
+        LOG.debug(methodName + ENTERED);
+
+        Optional<XhbDisplayStoreDao> xds =
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode); // uses main EM
+        if (xds.isPresent()) {
+            XhbDisplayStoreDao entity = xds.get(); // managed and detached entity
+            entity.setLastUpdateDate(LocalDateTime.now());
+            entity.setLastUpdatedBy("PDDA");
+            entity.setContent(contents);
+            LOG.debug("Merging entity: displayStoreId={}, version={}", entity.getDisplayStoreId(),
+                entity.getVersion());
+            getXhbDisplayStoreRepository().save(entity); // Force update
+        } else {
+            XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
+            newEntity.setRetrievalCode(retrievalCode);
+            newEntity.setContent(contents);
+            getXhbDisplayStoreRepository().save(newEntity);
+        }
+
+    }
+
+
     public void writeToDatabase(final String retrievalCode, final String contents) {
         String methodName = "writeToDatabase(" + retrievalCode + "," + contents + METHOD_END;
         LOG.debug(methodName + ENTERED);
 
         Optional<XhbDisplayStoreDao> xds =
-            getXhbDisplayStoreRepository().findByRetrievalCode(retrievalCode);
+            getXhbDisplayStoreRepository().findByRetrievalCodeSafe(retrievalCode);
+
         if (xds.isPresent()) {
-            getXhbDisplayStoreRepository().update(xds.get());
+            XhbDisplayStoreDao entity = xds.get();
+            if (Objects.equals(entity.getContent(), contents)) {
+                LOG.info("Content already matches. Skipping update.");
+                return;
+            }
+            entity.setLastUpdateDate(LocalDateTime.now());
+            entity.setLastUpdatedBy("PDDA");
+            entity.setContent(contents);
+
+            LOG.debug("Retrying merge for entity: displayStoreId={}, version={}",
+                entity.getDisplayStoreId(), entity.getVersion());
+
+            getXhbDisplayStoreRepository().saveWithRetry(entity, 3); // try up to 3 times
+
         } else {
-            XhbDisplayStoreDao xhbDisplayStore = new XhbDisplayStoreDao();
-            xhbDisplayStore.setRetrievalCode(retrievalCode);
-            xhbDisplayStore.setContent(contents);
-            getXhbDisplayStoreRepository().save(xhbDisplayStore);
+            XhbDisplayStoreDao newEntity = new XhbDisplayStoreDao();
+            newEntity.setRetrievalCode(retrievalCode);
+            newEntity.setContent(contents);
+            getXhbDisplayStoreRepository().save(newEntity); // No retry needed for create
         }
     }
 
+
     /**
      * Converts a LocalDateTime object to a Date object.
-     * 
+
      * @param ldt LocalDateTime object
      * @return Date object
      */
@@ -157,11 +212,11 @@ public class DisplayStoreControllerBean extends AbstractControllerBean implement
 
     /**
      * Returns the xhbDisplayStoreRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayStoreRepository
      */
     private XhbDisplayStoreRepository getXhbDisplayStoreRepository() {
-        if (xhbDisplayStoreRepository == null) {
+        if (xhbDisplayStoreRepository == null || !isEntityManagerActive()) {
             xhbDisplayStoreRepository = new XhbDisplayStoreRepository(getEntityManager());
         }
         return xhbDisplayStoreRepository;

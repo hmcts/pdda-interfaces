@@ -6,8 +6,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.GodClass",
-                   "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD.TooManyFields","PMD.ExcessivePublicCount","PMD.GodClass"})
 public class AbstractXhbCaseDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6788003970955114552L;
@@ -116,6 +115,12 @@ public class AbstractXhbCaseDao extends AbstractVersionedDao implements Serializ
 
     protected AbstractXhbCaseDao() {
         super();
+    }
+
+    @Override
+    public Object getPrimaryKey() {
+        throw new UnsupportedOperationException(
+            "getPrimaryKey() must be implemented by XhbCaseDao");
     }
 
     protected void setAdditionalData(XhbCaseDao otherData) {

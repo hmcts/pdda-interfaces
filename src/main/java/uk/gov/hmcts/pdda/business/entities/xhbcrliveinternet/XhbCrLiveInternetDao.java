@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 
 /**
  * Commenting out the Entity annotation so that Hibernate does not think its a table that exists.
- * 
+
  * @author scottatwell
- *
+
  */
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CR_LIVE_INTERNET")
@@ -65,10 +65,10 @@ public class XhbCrLiveInternetDao extends AbstractVersionedDao implements Serial
         setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCrLiveInternetId();
     }
-
 
     public Integer getCrLiveInternetId() {
         return crLiveInternetId;

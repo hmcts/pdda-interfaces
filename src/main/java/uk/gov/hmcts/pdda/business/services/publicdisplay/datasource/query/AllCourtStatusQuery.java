@@ -33,7 +33,7 @@ import java.util.Optional;
 
 /**
  * This class wraps the stored procedure that provides the data for the court list document.
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
@@ -69,11 +69,11 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
 
     /**
      * Returns an array of CourtListValue.
-     * 
+
      * @param date localdateTime
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-     * 
+
      * @return Suumary by name data for the specified court rooms
      */
     @Override
@@ -142,7 +142,7 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
 
                 // Get the case
                 Optional<XhbCaseDao> caseDao =
-                    getXhbCaseRepository().findById(hearingDao.get().getCaseId());
+                    getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
                 if (caseDao.isPresent()) {
                     result
                         .setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
@@ -172,13 +172,14 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
 
             // Get the defendant on case
             Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
-                getXhbDefendantOnCaseRepository().findById(schedDao.getDefendantOnCaseId());
+                getXhbDefendantOnCaseRepository().findByIdSafe(schedDao.getDefendantOnCaseId());
             if (defendantOnCaseDao.isPresent()
                 && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
                 // Get the defendant
                 Optional<XhbDefendantDao> defendantDao =
-                    getXhbDefendantRepository().findById(defendantOnCaseDao.get().getDefendantId());
+                    getXhbDefendantRepository()
+                        .findByIdSafe(defendantOnCaseDao.get().getDefendantId());
                 if (defendantDao.isPresent()) {
                     boolean isHidden =
                         isCaseHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())

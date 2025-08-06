@@ -28,7 +28,6 @@ import java.util.Optional;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.TooManyMethods")
 public class CppStagingInboundControllerBean extends AbstractCppStagingInboundControllerBean
     implements CppStagingInboundController {
 
@@ -52,13 +51,12 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-     * <p>
+
      * Returns the latest unprocessed XHB_CPP_STAGING_INBOUND record for processing.
-     * </p>
-     * 
+
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-     * 
+
      */
     @Override
     public List<XhbCppStagingInboundDao> getLatestUnprocessedDocument() {
@@ -77,14 +75,13 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-     * <p>
+
      * Returns the latest record from XHB_CPP_STAGING_INBOUND that has been validated successfully
      * and not processed.
-     * </p>
-     * 
+
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-     * 
+
      */
     @Override
     public List<XhbCppStagingInboundDao> getNextValidatedDocument() {
@@ -103,13 +100,12 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-     * <p>
+
      * Returns the earliest XHB_CPP_STAGING_INBOUND from today that is to be validated.
-     * </p>
-     * 
+
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-     * 
+
      */
     @Override
     public List<XhbCppStagingInboundDao> getNextDocumentToValidate() {
@@ -129,10 +125,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of successfully validated.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
     public void updateStatusSuccess(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -158,10 +154,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of validation failed.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
     public void updateStatusFailed(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -193,10 +189,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of In Progress.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
     public Optional<XhbCppStagingInboundDao> updateStatusInProcess(
@@ -219,10 +215,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
     public void updateStatusProcessingFail(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -244,10 +240,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
     public void updateStatusProcessingSuccess(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -275,12 +271,13 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
      * The DOCUMENT_TYPE is checked to be valid 3. The appropriate schema to validate the XML
      * against will be determined 4. Validation of the XML will be done against the appropriate
      * schema.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     @Override
+    @SuppressWarnings("PMD")
     public boolean validateDocument(XhbCppStagingInboundDao cppStagingInboundDao,
         String userDisplayName) throws ValidationException {
         String methodName =
@@ -288,12 +285,15 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
         LOG.debug(TWO_PARAMS, methodName, ENTERED);
         // Get schema to validate against
         String schemaName = getSchemaName(cppStagingInboundDao.getDocumentType());
+        LOG.debug("Schema name for document type {} is: {}", cppStagingInboundDao.getDocumentType(), schemaName);
         if (EMPTY_STRING.equals(schemaName)) {
+            LOG.debug("Looking for schemaName: {} but it was not found", cppStagingInboundDao.getDocumentType());
             updateStatusFailed(cppStagingInboundDao, "Document schema config is invalid",
                 userDisplayName);
             return false;
         }
         try {
+            LOG.debug("About to check document name for: {}", cppStagingInboundDao.getDocumentName());
             if (DocumentValidationUtils
                 .isValidDocumentName(cppStagingInboundDao.getDocumentName())) {
                 LOG.debug("{} - Document Name is valid", methodName);
@@ -302,6 +302,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
                     userDisplayName);
                 return false;
             }
+            LOG.debug("About to check document type for: {}", cppStagingInboundDao.getDocumentType());
             if (DocumentValidationUtils
                 .isValidDocumentType(cppStagingInboundDao.getDocumentType())) {
                 LOG.debug("{} - Document Type is valid", methodName);
@@ -312,22 +313,33 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
             }
 
             // Get the XML
+            LOG.debug("About to validate XML for clobId: {}", cppStagingInboundDao.getClobId());
             String xmlToValidate = getClobXmlAsString(cppStagingInboundDao.getClobId());
 
-            // Validate the XML
-            ValidationResult validDoc =
-                getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
-            if (validDoc.isValid()) {
-                LOG.debug("{} - Document XML is valid", methodName);
-            } else {
-                updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
-                    + schemaName + "; error::" + validDoc.toString(), userDisplayName);
-                return false;
-            }
+            // Validate the XML - only for WP and PD document types
+            CppDocumentTypes docType = CppDocumentTypes.fromString(cppStagingInboundDao.getDocumentType());
+            boolean shouldValidateXml = (docType == CppDocumentTypes.WP || docType == CppDocumentTypes.PD);
 
+            if (shouldValidateXml) {
+                ValidationResult validDoc =
+                    getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
+                LOG.debug("Document validation result: {}", validDoc.isValid());
+                if (validDoc.isValid()) {
+                    LOG.debug("{} - Document XML is valid", methodName);
+                } else {
+                    updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:"
+                        + schemaName + "; error::" + validDoc.toString(), userDisplayName);
+                    return false;
+                }
+            } else {
+                LOG.debug("{} - Document Type is not WP or PD, skipping XML validation", methodName);
+            }
+            
             // Do a check to make sure the court is a cpp court if not we want to fail
             List<XhbCourtDao> courts = getXhbCourtRepository()
-                .findByCrestCourtIdValue(cppStagingInboundDao.getCourtCode());
+                .findByCrestCourtIdValueSafe(cppStagingInboundDao.getCourtCode());
+            LOG.debug("Found {} courts for court code: {}",
+                courts.size(), cppStagingInboundDao.getCourtCode());
             if (CourtUtils.isCppCourt(courts)) {
                 if (CppDocumentTypes.WP == CppDocumentTypes
                     .fromString(cppStagingInboundDao.getDocumentType())
@@ -336,6 +348,8 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
                         "Validation failed: error:: No court sites in document ", userDisplayName);
                     return false;
                 } else {
+                    LOG.debug("Document is validated successfully for court: {}",
+                        cppStagingInboundDao.getCourtCode());
                     updateStatusSuccess(cppStagingInboundDao, userDisplayName);
                     return true;
                 }
@@ -344,9 +358,11 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
                     "Validation failed: error:: CPP court flag not set ", userDisplayName);
                 // if its iwp and has zero court sites then fail validation
                 return true;
-            }
+            }            
 
         } catch (ValidationException ve) {
+            LOG.error("Validation failed for schema name: {}; root cause: {}", schemaName,
+                ve.getCause().getMessage(), ve);
             updateStatusFailed(cppStagingInboundDao, "Validation failed: Schema name:" + schemaName
                 + "; error::" + ve.getCause().getMessage(), userDisplayName);
         }
@@ -355,17 +371,17 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Given a clob Id get the Xml.
-     * 
+
      * @param clobId Long
      * @return String
-     * 
+
      */
     @Override
     public String getClobXmlAsString(Long clobId) {
         String methodName = "getClobXmlAsString(" + clobId.longValue() + METHOD_NAME_SUFFIX;
         LOG.debug(TWO_PARAMS, methodName, ENTERED);
 
-        Optional<XhbClobDao> clobObj = getXhbClobRepository().findById(clobId);
+        Optional<XhbClobDao> clobObj = getXhbClobRepository().findByIdSafe(clobId);
         if (clobObj.isPresent()) {
             return clobObj.get().getClobData();
         } else {

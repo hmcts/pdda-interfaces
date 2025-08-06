@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class TranslationServicesTest {

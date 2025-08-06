@@ -26,9 +26,9 @@ public class AbstractTypeMarshal<T> {
     
     /**
      * Method marshal.
-     * 
-     * 
-     * 
+
+
+
      * @param out Writer
      */
     public void marshal(java.io.Writer out)
@@ -39,7 +39,7 @@ public class AbstractTypeMarshal<T> {
 
     /**
      * Method marshal.
-     * 
+
      * @param handler ContentHandler
      */
     public void marshal(org.xml.sax.ContentHandler handler) throws java.io.IOException,
@@ -50,7 +50,7 @@ public class AbstractTypeMarshal<T> {
     
     /**
      * Method isValid.
-     * 
+
      * @return boolean
      */
     public boolean isValid() {
@@ -64,7 +64,7 @@ public class AbstractTypeMarshal<T> {
 
     /**
      * Method validate.
-     * 
+
      */
     public void validate() throws ValidationException {
         Validator validator = new Validator();

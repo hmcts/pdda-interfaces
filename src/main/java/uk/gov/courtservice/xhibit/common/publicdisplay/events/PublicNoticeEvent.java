@@ -4,22 +4,15 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIde
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 
 /**
- * <p>
+
  * Title: Public Notice Event.
- * </p>
- * 
- * <p>
+
  * Description: This event is generated when the public notices are changed for a court room
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2002
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Rakesh Lakhani
  * @version 1.0
  */
@@ -33,7 +26,7 @@ public class PublicNoticeEvent extends CourtRoomEvent {
     /**
      * Specify the court room for which the public notices have changed, and no reporting
      * restriction changes.
-     * 
+
      * @param courtRoomIdentifier The court room for which the change applies.
      */
     public PublicNoticeEvent(CourtRoomIdentifier courtRoomIdentifier) {
@@ -42,7 +35,7 @@ public class PublicNoticeEvent extends CourtRoomEvent {
 
     /**
      * Constructor that allows the explicit setting of whether reporting restrictions has changed.
-     * 
+
      * @param courtRoomIdentifier The court room for which the change applies.
      * @param reportingRestrictionsChanged Whether reporting restrictions has changed.
      */
@@ -54,7 +47,7 @@ public class PublicNoticeEvent extends CourtRoomEvent {
 
     /**
      * Get event type.
-     * 
+
      * @return eventType
      */
     @Override
@@ -64,7 +57,7 @@ public class PublicNoticeEvent extends CourtRoomEvent {
 
     /**
      * Returns whether the reporting restrictions state has changed.
-     * 
+
      * @return true if the reporting restrictions norice has been set or unset, false otherwise.
      */
     public boolean isReportingRestrictionsChanged() {

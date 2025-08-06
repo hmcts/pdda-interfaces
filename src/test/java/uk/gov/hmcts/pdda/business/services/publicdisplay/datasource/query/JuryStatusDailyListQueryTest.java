@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCaseUtil;
@@ -48,23 +49,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: JuryStatusDailyListQuery Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyFields", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 class JuryStatusDailyListQueryTest extends AbstractQueryTest {
 
     protected static final String TRUE = "Result is not True";
@@ -120,6 +120,12 @@ class JuryStatusDailyListQueryTest extends AbstractQueryTest {
     @BeforeAll
     public static void setUp() {
         // Do nothing
+    }
+
+    @BeforeEach
+    void setupEntityManager() {
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        EasyMock.replay(mockEntityManager);
     }
 
     @AfterAll
@@ -234,23 +240,28 @@ class JuryStatusDailyListQueryTest extends AbstractQueryTest {
 
         // Expects
         boolean abortExpects;
-        EasyMock.expect(mockXhbHearingListRepository.findByCourtIdAndDate(courtId, startDate))
+        EasyMock.expect(mockXhbHearingListRepository.findByCourtIdAndDateSafe(courtId, startDate))
             .andReturn(xhbHearingListDaoList);
         addReplayArray(replayArray, mockXhbHearingListRepository);
         abortExpects = xhbHearingListDaoList.isEmpty();
         if (!abortExpects) {
             if (classUnderTest.isFloatingIncluded()) {
-                EasyMock.expect(mockXhbSittingRepository.findByListId(EasyMock.isA(Integer.class)))
+                EasyMock
+                    .expect(mockXhbSittingRepository.findByListIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(xhbSittingDaoList);
             } else {
-                EasyMock.expect(mockXhbSittingRepository.findByNonFloatingHearingList(EasyMock.isA(Integer.class)))
+                EasyMock
+                    .expect(mockXhbSittingRepository
+                        .findByNonFloatingHearingListSafe(EasyMock.isA(Integer.class)))
                     .andReturn(xhbSittingDaoList);
             }
             addReplayArray(replayArray, mockXhbSittingRepository);
             abortExpects = xhbSittingDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbScheduledHearingRepository.findBySittingId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbScheduledHearingRepository
+                    .findBySittingIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbScheduledHearingDaoList);
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbScheduledHearingRepository);
@@ -275,57 +286,70 @@ class JuryStatusDailyListQueryTest extends AbstractQueryTest {
     private void expectCourtSite(List<XhbSchedHearingDefendantDao> xhbSchedHearingDefendantDaoList,
         Optional<XhbHearingDao> xhbHearingDao, List<AbstractRepository<?>> replayArray,
         Optional<XhbRefJudgeDao> refJudgeDao) {
-        EasyMock.expect(mockXhbCourtSiteRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbCourtSiteRepository);
-        EasyMock.expect(mockXhbCourtRoomRepository.findById(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtRoomRepository.findByIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbCourtRoomRepository);
-        EasyMock.expect(mockXhbHearingRepository.findById(EasyMock.isA(Integer.class))).andReturn(xhbHearingDao);
+        EasyMock.expect(mockXhbHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(xhbHearingDao);
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbHearingRepository);
         if (xhbHearingDao.isPresent()) {
-            EasyMock.expect(mockXhbCaseRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbCaseRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(DummyCaseUtil.getXhbCaseDao()));
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbCaseRepository);
             List<XhbCaseReferenceDao> xhbCaseReferenceDaoList = new ArrayList<>();
             xhbCaseReferenceDaoList.add(DummyCaseUtil.getXhbCaseReferenceDao());
-            EasyMock.expect(mockXhbCaseReferenceRepository.findByCaseId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCaseReferenceRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCaseReferenceDaoList);
             addReplayArray(replayArray, mockXhbCaseReferenceRepository);
             List<XhbCourtLogEntryDao> xhbCourtLogEntryDaoList = new ArrayList<>();
             xhbCourtLogEntryDaoList.add(DummyCourtUtil.getXhbCourtLogEntryDao());
-            EasyMock.expect(mockXhbCourtLogEntryRepository.findByCaseId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(
+                    mockXhbCourtLogEntryRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtLogEntryDaoList);
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbCourtLogEntryRepository);
-            EasyMock.expect(mockXhbRefHearingTypeRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbRefHearingTypeRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(DummyHearingUtil.getXhbRefHearingTypeDao()));
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbRefHearingTypeRepository);
         }
-        EasyMock.expect(mockXhbSchedHearingDefendantRepository.findByScheduledHearingId(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbSchedHearingDefendantRepository
+                .findByScheduledHearingIdSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbSchedHearingDefendantDaoList);
         EasyMock.expectLastCall().anyTimes();
         addReplayArray(replayArray, mockXhbSchedHearingDefendantRepository);
         if (!xhbSchedHearingDefendantDaoList.isEmpty()) {
-            EasyMock.expect(mockXhbDefendantOnCaseRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDefendantOnCaseRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()));
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantOnCaseRepository);
-            EasyMock.expect(mockXhbDefendantRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbDefendantRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantRepository);
         }
-        EasyMock.expect(mockXhbRefJudgeRepository.findScheduledAttendeeJudge(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbRefJudgeRepository
+                .findScheduledAttendeeJudgeSafe(EasyMock.isA(Integer.class)))
             .andReturn(refJudgeDao);
         EasyMock.expectLastCall().anyTimes();
         if (refJudgeDao.isEmpty()) {
-            EasyMock.expect(mockXhbRefJudgeRepository.findScheduledSittingJudge(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbRefJudgeRepository
+                    .findScheduledSittingJudgeSafe(EasyMock.isA(Integer.class)))
                 .andReturn(refJudgeDao);
         }
         addReplayArray(replayArray, mockXhbRefJudgeRepository);

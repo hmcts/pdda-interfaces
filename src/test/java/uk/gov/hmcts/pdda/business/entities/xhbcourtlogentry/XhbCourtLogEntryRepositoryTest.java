@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -37,41 +40,70 @@ class XhbCourtLogEntryRepositoryTest extends AbstractRepositoryTest<XhbCourtLogE
 
     @Override
     protected XhbCourtLogEntryRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbCourtLogEntryRepository(getEntityManager());
-        }
         return classUnderTest;
     }
 
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbCourtLogEntryRepository(mockEntityManager);
+    }
+
     @Test
-    void testfindByCaseIdSuccess() {
-        boolean result = testfindByCaseId(getDummyDao());
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbCourtLogEntryDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbCourtLogEntryDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
+    }
+
+    @Test
+    void testFindByCaseIdSuccess() {
+        boolean result = testFindByCaseId(getDummyDao());
         assertTrue(result, NOT_TRUE);
     }
 
     @Test
-    void testfindByCaseIdFailure() {
-        boolean result = testfindByCaseId(null);
+    void testFindByCaseIdFailure() {
+        boolean result = testFindByCaseId(null);
         assertTrue(result, NOT_TRUE);
     }
 
-    private boolean testfindByCaseId(XhbCourtLogEntryDao dao) {
+    private boolean testFindByCaseId(XhbCourtLogEntryDao dao) {
         List<XhbCourtLogEntryDao> list = new ArrayList<>();
         if (dao != null) {
             list.add(dao);
         }
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbCourtLogEntryDao> result =
-            getClassUnderTest().findByCaseId(getDummyDao().getCaseId());
-        assertNotNull(result, "Result is Null");
-        if (dao != null) {
-            assertSame(dao, result.get(0), "Result is not Same");
-        } else {
-            assertSame(0, result.size(), "Result is not Same");
+
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(mockEntityManager.createNamedQuery(isA(String.class)))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(list);
+
+            List<XhbCourtLogEntryDao> result =
+                getClassUnderTest().findByCaseIdSafe(dao != null ? dao.getCaseId() : -1);
+
+            assertNotNull(result, "Result is Null");
+            if (dao != null) {
+                assertTrue(!result.isEmpty(), "Result list is empty");
+                assertSame(dao, result.get(0), "Result is not Same");
+            } else {
+                assertTrue(result.isEmpty(), "Expected empty result list");
+            }
+
+            return true;
         }
-        return true;
     }
+
 
     @Override
     protected XhbCourtLogEntryDao getDummyDao() {
@@ -105,7 +137,7 @@ class XhbCourtLogEntryRepositoryTest extends AbstractRepositoryTest<XhbCourtLogE
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         entryId = result.getPrimaryKey();
-        assertNotNull(entryId, NOTNULL);
+        assertNotNull(entryId, NOTSAMERESULT);
         return new XhbCourtLogEntryDao(result);
     }
 

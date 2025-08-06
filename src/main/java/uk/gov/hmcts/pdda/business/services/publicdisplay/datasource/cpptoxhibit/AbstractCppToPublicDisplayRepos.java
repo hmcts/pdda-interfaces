@@ -24,11 +24,10 @@ import javax.xml.xpath.XPathFactory;
 /**
  * The AbstractCppToPublicDisplay class is used to retrieve CPP XML, extract data from the CPP XML
  * and update the XHB_CPP_FORMATTING table's STATUS column.
- * 
+
  * @author groenm
- *
+
  */
-@SuppressWarnings("PMD.GodClass")
 public class AbstractCppToPublicDisplayRepos {
 
     private static final Logger LOG =
@@ -66,7 +65,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * Converts a String in the format dd-MM-yyyy HH:mm to a Timestamp object.
-     * 
+
      * @param dateTime Timestamp string
      * @return Timestamp
      */
@@ -85,7 +84,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * Returns the XPath object reference.
-     * 
+
      * @return XPath
      */
     protected XPath getXPath() {
@@ -98,7 +97,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * getXhbCourtStructure.
-     * 
+
      * @return the xhbCourtStructure
      */
     public CourtStructureValue getXhbCourtStructure() {
@@ -116,7 +115,7 @@ public class AbstractCppToPublicDisplayRepos {
         XhbCourtRoomDao[] courtRoomArray = new XhbCourtRoomDao[0];
         List<XhbCourtSiteDao> courtSitesList = new ArrayList<>();
         List<XhbCourtSiteDao> allCourtSitesForCourt =
-            getXhbCourtSiteRepository(entityManager).findByCourtId(court.getCourtId());
+            getXhbCourtSiteRepository(entityManager).findByCourtIdSafe(court.getCourtId());
         for (XhbCourtSiteDao courtSite : allCourtSitesForCourt) {
             if (YES.equals(courtSite.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtSite");
@@ -140,7 +139,8 @@ public class AbstractCppToPublicDisplayRepos {
         XhbCourtSiteDao courtSite, List<XhbCourtSiteDao> xhbCourtSites) {
         List<XhbCourtRoomDao> courtRoomList = new ArrayList<>();
         List<XhbCourtRoomDao> allCourtRooms =
-            getXhbCourtRoomRepository(entityManager).findByCourtSiteId(courtSite.getCourtSiteId());
+            getXhbCourtRoomRepository(entityManager)
+                .findByCourtSiteIdSafe(courtSite.getCourtSiteId());
         for (XhbCourtRoomDao courtRoom : allCourtRooms) {
             if (YES.equals(courtRoom.getObsInd())) {
                 LOG.debug("Ignored Obsolete CourtRoom");
@@ -158,7 +158,7 @@ public class AbstractCppToPublicDisplayRepos {
 
     /**
      * setXhbCourtStructure.
-     * 
+
      * @param xhbCourtStructure the xhbCourtStructure to set
      */
     public void setXhbCourtStructure(CourtStructureValue xhbCourtStructure) {

@@ -16,7 +16,7 @@ import java.util.Optional;
 /**
  * A helper class to contain all of the logic for manipulating the xhb_cr_live_status entry for a
  * court room and scheduled hearings.
- * 
+
  * @author pznwc5
  * @author tz0d5m
  * @version $Revision: 1.7 $
@@ -33,7 +33,7 @@ public final class CrLiveStatusHelper {
      * Method to indicate that the public display should be activated. This will clear out the
      * xhb_cr_live_display row entries for the court room that the scheduled hearing is assigned to,
      * and then assign the passed in scheduled hearing to the cr live status.
-     * 
+
      * @param xsh XhbScheduledHearingDAO
      * @param activationDate Date
      */
@@ -60,7 +60,7 @@ public final class CrLiveStatusHelper {
      * Method to indicate that the public display should be deactivated if the scheduled hearing
      * passed in is not already de-activated. This will clear out the xhb_cr_live_status row entries
      * for the court room that the scheduled hearing is assigned to.
-     * 
+
      * @param xsh XhbScheduledHearingDAO
      * @param deactivationDate Date
      */

@@ -35,11 +35,10 @@ import java.util.Optional;
 
 /**
  * Abstract query class used by public display.
- * 
+
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyFields", "PMD.GodClass",
-    "PMD.ExcessiveImports", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD")
 public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected static final String EMPTY_STRING = "";
@@ -86,11 +85,11 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     /**
      * Returns an array of SummaryByNameValue.
-     * 
+
      * @param date localDateTime
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-     * 
+
      * @return Summary by name data for the specified court rooms
      */
     public abstract Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds);
@@ -103,7 +102,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         result.setNotBeforeTime(notBeforeTime);
 
         // Get the court site
-        Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findById(courtSiteId);
+        Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findByIdSafe(courtSiteId);
         if (courtSite.isPresent()) {
             result.setCourtSiteCode(courtSite.get().getCourtSiteCode());
             result.setCourtSiteName(courtSite.get().getCourtSiteName());
@@ -115,7 +114,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         }
 
         // Get courtRoom
-        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository().findById(courtRoomId);
+        Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository().findByIdSafe(courtRoomId);
         if (courtRoom.isPresent()) {
             result.setCourtRoomId(courtRoom.get().getCourtRoomId());
             result.setCourtRoomName(courtRoom.get().getDisplayName());
@@ -132,12 +131,12 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         result.setMovedFromCourtSiteShortName("");
         if (movedFromCourtRoomId != null) {
             Optional<XhbCourtRoomDao> movedCourtRoom =
-                getXhbCourtRoomRepository().findById(movedFromCourtRoomId);
+                getXhbCourtRoomRepository().findByIdSafe(movedFromCourtRoomId);
             if (movedCourtRoom.isPresent()) {
                 result.setMovedFromCourtRoomId(movedCourtRoom.get().getCourtRoomId());
                 result.setMovedFromCourtRoomName(movedCourtRoom.get().getDisplayName());
                 Optional<XhbCourtSiteDao> movedCourtSite =
-                    getXhbCourtSiteRepository().findById(movedCourtRoom.get().getCourtSiteId());
+                    getXhbCourtSiteRepository().findByIdSafe(movedCourtRoom.get().getCourtSiteId());
                 if (movedCourtSite.isPresent()) {
                     result.setMovedFromCourtSiteShortName(movedCourtSite.get().getShortName());
                 }
@@ -146,36 +145,38 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected List<XhbHearingListDao> getHearingListDaos(int courtId, LocalDateTime startDate) {
-        return getXhbHearingListRepository().findByCourtIdAndDate(courtId, startDate);
+        return getXhbHearingListRepository().findByCourtIdAndDateSafe(courtId, startDate);
     }
 
     protected List<XhbSittingDao> getSittingListDaos(Integer listId) {
-        return getXhbSittingRepository().findByListId(listId);
+        return getXhbSittingRepository().findByListIdSafe(listId);
     }
 
     protected List<XhbSittingDao> getNonFloatingSittingListDaos(Integer listId) {
-        return getXhbSittingRepository().findByNonFloatingHearingList(listId);
+        return getXhbSittingRepository().findByNonFloatingHearingListSafe(listId);
     }
 
     protected List<XhbScheduledHearingDao> getScheduledHearingDaos(Integer sittingId) {
-        return getXhbScheduledHearingRepository().findBySittingId(sittingId);
+        return getXhbScheduledHearingRepository().findBySittingIdSafe(sittingId);
     }
 
     protected List<XhbSchedHearingDefendantDao> getSchedHearingDefendantDaos(
         Integer scheduledHearingId) {
-        return getXhbSchedHearingDefendantRepository().findByScheduledHearingId(scheduledHearingId);
+        return getXhbSchedHearingDefendantRepository()
+            .findByScheduledHearingIdSafe(scheduledHearingId);
     }
 
     protected Optional<XhbRefJudgeDao> getXhbRefJudgeDao(Integer scheduledHearingId) {
         log.debug("getXhbRefJudgeDao({})", scheduledHearingId);
         // Get the judge from the scheduled hearing attendees
         Optional<XhbRefJudgeDao> xhbRefJudgeDao =
-            getXhbRefJudgeRepository().findScheduledAttendeeJudge(scheduledHearingId);
+            getXhbRefJudgeRepository().findScheduledAttendeeJudgeSafe(scheduledHearingId);
         if (xhbRefJudgeDao.isPresent()) {
             log.debug("Found Judge {} in scheduledHearingAttendees",
                 xhbRefJudgeDao.get().getRefJudgeId());
         } else {
-            xhbRefJudgeDao = getXhbRefJudgeRepository().findScheduledSittingJudge(scheduledHearingId);
+            xhbRefJudgeDao =
+                getXhbRefJudgeRepository().findScheduledSittingJudgeSafe(scheduledHearingId);
             if (xhbRefJudgeDao.isPresent()) {
                 log.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
             } else {
@@ -199,7 +200,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected boolean isReportingRestricted(Integer caseId) {
         boolean result = false;
         List<XhbCaseReferenceDao> caseReferenceDaos =
-            getXhbCaseReferenceRepository().findByCaseId(caseId);
+            getXhbCaseReferenceRepository().findByCaseIdSafe(caseId);
         Integer trueInt = 1;
         if (!caseReferenceDaos.isEmpty()) {
             for (XhbCaseReferenceDao caseReferenceDao : caseReferenceDaos) {
@@ -222,6 +223,6 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected Optional<XhbHearingDao> getXhbHearingDao(Integer hearingId) {
-        return getXhbHearingRepository().findById(hearingId);
+        return getXhbHearingRepository().findByIdSafe(hearingId);
     }
 }

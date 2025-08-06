@@ -269,14 +269,20 @@ function attachStylesheets()
     var displayType = trimToNull(getParameterForWindow(self,"displayType"));
     if(displayType != null) {
 		log("Display Stylesheet " + displayType);
-        document.createStyleSheet("css/" + displayType + ".css");
+        const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = "css/" + displayType + ".css";
+		document.head.appendChild(link);
     } else {
         log("Display Stylesheet not found.");
     }
 
     var additionalStylesheet = trimToNull(getParameter("stylesheet"));
-    if(additionalStylesheet != null ) {        
-        document.createStyleSheet("css/"+additionalStylesheet+".css");
+    if(additionalStylesheet != null ) {
+        const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = "css/" + additionalStylesheet + ".css";
+		document.head.appendChild(link);
         log("Additional Stylesheet " + additionalStylesheet + " added.");
     } else {
         log("Additional Stylesheet not found.");

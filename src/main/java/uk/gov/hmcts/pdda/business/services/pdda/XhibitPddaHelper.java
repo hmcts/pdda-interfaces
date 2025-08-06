@@ -15,19 +15,18 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 /**
- * <p>
+
  * Title: Xhibit PDDAHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  * @version 1.0
  */
@@ -72,9 +71,16 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         this.courtRepository = courtRepository;
     }
 
+    @Override
+    protected void clearRepositories() {
+        super.clearRepositories();
+        clobRepository = null;
+        courtRepository = null;
+    }
+
     /**
      * Sends a public display event.
-     * 
+
      * @param event Public display event
      */
     public void sendMessage(PublicDisplayEvent event) {
@@ -90,22 +96,22 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     }
 
     protected XhbClobRepository getClobRepository() {
-        if (clobRepository == null) {
+        if (clobRepository == null || !isEntityManagerActive()) {
             clobRepository = new XhbClobRepository(entityManager);
         }
         return clobRepository;
     }
 
     protected XhbCourtRepository getCourtRepository() {
-        if (courtRepository == null) {
-            courtRepository = new XhbCourtRepository(entityManager);
+        if (courtRepository == null || !isEntityManagerActive()) {
+            courtRepository = new XhbCourtRepository(getEntityManager());
         }
         return courtRepository;
     }
 
     protected PddaMessageHelper getPddaMessageHelper() {
         if (pddaMessageHelper == null) {
-            pddaMessageHelper = new PddaMessageHelper(entityManager);
+            pddaMessageHelper = new PddaMessageHelper(getEntityManager());
         }
         return pddaMessageHelper;
     }
@@ -143,5 +149,9 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
             pddaSftpHelperSshj = new PddaSftpHelperSshj();
         }
         return pddaSftpHelperSshj;
+    }
+
+    public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {
+        this.publicDisplayNotifier = publicDisplayNotifier;
     }
 }

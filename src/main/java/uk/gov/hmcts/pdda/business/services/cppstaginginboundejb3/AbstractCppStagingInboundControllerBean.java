@@ -12,14 +12,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
-import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationService;
 import uk.gov.hmcts.pdda.business.services.validation.sax.FileEntityResolver;
 import uk.gov.hmcts.pdda.business.services.validation.sax.SaxValidationService;
 
 import java.util.List;
 
-@SuppressWarnings("PMD.NullAssignment")
 public class AbstractCppStagingInboundControllerBean extends AbstractControllerBean {
 
     private static final Logger LOG =
@@ -37,7 +35,6 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
 
     private CppStagingInboundHelper cppStagingInboundHelper;
     private ValidationService validationService;
-    private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
     
     public AbstractCppStagingInboundControllerBean() {
         super();
@@ -53,19 +50,13 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         this.cppStagingInboundHelper = cppStagingInboundHelper;
         this.validationService = validationService;
     }
-    
-    @Override
-    protected void clearRepositories() {
-        super.clearRepositories();
-        xhbCppStagingInboundRepository = null;
-    }
 
     /**
      * Get courtId from XHB_COURT using crest court id (aka court code).
-     * 
+
      * @param courtCode Integer
      * @return int
-     * 
+
      */
     public int getCourtId(Integer courtCode) {
         String methodName = "getCourtId(" + courtCode.intValue() + METHOD_NAME_SUFFIX;
@@ -74,7 +65,7 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         int courtId = 0;
 
         List<XhbCourtDao> data =
-            getXhbCourtRepository().findByCrestCourtIdValue(courtCode.toString());
+            getXhbCourtRepository().findByCrestCourtIdValueSafe(courtCode.toString());
         if (data.isEmpty()) {
             LOG.debug("No court site items returned when searching for court code: "
                 + courtCode.intValue());
@@ -88,10 +79,10 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record such that all status values are reset back to when
      * there initial values This is useful for testing.
-     * 
+
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-     * 
+
      */
     public void resetDocumentStatus(XhbCppStagingInboundDao cppStagingInboundDao,
         String userDisplayName) {
@@ -112,17 +103,17 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
      * Based on the document type return the (name of the) schema that is to be used to validate the
      * XML The schema document itself will be picked up from SCHEMA_DIR as defined at the top of the
      * class.
-     * 
+
      * @param documentType String
      * @return String
-     * 
+
      */
     public String getSchemaName(String documentType) {
         String methodName = "getSchemaName(" + documentType + METHOD_NAME_SUFFIX;
         LOG.debug(methodName + ENTERED);
 
         List<XhbConfigPropDao> configPropReturnList =
-            getXhbConfigPropRepository().findByPropertyName("CPPX_Schema" + documentType);
+            getXhbConfigPropRepository().findByPropertyNameSafe("CPPX_Schema" + documentType);
         
         for (XhbConfigPropDao configPropReturn : configPropReturnList) {
             LOG.debug("Config prop return: {} {} {}", configPropReturn.getConfigPropId(),
@@ -138,20 +129,22 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
         return tempConfigProp.getPropertyValue();
     }
 
+    protected List<XhbConfigPropDao> getSafeConfigProperties(String propertyName) {
+        return getXhbConfigPropRepository().findByPropertyNameSafe(propertyName);
+    }
+
     public String findConfigEntryByPropertyName(String propertyName) {
-        String returnString = null;
         LOG.info("findConfigEntryByPropertyName(" + propertyName + ")");
-        List<XhbConfigPropDao> properties =
-            getXhbConfigPropRepository()
-                .findByPropertyName("scheduledtasks.pdda");
-        if (null != properties && !properties.isEmpty()) {
-            returnString = properties.get(0).getPropertyValue();
-        } else {
+        List<XhbConfigPropDao> properties = getSafeConfigProperties(propertyName);
+        if (properties.isEmpty()) {
             LOG.debug("findConfigEntryByPropertyName(" + propertyName
                 + "): cannot find property in database.");
+        } else {
+            return properties.get(0).getPropertyValue();
         }
-        return returnString;
+        return null;
     }
+
 
     protected CppStagingInboundHelper getCppStagingInboundHelper() {
         if (cppStagingInboundHelper == null) {
@@ -165,12 +158,5 @@ public class AbstractCppStagingInboundControllerBean extends AbstractControllerB
             validationService = new SaxValidationService(new FileEntityResolver());
         }
         return validationService;
-    }
-    
-    public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
-        if (xhbCppStagingInboundRepository == null || !isEntityManagerActive()) {
-            xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
-        }
-        return xhbCppStagingInboundRepository;
     }
 }

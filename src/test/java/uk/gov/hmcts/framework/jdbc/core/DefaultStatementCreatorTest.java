@@ -20,21 +20,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: DefaultStatementCreator Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author harrism
  */
+@SuppressWarnings("PMD")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class DefaultStatementCreatorTest {

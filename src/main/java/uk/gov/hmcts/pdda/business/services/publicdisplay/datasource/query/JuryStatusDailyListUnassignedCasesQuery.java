@@ -20,7 +20,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
  * This class wraps the stored procedure that provides the data for the daily list and jury status
  * document and includes unassigned cases from all court rooms (though currently they are only in
  * court room 1).
- * 
+
  * @author pznwc5
  */
 @SuppressWarnings("PMD.ExcessiveParameterList")

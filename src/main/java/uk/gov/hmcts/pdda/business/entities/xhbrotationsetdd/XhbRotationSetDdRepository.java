@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class XhbRotationSetDdRepository extends AbstractRepository<XhbRotationSe
 
     /**
      * findByRotationSetId.
-     * 
+
      * @param rotationSetId Integer 
      * @return List
      */
@@ -39,4 +40,18 @@ public class XhbRotationSetDdRepository extends AbstractRepository<XhbRotationSe
         query.setParameter("rotationSetId", rotationSetId);
         return query.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<XhbRotationSetDdDao> findByRotationSetIdSafe(Integer rotationSetId) {
+        LOG.debug("findByRotationSetIdSafe({})", rotationSetId);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_ROTATION_SET_DD.findByRotationSetId");
+            query.setParameter("rotationSetId", rotationSetId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByRotationSetIdSafe({}): {}", rotationSetId, e.getMessage(), e);
+            return List.of(); // Return empty list on failure
+        }
+    }
+
 }

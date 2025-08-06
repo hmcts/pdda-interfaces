@@ -13,19 +13,18 @@ import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 
 /**
- * <p>
+
  * Title: Clear Down Controller Bean.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Nathan Toft
  */
 @Stateless
@@ -50,7 +49,7 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
     /**
      * Implementation of RemoteTask so that this process is called by the timer process. This scheduled
      * job resets the IWP data.
-     * 
+
      */
     @Override
     public void doTask() {
@@ -62,9 +61,9 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
     }
 
     /**
-     * <p>
+
      * Reset the records in XHB_CR_LIVE_DISPLAY.
-     * </p>
+
      */
     public void resetLiveDisplays() {
         LOG.debug("Calling resetLiveDisplays()");
@@ -74,7 +73,7 @@ public class ClearDownControllerBean extends AbstractControllerBean implements R
     
     /**
      * Returns a reference to the pddaDlNotifierHelper object.
-     * 
+
      * @return pddaDlNotifierHelper
      */
     private ClearDownHelper getClearDownHelper() {

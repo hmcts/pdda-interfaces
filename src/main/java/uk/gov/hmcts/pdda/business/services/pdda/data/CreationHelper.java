@@ -11,8 +11,11 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.io.Serializable;
@@ -20,23 +23,22 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: CreationHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.LawOfDemeter", "PMD.TooManyMethods",
+@SuppressWarnings({"PMD.CouplingBetweenObjects", "PMD.TooManyMethods",
     "PMD.UseObjectForClearerAPI"})
 public class CreationHelper implements Serializable {
 
@@ -142,19 +144,64 @@ public class CreationHelper implements Serializable {
 
     public Optional<XhbCaseDao> updateCase(final XhbCaseDao dao, final String caseTitle) {
         LOG.debug("updateCase({}{})", dao.getCaseType(), dao.getCaseNumber());
-        dao.setCaseTitle(caseTitle);
-        return getRepositoryHelper().getXhbCaseRepository().update(dao);
+        Optional<XhbCaseDao> freshDao = repositoryHelper.getXhbCaseRepository().findByIdSafe(dao.getCaseId());
+        if (freshDao.isPresent()) {
+            freshDao.get().setCaseTitle(caseTitle);
+            return repositoryHelper.getXhbCaseRepository().update(freshDao.get());
+        }
+        return Optional.empty();
+    }
+    
+    /**
+     * Create XhbRefJudgeDao.
+     */
+    public Optional<XhbRefJudgeDao> createRefJudge(final Integer courtId,
+        final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
+        LOG.info("createRefJudge({},{},{},{})", courtId, judgeTitle, judgeFirstname, judgeSurname);
+        XhbRefJudgeDao dao = new XhbRefJudgeDao();
+        dao.setTitle(judgeTitle);
+        dao.setFirstname(judgeFirstname);
+        dao.setSurname(judgeSurname);
+        dao.setCourtId(courtId);
+        return getRepositoryHelper().getXhbRefJudgeRepository().update(dao);
+    }
+    
+    /**
+     * Create XhbShJudgeDao.
+     */
+    public Optional<XhbShJudgeDao> createShJudge(final String deputyHcj, final Integer refJudgeId,
+        final Integer shAttendeeId) {
+        LOG.info("createShJudge({},{},{})", deputyHcj, refJudgeId, shAttendeeId);
+        XhbShJudgeDao dao = new XhbShJudgeDao();
+        dao.setDeputyHcj(deputyHcj);
+        dao.setRefJudgeId(refJudgeId);
+        dao.setShAttendeeId(shAttendeeId);
+        return getRepositoryHelper().getXhbShJudgeRepository().update(dao);
+    }
+    
+    /**
+     * Create XhbSchedHearingAttendeeDao.
+     */
+    public Optional<XhbSchedHearingAttendeeDao> createSchedHearingAttendee(final String attendeeType,
+        final Integer scheduledHearingId, final Integer refJudgeId) {
+        LOG.info("createSchedHearingAttendee({},{})", scheduledHearingId, refJudgeId);
+        XhbSchedHearingAttendeeDao dao = new XhbSchedHearingAttendeeDao();
+        dao.setAttendeeType(attendeeType);
+        dao.setScheduledHearingId(scheduledHearingId);
+        dao.setRefJudgeId(refJudgeId);
+        return getRepositoryHelper().getXhbSchedHearingAttendeeRepository().update(dao);
     }
     
     /**
      * Create XhbDefendantOnCaseDao.
      */
     public Optional<XhbDefendantOnCaseDao> createDefendantOnCase(final Integer caseId,
-        final Integer defendantId) {
+        final Integer defendantId, final String isMasked) {
         LOG.info("createDefendantOnCase()");
         XhbDefendantOnCaseDao dao = new XhbDefendantOnCaseDao();
         dao.setCaseId(caseId);
         dao.setDefendantId(defendantId);
+        dao.setIsMasked(NO);
         return getRepositoryHelper().getXhbDefendantOnCaseRepository().update(dao);
     }
 
@@ -163,7 +210,7 @@ public class CreationHelper implements Serializable {
      */
     public Optional<XhbDefendantDao> createDefendant(final Integer courtId, final String firstName,
         final String middleName, final String surname, final Integer gender,
-        final LocalDateTime dateOfBirth) {
+        final LocalDateTime dateOfBirth, final String publicDisplayHide) {
         LOG.info("createDefendant({},{},{})", firstName, middleName, surname);
         XhbDefendantDao dao = new XhbDefendantDao();
         dao.setFirstName(firstName);
@@ -172,6 +219,7 @@ public class CreationHelper implements Serializable {
         dao.setCourtId(courtId);
         dao.setGender(gender);
         dao.setDateOfBirth(dateOfBirth);
+        dao.setPublicDisplayHide(publicDisplayHide);
         return getRepositoryHelper().getXhbDefendantRepository().update(dao);
     }
 

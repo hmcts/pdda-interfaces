@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -179,7 +180,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
 
     /**
      * Populates the AllCaseStatusValue object with data from the courtroom XML element.
-     * 
+
      * @param value AllCaseStatusValue
      * @param defNode XML element for the defendant
      * @throws XPathExpressionException Exception
@@ -217,10 +218,10 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
             String dateString = dateFormat.format(this.date);
             // Combine the time with the date to complete the timestamp otherwise uses 1970
             eventDateTime = dateString + " " + timeStatusSet;
+            value.setEventTime(convertStringToTimestamp(eventDateTime));
         } else {
-            eventDateTime = eventDate + " " + eventTime;
+            value.setEventTime(LocalDateTime.now());
         }
-        value.setEventTime(convertStringToTimestamp(eventDateTime));
 
         String hearingDesc = getXPath().evaluate(XPATH_HEARINGTYPE, caseNode);
         value.setHearingDescription(hearingDesc);

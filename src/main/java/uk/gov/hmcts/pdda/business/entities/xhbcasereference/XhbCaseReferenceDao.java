@@ -63,6 +63,7 @@ public class XhbCaseReferenceDao extends AbstractVersionedDao implements Seriali
         super.setVersion(otherData.getVersion());
     }
 
+    @Override
     public Integer getPrimaryKey() {
         return getCaseReferenceId();
     }

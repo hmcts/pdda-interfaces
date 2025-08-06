@@ -1,28 +1,27 @@
 package uk.gov.hmcts.framework.security;
 
 /**
- * <p>
+
  * Title: GroupNames.
- * </p>
- * <p>
+
+
  * Description: Defines Names of User Groups
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company: Electronic Data Systems
- * </p>
- * 
+
  * @author XHIBIT User
  * @version 1.0
  */
 /*
- * 
+
  * Ref Date Author Description
- * 
+
  * PRE00121 07-10-2003 AW Daley Initial Version
- * 
+
  */
 public final class GroupNames {
 

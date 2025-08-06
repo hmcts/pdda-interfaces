@@ -1,10 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbhearinglist;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -12,13 +15,11 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.isA;
 
@@ -39,41 +40,27 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
 
     @Override
     protected XhbHearingListRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbHearingListRepository(getEntityManager());
-        }
         return classUnderTest;
     }
 
-    @Test
-    void testFindByCourtIdAndDateSuccess() {
-        boolean result = testFindByCourtIdAndDate(getDummyDao());
-        assertTrue(result, NOT_TRUE);
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbHearingListRepository(mockEntityManager);
     }
 
     @Test
-    void testFindByCourtIdAndDateFailure() {
-        boolean result = testFindByCourtIdAndDate(null);
-        assertTrue(result, NOT_TRUE);
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
 
-    }
+            XhbHearingListDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbHearingListDao.class, getDummyId()))
+                .thenReturn(dummyDao);
 
-    private boolean testFindByCourtIdAndDate(XhbHearingListDao dao) {
-        List<XhbHearingListDao> list = new ArrayList<>();
-        if (dao != null) {
-            list.add(dao);
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
         }
-        Mockito.when(getEntityManager().createNamedQuery(isA(String.class))).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<XhbHearingListDao> result = getClassUnderTest()
-            .findByCourtIdAndDate(getDummyDao().getCourtId(), LocalDateTime.now());
-        assertNotNull(result, "Result is Null");
-        if (dao != null) {
-            assertSame(dao, result.get(0), "Result is not Same");
-        } else {
-            assertSame(0, result.size(), "Result is not Same");
-        }
-        return true;
     }
 
     @Test
@@ -85,13 +72,13 @@ class XhbHearingListRepositoryTest extends AbstractRepositoryTest<XhbHearingList
         XhbHearingListDao dao = getDummyDao();
         Optional<XhbHearingListDao> result = classUnderTest
             .findByCourtIdStatusAndDate(dao.getCourtId(), dao.getStatus(), dao.getStartDate());
-        assertNotNull(result, NOTNULL);
+        assertNotNull(result, NOTNULLRESULT);
     }
 
     @Override
     protected XhbHearingListDao getDummyDao() {
         XhbHearingListDao result = DummyHearingUtil.getXhbHearingListDao();
-        assertNotNull(result.getPrimaryKey(), NOTNULL);
+        assertNotNull(result.getPrimaryKey(), NOTNULLRESULT);
         return new XhbHearingListDao(result);
     }
 

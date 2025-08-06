@@ -4,7 +4,7 @@ import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
 /**
  * Description of the Class.
- * 
+
  * @author tzxbys
  * @created 24 February 2003
  */
@@ -16,7 +16,7 @@ public class DefinitivePublicNoticeStatusValue extends CsAbstractValue {
 
     /**
      * Constructor for the DefinitivePublicNoticeStatusValue object.
-     * 
+
      * @param definitivePublicNoticeId Integer
      * @param active boolean
      */
@@ -28,7 +28,7 @@ public class DefinitivePublicNoticeStatusValue extends CsAbstractValue {
 
     /**
      * Gets the definitivePublicNoticeId attribute of the DefinitivePublicNoticeStatusValue object.
-     * 
+
      * @return The definitivePublicNoticeId value
      */
     public Integer getDefinitivePublicNoticeId() {
@@ -37,7 +37,7 @@ public class DefinitivePublicNoticeStatusValue extends CsAbstractValue {
 
     /**
      * Gets the isActive attribute of the DefinitivePublicNoticeStatusValue object.
-     * 
+
      * @return The isActive value
      */
     public boolean isActive() {

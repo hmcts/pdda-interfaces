@@ -21,7 +21,7 @@ import uk.gov.hmcts.pdda.business.services.publicdisplay.database.query.VipDispl
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.TooManyMethods", "PMD.NullAssignment"})
 public abstract class AbstractPdConfigReposControllerBean extends AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractPdConfigReposControllerBean.class);
@@ -61,6 +61,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
         this.xhbRotationSetsRepository = xhbRotationSetsRepository;
         this.xhbRotationSetDdRepository = xhbRotationSetDdRepository;
         this.xhbDisplayTypeRepository = xhbDisplayTypeRepository;
+        this.xhbDisplayDocumentRepository = null;
         this.xhbDisplayRepository = xhbDisplayRepository;
         this.xhbCourtSiteRepository = xhbCourtSiteRepository;
         this.xhbCourtRoomRepository = xhbCourtRoomRepository;
@@ -70,9 +71,23 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
         this.vipDisplayCourtRoomQuery = vipDisplayCourtRoomQuery;
     }
 
+    @Override
+    protected void clearRepositories() {
+        LOG.info("clearRepositories()");
+        xhbRotationSetsRepository = null;
+        xhbRotationSetDdRepository = null;
+        xhbDisplayTypeRepository = null;
+        xhbDisplayRepository = null;
+        xhbCourtSiteRepository = null;
+        xhbCourtRoomRepository = null;
+        xhbDisplayLocationRepository = null;
+        xhbDisplayDocumentRepository = null;
+        super.clearRepositories();
+    }
+
     /**
      * Returns the publicDisplayNotifier object, initialising if currently null.
-     * 
+
      * @return PublicDisplayNotifier
      */
     protected PublicDisplayNotifier getPublicDisplayNotifier() {
@@ -84,11 +99,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbRotationSetsRepository object, initialising if currently null.
-     * 
+
      * @return XhbRotationSetsRepository
      */
     protected XhbRotationSetsRepository getXhbRotationSetsRepository() {
-        if (xhbRotationSetsRepository == null) {
+        if (xhbRotationSetsRepository == null || !isEntityManagerActive()) {
             xhbRotationSetsRepository = new XhbRotationSetsRepository(getEntityManager());
         }
         return xhbRotationSetsRepository;
@@ -96,11 +111,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbRotationSetDdRepository object, initialising if currently null.
-     * 
+
      * @return XhbRotationSetDdRepository
      */
     protected XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
-        if (xhbRotationSetDdRepository == null) {
+        if (xhbRotationSetDdRepository == null || !isEntityManagerActive()) {
             xhbRotationSetDdRepository = new XhbRotationSetDdRepository(getEntityManager());
         }
         return xhbRotationSetDdRepository;
@@ -108,11 +123,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayDocumentRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayDocumentRepository
      */
     protected XhbDisplayDocumentRepository getXhbDisplayDocumentRepository() {
-        if (xhbDisplayDocumentRepository == null) {
+        if (xhbDisplayDocumentRepository == null || !isEntityManagerActive()) {
             xhbDisplayDocumentRepository = new XhbDisplayDocumentRepository(getEntityManager());
         }
         return xhbDisplayDocumentRepository;
@@ -120,11 +135,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayTypeRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayTypeRepository
      */
     protected XhbDisplayTypeRepository getXhbDisplayTypeRepository() {
-        if (xhbDisplayTypeRepository == null) {
+        if (xhbDisplayTypeRepository == null || !isEntityManagerActive()) {
             xhbDisplayTypeRepository = new XhbDisplayTypeRepository(getEntityManager());
         }
         return xhbDisplayTypeRepository;
@@ -132,11 +147,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayRepository
      */
     protected XhbDisplayRepository getXhbDisplayRepository() {
-        if (xhbDisplayRepository == null) {
+        if (xhbDisplayRepository == null || !isEntityManagerActive()) {
             xhbDisplayRepository = new XhbDisplayRepository(getEntityManager());
         }
         return xhbDisplayRepository;
@@ -144,11 +159,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbCourtSiteRepository object, initialising if currently null.
-     * 
+
      * @return XhbCourtSiteRepository
      */
     protected XhbCourtSiteRepository getXhbCourtSiteRepository() {
-        if (xhbCourtSiteRepository == null) {
+        if (xhbCourtSiteRepository == null || !isEntityManagerActive()) {
             xhbCourtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return xhbCourtSiteRepository;
@@ -156,11 +171,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbCourtRoomRepository object, initialising if currently null.
-     * 
+
      * @return XhbCourtRoomRepository
      */
     protected XhbCourtRoomRepository getXhbCourtRoomRepository() {
-        if (xhbCourtRoomRepository == null) {
+        if (xhbCourtRoomRepository == null || !isEntityManagerActive()) {
             xhbCourtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return xhbCourtRoomRepository;
@@ -168,11 +183,11 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-     * 
+
      * @return XhbDisplayLocationRepository
      */
     protected XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
-        if (xhbDisplayLocationRepository == null) {
+        if (xhbDisplayLocationRepository == null || !isEntityManagerActive()) {
             xhbDisplayLocationRepository = new XhbDisplayLocationRepository(getEntityManager());
         }
         return xhbDisplayLocationRepository;
@@ -180,7 +195,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     /**
      * Returns the displayRotationSetDataHelper object, initialising if currently null.
-     * 
+
      * @return DisplayRotationSetDataHelper
      */
     protected DisplayRotationSetDataHelper getDisplayRotationSetDataHelper() {

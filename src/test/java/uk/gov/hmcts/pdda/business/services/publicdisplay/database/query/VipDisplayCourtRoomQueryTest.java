@@ -7,6 +7,7 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -32,25 +33,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: VipDisplayCourtRoomQueryTest Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2023
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
+@SuppressWarnings("PMD")
 class VipDisplayCourtRoomQueryTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     protected EntityManager mockEntityManager;
@@ -79,6 +82,13 @@ class VipDisplayCourtRoomQueryTest {
     public static void setUp() {
         // Do nothing
     }
+
+    @BeforeEach
+    void setupEntityManagerExpectations() {
+        EasyMock.expect(mockEntityManager.isOpen()).andStubReturn(true);
+        EasyMock.replay(mockEntityManager);
+    }
+
 
     @AfterAll
     public static void tearDown() {
@@ -173,30 +183,36 @@ class VipDisplayCourtRoomQueryTest {
 
         // Expects
         boolean abortExpects;
-        EasyMock.expect(mockXhbDisplayLocationRepository.findByVipCourtSite(EasyMock.isA(Integer.class)))
+        EasyMock
+            .expect(mockXhbDisplayLocationRepository
+                .findByVipCourtSiteSafe(EasyMock.isA(Integer.class)))
             .andReturn(xhbDisplayLocationDaoList);
         replayArray.add(mockXhbDisplayLocationRepository);
         abortExpects = xhbDisplayLocationDaoList.isEmpty();
         if (!abortExpects) {
-            EasyMock.expect(mockXhbCourtSiteRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbCourtSiteRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtSiteDao);
             replayArray.add(mockXhbCourtSiteRepository);
             abortExpects = xhbCourtSiteDao.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayRepository.findByDisplayLocationId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayRepository
+                    .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayDaoList);
             replayArray.add(mockXhbDisplayRepository);
             abortExpects = xhbDisplayDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbDisplayCourtRoomRepository.findByDisplayId(EasyMock.isA(Integer.class)))
+            EasyMock
+                .expect(mockXhbDisplayCourtRoomRepository
+                    .findByDisplayIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbDisplayCourtRoomDaoList);
             replayArray.add(mockXhbDisplayCourtRoomRepository);
             abortExpects = xhbDisplayCourtRoomDaoList.isEmpty();
         }
         if (!abortExpects) {
-            EasyMock.expect(mockXhbCourtRoomRepository.findById(EasyMock.isA(Integer.class)))
+            EasyMock.expect(mockXhbCourtRoomRepository.findByIdSafe(EasyMock.isA(Integer.class)))
                 .andReturn(xhbCourtRoomDao);
             replayArray.add(mockXhbCourtRoomRepository);
         }
@@ -214,6 +230,55 @@ class VipDisplayCourtRoomQueryTest {
             EasyMock.verify(repository);
         }
         return true;
+    }
+
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbDisplayCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+
+        // Use reflection to check the private field
+        field = VipDisplayCourtRoomQuery.class.getDeclaredField("xhbCourtRoomRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
     }
 
 }

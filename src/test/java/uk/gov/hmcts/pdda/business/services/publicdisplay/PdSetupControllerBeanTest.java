@@ -35,29 +35,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: PDSetupControllerBean Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2022
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Chris Vincent
  */
+@SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class PdSetupControllerBeanTest {
 
     private static final String EQUALS = "Results are not Equal";
     private static final String TRUE = "Result is not True";
-
-    @Mock
-    private EntityManager mockEntityManager;
+    private static final String CLEAR_REPOSITORIES_MESSAGE =
+        "Repository should be null after clearRepositories()";
 
     @Mock
     private XhbCourtRepository mockXhbCourtRepository;
@@ -70,10 +69,13 @@ class PdSetupControllerBeanTest {
 
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
+    
+    @Mock
+    private static EntityManager mockEntityManager;
 
     @TestSubject
     private final PdSetupControllerBean classUnderTest =
-        new PdSetupControllerBean(mockEntityManager);
+        new PdSetupControllerBean(EasyMock.createMock(EntityManager.class));
 
     @BeforeAll
     public static void setUp() {
@@ -108,9 +110,11 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.of(courtDao));
+        EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+            .andReturn(Optional.of(courtDao));
         EasyMock
-            .expect(mockXhbCourtSiteRepository.findByCrestCourtIdValue(EasyMock.isA(String.class)))
+            .expect(
+                mockXhbCourtSiteRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(courtSiteList);
 
         List<XhbDisplayLocationDao> displayLocationList;
@@ -120,19 +124,18 @@ class PdSetupControllerBeanTest {
             displayLocationList = (ArrayList<XhbDisplayLocationDao>) getDummyDisplayLocationList();
             EasyMock
                 .expect(
-                    mockXhbDisplayLocationRepository.findByCourtSite(EasyMock.isA(Integer.class)))
+                    mockXhbDisplayLocationRepository
+                        .findByCourtSiteSafe(EasyMock.isA(Integer.class)))
                 .andReturn(displayLocationList);
 
             for (XhbDisplayLocationDao displayLocation : displayLocationList) {
                 displaysList = (ArrayList<XhbDisplayDao>) getDummyDisplayList();
                 EasyMock
                     .expect(mockXhbDisplayRepository
-                        .findByDisplayLocationId(EasyMock.isA(Integer.class)))
+                        .findByDisplayLocationIdSafe(EasyMock.isA(Integer.class)))
                     .andReturn(displaysList);
             }
         }
-        EasyMock.expect(mockXhbDisplayLocationRepository.getEntityManager())
-            .andReturn(mockEntityManager).anyTimes();
 
         replayMocks();
 
@@ -154,7 +157,8 @@ class PdSetupControllerBeanTest {
             EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
             EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
             
-            EasyMock.expect(mockXhbCourtRepository.findById(courtId)).andReturn(Optional.empty());
+            EasyMock.expect(mockXhbCourtRepository.findByIdSafe(courtId))
+                .andReturn(Optional.empty());
             EasyMock.replay(mockXhbCourtRepository);
             EasyMock.replay(mockEntityManager);
             // Run
@@ -173,7 +177,7 @@ class PdSetupControllerBeanTest {
         EasyMock.expect(mockXhbCourtRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
-        EasyMock.expect(mockXhbCourtRepository.findAll()).andReturn(dummyCourtList);
+        EasyMock.expect(mockXhbCourtRepository.findAllSafe()).andReturn(dummyCourtList);
         replayMocks();
 
         // Run
@@ -223,5 +227,37 @@ class PdSetupControllerBeanTest {
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         xdList.add(DummyPublicDisplayUtil.getXhbDisplayDao());
         return xdList;
+    }
+
+    @SuppressWarnings({"PMD.UseExplicitTypes", "PMD.AvoidAccessibilityAlteration"})
+    @Test
+    void testClearRepositoriesSetsRepositoryToNull() throws Exception {
+        // Given
+        classUnderTest.clearRepositories();
+
+        // Use reflection to check the private field
+        var field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayLocationRepository");
+        field.setAccessible(true);
+        Object repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbDisplayRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
+        // Use reflection to check the private field
+        field = PdSetupControllerBean.class.getDeclaredField("xhbCourtSiteRepository");
+        field.setAccessible(true);
+        repository = field.get(classUnderTest);
+
+        // Then
+        assertTrue(repository == null, CLEAR_REPOSITORIES_MESSAGE);
+
     }
 }

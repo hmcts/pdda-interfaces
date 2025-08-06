@@ -1,11 +1,13 @@
 package uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing;
 
-
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -38,10 +40,27 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
 
     @Override
     protected XhbScheduledHearingRepository getClassUnderTest() {
-        if (classUnderTest == null) {
-            classUnderTest = new XhbScheduledHearingRepository(getEntityManager());
-        }
         return classUnderTest;
+    }
+
+    @BeforeEach
+    void setup() {
+        classUnderTest = new XhbScheduledHearingRepository(mockEntityManager);
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            XhbScheduledHearingDao dummyDao = getDummyDao();
+            Mockito.when(mockEntityManager.find(XhbScheduledHearingDao.class, getDummyId()))
+                .thenReturn(dummyDao);
+
+            boolean result = runFindByIdTest(dummyDao);
+            assertTrue(result, NOT_TRUE);
+        }
     }
 
     @Test
@@ -69,9 +88,9 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
             .findActiveCasesInRoom(listId, courtRoomId, getDummyDao().getScheduledHearingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -99,9 +118,9 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
             getClassUnderTest().findBySittingId(getDummyDao().getSittingId());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), SAME);
+            assertSame(dao, result.get(0), NOTSAMERESULT);
         } else {
-            assertSame(0, result.size(), SAME);
+            assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
     }
@@ -142,7 +161,7 @@ class XhbScheduledHearingRepositoryTest extends AbstractRepositoryTest<XhbSchedu
         result.setCreatedBy(createdBy);
         result.setVersion(version);
         scheduledHearingId = result.getPrimaryKey();
-        assertNotNull(scheduledHearingId, NOTNULL);
+        assertNotNull(scheduledHearingId, NOTNULLRESULT);
         result.setXhbCrLiveDisplays(result.getXhbCrLiveDisplays());
         return new XhbScheduledHearingDao(result);
     }

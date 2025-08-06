@@ -1,19 +1,18 @@
 package uk.gov.hmcts.pdda.common.publicdisplay.jms;
 
 /**
- * <p>
+
  * Title: PublicDisplayJMSConstants.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2003
- * </p>
- * <p>
+
+
  * Company:
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */

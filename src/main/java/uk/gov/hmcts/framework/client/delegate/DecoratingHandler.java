@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 /**
  * The class provides decoration to log the invocations.
- * 
+
  * @author pznwc5
  */
 public abstract class DecoratingHandler extends XhibitHandler implements Cloneable {
@@ -33,7 +33,7 @@ public abstract class DecoratingHandler extends XhibitHandler implements Cloneab
 
     /**
      * Sets the next invocation handler.
-     * 
+
      * @param next DecoratingHandler
      */
     public void setNextHandler(DecoratingHandler next) {
@@ -42,7 +42,7 @@ public abstract class DecoratingHandler extends XhibitHandler implements Cloneab
 
     /**
      * Set the target.
-     * 
+
      * @param target CsBusinessDelegateHandler
      */
     public void setTarget(CsBusinessDelegateHandler target) {
@@ -70,7 +70,7 @@ public abstract class DecoratingHandler extends XhibitHandler implements Cloneab
 
     /**
      * Clones the object.
-     * 
+
      * @return DecoratingHandler
      */
     public DecoratingHandler deepCopy() {

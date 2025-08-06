@@ -32,7 +32,7 @@ public final class TranslationServices {
 
     /**
      * Get the singleton.
-     * 
+
      * @return the ResourceServices singleton instance
      */
     public static TranslationServices getInstance() {

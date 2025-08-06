@@ -15,22 +15,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>
+
  * Title: DefaultDisplayConfigurationReader.
- * </p>
- * 
- * <p>
+
  * Description:
- * </p>
- * 
- * <p>
+
  * Copyright: Copyright (c) 2003
- * </p>
- * 
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Bob Boothby
  * @version 1.0
  */
@@ -79,9 +72,9 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
 
     /**
      * getRenderChanges.
-     * 
+
      * @param change CourtConfigurationChange
-     * 
+
      * @return renderChanges:
      */
     @Override
@@ -92,7 +85,7 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
 
     /**
      * getRenderChanges.
-     * 
+
      * @param documentTypes DisplayDocumentTypeArray
      * @param courtRoom CourtRoomIdentifier
      * @return RenderChanges
@@ -109,7 +102,7 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
 
     /**
      * Get the configured court IDs.
-     * 
+
      * @return intArray
      */
     @Override
@@ -119,7 +112,7 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
 
     /**
      * Returns a reference to the pdConfigurationController object.
-     * 
+
      * @return PDConfigurationControllerBean
      */
     private PdConfigurationControllerBean getPdConfigurationControllerBean() {
@@ -131,7 +124,7 @@ public class DefaultDisplayConfigurationReader extends DisplayConfigurationReade
 
     /**
      * Returns a reference to the PDDataControllerBean object.
-     * 
+
      * @return PDDataControllerBean
      */
     private PdDataControllerBean getPdDataControllerBean() {
