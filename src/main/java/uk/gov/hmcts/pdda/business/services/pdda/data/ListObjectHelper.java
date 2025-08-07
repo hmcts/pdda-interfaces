@@ -144,6 +144,7 @@ public class ListObjectHelper implements Serializable {
         String courtHouseName = nodesMap.get(COURTHOUSENAME);
         String courtHouseCode = nodesMap.get(COURTHOUSECODE);
         if (courtHouseName != null && courtHouseCode != null) {
+            LOG.debug("Validating court site with name: {} and code: {}", courtHouseName, courtHouseCode);
             return dataHelper.validateCourtSite(courtHouseName, courtHouseCode);
         }
         return Optional.empty();
@@ -156,6 +157,7 @@ public class ListObjectHelper implements Serializable {
             String courtRoomNoString = nodesMap.get(COURTROOMNO);
             Integer crestCourtRoomNo = getInteger(courtRoomNoString);
             if (courtSiteId != null && crestCourtRoomNo != null) {
+                LOG.debug("Validating court room with site ID: {} and room number: {}", courtSiteId, crestCourtRoomNo);
                 return dataHelper.validateCourtRoom(courtSiteId, crestCourtRoomNo);
             }
         }
@@ -189,6 +191,8 @@ public class ListObjectHelper implements Serializable {
             final Integer editionNo = 1;
             final String listCourtType = "CR";
             if (courtId != null && status != null && startDate != null) {
+                LOG.debug("Validating hearing list for court ID: {}, status: {}, start date: {}",
+                    courtId, status, startDate);
                 return dataHelper.validateHearingList(courtId, crestListId, listType, status,
                     startDate, publishedTime, printReference, editionNo, listCourtType);
             }
@@ -236,6 +240,8 @@ public class ListObjectHelper implements Serializable {
             LocalDateTime sittingTime =
                 parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
             if (sittingTime != null) {
+                LOG.debug("Validating sitting for court site ID: {}, court room ID: {}, time: {}",
+                    courtSiteId, courtRoomId, sittingTime);
                 return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime,
                     listId);
             }
@@ -249,9 +255,11 @@ public class ListObjectHelper implements Serializable {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String caseTypeAndNumber = nodesMap.get(CASENUMBER);
             if (!CPP.equals(caseTypeAndNumber)) {
+                LOG.debug("Case type and number: {}", caseTypeAndNumber);
                 String caseType = getSubstring(caseTypeAndNumber, 0, 1);
                 String caseNumber = getSubstring(caseTypeAndNumber, 1, null);
                 if (caseType != null && caseNumber != null) {
+                    LOG.debug("Validating case for court ID: {}, type: {}, number: {}", courtId, caseType, caseNumber);
                     return dataHelper.validateCase(courtId, caseType, getInteger(caseNumber));
                 }
             }
@@ -297,10 +305,12 @@ public class ListObjectHelper implements Serializable {
                 firstName = surname.substring(commaPosition + 1).trim();
                 surname = surname.substring(0, commaPosition);
             }
+            LOG.debug("Validating defendant with first name: {}, surname: {}", firstName, surname);
             String publicDisplayHide = "N";
             if (nodesMap.get(ISMASKED) != null) {
                 publicDisplayHide = nodesMap.get(ISMASKED).toUpperCase().substring(0, 1);
             }
+            LOG.debug("Public display hide: {}", publicDisplayHide);
             String genderAsString = nodesMap.get(GENDER);
             Integer gender = null;
             if (MALE.equalsIgnoreCase(genderAsString)) {
@@ -308,12 +318,16 @@ public class ListObjectHelper implements Serializable {
             } else if (FEMALE.equalsIgnoreCase(genderAsString)) {
                 gender = 2;
             }
+            LOG.debug("Gender: {}", genderAsString);
             String dateOfBirthAsString = nodesMap.get(DATEOFBIRTH);
             LocalDateTime dateOfBirth =
                 parseDateTime(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
+            LOG.debug("Date of birth: {}", dateOfBirthAsString);
             if (firstName != null && surname != null) {
+                LOG.debug("First name: {}, Surname: {}", firstName, surname);
                 Integer courtId = xhbCourtSiteDao.get().getCourtId();
                 String middleName = nodesMap.get(FIRSTNAME + ".2");
+                LOG.debug("CourtId {}, Middle name: {}", courtId, middleName);
                 return dataHelper.validateDefendant(courtId, firstName, middleName, surname, gender,
                     dateOfBirth, publicDisplayHide);
             }
@@ -328,6 +342,9 @@ public class ListObjectHelper implements Serializable {
             Integer defendantId = xhbDefendantDao.get().getDefendantId();
             String publicDisplayHide = xhbDefendantDao.get().getPublicDisplayHide();
             if (caseId != null && defendantId != null) {
+                LOG.debug("Validating defendant on case for case ID: {}, defendant ID: {},"
+                    + "public display hide: {}",
+                    caseId, defendantId, publicDisplayHide);
                 return dataHelper.validateDefendantOnCase(caseId, defendantId, publicDisplayHide);
             }
         }
@@ -369,6 +386,8 @@ public class ListObjectHelper implements Serializable {
             String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC).replaceAll("\s{2,}", " ");
             String category = getSubstring(nodesMap.get(CATEGORY), 0, 1);
             if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
+                LOG.debug("Validating hearing type for court ID: {}, code: {}, description: {}, category: {}",
+                    courtId, hearingTypeCode, hearingTypeDesc, category);
                 return dataHelper.validateHearingType(courtId, hearingTypeCode, hearingTypeDesc,
                     category);
             }
@@ -389,6 +408,9 @@ public class ListObjectHelper implements Serializable {
             LocalDateTime hearingEndDate =
                 parseDateTime(hearingEndDateString, DateTimeFormatter.ISO_DATE);
             if (hearingStartDate != null) {
+                LOG.debug("Validating hearing for court ID: {}, case ID: {}, hearing type ID: {},"
+                    + "start date: {}, end date: {}",
+                    courtId, caseId, refHearingTypeId, hearingStartDate, hearingEndDate);
                 return dataHelper.validateHearing(courtId, caseId, refHearingTypeId,
                     hearingStartDate, hearingEndDate);
             }
@@ -405,6 +427,8 @@ public class ListObjectHelper implements Serializable {
             String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME));
             LocalDateTime notBeforeTime = parseDateTime(notBeforeTimeString, TWELVEHOURTIMEFORMAT);
             if (notBeforeTime != null) {
+                LOG.debug("Validating scheduled hearing for sitting ID: {}, hearing ID: {}, not before time: {}",
+                    sittingId, hearingId, notBeforeTime);
                 return dataHelper.validateScheduledHearing(sittingId, hearingId, notBeforeTime);
             }
         }
@@ -431,6 +455,9 @@ public class ListObjectHelper implements Serializable {
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
             Integer defendantOnCaseId = xhbDefendantOnCaseDao.get().getDefendantOnCaseId();
             if (scheduledHearingId != null && defendantOnCaseId != null) {
+                LOG.debug("Validating scheduled hearing defendant for scheduled hearing ID: {}, "
+                    + "defendant on case ID: {}",
+                    scheduledHearingId, defendantOnCaseId);
                 return dataHelper.validateSchedHearingDefendant(scheduledHearingId,
                     defendantOnCaseId);
             }
@@ -444,6 +471,8 @@ public class ListObjectHelper implements Serializable {
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
             if (courtRoomId != null && scheduledHearingId != null) {
+                LOG.debug("Validating CR Live Display for court room ID: {}, scheduled hearing ID: {}",
+                    courtRoomId, scheduledHearingId);
                 dataHelper.validateCrLiveDisplay(courtRoomId, scheduledHearingId,
                     LocalDateTime.now());
             }
