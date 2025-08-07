@@ -18,18 +18,19 @@ import javax.xml.transform.stream.StreamSource;
 
 
 /**
-
+ * <p>
  * Title: Locale URI Resover.
-
-
+ * </p>
+ * <p>
  * Description: Resolves names for a given locale
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -68,7 +69,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
 
     /**
      * Construct a URI resolver for the given Locale.
-
+     * 
      * @throws IllegalArgumentException if the locale is null
      */
     private LocaleUriResolver(Locale locale) {
@@ -81,7 +82,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
 
     /**
      * Returns the locale.
-
+     * 
      * @return the locale
      */
     public Locale getLocale() {
@@ -90,7 +91,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
 
     /**
      * URIResolver Implementation, resolve the name to the source.
-
+     * 
      * @param href An href attribute, which may be relative or absolute.
      * @param base The base URI in effect when the href attribute was encountered.
      * @return A Source object, or null if the href cannot be resolved, and the processor should try to
@@ -115,7 +116,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
     /**
      * Resolve the name if it is relative against the given base, this is an interface into some code
      * stripped out of XALAN (did not want the dependency).
-
+     * 
      * @return the resolved base
      */
     public static String resolveName(String urlString, String base) throws TransformerException {
@@ -126,7 +127,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
 
     /**
      * Returns a <code>String</code> representation of this object.
-
+     * 
      * @return a <code>String</code> representation of this object
      */
     @Override
@@ -142,11 +143,12 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
     /**
      * Get absolute URI from a given relative URI.
      * <p/>
-
+     * <p>
      * The URI is resolved relative to the system property "user.dir" if it is available; if not (i.e.
      * in an Applet perhaps which throws SecurityException) then it is currently resolved relative to ""
      * or a blank string. Also replaces all backslashes with forward slashes.
-
+     * </p>
+     * 
      * @param uri Relative URI to resolve
      * @return Resolved absolute URI or the input relative URI if it could not be resolved.
      */
@@ -186,7 +188,7 @@ public final class LocaleUriResolver extends UriResolver implements URIResolver 
 
     /**
      * Take a SystemID string and try and turn it into a good absolute URL.
-
+     * 
      * @param urlString SystemID string
      * @param base Base URI to use to resolve the given systemID
      * @return The resolved absolute URI

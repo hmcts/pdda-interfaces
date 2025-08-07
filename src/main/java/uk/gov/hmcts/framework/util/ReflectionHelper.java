@@ -8,24 +8,25 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 /**
-
+ * <p>
  * Title: ReflectionHelper.
-
-
+ * </p>
+ * <p>
  * Description: Reflection Helper class that searches class hierarchies for specified methods and
  * fields.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author AW Daley
  */
 /*
  * Ref Date Author Description
-
+ * 
  * 83,52539 29-04-2003 AW Daley Initial version.
  */
 public class ReflectionHelper {
@@ -39,7 +40,7 @@ public class ReflectionHelper {
 
     /**
      * Returns a field given a path to the field.
-
+     * 
      * @param cls The sub class in the hierarchy where the search is to begin
      * @param fieldPath The path of the field to return. A field contained in a hiearchy of objects
      *        can be returned by specifying each attribute name seperated by a delimiter. (e.g
@@ -77,7 +78,7 @@ public class ReflectionHelper {
 
     /**
      * Returns the getter method for a field given the path to the field.
-
+     * 
      * @param fieldPath The path of the field to return. A field contained in a hiearchy of objects
      *        can be returned by specifying each attribute name separated by a period. (e.g
      *        courtReporterFirm.firmName)
@@ -134,7 +135,7 @@ public class ReflectionHelper {
 
     /**
      * Recursive method to traverse the class hierarchy searching for the specified method.
-
+     * 
      * @param cls Class
      * @param methodName method name to search for
      * @param parameterTypes parameter types
@@ -164,7 +165,7 @@ public class ReflectionHelper {
 
     /**
      * Recursive method to traverse the class hierarchy searching for the specified field.
-
+     * 
      * @param cls The sub class in the hierarchy where the search is to begin
      * @param fieldName field to search for.
      * @return the specific field or null if not found
@@ -192,7 +193,7 @@ public class ReflectionHelper {
 
     /**
      * Build getter method name for given field name.
-
+     * 
      * @param fieldName field name for which getter method name is to be built
      * @return getter method name
      */

@@ -34,18 +34,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: DisplaySelectorServlet Test.
-
-
+ * </p>
+ * <p>
  * Description: Tests for the DisplaySelectorServlet class
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2022
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Chris Vincent
  */
 @SuppressWarnings("PMD")

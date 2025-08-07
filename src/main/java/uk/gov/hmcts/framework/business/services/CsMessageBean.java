@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Message driven bean template class. Removes the common code of all message beans into a
  * well-defined framework class.
-
+ * 
  * @author tz0d5m
  * @version $Id: CSMessageBean.java,v 1.4 2006/06/05 12:30:14 bzjrnl Exp $
  */
@@ -23,7 +23,7 @@ public class CsMessageBean implements MessageDrivenBean {
 
     /**
      * Required by the EJB specification. Called upon message bean creation.
-
+     * 
      * @throws CreateException Required as per the EJB spec, in case ant overriding classes require
      *         creation exceptions.
      */
@@ -35,7 +35,7 @@ public class CsMessageBean implements MessageDrivenBean {
 
     /**
      * Accessor method for the <code>MessageDrivenContext</code>.
-
+     * 
      * @return The current <code>MessageDrivenContext</code>.
      */
     public MessageDrivenContext getMessageDrivenContext() {
@@ -44,9 +44,9 @@ public class CsMessageBean implements MessageDrivenBean {
 
     /**
      * Sets the message context.
-
+     * 
      * @param messageDrivenContext The <code>MessageDrivenContext</code>
-
+     * 
      * @see jakarta.ejb.MessageDrivenBean#setMesssageDrivenContext (jakarta.ejb.MessageDrivenContext)
      */
     @Override
@@ -61,7 +61,7 @@ public class CsMessageBean implements MessageDrivenBean {
     /**
      * Required by the EJB specification, this is a stubbed implementation that does nothing but log
      * access.
-
+     * 
      * @see jakarta.ejb.MessageDrivenBean#ejbRemove()
      */
     @Override

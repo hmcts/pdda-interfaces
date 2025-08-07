@@ -13,25 +13,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
-
+ * <p>
  * Title: Scheduler class that configures, initialises and controls a set of tasks using
  * Schedulables.
-
-
+ * </p>
+ * <p>
  * Description: This class expects properties of very specific format. The property defined by
  * SCHEDULED_TASK contains a comma separated list of task names for scheduling. The properties for
  * each of the tasks as defined in schedulable and in the defined task strategies are to prefixed by
  * the task name and a full stop.
-
-
+ * </p>
+ * <p>
  * For example:
-
+ * 
  * <pre>
  *   ##############################
  *   #Current tasks for scheduling.
  *   ##############################
  *   scheduledtasks=javatask,sessionbeantask
-
+ *    
  *   ############################
  *   #Configuration for javatask.
  *   ############################
@@ -50,12 +50,15 @@ import java.util.concurrent.ConcurrentHashMap;
  *   sessionbeantask.delay=0
  *   sessionbeantask.period=10000
  * </pre>
-
+ * 
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bob Boothby
  */
 public class Scheduler {
@@ -82,7 +85,7 @@ public class Scheduler {
 
     /**
      * Initialise the scheduler, passing it's configuration properties in.
-
+     * 
      * @param props the properties to use to configure the scheduler and it's tasks.
      */
     public Scheduler(Properties props, String taskList) {
@@ -164,7 +167,7 @@ public class Scheduler {
 
     /**
      * Utility method to parse a list into a String[].
-
+     * 
      * @param delimitedList The list to be split.
      * @param delimiter The delimiter to use.
      * @return a String array containing the split list.
@@ -191,7 +194,7 @@ public class Scheduler {
     /**
      * Utility method that splits a Properties object by prefix, separation is determined by the
      * passed in delimiter. The prefix is stripped from the new properties.
-
+     * 
      * @param props Properties
      * @param delimiter The delimiter used to determine the boundary betwen the prefix and the rest
      *        of the property name.

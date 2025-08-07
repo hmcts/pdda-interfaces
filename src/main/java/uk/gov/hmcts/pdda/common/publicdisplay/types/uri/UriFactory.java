@@ -5,19 +5,20 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.exceptions.UnsupportedUr
 /**
  * <p/>
  * Title: URIFactory.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */

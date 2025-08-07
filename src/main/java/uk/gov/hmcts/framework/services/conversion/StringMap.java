@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * A map from Strings to Strings. Basically, a Properties, with extra methods including parsing,
  * formating, and bean introspection.
-
+ * 
  * @author Nick Lawson
  *         Pete Raymond Originally written for workstep by Nick Lawson this class has been updated
  *         and ammended by Pete Raymond
-
+ * 
  */
 @SuppressWarnings("PMD.LooseCoupling")
 public class StringMap extends ByteMap {
@@ -77,11 +77,11 @@ public class StringMap extends ByteMap {
 
     /**
      * Put a bean's properties.
-
-     * This copies properties from the bean to here. Same as
+     * 
+     * <p>This copies properties from the bean to here. Same as
      * {@link #putBeanProperties(java.lang.Object,java.lang.String) putBeanProperties()} with a
      * zero-length prefix.
-
+     * 
      * @throws CsException if an Exception is thrown by the bean's getter method.
      */
     public void copyValueToMap(Object bean) {

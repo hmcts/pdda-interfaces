@@ -12,18 +12,19 @@ import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpService;
 
 /**
-
+ * <p>
  * Title: PDDA Bais Controller Bean.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2022
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  */
 @Stateless
@@ -47,9 +48,9 @@ public class PddaBaisControllerBean extends AbstractControllerBean implements Re
     }
 
     /**
-
+     * <p>
      * Scheduler task wrapper to retrieve Bais messages.
-
+     * </p>
      */
     @Override
     public void doTask() {

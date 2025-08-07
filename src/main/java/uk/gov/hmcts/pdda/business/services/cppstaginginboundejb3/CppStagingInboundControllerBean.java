@@ -51,12 +51,13 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-
+     * <p>
      * Returns the latest unprocessed XHB_CPP_STAGING_INBOUND record for processing.
-
+     * </p>
+     * 
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-
+     * 
      */
     @Override
     public List<XhbCppStagingInboundDao> getLatestUnprocessedDocument() {
@@ -75,13 +76,14 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-
+     * <p>
      * Returns the latest record from XHB_CPP_STAGING_INBOUND that has been validated successfully
      * and not processed.
-
+     * </p>
+     * 
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-
+     * 
      */
     @Override
     public List<XhbCppStagingInboundDao> getNextValidatedDocument() {
@@ -100,12 +102,13 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
     }
 
     /**
-
+     * <p>
      * Returns the earliest XHB_CPP_STAGING_INBOUND from today that is to be validated.
-
+     * </p>
+     * 
      * @return CppStagingInboundDao
      * @throws CppStagingInboundControllerException Exception
-
+     * 
      */
     @Override
     public List<XhbCppStagingInboundDao> getNextDocumentToValidate() {
@@ -125,10 +128,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of successfully validated.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     public void updateStatusSuccess(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -154,10 +157,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of validation failed.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     public void updateStatusFailed(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -189,10 +192,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of In Progress.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     public Optional<XhbCppStagingInboundDao> updateStatusInProcess(
@@ -215,10 +218,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     public void updateStatusProcessingFail(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -240,10 +243,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     public void updateStatusProcessingSuccess(XhbCppStagingInboundDao cppStagingInboundDao,
@@ -271,10 +274,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
      * The DOCUMENT_TYPE is checked to be valid 3. The appropriate schema to validate the XML
      * against will be determined 4. Validation of the XML will be done against the appropriate
      * schema.
-
+     * 
      * @param cppStagingInboundDao CppStagingInboundDao
      * @param userDisplayName String
-
+     * 
      */
     @Override
     @SuppressWarnings("PMD")
@@ -371,10 +374,10 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
     /**
      * Given a clob Id get the Xml.
-
+     * 
      * @param clobId Long
      * @return String
-
+     * 
      */
     @Override
     public String getClobXmlAsString(Long clobId) {

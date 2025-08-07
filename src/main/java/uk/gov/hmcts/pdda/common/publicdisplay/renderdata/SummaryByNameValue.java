@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class provides the data for summary by name document.
-
+ * 
  * @author pznwc5
  */
 public class SummaryByNameValue extends PublicDisplayValue {
@@ -31,7 +31,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
 
     /**
      * Returns the is floating string.
-
+     * 
      * @return The string as it appears in the DB
      */
     public String getFloating() {
@@ -51,7 +51,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
 
     /**
      * Gets the name of the defendant.
-
+     * 
      * @param val Name of the defendant
      */
     public void setDefendantName(DefendantName val) {
@@ -60,7 +60,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
 
     /**
      * Gets the name of the defendant.
-
+     * 
      * @return Name of the defendant
      */
     public DefendantName getDefendantName() {
@@ -69,7 +69,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
 
     /**
      * Sets reporting restriction.
-
+     * 
      * @param val Reporting restriction
      */
     public void setReportingRestricted(boolean val) {
@@ -78,7 +78,7 @@ public class SummaryByNameValue extends PublicDisplayValue {
 
     /**
      * Returns reporting restriction.
-
+     * 
      * @return Reporting restriction
      */
     public boolean isReportingRestricted() {

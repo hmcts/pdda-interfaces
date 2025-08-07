@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Object representing a Branch node of an xml document. This node will contain other Branch and
  * leaf nodes.
-
+ * 
  * @author szfnvt
-
+ * 
  */
 public class BranchEventXmlNode extends EventXmlNode {
 
@@ -32,7 +32,7 @@ public class BranchEventXmlNode extends EventXmlNode {
 
     /**
      * Constructor taking in name of node.
-
+     * 
      * @param nameIn String
      */
     public BranchEventXmlNode(String nameIn) {
@@ -41,7 +41,7 @@ public class BranchEventXmlNode extends EventXmlNode {
 
     /**
      * Method returning a single value. This can be the first item in a list.
-
+     * 
      * @param key String
      * @return Object
      */
@@ -60,7 +60,7 @@ public class BranchEventXmlNode extends EventXmlNode {
 
     /**
      * method return a list containing one or more values.
-
+     * 
      * @param key String
      * @return List
      */
@@ -83,7 +83,7 @@ public class BranchEventXmlNode extends EventXmlNode {
 
     /**
      * Add EventXMLNode to internal Map either as a single node or as part of a list.
-
+     * 
      * @param node EventXMLNode
      */
     @SuppressWarnings("unchecked")
@@ -114,7 +114,7 @@ public class BranchEventXmlNode extends EventXmlNode {
 
     /**
      * Returns map for branch containing branch and leaf nodes.
-
+     * 
      * @return Map
      */
     public Map<String, Object> getMap() {

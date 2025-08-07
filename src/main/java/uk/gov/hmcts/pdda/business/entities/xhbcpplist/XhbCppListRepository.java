@@ -31,7 +31,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao>
 
     /**
      * findByCourtCodeAndListTypeAndListDate.
-
+     * 
      * @param courtCode Integer
      * @param listType String
      * @param listStartDate LocalDateTime
@@ -74,7 +74,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao>
 
     /**
      * findByCourtCodeAndListTypeAndListStartDateAndListEndDate.
-
+     * 
      * @param courtCode Integer
      * @param listType String
      * @param listStartDate LocalDateTime
@@ -125,7 +125,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao>
 
     /**
      * findByClobId.
-
+     * 
      * @param listClobId Long
      * @return XhbCppListDao
      */

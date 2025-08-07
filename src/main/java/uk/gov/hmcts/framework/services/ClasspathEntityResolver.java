@@ -8,19 +8,20 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
-
+ * <p>
  * Title: ClasspathEntityResolver.
-
-
+ * </p>
+ * <p>
  * Description: This class enables us to have the dtd referenced in the mapping.xml file to be
  * located on the classpath relative location
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Faisal Shoukat
  * @version 1.0
  */

@@ -5,18 +5,19 @@ import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.sftp.SFTPClient;
 
 /**
-
+ * <p>
  * Title: Sftp Config.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2023
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  * @version 1.0
  */

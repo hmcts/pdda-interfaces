@@ -4,14 +4,14 @@ import java.lang.reflect.Method;
 
 /**
  * The class provides decoration to log the invocations.
-
+ * 
  * @author pznwc5
  */
 public class LoggingHandler extends DecoratingHandler {
 
     /*
      * (non-Javadoc)
-
+     * 
      * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object, java.lang.reflect.Method,
      * java.lang.Object[])
      */

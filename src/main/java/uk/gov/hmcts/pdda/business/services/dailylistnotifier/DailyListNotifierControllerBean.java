@@ -52,7 +52,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
     /**
      * Implementation of RemoteTask so that this process is called by the timer process. This scheduled
      * job replaces the need for DailyListNotifier due to the removal of ActiveMQ.
-
+     * 
      */
     @Override
     public void doTask() {
@@ -63,7 +63,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     /**
      * Implementation of RemoteTask so that this process is called by the timer process.
-
+     * 
      */
     public void callDailyListNotifierHelper() {
         String methodName = "callDailyListNotifierHelper(" + METHOD_END;
@@ -81,7 +81,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     /**
      * Refreshes all public displays for the court specified.
-
+     * 
      * @param courtId Court Id
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {
@@ -93,7 +93,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     /**
      * Returns a reference to the publicDisplayNotifier object.
-
+     * 
      * @return publicDisplayNotifier
      */
     private PublicDisplayNotifier getPublicDisplayNotifier() {
@@ -105,7 +105,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     /**
      * Returns a reference to the pddaDlNotifierHelper object.
-
+     * 
      * @return pddaDlNotifierHelper
      */
     private PddaDlNotifierHelper getPddaDlNotifierHelper() {
@@ -117,7 +117,7 @@ public class DailyListNotifierControllerBean extends AbstractControllerBean impl
 
     /**
      * Returns a reference to the pdConfigurationController object.
-
+     * 
      * @return PDConfigurationControllerBean
      */
     private PdConfigurationControllerBean getPdConfigurationControllerBean() {

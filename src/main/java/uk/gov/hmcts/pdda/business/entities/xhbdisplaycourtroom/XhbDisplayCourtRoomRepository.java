@@ -28,7 +28,7 @@ public class XhbDisplayCourtRoomRepository extends AbstractRepository<XhbDisplay
 
     /**
      * findByDisplayId.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")

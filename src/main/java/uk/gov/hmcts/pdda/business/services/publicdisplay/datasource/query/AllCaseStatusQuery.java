@@ -35,7 +35,7 @@ import java.util.Optional;
 
 /**
  * This class wraps the stored procedure that provides the data for the all case status document.
-
+ * 
  * @author Rakesh Lakhani
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
@@ -65,11 +65,11 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
     /**
      * Returns an array of CourtListValue.
-
+     * 
      * @param date Id
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-
+     * 
      * @return Suumary by name data for the specified court rooms
      */
     @Override
@@ -145,6 +145,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         List<AllCaseStatusValue> results = new ArrayList<>();
         for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
 
+            boolean isHidden = false;
             AllCaseStatusValue result = getAllCaseStatusValue();
             populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
                 scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
@@ -155,7 +156,6 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
             result.setListCourtRoomId(sittingDao.getCourtRoomId());
 
             // Get the hearing
-            boolean isHidden = false;
             Optional<XhbHearingDao> hearingDao = getXhbHearingDao(scheduledHearingDao.getHearingId());
             if (hearingDao.isPresent()) {
                 result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));

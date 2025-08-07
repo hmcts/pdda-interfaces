@@ -3,19 +3,20 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 import uk.gov.hmcts.framework.exception.CsBusinessException;
 
 /**
-
+ * <p>
  * Title:PublicNoticeException, general Public notice Exception thrown from the Public Notice
  * Subsystem.
-
-
+ * </p>
+ * <p>
  * Description:see title
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @authors Pat Fox
  * @version 1.0
  */
@@ -26,7 +27,7 @@ public class PublicNoticeException extends CsBusinessException {
 
     /**
      * PublicNoticeException.
-
+     * 
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param parameters the parameters for the error message
      * @param logMessage error message for log
@@ -39,7 +40,7 @@ public class PublicNoticeException extends CsBusinessException {
 
     /**
      * PublicNoticeException.
-
+     * 
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param logMessage error message for log
      */
@@ -49,7 +50,7 @@ public class PublicNoticeException extends CsBusinessException {
 
     /**
      * PublicNoticeException.
-
+     * 
      * @param errorKey key to the message for the user of application, stored in the properties file
      * @param logMessage error message for log
      * @param params parameters for message key

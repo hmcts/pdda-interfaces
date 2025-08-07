@@ -74,9 +74,9 @@ class CathConnectionServiceBeanTest {
              * 404)).andReturn(false); EasyMock.expect(mockCathConnectionServiceBean.checkUrl(
              * "https://sds-api-mgmt.staging.platform.hmcts.net/pip/data-management/publication",
              * 401)).andReturn(true);
-
+             * 
              * EasyMock.replay(mockCathConnectionServiceBean);
-
+             * 
              * // Test 1 classUnderTest.doTask();
              */
         } catch (RemoteException e) {

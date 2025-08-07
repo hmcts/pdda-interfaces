@@ -35,7 +35,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
 
     /**
      * findByCourtSiteId.
-
+     * 
      * @param courtSiteId Integer
      * @return List
      */
@@ -63,7 +63,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
 
     /**
      * findByDisplayId.
-
+     * 
      * @param displayId Integer
      * @return List
      */
@@ -90,7 +90,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
 
     /**
      * findVIPMultiSite.
-
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -104,7 +104,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
 
     /**
      * findVIPMNoSite.
-
+     * 
      * @param courtId Integer
      * @return List
      */
@@ -118,7 +118,7 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
 
     /**
      * findByCourtRoomNo.
-
+     * 
      * @param courtSiteId Integer
      * @param crestCourtRoomNo Integer
      * @return XhbCourtRoomDao

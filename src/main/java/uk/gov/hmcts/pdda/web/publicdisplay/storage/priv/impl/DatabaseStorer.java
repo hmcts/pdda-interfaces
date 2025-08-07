@@ -26,7 +26,7 @@ public class DatabaseStorer implements Storer {
 
     /**
      * Returns a DatabaseStorer.
-
+     *
      * @return a DatabaseStorer.
      */
     public static DatabaseStorer getInstance() {
@@ -132,7 +132,7 @@ public class DatabaseStorer implements Storer {
     /**
      * Accepts a DisplayDocumentURI object and constructs a retrieval code from its values. The form
      * will depend on the subclass of the input.
-
+     *
      * @param uri The AbstractURI to convert
      * @return The retrieval code.
      * @throws PublicDisplayFailureException The input was of an unknown AbstractURI subclass.
@@ -152,11 +152,11 @@ public class DatabaseStorer implements Storer {
     /**
      * Accepts a DisplayDocumentURI object and constructs a retrieval code from its values. Will be of
      * the form:
-
+     * 
      * <pre>
      * "documents-court&lt;courtId&gt;[-&lt;courtRoomId&gt;|u]+-&lt;documentType&gt;"
      * </pre>
-
+     *
      * @param uri The DisplayDocumentURI to convert
      * @return The retrieval code.
      */
@@ -181,11 +181,11 @@ public class DatabaseStorer implements Storer {
 
     /**
      * Accepts a DisplayURI object and constructs a retrieval code from its values. Will be of the form:
-
+     * 
      * <pre>
      * "displays-&lt;courthouseName&gt;-&lt;courtSiteCode&gt;-&lt;location&gt;-&lt;display&gt;"
      * </pre>
-
+     *
      * @param uri The DisplayURI to convert
      * @return The retrieval code.
      */

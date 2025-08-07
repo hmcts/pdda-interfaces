@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *         A FIFO implementation of event queue.
-
+ *         
  * @author meekun
  */
 @SuppressWarnings({"PMD.AvoidSynchronizedStatement","PMD.DoNotUseThreads"})
@@ -26,7 +26,7 @@ public class DefaultEventStore implements EventStore {
 
     /**
      * Pushes an event to the queue.
-
+     * 
      * @param event Event to be pushed into the queue
      */
     @Override
@@ -41,7 +41,7 @@ public class DefaultEventStore implements EventStore {
 
     /**
      * Pops an event from the queue.
-
+     * 
      * @return Next event in the queue
      */
     @Override

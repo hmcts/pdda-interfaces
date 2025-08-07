@@ -29,7 +29,7 @@ public class FileEntityResolver implements EntityResolver {
 
     /**
      * Construct a new instance to resolve entities to files in the specified dir.
-
+     * 
      * @param entityDir the dir containing the entities.
      */
     public FileEntityResolver(final String entityDir) {
@@ -38,7 +38,7 @@ public class FileEntityResolver implements EntityResolver {
 
     /**
      * Construct a new instance to resolve entities to files in the specified dir.
-
+     * 
      * @param entityDir the dir containing the entities.
      */
     public FileEntityResolver(final File entityDir) {
@@ -51,7 +51,7 @@ public class FileEntityResolver implements EntityResolver {
 
     /**
      * Resolve the entity.
-
+     * 
      * @param publicId Public id
      * @param systemId System id
      */

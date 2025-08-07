@@ -21,19 +21,20 @@ import java.io.Serializable;
 /**
  * <p/>
  * Title: An abstract convenience class for objects that can be both rendererd and stored.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.6 $
  */
@@ -72,7 +73,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * Sets the rendered string.
-
+     * 
      * @param renderedString the rendered version of the document as a String.
      * @pre renderedString != null
      */
@@ -83,7 +84,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * Gets the string containing the rendered version of this object.
-
+     * 
      * @return the rendered version as a String.
      */
     @Override
@@ -93,7 +94,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * remove.
-
+     * 
      * @pre storer != null
      * @see uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Removeable#remove()
      */
@@ -108,7 +109,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * Render this object in the context supplied.
-
+     * 
      * @pre renderer != null
      */
     @Override
@@ -122,7 +123,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * Obtain a refrence to the stored version of this object.
-
+     * 
      * @return the stored reference.
      * @pre storer != null
      */
@@ -138,7 +139,7 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
 
     /**
      * Store this object in the context supplied.
-
+     * 
      * @pre storer != null
      */
     @Override

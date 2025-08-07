@@ -1,18 +1,19 @@
 package uk.gov.hmcts.pdda.business.vos.translation.impl;
 
 /**
-
+ * <p>
  * Title: XmlBuffer.
-
-
+ * </p>
+ * <p>
  * Description: Buffer for creating the XML
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: XmlBuffer.java,v 1.4 2006/06/05 12:28:29 bzjrnl Exp $
  */
@@ -24,7 +25,7 @@ public class XmlBuffer {
 
     /**
      * Append a line no escape.
-
+     * 
      * @param text String
      */
     public void append(String text) {
@@ -35,7 +36,7 @@ public class XmlBuffer {
 
     /**
      * Append a line.
-
+     * 
      * @param text String
      */
     public void appendLine(String text) {
@@ -54,7 +55,7 @@ public class XmlBuffer {
 
     /**
      * Append the specified indent.
-
+     * 
      * @param indent int
      */
     public void appendIndent(int indent) {
@@ -67,7 +68,7 @@ public class XmlBuffer {
 
     /**
      * Append the specified attribute if not null.
-
+     * 
      * @param name String
      * @param value String
      */
@@ -83,7 +84,7 @@ public class XmlBuffer {
 
     /**
      * Append the text escaping any characters.
-
+     * 
      * @param text String
      */
     public void appendXml(String text) {

@@ -16,9 +16,9 @@ import java.util.Locale;
 /**
  * PublicDisplayXmlUpdater is a utility class that updates an XML file with the current date and
  * time, and saves it to a specified output directory.
-
+ * <p>
  * Usage: java PublicDisplayXmlUpdater [inputFile] [outputFolder]
-
+ * </p>
  */
 @SuppressWarnings("PMD")
 public class PublicDisplayXmlUpdater {

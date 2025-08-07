@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Performs initial document rendering.
-
+ * 
  * @author pznwc5
  */
 public class DocumentInitializer {
@@ -37,7 +37,7 @@ public class DocumentInitializer {
 
     /**
      * Constructs the initializer.
-
+     * 
      * @param courtIds Courts to be initialized
      * @param numWorkers Number of workers to do the initialization
      * @param delay Delay after each initialization
@@ -56,7 +56,7 @@ public class DocumentInitializer {
 
     /**
      * Performs the initialization.
-
+     * 
      */
     public void initialize() {
         log.debug("initialize() - start");

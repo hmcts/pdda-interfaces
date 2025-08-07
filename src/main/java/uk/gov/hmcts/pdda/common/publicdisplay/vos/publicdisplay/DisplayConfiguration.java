@@ -6,20 +6,29 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsets.XhbRotationSetsDao;
 
 /**
-
+ * <p>
  * Title: Display Configuration.
-
+ * </p>
+ * 
+ * <p>
  * Description: A display configuration defines the display (aka screen), the rotation set assigned
  * to that display, and the list of court rooms assigned to that display.
-
+ * </p>
+ * 
+ * <p>
  * This object is also used for updating. Changing the rotation set and/or the court rooms and
  * calling the method updateDisplayConfiguration in the PDConfigurationController will update the
  * database and cause the relevant pages to be re-rendered.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: DisplayConfiguration.java,v 1.6 2006/06/05 12:28:26 bzjrnl Exp $
  */
@@ -63,7 +72,7 @@ public class DisplayConfiguration extends CsAbstractValue {
     /**
      * Sets a new collection of court rooms for the display Internally sets a flag to indicate the
      * court rooms have changed.
-
+     * 
      * @param courtRoomDaos new list of court rooms
      */
     public void setCourtRoomDaosWithCourtRoomChanged(XhbCourtRoomDao... courtRoomDaos) {
@@ -73,7 +82,7 @@ public class DisplayConfiguration extends CsAbstractValue {
     
     /**
      * Get the current assignment of court rooms.
-
+     * 
      * @return array of court rooms
      */
     public XhbCourtRoomDao[] getCourtRoomDaos() {
@@ -87,7 +96,7 @@ public class DisplayConfiguration extends CsAbstractValue {
     
     /**
      * Query if there is a new list of court rooms.
-
+     * 
      * @return true if new court rooms
      */
     public boolean isCourtRoomsChanged() {
@@ -96,7 +105,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * Returns information about the display.
-
+     * 
      * @return XhbDisplayDAO
      */
     public XhbDisplayDao getDisplayDao() {
@@ -105,7 +114,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * getDisplayId.
-
+     * 
      * @return Integer
      */
     public Integer getDisplayId() {
@@ -115,7 +124,7 @@ public class DisplayConfiguration extends CsAbstractValue {
     /**
      * Sets a new rotation set to the display. Internally sets a flag to indicate the rotation set
      * has changed
-
+     * 
      * @param rotationSetsDao new rotation set
      */
     public void setRotationSetDao(XhbRotationSetsDao rotationSetsDao) {
@@ -126,7 +135,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * Get the currently assigned rotation set.
-
+     * 
      * @return current rotation set assigned to the display
      */
     public XhbRotationSetsDao getRotationSetDao() {
@@ -135,7 +144,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * Query if the rotation set has changed.
-
+     * 
      * @return true if new rotation set
      */
     public boolean isRotationSetChanged() {
@@ -144,7 +153,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * getRotationSetId.
-
+     * 
      * @return Integer
      */
     public Integer getRotationSetId() {
@@ -153,7 +162,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * Update that a new list of court rooms has been added.
-
+     * 
      * @param courtRoomsChanged true to indicate modified
      */
     private void setCourtRoomsChanged(boolean courtRoomsChanged) {
@@ -162,7 +171,7 @@ public class DisplayConfiguration extends CsAbstractValue {
 
     /**
      * Update that the rotation set has been modified.
-
+     * 
      * @param rotationSetChanged true to indicate modified
      */
     private void setRotationSetChanged(boolean rotationSetChanged) {

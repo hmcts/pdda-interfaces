@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * To change the template for this generated type comment go to Window - Preferences - Java - Code
  * Generation - Code and Comments.
-
+ * 
  * @author pznwc5
  */
 public final class ProcessingInstance implements Serializable {

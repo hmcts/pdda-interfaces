@@ -16,29 +16,30 @@ import java.util.List;
 
 
 /**
-
+ * <p>
  * Title: Sorter.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version $Id: Sorter.java,v 1.12 2006/07/14 10:26:06 bzjrnl Exp $
  */
 /*
  * Ref Date Author Description
-
+ * 
  * 315, 02-04-2003 AW Daley Sort modified to provide ascending 52305 or descending order. compareTo
  * method can now be on a superclass of the object to be compared.
-
+ * 
  * 83,52539 29-04-2003 AW Daley Modifed to use ReflectionHelper class.
-
+ * 
  * 30-10-2003 AW Daley compare method modified to allow objects to be sorted that contain null
  * member attributes.
  */
@@ -59,7 +60,7 @@ public final class Sorter {
 
     /**
      * Statis utility method to sort data.
-
+     * 
      * @param data Data to be sorted
      * @param keys Keys by which to be sorted
      */
@@ -73,7 +74,7 @@ public final class Sorter {
 
     /**
      * Statis utility method to sort data.
-
+     * 
      * @param data Data to be sorted
      * @param keys Keys by which to be sorted
      */
@@ -87,7 +88,7 @@ public final class Sorter {
 
     /**
      * Statis utility method to sort data.
-
+     * 
      * @param data Array of Data to be sorted
      * @param keys Keys by which to be sorted
      * @param ascending True - ascending order
@@ -100,7 +101,7 @@ public final class Sorter {
 
     /**
      * Statis utility method to sort data.
-
+     * 
      * @param data Collection of Data to be sorted
      * @param keys Keys by which to be sorted
      * @param ascending True - ascending order
@@ -113,18 +114,19 @@ public final class Sorter {
 
     /**
      * Comparator implementation based on reflection.
-
+     * <p>
      * Title:
-
-
+     * </p>
+     * <p>
      * Description:
-
-
+     * </p>
+     * <p>
      * Copyright: Copyright (c) 2002
-
-
+     * </p>
+     * <p>
      * Company: EDS
-
+     * </p>
+     * 
      * @author Meeraj Kunnumpurath
      * @version 1.0
      */
@@ -142,7 +144,7 @@ public final class Sorter {
 
         /**
          * Constructor initalises the sort keys.
-
+         * 
          * @param keys StringArray
          */
         public ReflectionComparator(String... keys) {
@@ -151,7 +153,7 @@ public final class Sorter {
 
         /**
          * Constructor initializes the sort keys.
-
+         * 
          * @param ascending True - ascending
          */
         public ReflectionComparator(String[] keys, Boolean ascending) {
@@ -161,7 +163,7 @@ public final class Sorter {
 
         /**
          * Sets ascending or descending order.
-
+         * 
          * @param ascending True - ascending
          */
         public final void setAscending(Boolean ascending) {
@@ -170,7 +172,7 @@ public final class Sorter {
 
         /**
          * Gets ascending or descending order.
-
+         * 
          * @return True - ascending
          */
         public boolean isAscending() {
@@ -190,7 +192,7 @@ public final class Sorter {
 
         /**
          * Compare method based on the compareTo implementation.
-
+         * 
          * @param obj1 Object
          * @param obj2 Object
          * @return int

@@ -12,18 +12,19 @@ import javax.security.auth.Subject;
 
 
 /**
-
+ * <p>
  * Title: AccessInfoFactory.
-
-
+ * </p>
+ * <p>
  * Description: Concrete instances of this class are found using the discovery pattern.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: SubjectManager.java,v 1.4 2014/06/20 18:03:08 atwells Exp $
  */
@@ -37,7 +38,7 @@ public abstract class SubjectManager {
 
     /**
      * Get the singleton using the discovery pattern.
-
+     * 
      * @return the singleton instance.
      */
     public static SubjectManager getInstance() {
@@ -51,7 +52,7 @@ public abstract class SubjectManager {
 
     /**
      * Runs a privileged exception action as the current subject.
-
+     * 
      * @param action PrivilegedExceptionAction
      * @return Object
      * @throws PrivilegedActionException Exception
@@ -62,7 +63,7 @@ public abstract class SubjectManager {
 
     /**
      * Runs a privileged action.
-
+     * 
      * @param action PrivilegedAction
      * @return Object
      */
@@ -72,7 +73,7 @@ public abstract class SubjectManager {
 
     /**
      * Runs a privileged exception action as the current subject.
-
+     * 
      * @param user Subject
      * @param action PrivilegedExceptionAction
      * @return Object
@@ -90,7 +91,7 @@ public abstract class SubjectManager {
 
     /**
      * Runs a privileged action.
-
+     * 
      * @param user the subject to use
      * @param action the action to execute
      * @return the value from the action
@@ -106,7 +107,7 @@ public abstract class SubjectManager {
 
     /**
      * Use the discovery pattern to discover a new instance of the subject manager.
-
+     * 
      * @return a new instance of the subject manager
      * @throws SubjectManagerException if an error occures
      */

@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * EagerLoadingServiceLocatorImpl.
-
+ * 
  * @author Meeraj
  * @title EagerServiceLocatorImpl
  */
@@ -38,7 +38,7 @@ public class EagerLoadingServiceLocatorImpl extends ServiceLocatorImpl {
 
     /**
      * Utility method to lookup objects.
-
+     * 
      * @param jndiName String
      * @return Object
      */

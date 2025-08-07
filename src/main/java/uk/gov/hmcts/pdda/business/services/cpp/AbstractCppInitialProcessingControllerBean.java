@@ -70,7 +70,7 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
 
     /**
      * Retrieves a reference to the cppStagingInboundControllerBean.
-
+     * 
      * @return CppStagingInboundControllerBean
      */
     protected CppStagingInboundControllerBean getCppStagingInboundControllerBean() {
@@ -85,7 +85,7 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
 
     /**
      * Retrieves a reference to the cppListControllerBean.
-
+     * 
      * @return CppListControllerBean
      */
     protected CppListControllerBean getCppListControllerBean() {

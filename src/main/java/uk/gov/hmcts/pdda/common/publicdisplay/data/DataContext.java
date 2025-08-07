@@ -3,15 +3,22 @@ package uk.gov.hmcts.pdda.common.publicdisplay.data;
 import java.util.Date;
 
 /**
-
+ * <p>
  * Title: DataContext.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.3 $
  */
@@ -20,7 +27,7 @@ public class DataContext {
 
     /**
      * Creates a new DataContext object.
-
+     * 
      * @param date the date.
      */
     public DataContext(Date date) {
@@ -29,7 +36,7 @@ public class DataContext {
 
     /**
      * Sets the date.
-
+     * 
      * @param date the date.
      */
     public void setDate(Date date) {
@@ -38,7 +45,7 @@ public class DataContext {
 
     /**
      * Returns the date.
-
+     * 
      * @return the date.
      */
     public Date getDate() {

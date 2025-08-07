@@ -7,9 +7,9 @@ import java.util.Date;
 /**
  * A series of methods to convert between old-style Date/Calendar values and new LocalDate /
  * LocalDateTime values.
-
+ * 
  * @author scottatwell
-
+ *
  */
 public class DateConverter {
 

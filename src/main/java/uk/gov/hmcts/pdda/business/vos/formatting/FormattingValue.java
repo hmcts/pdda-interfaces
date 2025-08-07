@@ -7,19 +7,20 @@ import java.io.Reader;
 import java.util.Locale;
 
 /**
-
+ * <p>
  * Title:Class contains parameters required for making formatting decisions. When formatting a data
  * using XSLs.
-
-
+ * </p>
+ * <p>
  * Description: This is passed into the FormattingServices.process method
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2004
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bal Bhamra
  * @version 1.0
  */
@@ -60,7 +61,7 @@ public class FormattingValue {
 
     /**
      * Constructor taking in Formatting parameters.
-
+     * 
      * @param distributionTypeIn String
      * @param mimeTypeIn String
      * @param documentTypeIn String
@@ -96,7 +97,7 @@ public class FormattingValue {
 
     /**
      * Getters returning individual formatting parameters.
-
+     * 
      * @return Formatting Parameter
      */
     public String getDistributionType() {

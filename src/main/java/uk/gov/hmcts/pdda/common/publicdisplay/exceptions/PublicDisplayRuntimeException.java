@@ -8,19 +8,20 @@ import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 /**
  * <p/>
  * Title: PublicDisplayRuntimeException.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
@@ -32,7 +33,7 @@ public class PublicDisplayRuntimeException extends CsUnrecoverableException {
 
     /**
      * Creates a new PublicDisplayRuntimeException object.
-
+     * 
      * @param message the message.
      */
     public PublicDisplayRuntimeException(String message) {
@@ -48,7 +49,7 @@ public class PublicDisplayRuntimeException extends CsUnrecoverableException {
 
     /**
      * Creates a new PublicDisplayRuntimeException object.
-
+     * 
      * @param throwable the root cause.
      */
     public PublicDisplayRuntimeException(Throwable throwable) {
@@ -63,7 +64,7 @@ public class PublicDisplayRuntimeException extends CsUnrecoverableException {
 
     /**
      * Creates a new PublicDisplayRuntimeException object.
-
+     * 
      * @param message the message.
      * @param throwable the roor cause.
      */

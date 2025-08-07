@@ -39,7 +39,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
 
     /**
      * findActiveCasesInRoom.
-
+     * 
      * @param listId Integer
      * @param courtRoomId Integer
      * @param scheduledHearingId INteger
@@ -59,7 +59,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
 
     /**
      * findBySittingId.
-
+     * 
      * @param sittingId Integer
      * @return List
      */
@@ -89,7 +89,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
 
     /**
      * findBySittingDate.
-
+     * 
      * @return XhbScheduledHearingDao
      */
     public Optional<XhbScheduledHearingDao> findBySittingDate(final Integer sittingId,

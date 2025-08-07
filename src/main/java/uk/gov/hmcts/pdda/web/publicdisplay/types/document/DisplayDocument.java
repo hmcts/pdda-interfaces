@@ -13,17 +13,17 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.AbstractRenderAndStoreableType;
 /**
  * <p/>
  * Title: DisplayDocument.
-
+ * </p>
  * <p/>
  * <p/>
  * Description: The DisplayDocument class encapsulates a concrete instance of a Document. Or in the
  * domain langauge: it is a specific list associated with a court house and one or many courtrooms.
-
-
+ * </p>
+ * <p>
  * A DisplayDocument is described by the DisplayDocumentURI, this can be considered to be a primary
  * key for the DisplayDocument.
-
-
+ * </p>
+ * <p>
  * The DisplayDocument extends AbstractRenderAndStoreableType which means that it can be accepted by
  * a Renderer for rendering and a Storer for storing. Before rendering the DisplayDocument will need
  * to have data added to it this can be done through the fetchData() method. Once the data is
@@ -32,14 +32,15 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.AbstractRenderAndStoreableType;
  * Since the DisplayDocument implements Creatable through the AbstractRenderAndStoreableType
  * superclass we provide a create() method that will create a concrete, rendered and stored display
  * document, this method calls all the methods mentioned above.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.8 $
  */
@@ -53,9 +54,9 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Creates the DisplayDocument from it's uri.
-
+     * 
      * @param uri the URI for the document.
-
+     * 
      * @pre uri != null
      */
     public DisplayDocument(final DisplayDocumentUri uri, PdDataControllerBean pdDataControllerBean,
@@ -75,7 +76,7 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Returns the data of any associated with the document.
-
+     * 
      * @return Returns the data.
      */
     public Data getData() {
@@ -84,7 +85,7 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Returns the renderable type.
-
+     * 
      * @return the renderable type.
      */
     @Override
@@ -94,7 +95,7 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Returns the storeable type.
-
+     * 
      * @return the storeable type.
      */
     public String getStoreableType() {
@@ -103,9 +104,9 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Returns the URI of this object.
-
+     * 
      * @return the URI of this object.
-
+     * 
      * @post return != null
      */
     @Override
@@ -115,7 +116,7 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Run the document through it's lifecycle.
-
+     * 
      * @see uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Createable
      */
     @Override
@@ -136,9 +137,9 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Set the data associated with the document.
-
+     * 
      * @param data the data associated with the document.
-
+     * 
      * @pre data != null
      */
     private void setData(final Data data) {
@@ -147,9 +148,9 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Checks the equality of this instance of DisplayDocument with that of the passed in object.
-
+     * 
      * @param obj The object to check equality with.
-
+     * 
      * @return True if the passed in object is equal to this DisplayDocument.
      */
     @Override
@@ -174,7 +175,7 @@ public class DisplayDocument extends AbstractRenderAndStoreableType {
 
     /**
      * Gets the hashcode for this instance, dependent solely on URI, not on contained data.
-
+     * 
      * @return The hashcode.
      */
     @Override

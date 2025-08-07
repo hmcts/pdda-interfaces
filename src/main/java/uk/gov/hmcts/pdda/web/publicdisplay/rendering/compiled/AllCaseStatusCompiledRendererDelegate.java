@@ -37,7 +37,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
 
     /**
      * Append the html for the display document.
-
+     * 
      * @param buffer the buffer to append to
      * @param displayDocument the document containing the information to render
      */
@@ -144,7 +144,7 @@ public class AllCaseStatusCompiledRendererDelegate extends DisplayDocumentCompil
      * If all the defendants on a case are hidden from the public display then we we should present
      * a single row on the display for that case, and that row should have an empty defendant
      * column. To do this we need to know which cases have every defendant hidden.
-
+     * 
      * @param table Collection
      * @return Return a map of cases where the case number maps to a boolean value. TRUE if every
      *         defendant is hidden, FALSE otherwise.

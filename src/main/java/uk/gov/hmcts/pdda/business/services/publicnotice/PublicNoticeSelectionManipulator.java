@@ -12,19 +12,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
-
+ * <p>
  * Title: Based on CourtLogSubscription Event Type it's the responsiblity of this class to
  * Manipulate the PublicNotices if Required.
-
+ * </p>
+ * 
+ * <p>
  * Description:This class will manipulate the selection so that the notices being displayed are
  * being correct .
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Pat Fox
  * @created 17 February 2003
  */
@@ -89,7 +92,7 @@ public final class PublicNoticeSelectionManipulator {
      * This method manipulates the Configured Public notices Activation Status based on the array of
      * Displayable Public Notices passed in. The Manipulation actions are configured through the XML
      * file.
-
+     * 
      * @param courtLogSubscriptionValue Description of the Parameter
      * @return Description of the Return Value
      * @throws PublicNoticeException Description of the Exception
@@ -126,7 +129,7 @@ public final class PublicNoticeSelectionManipulator {
      * Event Type is not contained in the keys of the hashmap then no manipulation is carried out.
      * If it the Court Log Event Type is within the keys then the manipulation is carried out based
      * on the list of statusChange objects returned for that key.
-
+     * 
      * @param courtRoomId Description of the Parameter
      * @param eventType Description of the Parameter
      * @return Description of the Return Value

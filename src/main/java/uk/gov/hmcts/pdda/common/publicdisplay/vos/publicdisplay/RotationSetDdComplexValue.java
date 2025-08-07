@@ -7,16 +7,23 @@ import uk.gov.hmcts.pdda.business.entities.xhbdisplaydocument.XhbDisplayDocument
 import uk.gov.hmcts.pdda.business.entities.xhbrotationsetdd.XhbRotationSetDdDao;
 
 /**
-
+ * <p>
  * Title: Rotation Set / Display Document complex value.
-
+ * </p>
+ * 
+ * <p>
  * Description: This VO holds information from the rotation set DD basic value for ordering and
  * delay, and the display document basic value for identifying the document.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: RotationSetDDComplexValue.java,v 1.2 2004/03/29 14:09:57 pznwc5 Exp $
  */
@@ -32,7 +39,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
 
     /**
      * Create the complex value with the display document and the rotation set DD.
-
+     * 
      * @param rotationSetDdDao the many-to-many relationship
      * @param displayDocumentDao the display document
      */
@@ -46,7 +53,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
     /**
      * Set the display document. This should not be updated in the GUI, only by the
      * uk.gov.hmcts.pdda.business.services.publicdisplay.
-
+     * 
      * @param displayDocumentDao display document for the XhbRotationSetDdBasicValue
      */
     public final void setDisplayDocumentDao(XhbDisplayDocumentDao displayDocumentDao) {
@@ -55,7 +62,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
 
     /**
      * Get the document.
-
+     * 
      * @return the display document
      */
     public XhbDisplayDocumentDao getDisplayDocumentBasicValue() {
@@ -64,7 +71,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
 
     /**
      * Delegated method call that gets the display document id from the RotationSetDDBasicValue.
-
+     * 
      * @return Primary key of the display document
      */
     public Integer getDisplayDocumentId() {
@@ -73,7 +80,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
 
     /**
      * Set a new delay or order.
-
+     * 
      * @param rotationSetDdDao new value
      */
     private void setRotationSetDdDao(XhbRotationSetDdDao rotationSetDdDao) {
@@ -83,7 +90,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
     /**
      * Get the many-to-many relationship information of rotation set to display document. This will
      * give ordering and delay.
-
+     * 
      * @return XhbRotationSetDdBasicValue
      */
     public XhbRotationSetDdDao getRotationSetDdDao() {
@@ -92,7 +99,7 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
 
     /**
      * Delegated method call that gets the rotation set Id from the RotationSetDDBasicValue.
-
+     * 
      * @return Primary key of the rotation set
      */
     public Integer getRotationSetDdId() {
@@ -103,9 +110,9 @@ public class RotationSetDdComplexValue extends CsAbstractValue {
      * Override the equals method to compare the id's of the associated basic value only if both
      * primary keys are not null (this may not be the case if a new RotationSetDDBasicValue is being
      * added. In this case, the display document id's are compared as these can never be null.
-
+     * 
      * @param complexValue A DisplayLocationComplexValue
-
+     * 
      * @return true if the object with same rotation set dd primary key or same display document
      *         primary key
      */

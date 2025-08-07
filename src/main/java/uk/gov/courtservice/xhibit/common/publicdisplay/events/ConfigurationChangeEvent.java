@@ -4,15 +4,22 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 
 /**
-
+ * <p>
  * Title: ConfigurationChangeEvent.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
@@ -24,7 +31,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
 
     /**
      * Creates a new ConfigurationChangeEvent object.
-
+     * 
      * @param change CourtConfigurationChange
      */
     public ConfigurationChangeEvent(CourtConfigurationChange change) {
@@ -33,7 +40,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
 
     /**
      * getChange.
-
+     * 
      * @return CourtConfigurationChange
      */
     public CourtConfigurationChange getChange() {
@@ -42,7 +49,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
 
     /**
      * getEventType.
-
+     * 
      * @return EventType
      */
     @Override
@@ -52,7 +59,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
 
     /**
      * Get the court ID for this event.
-
+     * 
      * @return the court Id for this event.
      */
     @Override

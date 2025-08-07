@@ -15,19 +15,20 @@ import java.util.Iterator;
 import javax.sql.DataSource;
 
 /**
-
+ * <p>
  * Title: JdbcHelper.
-
-
+ * </p>
+ * <p>
  * Description: This class uses inversion of control to hide JDBC API. This class has some Oracle
  * specific features in the way callable statements are executed
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version $Id: JdbcHelper.java,v 1.13 2013/11/15 16:19:53 hingstb Exp $
  */
@@ -53,7 +54,7 @@ public class JdbcHelper {
 
     /**
      * Initializes the datasource and SQL.
-
+     * 
      * @param newDs DataSource
      * @param newSql String
      */
@@ -72,7 +73,7 @@ public class JdbcHelper {
 
     /**
      * Set the maximum number of rows that should be processed.
-
+     * 
      * @param maxRowCount int
      */
     public void setMaxRowCount(final int maxRowCount) {
@@ -81,7 +82,7 @@ public class JdbcHelper {
 
     /**
      * Sets the row processor for SQL queries.
-
+     * 
      * @param newRowProcessor RowProcessor
      */
     public void setRowProcessor(RowProcessor newRowProcessor) {
@@ -90,7 +91,7 @@ public class JdbcHelper {
 
     /**
      * Executes a SQL using prepared statement.
-
+     * 
      * @param params ParameterArray
      * @return Number of records returned
      * @throws DataAccessException Exception
@@ -126,7 +127,7 @@ public class JdbcHelper {
 
     /**
      * Executes a SQL update using prepared statement.
-
+     * 
      * @param params ParameterArray
      * @throws DataAccessException Exception
      */
@@ -152,7 +153,7 @@ public class JdbcHelper {
 
     /**
      * Executes a stored procedure that return resultsets.
-
+     * 
      * @param params ParameterArray
      * @return int The number of rows retrieved.
      * @throws DataAccessException Exception
@@ -183,7 +184,7 @@ public class JdbcHelper {
 
     /**
      * Executes a stored function that return any non-database related object.
-
+     * 
      * @param params ParameterArray
      * @return Object That must be cast externally to the required type.
      * @throws DataAccessException Exception
@@ -215,7 +216,7 @@ public class JdbcHelper {
 
     /**
      * A private common target for processing a <code>ResultSet</code>.
-
+     * 
      * @param rset A <code>ResultSet</code> that processing is to be done against
      * @return An <code>int</code> value representing the number of rows processed
      * @throws A <code>SQLException</code> if any database related exception occurs
@@ -241,7 +242,7 @@ public class JdbcHelper {
 
     /**
      * Processes a row.
-
+     * 
      * @param processor RowProcessor
      * @param row Row
      */
@@ -262,7 +263,7 @@ public class JdbcHelper {
      * A true helper method used to close the passed in <code>ResultSet</code> if it is not
      * <i>null</i>. If any errors occur whilst closing they will simply be logged and processing
      * allowed to continue.
-
+     * 
      * @param rset The <code>ResultSet</code> to close.
      */
     public static final void closeResultSet(final ResultSet rset) {
@@ -279,7 +280,7 @@ public class JdbcHelper {
      * A true helper method used to close the passed in <code>Statement</code> if it is not
      * <i>null</i>. If any errors occur whilst closing they will simply be logged and processing
      * allowed to continue.
-
+     * 
      * @param stmt The <code>Statement</code> to close.
      */
     public static final void closeStatement(final Statement stmt) {
@@ -296,7 +297,7 @@ public class JdbcHelper {
      * A true helper method used to close the passed in <code>Connection</code> if it is not
      * <i>null</i>. If any errors occur whilst closing they will simply be logged and processing
      * allowed to continue.
-
+     * 
      * @param con The <code>Connection</code> to close.
      */
     public static final void closeConnection(final Connection con) {

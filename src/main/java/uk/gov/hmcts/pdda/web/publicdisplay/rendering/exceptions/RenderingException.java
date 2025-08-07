@@ -5,19 +5,20 @@ import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeExc
 /**
  * <p/>
  * Title: A general rendering error occured.
-
+ * </p>
  * <p/>
  * <p/>
  * Description: This Exception is recoverable.
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.3 $
  */
@@ -27,7 +28,7 @@ public class RenderingException extends PublicDisplayRuntimeException {
 
     /**
      * A general rendering error occured.
-
+     * 
      * @param message helpful message.
      */
     public RenderingException(final String message) {

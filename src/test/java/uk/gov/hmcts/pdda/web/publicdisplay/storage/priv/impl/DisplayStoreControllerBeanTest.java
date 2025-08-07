@@ -22,18 +22,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: DisplayStoreControllerBean Test.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2022
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
@@ -220,7 +221,7 @@ class DisplayStoreControllerBeanTest {
 
     /**
      * Returns a dummy XhbDisplayStoreDao object for use in testing.
-
+     * 
      * @param displayStoreId display store id to set
      * @param retrievalCode retrieval code to set
      * @return XhbDisplayStoreDao

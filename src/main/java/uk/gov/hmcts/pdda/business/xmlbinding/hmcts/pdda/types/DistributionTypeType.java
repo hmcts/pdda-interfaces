@@ -10,7 +10,7 @@ import java.util.Properties;
 
 /**
  * Class DistributionTypeType.
-
+ * 
  * @version $Revision$ $Date$
  */
 public final class DistributionTypeType implements java.io.Serializable {
@@ -92,7 +92,7 @@ public final class DistributionTypeType implements java.io.Serializable {
 
     /**
      * Returns an enumeration of all possible instances of DistributionTypeType.
-
+     * 
      * @return Enumeration
      */
     public static Enumeration enumerate() {
@@ -101,7 +101,7 @@ public final class DistributionTypeType implements java.io.Serializable {
 
     /**
      * Returns the type of this DistributionTypeType.
-
+     * 
      * @return int
      */
     public int getType() {
@@ -110,7 +110,7 @@ public final class DistributionTypeType implements java.io.Serializable {
 
     /**
      * Method init.
-
+     * 
      * @return Properties
      */
     private static Properties init() {
@@ -125,7 +125,7 @@ public final class DistributionTypeType implements java.io.Serializable {
     /**
      * Called during deserialization to replace the deserialized object with the correct
      * constant instance.
-
+     * 
      * @return Object
      */
     private Object readResolve() {
@@ -134,7 +134,7 @@ public final class DistributionTypeType implements java.io.Serializable {
 
     /**
      * Returns the String representation of this DistributionTypeType.
-
+     * 
      * @return String
      */
     @Override
@@ -144,7 +144,7 @@ public final class DistributionTypeType implements java.io.Serializable {
 
     /**
      * Returns a new DistributionTypeType based on the given String value.
-
+     * 
      * @param string String
      * @return DistributionTypeType
      */

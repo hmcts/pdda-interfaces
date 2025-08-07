@@ -32,7 +32,7 @@ public class XhbCaseRepository extends AbstractRepository<XhbCaseDao> implements
 
     /**
      * findByNumberTypeAndCourt.
-
+     * 
      * @param courtId Integer
      * @param caseType String
      * @param caseNumber Integer

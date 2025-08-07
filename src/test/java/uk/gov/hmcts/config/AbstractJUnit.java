@@ -1,6 +1,6 @@
 /*
  * Copyrights and Licenses
-
+ * 
  * Copyright (c) 2015-2016 by the Ministry of Justice. All rights reserved. Redistribution and use
  * in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: - Redistributions of source code must retain the above copyright
@@ -37,9 +37,9 @@ import java.util.concurrent.Executors;
 
 /**
  * The class AbstractJUnitTest.
-
+ * 
  * @author uphillj
-
+ *
  */
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class AbstractJUnit {
@@ -73,7 +73,7 @@ public class AbstractJUnit {
 
     /**
      * Runs a list of runnables concurrently which is useful for testing multi-threaded code.
-
+     * 
      * @param runnables list of runnables
      * @throws InterruptedException if running is interrupted
      */

@@ -3,15 +3,22 @@ package uk.gov.courtservice.xhibit.common.publicdisplay.events;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 
 /**
-
+ * <p>
  * Title: Court Room Event.
-
+ * </p>
+ * 
+ * <p>
  * Description: An event that has been generated from a court room should extend this class
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: CourtRoomEvent.java,v 1.4 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -23,7 +30,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
     /**
      * Create with information to identify a court room and court.
-
+     * 
      * @param courtRoomIdentifier CourtRoomIdentifier
      */
     protected CourtRoomEvent(CourtRoomIdentifier courtRoomIdentifier) {
@@ -32,7 +39,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
     /**
      * Return the court id directly from the court room identifier.
-
+     * 
      * @return Court Id
      */
     @Override
@@ -45,7 +52,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
     /**
      * Return the court room id directly from the court room identifier.
-
+     * 
      * @return Court room Id
      */
     public Integer getCourtRoomId() {
@@ -54,7 +61,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
     /**
      * Set a new court room identifier.
-
+     * 
      * @param courtRoomIdentifier CourtRoomIdentifier
      */
     protected final void setCourtRoomIdentifier(CourtRoomIdentifier courtRoomIdentifier) {
@@ -63,7 +70,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
     /**
      * Get the court room.
-
+     * 
      * @return CourtRoomIdentifier
      */
     public CourtRoomIdentifier getCourtRoomIdentifier() {

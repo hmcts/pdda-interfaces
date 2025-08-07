@@ -6,15 +6,22 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 
 /**
-
+ * <p>
  * Title: An enumeration of possible CasesRequired values.
-
+ * </p>
+ * 
+ * <p>
  * Description: Possible values are simply <b>all</b> or <b>active</b>.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.3 $
  */
@@ -36,9 +43,9 @@ public final class CasesRequired implements Serializable {
 
     /**
      * Object comparison.
-
+     * 
      * @param obj Object to compare.
-
+     * 
      * @return true if they are semantically identical.
      */
     @Override
@@ -51,9 +58,9 @@ public final class CasesRequired implements Serializable {
 
     /**
      * Returns the String representation of the instance.
-
+     * 
      * @return the String representation of the instance.
-
+     * 
      * @post return != null
      */
     @Override

@@ -7,7 +7,7 @@ import javax.xml.transform.TransformerConfigurationException;
 
 /**
  * Allows the values of a template to be adapted.
-
+ * 
  * @author Will Fardell
  */
 public class TemplatesAdapter implements Templates {
@@ -15,7 +15,7 @@ public class TemplatesAdapter implements Templates {
 
     /**
      * Construct a new adapter.
-
+     * 
      * @author Will Fardell
      */
     public TemplatesAdapter(Templates delegate) {

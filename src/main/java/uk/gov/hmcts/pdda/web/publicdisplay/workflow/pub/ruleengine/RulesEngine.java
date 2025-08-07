@@ -6,18 +6,19 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.exceptions.RulesConfigurationException;
 
 /**
-
+ * <p>
  * Title: Rules Engine.
-
-
+ * </p>
+ * <p>
  * Description: The main interface into the Rules for established effected DisplayDocuments
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: RulesEngine.java,v 1.5 2006/06/05 12:32:37 bzjrnl Exp $
  */
@@ -51,7 +52,7 @@ public final class RulesEngine {
 
     /**
      * Return an instance of the rule engine.
-
+     * 
      * @return RulesEngine
      */
     public static RulesEngine getInstance() {
@@ -62,14 +63,14 @@ public final class RulesEngine {
 
     /**
      * Get the display document types that are effected by the public display event.
-
+     * 
      * @param publicDisplayEvent PublicDisplayEvent
      * @return DocumentsForEvent containing a collection of DisplayDocumentTypes
-
+     * 
      * @pre publicDisplayEvent != null
      * @post return != null
      * @post return.getDisplayDocumentTypes() != null
-
+     * 
      */
     public DocumentsForEvent getDisplayDocumentTypesForEvent(
         PublicDisplayEvent publicDisplayEvent) {

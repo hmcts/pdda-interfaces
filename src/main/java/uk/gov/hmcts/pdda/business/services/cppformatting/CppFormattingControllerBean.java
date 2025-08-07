@@ -51,7 +51,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Implementation of RemoteTask so that this process is called by the timer process.
-
+     * 
      */
     @Override
     public void doTask() {
@@ -60,7 +60,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Implementation of RemoteTask so that this process is called by the timer process.
-
+     * 
      */
     public void processCppPublicDisplayDocs() {
         // Get a list of CPP_FORMATTING objects that have a type of 'PD', a format status of 'ND'
@@ -80,12 +80,13 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
     }
 
     /**
-
+     * <p>
      * Returns the latest unprocessed XHB_CPP_FORMATTING record for Public Display.
-
+     * </p>
+     * 
      * @param courtId ID of the court
      * @return XhbCppFormattingDAO
-
+     * 
      */
     public XhbCppFormattingDao getLatestPublicDisplayDocument(Integer courtId) {
         String methodName = "getLatestPublicDisplayDocument(" + courtId + METHOD_END;
@@ -96,12 +97,13 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
     }
 
     /**
-
+     * <p>
      * Returns the latest unprocessed XHB_CPP_FORMATTING record for Internet Web Pages.
-
+     * </p>
+     * 
      * @param courtId ID of the court
      * @return XhbCppFormattingDAO
-
+     * 
      */
     public XhbCppFormattingDao getLatestWebPageDocument(Integer courtId) {
         String methodName = "getLatestWebPageDocument(" + courtId + METHOD_END;
@@ -113,9 +115,9 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Updates an XHB_CPP_FORMATTING record with a status of successfully merged/processed.
-
+     * 
      * @param dao XhbCppFormattingDao
-
+     * 
      */
     public void updateStatusSuccess(XhbCppFormattingDao dao) {
         String methodName = "updateStatusSuccess(" + dao + METHOD_END;
@@ -126,9 +128,9 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Updates an XHB_CPP_FORMATTING record with a status of merge failed.
-
+     * 
      * @param dao XhbCppFormattingDao
-
+     * 
      */
     public void updateStatusFailed(XhbCppFormattingDao dao) {
         String methodName = "updateStatusFailed(" + dao + METHOD_END;
@@ -139,7 +141,7 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
 
     /**
      * Refreshes all public displays for the court specified.
-
+     * 
      * @param courtId Court Id
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {

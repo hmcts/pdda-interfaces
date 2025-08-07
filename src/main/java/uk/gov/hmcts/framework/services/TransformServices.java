@@ -24,18 +24,19 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /**
-
+ * <p>
  * Title: XSL Services.
-
-
+ * </p>
+ * <p>
  * Description: Insulates the application components from knowedge of XSL.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -47,7 +48,7 @@ public class TransformServices extends TemplateServices {
 
     /**
      * Transform the xml using the xsl, if specified use the locale and or parameter map.
-
+     * 
      * @param document the xml transform
      * @param xslName the name of a resource containing the xsl style sheet
      * @param locale optional, the locale to resolve the xsl
@@ -70,7 +71,7 @@ public class TransformServices extends TemplateServices {
 
     /**
      * Transform the xml using the xsl for the specified locale.
-
+     * 
      * @param source the xml transform
      * @param systemId the system Id of a resource containing the xsl style sheet
      * @param locale optional, the locale to resolve the xsl
@@ -112,7 +113,7 @@ public class TransformServices extends TemplateServices {
 
     /**
      * Create a transformer for rendering pipelines.
-
+     * 
      * @param locale the locale to use, if null use default
      * @param parameterMap any parameters that need to be added to the transformer
      * @return the new transformer
@@ -142,7 +143,7 @@ public class TransformServices extends TemplateServices {
     /**
      * Gets the transformer for the xsl name and resolver, private because xsl classes should not be
      * used outside this class.
-
+     * 
      * @param systemId the name of the xsl
      * @param resolver the resolver used to create the transform
      * @return the transformer
@@ -166,7 +167,7 @@ public class TransformServices extends TemplateServices {
 
     /**
      * Format parameter map for debug.
-
+     * 
      * @param parameterMap Map
      * @return a string containing formatted parameter map
      */
@@ -193,7 +194,7 @@ public class TransformServices extends TemplateServices {
 
     /**
      * Convert a document to a String (this is used for debug output).
-
+     * 
      * @param document the docuemnt to convert
      * @return a String containing the xml
      */

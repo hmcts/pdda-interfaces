@@ -5,16 +5,23 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIde
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 
 /**
-
+ * <p>
  * Title: Hearing Status Event.
-
+ * </p>
+ * 
+ * <p>
  * Description: This event is generated when a cases status changes. For example, From 'To be heard'
  * to 'In progress'.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: HearingStatusEvent.java,v 1.3 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -24,7 +31,7 @@ public class HearingStatusEvent extends CaseCourtRoomEvent {
 
     /**
      * Specify the case that whos status has change and in which court room.
-
+     * 
      * @param courtRoomIdentifier The court the change occured in
      * @param caseChangeInformation The case effected
      */
@@ -35,7 +42,7 @@ public class HearingStatusEvent extends CaseCourtRoomEvent {
 
     /**
      * getEventType.
-
+     * 
      * @return EventType
      */
     @Override

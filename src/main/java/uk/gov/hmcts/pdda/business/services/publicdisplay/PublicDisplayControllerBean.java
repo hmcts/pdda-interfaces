@@ -50,7 +50,7 @@ public class PublicDisplayControllerBean extends AbstractPdConfigDisplaysControl
 
     /**
      * Check the Public display activation status for this particular scheduled hearing.
-
+     * 
      * @param schedHearingId Integer
      * @return boolean true if scheduled hearing is active
      */
@@ -61,7 +61,7 @@ public class PublicDisplayControllerBean extends AbstractPdConfigDisplaysControl
 
     /**
      * Sets the public display for this scheduling hearing to deActivate.
-
+     * 
      * @param schedHearingId Integer
      */
     public void deActivatePublicDisplay(final Integer schedHearingId, final Date deactivationDate) {
@@ -72,7 +72,7 @@ public class PublicDisplayControllerBean extends AbstractPdConfigDisplaysControl
 
     /**
      * Sets the public display for this scheduling hearing to Activate.
-
+     * 
      * @param schedHearingId Integer
      */
     public void activatePublicDisplay(final Integer schedHearingId, final Date activationDate) {

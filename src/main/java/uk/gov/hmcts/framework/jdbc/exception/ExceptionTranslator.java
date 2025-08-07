@@ -1,19 +1,20 @@
 package uk.gov.hmcts.framework.jdbc.exception;
 
 /**
-
+ * <p>
  * Title: Exception translator.
-
-
+ * </p>
+ * <p>
  * Description: This should be implemented by classes that translate SQLException to JDBC framework
  * Exceptions
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version $Id: ExceptionTranslator.java,v 1.8 2006/06/05 12:30:17 bzjrnl Exp $
  */
@@ -29,7 +30,7 @@ public abstract class ExceptionTranslator {
 
     /**
      * Translates the SQLException to the JDBC framework exception.
-
+     * 
      * @param ex SQL exception that needs to be translated
      * @return Data access exception specific to the JDBC framework
      */
@@ -37,7 +38,7 @@ public abstract class ExceptionTranslator {
 
     /**
      * Translates the SQLException to the JDBC framework exception.
-
+     * 
      * @param ex SQL exception that needs to be translated
      * @param col String
      * @return Data access exception specific to the JDBC framework
@@ -46,7 +47,7 @@ public abstract class ExceptionTranslator {
 
     /**
      * Translates the SQLException to the JDBC framework exception.
-
+     * 
      * @param ex SQL exception that needs to be translated
      * @param col int
      * @return Data access exception specific to the JDBC framework
@@ -55,7 +56,7 @@ public abstract class ExceptionTranslator {
 
     /**
      * Returns the default implementation.
-
+     * 
      * @return ExceptionTranslator
      */
     public static ExceptionTranslator getInstance() {

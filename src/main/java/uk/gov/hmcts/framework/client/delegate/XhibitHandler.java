@@ -14,7 +14,7 @@ import java.security.PrivilegedExceptionAction;
 
 /**
  * The class provides decoration to log the invocations.
-
+ * 
  * @author pznwc5
  * @version $Revision: 1.7 $
  */
@@ -28,7 +28,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
     /**
      * matchMethod.
-
+     * 
      * @param in method on the business delegate
      * @param remote Target of invocation
      * @return Target method
@@ -78,7 +78,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
     /**
      * Utility method to get the remote object.
-
+     * 
      * @return EJBObject
      * @throws SecurityException exception
      * @throws NoSuchMethodException exception
@@ -95,7 +95,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
     /**
      * An inner class for performing remote invocation.
-
+     * 
      * @author Meeraj Kunnumpurath
      */
     protected static class RemoteInvoker implements PrivilegedExceptionAction<Object> {
@@ -110,7 +110,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
         /**
          * Constructor initializes the required information for invocation.
-
+         * 
          * @param businessMethod Method
          * @param target Object
          * @param args ObjectArray
@@ -123,7 +123,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
         /**
          * PrivilegedExceptionACtion implementation.
-
+         * 
          * @return Object
          * @throws InvocationTargetException Exception
          * @throws IllegalAccessException Exception
@@ -135,7 +135,7 @@ public abstract class XhibitHandler implements InvocationHandler {
 
         /**
          * This invokes the method.
-
+         * 
          * @return Object
          * @throws InvocationTargetException Exception
          * @throws IllegalAccessException Exception

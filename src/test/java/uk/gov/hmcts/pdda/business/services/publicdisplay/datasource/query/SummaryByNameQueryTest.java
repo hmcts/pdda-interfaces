@@ -46,18 +46,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: SummaryByNameQuery Test.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2023
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)

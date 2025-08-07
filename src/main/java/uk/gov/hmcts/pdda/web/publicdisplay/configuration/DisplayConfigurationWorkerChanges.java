@@ -71,9 +71,9 @@ public abstract class DisplayConfigurationWorkerChanges {
     /**
      * Returns the <code>RenderChanges</code> that need re-rendering after the
      * <code>CourtConfigurationChange</code>.
-
+     * 
      * @param change The change to the court configuration that has ooccured.
-
+     * 
      * @return The RenderChanges caused by the court configuration changed.
      */
     public RenderChanges getRenderChanges(CourtConfigurationChange change) {
@@ -107,7 +107,7 @@ public abstract class DisplayConfigurationWorkerChanges {
     /**
      * Return the set of Display Documents currently held in configuration for the given combination
      * of document types and court room.
-
+     * 
      * @param documentTypes The different types of Display Document to find.
      * @param courtRoom The court room for which to find relevant Display Documents.
      * @return A RenderChanges instance containing the relevant Display Documents.
@@ -130,7 +130,7 @@ public abstract class DisplayConfigurationWorkerChanges {
 
     /**
      * Look up the old and the new configuration data for a display.
-
+     * 
      * @param configurations ConfigurationTuple to populate with the old and new configurations.
      * @param change The display change object.
      */
@@ -157,7 +157,7 @@ public abstract class DisplayConfigurationWorkerChanges {
 
     /**
      * Look up the old and the new configuration data for a rotation set.
-
+     * 
      * @param configurations ConfigurationTuple to populate with the old and new configurations.
      * @param change The Rotation Set change object.
      */
@@ -182,7 +182,7 @@ public abstract class DisplayConfigurationWorkerChanges {
 
     /**
      * Look up the old and the new configuration data for a court.
-
+     * 
      * @param configurations ConfigurationTuple to populate with the old and new configurations.
      * @throws CourtNotFoundException When the court is not found in the middle tier.
      */
@@ -202,7 +202,7 @@ public abstract class DisplayConfigurationWorkerChanges {
     /**
      * This method takes the old and new configurations, compares them, stores the changes and
      * returns a digest of render changes.
-
+     * 
      * @param configurationChange The old and new configurations.
      * @param forceRecreate Whether to return all documents for rendering or only those that need to
      *        start and stop rendering.
@@ -297,22 +297,23 @@ public abstract class DisplayConfigurationWorkerChanges {
     }
     
     /**
-
+     * <p>
      * Title: Configuration Data Tuple.
-
-
+     * </p>
+     * <p>
      * Description:
-
-
+     * </p>
+     * <p>
      * This class is used to encapsulate the old and new configuration data for a given court,
      * display or rotation set and provides the ability to sort it by display ID.
-
-
+     * </p>
+     * <p>
      * Copyright: Copyright (c) 2003
-
-
+     * </p>
+     * <p>
      * Company: EDS
-
+     * </p>
+     * 
      * @author Bob Boothby
      * @version 1.0
      */

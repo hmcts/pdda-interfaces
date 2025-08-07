@@ -41,7 +41,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Populate the SFTP configuration.
-
+     * 
      * @return The SFTP configuration
      */
     protected SftpConfig populateSftpConfig(int sftpPort) {
@@ -78,7 +78,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Get and set the data for testing.
-
+     * 
      * @param sftpConfig The SFTP Config
      * @return Updated SFTP Config
      */
@@ -111,7 +111,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Check whether to use Key Vault.
-
+     * 
      * @return True if using Key Vault, false otherwise
      */
     private boolean checkWhetherToUseKeyVault() {
@@ -137,7 +137,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params.
-
+     * 
      * @param sftpConfig The SFTP configuration
      * @return The SFTP configuration
      */
@@ -154,7 +154,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params from the DB.
-
+     * 
      * @return The SFTP configuration
      */
     private SftpConfig getDbConfigParams(SftpConfig sftpConfig) {
@@ -218,7 +218,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Validate and set the host and port.
-
+     * 
      * @param sftpConfig The SFTP configuration
      * @param hostAndPort The host and port
      * @return The SFTP configuration
@@ -246,7 +246,7 @@ public class SftpHelperUtil extends SftpService {
 
     /**
      * Set the SFTP config params from the Key Vault.
-
+     * 
      * @return The SFTP configuration
      */
     @SuppressWarnings("PMD.UnusedAssignment")

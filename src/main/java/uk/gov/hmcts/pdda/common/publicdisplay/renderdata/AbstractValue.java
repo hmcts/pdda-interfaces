@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * Common superclass for public display data classes.
-
+ * 
  * @author pznwc5
  */
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -33,9 +33,9 @@ public abstract class AbstractValue implements Serializable {
 
     /**
      * Implements pretty print.
-
+     * 
      * @return Pretty print string
-
+     * 
      * @throws CsUnrecoverableException Exception
      */
     @Override

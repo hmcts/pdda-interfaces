@@ -35,7 +35,7 @@ import java.util.Optional;
 
 /**
  * Abstract query class used by public display.
-
+ * 
  * @author pznwc5
  */
 @SuppressWarnings("PMD")
@@ -85,11 +85,11 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     /**
      * Returns an array of SummaryByNameValue.
-
+     * 
      * @param date localDateTime
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
-
+     * 
      * @return Summary by name data for the specified court rooms
      */
     public abstract Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds);

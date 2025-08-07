@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * DefendantName.
-
+ * 
  * @author pznwc5 The class represents a defendant name.
  */
 public class DefendantName implements Serializable, Comparable<DefendantName> {
@@ -50,7 +50,7 @@ public class DefendantName implements Serializable, Comparable<DefendantName> {
 
     /**
      * Creates a defendant. The constructor is not visible outside the package.
-
+     * 
      * @param row Row
      */
     public DefendantName(PddaRow row) {
@@ -64,7 +64,7 @@ public class DefendantName implements Serializable, Comparable<DefendantName> {
 
     /**
      * Creates a defendant from String values.
-
+     * 
      * @param firstName String
      * @param middleName String
      * @param surname String
@@ -80,7 +80,7 @@ public class DefendantName implements Serializable, Comparable<DefendantName> {
 
     /**
      * Returns the name.
-
+     * 
      * @return String
      */
     public String getName() {

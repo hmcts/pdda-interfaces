@@ -17,19 +17,20 @@ import javax.imageio.ImageIO;
 /**
  * <p/>
  * Title: THe abstract superclass for any servlet that modifies images.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.7 $
  */

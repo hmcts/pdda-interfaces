@@ -18,11 +18,11 @@ import javax.imageio.ImageIO;
 /**
  * <p/>
  * Title: Servlet used to generate titles for lists.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * Pass the following parameters
  * <ul>
@@ -36,11 +36,12 @@ import javax.imageio.ImageIO;
  * </ul>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.10 $
  */

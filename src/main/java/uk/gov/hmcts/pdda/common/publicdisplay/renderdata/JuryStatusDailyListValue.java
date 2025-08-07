@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class provides the data for daily list and jury status document.
-
+ * 
  * @author pznwc5
  */
 public class JuryStatusDailyListValue extends CourtListValue {
@@ -22,7 +22,7 @@ public class JuryStatusDailyListValue extends CourtListValue {
 
     /**
      * Sets the judge name.
-
+     * 
      * @param val Judge name
      */
     public void setJudgeName(JudgeName val) {
@@ -31,7 +31,7 @@ public class JuryStatusDailyListValue extends CourtListValue {
 
     /**
      * Returns the judge name.
-
+     * 
      * @return Judge name
      */
     public JudgeName getJudgeName() {
@@ -40,7 +40,7 @@ public class JuryStatusDailyListValue extends CourtListValue {
 
     /**
      * Returns the is floating string.
-
+     * 
      * @return The string as it appears in the DB
      */
     public String getFloating() {
@@ -56,7 +56,7 @@ public class JuryStatusDailyListValue extends CourtListValue {
 
     /**
      * Returns the is floating string.
-
+     * 
      * @return true if the cases is unassigned
      */
     public boolean isFloating() {

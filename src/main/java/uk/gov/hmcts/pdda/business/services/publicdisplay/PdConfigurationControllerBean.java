@@ -102,7 +102,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Gets all the courts that are to be rendered for Public Displays.
-
+     *
      * @return an array of IDs of courts to be included in the Public Display.
      */
     public int[] getCourtsForPublicDisplay() {
@@ -119,7 +119,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Gets the full set of public display configuration data for a given court.
-
+     *
      * @param courtId The court for which to get the configuration information.
      * @return An array of <code>DisplayRotationSetData</code>, one for every display in the court.
      * @throws CourtNotFoundException When the court ID passed in is not valid.
@@ -142,7 +142,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Gets the configuration data for all displays using the rotation set.
-
+     *
      * @param courtId The court that the rotation set belongs to.
      * @param rotationSetId The rotation set for which to get the data.
      * @return An array of <code>DisplayRotationSetData</code>, one for every display using the
@@ -180,7 +180,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Gets the configuration data for a given display in a court.
-
+     *
      * @param courtId The court that the rotation set belongs to.
      * @param displayId The display for which to get the data
      * @return A <code>DisplayRotationSetData</code> array representing the configuration of the
@@ -224,7 +224,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Returns a rotation set with an array of the display documents that are assigned in to the
      * rotation set.
-
+     *
      * @param rotationSetId The rotation set being queried
      * @return RotationSetComplexValue
      */
@@ -262,9 +262,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Requests that the rotation set and display documents within the rotation set are all
      * re-rendered from scratch.
-
-     * Note: sends a RenderEntireDisplayRotationSet JMS configuration message
-
+     *
+     * <p>Note: sends a RenderEntireDisplayRotationSet JMS configuration message
+     *
      * @param displayId the display that will have its pages and rotation set re-rendered
      */
     public void initialiseDisplay(final Integer courtId, final Integer displayId) {
@@ -281,9 +281,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Requests that all rotation sets and display documents are all re-rendered from scratch.
-
-     * Note: sends a RenderEntireCourt JMS configuration message
-
+     *
+     * <p>Note: sends a RenderEntireCourt JMS configuration message
+     *
      * @param courtId the court to be completely re-rendered.
      */
     public void initialiseCourt(final Integer courtId) {
@@ -298,7 +298,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
 
     /**
      * Requests all courtrooms for a court house.
-
+     *
      * @param courtId the court house
      * @return array of XhbCourtRoomDAO
      */
@@ -331,7 +331,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Requests courtrooms assigned to the VIP screen for a court house If none are found, falls
      * back to returning all court rooms.
-
+     *
      * @param courtId the court house
      * @return array of XhbCourtRoomDAO
      */
@@ -355,7 +355,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     /**
      * Returns a composite value object containing display document, court room and unassigned cases
      * information for the court site.
-
+     *
      * @return VIPDisplayConfiguration
      */
     public VipDisplayConfiguration getVipDisplayConfiguration(final Integer courtSiteId) {

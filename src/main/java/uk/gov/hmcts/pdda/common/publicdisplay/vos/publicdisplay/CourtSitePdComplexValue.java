@@ -9,19 +9,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
-
+ * <p>
  * Title: CourtSitePDComplexValue.
-
+ * </p>
+ * 
+ * <p>
  * Description: Complex value object that builds a tree of information for a court site and the
  * locations within it (<code>DisplayLocationComplexValue</code>)
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: CourtSitePDComplexValue.java,v 1.1 2004/01/15 10:34:17 rz3jq5 Exp $
-
+ * 
  * @see DisplayLocationComplexValue
  */
 public class CourtSitePdComplexValue extends CsAbstractValue {
@@ -39,7 +46,7 @@ public class CourtSitePdComplexValue extends CsAbstractValue {
 
     /**
      * Set a court site for the VO.
-
+     * 
      * @param courtSiteDao The court site
      */
     public void setCourtSiteDao(XhbCourtSiteDao courtSiteDao) {
@@ -48,7 +55,7 @@ public class CourtSitePdComplexValue extends CsAbstractValue {
 
     /**
      * Get the court site that this VO is for.
-
+     * 
      * @return XhbCourtSiteDAO
      */
     public XhbCourtSiteDao getCourtSiteDao() {
@@ -57,7 +64,7 @@ public class CourtSitePdComplexValue extends CsAbstractValue {
 
     /**
      * Get all the locations for the court site.
-
+     * 
      * @return An array of DisplayLocationComplexValue
      */
     public DisplayLocationComplexValue[] getDisplayLocationComplexValue() {
@@ -68,7 +75,7 @@ public class CourtSitePdComplexValue extends CsAbstractValue {
     /**
      * Add a display location to the hash set. If one already exists (based on the equals method in
      * DisplayLocationComplexValue) then that one will be replaced.
-
+     * 
      * @param displayLocationComplexValue The Location to add
      */
     public void addDisplayLocationComplexValue(

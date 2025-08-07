@@ -37,7 +37,7 @@ import java.util.Optional;
  * Even though the instance is not thread safe, you can still cache this in a session bean as the
  * container serializes invocations on a given session bean instance. In short, stateless session
  * bean instances are pooled and wouldn't allow concurrent invocations.
-
+ * 
  * @author pznwc5
  */
 @SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})

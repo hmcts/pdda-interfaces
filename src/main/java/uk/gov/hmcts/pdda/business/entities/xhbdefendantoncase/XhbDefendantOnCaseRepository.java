@@ -33,7 +33,7 @@ public class XhbDefendantOnCaseRepository extends AbstractRepository<XhbDefendan
 
     /**
      * findByDefendantAndCase.
-
+     * 
      * @param caseId Integer
      * @param defendantId Integer
      * @return XhbDefendantOnCaseDao

@@ -1,19 +1,20 @@
 package uk.gov.hmcts.pdda.business.services.publicnotice;
 
 /**
-
+ * <p>
  * Title:PublicNoticeInvalidSelectionException, thrown when the public notices selected as Active
  * break the Validation rules.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @authors Pat Fox
  * @version 1.0
  */
@@ -24,7 +25,7 @@ public class PublicNoticeInvalidSelectionException extends PublicNoticeException
 
     /**
      * PublicNoticeInvalidSelectionException.
-
+     * 
      * @param maxAllowed Integer
      * @param logMessage error message for log
      */

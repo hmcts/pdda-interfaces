@@ -5,16 +5,23 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIde
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 
 /**
-
+ * <p>
  * Title: Update Case Event.
-
+ * </p>
+ * 
+ * <p>
  * Description: This event is created when case information is updated.<br>
  * Currently applies to the judge name changed and defendant maintenance.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: UpdateCaseEvent.java,v 1.4 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -24,7 +31,7 @@ public class UpdateCaseEvent extends CaseCourtRoomEvent {
 
     /**
      * Specify the case that has been modified and the court room in which it happened.
-
+     * 
      * @param courtRoomIdentifier The court the change occured in
      * @param caseChangeInformation The case effected
      */

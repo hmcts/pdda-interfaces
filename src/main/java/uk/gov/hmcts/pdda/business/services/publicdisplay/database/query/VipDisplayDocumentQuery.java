@@ -20,19 +20,20 @@ import java.util.List;
 import java.util.Optional;
 
 /**
-
+ * <p>
  * Title: VIP display documents for court site query.
-
-
+ * </p>
+ * <p>
  * Description: This runs the stored procedure that for a given court site, it finds all display
  * documents configured for the View Information Pages.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2005
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bal Bhamra
  * @version $Id: VIPDisplayDocumentQuery.java,v 1.2 2005/11/17 10:55:48 bzjrnl Exp $
  */
@@ -72,9 +73,9 @@ public class VipDisplayDocumentQuery extends AbstractControllerBean {
 
     /**
      * Returns an array of CourtListValue.
-
+     * 
      * @param courtSiteId court site id
-
+     * 
      * @return Summary by name data for the specified court rooms
      */
     public Collection<VipDisplayConfigurationDisplayDocument> getData(Integer courtSiteId) {

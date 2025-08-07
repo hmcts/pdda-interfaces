@@ -10,21 +10,23 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
-
+ * 
+ * <p>
  * Title: Message.
-
-
+ * </p>
+ * <p>
  * Description: The Message class supports internationalisation in the creation of message texts.
  * Messages are created by providing a key which exists in the external properties file (e.g.
  * errortext.properties). These messages may require additional parameters for the construction of
  * the completed message. see also java.lang.MessageFormat
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Kevin Buckthorpe
  * @version 1.0
  */
@@ -47,7 +49,7 @@ public class Message implements Serializable {
 
     /**
      * Constructor.
-
+     * 
      * @param key external key in properties file
      * @param parameters paramaters that will be passed into MessageFormat.format(String, Object[])
      *        to format the message
@@ -59,7 +61,7 @@ public class Message implements Serializable {
 
     /**
      * Constructor.
-
+     * 
      * @param key external key in properties file
      * @param parameters paramaters that will be passed into MessageFormat.format(String, Object[])
      *        to format the message
@@ -74,7 +76,7 @@ public class Message implements Serializable {
     /**
      * Convienience constructor that passes the parameter into Object[] and calls the
      * Message(String, Object[]) constructor.
-
+     * 
      * @param key external key in properties file
      * @param parameter paramater that will be passed into MessageFormat.format(String, Object[])
      * @param properties file if not using default
@@ -85,7 +87,7 @@ public class Message implements Serializable {
 
     /**
      * Constructor.
-
+     * 
      * @param key external key in properties file
      */
     public Message(String key) {
@@ -94,7 +96,7 @@ public class Message implements Serializable {
 
     /**
      * Get key.
-
+     * 
      * @return external key
      */
     public String getKey() {
@@ -103,7 +105,7 @@ public class Message implements Serializable {
 
     /**
      * Formats and returns text associated with the key provided.
-
+     * 
      * @return the formated message text
      */
     public String getMessage() {
@@ -121,7 +123,7 @@ public class Message implements Serializable {
 
     /**
      * Set Locale.
-
+     * 
      * @param loc the Locale
      * @throws CSResourceUnavailableException Exception
      */
@@ -131,7 +133,7 @@ public class Message implements Serializable {
 
     /**
      * getPropertiesFileName.
-
+     * 
      * @return the propeties file used to match key value pairs
      */
     public String getPropertiesFileName() {

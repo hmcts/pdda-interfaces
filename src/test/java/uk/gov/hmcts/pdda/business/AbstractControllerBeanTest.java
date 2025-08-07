@@ -14,18 +14,19 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
-
+ * <p>
  * Title: AbstractControllerBean Test.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Luke Gittins
  */
 @ExtendWith(EasyMockExtension.class)

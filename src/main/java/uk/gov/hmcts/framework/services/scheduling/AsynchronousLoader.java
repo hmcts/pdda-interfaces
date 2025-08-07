@@ -15,8 +15,8 @@ import java.util.StringTokenizer;
  * (using a no args constructor) the list of classes in asynchronousloader.properties
  * init.classes(delimited by a ;), that can on instantiation, register either themselves (if
  * loadable)or another class (that is loadable) with the AsynchronousLoader.
-
- * To have your data scheduled the class must extend AbstractLoadable.</p>
+ * 
+ * <p>To have your data scheduled the class must extend AbstractLoadable.</p>
  */
 @SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidSynchronizedStatement"})
 public final class AsynchronousLoader implements Runnable {
@@ -85,7 +85,7 @@ public final class AsynchronousLoader implements Runnable {
 
     /**
      * Request the loader to load the job.
-
+     * 
      * @param job the
      */
     public void addToLoader(Loadable job) {
@@ -149,7 +149,7 @@ public final class AsynchronousLoader implements Runnable {
 
     /**
      * Factory method to provide an instamce of an AsynchronousLoader.
-
+     * 
      * @return an instamce of an AsynchronousLoader
      */
     public static AsynchronousLoader getInstance() {

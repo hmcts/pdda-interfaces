@@ -32,8 +32,8 @@ public class CsBusinessDelegateHandler extends XhibitHandler {
 
     /**
      * Constructor initailizes delegate and access information.
-
-
+     * 
+     * 
      * @param delegateInfo CSBusinessDelegateInfo
      * @throws Throwable Exception
      */

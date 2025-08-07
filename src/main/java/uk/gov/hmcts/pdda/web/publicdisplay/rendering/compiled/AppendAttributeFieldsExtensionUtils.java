@@ -24,7 +24,7 @@ public final class AppendAttributeFieldsExtensionUtils {
 
     /**
      * Append the court room name if assigned else append unassigned text.
-
+     * 
      * @param buffer StringBuilder
      * @param documentI18n TranslationBundle
      * @param item Object
@@ -48,7 +48,7 @@ public final class AppendAttributeFieldsExtensionUtils {
 
     /**
      * Append defendant overspill if required.
-
+     * 
      * @param buffer StringBuilder
      * @param item Object
      * @param rowType String
@@ -79,7 +79,7 @@ public final class AppendAttributeFieldsExtensionUtils {
 
     /**
      * Append the court room name.
-
+     * 
      * @param buffer StringBuilder
      * @param name String
      */
@@ -95,7 +95,7 @@ public final class AppendAttributeFieldsExtensionUtils {
 
     /**
      * Append the no information row.
-
+     * 
      * @param buffer StringBuilder
      * @param documentI18n TranslationBundle
      */

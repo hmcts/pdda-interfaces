@@ -11,28 +11,31 @@ import java.util.Optional;
 public interface CppStagingInboundController extends Serializable {
 
     /**
-
+     * <p>
      * Returns the latest unprocessed XHB_CPP_STAGING_INBOUND record for processing.
-
+     * </p>
+     * 
      * @return CppStagingInboundBasicValue
      * @throws CppStagingInboundControllerException Exception
      */
     List<XhbCppStagingInboundDao> getLatestUnprocessedDocument();
 
     /**
-
+     * <p>
      * Returns the latest record from XHB_CPP_STAGING_INBOUND that has been validated successfully
      * and not processed.
-
+     * </p>
+     * 
      * @return CppStagingInboundBasicValue
      * @throws CppStagingInboundControllerException Exception
      */
     List<XhbCppStagingInboundDao> getNextValidatedDocument();
 
     /**
-
+     * <p>
      * Returns the earliest XHB_CPP_STAGING_INBOUND from today that is to be validated.
-
+     * </p>
+     * 
      * @return CppStagingInboundBasicValue
      * @throws CppStagingInboundControllerException Exception
      */
@@ -40,7 +43,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of successfully validated.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -49,7 +52,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of validation failed.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -58,7 +61,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a status of In Progress.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      * @return XhbCppStagingInboundDao
@@ -68,7 +71,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -77,7 +80,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record with a processing status of fail.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -87,7 +90,7 @@ public interface CppStagingInboundController extends Serializable {
     /**
      * Updates an XHB_CPP_STAGING_INBOUND record such that all status values are reset back to when
      * there initial values This is useful for testing.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -100,7 +103,7 @@ public interface CppStagingInboundController extends Serializable {
      * The DOCUMENT_TYPE is checked to be valid 3. The appropriate schema to validate the XML
      * against will be determined 4. Validation of the XML will be done against the appropriate
      * schema.
-
+     * 
      * @param cppStagingInboundDao XhbCppStagingInboundDao
      * @param userDisplayName String
      */
@@ -112,7 +115,7 @@ public interface CppStagingInboundController extends Serializable {
      * Based on the document type return the (name of the) schema that is to be used to validate the
      * XML The schema document itself will be picked up from SCHEMA_DIR as defined at the top of the
      * class.
-
+     * 
      * @param documentType String
      * @return String
      */
@@ -120,7 +123,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Get courtId from XHB_COURT_SITE using crest court id (aka court code).
-
+     * 
      * @param courtCode Integer
      * @return int
      */
@@ -128,7 +131,7 @@ public interface CppStagingInboundController extends Serializable {
 
     /**
      * Given a clob Id get the Xml.
-
+     * 
      * @param clobId Long
      * @return String
      */

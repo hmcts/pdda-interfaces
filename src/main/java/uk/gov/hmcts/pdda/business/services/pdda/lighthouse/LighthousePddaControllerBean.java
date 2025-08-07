@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * This class is the controller bean for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
  * updating XHB_PDDA_MESSAGE.
-
- * It will check for the existence of (unprocessed) records in the database -
+ *
+ * <p>It will check for the existence of (unprocessed) records in the database -
  *  for each record it will add an entry to XHB_CPP_STAGING_INBOUND - once processed it will then update the
  * message record to show it has been processed.
  */
@@ -171,7 +171,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Write to the debug log if debug is enabled.
-
+     *
      * @param string Debug message to write to the log
      */
     private void writeToLog(final String string) {
@@ -198,7 +198,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Insert the row into XHB_CPP_STAGING_INBOUND.
-
+     *
      * @param docName - Document name e.g. DailyList_453_20200101123213.xml
      * @param courtCode from the document name
      * @param documentType e.g. DL
@@ -227,7 +227,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Update the XHB_PDA_MESSAGE record.
-
+     *
      * @param stagingInboundId - cpp staging inbound id
      * @throws SQLException Exception
      */
@@ -276,7 +276,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Return the document type depending on what's been used in the file name.
-
+     *
      * @param fileType portion of the filename
      * @return shorthand documentType
      */
@@ -295,7 +295,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     /**
      * Get the document name to process. If the document name is invalid then return an empty
      * string.
-
+     * 
      * @param documentName document name
      * @return the document name to process
      */
@@ -324,7 +324,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
 
     /**
      * Use a regular expression to check if the document name is valid.
-
+     * 
      * @param documentName The document name to check
      * @return true if the document name is valid
      */

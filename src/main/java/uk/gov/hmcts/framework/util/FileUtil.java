@@ -7,19 +7,20 @@ import java.io.File;
 import java.io.IOException;
 
 /**
-
+ * <p>
  * Title: FileUtil.
-
-
+ * </p>
+ * <p>
  * Description: This class is used as a repositiry for common functions and utilities relating to
  * file
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2005
-
-
+ * </p>
+ * <p>
  * Company: Electronic Dathreads Systems
-
+ * </p>
+ * 
  * @author Will Fardel
  * @version $Id: FileUtil.java,v 1.3 2006/06/05 12:30:21 bzjrnl Exp $
  */
@@ -38,7 +39,7 @@ public final class FileUtil {
     /**
      * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work
      * around 4742723.
-
+     * 
      * @param path the dir to create
      * @throws IOException if cant create the dir for any reason
      */
@@ -52,7 +53,7 @@ public final class FileUtil {
     /**
      * Make this dir and all the dirs above this path. Use this instead of File.mkdirs to work
      * around 4742723.del.
-
+     * 
      * @param dir path the dir to create
      * @throws IOException if cant create the dir for any reason
      */
@@ -67,7 +68,7 @@ public final class FileUtil {
 
     /**
      * Test method.
-
+     * 
      * @param args the command line arguments, these are not used.
      * @throws InterruptedException Exception
      */

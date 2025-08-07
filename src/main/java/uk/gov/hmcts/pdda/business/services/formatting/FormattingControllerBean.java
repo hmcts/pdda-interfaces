@@ -69,7 +69,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     /**
      * Format the xml.
-
+     * 
      * @param formattingValue formattingValue
      * @param listStartDate LocalDateTime
      * @param xml String
@@ -106,7 +106,7 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     /**
      * Only remotely accessible method, this method processes the next available document if one is
      * available. If no document is available, then method will return.
-
+     * 
      * @throws RuntimeException if any <code>RuntimeException</code> is thrown during processing of
      *         the document, after first having the status of the document set to failed.
      */
@@ -137,9 +137,9 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
 
     /**
      * Process the document whose primary key value is passed in.
-
-     * Only accessible via the EJB local interface.
-
+     * 
+     * <p>Only accessible via the EJB local interface.
+     * 
      * @param formattingDocument XhbFormattingDao
      */
     public void processFormattingDocument(final XhbFormattingDao formattingDocument) {
@@ -169,9 +169,9 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     /**
      * Update the status of the formatting entity identified by the passed in formatting id primary
      * key to indicate success or failure of formatting of the document.
-
-     * Only accessible via the EJB local interface.
-
+     * 
+     * <p>Only accessible via the EJB local interface.
+     * 
      * @param formattingId Primary key of formatting entity we are updating.
      * @param success <i>true</i> if the document was successfully formatted, or <i>false</i> if not
      *        successfully formatted.
@@ -188,9 +188,9 @@ public class FormattingControllerBean extends AbstractControllerBean implements 
     /**
      * Update the status of the formatting entity identified by the passed in formatting id primary
      * key to indicate success or failure of formatting of the document.
-
-     * Only accessible via the EJB local interface.
-
+     * 
+     * <p>Only accessible via the EJB local interface.
+     * 
      * @param cppFormattingId Primary key of formatting entity we are updating.
      * @param errorMessage String
      */

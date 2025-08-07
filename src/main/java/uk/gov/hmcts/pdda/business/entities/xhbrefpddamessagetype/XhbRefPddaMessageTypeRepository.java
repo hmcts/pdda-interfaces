@@ -32,7 +32,7 @@ public class XhbRefPddaMessageTypeRepository extends AbstractRepository<XhbRefPd
 
     /**
      * findByMessageType.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")

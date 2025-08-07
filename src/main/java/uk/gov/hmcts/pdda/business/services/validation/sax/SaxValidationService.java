@@ -28,7 +28,7 @@ import javax.xml.validation.SchemaFactory;
 
 /**
  * Simple Service for Validating XML.
-
+ * 
  * @author William Fardell
  */
 @SuppressWarnings({"squid:S2755", "PMD.LawOfDemeter","PMD.CloseResource"})
@@ -166,7 +166,7 @@ public class SaxValidationService implements ValidationService {
     
     /**
      * Sets the schema for the SAXParserFactory.
-
+     *
      * @param schemaName the name of the schema to set.
      * @param factory    the SAXParserFactory to set the schema on.
      * @return the updated SAXParserFactory with the schema set.

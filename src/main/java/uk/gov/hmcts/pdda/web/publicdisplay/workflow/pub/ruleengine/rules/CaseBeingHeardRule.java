@@ -6,19 +6,20 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseCourtRoomEvent
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 
 /**
-
+ * <p>
  * Title: Case Being Heard Rule.
-
-
+ * </p>
+ * <p>
  * Description: Checks whether the case associated with event being processed has its display turned
  * on
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version 1.0
  */
@@ -28,7 +29,7 @@ public class CaseBeingHeardRule implements Rule {
 
     /**
      * Rule is true if the case associated with the event being processed has its display turned on.
-
+     * 
      * @param event An event that sub classes
      * @return boolean
      */

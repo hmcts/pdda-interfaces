@@ -1,18 +1,19 @@
 package uk.gov.hmcts.framework.security.login;
 
 /**
-
+ * <p>
  * Title: UserNamePasswordURLCallbackHandler.
-
-
+ * </p>
+ * <p>
  * Description: This class provides a user, password, URL based callback
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -37,7 +38,7 @@ public class UserNamePasswordUrlCallbackHandler implements CallbackHandler {
 
     /**
      * Constructor initialises the user name and password.
-
+     * 
      * @param userName String
      * @param password String
      */
@@ -48,7 +49,7 @@ public class UserNamePasswordUrlCallbackHandler implements CallbackHandler {
 
     /**
      * Handles the callback.
-
+     * 
      * @param callbacks CallbackArray
      * @throws UnsupportedCallbackException Exception
      */

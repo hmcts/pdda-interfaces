@@ -13,25 +13,27 @@ import java.util.Locale;
 /**
  * <p/>
  * Title: An immutable class that provides URI functionality for Public Display.
-
+ * </p>
  * <p/>
  * <p/>
  * The DisplayDocumentURI can then be constructed from it's components as the usual Java primitives
  * ie. int courtId, String documentType, int[] courtRoomIds. The DisplayDocumentURI also supports
  * conversion to and from a String. The format of a display document URI is:
-
+ * 
  * <pre>
  *         pd://display/&lt;courthouseName&gt;/&lt;courtSiteCode&gt;/&lt;location&gt;/&lt;display&gt;
  * </pre>
-
+ * 
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.21 $
  */
@@ -64,7 +66,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Build a DisplayDocumentURI from it's component parts.
-
+     *
      * @param locale Locale
      * @param courtId int
      * @param name DisplayDocumentType
@@ -85,7 +87,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Construct a URI from the String passed.
-
+     * 
      * @param uri String
      * @pre uri != null
      * @post courtId >= 0
@@ -117,6 +119,9 @@ public final class DisplayDocumentUri extends AbstractUri {
         // Locale
         this.locale = DisplayDocumentUriUtils.parseLocale(chars, end);
 
+        // Court Ids
+        List<Integer> courtIdList = new ArrayList<>();
+
         // Court Ids - Initialise Loop Variables
         start = end + 1;
         end = indexOf(chars, start, ',');
@@ -124,10 +129,6 @@ public final class DisplayDocumentUri extends AbstractUri {
             end = chars.length;
         }
         length = end - start;
-        
-        // Court Ids
-        List<Integer> courtIdList = new ArrayList<>();
-
         while (length > 0) {
             // Court Ids - Process Entry
             Integer courtRoomId = parseCourtRoomId(chars, start, length);
@@ -155,7 +156,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the locale for this URI.
-
+     * 
      * @return the Locale for this uri
      */
     @Override
@@ -165,7 +166,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the type of uri this is as a String.
-
+     * 
      * @return the type of URI this is.
      * @post return != null
      */
@@ -176,7 +177,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the courtId.
-
+     * 
      * @return Returns the courtId.
      */
     public int getCourtId() {
@@ -186,7 +187,7 @@ public final class DisplayDocumentUri extends AbstractUri {
     /**
      * This returns a copy of the courtRoomIds. We return a copy to make sure the object remains
      * immutable.
-
+     * 
      * @return returns a copy of the courtRoomIds.
      */
     public int[] getCourtRoomIds() {
@@ -196,7 +197,7 @@ public final class DisplayDocumentUri extends AbstractUri {
     /**
      * This returns a copy of the courtRoomIds. We return a copy to make sure the object remains
      * immutable.
-
+     * 
      * @return returns a copy of the courtRoomIds.
      */
     public int[] getCourtRoomIdsWithoutUnassigned() {
@@ -211,7 +212,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the DocumentTupe from the URI.
-
+     * 
      * @return the documentType.
      */
     public DisplayDocumentType getDocumentType() {
@@ -220,7 +221,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the DocumentTupe from the URI.
-
+     * 
      * @return the documentType.
      */
     public String getSimpleDocumentType() {
@@ -229,7 +230,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns the DocumentTupe from the URI converted to lowercase.
-
+     * 
      * @return the documentType.
      */
     public String getDocumentTypeAsLowerCaseString() {
@@ -238,7 +239,7 @@ public final class DisplayDocumentUri extends AbstractUri {
 
     /**
      * Returns true if the URI has unassigned cases.
-
+     * 
      * @return the documentType.
      */
     public boolean isUnassignedRequired() {

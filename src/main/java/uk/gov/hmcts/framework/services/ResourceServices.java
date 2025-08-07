@@ -7,20 +7,23 @@ import java.io.InputStream;
 import java.util.Locale;
 
 /**
-
+ * <p>
  * Title: Resource Services.
-
-
+ * </p>
+ * <p>
  * Description: Loads a resource (xsl, xml, images etc) for a given locale.
-
-
+ * </p>
+ * <p>
  * Use: Use ResourceServices.getInstance() to get an instance of the resource services
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author William Fardell (Xdevelopment 2003)
  * @version 1.0
  */
@@ -42,7 +45,7 @@ public final class ResourceServices {
 
     /**
      * Get the singleton.
-
+     * 
      * @return the ResourceServices singleton instance
      */
     public static ResourceServices getInstance() {
@@ -58,7 +61,7 @@ public final class ResourceServices {
 
     /**
      * Get the resource for the default locale.
-
+     * 
      * @param name the name of the resource to retrieve
      * @return an input stream to read the resource
      * @throws IllegalArgumentException if parameter is null
@@ -72,7 +75,7 @@ public final class ResourceServices {
 
     /**
      * Get the resource for the specified locale.
-
+     * 
      * @param name the name of the resource to retrieve
      * @param locale the locale to use
      * @return an input stream to read the resource

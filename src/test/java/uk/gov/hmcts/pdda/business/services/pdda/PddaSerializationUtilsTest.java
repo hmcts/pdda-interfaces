@@ -10,18 +10,19 @@ import uk.gov.hmcts.DummyFileUtil;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
-
+ * <p>
  * Title: PddaSerializationUtilsTest.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  */
 @SuppressWarnings("PMD")

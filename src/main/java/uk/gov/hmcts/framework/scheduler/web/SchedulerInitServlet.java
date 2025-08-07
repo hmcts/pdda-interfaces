@@ -13,33 +13,36 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
-
+ * <p>
  * Title: Initialisation servlet for a scheduler web application.
-
-
+ * </p>
+ * <p>
  * Description: Servlet called at instantiation of a scheduler web application. Responsible for
  * retrieving properties and initialising the scheduler. In future can be configured to provide much
  * more control over the scheduler.
-
-
+ * </p>
+ * <p>
  * This class requires complex configuration as it is used both as a context listener and as a
  * servlet. This is required as it needs to create the scheduler with a valid subject and not
  * destroy it untill the context is destroyed.
-
-
+ * </p>
+ * <p>
  * The first of these criteria is met by starting it as a servlet (use load-on-start and run-as tags
  * in config).
-
-
+ * </p>
+ * <p>
  * The second of these criteria is met by destroying it in the destoryContext handler of the context
  * listener. The servlet destroy method is unsafe as a servlet can be destroyed before the context
  * to free up resources.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @see Scheduler
  * @author Bob Boothby, Will Fardell
  */

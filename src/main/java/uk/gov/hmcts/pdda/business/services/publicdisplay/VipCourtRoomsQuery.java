@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-
+ * <p>
  * Title: Query to return all court rooms linked to the VIP Screen.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2004
-
-
+ * </p>
+ * <p>
  * Company:
-
+ * </p>
+ * 
  * @author unascribed
  * @version $Id: VipCourtRoomsQuery.java,v 1.4 2006/06/05 12:29:45 bzjrnl Exp $
  */
@@ -53,9 +54,9 @@ public class VipCourtRoomsQuery extends AbstractControllerBean {
 
     /**
      * Returns an array of CourtListValue.
-
+     * 
      * @param courtId room ids for which the data is required
-
+     * 
      * @return Summary by name data for the specified court rooms
      */
     public XhbCourtRoomDao[] getData(Integer courtId) {

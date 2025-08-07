@@ -7,18 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-
+ * <p>
  * Title: AbstractRowProcessor.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version $Id: AbstractRowProcessor.java,v 1.5 2006/06/05 12:30:15 bzjrnl Exp $
  */
@@ -30,7 +31,7 @@ public abstract class AbstractRowProcessor implements RowProcessor {
 
     /**
      * getChildProcessors.
-
+     * 
      * @return RowProcessorList
      */
     @Override
@@ -40,7 +41,7 @@ public abstract class AbstractRowProcessor implements RowProcessor {
 
     /**
      * addChildProcessor.
-
+     * 
      * @param childProcessor RowProcessor
      * @see <code>RowProcessor</code>
      */
@@ -56,7 +57,7 @@ public abstract class AbstractRowProcessor implements RowProcessor {
     /**
      * Use this for any pre-processing. Implementing classes should make sure that this is called in
      * processRow before processing and overridden properly to add pre-processing logic.
-
+     * 
      * @see RowProcessor
      * @param row Row
      */
@@ -69,7 +70,7 @@ public abstract class AbstractRowProcessor implements RowProcessor {
     /**
      * Use this for any post processing. Implementing classes should make sure that this is called
      * in processRow after processing and overridden properly to add post-processing logic.
-
+     * 
      * @see RowProcessor
      * @param row Row
      */

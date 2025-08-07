@@ -16,14 +16,14 @@ public interface Loadable {
 
     /**
      * A callback method for the loader.
-
+     * 
      * @param loaded boolean
      */
     void setLoaded(boolean loaded);
 
     /**
      * Method used to determine whether the job has loaded successfully.
-
+     * 
      * @return whether this Loadable has loaded successfully.
      */
     boolean isLoaded();

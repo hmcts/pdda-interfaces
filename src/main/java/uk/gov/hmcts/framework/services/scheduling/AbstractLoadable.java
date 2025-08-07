@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
  * Sub classes must provide a concrete <b>public void load()</b> method and a <b>getName()</b>
  * method. Each method that accesses the loaded data must call the <b>waitOnLoad()</b> method before
  * accesing the data.
-
+ * 
  * @see AsynchronousLoader
-
+ * 
  */
 @SuppressWarnings({"PMD.AvoidSynchronizedStatement","PMD.DoNotUseThreads"})
 public abstract class AbstractLoadable implements Loadable {
@@ -21,7 +21,7 @@ public abstract class AbstractLoadable implements Loadable {
 
     /**
      * A callback method for the loader.
-
+     * 
      * @param loaded boolean
      */
     @Override
@@ -31,7 +31,7 @@ public abstract class AbstractLoadable implements Loadable {
 
     /**
      * Method used to determine whether the job has loaded successfully.
-
+     * 
      * @return whether this AbstractLoadable has loaded successfully.
      */
     @Override
@@ -42,7 +42,7 @@ public abstract class AbstractLoadable implements Loadable {
     /**
      * This method waits until either the data has loaded or <b>TIMEOUT</b> milliseconds have
      * elapsed.
-
+     * 
      * @throws AsynchronousLoaderException if the timeout is reached.
      */
     protected void waitOnLoad() {

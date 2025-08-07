@@ -26,19 +26,20 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  * <p/>
  * Title: A general purpose DataSource.
-
+ * </p>
  * <p/>
  * <p/>
  * Description: A general purpose DataSource.
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.15 $
  */
@@ -51,11 +52,11 @@ public class GenericPublicDisplayDataSource extends DataSource {
 
     /**
      * Creates a new GenericPublicDisplayDataSource object.
-
+     * 
      * @param uri the uri of the document we wish to obtain data for.
      * @param query the query we will use to obtain the data, this is provided by the
      *        DataSourceFactory
-
+     * 
      * @pre uri != null
      * @pre query != null
      * @post this.query != null
@@ -78,9 +79,9 @@ public class GenericPublicDisplayDataSource extends DataSource {
 
     /**
      * If there is any data for the query place it into the data object otherwise leave it empty.
-
+     * 
      * @param entityManager EntityManager
-
+     * 
      * @pre getUri() != null
      * @pre getData() != null
      */
@@ -143,7 +144,7 @@ public class GenericPublicDisplayDataSource extends DataSource {
 
     /**
      * Commonly used setData method for setting the public display data.
-
+     * 
      * @param data Collection
      */
     private void setData(Collection<?> data) {
@@ -156,9 +157,9 @@ public class GenericPublicDisplayDataSource extends DataSource {
 
     /**
      * Sets the court name in the data object for the court that we're retrieving data for.
-
+     * 
      * @param courtId Integer
-
+     * 
      * @throws FinderException Exception
      */
     private void setCourtName(final Integer courtId, final EntityManager entityManager) {

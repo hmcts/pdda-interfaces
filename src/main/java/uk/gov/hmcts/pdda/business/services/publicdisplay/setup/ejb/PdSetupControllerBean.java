@@ -66,7 +66,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns a CourtDrillDown object for the court Id supplied.
-
+     * 
      * @param courtId Integer
      * @return CourtDrillDown object
      * @throws uk.gov.hmcts.framework.business.exceptions.CourtNotFoundException Exception
@@ -139,7 +139,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
     
     /**
      * getAllCourts.
-
+     * 
      * @return XhbCourtDaoArray
      */
     public XhbCourtDao[] getAllCourts() {
@@ -153,7 +153,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns the xhbCourtSiteRepository object, initialising if currently null.
-
+     * 
      * @return XhbCourtSiteRepository
      */
     private XhbCourtSiteRepository getXhbCourtSiteRepository() {
@@ -165,7 +165,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-
+     * 
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayLocationRepository getXhbDisplayLocationRepository() {
@@ -177,7 +177,7 @@ public class PdSetupControllerBean extends AbstractControllerBean implements Ser
 
     /**
      * Returns the xhbDisplayLocationRepository object, initialising if currently null.
-
+     * 
      * @return XhbDisplayLocationRepository
      */
     private XhbDisplayRepository getXhbDisplayRepository() {

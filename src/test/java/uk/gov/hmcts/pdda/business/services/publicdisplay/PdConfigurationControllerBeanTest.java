@@ -52,18 +52,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: PdConfigurationControllerBean Test.
-
-
+ * </p>
+ * <p>
  * Description: Unit tests for the PdConfigurationControllerBean class
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2022
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Chris Vincent
  */
 @ExtendWith(MockitoExtension.class)

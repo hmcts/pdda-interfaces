@@ -58,7 +58,7 @@ public class CaseControllerBean extends AbstractControllerBean {
 
     /**
      * This method is called to get all the hearings scheduled for a case on a particular day.
-
+     * 
      * @param caseId The case for which to retrieve the scheduled hearings.
      * @param day The Calendar object representing the day to look for scheduled hearings on.
      * @return an array of ScheduledHearingValues representing the scheduled hearings occurring for
@@ -90,7 +90,7 @@ public class CaseControllerBean extends AbstractControllerBean {
 
     /**
      * Returns all the hearings which have been scheduled so far for a given caseId.
-
+     * 
      * @param caseID The case id
      * @return A Collection of ScheduledHearing value objects containing the scheduled hearing id
      *         and date.
@@ -149,7 +149,7 @@ public class CaseControllerBean extends AbstractControllerBean {
     
     /**
      * Returns the xhbHearingRepository object, initialising if currently null.
-
+     * 
      * @return XhbHearingRepository
      */
     protected XhbHearingRepository getXhbHearingRepository() {
@@ -161,7 +161,7 @@ public class CaseControllerBean extends AbstractControllerBean {
 
     /**
      * Returns the xhbHearingListRepository object, initialising if currently null.
-
+     * 
      * @return XhbHearingListRepository
      */
     protected XhbHearingListRepository getXhbHearingListRepository() {

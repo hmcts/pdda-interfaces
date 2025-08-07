@@ -15,7 +15,7 @@ import java.util.Locale;
 
 /**
  * InitServlet.
-
+ * 
  * @author pznwc5 Servlet used for managing the initialization remove
  */
 public class InitServlet extends HttpServlet {
@@ -45,9 +45,9 @@ public class InitServlet extends HttpServlet {
 
     /**
      * Override the init method to initialize services.
-
+     * 
      * @param config the servlet config
-
+     * 
      * @throws ServletException Exception
      */
     @Override
@@ -85,7 +85,7 @@ public class InitServlet extends HttpServlet {
 
     /**
      * Override the service method to stop the servlet from serving requests.
-
+     * 
      * @param req The HTTP request
      * @param res The HTTP response
      */
@@ -104,7 +104,7 @@ public class InitServlet extends HttpServlet {
 
     /**
      * Sets the number of initialization workers.
-
+     * 
      * @param service InitializationService
      */
     private void setNumInitializationWorkers(InitializationService service) {
@@ -117,7 +117,7 @@ public class InitServlet extends HttpServlet {
 
     /**
      * Sets initialization delay.
-
+     * 
      * @param service InitializationService
      */
     private void setInitializationDelay(InitializationService service) {
@@ -130,7 +130,7 @@ public class InitServlet extends HttpServlet {
 
     /**
      * Sets the retry period for initialization.
-
+     * 
      * @param service InitializationService
      */
     private void setRetryPeriod(InitializationService service) {

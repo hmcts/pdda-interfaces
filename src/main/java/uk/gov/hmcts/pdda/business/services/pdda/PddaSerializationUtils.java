@@ -8,18 +8,19 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
 import java.util.Base64;
 
 /**
-
+ * <p>
  * Title: PddaSerializationUtils.
-
-
+ * </p>
+ * <p>
  * Description: Holds the methods used to encode, decode, serialize and deserialize events
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Luke Gittins
  * @version 1.0
  */

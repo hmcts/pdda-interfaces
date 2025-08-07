@@ -30,7 +30,7 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> im
 
     /**
      * findScheduledAttendeeJudge.
-
+     * 
      * @param scheduledHearingId Integer
      * @return XhbRefJudgeDao
      */
@@ -83,7 +83,7 @@ public class XhbRefJudgeRepository extends AbstractRepository<XhbRefJudgeDao> im
 
     /**
      * findScheduledSittingJudge.
-
+     * 
      * @param scheduledHearingId Integer
      * @return XhbRefJudgeDao
      */

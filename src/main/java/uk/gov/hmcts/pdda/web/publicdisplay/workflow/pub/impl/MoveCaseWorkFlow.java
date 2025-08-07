@@ -5,15 +5,22 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.DocumentsForEvent;
 
 /**
-
+ * <p>
  * Title: MoveCaseWorkFlow.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: MoveCaseWorkFlow.java,v 1.4 2006/06/05 12:32:37 bzjrnl Exp $
  */
@@ -24,7 +31,7 @@ public class MoveCaseWorkFlow extends AbstractEventWorkFlow {
 
     /**
      * Creates a new MoveCaseWorkFlow object.
-
+     * 
      * @param context WorkFlowContext
      */
     public MoveCaseWorkFlow(WorkFlowContext context) {
@@ -33,7 +40,7 @@ public class MoveCaseWorkFlow extends AbstractEventWorkFlow {
 
     /**
      * Creates a new MoveCaseWorkFlow object.
-
+     * 
      * @param context WorkFlowContext
      * @param event MoveCaseEvent
      */

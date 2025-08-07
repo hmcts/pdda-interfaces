@@ -12,18 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-
+ * <p>
  * Title: RulesConfigurationHandler.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version 1.0
  */
@@ -58,7 +59,7 @@ public class RulesConfigurationHandler extends DefaultHandler {
     /**
      * Processed when a start tag is reached. Only handles RuleRef, Event, ConditionalDocument &
      * Rule.
-
+     * 
      * @param uri String
      * @param localName String
      * @param name String
@@ -95,7 +96,7 @@ public class RulesConfigurationHandler extends DefaultHandler {
 
     /**
      * Processed when a end tag is reached. Only handles Event & ConditionalDocument.
-
+     * 
      * @param uri String
      * @param localName String
      * @param name String

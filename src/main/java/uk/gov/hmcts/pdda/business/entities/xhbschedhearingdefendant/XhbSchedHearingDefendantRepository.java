@@ -33,7 +33,7 @@ public class XhbSchedHearingDefendantRepository
 
     /**
      * findByScheduledHearingId.
-
+     * 
      * @param scheduledHearingId INteger
      * @return List
      */
@@ -67,7 +67,7 @@ public class XhbSchedHearingDefendantRepository
 
     /**
      * findByHearingAndDefendant.
-
+     * 
      * @return XhbSchedHearingDefendantDao
      */
     public Optional<XhbSchedHearingDefendantDao> findByHearingAndDefendant(

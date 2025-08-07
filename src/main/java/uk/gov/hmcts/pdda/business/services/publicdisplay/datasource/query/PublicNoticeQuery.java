@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * Abstract query class used by public display.
-
+ * 
  * @author pznwc5
  */
 @SuppressWarnings("PMD.NullAssignment")
@@ -35,7 +35,7 @@ public class PublicNoticeQuery extends AbstractControllerBean {
 
     /**
      * Creates a new PublicDisplayQuery object.
-
+     * 
      * @param entityManager EntityManager
      */
     public PublicNoticeQuery(EntityManager entityManager) {
@@ -62,7 +62,7 @@ public class PublicNoticeQuery extends AbstractControllerBean {
 
     /**
      * Executes the stored procedure and returns the data.
-
+     * 
      * @param courtRoomId room id for which the data is required
      * @return Public display data
      */

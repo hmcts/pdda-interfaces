@@ -7,15 +7,22 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 
 /**
-
+ * <p>
  * Title: ConfigurationChangeWorkFlow.
-
+ * </p>
+ * 
+ * <p>
  * Description: The workflow for a configuration change
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
@@ -23,7 +30,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
 public class ConfigurationChangeWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Creates a new ConfigurationChangeWorkFlow object.
-
+     * 
      * @param context WorkFlowContext
      * @param event ConfigurationChangeEvent
      */
@@ -43,7 +50,7 @@ public class ConfigurationChangeWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Configuration change events are handled by this workflow. Gets render changes from the
      * configuration, renders the document changes, then renders the rotations sets.
-
+     * 
      * @throws IllegalArgumentException Thrown if the event is not a ConfigurationChangeEvent
      */
     @Override

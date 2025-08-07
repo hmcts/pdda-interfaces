@@ -29,7 +29,7 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
 
     /**
      * findByFormatStatus.
-
+     * 
      * @return list
      */
     @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
 
     /**
      * findByDocumentAndClob.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")

@@ -6,19 +6,20 @@ import uk.gov.hmcts.pdda.web.publicdisplay.configuration.DisplayConfigurationRea
 /**
  * <p/>
  * Title: WorkFlowContext.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.5 $
  */
@@ -37,7 +38,7 @@ public final class WorkFlowContext {
 
     /**
      * newInstance.
-
+     * 
      * @return WorkFlowContext
      */
     public static WorkFlowContext newInstance() {
@@ -46,9 +47,9 @@ public final class WorkFlowContext {
 
     /**
      * newInstance.
-
+     * 
      * @param displayConfigurationReader TODO:
-
+     * 
      * @return WorkFlowContext
      */
     public static WorkFlowContext newInstance(
@@ -58,7 +59,7 @@ public final class WorkFlowContext {
 
     /**
      * setDataContext.
-
+     * 
      * @param dataContext DataContext
      */
     public void setDataContext(DataContext dataContext) {
@@ -67,7 +68,7 @@ public final class WorkFlowContext {
 
     /**
      * getDataContext.
-
+     * 
      * @return DataContext
      */
     public DataContext getDataContext() {
@@ -76,7 +77,7 @@ public final class WorkFlowContext {
 
     /**
      * getDisplayConfigurationReader.
-
+     * 
      * @return DisplayConfigurationReader
      */
     public DisplayConfigurationReader getDisplayConfigurationReader() {

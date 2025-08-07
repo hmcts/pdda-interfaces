@@ -33,7 +33,7 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
 
     /**
      * findByCourtIdStatusAndDate.
-
+     * 
      * @return XhbHearingListDao
      */
     public Optional<XhbHearingListDao> findByCourtIdStatusAndDate(Integer courtId, String status,

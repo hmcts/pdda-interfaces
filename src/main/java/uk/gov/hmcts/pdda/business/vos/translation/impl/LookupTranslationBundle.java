@@ -10,18 +10,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
-
+ * <p>
  * Title: Lookup Translation Bundle.
-
-
+ * </p>
+ * <p>
  * Description: Stores a set of translations
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: LookupTranslationBundle.java,v 1.3 2005/11/24 14:35:15 bzjrnl Exp $
  */
@@ -41,7 +42,7 @@ public class LookupTranslationBundle extends AbstractTranslationBundle {
 
     /**
      * LookupTranslationBundle.
-
+     * 
      * @param locale the locale for the bundle.
      * @throws IllegalArgumentException if the locale is null
      */
@@ -51,7 +52,7 @@ public class LookupTranslationBundle extends AbstractTranslationBundle {
 
     /**
      * getTranslation.
-
+     * 
      * @return the translation for the specified key or null if not found
      */
     @Override
@@ -61,7 +62,7 @@ public class LookupTranslationBundle extends AbstractTranslationBundle {
 
     /**
      * getTranslation.
-
+     * 
      * @return the translation for the specified key in the given context or null if not found
      */
     @Override
@@ -131,7 +132,7 @@ public class LookupTranslationBundle extends AbstractTranslationBundle {
 
     /**
      * Append the xml for this bundle to the buffer.
-
+     * 
      * @throws IllegalArgumentException if buffer is null
      */
     public XmlBuffer appendXml(XmlBuffer buffer, int indent) {

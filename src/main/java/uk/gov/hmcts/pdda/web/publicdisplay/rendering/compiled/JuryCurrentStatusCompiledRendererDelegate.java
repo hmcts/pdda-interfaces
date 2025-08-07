@@ -16,7 +16,7 @@ public class JuryCurrentStatusCompiledRendererDelegate
 
     /**
      * Append the html for the display document.
-
+     * 
      * @param buffer the buffer to append to
      * @param displayDocument the document containing the information to render
      */

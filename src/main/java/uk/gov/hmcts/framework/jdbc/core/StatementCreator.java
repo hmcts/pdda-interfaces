@@ -6,18 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
-
+ * <p>
  * Title: StatementCreator.
-
-
+ * </p>
+ * <p>
  * Description: A factory for creating prepared and callable statements
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author XHIBIT User
  * @version 1.0
  */
@@ -25,7 +26,7 @@ public interface StatementCreator {
 
     /**
      * Creates a prepared statement.
-
+     * 
      * @connection con
      * @param sql String
      * @param params ParameterArray
@@ -37,7 +38,7 @@ public interface StatementCreator {
 
     /**
      * Creates a callable statement.
-
+     * 
      * @connection con
      * @param call String
      * @param params ParameterArray

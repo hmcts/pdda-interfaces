@@ -3,15 +3,22 @@ package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 import java.io.Serializable;
 
 /**
-
+ * <p>
  * Title: Court Room Identifier.
-
+ * </p>
+ * 
+ * <p>
  * Description: This class holds the court id and court room id
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: CourtRoomIdentifier.java,v 1.4 2006/06/05 12:28:23 bzjrnl Exp $
  */
@@ -25,7 +32,7 @@ public class CourtRoomIdentifier implements Serializable {
 
     /**
      * Create the object using the court id and court room id.
-
+     * 
      * @param courtId identifier from XHB_COURT
      * @param courtRoomId identifier from XHB_COURT_ROOM
      */
@@ -36,7 +43,7 @@ public class CourtRoomIdentifier implements Serializable {
 
     /**
      * Set a new court Id.
-
+     * 
      * @param courtId identifier from XHB_COURT
      */
     public final void setCourtId(Integer courtId) {
@@ -45,7 +52,7 @@ public class CourtRoomIdentifier implements Serializable {
 
     /**
      * Get the court Id.
-
+     * 
      * @return court Id
      */
     public Integer getCourtId() {
@@ -54,7 +61,7 @@ public class CourtRoomIdentifier implements Serializable {
 
     /**
      * Set a new court roomId.
-
+     * 
      * @param courtRoomId identifier from XHB_COURT_ROOM
      */
     public final void setCourtRoomId(Integer courtRoomId) {
@@ -63,7 +70,7 @@ public class CourtRoomIdentifier implements Serializable {
 
     /**
      * Get the court room Id.
-
+     * 
      * @return court room Id
      */
     public Integer getCourtRoomId() {

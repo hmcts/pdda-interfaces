@@ -37,13 +37,13 @@ public final class CppDataSourceFactory {
 
     /**
      * Returns a DataSource for the document specified.
-
+     * 
      * @param shortName String
      * @param date Date
      * @param courtId int
      * @param courtRoomIds intArray
      * @return a DataSource.
-
+     * 
      * @post return != null
      * @pre uri != null
      * @pre uri.getDocumentType() != null

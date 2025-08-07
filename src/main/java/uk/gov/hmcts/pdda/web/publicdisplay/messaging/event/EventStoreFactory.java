@@ -25,7 +25,7 @@ public final class EventStoreFactory {
 
     /**
      * Gets the singleton EventStore instance.
-
+     *
      * @return EventStore instance
      */
     @SuppressWarnings("PMD.NonThreadSafeSingleton")

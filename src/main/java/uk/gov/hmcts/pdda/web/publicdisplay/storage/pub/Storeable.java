@@ -5,23 +5,24 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.Identifiable;
 /**
  * <p/>
  * Title: Any object that a Storer can store.
-
+ * </p>
  * <p/>
  * <p/>
  * Description: A Storeable object is one that is Identifiable, that is it has an AbstractURI
  * associated with it and which contains textual content that can be persisted.
-
-
+ * </p>
+ * <p>
  * To encourage cleaner interfaces Storeable objects are required to implement the store() method.
  * This is <b>not</b> a callback method.#
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.6 $
  */
@@ -32,7 +33,7 @@ public interface Storeable extends Identifiable {
 
     /**
      * Returns the contents of the Storeable object which we wish to persist.
-
+     * 
      * @return the textual content of the object.
      */
     String getRenderedString();

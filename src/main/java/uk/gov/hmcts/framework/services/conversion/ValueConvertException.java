@@ -24,7 +24,7 @@ public class ValueConvertException extends CsBusinessException implements Serial
 
     /**
      * ValueConvertException.
-
+     * 
      * @param propertyValue String
      * @param exception the initial cause
      */
@@ -50,7 +50,7 @@ public class ValueConvertException extends CsBusinessException implements Serial
 
     /**
      * An ConvertException has a name, type and value.
-
+     * 
      * @param propertyName identifies the field whose parse failed.
      * @param propertyType is the type required, e.g. java.util.Date.class, or Double.TYPE.
      * @param propertyValue is the actual value that failed to parse.

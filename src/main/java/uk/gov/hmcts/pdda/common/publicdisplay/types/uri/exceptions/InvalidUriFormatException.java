@@ -3,15 +3,22 @@ package uk.gov.hmcts.pdda.common.publicdisplay.types.uri.exceptions;
 import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.PublicDisplayRuntimeException;
 
 /**
-
+ * <p>
  * Title: InvalidURIFormatException.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.3 $
  */
@@ -21,7 +28,7 @@ public class InvalidUriFormatException extends PublicDisplayRuntimeException {
 
     /**
      * Creates a new InvalidURIFormatException object.
-
+     * 
      * @param message the message.
      */
     public InvalidUriFormatException(final String message) {
@@ -30,7 +37,7 @@ public class InvalidUriFormatException extends PublicDisplayRuntimeException {
 
     /**
      * Creates a new InvalidURIFormatException object.
-
+     * 
      * @param uri the offending URI.
      * @param message the message.
      */
@@ -40,7 +47,7 @@ public class InvalidUriFormatException extends PublicDisplayRuntimeException {
     
     /**
      * Creates a new InvalidURIFormatException object.
-
+     * 
      * @param uri the offending URI.
      * @param message the message.
      * @param throwable Throwable

@@ -40,7 +40,7 @@ public final class AppendFieldsUtils {
 
     /**
      * Append the document heading.
-
+     * 
      * @param buffer StringBuilder
      */
     public static void appendHeading(StringBuilder buffer, DisplayDocument displayDocument,

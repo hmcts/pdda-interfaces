@@ -27,7 +27,7 @@ public class TranslationXmlTemplates implements Templates {
 
     /**
      * Constuct a new Translation XML Template wrapper.
-
+     * 
      * @param translationXml (optional)
      * @param delegate Templates
      */
@@ -70,7 +70,7 @@ public class TranslationXmlTemplates implements Templates {
 
         /**
          * Construct a new instance.
-
+         * 
          * @param translationXml (optional)
          * @param delegate (optional)
          */
@@ -81,7 +81,7 @@ public class TranslationXmlTemplates implements Templates {
 
         /**
          * URIResolver Implementation, resolve the name to the source.
-
+         * 
          * @param href An href attribute, which may be relative or absolute.
          * @param base The base URI in effect when the href attribute was encountered.
          * @return A Source object, or null if the href cannot be resolved, and the processor should try to

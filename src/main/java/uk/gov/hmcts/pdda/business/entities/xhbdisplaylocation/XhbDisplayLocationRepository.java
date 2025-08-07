@@ -29,7 +29,7 @@ public class XhbDisplayLocationRepository extends AbstractRepository<XhbDisplayL
 
     /**
      * findByVIPCourtSite.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")
@@ -59,7 +59,7 @@ public class XhbDisplayLocationRepository extends AbstractRepository<XhbDisplayL
 
     /**
      * findByCourtSite.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")

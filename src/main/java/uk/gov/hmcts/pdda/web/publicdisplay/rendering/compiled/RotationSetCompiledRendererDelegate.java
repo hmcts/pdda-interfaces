@@ -13,7 +13,7 @@ public class RotationSetCompiledRendererDelegate extends AbstractCompiledRendere
 
     /**
      * Get the html for the rotation set.
-
+     * 
      * @param rotationSet DisplayRotationSet
      * @return the html
      */
@@ -32,10 +32,10 @@ public class RotationSetCompiledRendererDelegate extends AbstractCompiledRendere
 
     /**
      * Append the html generated for the rotation set to the buffer.
-
+     * 
      * @param buffer the buffer to populate
      * @param rotationSet the rotation set to process
-
+     * 
      */
     protected void appendDisplayRotationSetHtml(StringBuilder buffer,
         DisplayRotationSet rotationSet) {

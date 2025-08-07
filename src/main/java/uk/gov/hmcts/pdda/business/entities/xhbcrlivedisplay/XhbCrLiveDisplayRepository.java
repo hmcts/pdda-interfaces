@@ -38,7 +38,7 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
 
     /**
      * findLiveDisplaysWhereStatusNotNull.
-
+     * 
      * @return List
      */
     @SuppressWarnings("unchecked")
@@ -51,7 +51,7 @@ public class XhbCrLiveDisplayRepository extends AbstractRepository<XhbCrLiveDisp
 
     /**
      * findByCourtRoom.
-
+     * 
      * @param courtRoomId Integer
      * @return XhbCrLiveDisplayDao
      */

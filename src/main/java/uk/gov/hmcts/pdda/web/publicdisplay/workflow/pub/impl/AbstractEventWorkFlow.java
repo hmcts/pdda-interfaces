@@ -9,15 +9,22 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.DocumentsForE
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.RulesEngine;
 
 /**
-
+ * <p>
  * Title: Event Work Flow.
-
+ * </p>
+ * 
+ * <p>
  * Description: Retrieves effected documents and processes them
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Rakesh Lakhani
  * @version $Id: AbstractEventWorkFlow.java,v 1.3 2006/06/05 12:32:36 bzjrnl Exp $
  */
@@ -25,7 +32,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.ruleengine.RulesEngine;
 public abstract class AbstractEventWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Creates a new AbstractEventWorkFlow object.
-
+     * 
      * @param context WorkFlowContext
      * @param renderChanges RenderChanges
      */
@@ -35,7 +42,7 @@ public abstract class AbstractEventWorkFlow extends AbstractBasicWorkFlow {
 
     /**
      * Creates a new AbstractEventWorkFlow object.
-
+     * 
      * @param context WorkFlowContext
      */
     protected AbstractEventWorkFlow(WorkFlowContext context) {
@@ -44,9 +51,9 @@ public abstract class AbstractEventWorkFlow extends AbstractBasicWorkFlow {
 
     /**
      * Helper method that calls the rules engine.
-
+     * 
      * @param event PublicDisplayEvent
-
+     * 
      * @return DocumentsForEvent
      */
     protected DocumentsForEvent processRules(PublicDisplayEvent event) {
@@ -59,7 +66,7 @@ public abstract class AbstractEventWorkFlow extends AbstractBasicWorkFlow {
     /**
      * Helper method that requests the documents that need re-rendering from the configuration and
      * processes them.
-
+     * 
      * @param documents DocumentsForEvent
      * @param courtRoomIdentifier CourtRoomIdentifier
      */

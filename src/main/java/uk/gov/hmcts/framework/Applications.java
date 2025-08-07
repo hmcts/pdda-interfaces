@@ -5,28 +5,29 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
-
+ * <p>
  * Title: Applications.
-
-
+ * </p>
+ * <p>
  * Description: Object to allow all the applications that the CS framework handles to be referenced.
  * The exhibit application would be referenced with a <code>Applications.XHIBIT</code> reference.
  * This references the <code>Application</code> inner class. This is an implementation of the type
  * safe pattern.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Pete Raymond
-
+ *         <p>
  *         edited Paul Grove 20/09/2002
-
-
+ *         </p>
+ *         <p>
  *         edited Frederik Vandendriessche 16/11/2002
-
+ *         </p>
  * @version 1.1
  */
 
@@ -54,7 +55,7 @@ public final class Applications {
 
     /**
      * Provides a list of Applications running on the CS HUB which the Framework supports.
-
+     * 
      * @return Iterator object loaded with application objects which represents all the applications
      *         running on the CS Hub under the Framework
      */
@@ -67,9 +68,9 @@ public final class Applications {
 
         /**
          * Creates an application.
-
+         * 
          * @param name - String the name of the application e.g. Xhibit
-
+         * 
          *        Fred VDD: changed access control to public so client.xhibitapplication.Xhibit may
          *        instantiate.
          */
@@ -81,7 +82,7 @@ public final class Applications {
          * Used to provide a name for the application. This is used for example as a properties
          * object key to create a name space for all applications which access information from the
          * ConfigServices interface.
-
+         * 
          * @returns the name of the application
          */
         public String getName() {

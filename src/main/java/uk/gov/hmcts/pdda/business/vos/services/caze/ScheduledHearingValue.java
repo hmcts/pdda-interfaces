@@ -5,18 +5,19 @@ import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 import java.time.LocalDateTime;
 
 /**
-
+ * <p>
  * Title: ScheduledHearingValue.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Sarah Tong
  * @version 1.0
  */

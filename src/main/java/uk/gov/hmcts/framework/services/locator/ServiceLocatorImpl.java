@@ -20,18 +20,19 @@ import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 
 /**
-
+ * <p>
  * Title: LocatorServicesImpl.
-
-
+ * </p>
+ * <p>
  * Description: Implementation of LocatorServices provides basic lookup
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Pete Raymond
  * @version 1.0
  */
@@ -69,7 +70,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Returns the service locator for unauthenticated access to the default server.
-
+     * 
      * @return the instance of ServiceLocator class
      */
     public static ServiceLocator getInstance() {
@@ -78,7 +79,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets the initial context.
-
+     * 
      * @return InitialContext
      */
     @Override
@@ -95,7 +96,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets the default datasource.
-
+     * 
      * @return DataSource
      */
     @Override
@@ -105,7 +106,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets the default datasource.
-
+     * 
      * @return DataSource
      */
     @Override
@@ -129,7 +130,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets a remote EJB.
-
+     * 
      * @param homeClass Class
      * @return EJBHome
      */
@@ -141,7 +142,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets a local EJB.
-
+     * 
      * @param homeClass Class
      * @return EJBLocalHome
      */
@@ -152,7 +153,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets a user transaction.
-
+     * 
      * @return UserTransaction
      */
     @Override
@@ -173,7 +174,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Utility method to populate the JNDI properties.
-
+     * 
      * @return Properties
      */
     protected Properties getEnv() {
@@ -187,7 +188,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Utility method to lookup objects.
-
+     * 
      * @param jndiName String
      * @return Object
      */
@@ -195,7 +196,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Handles exception.
-
+     * 
      * @param ex PrivilegedActionException
      */
     protected static CsUnrecoverableException handleException(PrivilegedActionException ex) {
@@ -205,7 +206,7 @@ public abstract class ServiceLocatorImpl implements ServiceLocator {
 
     /**
      * Gets the home JNDI name.
-
+     * 
      * @param clazz Class
      * @return String
      */

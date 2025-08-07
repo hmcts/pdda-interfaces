@@ -132,7 +132,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     /**
      * Process a document from XHB_CPP_STAGING_INBOUND that has been added but not yet validated or
      * processed.
-
+     * 
      * @param xcsi The cpp staging inbound record to process
      */
     private void processDocument(XhbCppStagingInboundDao xcsi) {
@@ -226,10 +226,10 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
      * Get the earliest document that has been validated but not yet processed and attempt to
      * process it. Processing means that based on the document type data is extracted from the XML
      * and used to populate records in XHB_CPP_LIST or XHB_CPP_FORMATTING.
-
-     * If a process fails then the status needs to be updated accordingly so that it doesn't get
+     * 
+     * <p>If a process fails then the status needs to be updated accordingly so that it doesn't get
      * picked up again until it has been fixed
-
+     * 
      * @throws CppInitialProcessingControllerException Exception
      */
     @Override
@@ -281,7 +281,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getListStartDate.
-
+     * 
      * @param xml String
      * @param documentType String
      * @return LocalDateTime
@@ -316,7 +316,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getListEndDate.
-
+     * 
      * @param xml String
      * @param documentType String
      * @return LocalDateTime
@@ -351,7 +351,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * getCourtHouseCode.
-
+     * 
      * @param xml String
      * @param documentType String
      * @return String
@@ -386,7 +386,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * createUpdateNonListRecords.
-
+     * 
      * @param thisDoc XhbCppStagingInboundDao
      */
     public void createUpdateNonListRecords(XhbCppStagingInboundDao thisDoc) {
@@ -478,7 +478,7 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
 
     /**
      * createUpdateListRecords.
-
+     * 
      * @param thisDoc XhbCppStagingInboundDao
      */
     public void createUpdateListRecords(XhbCppStagingInboundDao thisDoc, String clobXml) {

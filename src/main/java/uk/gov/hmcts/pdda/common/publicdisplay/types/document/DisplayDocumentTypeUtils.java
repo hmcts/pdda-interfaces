@@ -16,11 +16,11 @@ public final class DisplayDocumentTypeUtils  {
     
     /**
      * Return a single instance of DisplayDocumentType.
-
+     * 
      * @param documentId is the shortName of the description_code from the DISPLAY_DOCUMENT table
-
+     * 
      * @return DisplayDocumentType
-
+     * 
      * @pre typeMap.get(documentId) instanceof DisplayDocumentType
      * @pre exists DisplayDocumentType dt inarray types | dt.shortName.equals(documentId)
      * @post return.shortName.equals(documentId)
@@ -33,11 +33,11 @@ public final class DisplayDocumentTypeUtils  {
 
     /**
      * Return a single instance of DisplayDocumentType.
-
+     * 
      * @param documentId is the shortName of the description_code from the DISPLAY_DOCUMENT table
-
+     * 
      * @return DisplayDocumentType
-
+     * 
      * @pre typeMap.get(documentId) instanceof DisplayDocumentType
      * @pre exists DisplayDocumentType dt inarray types | dt.shortName.equals(documentId)
      * @post return.shortName.equals(documentId)

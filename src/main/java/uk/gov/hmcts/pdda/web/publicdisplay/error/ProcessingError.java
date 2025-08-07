@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * ProcessingError.
-
+ * 
  * @author pznwc5
  *         <p/>
  *         To change the template for this generated type comment go to Window - Preferences - Java

@@ -106,7 +106,7 @@ public class AbstractControllerBean {
 
     /**
      * Retrieves a reference to the xhbCppListRepository.
-
+     * 
      * @return XhbCppListRepository
      */
     protected XhbCppListRepository getXhbCppListRepository() {
@@ -118,7 +118,7 @@ public class AbstractControllerBean {
 
     /**
      * Retrieves a reference to the xhbFormattingRepository.
-
+     * 
      * @return XhbFormattingRepository
      */
     protected XhbFormattingRepository getXhbFormattingRepository() {
@@ -130,7 +130,7 @@ public class AbstractControllerBean {
     
     /**
      * Retrieves a reference to the xhbCppStagingInboundRepository.
-
+     * 
      * @return XhbCppStagingInboundRepository
      */
     public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {

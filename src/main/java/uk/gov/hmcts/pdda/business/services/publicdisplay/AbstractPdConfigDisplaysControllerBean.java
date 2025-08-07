@@ -56,7 +56,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
 
     /**
      * Returns the list of display documents.
-
+     * 
      * @return All Display Documents
      */
     public XhbDisplayDocumentDao[] getDisplayDocuments() {
@@ -68,7 +68,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
      * Updates the display configuration with changes.
      * <p/>
      * Note: sends a DisplayConfigurationChanged JMS configuration message
-
+     * 
      * @param displayConfiguration The updated display configuration to be stored
      */
     public void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration) {
@@ -79,7 +79,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
 
     /**
      * Returns the Court Sites, Locations within the Site and Displays within the Site.
-
+     * 
      * @param courtId The court being maintained
      * @return Details of site, location and screen within a court
      */
@@ -91,7 +91,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
     /**
      * The Rotation sets, pages within each set and the screens the rotation sets are assigned to are
      * returned.
-
+     * 
      * @param courtId The court the display is in.
      * @return Array of objects containing the rotation set, pages and screens rotation set is assigned
      *         to
@@ -103,7 +103,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
 
     /**
      * Returns the list of RotationSets available in the court.
-
+     * 
      * @param courtId The court to which the rotation set belongs
      * @return The rotation sets within a court
      */
@@ -114,7 +114,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
 
     /**
      * Creates a new rotation set with associated documents.
-
+     * 
      * @param newRotationSet This object must contain a RotationSetBasic value with court Id populated
      *        and a list of RotationSetDDComplex values with RotationSetDDBasicValues and valid
      *        DisplayDocumentBasicValues
@@ -127,7 +127,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
     /**
      * Delete a rotation set with associated documents Note the rotation set must not be assigned to any
      * displays.
-
+     * 
      * @param rotationSet The rotation set to be deleted
      */
     public void deleteRotationSets(final RotationSetComplexValue rotationSet) {
@@ -139,7 +139,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
      * Updates the rotation set with display documents that have been selected.
      * <p/>
      * Note: sends a RotationSet changed JMS configuration message
-
+     * 
      * @param rotationSet The rotation set being updated and an array of display documents with ordering
      *        and delay information
      * @throws PublicDisplayCheckedException Thrown if rotation set does not exist in the DB
@@ -152,7 +152,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
 
     /**
      * Returns the display, the rotations set assigned and an array of court rooms assigned.
-
+     * 
      * @param displayId the display (ie physical screen) being queried
      * @return An object containing details of the display, the rotation set and the courtrooms assigned
      */

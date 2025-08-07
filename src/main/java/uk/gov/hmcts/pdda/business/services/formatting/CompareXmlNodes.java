@@ -92,7 +92,7 @@ public final class CompareXmlNodes {
     
     /**
      * Is the value to compare a number.
-
+     * 
      * @param value String to check
      * @return true if it's a number
      */

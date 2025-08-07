@@ -18,19 +18,20 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
-
+ * <p>
  * Title: Row.
-
-
+ * </p>
+ * <p>
  * Description: This class hides the result set from the clients. The fetch direction is forward
  * only.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version $Id: Row.java,v 1.19 2014/06/20 18:01:08 atwells Exp $
  */
@@ -44,7 +45,7 @@ public class PddaRow {
 
     /**
      * Creates a row with the backing resultset.
-
+     * 
      * @param rs Result set
      */
     protected PddaRow(final ResultSet rs) {
@@ -85,15 +86,15 @@ public class PddaRow {
      * Return an <code>OutputStream</code> pointing to the <code>Blob</code> value of the designated
      * column in the current row of this <code>Row</code> object. If the <code>Blob</code> found is
      * <i>null</i>, then this method will return <i>null</i>.
-
-     * Note: This method uses Oracle specific functionality, however, several classes in this JDBC
+     * 
+     * <p>Note: This method uses Oracle specific functionality, however, several classes in this JDBC
      * framework also use Oracle specific functionality, and it would require significant work to
      * extract in a proper manner.
-
+     * 
      * @param col the name of the column from which to retrieve the value.
      * @return an <code>OutputStream</code> object pointing to the <code>BLOB</code> value in the
      *         specified column.
-
+     * 
      * @see #getBlob(java.lang.String)
      * @see oracle.sql.BLOB.getBinaryOutputStream
      */
@@ -115,15 +116,15 @@ public class PddaRow {
      * Return an <code>InputStream</code> pointing to the <code>Blob</code> value of the designated
      * column in the current row of this <code>Row</code> object. If the <code>Blob</code> found is
      * <i>null</i>, then this method will return <i>null</i>.
-
-     * Note: This method uses Oracle specific functionality, however, several classes in this JDBC
+     * 
+     * <p>Note: This method uses Oracle specific functionality, however, several classes in this JDBC
      * framework also use Oracle specific functionality, and it would require significant work to
      * extract in a proper manner.
-
+     * 
      * @param col the name of the column from which to retrieve the value.
      * @return an <code>InputStream</code> object pointing to the <code>BLOB</code> value in the
      *         specified column.
-
+     * 
      * @see #getBlob(java.lang.String)
      * @see oracle.sql.BLOB.getBinaryStream
      */
@@ -143,7 +144,7 @@ public class PddaRow {
 
     /**
      * getBoolean.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public boolean getBoolean(final String col) {
@@ -156,7 +157,7 @@ public class PddaRow {
 
     /**
      * getByte.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public byte getByte(final String col) {
@@ -169,7 +170,7 @@ public class PddaRow {
 
     /**
      * getCharacterStream.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public Reader getCharacterStream(final String col) {
@@ -182,7 +183,7 @@ public class PddaRow {
 
     /**
      * getDate.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public Date getDate(final String col) {
@@ -195,7 +196,7 @@ public class PddaRow {
 
     /**
      * getDouble.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public double getDouble(final String col) {
@@ -208,7 +209,7 @@ public class PddaRow {
 
     /**
      * getFloat.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public float getFloat(final String col) {
@@ -221,7 +222,7 @@ public class PddaRow {
 
     /**
      * getInt.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public int getInt(final String col) {
@@ -234,7 +235,7 @@ public class PddaRow {
 
     /**
      * getLong.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public long getLong(final String col) {
@@ -247,7 +248,7 @@ public class PddaRow {
 
     /**
      * getObject.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public Object getObject(final String col) {
@@ -260,7 +261,7 @@ public class PddaRow {
 
     /**
      * getShort.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public short getShort(final String col) {
@@ -273,7 +274,7 @@ public class PddaRow {
 
     /**
      * getString.
-
+     * 
      * @see Javadoc for java.sql.ResultSet
      */
     public String getString(final String col) {
@@ -286,7 +287,7 @@ public class PddaRow {
 
     /**
      * Gets the given clob as a string.
-
+     * 
      * @param col String
      * @return the clob as a string.
      */
@@ -318,7 +319,7 @@ public class PddaRow {
 
     /**
      * Gets the given clob as a string.
-
+     * 
      * @param col string
      * @return the clob as a string.
      */

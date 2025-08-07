@@ -10,7 +10,7 @@ import java.util.Collection;
  * Common superclass for public display data classes Note: This extends public display value, but
  * only uses the court site information from this value object. The row processor calls a separate
  * method on the abstractRowProcessor to acheive this.
-
+ * 
  * @author pznwc5
  */
 public class AllCourtStatusValue extends PublicDisplayValue {
@@ -44,7 +44,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Sets the case title.
-
+     * 
      * @param val the Case title
      */
     public void setCaseTitle(String val) {
@@ -53,7 +53,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Sets the case number.
-
+     * 
      * @param val the Case number
      */
     public void setCaseNumber(String val) {
@@ -62,7 +62,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Gets the case title.
-
+     * 
      * @return val the Case title
      */
     public String getCaseTitle() {
@@ -71,7 +71,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Gets the case number.
-
+     * 
      * @return the case number
      */
     public String getCaseNumber() {
@@ -80,7 +80,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Gets the defendant names.
-
+     * 
      * @return Defendant names
      */
     public Collection<DefendantName> getDefendantNames() {
@@ -89,7 +89,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Adds the defendant name.
-
+     * 
      * @param val the DefendantName name
      */
     public void addDefendantName(DefendantName val) {
@@ -111,7 +111,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Sets reporting restriction.
-
+     * 
      * @param val Reporting restriction
      */
     public void setReportingRestricted(boolean val) {
@@ -120,7 +120,7 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     /**
      * Returns reporting restriction.
-
+     * 
      * @return Reporting restriction
      */
     public boolean isReportingRestricted() {

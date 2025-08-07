@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 /**
  * Basic Numeric Parser implementation.
-
- * Other implementations could use this as a base to provide defaults.</p>
-
+ * 
+ * <p>Other implementations could use this as a base to provide defaults.</p>
+ * 
  */
 public abstract class BasicNumericConverter implements ValueConverter, Serializable {
 
@@ -18,7 +18,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
 
     /**
      * Format an integer as a String. Returns String.valueOf(value).
-
+     * 
      * @param value the integer to format.
      */
     @Override
@@ -28,7 +28,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Format a double as a String. Returns String.valueOf(value).
-
+     * 
      * @param value the double to format.
      */
     @Override
@@ -38,7 +38,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Format a float as a String. Returns String.valueOf(value).
-
+     * 
      * @param value the float to format.
      */
     @Override
@@ -48,7 +48,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Format a short as a String. Returns String.valueOf(value).
-
+     * 
      * @param value the short to format.
      */
     @Override
@@ -58,7 +58,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
 
     /**
      * Format a long as a String. Returns String.valueOf(value).
-
+     * 
      * @param value the long to format.
      */
     @Override
@@ -68,7 +68,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Extract a short value from a String. Uses Short.parseShort.
-
+     * 
      * @param value the String to parse.
      */
     @Override
@@ -84,7 +84,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Extract a double value from a String. Uses Double.parseDouble.
-
+     * 
      * @param value the String to parse.
      */
     @Override
@@ -100,7 +100,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
    
     /**
      * Extract a float value from a String. Uses Float.parseFloat.
-
+     * 
      * @param value the String to parse.
      */
     @Override
@@ -116,7 +116,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Extract an integer value from a String. Uses Integer.parseInt.
-
+     * 
      * @param value the String to parse.
      */
     @Override
@@ -132,7 +132,7 @@ public abstract class BasicNumericConverter implements ValueConverter, Serializa
     
     /**
      * Extract a long value from a String. Uses Long.parseLong.
-
+     * 
      * @param value the String to parse.
      * @throws ValueConvertException if the format is invalid.
      */

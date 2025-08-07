@@ -11,25 +11,26 @@ import java.util.Properties;
 
 
 /**
-
+ * <p>
  * Title: TaskStrategy implementation that allows the execution of a RemoteTask implemented by a
  * session bean with a no arguments create method.
-
-
+ * </p>
+ * <p>
  * Description: Handles the execution of a Session Bean that implements the RemoteTask interface
  * with a no arguments constructor. In future an implementation can easily be written to allow more
  * complex create methods to be used.
-
-
+ * </p>
+ * <p>
  * To use this class, it must be supplied with the required properties. It will not initialise
  * correctly if the session bean's remote interface does not implement the RemoteTask interface.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bob Boothby
  */
 public final class RemoteSessionTaskStrategy implements TaskStrategy {
@@ -130,7 +131,7 @@ public final class RemoteSessionTaskStrategy implements TaskStrategy {
 
     /**
      * Returns the classname of the controller bean. Used for unit testing.
-
+     * 
      * @return Name of the controllerBean's class
      */
     public Object getControllerBeanClassName() {

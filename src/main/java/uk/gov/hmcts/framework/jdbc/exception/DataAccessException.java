@@ -3,18 +3,19 @@ package uk.gov.hmcts.framework.jdbc.exception;
 import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 
 /**
-
+ * <p>
  * Title: Data Access Exception.
-
-
+ * </p>
+ * <p>
  * Description: This is an unchecked exception used by the JDBC framework
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Meeraj Kunnumpurath
  * @version 1.0
  */
@@ -29,7 +30,7 @@ public class DataAccessException extends CsUnrecoverableException {
 
     /**
      * Creates an instance with the message.
-
+     * 
      * @param msg String
      */
     public DataAccessException(String msg) {
@@ -39,7 +40,7 @@ public class DataAccessException extends CsUnrecoverableException {
 
     /**
      * Creates an instance with the message and root cause.
-
+     * 
      * @param msg String
      * @param cause Root cause
      */
@@ -50,7 +51,7 @@ public class DataAccessException extends CsUnrecoverableException {
 
     /**
      * Creates an instance with the message.
-
+     * 
      * @param msg String
      * @param column String
      */
@@ -61,7 +62,7 @@ public class DataAccessException extends CsUnrecoverableException {
 
     /**
      * Creates an instance with the message and root cause.
-
+     * 
      * @param msg String
      * @param cause Root cause
      */
@@ -72,7 +73,7 @@ public class DataAccessException extends CsUnrecoverableException {
 
     /**
      * Gets the column.
-
+     * 
      * @return String
      */
     public String getColumn() {

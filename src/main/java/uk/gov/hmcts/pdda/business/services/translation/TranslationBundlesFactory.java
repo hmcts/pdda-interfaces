@@ -6,18 +6,19 @@ import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 import java.util.Locale;
 
 /**
-
+ * <p>
  * Title: TranslationBundlesFactory.
-
-
+ * </p>
+ * <p>
  * Description: Concrete instances of this class are found using the discovery pattern.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author William Fardell, Xdevelopment (2004)
  * @version $Id: TranslationBundlesFactory.java,v 1.1 2005/12/01 15:19:56 bzjrnl Exp $
  */
@@ -27,7 +28,7 @@ public abstract class TranslationBundlesFactory {
 
     /**
      * Get the singleton using the discovery pattern.
-
+     * 
      * @return the singleton instance.
      */
     public static TranslationBundlesFactory getInstance() {

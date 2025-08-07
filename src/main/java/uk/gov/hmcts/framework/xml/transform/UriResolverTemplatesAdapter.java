@@ -12,7 +12,7 @@ import javax.xml.transform.URIResolver;
 
 /**
  * Allows the values of a template to be adapted.
-
+ * 
  * @author Will Fardell
  */
 @SuppressWarnings("PMD.LawOfDemeter")
@@ -23,7 +23,7 @@ public class UriResolverTemplatesAdapter extends TemplatesAdapter {
 
     /**
      * Construct a new adapter.
-
+     * 
      * @author Will Fardell
      */
     public UriResolverTemplatesAdapter(Templates delegate, URIResolver resolver) {

@@ -21,7 +21,7 @@ public final class RendererUtils {
 
     /**
      * isEmpty.
-
+     * 
      * @return true if the document contains no data.
      */
     public static boolean isEmpty(DisplayDocument document) {
@@ -44,7 +44,7 @@ public final class RendererUtils {
 
     /**
      * getMaxDefendantsWithoutOverspill.
-
+     * 
      * @return the number of defendants than can be rendered without overspill.
      */
     private static int getMaxDefendantsWithoutOverspill() {
@@ -68,7 +68,7 @@ public final class RendererUtils {
 
     /**
      * isReportingRestricted.
-
+     * 
      * @param item the SummaryByNameValue to check
      * @return true if reporting is restricted for this item
      */
@@ -85,7 +85,7 @@ public final class RendererUtils {
 
     /**
      * isFloating.
-
+     * 
      * @param item the SummaryByNameValue to check
      * @return true if this item is floating
      */

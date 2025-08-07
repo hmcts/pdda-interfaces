@@ -29,7 +29,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * Fetch files from a remote folder.
-
+     * 
      * @param remoteFolder The remote folder
      * @param validation The validation
      * @return The files
@@ -50,7 +50,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * Delete a file from a remote folder.
-
+     * 
      * @param remoteFolder The remote folder
      * @param filename The filename
      * @throws IOException The IO Exception
@@ -80,7 +80,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * Fetch the files from the remote folder.
-
+     * 
      * @param sftpClient The SFTP Client
      * @param remoteFolder The remote folder
      * @param validation The validation
@@ -136,7 +136,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * List the files in a folder.
-
+     * 
      * @param sftpClient The SFTP Client
      * @param folder The folder
      * @param validation The validation
@@ -175,7 +175,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * Separate method to get the file., due to PMD rules.
-
+     * 
      * @param remoteFile The remote file
      * @return The file
      */
@@ -185,7 +185,7 @@ public class PddaSftpHelperSshj {
 
     /**
      * Get the contents of a file.
-
+     * 
      * @param filename The filename
      * @param inputStream The input stream
      * @return The file contents

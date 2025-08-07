@@ -4,15 +4,22 @@ import uk.gov.hmcts.pdda.common.publicdisplay.exceptions.Fatal;
 import uk.gov.hmcts.pdda.web.publicdisplay.storage.pub.Storeable;
 
 /**
-
+ * <p>
  * Title: DocumentNotYetRenderedException.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.4 $
  */
@@ -23,7 +30,7 @@ public class DocumentNotYetRenderedException extends StoreException implements F
 
     /**
      * Creates a new DocumentNotYetRenderedException object.
-
+     * 
      * @param doc the Storeable document.
      */
     public DocumentNotYetRenderedException(final Storeable doc) {

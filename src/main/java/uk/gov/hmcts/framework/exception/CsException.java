@@ -1,18 +1,19 @@
 package uk.gov.hmcts.framework.exception;
 
 /**
-
+ * <p>
  * Title: CSException.
-
-
+ * </p>
+ * <p>
  * Description: Interface for all CS Hub framework exceptions
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2002
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Kevin Buckthorpe
  * @version 1.0
  */

@@ -64,7 +64,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     
     /**
      * findAll.
-
+     * 
      * @return List
      */
     public List<T> findAll() {

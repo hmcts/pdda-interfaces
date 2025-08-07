@@ -15,18 +15,19 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 /**
-
+ * <p>
  * Title: Xhibit PDDAHelper.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2022
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  * @version 1.0
  */
@@ -80,7 +81,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
 
     /**
      * Sends a public display event.
-
+     * 
      * @param event Public display event
      */
     public void sendMessage(PublicDisplayEvent event) {

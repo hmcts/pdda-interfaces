@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * LazyLoadingServiceLocatorImpl.
-
+ * 
  * @author Meeraj
  * @title LazyLoadingServiceLocatorImpl.
  */
@@ -25,7 +25,7 @@ public class LazyLoadingServiceLocatorImpl extends ServiceLocatorImpl {
 
     /**
      * Utility method to lookup objects.
-
+     * 
      * @param jndiName String 
      * @return Object
      */

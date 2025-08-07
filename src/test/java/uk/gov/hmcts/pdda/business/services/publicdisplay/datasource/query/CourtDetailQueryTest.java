@@ -58,18 +58,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: CourtDetailQuery Test.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2023
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Mark Harris
  */
 @ExtendWith(EasyMockExtension.class)
@@ -355,7 +356,7 @@ class CourtDetailQueryTest extends AbstractQueryTest {
         if (!abortExpects) {
             XhbDefendantOnCaseDao xhbDefendantOnCaseDao =
                 DummyDefendantUtil.getXhbDefendantOnCaseDao();
-            
+            XhbDefendantDao xhbDefendantDao = DummyDefendantUtil.getXhbDefendantDao();
             if (defOnCasePublicDisplayHide) {
                 xhbDefendantOnCaseDao.setPublicDisplayHide("Y");
                 EasyMock
@@ -383,7 +384,6 @@ class CourtDetailQueryTest extends AbstractQueryTest {
             EasyMock.expectLastCall().anyTimes();
             addReplayArray(replayArray, mockXhbDefendantOnCaseRepository);
 
-            XhbDefendantDao xhbDefendantDao = DummyDefendantUtil.getXhbDefendantDao();
             if (defPublicDisplayHide) {
                 xhbDefendantDao.setPublicDisplayHide("Y");
                 EasyMock

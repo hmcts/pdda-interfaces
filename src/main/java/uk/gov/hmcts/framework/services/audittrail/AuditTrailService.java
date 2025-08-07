@@ -9,18 +9,19 @@ import java.util.Properties;
 
 
 /**
-
+ * <p>
  * Title: AuditTrailService.
-
-
+ * </p>
+ * <p>
  * Description: This is the AuditTrailService class
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2008
-
-
+ * </p>
+ * <p>
  * Company: Logica
-
+ * </p>
+ * 
  * @author James Powell
  * @version 1.0
  */
@@ -41,7 +42,7 @@ public final class AuditTrailService {
 
     /**
      * Private constructor for this singleton class. Gets and sets properties from the Resource Bundle.
-
+     *
      */
     private AuditTrailService() {
         Properties prop = CsServices.getConfigServices().getProperties("audittrail");
@@ -50,7 +51,7 @@ public final class AuditTrailService {
 
     /**
      * Return the singleton instance of this class.
-
+     * 
      * @return AuditTrailService
      */
     public static AuditTrailService getInstance() {
@@ -59,7 +60,7 @@ public final class AuditTrailService {
 
     /**
      * Accepts an AuditTrailEvent and sends the formatted message to the appropriate AuditProvider.
-
+     * 
      * @param evt - AuditTrailEvent to create AuditRecrod for
      */
     public void createAuditRecord(AuditTrailEvent evt) {
@@ -71,7 +72,7 @@ public final class AuditTrailService {
     /**
      * This class takes in an object and returns an appropriate AuditTrailEvent by using the
      * AuditTrailEventFactory.
-
+     * 
      * @param argument Arbitrary object to create AuditTrailEvent for
      * @return AuditTrailEvent
      */
@@ -97,7 +98,7 @@ public final class AuditTrailService {
      * <UL>
      * <li>FileAuditProvider - Log messages directly to file (only used for development)</li>
      * </UL>
-
+     * 
      * @return AuditProvider
      */
     private AuditProvider getAuditProvider() {

@@ -28,7 +28,7 @@ public class XhbCourtLogEntryRepository extends AbstractRepository<XhbCourtLogEn
 
     /**
      * findByCaseId.
-
+     * 
      * @param caseId Integer
      * @return List
      */

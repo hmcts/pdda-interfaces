@@ -14,29 +14,30 @@ import java.util.TimerTask;
 
 
 /**
-
+ * <p>
  * Title: Class that handles the configuration and execution of tasks to be executed in a scheduled
  * manner.
-
-
+ * </p>
+ * <p>
  * Description: This class uses the strategy pattern to allow the scheduled execution of tasks
  * implemented in many manners.
-
-
+ * </p>
+ * <p>
  * Properties are passed in by the 'user' of this class defining the required scheduling, execution
  * strategy and it's configuration. The properties defined within Schedulable all have defaults,
  * further properties may be defined by the individual strategies that may or may not have defaults.
-
-
+ * </p>
+ * <p>
  * Maintains an internal instance of java.util.Timer as we need to be able to support longer running
  * tasks that if run on a shared timer may hog the shared Timer's execution thread.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bob Boothby
  * @see java.util.Timer
  * @see TaskStrategy
@@ -59,7 +60,7 @@ public class Schedulable {
     /**
      * Property that needs setting for determining whether the task is to run at a fixed rate or not.
      * Fixed rate is best defined by java.util.Timer
-
+     * 
      * @see java.util.Timer
      * @see FIXED_RATE_DEFAULT
      */
@@ -67,7 +68,7 @@ public class Schedulable {
 
     /**
      * Property that needs setting for determining whether the task is to run once a day or not.
-
+     * 
      * @see java.util.Timer
      * @see ONCE_A_DAY_DEFAULT
      */
@@ -75,14 +76,14 @@ public class Schedulable {
 
     /**
      * Default value for the fixed rate property.
-
+     * 
      * @see FIXED_RATE
      */
     public static final String FIXED_RATE_DEFAULT = "false";
 
     /**
      * Default value for the once a day property.
-
+     * 
      * @see ONCE_A_DAY
      */
     public static final String ONCE_A_DAY_DEFAULT = "false";
@@ -93,42 +94,42 @@ public class Schedulable {
 
     /**
      * Property that needs setting for determining the delay in ms before initial execution of the task.
-
+     * 
      * @see DELAY_DEFAULT
      */
     public static final String DELAY = "delay";
 
     /**
      * Default value for the delay property.
-
+     * 
      * @see DELAY
      */
     public static final String DELAY_DEFAULT = "0";
 
     /**
      * Property that needs setting for determining the hour before initial execution of the task.
-
+     * 
      * @see HOUR_DEFAULT
      */
     public static final String HOUR = "hour";
 
     /**
      * Default value for the hour property.
-
+     * 
      * @see HOUR
      */
     public static final String HOUR_DEFAULT = "0";
 
     /**
      * Property that needs setting for determining the minute before initial execution of the task.
-
+     * 
      * @see MINUTE_DEFAULT
      */
     public static final String MINUTE = "minute";
 
     /**
      * Default value for the minute property.
-
+     * 
      * @see MINUTE
      */
     public static final String MINUTE_DEFAULT = "0";
@@ -138,14 +139,14 @@ public class Schedulable {
     /**
      * Property that needs setting for determining the period in ms between executions of the task. If
      * the period is 0, the task will run once and terminate.
-
+     * 
      * @see PERIOD_DEFAULT
      */
     public static final String PERIOD = "period";
 
     /**
      * Default value for the period.
-
+     * 
      * @see PERIOD
      */
     public static final String PERIOD_DEFAULT = "0";
@@ -158,7 +159,7 @@ public class Schedulable {
 
     /**
      * Property that specifies which strategy class to use in execution of the task.
-
+     * 
      * @see TaskStrategy
      * @see TASK_STRATEGY_DEFAULT
      */
@@ -170,7 +171,7 @@ public class Schedulable {
 
     /**
      * Default value for the strategy class.
-
+     * 
      * @see TASK_STRATEGY
      */
     public static final String TASK_STRATEGY_DEFAULT = JavaTaskStrategy.class.getName();
@@ -184,7 +185,7 @@ public class Schedulable {
     /**
      * This constructor that reads the basic scheduling properties before passing the properties to the
      * TaskStrategy implementation for initialisation.
-
+     * 
      * @see TaskStrategy.init
      */
     protected Schedulable(String name, Properties props) {
@@ -195,7 +196,7 @@ public class Schedulable {
      * This constructor that reads the basic scheduling properties before passing the properties to the
      * TaskStrategy implementation for initialisation. This variation includes the EntityManager which
      * can be used to construct the TaskStrategy
-
+     * 
      * @see TaskStrategy.init
      */
     protected Schedulable(String name, Properties props, EntityManager em) {
@@ -290,7 +291,7 @@ public class Schedulable {
     /**
      * isValid - This method returns whether the task schedule configuration is valid and ready for
      * scheduling.
-
+     * 
      * @return boolean Whether the task can be scheduled.
      */
     public boolean isValid() {
@@ -300,7 +301,7 @@ public class Schedulable {
     /**
      * Method supplied for implementations of TaskStrategy to be able to set their validity. Will not
      * allow validity to be set to true if already false.
-
+     * 
      * @param valid boolean value indicating how to attempt to set validity
      */
     public final void setValid(boolean valid) {
@@ -311,7 +312,7 @@ public class Schedulable {
 
     /**
      * getName.
-
+     * 
      * @return the name of this particular Schedulable.
      */
     public String getName() {
@@ -320,7 +321,7 @@ public class Schedulable {
 
     /**
      * isRunning.
-
+     * 
      * @return for repeating tasks, whether they are currently running.
      */
     public boolean isRunning() {
@@ -329,7 +330,7 @@ public class Schedulable {
 
     /**
      * Call to start this schedulable.
-
+     * 
      * @return true if successful.
      */
     public boolean start() {
@@ -399,7 +400,7 @@ public class Schedulable {
 
         /**
          * Constructor, taking which Task Strategy it is to execute.
-
+         * 
          * @param taskStrategy the TaskStrategy to execute.
          */
         private InternalTimerTask(TaskStrategy taskStrategy) {

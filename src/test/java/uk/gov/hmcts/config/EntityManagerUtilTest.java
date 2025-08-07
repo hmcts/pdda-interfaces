@@ -1,6 +1,6 @@
 /*
  * Copyrights and Licenses
-
+ * 
  * Copyright (c) 2015-2016 by the Ministry of Justice. All rights reserved. Redistribution and use
  * in source and binary forms, with or without modification, are permitted provided that the
  * following conditions are met: - Redistributions of source code must retain the above copyright
@@ -45,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for EntityManagerUtil.
-
+ *
  * @author harrism
  */
 @SuppressWarnings("PMD")

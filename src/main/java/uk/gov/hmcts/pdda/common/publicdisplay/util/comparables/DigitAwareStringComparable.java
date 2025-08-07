@@ -6,23 +6,24 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 
 /**
-
+ * <p>
  * Title: Terminating Digit Aware String Comparable.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * This class is a wrapper class intended to allow the sorting of strings to take into account their
  * terminating digits. So for example Test 2 will come before Test 12 and Test will come before Test
  * 1.
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2003
-
-
+ * </p>
+ * <p>
  * Company: EDS
-
+ * </p>
+ * 
  * @author Bob Boothby
  * @version $Id: DigitAwareStringComparable.java,v 1.1 2004/01/30 16:18:18 sz0t7n Exp $
  */
@@ -45,7 +46,7 @@ public class DigitAwareStringComparable implements Comparable<Object>, Serializa
 
     /**
      * Create an instance of the class from a String.
-
+     * 
      * @param text The String to make into a DigitAwareStringComparable.
      */
     public DigitAwareStringComparable(String text) {
@@ -80,7 +81,7 @@ public class DigitAwareStringComparable implements Comparable<Object>, Serializa
 
     /**
      * Compare the values represented by two instances of DigitAwareStringComparable.
-
+     * 
      * @param object The DigitAwareStringComparable to compare this one with.
      * @return an int value representing the absolute ordering of this object wrt the one passed in.
      * @throws ClassCastException if the object passed in is not an instance of
@@ -106,7 +107,7 @@ public class DigitAwareStringComparable implements Comparable<Object>, Serializa
 
     /**
      * Checks whether an object is equal to this one.
-
+     * 
      * @param object The object to check for equality.
      * @return true if the object is equivalent to this one.
      */

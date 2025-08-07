@@ -4,20 +4,27 @@ import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayDocumentUri;
 
 /**
-
+ * <p>
  * Title: DataSource.
-
+ * </p>
+ * 
+ * <p>
  * Description:
-
+ * 
  * A DataSource can be used more than once for a given uri.
-
+ * </p>
+ * 
+ * <p>
  * Copyright: Copyright (c) 2003
-
+ * </p>
+ * 
+ * <p>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.5 $
-
+ * 
  * @invariant uri != null
  * @invariant data != null
  */
@@ -30,7 +37,7 @@ public abstract class DataSource {
 
     /**
      * Creates a new DataSource object.
-
+     * 
      * @param uri the URI of the DisplayDocument we are retrieving data for.
      * @pre uri != null
      */
@@ -40,7 +47,7 @@ public abstract class DataSource {
 
     /**
      * Returns the URI of the DisplayDocument we are retrieving data for.
-
+     * 
      * @return the URI of the DisplayDocument we are retrieving data for.
      * @post return != null
      */
@@ -50,7 +57,7 @@ public abstract class DataSource {
 
     /**
      * Retrieve the data and store internally. Use getData() to access the data afterwards.
-
+     * 
      * @pre uri != null
      * @post getData() != null
      * @see #getData
@@ -59,7 +66,7 @@ public abstract class DataSource {
 
     /**
      * Sets the optional DataContext.
-
+     * 
      * @param context the DataContext.
      * @pre context != null
      */
@@ -69,7 +76,7 @@ public abstract class DataSource {
 
     /**
      * Returns the optional data context.
-
+     * 
      * @return the optional data context.
      */
     public DataContext getContext() {
@@ -78,7 +85,7 @@ public abstract class DataSource {
 
     /**
      * Returns the retrieved data.
-
+     * 
      * @return the retrieved data.
      * @post return != null
      */
@@ -89,7 +96,7 @@ public abstract class DataSource {
     /**
      * Reset the DataSource so it can be used again. This should be called by the subclasses
      * retrieve() implementation before retrieving data.
-
+     * 
      * @post data.isEmpty()
      */
     public void reset() {

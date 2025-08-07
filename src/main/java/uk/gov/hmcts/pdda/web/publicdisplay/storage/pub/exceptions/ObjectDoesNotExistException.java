@@ -7,19 +7,20 @@ import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.AbstractUri;
 /**
  * <p/>
  * Title: ObjectDoesNotExistException.
-
+ * </p>
  * <p/>
  * <p/>
  * Description:
-
+ * </p>
  * <p/>
  * <p/>
  * Copyright: Copyright (c) 2003
-
+ * </p>
  * <p/>
  * <p/>
  * Company: Electronic Data Systems
-
+ * </p>
+ * 
  * @author Neil Ellis
  * @version $Revision: 1.5 $
  */
@@ -29,7 +30,7 @@ public class ObjectDoesNotExistException extends PublicDisplayRuntimeException i
 
     /**
      * Creates a new ObjectDoesNotExistException object.
-
+     * 
      * @param uri the uri of the object we could not file.
      * @param retrievalCode the reference we were using when trying to obtain the object.
      */
