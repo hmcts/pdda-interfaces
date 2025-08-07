@@ -18,8 +18,8 @@ where cpp_formatting_id = 621000;
 
 -- Reset formattingControllerBean test data
 update XHB_FORMATTING
-set format_Status = 'ND', creation_date = current_timestamp
-where formatting_id = 621000;
+set format_Status = 'ND', creation_date = current_timestamp, formatted_document_blob_id = null
+where formatting_id in (621000, 621001, 621003);
 
 -- Reset CourtListQuery / AllCaseStatusQuery
 update xhb_hearing_list

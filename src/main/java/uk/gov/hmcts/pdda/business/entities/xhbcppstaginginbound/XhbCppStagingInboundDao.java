@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
         + "(o.validationStatus = 'VF' OR o.validationStatus = 'VS') "
         + "AND o.acknowledgmentStatus IS NULL AND (o.obsInd IS NULL OR o.obsInd='N') "
         + "ORDER by o.cppStagingInboundId")
+@NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findByClobId",
+    query = "SELECT o from XHB_CPP_STAGING_INBOUND o WHERE o.clobId = :clobId")
 @NamedQuery(name = "XHB_CPP_STAGING_INBOUND.findDocumentByDocumentName",
     query = "SELECT o FROM XHB_CPP_STAGING_INBOUND o "
         + "WHERE o.documentName = :documentName "
