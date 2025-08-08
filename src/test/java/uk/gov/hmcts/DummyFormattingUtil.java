@@ -207,8 +207,8 @@ public final class DummyFormattingUtil {
             OutputStream outputStreamIn = new ByteArrayOutputStream(1024);
             Integer courtId = 81;
 
-            FormattingValue result = new FormattingValue(distributionTypeIn, mimeTypeIn, documentTypeIn, majorVersion,
-                minorVersion, language, country, readerIn, outputStreamIn, courtId, cppList);
+            FormattingValue result = new FormattingValue(distributionTypeIn, mimeTypeIn, documentTypeIn,
+                majorVersion, minorVersion, language, country, readerIn, outputStreamIn, courtId, cppList);
             result.setFormattingId(DummyServicesUtil.getRandomNumber());
             return result;
         } catch (IOException exception) {
@@ -216,4 +216,21 @@ public final class DummyFormattingUtil {
             return null;
         }
     }
+
+    
+    /**
+     * Generate a basic FormattingValue with minimal required setup.
+     */
+    public static FormattingValue getFormattingValue() {
+        return getFormattingValue("<xml/>", "IWP", "application/pdf", null);
+    }
+
+
+    /**
+     * Optional: Returns a standard dummy translation XML for testing.
+     */
+    public static String getTranslationXml() {
+        return "<translations><item key=\"example\">value</item></translations>";
+    }
+
 }
