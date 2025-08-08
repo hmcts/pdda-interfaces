@@ -139,7 +139,7 @@ public class XhbCppListRepository extends AbstractRepository<XhbCppListDao>
     }
 
     @SuppressWarnings("unchecked")
-    public XhbCppListDao findByClobIdSafe(final Long listClobId) {
+    public XhbCppListDao findByClobIdSafe(Long listClobId) {
         LOG.debug("findByClobIdSafe({})", listClobId);
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {

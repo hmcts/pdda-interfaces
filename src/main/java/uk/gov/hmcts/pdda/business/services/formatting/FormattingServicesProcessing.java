@@ -100,7 +100,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         }
     }
 
-    private StringBuilder getFormattedInternetWebpage(List<StringBuilder> pddaClobAsString,
+    StringBuilder getFormattedInternetWebpage(List<StringBuilder> pddaClobAsString,
         XhbCppFormattingDao val, FormattingValue formattingValue, String courtSite,
         Document cppDocument, final String translationXml) throws IOException {
         if (pddaClobAsString == null || pddaClobAsString.isEmpty()) {
@@ -125,7 +125,7 @@ public abstract class FormattingServicesProcessing extends AbstractFormattingSer
         return null;
     }
 
-    private StringBuilder getFormattedInternetWebpageCourtSite(XhbCppFormattingDao val,
+    StringBuilder getFormattedInternetWebpageCourtSite(XhbCppFormattingDao val,
         FormattingValue formattingValue, Document cppDocument, final String translationXml,
         Long pddaClobId) throws IOException {
         // create a new xhb_formatting row first -- as this is a new merged
