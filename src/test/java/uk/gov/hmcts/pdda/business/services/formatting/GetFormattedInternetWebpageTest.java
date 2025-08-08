@@ -1,18 +1,16 @@
 package uk.gov.hmcts.pdda.business.services.formatting;
 
 import jakarta.persistence.EntityManager;
-import org.easymock.EasyMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CourtUtils;
@@ -33,6 +31,7 @@ import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD")
 class GetFormattedInternetWebpageTest {
 
     private FormattingServicesProcessing classUnderTest;

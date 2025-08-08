@@ -18,7 +18,6 @@ import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.framework.services.TranslationServices;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
@@ -26,39 +25,34 @@ import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CourtUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.time.LocalDateTime;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * <p>
  * Title: FormattingServicesProcessing Test.
- * </p>
- * <p>
  * Description:
- * </p>
- * <p>
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings("PMD")
 class FormattingServicesProcessingTest {
 
     private static final String NULL = "Result is Null";
@@ -136,7 +130,8 @@ class FormattingServicesProcessingTest {
     @Test
     void testProcessIwpDocumentThrowsXPathException() throws SAXException, ParserConfigurationException, IOException {
         // Arrange
-        FormattingValue formattingValue = DummyFormattingUtil.getFormattingValue("<xml/>", "IWP", "application/pdf", null);
+        FormattingValue formattingValue = DummyFormattingUtil
+            .getFormattingValue("<xml/>", "IWP", "application/pdf", null);
 
         XhbCppFormattingDao dao = DummyFormattingUtil.getXhbCppFormattingDao();
         when(mockCppFormattingRepo.findLatestByCourtDateInDocSafe(eq(81), eq("IWP"), any(LocalDateTime.class)))
@@ -179,7 +174,8 @@ class FormattingServicesProcessingTest {
         };
 
         assertThrows(FormattingException.class, () ->
-            classUnderTest.processIwpCppFormatting(123L, formattingValue, mock(Document.class), "<translation/>", cppDao));
+            classUnderTest
+            .processIwpCppFormatting(123L, formattingValue, mock(Document.class), "<translation/>", cppDao));
     }
     
     @Test
