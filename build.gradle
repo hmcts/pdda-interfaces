@@ -256,7 +256,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
     implementation 'org.yaml:snakeyaml:2.4'
-    compileOnly group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0', {
+    compileOnly group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0.1', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
@@ -311,7 +311,7 @@ dependencies {
     
 
     // Compile-only: Jakarta APIs (only for compilation)
-    compileOnly 'org.apache.tomee:jakartaee-api:10.0'
+    compileOnly 'org.apache.tomee:jakartaee-api:10.0.1'
     compileOnly 'org.springframework.boot:spring-boot-starter-tomcat:3.5.4'
 
     // Optional: If you're stuck with local jsch for some reason
