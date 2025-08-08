@@ -124,7 +124,7 @@
     </xsl:template>
 
     <!-- Check if cs:IsMasked is no, otherwise blank out cs:PersonalDetails fields -->
-    <xsl:template match="cs:Defendant/cs:PersonalDetails">
+    <xsl:template match="cs:PersonalDetails">
       <xsl:copy>
         <xsl:choose>
           <xsl:when test="cs:IsMasked = 'no'">
