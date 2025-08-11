@@ -43,7 +43,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbCourtSiteDao> validateCourtSite(final String courtHouseName,
         final String courtHouseCode) {
-        LOG.debug("validateCourtSite({})", courtHouseName);
+        LOG.debug("validateCourtSite(), courtHouseName:{}, courtHouseCode:{}",
+            courtHouseName, courtHouseCode);
         Optional<XhbCourtSiteDao> result = findCourtSite(courtHouseName, courtHouseCode);
         if (result.isEmpty()) {
             LOG.error("No XhbCourtSite found for name:{},  code:{}", courtHouseName, courtHouseCode);
@@ -53,7 +54,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbCourtRoomDao> validateCourtRoom(final Integer courtSiteId,
         final Integer crestCourtRoomNo) {
-        LOG.debug("validateCourtRoom({})", crestCourtRoomNo);
+        LOG.debug("validateCourtRoom(), courtSiteId:{}, crestCourtRoomNo:{}",
+            courtSiteId, crestCourtRoomNo);
         Optional<XhbCourtRoomDao> result = findCourtRoom(courtSiteId, crestCourtRoomNo);
         if (result.isEmpty()) {
             LOG.error("No XhbCourtRoom, found for courtSiteId:{},  crestCourtRoomNo:{}",
@@ -66,7 +68,10 @@ public class DataHelper extends FinderHelper {
         final Integer crestListId, final String listType, final String status,
         final LocalDateTime startDate, final LocalDateTime publishedTime, String printReference,
         final Integer editionNo, final String listCourtType) {
-        LOG.debug("validateHearingList({},{})", status, startDate);
+        LOG.debug("validateHearingList(), courtId:{}, crestListId:{}, listType:{}, "
+            + "status:{}, startDate:{}, publishedTime:{}, printReference:{}, editionNo:{}, listCourtType:{}",
+            courtId, crestListId, listType, status, startDate, publishedTime, printReference,
+            editionNo, listCourtType);
         Optional<XhbHearingListDao> result = findHearingList(courtId, status, startDate);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbHearingList for courtId:{}, crestListId:{}, listType:{},"
@@ -82,7 +87,8 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbSittingDao> validateSitting(final Integer courtSiteId,
         final Integer courtRoomId, final String isFloating, final LocalDateTime sittingTime,
         final Integer listId) {
-        LOG.debug("validateSitting({})", sittingTime);
+        LOG.debug("validateSitting(), courtSiteId:{}, courtRoomId:{}, isFloating:{}, sittingTime:{}, listId:{}",
+            courtSiteId, courtRoomId, isFloating, sittingTime, listId);
         Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbSitting for courtSiteId:{}, courtRoomId:{}, isFloating:{},"
@@ -95,7 +101,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbCaseDao> validateCase(final Integer courtId, final String caseType,
         final Integer caseNumber) {
-        LOG.debug("validateCase({}{})", caseType, caseNumber);
+        LOG.debug("validateCase(), courtId:{}, caseType:{}, caseNumber:{}",
+            courtId, caseType, caseNumber);
         Optional<XhbCaseDao> result = findCase(courtId, caseType, caseNumber);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbCase for courtId:{}, caseType:{}, caseNumber:{}",
@@ -107,7 +114,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbRefJudgeDao> validateJudge(final Integer courtId,
         final String judgeTitle, final String judgeFirstname, final String judgeSurname) {
-        LOG.debug("validateJudge()");
+        LOG.debug("validateJudge(), courtId:{}, judgeTitle:{}, "
+            + "judgeFirstname:{}, judgeSurname:{}", courtId, judgeTitle, judgeFirstname, judgeSurname);
         Optional<XhbRefJudgeDao> result =
             findJudge(courtId, judgeFirstname, judgeSurname);
         if (result.isEmpty()) {
@@ -120,7 +128,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbDefendantOnCaseDao> validateDefendantOnCase(final Integer caseId,
         final Integer defendantId, final String isMasked) {
-        LOG.debug("validateDefendantOnCase()");
+        LOG.debug("validateDefendantOnCase(), caseId:{}, defendantId:{}, isMasked:{}",
+            caseId, defendantId, isMasked);
         Optional<XhbDefendantOnCaseDao> result = findDefendantOnCase(caseId, defendantId);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbDefendantOnCase for caseId:{}, defendantId:{}, isMasked:{}",
@@ -133,7 +142,9 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbDefendantDao> validateDefendant(final Integer courtId,
         final String firstName, final String middleName, final String surname, final Integer gender,
         final LocalDateTime dateOfBirth, final String publicDisplayHide) {
-        LOG.debug("validateDefendant()");
+        LOG.debug("validateDefendant(), courtId:{}, firstName:{}, middleName:{}, "
+            + "surname:{}, gender:{}, dateOfBirth:{}, publicDisplayHide:{}",
+            courtId, firstName, middleName, surname, gender, dateOfBirth, publicDisplayHide);
         Optional<XhbDefendantDao> result =
             findDefendant(courtId, firstName, middleName, surname, gender, dateOfBirth);
         if (result.isEmpty()) {
@@ -148,7 +159,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbRefHearingTypeDao> validateHearingType(final Integer courtId,
         final String hearingTypeCode, final String hearingTypeDesc, final String category) {
-        LOG.debug("validateHearingType()");
+        LOG.debug("validateHearingType(), courtId:{}, hearingTypeCode:{}, "
+            + "hearingTypeDesc:{}, category:{}", courtId, hearingTypeCode, hearingTypeDesc, category);
         Optional<XhbRefHearingTypeDao> result =
             findHearingType(courtId, hearingTypeCode, hearingTypeDesc, category);
         if (result.isEmpty()) {
@@ -163,7 +175,9 @@ public class DataHelper extends FinderHelper {
     public Optional<XhbHearingDao> validateHearing(final Integer courtId, final Integer caseId,
         final Integer refHearingTypeId, final LocalDateTime hearingStartDate,
         final LocalDateTime hearingEndDate) {
-        LOG.debug("validateHearing()");
+        LOG.debug("validateHearing(), courtId:{}, caseId:{}, refHearingTypeId:{}, "
+            + "hearingStartDate:{}, hearingEndDate:{}", courtId, caseId, refHearingTypeId,
+            hearingStartDate, hearingEndDate);
         Optional<XhbHearingDao> result = findHearing(courtId, caseId, hearingStartDate);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbHearing for courtId:{}, caseId:{}, refHearingTypeId:{}, "
@@ -177,7 +191,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbScheduledHearingDao> validateScheduledHearing(final Integer sittingId,
         final Integer hearingId, final LocalDateTime notBeforeTime) {
-        LOG.debug("validateScheduledHearing()");
+        LOG.debug("validateScheduledHearing(), sittingId:{}, hearingId:{}, notBeforeTime:{}",
+            sittingId, hearingId, notBeforeTime);
         Optional<XhbScheduledHearingDao> result =
             findScheduledHearing(sittingId, hearingId, notBeforeTime);
         if (result.isEmpty()) {
@@ -190,7 +205,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant(
         final Integer scheduledHearingId, final Integer defendantId) {
-        LOG.debug("validateSchedHearingDefendant()");
+        LOG.debug("validateSchedHearingDefendant(), scheduledHearingId:{}, defendantId:{}",
+            scheduledHearingId, defendantId);
         Optional<XhbSchedHearingDefendantDao> result =
             findSchedHearingDefendant(scheduledHearingId, defendantId);
         if (result.isEmpty()) {
@@ -203,7 +219,8 @@ public class DataHelper extends FinderHelper {
 
     public Optional<XhbCrLiveDisplayDao> validateCrLiveDisplay(final Integer courtRoomId,
         final Integer scheduledHearingId, final LocalDateTime timeStatusSet) {
-        LOG.debug("validateCrLiveDisplay()");
+        LOG.debug("validateCrLiveDisplay(), courtRoomId:{}, scheduledHearingId:{}, timeStatusSet:{}",
+            courtRoomId, scheduledHearingId, timeStatusSet);
         Optional<XhbCrLiveDisplayDao> result = findCrLiveDisplay(courtRoomId);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbCrLiveDisplay for courtRoomId:{}, scheduledHearingId:{}, timeStatusSet:{}",
