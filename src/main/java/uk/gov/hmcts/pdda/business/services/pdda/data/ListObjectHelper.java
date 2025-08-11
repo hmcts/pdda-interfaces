@@ -143,6 +143,7 @@ public class ListObjectHelper implements Serializable {
         LOG.info("validateCourtSite()");
         String courtHouseName = nodesMap.get(COURTHOUSENAME);
         String courtHouseCode = nodesMap.get(COURTHOUSECODE);
+        LOG.debug("Court house name: {}, code: {}", courtHouseName, courtHouseCode);
         if (courtHouseName != null && courtHouseCode != null) {
             LOG.debug("Validating court site with name: {} and code: {}", courtHouseName, courtHouseCode);
             return dataHelper.validateCourtSite(courtHouseName, courtHouseCode);
@@ -152,10 +153,12 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbCourtRoomDao> validateCourtRoom(Map<String, String> nodesMap) {
         LOG.info("validateCourtRoom()");
+        LOG.debug("xhbCourtSiteDao is present: {}", xhbCourtSiteDao.isPresent());
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtSiteId = xhbCourtSiteDao.get().getCourtSiteId();
             String courtRoomNoString = nodesMap.get(COURTROOMNO);
             Integer crestCourtRoomNo = getInteger(courtRoomNoString);
+            LOG.debug("Court site ID: {}, Court room number: {}", courtSiteId, crestCourtRoomNo);
             if (courtSiteId != null && crestCourtRoomNo != null) {
                 LOG.debug("Validating court room with site ID: {} and room number: {}", courtSiteId, crestCourtRoomNo);
                 return dataHelper.validateCourtRoom(courtSiteId, crestCourtRoomNo);
@@ -177,6 +180,7 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbHearingListDao> validateHearingList(Map<String, String> nodesMap) {
         LOG.info("validateHearingList()");
+        LOG.debug("xhbCourtSiteDao is present: {}", xhbCourtSiteDao.isPresent());
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             final Integer crestListId = 1;
@@ -190,6 +194,9 @@ public class ListObjectHelper implements Serializable {
             final String printReference = "/";
             final Integer editionNo = 1;
             final String listCourtType = "CR";
+            LOG.debug("Court ID: {}, Status: {}, Start Date: {}, Published Time: {}, Print Reference: {}, "
+                + "Edition No: {}, List Court Type: {}",
+                courtId, status, startDate, publishedTime, printReference, editionNo, listCourtType);
             if (courtId != null && status != null && startDate != null) {
                 LOG.debug("Validating hearing list for court ID: {}, status: {}, start date: {}",
                     courtId, status, startDate);
@@ -231,6 +238,8 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbSittingDao> validateSitting(Map<String, String> nodesMap) {
         LOG.info("validateSitting()");
+        LOG.debug("xhbCourtRoomDao is present: {}, xhbHearingListDao is present: {}",
+            xhbCourtRoomDao.isPresent(), xhbHearingListDao.isPresent());
         if (xhbCourtRoomDao.isPresent() && xhbHearingListDao.isPresent()) {
             Integer courtSiteId = xhbCourtRoomDao.get().getCourtSiteId();
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
@@ -239,6 +248,8 @@ public class ListObjectHelper implements Serializable {
             String sittingTimeString = nodesMap.get(SITTINGTIME);
             LocalDateTime sittingTime =
                 parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
+            LOG.debug("Court site ID: {}, Court room ID: {}, Floating: {}, List ID: {}, Sitting time: {}",
+                courtSiteId, courtRoomId, floating, listId, sittingTime);
             if (sittingTime != null) {
                 LOG.debug("Validating sitting for court site ID: {}, court room ID: {}, time: {}",
                     courtSiteId, courtRoomId, sittingTime);
@@ -251,6 +262,7 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbCaseDao> validateCase(Map<String, String> nodesMap) {
         LOG.info("validateCase()");
+        LOG.debug("xhbCourtSiteDao is present: {}", xhbCourtSiteDao.isPresent());
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String caseTypeAndNumber = nodesMap.get(CASENUMBER);
@@ -269,17 +281,23 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbRefJudgeDao> validateJudge(Map<String, String> nodesMap) {
         LOG.info("validateJudge()");
+        LOG.debug("xhbCourtSiteDao is present: {}", xhbCourtSiteDao.isPresent());
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String judgeTitle = nodesMap.get(TITLE);
             String judgeFirstname = nodesMap.get(FIRSTNAME + ".1");
             String judgeSurname = nodesMap.get(SURNAME);
+            LOG.debug("Court ID: {}, Judge Title: {}, Firstname: {}, Surname: {}",
+                courtId, judgeTitle, judgeFirstname, judgeSurname);
             return dataHelper.validateJudge(courtId, judgeTitle, judgeFirstname, judgeSurname);
         }
         return Optional.empty();
     }
     
     protected void processJudgeRecords() {
+        LOG.debug("processJudgeRecords()");
+        LOG.debug("xhbScheduledHearingDao is present: {}, xhbRefJudgeDao is present: {}",
+            xhbScheduledHearingDao.isPresent(), xhbRefJudgeDao.isPresent());
         if (!xhbScheduledHearingDao.isEmpty() && !xhbRefJudgeDao.isEmpty()) {
             // Create the XhbSchedHearingAttendee record
             Optional<XhbSchedHearingAttendeeDao> xhbSchedHearingAttendeeDao =
@@ -287,6 +305,8 @@ public class ListObjectHelper implements Serializable {
                 xhbScheduledHearingDao.get().getScheduledHearingId(),
                 xhbRefJudgeDao.get().getRefJudgeId());
             if (!xhbSchedHearingAttendeeDao.isEmpty()) {
+                LOG.debug("Creating new XhbSchedHearingJudge with ShAttendeeID: {}",
+                    xhbSchedHearingAttendeeDao.get().getShAttendeeId());
                 // Create the XhbShJudge record
                 dataHelper.createShJudge("N", xhbRefJudgeDao.get().getRefJudgeId(),
                     xhbSchedHearingAttendeeDao.get().getShAttendeeId());
@@ -337,10 +357,14 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbDefendantOnCaseDao> validateDefendantOnCase() {
         LOG.info("validateDefendantOnCase()");
+        LOG.debug("xhbCaseDao is present: {}, xhbDefendantDao is present: {}",
+            xhbCaseDao.isPresent(), xhbDefendantDao.isPresent());
         if (xhbCaseDao.isPresent() && xhbDefendantDao.isPresent()) {
             Integer caseId = xhbCaseDao.get().getCaseId();
             Integer defendantId = xhbDefendantDao.get().getDefendantId();
             String publicDisplayHide = xhbDefendantDao.get().getPublicDisplayHide();
+            LOG.debug("Case ID: {}, Defendant ID: {}, Public Display Hide: {}",
+                caseId, defendantId, publicDisplayHide);
             if (caseId != null && defendantId != null) {
                 LOG.debug("Validating defendant on case for case ID: {}, defendant ID: {},"
                     + "public display hide: {}",
@@ -352,6 +376,7 @@ public class ListObjectHelper implements Serializable {
     }
 
     private Optional<XhbCaseDao> updateCaseTitle(Map<String, String> nodesMap) {
+        LOG.info("updateCaseTitle()");
         try {
             if (xhbCaseDao.isPresent()) {
                 String firstName = nodesMap.get(FIRSTNAME + ".1");
@@ -380,11 +405,14 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbRefHearingTypeDao> validateHearingType(Map<String, String> nodesMap) {
         LOG.info("validateHearingType()");
+        LOG.debug("xhbCourtSiteDao is present: {}", xhbCourtSiteDao.isPresent());
         if (xhbCourtSiteDao.isPresent()) {
             Integer courtId = xhbCourtSiteDao.get().getCourtId();
             String hearingTypeCode = nodesMap.get(HEARINGTYPECODE);
             String hearingTypeDesc = nodesMap.get(HEARINGTYPEDESC).replaceAll("\s{2,}", " ");
             String category = getSubstring(nodesMap.get(CATEGORY), 0, 1);
+            LOG.debug("Court ID: {}, Hearing Type Code: {}, Hearing Type Description: {}, Category: {}",
+                courtId, hearingTypeCode, hearingTypeDesc, category);
             if (hearingTypeCode != null && hearingTypeDesc != null && category != null) {
                 LOG.debug("Validating hearing type for court ID: {}, code: {}, description: {}, category: {}",
                     courtId, hearingTypeCode, hearingTypeDesc, category);
@@ -397,6 +425,9 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbHearingDao> validateHearing(Map<String, String> nodesMap) {
         LOG.info("validateHearing()");
+        LOG.debug("xhbRefHearingTypeDao is present: {}, xhbCaseDao is present: {}",
+            xhbRefHearingTypeDao.isPresent(), xhbCaseDao.isPresent());
+        // Validate hearing only if both refHearingType and case are present
         if (xhbRefHearingTypeDao.isPresent() && xhbCaseDao.isPresent()) {
             Integer courtId = xhbCaseDao.get().getCourtId();
             Integer caseId = xhbCaseDao.get().getCaseId();
@@ -407,6 +438,8 @@ public class ListObjectHelper implements Serializable {
                 parseDateTime(hearingStartDateString, DateTimeFormatter.ISO_DATE);
             LocalDateTime hearingEndDate =
                 parseDateTime(hearingEndDateString, DateTimeFormatter.ISO_DATE);
+            LOG.debug("Court ID: {}, Case ID: {}, Hearing Type ID: {}, Start Date: {}, End Date: {}",
+                courtId, caseId, refHearingTypeId, hearingStartDate, hearingEndDate);
             if (hearingStartDate != null) {
                 LOG.debug("Validating hearing for court ID: {}, case ID: {}, hearing type ID: {},"
                     + "start date: {}, end date: {}",
@@ -421,11 +454,16 @@ public class ListObjectHelper implements Serializable {
     private Optional<XhbScheduledHearingDao> validateScheduledHearing(
         Map<String, String> nodesMap) {
         LOG.info("validateScheduledHearing()");
+        LOG.debug("xhbCaseDao is present: {}, xhbSittingDao is present: {}, xhbHearingDao is present: {}",
+            xhbCaseDao.isPresent(), xhbSittingDao.isPresent(), xhbHearingDao.isPresent());
+        // Validate scheduled hearing only if case, sitting and hearing are present
         if (xhbCaseDao.isPresent() && xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {
             Integer sittingId = xhbSittingDao.get().getSittingId();
             Integer hearingId = xhbHearingDao.get().getHearingId();
             String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME));
             LocalDateTime notBeforeTime = parseDateTime(notBeforeTimeString, TWELVEHOURTIMEFORMAT);
+            LOG.debug("Sitting ID: {}, Hearing ID: {}, Not Before Time: {}",
+                sittingId, hearingId, notBeforeTime);
             if (notBeforeTime != null) {
                 LOG.debug("Validating scheduled hearing for sitting ID: {}, hearing ID: {}, not before time: {}",
                     sittingId, hearingId, notBeforeTime);
@@ -451,9 +489,14 @@ public class ListObjectHelper implements Serializable {
 
     private Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant() {
         LOG.info("validateSchedHearingDefendant()");
+        LOG.debug("xhbScheduledHearingDao is present: {}, xhbDefendantOnCaseDao is present: {}",
+            xhbScheduledHearingDao.isPresent(), xhbDefendantOnCaseDao.isPresent());
+        // Validate scheduled hearing defendant only if both scheduled hearing and defendant on case are present
         if (xhbScheduledHearingDao.isPresent() && xhbDefendantOnCaseDao.isPresent()) {
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
             Integer defendantOnCaseId = xhbDefendantOnCaseDao.get().getDefendantOnCaseId();
+            LOG.debug("Scheduled Hearing ID: {}, Defendant On Case ID: {}",
+                scheduledHearingId, defendantOnCaseId);
             if (scheduledHearingId != null && defendantOnCaseId != null) {
                 LOG.debug("Validating scheduled hearing defendant for scheduled hearing ID: {}, "
                     + "defendant on case ID: {}",
@@ -467,9 +510,14 @@ public class ListObjectHelper implements Serializable {
 
     private void validateCrLiveDisplay() {
         LOG.info("validateCrLiveDisplay()");
+        LOG.debug("xhbScheduledHearingDao is present: {}, xhbCourtRoomDao is present: {}",
+            xhbScheduledHearingDao.isPresent(), xhbCourtRoomDao.isPresent());
+        // Validate CR Live Display only if both scheduled hearing and court room are present
         if (xhbScheduledHearingDao.isPresent() && xhbCourtRoomDao.isPresent()) {
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
             Integer scheduledHearingId = xhbScheduledHearingDao.get().getScheduledHearingId();
+            LOG.debug("Court Room ID: {}, Scheduled Hearing ID: {}",
+                courtRoomId, scheduledHearingId);
             if (courtRoomId != null && scheduledHearingId != null) {
                 LOG.debug("Validating CR Live Display for court room ID: {}, scheduled hearing ID: {}",
                     courtRoomId, scheduledHearingId);
