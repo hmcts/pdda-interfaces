@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -84,15 +85,18 @@ public class ListObjectHelper implements Serializable {
     protected static final String VERSION = "cs:Version";
     protected static final String TITLE = "apd:CitizenNameTitle";
     
-    private static final String EMPTY_STRING = "";
+    //private static final String EMPTY_STRING = "";
     private static final String DECIMALS_REGEX = "\\d+";
     private static final String TWELVEHOURTIME = "hh:mma";
-    private static final String WHITESPACE_REGEX = "\\s";
+    //private static final String WHITESPACE_REGEX = "\\s";
 
     private static final String CPP = "CPP";
     private static final String[] NUMBERED_NODES = {FIRSTNAME};
     private static final DateTimeFormatter TWELVEHOURTIMEFORMAT =
-        DateTimeFormatter.ofPattern(TWELVEHOURTIME);
+        new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .appendPattern("hh:mm a")
+            .toFormatter(Locale.ENGLISH);
 
     private DataHelper dataHelper = new DataHelper();
     private transient Optional<XhbCourtSiteDao> xhbCourtSiteDao = Optional.empty();
@@ -218,23 +222,16 @@ public class ListObjectHelper implements Serializable {
         return null;
     }
 
-    private LocalDateTime parseDateTime(String dateAsString, DateTimeFormatter dateFormat) {
-        try {
-            if (dateAsString == null) {
-                return null;
-            } else if (DateTimeFormatter.ISO_TIME.equals(dateFormat)
-                || TWELVEHOURTIMEFORMAT.equals(dateFormat)) {
-                return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now());
-            } else if (DateTimeFormatter.ISO_DATE.equals(dateFormat)) {
-                return LocalDate.parse(dateAsString, dateFormat).atStartOfDay();
-            } else {
-                return LocalDateTime.parse(dateAsString, dateFormat);
-            }
-        } catch (DateTimeParseException ex) {
-            LOG.error("Unable to format date string {} to {}", dateAsString, dateFormat);
-            return null;
-        }
-    }
+    /*
+     * private LocalDateTime parseDateTime(String dateAsString, DateTimeFormatter dateFormat) { try
+     * { if (dateAsString == null) { return null; } else if
+     * (DateTimeFormatter.ISO_TIME.equals(dateFormat) || TWELVEHOURTIMEFORMAT.equals(dateFormat)) {
+     * return LocalTime.parse(dateAsString, dateFormat).atDate(LocalDate.now()); } else if
+     * (DateTimeFormatter.ISO_DATE.equals(dateFormat)) { return LocalDate.parse(dateAsString,
+     * dateFormat).atStartOfDay(); } else { return LocalDateTime.parse(dateAsString, dateFormat); }
+     * } catch (DateTimeParseException ex) { LOG.error("Unable to format date string {} to {}",
+     * dateAsString, dateFormat); return null; } }
+     */
 
     private Optional<XhbSittingDao> validateSitting(Map<String, String> nodesMap) {
         LOG.info("validateSitting()");
@@ -473,19 +470,14 @@ public class ListObjectHelper implements Serializable {
         return Optional.empty();
     }
 
-    private String getTime(String notBeforeTimeString) {
-        if (notBeforeTimeString != null) {
-            String result = notBeforeTimeString.toLowerCase(Locale.getDefault())
-                .replaceAll(WHITESPACE_REGEX, EMPTY_STRING);
-            // Find the first digit in the string
-            Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(result);
-            // Return the string from the point of the first digit onwards
-            if (matcher.find()) {
-                return result.substring(matcher.start());
-            }
-        }
-        return null;
-    }
+    /*
+     * private String getTime(String notBeforeTimeString) { if (notBeforeTimeString != null) {
+     * String result = notBeforeTimeString.toLowerCase(Locale.getDefault())
+     * .replaceAll(WHITESPACE_REGEX, EMPTY_STRING); // Find the first digit in the string Matcher
+     * matcher = Pattern.compile(DECIMALS_REGEX).matcher(result); // Return the string from the
+     * point of the first digit onwards if (matcher.find()) { return
+     * result.substring(matcher.start()); } } return null; }
+     */
 
     private Optional<XhbSchedHearingDefendantDao> validateSchedHearingDefendant() {
         LOG.info("validateSchedHearingDefendant()");
@@ -529,5 +521,81 @@ public class ListObjectHelper implements Serializable {
 
     public boolean isNumberedNode(String nodeName) {
         return Arrays.asList(NUMBERED_NODES).contains(nodeName);
+    }
+    
+    
+    ///// METHODS FOR ASSISTING WITH TIME AND DATE PARSING /////
+    /// These methods are used to extract and parse time and date strings
+    
+    private String getTime(String notBeforeTimeString) {
+        if (notBeforeTimeString != null) {
+            String result = notBeforeTimeString.toLowerCase(Locale.ENGLISH);
+            Matcher matcher = Pattern.compile(DECIMALS_REGEX).matcher(result);
+            if (matcher.find()) {
+                return result.substring(matcher.start()).replaceAll("\\s+", " ");
+            }
+        }
+        return null;
+    }
+
+    
+    
+    private LocalDateTime parseDateTime(String dateAsString, DateTimeFormatter dateFormat) {
+        if (dateAsString == null) {
+            return null;
+        }
+
+        try {
+            // Normalize to "hh:mm a" format
+            String normalized = normalizeTimeString(dateAsString.trim());
+
+            if (isTimeOnlyFormatter(dateFormat)) {
+                return LocalTime.parse(normalized, dateFormat).atDate(LocalDate.now());
+            } else if (dateFormat == DateTimeFormatter.ISO_DATE) {
+                return LocalDate.parse(normalized, dateFormat).atStartOfDay();
+            } else {
+                return LocalDateTime.parse(normalized, dateFormat);
+            }
+        } catch (DateTimeParseException ex) {
+            System.err.printf("Unable to parse date string '%s' with format '%s'%n", dateAsString, dateFormat);
+            return null;
+        }
+    }
+
+
+    
+    private boolean isTimeOnlyFormatter(DateTimeFormatter formatter) {
+        return formatter.toString().contains("ClockHourOfAmPm")
+            || formatter == DateTimeFormatter.ISO_TIME;
+    }
+    
+    
+    private String normalizeTimeString(String input) {
+        // Normalize AM/PM spacing (e.g., 11:00AM → 11:00 AM)
+        input = input.replaceAll("(?i)(\\d)(am|pm)$", "$1 $2");
+
+        // Pattern: hh:mm with optional am/pm
+        Matcher m = Pattern.compile("(?i)(\\d{1,2}):(\\d{1,2})(?:\\s*(am|pm))?").matcher(input);
+        if (m.matches()) {
+            int hour = Integer.parseInt(m.group(1));
+            int minute = Integer.parseInt(m.group(2));
+            String ampm = m.group(3);
+
+            // Default AM/PM if not provided
+            if (ampm == null) {
+                if (hour >= 10 && hour < 12) {
+                    ampm = "am";
+                } else {
+                    ampm = "pm";
+                }
+            } else {
+                ampm = ampm.toLowerCase();
+            }
+
+            return String.format("%02d:%02d %s", hour, minute, ampm);
+        }
+
+        // fallback if it doesn't match expected structure
+        return input;
     }
 }
