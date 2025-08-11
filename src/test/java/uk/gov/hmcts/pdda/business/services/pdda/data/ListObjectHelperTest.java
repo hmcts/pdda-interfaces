@@ -412,8 +412,10 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.COURTROOMNO, "1");
         nodesMap.put(classUnderTest.SITTINGTIME, "23:40"); // valid ISO_TIME format
 
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao", Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao", Optional.of(DummyHearingUtil.getXhbHearingListDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
+            Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
+            Optional.of(DummyHearingUtil.getXhbHearingListDao()));
 
         Mockito.when(mockDataHelper.validateSitting(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(),
             Mockito.any(), Mockito.anyInt())).thenReturn(Optional.of(DummyHearingUtil.getXhbSittingDao()));
@@ -430,11 +432,14 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.GENDER, "MALE");
         nodesMap.put(classUnderTest.ISMASKED, "yes");
 
-        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao", Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
-        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao", Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
 
         Mockito.when(mockDataHelper.validateDefendant(Mockito.anyInt(), Mockito.any(), Mockito.any(), Mockito.any(),
-            Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+            Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
 
         classUnderTest.validateNodeMap(nodesMap, classUnderTest.DEFENDANT_NODE);
     }
