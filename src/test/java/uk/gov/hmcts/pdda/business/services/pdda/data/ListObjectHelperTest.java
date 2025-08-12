@@ -14,6 +14,7 @@ import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyDefendantUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.DummyJudgeUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 
 import java.time.LocalDateTime;
@@ -403,4 +404,78 @@ class ListObjectHelperTest {
         result = classUnderTest.isNumberedNode(EMPTY_STRING);
         assertFalse(result, FALSE);
     }
+    
+    @Test
+    void testValidateSittingWhenSittingTimeIsValid() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.COURTROOMNO, "1");
+        nodesMap.put(classUnderTest.SITTINGTIME, "23:40"); // valid ISO_TIME format
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
+            Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
+            Optional.of(DummyHearingUtil.getXhbHearingListDao()));
+
+        Mockito.when(mockDataHelper.validateSitting(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(),
+            Mockito.any(), Mockito.anyInt())).thenReturn(Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        classUnderTest.validateNodeMap(nodesMap, classUnderTest.SITTING_NODE);
+    }
+    
+    @Test
+    void testValidateDefendantWithMaskedValue() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "Jane");
+        nodesMap.put(classUnderTest.SURNAME, "Doe");
+        nodesMap.put(classUnderTest.DATEOFBIRTH, "1990-01-01");
+        nodesMap.put(classUnderTest.GENDER, "MALE");
+        nodesMap.put(classUnderTest.ISMASKED, "yes");
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+
+        Mockito.when(mockDataHelper.validateDefendant(Mockito.anyInt(), Mockito.any(), Mockito.any(), Mockito.any(),
+            Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+
+        classUnderTest.validateNodeMap(nodesMap, classUnderTest.DEFENDANT_NODE);
+    }
+    
+    @Test
+    void testUpdateCaseTitleExceptionHandling() {
+        XhbCaseDao brokenDao = Mockito.mock(XhbCaseDao.class);
+        Mockito.when(brokenDao.getCaseTitle()).thenThrow(new RuntimeException("Forced error"));
+
+        Optional<XhbCaseDao> optionalBroken = Optional.of(brokenDao);
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao", optionalBroken);
+
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "Error");
+        nodesMap.put(classUnderTest.SURNAME, "Thrower");
+
+        // Should not throw despite the exception
+        Optional<XhbCaseDao> result = ReflectionTestUtils.invokeMethod(classUnderTest, "updateCaseTitle", nodesMap);
+        assertTrue(result.isEmpty(), "Expected empty optional due to exception");
+    }
+    
+    @Test
+    void testValidateScheduledHearingWhenNotBeforeTimeIsValid() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "10:15 PM");
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao", Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao", Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao", Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(Mockito.anyInt(), Mockito.anyInt(), Mockito.any()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
+    }
+
+
+
 }
