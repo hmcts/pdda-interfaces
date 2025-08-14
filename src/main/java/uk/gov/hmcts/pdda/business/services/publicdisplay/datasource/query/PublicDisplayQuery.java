@@ -100,6 +100,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             movedFromCourtRoomId, notBeforeTime);
         // Set not before time
         result.setNotBeforeTime(notBeforeTime);
+        log.debug("Not before time set to: {}", notBeforeTime);
 
         // Get the court site
         Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findByIdSafe(courtSiteId);
@@ -112,6 +113,9 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCourtSiteName("");
             result.setCourtSiteShortName("");
         }
+        
+        log.debug("Court site set to: {}, {}, {}",
+            result.getCourtSiteCode(), result.getCourtSiteName(), result.getCourtSiteShortName());
 
         // Get courtRoom
         Optional<XhbCourtRoomDao> courtRoom = getXhbCourtRoomRepository().findByIdSafe(courtRoomId);
@@ -124,6 +128,9 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCourtRoomName("");
             result.setCrestCourtRoomNo(99);
         }
+        
+        log.debug("Court room set to: {}, {}, {}",
+            result.getCourtRoomId(), result.getCourtRoomName(), result.getCrestCourtRoomNo());
 
         // Moved from courtroom
         result.setMovedFromCourtRoomId(-1);
@@ -142,6 +149,10 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
                 }
             }
         }
+        
+        log.debug("Moved from court room set to: {}, {}, {}",
+            result.getMovedFromCourtRoomId(), result.getMovedFromCourtRoomName(),
+            result.getMovedFromCourtSiteShortName());
     }
 
     protected List<XhbHearingListDao> getHearingListDaos(int courtId, LocalDateTime startDate) {

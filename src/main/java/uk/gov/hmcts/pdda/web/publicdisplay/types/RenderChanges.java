@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.services.publicdisplay.data.ejb.PdDataControllerBean;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.rotationset.DisplayRotationSetData;
 import uk.gov.hmcts.pdda.common.publicdisplay.types.uri.DisplayDocumentUri;
@@ -27,6 +29,10 @@ import java.util.Set;
  * @version 1.0
  */
 public class RenderChanges {
+    
+    /** Logger. */
+    private static Logger log = LoggerFactory.getLogger(RenderChanges.class);
+    
     private final Set<DisplayRotationSet> displayRotationSetsToStartRendering = new HashSet<>();
 
     private final Set<DisplayRotationSet> displayRotationSetsToStopRendering = new HashSet<>();
@@ -59,6 +65,7 @@ public class RenderChanges {
      * @return The documents that need to be rendererd.
      */
     public DisplayDocument[] getDocumentsToStartRendering() {
+        log.debug("getDocumentsToStartRendering() called, size: {}", documentsToStartRendering.size());
         return documentsToStartRendering.toArray(new DisplayDocument[0]);
     }
 
@@ -68,6 +75,7 @@ public class RenderChanges {
      * @return an array of DisplayDocument-s that need to be removed from the rendering remove.
      */
     public DisplayDocument[] getDocumentsToStopRendering() {
+        log.debug("getDocumentsToStopRendering() called, size: {}", documentsToStopRendering.size());
         return documentsToStopRendering.toArray(new DisplayDocument[0]);
     }
 
@@ -82,6 +90,7 @@ public class RenderChanges {
     public boolean addStartDocument(final DisplayDocumentUri doc,
         PdDataControllerBean pdDataControllerBean,
         DisplayStoreControllerBean displayStoreControllerBean) {
+        log.debug("addStartDocument() called, uri: {}", doc);
         return documentsToStartRendering
             .add(new DisplayDocument(doc, pdDataControllerBean, displayStoreControllerBean));
     }
@@ -95,6 +104,7 @@ public class RenderChanges {
      */
     public boolean addStartRotationSet(final DisplayRotationSetData set,
         DisplayStoreControllerBean displayStoreControllerBean) {
+        log.debug("addStartRotationSet() called, set: {}", set);
         return displayRotationSetsToStartRendering
             .add(new DisplayRotationSet(set, displayStoreControllerBean));
     }
@@ -109,6 +119,7 @@ public class RenderChanges {
     public boolean addStopDocument(final DisplayDocumentUri doc,
         PdDataControllerBean pdDataControllerBean,
         DisplayStoreControllerBean displayStoreControllerBean) {
+        log.debug("addStopDocument() called, uri: {}", doc);
         return documentsToStopRendering
             .add(new DisplayDocument(doc, pdDataControllerBean, displayStoreControllerBean));
     }
@@ -122,6 +133,7 @@ public class RenderChanges {
      */
     public boolean addStopRotationSet(final DisplayRotationSetData set,
         DisplayStoreControllerBean displayStoreControllerBean) {
+        log.debug("addStopRotationSet() called, set: {}", set);
         return displayRotationSetsToStopRendering
             .add(new DisplayRotationSet(set, displayStoreControllerBean));
     }
@@ -159,6 +171,7 @@ public class RenderChanges {
 
     private void appendDisplayDocuments(StringBuilder buffer, DisplayDocument[] displayDocuments,
         String lineIndent) {
+        log.debug("appendDisplayDocuments() called, size: {}", displayDocuments.length);
         String lineIndentToUse = lineIndent;
         lineIndentToUse += "\t";
         for (DisplayDocument displayDocument : displayDocuments) {

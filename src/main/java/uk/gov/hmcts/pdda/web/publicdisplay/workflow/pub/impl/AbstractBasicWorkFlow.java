@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.RenderChanges;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Createable;
 import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.Removeable;
@@ -21,6 +23,10 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowContext;
  * @version $Revision: 1.3 $
  */
 public abstract class AbstractBasicWorkFlow implements WorkFlow {
+    
+    /** Logger. */
+    private static Logger log = LoggerFactory.getLogger(AbstractBasicWorkFlow.class);
+    
     private final WorkFlowContext context;
 
     private RenderChanges renderChanges;
@@ -60,6 +66,7 @@ public abstract class AbstractBasicWorkFlow implements WorkFlow {
      * @param renderChanges RenderChanges
      */
     public void setRenderChanges(RenderChanges renderChanges) {
+        log.debug("Setting renderChanges: {}", renderChanges);
         this.renderChanges = renderChanges;
     }
 
@@ -69,6 +76,7 @@ public abstract class AbstractBasicWorkFlow implements WorkFlow {
      * @return renderChanges RenderChanges
      */
     public RenderChanges getRenderChanges() {
+        log.debug("Getting renderChanges: {}", renderChanges);
         return renderChanges;
     }
 
@@ -96,6 +104,7 @@ public abstract class AbstractBasicWorkFlow implements WorkFlow {
 
      */
     protected void processDisplayDocumentChanges() {
+        log.debug("Method processDisplayDocumentChanges called with renderChanges: {}", renderChanges);
         createAll(renderChanges.getDocumentsToStartRendering());
         removeAll(renderChanges.getDocumentsToStopRendering());
     }
@@ -113,6 +122,7 @@ public abstract class AbstractBasicWorkFlow implements WorkFlow {
      *      null
      */
     protected void processRotationSetChanges() {
+        log.debug("Method processRotationSetChanges called with renderChanges: {}", renderChanges);
         createAll(renderChanges.getDisplayRotationSetsToStartRendering());
         removeAll(renderChanges.getDisplayRotationSetsToStopRendering());
     }

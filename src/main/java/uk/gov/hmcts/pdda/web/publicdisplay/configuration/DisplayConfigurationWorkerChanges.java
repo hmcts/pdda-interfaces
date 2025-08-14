@@ -77,6 +77,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      * @return The RenderChanges caused by the court configuration changed.
      */
     public RenderChanges getRenderChanges(CourtConfigurationChange change) {
+        LOG.debug("Entering getRenderChanges(CourtConfigurationChange)");
         LOG.debug("getRenderChanges({})", change);
         if (!change.getCourtId().equals(courtId)) {
             throw new PublicDisplayRuntimeException(
@@ -96,8 +97,8 @@ public abstract class DisplayConfigurationWorkerChanges {
             }
 
             // Work through the old and new configurations working out what
-            // has
-            // changed.
+            // has changed.
+            LOG.debug("About to enter processRenderingChanges");
             return processRenderingChanges(configurations, change.isForceRecreate());
         } finally {
             this.readWriteLock.isWriteLockReleased();
@@ -114,6 +115,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     public RenderChanges getRenderChanges(DisplayDocumentType[] documentTypes,
         CourtRoomIdentifier courtRoom) {
+        LOG.debug("Entering getRenderChanges(DisplayDocumentType[], CourtRoomIdentifier)");
         if (!courtRoom.getCourtId().equals(courtId)) {
             throw new PublicDisplayRuntimeException(
                 "Problem getting render changes for a court room and display documents: "
@@ -136,6 +138,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     private void setDisplayConfigurationChanges(ConfigurationTuple configurations,
         CourtConfigurationChange change) {
+        LOG.debug("Entering setDisplayConfigurationChanges");
         CourtDisplayConfigurationChange courtDisplayConfigurationChange =
             (CourtDisplayConfigurationChange) change;
 
@@ -163,6 +166,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     private void setRotationSetConfigurationChanges(ConfigurationTuple configurations,
         CourtConfigurationChange change) {
+        LOG.debug("Entering setRotationSetConfigurationChanges");
         CourtRotationSetConfigurationChange courtRotationSetConfigurationChange =
             (CourtRotationSetConfigurationChange) change;
 
@@ -187,6 +191,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      * @throws CourtNotFoundException When the court is not found in the middle tier.
      */
     private void setCourtConfigurationChanges(ConfigurationTuple configurations) {
+        LOG.debug("Entering setCourtConfigurationChanges");
         // Get the DisplayRotationSetData from the middle tier.
         configurations.newConfigurationData =
             pdConfigurationController.getCourtConfiguration(courtId);
@@ -210,6 +215,7 @@ public abstract class DisplayConfigurationWorkerChanges {
      */
     private RenderChanges processRenderingChanges(ConfigurationTuple configurationChange,
         boolean forceRecreate) {
+        LOG.debug("Entering processRenderingChanges");
         LOG.debug("processRenderingChanges({},{})", configurationChange, forceRecreate);
         // Sort the changes.
         configurationChange.sort();
@@ -325,6 +331,7 @@ public abstract class DisplayConfigurationWorkerChanges {
          * Sort the encapsulated old and new configuration data by display ID.
          */
         private void sort() {
+            LOG.debug("Entering ConfigurationTuple.sort");
             Arrays.sort(oldConfigurationData,
                 DisplayRotationSetDataByDisplayComparator.getInstance());
             Arrays.sort(newConfigurationData,

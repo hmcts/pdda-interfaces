@@ -43,6 +43,7 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     public CourtListQuery(EntityManager entityManager) {
         super(entityManager);
+        log.debug("Entering CourtListQuery(EntityManager)");
         log.debug("Query object created");
     }
 
@@ -57,6 +58,7 @@ public class CourtListQuery extends PublicDisplayQuery {
             xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
             xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
             xhbDefendantRepository, null, null, null);
+        log.debug("Entering CourtListQuery(EntityManager, ...repositories)");
     }
 
     /**
@@ -70,6 +72,7 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
+        log.debug("Entering getData(LocalDateTime, int, int...)");
 
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
 
@@ -87,6 +90,7 @@ public class CourtListQuery extends PublicDisplayQuery {
     }
 
     private List<SummaryByNameValue> getHearingData(List<XhbHearingListDao> hearingListDaos, int... courtRoomIds) {
+        log.debug("Entering getHearingData(List<XhbHearingListDao>, int...)");
         List<SummaryByNameValue> results = new ArrayList<>();
         for (XhbHearingListDao hearingListDao : hearingListDaos) {
             // Loop the sittings
@@ -108,6 +112,7 @@ public class CourtListQuery extends PublicDisplayQuery {
 
     private List<SummaryByNameValue> getScheduledHearingData(XhbSittingDao sittingDao,
         List<XhbScheduledHearingDao> scheduledHearingDaos, int... courtRoomIds) {
+        log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
         List<SummaryByNameValue> results = new ArrayList<>();
         for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
 
@@ -133,11 +138,13 @@ public class CourtListQuery extends PublicDisplayQuery {
     }
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
+        log.debug("Entering getDefendantName(String, String, String, boolean)");
         return new DefendantName(firstName, middleName, surname, hide);
     }
 
     private SummaryByNameValue getSummaryByNameValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao, XhbSchedHearingDefendantDao schedHearingDefendantDao) {
+        log.debug("Entering getSummaryByNameValue(XhbSittingDao, XhbScheduledHearingDao, XhbSchedHearingDefendantDao)");
         SummaryByNameValue result = new SummaryByNameValue();
         boolean isHidden = false;
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),

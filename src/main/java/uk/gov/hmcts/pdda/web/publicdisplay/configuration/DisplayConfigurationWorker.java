@@ -76,6 +76,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     @Override
     protected void addDisplayRotationSetData(RenderChanges renderChanges,
         DisplayRotationSetData displayRotationSetData, boolean forceRecreate) {
+        LOG.debug("Entering addDisplayRotationSetData");
         displayRotationSetsByDisplayId.put(displayRotationSetData.getDisplayId(),
             displayRotationSetData);
         getRotationSetDisplayRotationSets(displayRotationSetData.getRotationSetId())
@@ -100,6 +101,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     @Override
     protected void removeDisplayRotationSetData(RenderChanges renderChanges,
         DisplayRotationSetData displayRotationSetData, boolean removeDisplayRotationSet) {
+        LOG.debug("Entering removeDisplayRotationSetData");
         displayRotationSetsByDisplayId.remove(displayRotationSetData.getDisplayId());
         getRotationSetDisplayRotationSets(displayRotationSetData.getRotationSetId())
             .remove(displayRotationSetData);
@@ -125,6 +127,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     protected void replaceDisplayRotationSetData(RenderChanges renderChanges,
         DisplayRotationSetData oldDisplayRotationSetData,
         DisplayRotationSetData newDisplayRotationSetData, boolean forceRecreate) {
+        LOG.debug("Entering replaceDisplayRotationSetData");
         if (oldDisplayRotationSetData.equals(newDisplayRotationSetData)) {
             // No change but we must re-render.
             addDisplayRotationSetData(renderChanges, newDisplayRotationSetData, forceRecreate);
@@ -145,6 +148,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
      */
     private void addAllDisplayDocumentsToRenderChanges(RenderChanges renderChanges,
         DisplayRotationSetData displayRotationSetData) {
+        LOG.debug("Entering addAllDisplayDocumentsToRenderChanges");
         RotationSetDisplayDocument[] rsDDs =
             displayRotationSetData.getRotationSetDisplayDocuments();
         for (int i = rsDDs.length - 1; i >= 0; i--) {
@@ -163,11 +167,13 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
      */
     @Override
     protected Set<DisplayRotationSetData> getRotationSetDisplayRotationSets(Integer rotationSetId) {
+        LOG.debug("Entering getRotationSetDisplayRotationSets");
         return displayRotationSetsByRotationSetId.computeIfAbsent(rotationSetId,
             k -> new HashSet<>());
     }
 
     private PdDataControllerBean getPdDataControllerBean() {
+        LOG.debug("Entering getPdDataControllerBean");
         if (pdDataControllerBean == null) {
             pdDataControllerBean = new PdDataControllerBean(getEntityManager());
         }
@@ -175,6 +181,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     }
 
     private DisplayStoreControllerBean getDisplayStoreControllerBean() {
+        LOG.debug("Entering getDisplayStoreControllerBean");
         if (displayStoreControllerBean == null) {
             displayStoreControllerBean = new DisplayStoreControllerBean(getEntityManager());
         }
@@ -182,6 +189,7 @@ public class DisplayConfigurationWorker extends DisplayConfigurationWorkerChange
     }
 
     private EntityManager getEntityManager() {
+        LOG.debug("Entering getEntityManager");
         if (entityManager == null) {
             LOG.debug("getEntityManager() - Creating new entityManager");
             entityManager = EntityManagerUtil.getEntityManager();
