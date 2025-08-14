@@ -89,7 +89,7 @@ public class DisplayDocumentReferenceManager {
     @SuppressWarnings(UNCHECKED)
     public RenderChanges getRenderChanges(DisplayDocumentType[] documentTypes,
         CourtRoomIdentifier courtRoom) {
-        LOG.debug("getRenderChanges()");
+        LOG.debug("Entering getRenderChanges");
         // The object to return.
         RenderChanges returnRenderChanges = new RenderChanges();
 
@@ -126,7 +126,7 @@ public class DisplayDocumentReferenceManager {
      *        registered.
      */
     public void addDisplayDocumentReferences(DisplayRotationSetData displayRotationSetData) {
-        LOG.debug("addDisplayDocumentReferences({})", displayRotationSetData);
+        LOG.debug("Entering addDisplayDocumentReferences");
         RotationSetDisplayDocument[] rsDds =
             displayRotationSetData.getRotationSetDisplayDocuments();
         for (int i = rsDds.length - 1; i >= 0; i--) {
@@ -145,7 +145,7 @@ public class DisplayDocumentReferenceManager {
      *        deregistered.
      */
     public void removeDisplayDocumentReferences(DisplayRotationSetData displayRotationSetData) {
-        LOG.debug("removeDisplayDocumentReferences({})", displayRotationSetData);
+        LOG.debug("Entering removeDisplayDocumentReferences");
         RotationSetDisplayDocument[] rsDds =
             displayRotationSetData.getRotationSetDisplayDocuments();
         for (int i = rsDds.length - 1; i >= 0; i--) {
@@ -162,6 +162,7 @@ public class DisplayDocumentReferenceManager {
      * @param renderChanges RenderChanges
      */
     public void fillInRenderChanges(RenderChanges renderChanges) {
+        LOG.debug("Entering fillInRenderChanges");
         // Accumulate dead Display Documents in this set.
         // We are doing this so we dont change the displayDocumentURICounts
         // map while iterating over it (fail-fast iterators.).
@@ -211,6 +212,7 @@ public class DisplayDocumentReferenceManager {
      */
     @SuppressWarnings({"rawtypes", UNCHECKED})
     private void storeDocumentByTypeAndCourts(DisplayDocumentUri displayDocumentUri) {
+        LOG.debug("Entering storeDocumentByTypeAndCourts");
         int[] courtRoomIDs = displayDocumentUri.getCourtRoomIds();
         for (int i = courtRoomIDs.length - 1; i >= 0; i--) {
             Set displayDocumentUris = getDdUrisForCourtRoomAndDocumentType(
@@ -226,6 +228,7 @@ public class DisplayDocumentReferenceManager {
      * @param displayDocumentUri The Display Document to remove.
      */
     private void removeDocumentByTypeAndCourts(DisplayDocumentUri displayDocumentUri) {
+        LOG.debug("Entering removeDocumentByTypeAndCourts");
         int[] courtRoomIDs = displayDocumentUri.getCourtRoomIds();
         for (int i = courtRoomIDs.length - 1; i >= 0; i--) {
             Set<DisplayDocumentUri> displayDocumentUris = getDdUrisForCourtRoomAndDocumentType(
@@ -245,6 +248,7 @@ public class DisplayDocumentReferenceManager {
      */
     private Set<DisplayDocumentUri> getDdUrisForCourtRoomAndDocumentType(
         DisplayDocumentType documentType, long courtRoomId) {
+        LOG.debug("Entering getDdUrisForCourtRoomAndDocumentType");
         String key = getCourtRoomAndDocumentTypeKey(documentType, courtRoomId);
         return displayDocumentUrisByCourtRoomAndDocumentType.computeIfAbsent(key,
             k -> new HashSet<>());
@@ -259,6 +263,7 @@ public class DisplayDocumentReferenceManager {
      */
     private String getCourtRoomAndDocumentTypeKey(DisplayDocumentType documentType,
         long courtRoomId) {
+        LOG.debug("Entering getCourtRoomAndDocumentTypeKey");
         StringBuilder returnBuffer =
             new StringBuilder(documentType.toString()).append('-').append(courtRoomId);
         return returnBuffer.toString();
@@ -272,6 +277,7 @@ public class DisplayDocumentReferenceManager {
      */
     private DisplayDocumentReferenceCounter getDisplayDocumentReferenceCounter(
         DisplayDocumentUri displayDocumentUri) {
+        LOG.debug("Entering getDisplayDocumentReferenceCounter");
         return displayDocumentUriCounts.computeIfAbsent(displayDocumentUri,
             k -> new DisplayDocumentReferenceCounter());
     }

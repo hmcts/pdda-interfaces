@@ -51,6 +51,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      */
     public JuryStatusDailyListQuery(EntityManager entityManager) {
         super(entityManager);
+        log.debug("Entering JuryStatusDailyListQuery(EntityManager)");
         log.debug("Query object created");
     }
 
@@ -66,6 +67,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
             xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
             xhbDefendantRepository, xhbCourtLogEntryRepository, xhbRefHearingTypeRepository, xhbRefJudgeRepository);
+        log.debug("Entering JuryStatusDailyListQuery(EntityManager, ...repositories)");
     }
 
     /**
@@ -79,8 +81,10 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
+        log.debug("Entering getData(LocalDateTime, int, int...)");
 
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
+        log.debug("Start date: {}", startDate);
 
         List<JuryStatusDailyListValue> results = new ArrayList<>();
 
@@ -107,11 +111,13 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     }
 
     protected boolean isFloatingIncluded() {
+        log.debug("Entering isFloatingIncluded()");
         // Only show isFloating = '0'
         return false;
     }
 
     private List<JuryStatusDailyListValue> getSittingData(List<XhbSittingDao> sittingDaos, int... courtRoomIds) {
+        log.debug("Entering getSittingData(List<XhbSittingDao>, int...)");
         List<JuryStatusDailyListValue> results = new ArrayList<>();
         for (XhbSittingDao sittingDao : sittingDaos) {
 
@@ -143,6 +149,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     private JuryStatusDailyListValue getJuryStatusDailyListValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao, String floating) {
+        log.debug("Entering getJuryStatusDailyListValue(XhbSittingDao, XhbScheduledHearingDao, String)");
         JuryStatusDailyListValue result = new JuryStatusDailyListValue();
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
             scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
@@ -191,6 +198,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     private DefendantName getDefendantNameFromSchedule(XhbSchedHearingDefendantDao schedHearingDefendantDao,
         boolean isCaseHidden) {
+        log.debug("Entering getDefendantNameFromSchedule(XhbSchedHearingDefendantDao, boolean)");
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
             getXhbDefendantOnCaseRepository()
                 .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
@@ -209,16 +217,19 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     private boolean isDefendantHidden(Optional<XhbDefendantDao> defendantDao,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isCaseHidden) {
+        log.debug("Entering isDefendantHidden(Optional<XhbDefendantDao>, Optional<XhbDefendantOnCaseDao>, boolean)");
         return isCaseHidden
             || defendantOnCaseDao.isPresent() && YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
             || defendantDao.isPresent() && YES.contentEquals(defendantDao.get().getPublicDisplayHide());
     }
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
+        log.debug("Entering getDefendantName(String, String, String, boolean)");
         return new DefendantName(firstName, middleName, surname, hide);
     }
 
     private JudgeName getJudgeName(XhbScheduledHearingDao scheduledHearingDao) {
+        log.debug("Entering getJudgeName(XhbScheduledHearingDao)");
         Optional<XhbRefJudgeDao> refJudgeDao = getXhbRefJudgeDao(scheduledHearingDao.getScheduledHearingId());
         if (refJudgeDao.isPresent()) {
             return new JudgeName(refJudgeDao.get().getFullListTitle1(), refJudgeDao.get().getSurname());
@@ -227,6 +238,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
     }
 
     private String getHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
+        log.debug("Entering getHearingTypeDesc(Optional<XhbHearingDao>)");
         if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
                 getXhbRefHearingTypeRepository()
