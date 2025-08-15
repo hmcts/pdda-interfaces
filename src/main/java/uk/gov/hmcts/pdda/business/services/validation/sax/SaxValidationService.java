@@ -37,6 +37,10 @@ public class SaxValidationService implements ValidationService {
     private static final Logger LOG = LoggerFactory.getLogger(SaxValidationService.class);
     private static final String DISALLOW_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
     private static final String XSD_HOME = "config/xsd/";
+    
+    private static final String COURT_SERVICE_CPP_XSD = "CourtService_CPP-v1-0.xsd";
+    private static final String PD_DOCTYPE = "PD";
+    private static final String IWP_DOCTYPE = "WP";
 
     private final EntityResolver entityResolver;
 
@@ -54,10 +58,58 @@ public class SaxValidationService implements ValidationService {
         this.schemaFactory = schemaFactory;
         this.saxParserFactory = saxParserFactory;
     }
-
+    
     @Override
-    public ValidationResult validate(final String xml, final String schemaName) throws ValidationException {
+    public ValidationResult validate(final String xml, final String schemaName, String documentType)
+            throws ValidationException {
         LOG.debug("entered validate method");
+        
+        ErrorHandlerValidationResult result;
+        if (PD_DOCTYPE.equals(documentType)) {
+            LOG.debug("Validating Public Display XML");
+            result = validatePdIwp(xml, schemaName);
+        } else if (IWP_DOCTYPE.equals(documentType)) {
+            LOG.debug("Validating IWP XML");
+            result = validatePdIwp(xml, schemaName);
+        } else {
+            LOG.debug("Validating List XML");
+            result = validateList(xml, schemaName);
+        }
+        return result;
+    }
+    
+    public ErrorHandlerValidationResult validatePdIwp(final String xml, final String schemaName)
+            throws ValidationException {
+        LOG.debug("entered validatePDIWP method");
+
+        try {
+            SAXParserFactory factory = getSaxParserFactory();
+            factory.setNamespaceAware(true);
+
+            factory.setSchema(
+                getSchemaFactory().newSchema(new SAXSource(entityResolver.resolveEntity(schemaName, schemaName))));
+            SAXParser parser = factory.newSAXParser();
+
+
+            XMLReader reader = parser.getXMLReader();
+            ErrorHandlerValidationResult result = new ErrorHandlerValidationResult();
+            reader.setErrorHandler(result);
+            reader.parse(new InputSource(new StringReader(xml)));
+            LOG.debug("Valid: {}", result.isValid());
+            if (!result.isValid()) {
+                LOG.debug("Validation Failed: {}", result);
+            }
+            return result;
+
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            throw new ValidationException("An error occurred validating.", e);
+        }
+    }
+
+    
+    public ErrorHandlerValidationResult validateList(final String xml, final String schemaName)
+            throws ValidationException {
+        LOG.debug("entered validateList method");
 
         try {
             SAXParserFactory factory = getSaxParserFactory();
@@ -65,13 +117,13 @@ public class SaxValidationService implements ValidationService {
 
             // Optional: log to confirm schema file is resolvable
             URL url = Thread.currentThread().getContextClassLoader()
-                .getResource(XSD_HOME + "CourtService_CPP-v1-0.xsd");
+                .getResource(XSD_HOME + COURT_SERVICE_CPP_XSD);
             LOG.debug("Test:: Resolved CourtService_CPP-v1-0.xsd to URL: {}", url);
 
             // Build schema from multiple XSD files
             Source[] schemaSources = getSchemaSources(
                 XSD_HOME + "DailyList-v1-0.xsd",
-                XSD_HOME + "CourtService_CPP-v1-0.xsd",
+                XSD_HOME + COURT_SERVICE_CPP_XSD,
                 XSD_HOME + "AddressTypes-v1-0.xsd",
                 XSD_HOME + "apd-v1-0.xsd",
                 XSD_HOME + "CitizenIdentificationTypes-v1-0.xsd",

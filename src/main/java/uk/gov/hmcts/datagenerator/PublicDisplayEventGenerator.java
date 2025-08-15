@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Generates random public display events and serializes them to files.
-
+ * Or can be tailored to generate specific events by providing court IDs and room IDs.
  * Usage: java PublicDisplayEventGenerator [outputPath] [count] [courtId] [courtRoomId] e.g. java
  * PublicDisplayEventGenerator /tmp/sftpfolder/xhibit/ 10 80 457 8107
 

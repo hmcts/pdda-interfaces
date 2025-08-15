@@ -83,7 +83,7 @@ class SaxValidationServiceTest {
         // Run
         boolean result = false;
         try {
-            classUnderTest.validate(xml, schemaName);
+            classUnderTest.validate(xml, schemaName, "PD");
             result = true;
         } catch (Exception exception) {
             fail(exception);
