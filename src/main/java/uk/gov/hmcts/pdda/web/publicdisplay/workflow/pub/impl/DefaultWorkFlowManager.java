@@ -1,5 +1,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CourtRoomEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
@@ -22,6 +24,10 @@ import uk.gov.hmcts.pdda.web.publicdisplay.workflow.pub.WorkFlowManager;
  * @version $Revision: 1.3 $
  */
 public class DefaultWorkFlowManager extends WorkFlowManager {
+    
+    /** Logger. */
+    private static Logger log = LoggerFactory.getLogger(DefaultWorkFlowManager.class);
+    
     /**
      * Creates a new DefaultWorkFlowManager object.
 
@@ -42,6 +48,8 @@ public class DefaultWorkFlowManager extends WorkFlowManager {
      */
     @Override
     protected WorkFlow[] getWorkFlowsForEvent(PublicDisplayEvent event) {
+        log.debug("getWorkFlowsForEvent: {}", event);
+        
         if (event instanceof ConfigurationChangeEvent) {
             return new WorkFlow[] {
                 new ConfigurationChangeWorkFlow(getContext(), (ConfigurationChangeEvent) event)};

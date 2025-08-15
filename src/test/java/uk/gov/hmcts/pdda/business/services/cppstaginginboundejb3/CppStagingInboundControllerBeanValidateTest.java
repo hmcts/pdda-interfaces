@@ -103,7 +103,7 @@ class CppStagingInboundControllerBeanValidateTest {
             testingClobRepository(dao);
 
             EasyMock.expect(mockValidationService.validate(EasyMock.isA(String.class),
-                EasyMock.isA(String.class))).andReturn(mockValidationResult);
+                EasyMock.isA(String.class), EasyMock.isA(String.class))).andReturn(mockValidationResult);
 
             mockValidationResult.isValid();
 
@@ -140,7 +140,8 @@ class CppStagingInboundControllerBeanValidateTest {
         testingClobRepository(dao);
 
         EasyMock.expect(
-            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
+            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class),
+                EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
 
         EasyMock.expect(mockValidationResult.isValid()).andReturn(false).anyTimes();
@@ -221,7 +222,8 @@ class CppStagingInboundControllerBeanValidateTest {
         testingClobRepository(dao);
 
         EasyMock.expect(
-            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class)))
+            mockValidationService.validate(EasyMock.isA(String.class), EasyMock.isA(String.class),
+                EasyMock.isA(String.class)))
             .andReturn(mockValidationResult);
         EasyMock
             .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
