@@ -13,34 +13,34 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-/**
- * IWPXmlUpdater is a utility class that updates an XML file with the current date and
- * time, and saves it to a specified output directory.
-
- * Usage: java IWPXmlUpdater [inputFile] [outputFolder]
-
- */
 @SuppressWarnings("PMD")
-public class IwpXmlUpdater {
+public class PdIwpXmlUpdater {
 
-    private IwpXmlUpdater() {
+    private PdIwpXmlUpdater() {
         // Prevent instantiation
     }
 
     public static void main(String[] args) throws Exception {
-        final String inputFile = args.length > 0 ? args[0] : "WebPage.xml";
-        String outputFolder = args.length > 1 ? args[1] : "output";
+        if (args.length < 1) {
+            throw new IllegalArgumentException("You must specify 'PublicDisplay' or 'WebPage' as the first argument.");
+        }
+
+        String displayType = args[0];
+        if (!"PublicDisplay".equalsIgnoreCase(displayType) && !"WebPage".equalsIgnoreCase(displayType)) {
+            throw new IllegalArgumentException("First argument must be either 'PublicDisplay' or 'WebPage'.");
+        }
+
+        final String inputFile = args.length > 1 ? args[1] : displayType + ".xml";
+        String outputFolder = args.length > 2 ? args[2] : "output";
 
         Files.createDirectories(Paths.get(outputFolder));
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime adjustedTime = now.minusMinutes(15);
 
-        final String dayOfWeek =
-            adjustedTime.getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL, Locale.UK);
+        final String dayOfWeek = adjustedTime.getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL, Locale.UK);
         final String day = String.format("%02d", adjustedTime.getDayOfMonth());
-        final String month =
-            adjustedTime.getMonth().getDisplayName(java.time.format.TextStyle.FULL, Locale.UK);
+        final String month = adjustedTime.getMonth().getDisplayName(java.time.format.TextStyle.FULL, Locale.UK);
         final String year = String.valueOf(adjustedTime.getYear());
         final String hour = String.format("%02d", adjustedTime.getHour());
         final String min = String.format("%02d", adjustedTime.getMinute());
@@ -76,11 +76,13 @@ public class IwpXmlUpdater {
 
         String courtCode = "457";
         String inputFilename = new File(inputFile).getName();
-        if (inputFilename.matches("WebPage_4\\d{2}_.*\\.xml")) {
+        if (inputFilename.matches("PublicDisplay_4\\d{2}_.*\\.xml")) {
+            courtCode = inputFilename.substring(14, 17);
+        } else if (inputFilename.matches("WebPage_4\\d{2}_.*\\.xml")) {
             courtCode = inputFilename.substring(8, 11);
         }
 
-        String outputFileName = "WebPage_" + courtCode + "_" + fileTimestamp + ".xml";
+        String outputFileName = displayType + "_" + courtCode + "_" + fileTimestamp + ".xml";
         File outputFile = Paths.get(outputFolder, outputFileName).toFile();
 
         XmlUtils.writeXmlToFile(doc, outputFile);
