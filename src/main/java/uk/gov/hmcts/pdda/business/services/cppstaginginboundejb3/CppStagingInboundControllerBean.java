@@ -322,7 +322,7 @@ public class CppStagingInboundControllerBean extends AbstractCppStagingInboundCo
 
             if (shouldValidateXml) {
                 ValidationResult validDoc =
-                    getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName);
+                    getValidationService().validate(xmlToValidate, SCHEMA_DIR_DEFAULT + schemaName, docType.toString());
                 LOG.debug("Document validation result: {}", validDoc.isValid());
                 if (validDoc.isValid()) {
                     LOG.debug("{} - Document XML is valid", methodName);

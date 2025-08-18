@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cs:DailyList xmlns="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.courtservice.gov.uk/schemas/courtservice file:///C:/XHIBIT/Schemas/DailyList-v1-0.xsd">
 	<cs:DocumentID>
-		<cs:DocumentName>Daily List FINAL v1 29-APR-25</cs:DocumentName>
+		<cs:DocumentName>Daily List FINAL v1 15-AUG-25</cs:DocumentName>
 		<cs:UniqueID>CSDDL000000013267670</cs:UniqueID>
 		<cs:DocumentType>DL</cs:DocumentType>
-		<cs:TimeStamp>2025-04-29T10:06:56.248</cs:TimeStamp>
+		<cs:TimeStamp>2025-08-15T10:06:56.248</cs:TimeStamp>
 		<cs:Version>1.0</cs:Version>
 		<cs:SecurityClassification>NPM</cs:SecurityClassification>
-		<cs:SellByDate>2025-04-29</cs:SellByDate>
+		<cs:SellByDate>2025-08-15</cs:SellByDate>
 		<cs:XSLstylesheetURL>http://www.courtservice.gov.uk/transforms/courtservice/dailyListHtml-v2-2.xsl
                 </cs:XSLstylesheetURL>
 	</cs:DocumentID>
 	<cs:ListHeader>
 		<cs:ListCategory>Criminal</cs:ListCategory>
-		<cs:StartDate>2025-04-29</cs:StartDate>
-		<cs:EndDate>2025-04-29</cs:EndDate>
+		<cs:StartDate>2025-08-15</cs:StartDate>
+		<cs:EndDate>2025-08-15</cs:EndDate>
 		<cs:Version>FINAL 1</cs:Version>
-		<cs:PublishedTime>2025-04-29T10:06:56.000</cs:PublishedTime>
+		<cs:PublishedTime>2025-08-15T10:06:56.000</cs:PublishedTime>
 		<cs:CRESTlistID>817761</cs:CRESTlistID>
 	</cs:ListHeader>
 	<cs:CrownCourt>
@@ -64,7 +64,7 @@
 							<cs:HearingDetails HearingType="CBR">
 								<cs:HearingDescription>Committal for Breaches
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:CRESThearingID>9810178</cs:CRESThearingID>
 							<cs:TimeMarkingNote>SITTING AT 10:30 am</cs:TimeMarkingNote>
@@ -129,7 +129,7 @@
 							<cs:HearingDetails HearingType="CBR">
 								<cs:HearingDescription>Committal for Breaches
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 								<cs:ListNote>To be listed after 14:00 </cs:ListNote>
 							</cs:HearingDetails>
 							<cs:CRESThearingID>9810179</cs:CRESThearingID>
@@ -213,7 +213,7 @@
 							<cs:HearingDetails HearingType="CBR">
 								<cs:HearingDescription>Committal for Breaches
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:CRESThearingID>9810178</cs:CRESThearingID>
 							<cs:TimeMarkingNote>SITTING AT 10:30 am</cs:TimeMarkingNote>
@@ -277,7 +277,7 @@
 							<cs:HearingDetails HearingType="CBR">
 								<cs:HearingDescription>Committal for Breaches
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 								<cs:ListNote>To be listed after 14:00 </cs:ListNote>
 							</cs:HearingDetails>
 							<cs:CRESThearingID>9810179</cs:CRESThearingID>
@@ -359,7 +359,7 @@
 							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="SEN">
 								<cs:HearingDescription>For Sentence</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>A20241243</cs:CaseNumber>
@@ -407,7 +407,7 @@
 							<cs:HearingDetails HearingType="PTP">
 								<cs:HearingDescription>Plea and Trial Preparation
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -445,7 +445,7 @@
 							<cs:HearingDetails HearingType="PTP">
 								<cs:HearingDescription>Plea and Trial Preparation
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -481,7 +481,7 @@
 							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="MEN">
 								<cs:HearingDescription>For Mention</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 								<cs:ListNote>Complainant's anonymity protected by virtue of
                                                                         Section 1 of the Sexual Offences Amendment Act 1992
                                                                 </cs:ListNote>
@@ -530,7 +530,7 @@
 							<cs:HearingDetails HearingType="PTP">
 								<cs:HearingDescription>Plea and Trial Preparation
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 								<cs:ListNote>Complainant's anonymity protected by virtue of
                                                                         Section 1 of the Sexual Offences Amendment Act 1992
                                                                 </cs:ListNote>
@@ -578,7 +578,7 @@
 							<cs:HearingDetails HearingType="PTP">
 								<cs:HearingDescription>Plea and Trial Preparation
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>11:15 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -644,7 +644,7 @@
 							<cs:HearingDetails HearingType="PTP">
 								<cs:HearingDescription>Plea and Trial Preparation
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>11:30 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -697,7 +697,7 @@
 							<cs:HearingDetails HearingType="BVA">
 								<cs:HearingDescription>For Application to Vary Bail Conditions
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>11:45 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -744,7 +744,7 @@
 							<cs:HearingDetails HearingType="CSE">
 								<cs:HearingDescription>Committal for Sentence
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>12:30 PM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -784,7 +784,7 @@
 							<cs:HearingSequenceNumber>10</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="SEN">
 								<cs:HearingDescription>For Sentence</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>2:15 PM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -830,7 +830,7 @@
 							<cs:HearingDetails HearingType="PRA">
 								<cs:HearingDescription>For Application under the Proceeds of
                                                                         Crime Act 2002</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>2:45 PM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -925,7 +925,7 @@
 							<cs:HearingDetails HearingType="PRA">
 								<cs:HearingDescription>For Application under the Proceeds of
                                                                         Crime Act 2002</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>3:00 PM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -962,7 +962,7 @@
 							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="MEN">
 								<cs:HearingDescription>For Mention</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 								<cs:ListNote>Complainant's anonymity protected by virtue of
                                                                         Section 1 of the Sexual Offences Amendment Act 1992
                                                                 </cs:ListNote>
@@ -1057,7 +1057,7 @@
 							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="SEN">
 								<cs:HearingDescription>For Sentence</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -1095,7 +1095,7 @@
 							<cs:HearingDetails HearingType="BLA">
 								<cs:HearingDescription>For Application for Bail
                                                                 </cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -1132,7 +1132,7 @@
 							<cs:HearingSequenceNumber>3</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="SEN">
 								<cs:HearingDescription>For Sentence</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -1168,7 +1168,7 @@
 							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
 							<cs:HearingDetails HearingType="TRL">
 								<cs:HearingDescription>For Trial</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>11:00 AM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>
@@ -1214,7 +1214,7 @@
 							<cs:HearingDetails HearingType="PRA">
 								<cs:HearingDescription>For Application under the Proceeds of
                                                                         Crime Act 2002</cs:HearingDescription>
-								<cs:HearingDate>2025-04-29</cs:HearingDate>
+								<cs:HearingDate>2025-08-15</cs:HearingDate>
 							</cs:HearingDetails>
 							<cs:TimeMarkingNote>2:00 PM</cs:TimeMarkingNote>
 							<cs:CaseNumber>CPP</cs:CaseNumber>

@@ -9,5 +9,5 @@ package uk.gov.hmcts.pdda.business.services.validation;
  */
 @SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface ValidationService {
-    ValidationResult validate(String xml, String schemaName) throws ValidationException;
+    ValidationResult validate(String xml, String schemaName, String documentType) throws ValidationException;
 }
