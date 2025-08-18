@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.rmi.RemoteException;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @SuppressWarnings("PMD")
 @ExtendWith(EasyMockExtension.class)
 class CathConnectionServiceBeanTest {
