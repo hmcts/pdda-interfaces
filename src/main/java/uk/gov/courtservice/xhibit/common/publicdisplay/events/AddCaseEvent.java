@@ -5,9 +5,13 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIde
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 
 /**
+
  * Title: Add Case Event.
+
  * Description: This event is generated when a case is added to the todays schedule.
+
  * Copyright: Copyright (c) 2003
+
  * Company: EDS
 
  * @author Rakesh Lakhani

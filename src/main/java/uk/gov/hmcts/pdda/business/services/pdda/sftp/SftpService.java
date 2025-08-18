@@ -642,8 +642,8 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append("Invalid filename - DateTime\n");
             }
 
-            String debugErrorPrefix = filename + " error: {}";
             if (errorMessages.length() > 0) {
+                String debugErrorPrefix = filename + " error: {}";
                 LOG.debug(debugErrorPrefix, errorMessages.toString());
                 return errorMessages.toString();
             }

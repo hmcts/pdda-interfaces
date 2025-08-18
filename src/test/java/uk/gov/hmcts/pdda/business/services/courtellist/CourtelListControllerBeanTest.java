@@ -1,0 +1,166 @@
+package uk.gov.hmcts.pdda.business.services.courtellist;
+
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.test.util.ReflectionTestUtils;
+import uk.gov.hmcts.DummyCourtelUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+
+ * Title: CourtelListControllerBean Test.
+
+
+ * Description: Unit tests for the CourtelListControllerBean class
+
+
+ * Copyright: Copyright (c) 2024
+
+
+ * Company: CGI
+
+ * @author Nathan Toft
+ */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class CourtelListControllerBeanTest {
+
+    private static final String TRUE = "Result is not True";
+    private static final String FALSE = "Result is not False";
+    private static final String NOT_NULL = "Result is Not Null";
+
+    @Mock
+    private EntityManager mockEntityManager;
+
+    @Mock
+    private XhbConfigPropRepository mockXhbConfigPropRepository;
+
+    @Mock
+    private XhbCourtelListRepository mockXhbCourtelListRepository;
+
+    @InjectMocks
+    private final CourtelListControllerBean classUnderTest =
+        new CourtelListControllerBean(mockEntityManager);
+
+    @AfterEach
+    public void teardown() {
+        Mockito.clearAllCaches();
+    }
+    
+    @Test
+    void testDoTask() {
+        ReflectionTestUtils.setField(classUnderTest, "courtelHelper",
+            Mockito.mock(CourtelHelper.class));
+        // Run method
+        boolean result;
+        try {
+            // Setup
+            XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+            xhbConfigPropDao.setPropertyValue("1");
+            List<XhbConfigPropDao> configPropDaos = new ArrayList<>();
+            configPropDaos.add(xhbConfigPropDao);
+
+            Mockito.when(mockXhbConfigPropRepository.findByPropertyName(Mockito.isA(String.class)))
+                .thenReturn(configPropDaos);
+
+            // Run
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testDoTaskFail() {
+        // Run method
+        boolean result;
+        try {
+            // Run
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertFalse(result, FALSE);
+    }
+
+    @Test
+    void testDoTaskBadConfigProp() {
+        // Run method
+        boolean result;
+        try {
+            // Setup
+            XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+            xhbConfigPropDao.setPropertyValue("abcdefgh");
+            List<XhbConfigPropDao> configPropDaos = new ArrayList<>();
+            configPropDaos.add(xhbConfigPropDao);
+
+            Mockito.when(mockXhbConfigPropRepository.findByPropertyName(Mockito.isA(String.class)))
+                .thenReturn(configPropDaos);
+
+            // Run
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertFalse(result, FALSE);
+    }
+
+    @Test
+    void testDoTaskPoppulatedList() {
+        // Setup
+        CourtelHelper mockCourtelHelper = Mockito.mock(CourtelHelper.class);
+        List<XhbCourtelListDao> xhbCourtelList = new ArrayList<>();
+        xhbCourtelList.add(DummyCourtelUtil.getXhbCourtelListDao());
+        // Run method
+        boolean result;
+        try {
+            ReflectionTestUtils.setField(classUnderTest, "courtelHelper", mockCourtelHelper);
+            Mockito.when(mockCourtelHelper.getCourtelList()).thenReturn(xhbCourtelList);
+            classUnderTest.doTask();
+            result = true;
+        } catch (Exception exception) {
+            result = false;
+        }
+        // Check results
+        assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testDefaultConstructorEntityManager() {
+        CourtelListControllerBean testConstructor =
+            new CourtelListControllerBean(mockEntityManager);
+        assertNotNull(testConstructor, NOT_NULL);
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        CourtelListControllerBean testConstructor = new CourtelListControllerBean();
+        assertNotNull(testConstructor, NOT_NULL);
+    }
+}

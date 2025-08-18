@@ -72,6 +72,7 @@ class FirmListXmlMergeUtilsNodesTest {
         // First Node Reserved Data
         documentXmls.add("<cs:ReserveList></cs:ReserveList>");
         documentXmlsToMerge.add("<cs:ReserveList></cs:ReserveList>");
+
         boolean result = true;
         for (int i = 0; i < documentXmls.size(); i++) {
             testMergeNode(documentXmls.get(i), documentXmlsToMerge.get(i));

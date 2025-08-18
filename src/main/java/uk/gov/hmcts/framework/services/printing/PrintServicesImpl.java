@@ -14,19 +14,11 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
-
  * Title: PrintServicesImpl.
-
-
  * Description: Implementation of the print service
-
  * This is a replacement for the PrintController
-
  * Copyright: Copyright (c) 2002
-
-
  * Company: EDS
-
  * @author Will Fardell (Xdevelopment 2003)
  * @version 1.0
  */

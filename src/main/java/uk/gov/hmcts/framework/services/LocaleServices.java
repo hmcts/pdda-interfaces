@@ -109,8 +109,8 @@ public final class LocaleServices {
      * Opens the stream for the url in the given locale for name resolution see getCandidates, this
      * is a localised version of URL.openStream().
 
-     * @param locale the required locale.
-     * @param url the url to open.
+     * @param locale the required locale
+     * @param url the url to open
      */
     public InputStream openStream(Locale locale, String url) {
         Iterator<?> candidates = getCandidates(locale, url);
@@ -174,8 +174,6 @@ public final class LocaleServices {
 
      * The LAST file extension (if any) is seperated from the base, the extension is the part after
      * and including the file extension seperator '.'
-     * <p/>
-
      * The resource bundle lookup searches for classes with various paterns on the basis of (1) the
      * desired locale and (2) the current default locale as returned by Locale.getDefault(), and (3)
      * the root resource bundle (base), in the following order from lower-level (more specific) to

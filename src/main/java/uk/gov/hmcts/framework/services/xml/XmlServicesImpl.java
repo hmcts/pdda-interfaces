@@ -71,7 +71,6 @@ import javax.xml.transform.TransformerException;
  *          19/11/03 - RL - Changing encoding to UTF-8 as this handles special chars even
  *          better!<br>
  *          Removing XMLTransform as XSLServices should be used
-
  */
 
 public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {

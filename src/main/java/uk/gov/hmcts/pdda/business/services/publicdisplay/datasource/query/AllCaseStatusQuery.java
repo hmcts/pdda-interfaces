@@ -166,6 +166,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
                 if (caseDao.isPresent()) {
                     result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                     result.setCaseTitle(caseDao.get().getCaseTitle());
+                    
                     isHidden = YES.equals(caseDao.get().getPublicDisplayHide());
 
                     // Populate the event

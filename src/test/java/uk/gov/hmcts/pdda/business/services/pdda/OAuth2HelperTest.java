@@ -1,4 +1,3 @@
-
 package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.junit.jupiter.api.AfterEach;
@@ -18,6 +17,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.Initialization
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
@@ -28,6 +28,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -66,6 +67,8 @@ class OAuth2HelperTest {
 
     @Mock
     private Builder mockBuilder;
+    
+    private Builder realBuilder;
 
     @Mock
     private HttpClient mockHttpClient;
@@ -78,6 +81,8 @@ class OAuth2HelperTest {
 
     @BeforeEach
     public void setUp() {
+        realBuilder = HttpRequest.newBuilder();
+        
         classUnderTest = new OAuth2Helper(mockEnvironment) {
             @Override
             protected String getTenantId() {
@@ -124,6 +129,38 @@ class OAuth2HelperTest {
     }
 
     @Test
+    void testGetAccessTokenValid() {
+        String result = testGetAccessToken(DummyCourtelUtil.getHttpResponse(200, VALID_RESPONSE));
+        assertNotNull(result, NOTNULL);
+    }
+
+
+    private String testGetAccessToken(HttpResponse<String> response) {
+        try (
+            MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)
+        ) {
+            // Use a real builder chain
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://dummy.com/" + DUMMY_TENANTID + "/oauth2/token"))
+                .headers("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString("grant_type=client_credentials"))
+                .build();
+
+            staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
+
+            // Stub send call
+            Mockito.when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.eq(BodyHandlers.ofString())))
+                .thenReturn(response);
+
+            // Replace mockHttpRequest with realRequest if necessary
+            return classUnderTest.getAccessToken();
+        } catch (IOException | InterruptedException | RuntimeException | URISyntaxException exception) {
+            fail(exception.getMessage());
+            return null;
+        }
+    }
+
+    
     void shouldReturnAccessTokenWhenResponseIsValid() {
         runAccessTokenScenario(DummyCourtelUtil.getHttpResponse(200, VALID_RESPONSE));
     }
@@ -390,7 +427,7 @@ class OAuth2HelperTest {
         String tokenUrlTemplate = "https://example.com/%s/oauth2/token";
         String tenantId = "tenant-abc";
 
-        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token-url"))
+        Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.oauth2.token.url"))
             .thenReturn(tokenUrlTemplate);
         Mockito.when(mockEnvironment.getProperty("spring.cloud.azure.active-directory.profile.tenant-id"))
             .thenReturn(tenantId);
@@ -398,7 +435,14 @@ class OAuth2HelperTest {
         OAuth2Helper helper = new OAuth2Helper(mockEnvironment);
         String result = helper.getTokenUrl();
 
-        assertTrue(result.equals("https://example.com/tenant-abc/oauth2/token"), "Formatted token URL is incorrect");
+        System.out.println("Formatted token URL: " + result);
+        assertNotNull(result);
+        assertTrue(result.contains("tenant-abc"), "Tenant ID missing from token URL");
+
+        assertEquals("https://example.com/tenant-abc/oauth2/token", result, "Formatted token URL is incorrect");
+        assertEquals("https://example.com/tenant-abc/oauth2/token", result, 
+            "Formatted token URL is incorrect");
+
     }
 
     
@@ -426,6 +470,5 @@ class OAuth2HelperTest {
 
         assertTrue(result.equals(expectedSecret));
     }
-
 
 }

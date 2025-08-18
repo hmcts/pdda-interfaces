@@ -23,6 +23,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
 import uk.gov.hmcts.pdda.business.exception.formatting.FormattingException;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CourtUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.BlobHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.CourtelHelper;
 import uk.gov.hmcts.pdda.business.vos.formatting.FormattingValue;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundles;
 
@@ -73,16 +74,20 @@ class FormattingServicesProcessingTest {
     private BlobHelper mockBlobHelper;
     
     @Mock
+    private CourtelHelper mockCourtelHelper;
+    
+    @Mock
     private XhbCppListRepository mockCppListRepo;
     
 
     @InjectMocks
     private FormattingServices classUnderTest = new FormattingServices(
-        EasyMock.createMock(EntityManager.class), EasyMock.createMock(BlobHelper.class));
+        EasyMock.createMock(EntityManager.class), EasyMock.createMock(CourtelHelper.class),
+        EasyMock.createMock(BlobHelper.class));
 
     @BeforeEach
     void setup() {
-        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper) {
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper) {
             @Override
             protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
                 return mockCppFormattingRepo;
@@ -137,7 +142,7 @@ class FormattingServicesProcessingTest {
         when(mockCppFormattingRepo.findLatestByCourtDateInDocSafe(eq(81), eq("IWP"), any(LocalDateTime.class)))
             .thenReturn(dao);
 
-        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper) {
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper) {
             @Override
             protected XhbCppFormattingRepository getXhbCppFormattingRepository() {
                 return mockCppFormattingRepo;
@@ -166,7 +171,7 @@ class FormattingServicesProcessingTest {
         XhbCppFormattingDao cppDao = DummyFormattingUtil.getXhbCppFormattingDao();
 
         // Use invalid XML that causes a parsing exception
-        classUnderTest = new FormattingServices(mockEntityManager, mockBlobHelper) {
+        classUnderTest = new FormattingServices(mockEntityManager, mockCourtelHelper, mockBlobHelper) {
             @Override
             protected String getClobData(Long clobId) {
                 return null; // causes StringReader(null) → NullPointerException inside createInputDocument
