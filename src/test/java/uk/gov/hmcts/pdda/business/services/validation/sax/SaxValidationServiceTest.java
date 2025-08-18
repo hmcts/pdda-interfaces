@@ -22,6 +22,7 @@ import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.SchemaFactory;
 
@@ -167,6 +168,105 @@ class SaxValidationServiceTest {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             localClassUnderTest.getSchema("config/xsd/NonExistentFile.xsd", factory);
         });
+    }
+
+    @Test
+    void testGetSchemaFactory_cachingAndFeatures() throws Exception {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        // First call should create and cache
+        assertNotNull(localClassUnderTest.getSchemaFactory(), "SchemaFactory is null");
+        // Second call should return cached
+        assertEquals(localClassUnderTest.getSchemaFactory(), localClassUnderTest.getSchemaFactory(),
+            "SchemaFactory not cached");
+    }
+
+
+    @Test
+    void testGetSchemaSources_validAndInvalid() throws Exception {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        // Valid path
+        Source[] sources = localClassUnderTest.getSchemaSources("config/xsd/DailyList-v1-0.xsd");
+        assertNotNull(sources, "Sources is null");
+        assertTrue(sources.length > 0, "Sources is empty");
+        // Invalid path
+        Assertions.assertThrows(SAXException.class, () -> {
+            localClassUnderTest.getSchemaSources("config/xsd/NonExistentFile.xsd");
+        });
+    }
+
+    @Test
+    void testGetSchema_alreadyHasSchema() throws Exception {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver());
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        // Should not throw if schema is set again
+        assertNotNull(localClassUnderTest.getSchema("config/xsd/DailyList-v1-0.xsd", factory));
+    }
+
+    @Test
+    void testConstructorWithNulls() {
+        SaxValidationService localClassUnderTest = new SaxValidationService(getDummyFileEntityResolver(), null, null);
+        assertNotNull(localClassUnderTest, "Instance is null");
+    }
+
+    @Test
+    void testValidateListIsCovered() throws Exception {
+        // Setup
+        String xml = "<XML></XML>";
+        String schemaName = "DailyList-v1-0.xsd";
+        // Expects
+        Mockito.when(mockSaxParserFactory.newSAXParser()).thenReturn(mockSaxParser);
+        Mockito.when(mockSaxParser.getXMLReader()).thenReturn(mockXmlReader);
+        // Run
+        boolean result = false;
+        try {
+            // Use a documentType that triggers validateList
+            classUnderTest.validate(xml, schemaName, "LIST");
+            result = true;
+        } catch (Exception exception) {
+            fail(exception);
+        }
+        assertTrue(result, TRUE);
+    }
+
+
+    @Test
+    void testValidate_elseBranchForUnknownDocumentType() throws Exception {
+        // Setup
+        String xml = "<XML></XML>";
+        String schemaName = "DailyList-v1-0.xsd";
+        // Expects
+        Mockito.when(mockSaxParserFactory.newSAXParser()).thenReturn(mockSaxParser);
+        Mockito.when(mockSaxParser.getXMLReader()).thenReturn(mockXmlReader);
+        // Run
+        boolean result = false;
+        try {
+            // Use a documentType that is not "PD" or "WP" to trigger the else branch
+            classUnderTest.validate(xml, schemaName, "UNKNOWN_TYPE");
+            result = true;
+        } catch (Exception exception) {
+            fail(exception);
+        }
+        assertTrue(result, TRUE);
+    }
+
+    @Test
+    void testValidate_elseBranchForNullDocumentType() throws Exception {
+        // Setup
+        String xml = "<XML></XML>";
+        String schemaName = "DailyList-v1-0.xsd";
+        // Expects
+        Mockito.when(mockSaxParserFactory.newSAXParser()).thenReturn(mockSaxParser);
+        Mockito.when(mockSaxParser.getXMLReader()).thenReturn(mockXmlReader);
+        // Run
+        boolean result = false;
+        try {
+            // Use a null documentType to trigger the else branch
+            classUnderTest.validate(xml, schemaName, null);
+            result = true;
+        } catch (Exception exception) {
+            fail(exception);
+        }
+        assertTrue(result, TRUE);
     }
 
 

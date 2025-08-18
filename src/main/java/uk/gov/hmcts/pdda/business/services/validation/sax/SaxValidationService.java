@@ -242,7 +242,7 @@ public class SaxValidationService implements ValidationService {
     }
     
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private Source[] getSchemaSources(String... schemaPaths) throws SAXException {
+    public Source[] getSchemaSources(String... schemaPaths) throws SAXException {
         List<Source> sources = new ArrayList<>();
         for (String path : schemaPaths) {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
