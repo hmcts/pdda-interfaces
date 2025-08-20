@@ -135,7 +135,7 @@ public class OAuth2Helper implements Serializable {
         try {
             return HttpRequest.newBuilder().uri(URI.create(url))
                 .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
-                    "Basic " + encodedKey)
+                    "Bearer " + encodedKey)
                 .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
         } catch (Exception ex) {
             throw new RuntimeException(
