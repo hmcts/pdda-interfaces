@@ -17,6 +17,7 @@ import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.DummyJudgeUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -572,7 +573,7 @@ class ListObjectHelperTest {
     @Test
     void testValidateScheduledHearing_UsesSittingTime_WhenNoOverrideKeyPresent_reflect() {
         // Arrange
-        Map<String, String> nodesMap = new LinkedHashMap<>();
+        
         // no NOTBEFORETIME key → getTime(...) returns null
 
         // Reuse the SAME sitting DAO instance for both setup and expectation
@@ -589,6 +590,7 @@ class ListObjectHelperTest {
             .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
 
         // Act
+        Map<String, String> nodesMap = new LinkedHashMap<>();
         ReflectionTestUtils.invokeMethod(classUnderTest, "validateScheduledHearing", nodesMap);
 
         // Assert
@@ -639,8 +641,7 @@ class ListObjectHelperTest {
 
         // Use ONE sitting dao instance to avoid time drift
         var sittingDao = DummyHearingUtil.getXhbSittingDao();
-        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
-
+        
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
@@ -660,6 +661,7 @@ class ListObjectHelperTest {
         Mockito.verify(mockDataHelper).validateScheduledHearing(
             Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
 
+        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
         LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(14, 5));
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
     }
@@ -668,11 +670,11 @@ class ListObjectHelperTest {
     void testValidateScheduledHearing_ElseBranch_CatchPath_12h() {
         // Arrange
         Map<String, String> nodesMap = new LinkedHashMap<>();
-        nodesMap.put(ListObjectHelper.NOTBEFORETIME, "11:00 pm"); // not ISO -> throws, falls into catch with 12h formatter
-
+        // not ISO -> throws, falls into catch with 12h formatter
+        nodesMap.put(ListObjectHelper.NOTBEFORETIME, "11:00 pm");
+        
         var sittingDao = DummyHearingUtil.getXhbSittingDao();
-        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
-
+        
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
@@ -692,6 +694,7 @@ class ListObjectHelperTest {
         Mockito.verify(mockDataHelper).validateScheduledHearing(
             Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
 
+        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
         LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(23, 0));
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
     }
