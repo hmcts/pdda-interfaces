@@ -242,9 +242,12 @@ public class ListObjectHelper implements Serializable {
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
             final String floating = "N";
             final Integer listId = xhbHearingListDao.get().getListId();
+            final LocalDateTime listDate = xhbHearingListDao.get().getStartDate();
             String sittingTimeString = nodesMap.get(SITTINGTIME);
-            LocalDateTime sittingTime =
-                parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
+            //LocalDateTime sittingTime =
+            //    parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
+            LocalTime sittingTimeAsTime = LocalTime.parse(sittingTimeString.trim(), DateTimeFormatter.ISO_LOCAL_TIME);
+            LocalDateTime sittingTime = LocalDateTime.of(listDate.toLocalDate(), sittingTimeAsTime);
             LOG.debug("Court site ID: {}, Court room ID: {}, Floating: {}, List ID: {}, Sitting time: {}",
                 courtSiteId, courtRoomId, floating, listId, sittingTime);
             if (sittingTime != null) {
@@ -458,7 +461,33 @@ public class ListObjectHelper implements Serializable {
             Integer sittingId = xhbSittingDao.get().getSittingId();
             Integer hearingId = xhbHearingDao.get().getHearingId();
             String notBeforeTimeString = getTime(nodesMap.get(NOTBEFORETIME));
-            LocalDateTime notBeforeTime = parseDateTime(notBeforeTimeString, TWELVEHOURTIMEFORMAT);
+            
+            LocalDateTime sittingDateTime = xhbSittingDao.get().getSittingTime();
+            LocalDateTime notBeforeTime;
+            if (notBeforeTimeString == null || notBeforeTimeString.isBlank()) {
+                // no override → use the sitting time as-is
+                notBeforeTime = sittingDateTime;
+            } else {
+                String s = notBeforeTimeString.trim();
+                LocalTime nbTime;
+
+                try {
+                    // 24h formats like 10:00 or 10:00:00
+                    nbTime = LocalTime.parse(s, DateTimeFormatter.ISO_LOCAL_TIME);
+                } catch (DateTimeParseException ignore) {
+                    // 12h formats like 11:00 am / 11:00am / 11 am
+                    DateTimeFormatter twelveHour = new DateTimeFormatterBuilder()
+                        .parseCaseInsensitive()
+                        .appendPattern("h[:mm][:ss][.SSS]")
+                        .optionalStart().appendLiteral(' ').optionalEnd()
+                        .appendPattern("a") // AM/PM
+                        .toFormatter(Locale.UK);
+                    nbTime = LocalTime.parse(s, twelveHour);
+                }
+
+                notBeforeTime = sittingDateTime.toLocalDate().atTime(nbTime);
+            }
+            
             LOG.debug("Sitting ID: {}, Hearing ID: {}, Not Before Time: {}",
                 sittingId, hearingId, notBeforeTime);
             if (notBeforeTime != null) {
