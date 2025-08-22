@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,7 +18,9 @@ import uk.gov.hmcts.DummyJudgeUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -475,7 +478,225 @@ class ListObjectHelperTest {
 
         classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
     }
+    
+    
+    @Test
+    void testValidateSittingParsesWhitespaceAndSeconds() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.COURTROOMNO, "1");
+        nodesMap.put(classUnderTest.SITTINGTIME, " 09:05:30 "); // whitespace + seconds
+
+        // Precondition DAOs
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
+            Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
+            Optional.of(DummyHearingUtil.getXhbHearingListDao()));
+
+        // Expect validateSitting to be invoked successfully
+        Mockito.when(mockDataHelper.validateSitting(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(),
+                Mockito.any(), Mockito.anyInt()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        // Exercise
+        classUnderTest.validateNodeMap(nodesMap, classUnderTest.SITTING_NODE);
+    }
+
+    @Test
+    void testValidateScheduledHearingParses24hTime() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "14:05"); // 24h format
+
+        // Precondition DAOs
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Exercise
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
+    }
+
+    @Test
+    void testValidateScheduledHearingParses12hNoSpace() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "11:00am"); // 12h without space
+
+        // Precondition DAOs
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Exercise
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
+    }
+
+    @Test
+    void testValidateScheduledHearingParses12hHourOnly() {
+        // Setup
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.NOTBEFORETIME, "11 am"); // hour-only 12h
+
+        // Precondition DAOs
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Exercise
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
+    }
 
 
+    @Test
+    void testValidateScheduledHearing_UsesSittingTime_WhenNoOverrideKeyPresent_reflect() {
+        // Arrange
+        
+        // no NOTBEFORETIME key → getTime(...) returns null
+
+        // Reuse the SAME sitting DAO instance for both setup and expectation
+        var sittingDao = DummyHearingUtil.getXhbSittingDao();
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(sittingDao));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Act
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        ReflectionTestUtils.invokeMethod(classUnderTest, "validateScheduledHearing", nodesMap);
+
+        // Assert
+        ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateScheduledHearing(
+            Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
+
+        LocalDateTime expected = sittingDao.getSittingTime(); // same instance → same timestamp
+        org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
+    }
+
+    @Test
+    void testValidateScheduledHearing_UsesSittingTime_WhenOverrideHasNoDigits_reflect() {
+        // Arrange
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(ListObjectHelper.NOTBEFORETIME, "no time specified"); // no digits → getTime(...) = null
+
+        var sittingDao = DummyHearingUtil.getXhbSittingDao();
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(sittingDao));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Act
+        ReflectionTestUtils.invokeMethod(classUnderTest, "validateScheduledHearing", nodesMap);
+
+        // Assert
+        ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateScheduledHearing(
+            Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
+
+        LocalDateTime expected = sittingDao.getSittingTime(); // same instance
+        org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
+    }
+    
+    
+    @Test
+    void testValidateScheduledHearing_ElseBranch_TryPath_24h() {
+        // Arrange
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(ListObjectHelper.NOTBEFORETIME, "14:05"); // digits -> getTime != null, ISO_LOCAL_TIME parses OK
+
+        // Use ONE sitting dao instance to avoid time drift
+        var sittingDao = DummyHearingUtil.getXhbSittingDao();
+        
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(sittingDao));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Act (call private method directly)
+        ReflectionTestUtils.invokeMethod(classUnderTest, "validateScheduledHearing", nodesMap);
+
+        // Assert: notBeforeTime = sittingDate @ 14:05
+        ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateScheduledHearing(
+            Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
+
+        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
+        LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(14, 5));
+        org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
+    }
+    
+    @Test
+    void testValidateScheduledHearing_ElseBranch_CatchPath_12h() {
+        // Arrange
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        // not ISO -> throws, falls into catch with 12h formatter
+        nodesMap.put(ListObjectHelper.NOTBEFORETIME, "11:00 pm");
+        
+        var sittingDao = DummyHearingUtil.getXhbSittingDao();
+        
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
+            Optional.of(DummyHearingUtil.getXhbHearingDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbSittingDao",
+            Optional.of(sittingDao));
+
+        Mockito.when(mockDataHelper.validateScheduledHearing(
+                Mockito.anyInt(), Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
+
+        // Act
+        ReflectionTestUtils.invokeMethod(classUnderTest, "validateScheduledHearing", nodesMap);
+
+        // Assert: notBeforeTime = sittingDate @ 23:00
+        ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateScheduledHearing(
+            Mockito.anyInt(), Mockito.anyInt(), timeCaptor.capture());
+
+        LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
+        LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(23, 0));
+        org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
+    }
 
 }
