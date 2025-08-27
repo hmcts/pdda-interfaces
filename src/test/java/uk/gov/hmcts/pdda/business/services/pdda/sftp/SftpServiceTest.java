@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -1028,6 +1029,119 @@ class SftpServiceTest {
 
         EasyMock.verify(fake);
     }
+    
+    
+    @Test
+    void testGetFilenameMessageType_allCases() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+        assertTrue("XhibitPublicDisplay".equals(bxv.getFilenameMessageType("XPD")));
+        assertTrue("CpPublicDisplay".equals(bxv.getFilenameMessageType("CPD")));
+        assertTrue("XhibitDailyList".equals(bxv.getFilenameMessageType("XDL")));
+        assertTrue("XhibitWebPage".equals(bxv.getFilenameMessageType("XWP")));
+        assertTrue("CpDailyList".equals(bxv.getFilenameMessageType("CDL")));
+        assertTrue("CpFirmList".equals(bxv.getFilenameMessageType("CFL")));
+        assertTrue("CpWarnedList".equals(bxv.getFilenameMessageType("CWL")));
+        assertTrue(SftpService.INVALID_MESSAGE_TYPE.equals(bxv.getFilenameMessageType("ZZZ")));
+    }
+
+    
+    @Test
+    void testBaisXhibit_getMessageType_eventAndFilename() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+
+        // Event present wins
+        var event = new HearingStatusEvent(new CourtRoomIdentifier(1,1), null);
+        assertTrue("HearingStatus".equals(bxv.getMessageType("anything", event)));
+
+        // From filename (event == null)
+        assertTrue(SftpService.DAILY_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...XDL...", null)));
+        assertTrue(SftpService.WEB_PAGE_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...XWP...", null)));
+        assertTrue(SftpService.DAILY_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CDL...", null)));
+        assertTrue(SftpService.FIRM_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CFL...", null)));
+        assertTrue(SftpService.WARNED_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CWL...", null)));
+        assertTrue(SftpService.PUBLIC_DISPLAY_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CPD...", null)));
+        assertTrue(SftpService.INVALID_MESSAGE_TYPE
+            .equals(bxv.getMessageType("...XXX...", null)));
+    }
+
+    
+    @Test
+    void testBaisXhibit_getCourtId_NumberFormat_returnsNull() {
+        // Force the NumberFormatException branch regardless of repository behavior
+        SftpService.BaisXhibitValidation bxv =
+            new SftpService.BaisXhibitValidation(mockXhbCourtRepository) {
+                @Override
+                protected int getCourtIdFromCrestCourtId(String crestCourtId) {
+                    throw new NumberFormatException("not numeric");
+                }
+            };
+
+        // crestCourtId is non-numeric (“ABC”) — we expect the catch block to return null
+        String bad = "PDDA_XDL_34_1_ABC_20241209130506";
+        Integer out = bxv.getCourtId(bad, null);
+
+        assertNull(out, "Expect null when crestCourtId isn't numeric");
+    }
+
+
+    
+    @Test
+    void testBaisXhibit_validateFilename_booleanOverload_delegates() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+        String invalid = "PDDA_XPD_1_453_20241209130506"; // too few parts
+        String twoArg = bxv.validateFilename(invalid, null);           // uses full logic
+        String threeArg = bxv.validateFilename(invalid, null, true);   // delegates
+        assertTrue(twoArg.length() > 0 && twoArg.equals(threeArg),
+            "boolean overload should delegate to 2-arg version");
+    }
+
+    
+    @Test
+    void testBaisCp_validateFilename_booleanOverload_delegates() {
+        // Return a real court so the only error we see is the extension (keeps it simple)
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andStubReturn(courts);
+        EasyMock.replay(mockXhbCourtRepository);
+
+        BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository);
+        String badExt = "PublicDisplay_453_20240101120000.xl"; // triggers "Extension" error
+        assertTrue(bcv.validateFilename(badExt, null)
+                .equals(bcv.validateFilename(badExt, null, true)));
+    }
+
+    
+    @Test
+    void testBaisCp_validateFilename_missingCourtId_appendsError() {
+        // Force getCourtId(...) to return null to cover the "append CrestCourtId" branch
+        SftpService.BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository) {
+            @Override public Integer getCourtId(String filename, PublicDisplayEvent event) {
+                return null;
+            }
+        };
+
+        String filename = "PublicDisplay_999_20240101120000.xml"; // syntactically valid
+        String out = bcv.validateFilename(filename, null);
+
+        assertTrue(out != null && out.contains("CrestCourtId"),
+            "Should include CrestCourtId error when court not found");
+    }
+
+    
+    @Test
+    void testBaisCp_getMessageType_and_getPublicDisplayEvent() {
+        BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository);
+        assertTrue("PublicDisplay".equals(bcv.getMessageType("PublicDisplay_453_20240101120000.xml", null)));
+        assertNull(bcv.getPublicDisplayEvent("anything", "<ignored/>"));
+    }
+
 
 
 }
