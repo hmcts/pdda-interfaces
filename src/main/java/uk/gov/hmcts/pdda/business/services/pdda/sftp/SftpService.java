@@ -37,9 +37,8 @@ public class SftpService extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
 
     private static final String NO = "N";
-    static final String INVALID_MESSAGE_TYPE = "Invalid";
+    protected static final String INVALID_MESSAGE_TYPE = "Invalid";
     protected static final String SFTP_ERROR = "SFTP Error:";
-
 
     protected static final String LOG_CALLED = " called";
     protected static final String CP_CONNECTION_TYPE = "CP";
@@ -186,6 +185,8 @@ public class SftpService extends XhibitPddaHelper {
 
 
 
+
+
     /**
      * Retrieve events from BAIS.
 
@@ -303,7 +304,7 @@ public class SftpService extends XhibitPddaHelper {
                 sendMessage(event);
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;
-                // We don't want to send a message for CPD (Common Platform PD docs from XHIBIT) files
+                // We don't want to send a message for CPD files
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XWP_")) {
                 isList = false;
                 // We don't want to send a message for XWP (XHIBIT Web Page) files
