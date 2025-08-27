@@ -37,7 +37,7 @@ public class SftpService extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
 
     private static final String NO = "N";
-    private static final String INVALID_MESSAGE_TYPE = "Invalid";
+    static final String INVALID_MESSAGE_TYPE = "Invalid";
     protected static final String SFTP_ERROR = "SFTP Error:";
 
 
