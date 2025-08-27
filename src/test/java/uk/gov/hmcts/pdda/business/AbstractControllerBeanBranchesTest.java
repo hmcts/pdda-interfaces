@@ -5,12 +5,15 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
 /**
  * Extra branch coverage for AbstractControllerBean.
  */
+@SuppressWarnings("PMD")
 class AbstractControllerBeanBranchesTest {
 
     /** Test double that lets us flip EM/txn state. */

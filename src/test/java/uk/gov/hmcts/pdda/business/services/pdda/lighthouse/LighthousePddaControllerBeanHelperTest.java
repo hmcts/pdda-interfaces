@@ -10,13 +10,21 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 
 /**
  * Tests for LighthousePddaControllerBeanHelper using Mockito.
  */
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("PMD")
 class LighthousePddaControllerBeanHelperTest {
 
     @Mock
@@ -68,9 +76,12 @@ class LighthousePddaControllerBeanHelperTest {
         helper.clearRepositories();
 
         // Assert
-        assertNull(helper.xhbPddaMessageRepository, "xhbPddaMessageRepository should be null after clearRepositories()");
-        assertNull(helper.xhbCppStagingInboundRepository, "xhbCppStagingInboundRepository should be null after clearRepositories()");
-        assertNull(helper.xhbInternetHtmlRepository, "xhbInternetHtmlRepository should be null after clearRepositories()");
+        assertNull(helper.xhbPddaMessageRepository,
+            "xhbPddaMessageRepository should be null after clearRepositories()");
+        assertNull(helper.xhbCppStagingInboundRepository,
+            "xhbCppStagingInboundRepository should be null after clearRepositories()");
+        assertNull(helper.xhbInternetHtmlRepository,
+            "xhbInternetHtmlRepository should be null after clearRepositories()");
     }
 
     @Test
