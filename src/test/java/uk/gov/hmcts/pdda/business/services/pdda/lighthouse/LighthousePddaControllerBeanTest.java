@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
@@ -59,6 +60,9 @@ class LighthousePddaControllerBeanTest {
 
     @Mock
     private XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository;
+    
+    @Mock
+    private XhbInternetHtmlRepository mockXhbInternetHtmlRepository;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -113,7 +117,8 @@ class LighthousePddaControllerBeanTest {
             NOT_INSTANCE);
         assertInstanceOf(LighthousePddaControllerBean.class,
             new LighthousePddaControllerBean(mockXhbPddaMessageRepository,
-                mockXhbCppStagingInboundRepository, mockEntityManager),
+                mockXhbCppStagingInboundRepository,
+                mockXhbInternetHtmlRepository, mockEntityManager),
             NOT_INSTANCE);
         assertInstanceOf(LighthousePddaControllerBean.class,
             new LighthousePddaControllerBean(mockEntityManager), NOT_INSTANCE);
@@ -221,7 +226,7 @@ class LighthousePddaControllerBeanTest {
             .thenReturn(xhbPddaMessageDao1);
 
         classUnderTestMock.updatePddaMessageStatus(Mockito.isA(XhbPddaMessageDao.class),
-            Mockito.isA(String.class));
+            Mockito.isA(String.class), Mockito.isA(String.class));
 
         if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {
             // Failure
@@ -316,14 +321,19 @@ class LighthousePddaControllerBeanTest {
             .thenReturn(Optional.of(mockXhbPddaMessageDao));
         
         // Spy updatePddaMessageStatus to verify it's called
-        Mockito.doNothing().when(controller).updatePddaMessageStatus(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(controller).updatePddaMessageStatus(Mockito.any(), Mockito.any(), Mockito.any());
 
         // Run
         controller.processFile(mockXhbPddaMessageDao);
 
         // Verify
         Mockito.verify(mockXhbCppStagingInboundRepository).findDocumentByDocumentNameSafe("TestDoc.xml");
-        Mockito.verify(controller).updatePddaMessageStatus(mockXhbPddaMessageDao, "INV");
+        Mockito.verify(controller)
+            .updatePddaMessageStatus(
+                Mockito.eq(mockXhbPddaMessageDao),
+                Mockito.eq("INV"),
+                Mockito.anyString()
+            );
         // Ensure no further processing occurs
         Mockito.verify(controller, Mockito.never()).isDocumentNameValid(Mockito.anyString());
     }
