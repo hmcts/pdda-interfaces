@@ -37,9 +37,8 @@ public class SftpService extends XhibitPddaHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
 
     private static final String NO = "N";
-    private static final String INVALID_MESSAGE_TYPE = "Invalid";
+    protected static final String INVALID_MESSAGE_TYPE = "Invalid";
     protected static final String SFTP_ERROR = "SFTP Error:";
-
 
     protected static final String LOG_CALLED = " called";
     protected static final String CP_CONNECTION_TYPE = "CP";
@@ -48,6 +47,9 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String PDDA_FILENAME_PREFIX = "PDDA";
     protected static final String PUBLIC_DISPLAY_DOCUMENT_TYPE = "PublicDisplay";
     protected static final String DAILY_LIST_DOCUMENT_TYPE = "DailyList";
+    protected static final String FIRM_LIST_DOCUMENT_TYPE = "FirmList";
+    protected static final String WARNED_LIST_DOCUMENT_TYPE = "WarnedList";
+    protected static final String WEB_PAGE_DOCUMENT_TYPE = "WebPage";
 
     public static final String NEWLINE = "\n";
 
@@ -303,6 +305,9 @@ public class SftpService extends XhibitPddaHelper {
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;
                 // We don't want to send a message for CPD files
+            } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XWP_")) {
+                isList = false;
+                // We don't want to send a message for XWP (XHIBIT Web Page) files
             } else {
                 // What type of list is this?
                 LOG.debug("Getting the list type.");
@@ -530,6 +535,14 @@ public class SftpService extends XhibitPddaHelper {
                     return "CpPublicDisplay";
                 case "XDL":
                     return "XhibitDailyList";
+                case "XWP":
+                    return "XhibitWebPage";
+                case "CDL":
+                    return "CpDailyList";
+                case "CFL":
+                    return "CpFirmList";
+                case "CWL":
+                    return "CpWarnedList";
                 default:
                     return INVALID_MESSAGE_TYPE;
             }
@@ -553,6 +566,14 @@ public class SftpService extends XhibitPddaHelper {
             } else {
                 if (filename.contains("XDL")) {
                     return DAILY_LIST_DOCUMENT_TYPE;
+                } else if (filename.contains("XWP")) {
+                    return WEB_PAGE_DOCUMENT_TYPE;
+                } else if (filename.contains("CDL")) {
+                    return DAILY_LIST_DOCUMENT_TYPE;
+                } else if (filename.contains("CFL")) {
+                    return FIRM_LIST_DOCUMENT_TYPE;
+                } else if (filename.contains("CWL")) {
+                    return WARNED_LIST_DOCUMENT_TYPE;
                 } else if (filename.contains("CPD")) {
                     return PUBLIC_DISPLAY_DOCUMENT_TYPE;
                 } else {

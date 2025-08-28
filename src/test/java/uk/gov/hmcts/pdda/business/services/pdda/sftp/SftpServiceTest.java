@@ -12,11 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.DummyCourtUtil;
@@ -42,8 +45,11 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -601,4 +607,541 @@ class SftpServiceTest {
             LOG.error("Error setting up SFTP config", e);
         }
     }
+    
+    
+    @Test
+    void testProcessBaisMessages_ConnectionErrors_setsErrorTrue() {
+        int badPort = 1; // valid port, almost certainly closed
+        boolean error = classUnderTest.processBaisMessages(badPort);
+        assertTrue(error, "Expected error=true when both CP and XHIBIT connects fail");
+    }
+
+    
+    
+    @Test
+    void testSetupSftpClientAndProcessBaisData_NewSftpClientThrows_isCaught() throws Exception {
+        SSHClient ssh = EasyMock.createMock(SSHClient.class);
+        EasyMock.expect(ssh.newSFTPClient()).andThrow(new IOException("boom"));
+        EasyMock.replay(ssh);
+
+        SftpConfig cfg = new SftpConfig();
+        // exercise: nothing should bubble out
+        classUnderTest.setupSftpClientAndProcessBaisData(cfg, ssh, true);
+
+        EasyMock.verify(ssh);
+    }
+    
+    
+    @Test
+    void testProcessDataFromBais_RetrieveThrows_isCaught() throws Exception {
+        // Partial mock with BOTH methods mocked: retrieveFromBais(...) and getCourtRepository()
+        SftpService spy = EasyMock.partialMockBuilder(SftpService.class)
+            .withConstructor(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+                mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository)
+            .addMockedMethod("retrieveFromBais", SftpConfig.class, BaisValidation.class)
+            .addMockedMethod("getCourtRepository")
+            .createMock();
+
+        // When processDataFromBais(...) runs, it first calls getCourtRepository()
+        EasyMock.expect(spy.getCourtRepository()).andReturn(mockXhbCourtRepository).anyTimes();
+
+        // Then it constructs BaisCpValidation/BaisXhibitValidation and calls retrieveFromBais(...),
+        // which we force to throw so the catch in processDataFromBais is exercised.
+        SftpConfig cfg = new SftpConfig();
+        spy.retrieveFromBais(EasyMock.eq(cfg), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().andThrow(new IOException("retrieve failed"));
+
+        EasyMock.replay(spy);
+
+        var m = SftpService.class.getDeclaredMethod("processDataFromBais", SftpConfig.class, boolean.class);
+        m.setAccessible(true);
+
+        // Should not throw; the catch block in processDataFromBais handles the IOException
+        m.invoke(spy, cfg, true);   // true or false is fine now, since getCourtRepository is stubbed
+
+        EasyMock.verify(spy);
+    }
+
+
+    
+    
+    @Test
+    void testRetrieveFromBais_FinallyBlockRunsWhenClientNull() throws Exception {
+        // Fake helper that tolerates null client and returns empty maps
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        EasyMock.expect(fake.sftpFetch(EasyMock.isNull(), EasyMock.anyString(),
+                EasyMock.anyObject(BaisValidation.class), EasyMock.anyString()))
+            .andReturn(Collections.emptyMap()).times(2); // once in try, once in finally
+        // listFilesInFolder never reached because files map is empty
+        EasyMock.replay(fake);
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() { 
+                return fake;
+            }
+        };
+
+        SftpConfig cfg = new SftpConfig(); // note: cfg.getSshjSftpClient() is null
+        svc.retrieveFromBais(cfg, new SftpService.BaisCpValidation(mockXhbCourtRepository));
+
+        EasyMock.verify(fake);
+    }
+
+    
+    @Test
+    void testGetBaisFileList_HelperThrows_returnsEmptyMap() throws Exception {
+        PddaSftpHelperSshj throwing = EasyMock.createMock(PddaSftpHelperSshj.class);
+        EasyMock.expect(throwing.sftpFetch(EasyMock.anyObject(), EasyMock.anyString(),
+                EasyMock.anyObject(BaisValidation.class), EasyMock.anyString()))
+            .andThrow(new RuntimeException("fetch fail"));
+        EasyMock.replay(throwing);
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return throwing;
+            }
+        };
+
+        var m = SftpService.class.getDeclaredMethod("getBaisFileList", SftpConfig.class, BaisValidation.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        Map<String,String> out = (Map<String,String>) m.invoke(
+            svc, new SftpConfig(), new SftpService.BaisCpValidation(mockXhbCourtRepository));
+
+        assertTrue(out.isEmpty(), "Expected empty map when helper throws");
+        EasyMock.verify(throwing);
+    }
+    
+    
+    private SftpService prepServiceForCreateBaisMessage() {
+        // Courts: crestCourtId -> court exists
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andStubReturn(courts);
+
+        // Message type lookup succeeds (no NotFoundException)
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType(EasyMock.anyString()))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao())).anyTimes();
+
+        // No duplicate PDDA message entry
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.anyString()))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao())).anyTimes();
+
+        EasyMock.replay(mockXhbCourtRepository, mockPddaMessageHelper, mockXhbClobRepository);
+
+        // Fake helper for the 'finally' sftpDeleteFile
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        try {
+            fake.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+                EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        EasyMock.expectLastCall().anyTimes();
+        EasyMock.replay(fake);
+
+        return new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return fake;
+            }
+        };
+    }
+
+    @Test
+    void testProcessBaisFile_Cpd_branch_executes() throws Exception {
+        SftpService svc = prepServiceForCreateBaisMessage();
+
+        SftpConfig cfg = new SftpConfig();
+        cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class)); // used by finally-delete
+        String filename = "PDDA_CPD_34_1_453_20241209130506";
+        String clobData = "<whatever/>";
+
+        var m = SftpService.class.getDeclaredMethod(
+            "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+        m.setAccessible(true);
+        // should run through CPD branch without sending a message (but still creating DB message)
+        m.invoke(svc, cfg, new SftpService.BaisXhibitValidation(mockXhbCourtRepository), filename, clobData);
+    }
+
+    @Test
+    void testProcessBaisFile_Xwp_branch_executes() throws Exception {
+        SftpService svc = prepServiceForCreateBaisMessage();
+
+        SftpConfig cfg = new SftpConfig();
+        cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class));
+        String filename = "PDDA_XWP_34_1_453_20241209130506";
+        String clobData = "<whatever/>";
+
+        var m = SftpService.class.getDeclaredMethod(
+            "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+        m.setAccessible(true);
+        m.invoke(svc, cfg, new SftpService.BaisXhibitValidation(mockXhbCourtRepository), filename, clobData);
+    }
+    
+    
+    @Test
+    void testProcessBaisFile_ListBranch_InvalidMessageType_and_InvalidFilename() throws Exception {
+        // Fake helper used by finally{} delete (do nothing)
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        fake.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+            EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().anyTimes();
+        EasyMock.replay(fake);
+
+        // Make message-type lookup succeed (so createBaisMessage won't throw)
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType(EasyMock.anyString()))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao())).anyTimes();
+        // Mark as duplicate so createBaisMessage returns early (no CLOB / EMF)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.anyString()))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao())).anyTimes();
+        EasyMock.replay(mockPddaMessageHelper);
+
+        // Custom validation: force invalid filename and INVALID message type,
+        // but still provide a court id so flow reaches createBaisMessage().
+        BaisValidation v = new SftpService.BaisXhibitValidation(mockXhbCourtRepository) {
+            @Override
+            public String validateFilename(String f,
+                uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent e, boolean isList) {
+                    return "bad filename";
+            }
+            
+            @Override
+            public String getMessageType(String f,
+                uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent e) {
+                    return SftpService.INVALID_MESSAGE_TYPE;
+            }
+            
+            @Override
+            public Integer getCourtId(String f,
+                uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent e) {
+                    return 453;
+            }
+            
+            @Override
+            public Optional<XhbPddaMessageDao> getPddaMessageDao(PddaMessageHelper h, String f) {
+                return Optional.empty();
+            }
+        };
+
+        SftpConfig cfg = new SftpConfig();
+        cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class));
+        String filename = "PDDA_XDL_34_1_453_20241209130506"; // triggers list branch (else{})
+        String clobData = "<?xml version=\"1.0\"?><cs:DailyList xmlns:cs=\"http://www.courtservice.gov.uk/schemas/courtservice\"/>";
+
+        // Service with injected helper
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return fake;
+            }
+        };
+        
+        var m = SftpService.class.getDeclaredMethod(
+            "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+        m.setAccessible(true);
+        m.invoke(svc, cfg, v, filename, clobData); // no exception expected
+    }
+
+
+    @Test
+    void testProcessBaisFile_AlreadyProcessed_DeleteThrowsIoException_Caught() throws Exception {
+        PddaSftpHelperSshj throwing = EasyMock.createMock(PddaSftpHelperSshj.class);
+
+        // 1st delete (inside try): throws
+        throwing.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+            EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().andThrow(new IOException("boom")).once();
+        
+        // 2nd delete (inside finally): allowed, no throw
+        throwing.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+            EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().anyTimes();
+        
+        EasyMock.replay(throwing);
+
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName("PublicDisplay_453_20241209130506.xml"))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao()));
+        EasyMock.replay(mockPddaMessageHelper);
+
+        SftpConfig cfg = new SftpConfig();
+        cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class));
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return throwing;
+            }
+        };
+        
+        var m = SftpService.class.getDeclaredMethod(
+            "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+        m.setAccessible(true);
+
+        m.invoke(svc, cfg, new SftpService.BaisCpValidation(mockXhbCourtRepository),
+            "PublicDisplay_453_20241209130506.xml", "<ignored/>");
+    }
+
+    
+    @Test
+    void testCreateBaisMessage_MessageTypeCreatedWhenMissing() throws Exception {
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        fake.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+            EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().anyTimes();
+        EasyMock.replay(fake);
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return fake;
+            }
+        };
+
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType(EasyMock.anyString()))
+            .andReturn(Optional.empty()).anyTimes();
+        // short-circuit after message-type creation (duplicate)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.anyString()))
+            .andReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageDao())).anyTimes();
+        EasyMock.replay(mockPddaMessageHelper);
+        
+        // before invoking processBaisFile(...)
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1")); // ok if negative in Dummy util
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andStubReturn(courts);
+        EasyMock.replay(mockXhbCourtRepository);
+
+
+        try (MockedStatic<uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil> mocked =
+                 Mockito.mockStatic(uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil.class)) {
+            mocked.when(() -> uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil.createMessageType(
+                    Mockito.any(PddaMessageHelper.class),
+                    Mockito.anyString(),
+                    Mockito.any(LocalDateTime.class)))
+                  .thenReturn(Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao()));
+
+            SftpConfig cfg = new SftpConfig();
+            cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class));
+
+            String filename = "PDDA_XDL_34_1_453_20241209130506";
+            String clobData = """
+                <?xml version="1.0"?>
+                <cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice"/>""";
+
+            var m = SftpService.class.getDeclaredMethod(
+                "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+            m.setAccessible(true);
+            m.invoke(svc, cfg, new SftpService.BaisXhibitValidation(mockXhbCourtRepository), filename, clobData);
+        }
+    }
+
+    
+    @Test
+    void testCreateBaisMessage_StillMissing_ThrowsNotFound_Caught() throws Exception {
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        fake.sftpDeleteFile(EasyMock.anyObject(SFTPClient.class), EasyMock.anyString(),
+            EasyMock.anyString(), EasyMock.anyObject(BaisValidation.class));
+        EasyMock.expectLastCall().anyTimes();
+        EasyMock.replay(fake);
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return fake;
+            }
+        };
+
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType(EasyMock.anyString()))
+            .andReturn(Optional.empty()).anyTimes();
+        EasyMock.replay(mockPddaMessageHelper);
+        
+        // before invoking processBaisFile(...)
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1")); // ok if negative in Dummy util
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andStubReturn(courts);
+        EasyMock.replay(mockXhbCourtRepository);
+
+
+        try (MockedStatic<uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil> mocked =
+                 Mockito.mockStatic(uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil.class)) {
+            mocked.when(() -> uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil.createMessageType(
+                    Mockito.any(PddaMessageHelper.class),
+                    Mockito.anyString(),
+                    Mockito.any(LocalDateTime.class)))
+                  .thenReturn(Optional.empty()); // force NotFoundException path
+
+            SftpConfig cfg = new SftpConfig();
+            cfg.setSshjSftpClient(EasyMock.createMock(SFTPClient.class));
+
+            String filename = "PDDA_XDL_34_1_453_20241209130506";
+            String clobData = """
+                <?xml version="1.0"?>
+                <cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice"/>""";
+
+            var m = SftpService.class.getDeclaredMethod(
+                "processBaisFile", SftpConfig.class, BaisValidation.class, String.class, String.class);
+            m.setAccessible(true);
+            // NotFoundException is caught inside processBaisFile, so no throw to the test
+            m.invoke(svc, cfg, new SftpService.BaisXhibitValidation(mockXhbCourtRepository), filename, clobData);
+        }
+    }
+
+    
+    @Test
+    void testRetrieveFromBais_FinallyBlock_WhenFilesRemain_logsNotEmpty() throws Exception {
+        // Helper returns empty on first call (try{}), non-empty on second (finally{})
+        PddaSftpHelperSshj fake = EasyMock.createMock(PddaSftpHelperSshj.class);
+        EasyMock.expect(fake.sftpFetch(EasyMock.isNull(), EasyMock.anyString(),
+                EasyMock.anyObject(BaisValidation.class), EasyMock.anyString()))
+            .andReturn(Collections.emptyMap()); // try{}
+
+        EasyMock.expect(fake.sftpFetch(EasyMock.isNull(), EasyMock.anyString(),
+                EasyMock.anyObject(BaisValidation.class), EasyMock.anyString()))
+            .andReturn(Collections.singletonMap("leftover.xml", "<xml/>")); // finally{}
+
+        // listFilesInFolder is never reached because the first fetch returns empty
+        EasyMock.replay(fake);
+
+        SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
+            mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository) {
+            @Override
+            protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
+                return fake;
+            }
+        };
+
+        // sshj client intentionally null to trigger the finally{} path in retrieveFromBais
+        SftpConfig cfg = new SftpConfig();
+        svc.retrieveFromBais(cfg, new SftpService.BaisCpValidation(mockXhbCourtRepository));
+
+        EasyMock.verify(fake);
+    }
+    
+    
+    @Test
+    void testGetFilenameMessageType_allCases() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+        assertTrue("XhibitPublicDisplay".equals(bxv.getFilenameMessageType("XPD")));
+        assertTrue("CpPublicDisplay".equals(bxv.getFilenameMessageType("CPD")));
+        assertTrue("XhibitDailyList".equals(bxv.getFilenameMessageType("XDL")));
+        assertTrue("XhibitWebPage".equals(bxv.getFilenameMessageType("XWP")));
+        assertTrue("CpDailyList".equals(bxv.getFilenameMessageType("CDL")));
+        assertTrue("CpFirmList".equals(bxv.getFilenameMessageType("CFL")));
+        assertTrue("CpWarnedList".equals(bxv.getFilenameMessageType("CWL")));
+        assertTrue(SftpService.INVALID_MESSAGE_TYPE.equals(bxv.getFilenameMessageType("ZZZ")));
+    }
+
+    
+    @Test
+    void testBaisXhibit_getMessageType_eventAndFilename() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+
+        // Event present wins
+        var event = new HearingStatusEvent(new CourtRoomIdentifier(1,1), null);
+        assertTrue("HearingStatus".equals(bxv.getMessageType("anything", event)));
+
+        // From filename (event == null)
+        assertTrue(SftpService.DAILY_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...XDL...", null)));
+        assertTrue(SftpService.WEB_PAGE_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...XWP...", null)));
+        assertTrue(SftpService.DAILY_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CDL...", null)));
+        assertTrue(SftpService.FIRM_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CFL...", null)));
+        assertTrue(SftpService.WARNED_LIST_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CWL...", null)));
+        assertTrue(SftpService.PUBLIC_DISPLAY_DOCUMENT_TYPE
+            .equals(bxv.getMessageType("...CPD...", null)));
+        assertTrue(SftpService.INVALID_MESSAGE_TYPE
+            .equals(bxv.getMessageType("...XXX...", null)));
+    }
+
+    
+    @Test
+    void testBaisXhibit_getCourtId_NumberFormat_returnsNull() {
+        // Force the NumberFormatException branch regardless of repository behavior
+        SftpService.BaisXhibitValidation bxv =
+            new SftpService.BaisXhibitValidation(mockXhbCourtRepository) {
+                @Override
+                protected int getCourtIdFromCrestCourtId(String crestCourtId) {
+                    throw new NumberFormatException("not numeric");
+                }
+            };
+
+        // crestCourtId is non-numeric (“ABC”) — we expect the catch block to return null
+        String bad = "PDDA_XDL_34_1_ABC_20241209130506";
+        Integer out = bxv.getCourtId(bad, null);
+
+        assertNull(out, "Expect null when crestCourtId isn't numeric");
+    }
+
+
+    
+    @Test
+    void testBaisXhibit_validateFilename_booleanOverload_delegates() {
+        BaisXhibitValidation bxv = new SftpService.BaisXhibitValidation(mockXhbCourtRepository);
+        String invalid = "PDDA_XPD_1_453_20241209130506"; // too few parts
+        String twoArg = bxv.validateFilename(invalid, null);           // uses full logic
+        String threeArg = bxv.validateFilename(invalid, null, true);   // delegates
+        assertTrue(twoArg.length() > 0 && twoArg.equals(threeArg),
+            "boolean overload should delegate to 2-arg version");
+    }
+
+    
+    @Test
+    void testBaisCp_validateFilename_booleanOverload_delegates() {
+        // Return a real court so the only error we see is the extension (keeps it simple)
+        List<XhbCourtDao> courts = new ArrayList<>();
+        courts.add(DummyCourtUtil.getXhbCourtDao(-453, "Court1"));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andStubReturn(courts);
+        EasyMock.replay(mockXhbCourtRepository);
+
+        BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository);
+        String badExt = "PublicDisplay_453_20240101120000.xl"; // triggers "Extension" error
+        assertTrue(bcv.validateFilename(badExt, null)
+                .equals(bcv.validateFilename(badExt, null, true)));
+    }
+
+    
+    @Test
+    void testBaisCp_validateFilename_missingCourtId_appendsError() {
+        // Force getCourtId(...) to return null to cover the "append CrestCourtId" branch
+        SftpService.BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository) {
+            @Override public Integer getCourtId(String filename, PublicDisplayEvent event) {
+                return null;
+            }
+        };
+
+        String filename = "PublicDisplay_999_20240101120000.xml"; // syntactically valid
+        String out = bcv.validateFilename(filename, null);
+
+        assertTrue(out != null && out.contains("CrestCourtId"),
+            "Should include CrestCourtId error when court not found");
+    }
+
+    
+    @Test
+    void testBaisCp_getMessageType_and_getPublicDisplayEvent() {
+        BaisCpValidation bcv = new SftpService.BaisCpValidation(mockXhbCourtRepository);
+        assertTrue("PublicDisplay".equals(bcv.getMessageType("PublicDisplay_453_20240101120000.xml", null)));
+        assertNull(bcv.getPublicDisplayEvent("anything", "<ignored/>"));
+    }
+
+
+
 }

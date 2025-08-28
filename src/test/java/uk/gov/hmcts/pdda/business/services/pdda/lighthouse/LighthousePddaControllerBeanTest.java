@@ -17,6 +17,7 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
@@ -59,6 +60,9 @@ class LighthousePddaControllerBeanTest {
 
     @Mock
     private XhbCppStagingInboundRepository mockXhbCppStagingInboundRepository;
+    
+    @Mock
+    private XhbInternetHtmlRepository mockXhbInternetHtmlRepository;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -113,7 +117,8 @@ class LighthousePddaControllerBeanTest {
             NOT_INSTANCE);
         assertInstanceOf(LighthousePddaControllerBean.class,
             new LighthousePddaControllerBean(mockXhbPddaMessageRepository,
-                mockXhbCppStagingInboundRepository, mockEntityManager),
+                mockXhbCppStagingInboundRepository,
+                mockXhbInternetHtmlRepository, mockEntityManager),
             NOT_INSTANCE);
         assertInstanceOf(LighthousePddaControllerBean.class,
             new LighthousePddaControllerBean(mockEntityManager), NOT_INSTANCE);
@@ -221,7 +226,7 @@ class LighthousePddaControllerBeanTest {
             .thenReturn(xhbPddaMessageDao1);
 
         classUnderTestMock.updatePddaMessageStatus(Mockito.isA(XhbPddaMessageDao.class),
-            Mockito.isA(String.class));
+            Mockito.isA(String.class), Mockito.isA(String.class));
 
         if (MESSAGE_STATUS_INVALID.equals(expectedSavedStatus)) {
             // Failure
@@ -316,17 +321,156 @@ class LighthousePddaControllerBeanTest {
             .thenReturn(Optional.of(mockXhbPddaMessageDao));
         
         // Spy updatePddaMessageStatus to verify it's called
-        Mockito.doNothing().when(controller).updatePddaMessageStatus(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(controller).updatePddaMessageStatus(Mockito.any(), Mockito.any(), Mockito.any());
 
         // Run
         controller.processFile(mockXhbPddaMessageDao);
 
         // Verify
         Mockito.verify(mockXhbCppStagingInboundRepository).findDocumentByDocumentNameSafe("TestDoc.xml");
-        Mockito.verify(controller).updatePddaMessageStatus(mockXhbPddaMessageDao, "INV");
+        Mockito.verify(controller)
+            .updatePddaMessageStatus(
+                Mockito.eq(mockXhbPddaMessageDao),
+                Mockito.eq("INV"),
+                Mockito.anyString()
+            );
         // Ensure no further processing occurs
         Mockito.verify(controller, Mockito.never()).isDocumentNameValid(Mockito.anyString());
     }
+    
+    
+    @Test
+    void testProcessFile_PublicDisplayEvent_Xpd_SetsProcessed() {
+        // Spy controller so we can stub its repos
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbCppStagingInboundRepository).when(controller).getXhbCppStagingInboundRepository();
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+
+        // Message DAO (status will be updated to VP by updatePddaMessageStatus)
+        XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        dao.setCpDocumentName("PDDA_XPD_34_1_453_20241014090000"); // triggers XPD branch
+        dao.setCpDocumentStatus("VN"); // current status valid-not-processed
+
+        // No prior staging rows -> not a duplicate
+        Mockito.when(mockXhbCppStagingInboundRepository.findDocumentByDocumentNameSafe(dao.getCpDocumentName()))
+               .thenReturn(new ArrayList<>());
+
+        // fetchLatest (called by updatePddaMessageStatus) returns our DAO
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(Mockito.anyInt()))
+               .thenReturn(Optional.of(dao));
+
+        // Capture the DAO passed to update(...) so we can assert status becomes VP
+        ArgumentCaptor<XhbPddaMessageDao> msgCaptor = ArgumentCaptor.forClass(XhbPddaMessageDao.class);
+        Mockito.when(mockXhbPddaMessageRepository.update(msgCaptor.capture()))
+            .thenAnswer(inv -> Optional.of(inv.getArgument(0)));
+
+        controller.processFile(dao);
+
+        // Assert status set to PROCESSED and no staging attempted
+        assertEquals("VP", msgCaptor.getValue().getCpDocumentStatus(), "XPD should set VP");
+        Mockito.verify(mockXhbCppStagingInboundRepository, Mockito.never()).update(Mockito.any());
+    }
+    
+    
+    @Test
+    void testProcessFile_WebPageEvent_Xwp_InsertsInternetHtmlAndSetsProcessed() {
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbCppStagingInboundRepository).when(controller).getXhbCppStagingInboundRepository();
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+        Mockito.doReturn(mockXhbInternetHtmlRepository).when(controller).getXhbInternetHtmlRepository();
+
+        XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        dao.setCpDocumentName("PDDA_XWP_34_1_453_20241014090000"); // triggers XWP branch
+        dao.setCourtId(987);
+        dao.setPddaMessageDataId(999L);
+        dao.setCpDocumentStatus("VN");
+
+        // No duplicates
+        Mockito.when(mockXhbCppStagingInboundRepository.findDocumentByDocumentNameSafe(dao.getCpDocumentName()))
+               .thenReturn(new ArrayList<>());
+
+        // fetchLatest for status update
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(Mockito.anyInt()))
+               .thenReturn(Optional.of(dao));
+
+        // Capture message update -> ensure VP
+        ArgumentCaptor<XhbPddaMessageDao> msgCaptor = ArgumentCaptor.forClass(XhbPddaMessageDao.class);
+        Mockito.when(mockXhbPddaMessageRepository.update(msgCaptor.capture()))
+               .thenAnswer(inv -> Optional.of(inv.getArgument(0)));
+
+        // Internet HTML insert should be invoked with status 'C', courtId and blobId
+        ArgumentCaptor<uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao> htmlCaptor =
+            ArgumentCaptor.forClass(uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao.class);
+
+        // Simulate successful insert (returning an ID)
+        uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao returned =
+            new uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao();
+        returned.setInternetHtmlId(1234);
+        Mockito.when(mockXhbInternetHtmlRepository.update(htmlCaptor.capture()))
+               .thenReturn(Optional.of(returned));
+
+        controller.processFile(dao);
+
+        // Check status on message
+        assertEquals("VP", msgCaptor.getValue().getCpDocumentStatus(), "XWP should set VP");
+
+        // Check the Internet HTML row that was created
+        uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao created = htmlCaptor.getValue();
+        assertEquals("C", created.getStatus(), "XWP insert should set status C");
+        assertEquals(987, created.getCourtId(), "CourtId should be passed through");
+        assertEquals(999L, created.getHtmlBlobId(), "BlobId should be passed through");
+    }
+
+    
+    @Test
+    void testProcessFile_UnknownPddaType_SetsInvalid() {
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbCppStagingInboundRepository).when(controller).getXhbCppStagingInboundRepository();
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+
+        // PDDA_* but neither XPD nor XWP and no list/pd filename => falls into "unknown" else {}
+        XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        dao.setCpDocumentName("PDDA_ABC_34_1_453_2024101409000");
+
+        Mockito.when(mockXhbCppStagingInboundRepository.findDocumentByDocumentNameSafe(dao.getCpDocumentName()))
+               .thenReturn(new ArrayList<>());
+
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(Mockito.anyInt()))
+               .thenReturn(Optional.of(dao));
+
+        ArgumentCaptor<XhbPddaMessageDao> msgCaptor = ArgumentCaptor.forClass(XhbPddaMessageDao.class);
+        Mockito.when(mockXhbPddaMessageRepository.update(msgCaptor.capture()))
+               .thenAnswer(inv -> Optional.of(inv.getArgument(0)));
+
+        controller.processFile(dao);
+
+        // The last status written by the branch is INV (unknown doc type)
+        assertEquals("INV", msgCaptor.getValue().getCpDocumentStatus(), "Unknown PDDA_* should set INV");
+    }
+
+    
+    @Test
+    void testFetchLatestThrowsWhenDaoMissing() {
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+
+        XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        dao.setCpDocumentName("AnyDoc.xml");
+
+        // Simulate not found -> Optional.empty() causes the else{} path to log + throw
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(Mockito.anyInt()))
+               .thenReturn(Optional.empty());
+
+        IllegalStateException ex = org.junit.jupiter.api.Assertions.assertThrows(
+            IllegalStateException.class,
+            () -> controller.updatePddaMessageStatus(dao, "IP", null),
+            "Expected fetchLatest to throw when DAO not found"
+        );
+        assertTrue(ex.getMessage().contains("DAO not found in DB for ID:"),
+            "Exception message includes helpful detail");
+    }
+
+
 
 
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {

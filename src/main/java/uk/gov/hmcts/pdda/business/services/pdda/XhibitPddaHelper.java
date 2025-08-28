@@ -102,7 +102,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         return clobRepository;
     }
 
-    protected XhbCourtRepository getCourtRepository() {
+    public XhbCourtRepository getCourtRepository() {
         if (courtRepository == null || !isEntityManagerActive()) {
             courtRepository = new XhbCourtRepository(getEntityManager());
         }

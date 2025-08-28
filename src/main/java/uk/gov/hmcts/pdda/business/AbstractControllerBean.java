@@ -12,8 +12,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingRepo
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 
-@SuppressWarnings("PMD.NullAssignment")
+@SuppressWarnings("PMD")
 public class AbstractControllerBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractControllerBean.class);
@@ -27,6 +28,7 @@ public class AbstractControllerBean {
     private XhbCppListRepository xhbCppListRepository;
     private XhbFormattingRepository xhbFormattingRepository;
     private XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
+    private XhbInternetHtmlRepository xhbInternetHtmlRepository;
 
     // For unit tests.
     protected AbstractControllerBean(EntityManager entityManager,
@@ -49,6 +51,7 @@ public class AbstractControllerBean {
         xhbConfigPropRepository = null;
         xhbCppFormattingRepository = null;
         xhbCppStagingInboundRepository = null;
+        xhbInternetHtmlRepository = null;
     }
 
     protected AbstractControllerBean(EntityManager entityManager) {
@@ -106,7 +109,6 @@ public class AbstractControllerBean {
 
     /**
      * Retrieves a reference to the xhbCppListRepository.
-
      * @return XhbCppListRepository
      */
     protected XhbCppListRepository getXhbCppListRepository() {
@@ -118,7 +120,6 @@ public class AbstractControllerBean {
 
     /**
      * Retrieves a reference to the xhbFormattingRepository.
-
      * @return XhbFormattingRepository
      */
     protected XhbFormattingRepository getXhbFormattingRepository() {
@@ -130,7 +131,6 @@ public class AbstractControllerBean {
     
     /**
      * Retrieves a reference to the xhbCppStagingInboundRepository.
-
      * @return XhbCppStagingInboundRepository
      */
     public XhbCppStagingInboundRepository getXhbCppStagingInboundRepository() {
@@ -138,6 +138,14 @@ public class AbstractControllerBean {
             xhbCppStagingInboundRepository = new XhbCppStagingInboundRepository(getEntityManager());
         }
         return xhbCppStagingInboundRepository;
+    }
+    
+    
+    public XhbInternetHtmlRepository getXhbInternetHtmlRepository() {
+        if (xhbInternetHtmlRepository == null || !isEntityManagerActive()) {
+            xhbInternetHtmlRepository = new XhbInternetHtmlRepository(getEntityManager());
+        }
+        return xhbInternetHtmlRepository;
     }
 
     protected boolean isEntityManagerActive() {

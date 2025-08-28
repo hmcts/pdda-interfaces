@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -58,6 +59,12 @@ class AbstractControllerBeanTest {
     @Test
     void testGetXhbFormattingRepository() {
         assertInstanceOf(XhbFormattingRepository.class, classUnderTest.getXhbFormattingRepository(),
+            NOT_INSTANCE);
+    }
+    
+    @Test
+    void testGetXhbInternetHtmlRepository() {
+        assertInstanceOf(XhbInternetHtmlRepository.class, classUnderTest.getXhbInternetHtmlRepository(),
             NOT_INSTANCE);
     }
 }
