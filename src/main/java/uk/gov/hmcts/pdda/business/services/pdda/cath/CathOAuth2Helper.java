@@ -5,6 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.pdda.business.services.pdda.OAuth2Helper;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 /**
 
  * Title: CathOAuth2Helper.
@@ -22,16 +31,20 @@ import uk.gov.hmcts.pdda.business.services.pdda.OAuth2Helper;
  * @version 1.0
  */
 @Component
+@SuppressWarnings({"PMD.PreserveStackTrace", "PMD.AvoidThrowingRawExceptionTypes"})
 public class CathOAuth2Helper extends OAuth2Helper {
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(CathOAuth2Helper.class);
     
-    private static final String CATH_AZURE_TOKEN_URL = "cath.azure.oauth2.token-url";
+    private static final String CATH_AZURE_TOKEN_URL = 
+        "cath.azure.oauth2.token-url";
     private static final String CATH_AZURE_CLIENT_ID =
         "cath.azure.active-directory.credential.client-id";
     private static final String CATH_AZURE_CLIENT_SECRET =
         "cath.azure.active-directory.credential.client-secret";
+    private static final String CATH_AZURE_AUTH_SCOPE =
+        "cath.azure.active-directory.credential.auth-scope";
 
     @Override
     protected String getTokenUrl() {
@@ -64,6 +77,43 @@ public class CathOAuth2Helper extends OAuth2Helper {
             return "";
         }
         return env.getProperty(CATH_AZURE_CLIENT_SECRET);
+    }
+    
+    protected String getAuthScope() {
+        LOG.debug("Getting CaTH Auth Scope {}", CATH_AZURE_AUTH_SCOPE);
+        String authScope = env.getProperty(CATH_AZURE_AUTH_SCOPE);
+        if (authScope == null) {
+            LOG.error("Auth Scope property '{}' not found in environment.", CATH_AZURE_AUTH_SCOPE);
+            return "";
+        }
+        return env.getProperty(CATH_AZURE_AUTH_SCOPE);
+    }
+    
+    @Override
+    protected HttpRequest getAuthenticationRequest(String url) {
+        LOG.info("getAuthenticationRequest({})", url);
+        // Build the authentication post request
+        try {
+            return HttpRequest.newBuilder().uri(URI.create(url))
+                .headers("Content-Type", "application/x-www-form-urlencoded")
+                .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                String.format("Error in building HTTP request: %s", ex.getMessage()));
+        }
+    }
+    
+    @Override
+    protected String getClientCredentialsForm() {
+        LOG.debug("getClientCredentialsForm()");
+        Map<String, String> parameters = new ConcurrentHashMap<>();
+        parameters.put("client_id", getClientId());
+        parameters.put("scope", getAuthScope());
+        parameters.put("client_secret", getClientSecret());
+        parameters.put("grant_type", "client_credentials");
+        return parameters.keySet().stream()
+            .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
+            .collect(Collectors.joining("&"));
     }
 
 }

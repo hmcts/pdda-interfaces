@@ -3,13 +3,13 @@ server:
 
 cath:
   azure:
-    scope: https://pip-ss-kv-stg.vault.azure.net/secrets/app-pip-data-management-scope
     oauth2:
-      token-url: ${cath.azure.scope}/.default
+      token-url: https://login.microsoftonline.com:443/${AZURE_TENANT_ID:AAAAAAAAAAAAAAAA}/oauth2/v2.0/token
     active-directory:
       credential:
         client-id: ${CATH_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
         client-secret: ${CATH_AZURE_CLIENT_SECRET:AAAAAAAAAAAAAAAA}
+        auth-scope: ${CATH_AZURE_AUTH_SCOPE:AAAAAAAAAAAAAAAA}/.default
 
 
 pdda:
