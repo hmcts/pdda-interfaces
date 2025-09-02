@@ -125,8 +125,8 @@ public class OAuth2Helper implements Serializable {
         return getAccessTokenFromResponse(response);
     }
 
-    private HttpRequest getAuthenticationRequest(String url) {
-        LOG.info("getAuthorizationRequest({})", url);
+    protected HttpRequest getAuthenticationRequest(String url) {
+        LOG.info("getAuthenticationRequest({})", url);
         // Build the encoded clientId / clientSecret key
         String key = getClientId() + ":" + getClientSecret();
         String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
@@ -135,7 +135,7 @@ public class OAuth2Helper implements Serializable {
         try {
             return HttpRequest.newBuilder().uri(URI.create(url))
                 .headers("Content-Type", "application/x-www-form-urlencoded", "Authorization",
-                    "Bearer " + encodedKey)
+                    "Basic " + encodedKey)
                 .POST(BodyPublishers.ofString(getClientCredentialsForm())).build();
         } catch (Exception ex) {
             throw new RuntimeException(
@@ -143,7 +143,7 @@ public class OAuth2Helper implements Serializable {
         }
     }
 
-    private String getClientCredentialsForm() {
+    protected String getClientCredentialsForm() {
         LOG.debug("getClientCredentialsForm()");
         Map<String, String> parameters = new ConcurrentHashMap<>();
         parameters.put("grant_type", "client_credentials");
