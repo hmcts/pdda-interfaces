@@ -39,6 +39,8 @@ public class CathOAuth2Helper extends OAuth2Helper {
     
     private static final String CATH_AZURE_TOKEN_URL = 
         "cath.azure.oauth2.token-url";
+    private static final String CATH_AZURE_HEALTH_ENDPOINT_URL = 
+        "cath.azure.oauth2.health-endpoint-url";
     private static final String CATH_AZURE_CLIENT_ID =
         "cath.azure.active-directory.credential.client-id";
     private static final String CATH_AZURE_CLIENT_SECRET =
@@ -89,6 +91,16 @@ public class CathOAuth2Helper extends OAuth2Helper {
         return env.getProperty(CATH_AZURE_AUTH_SCOPE);
     }
     
+    protected String getHealthEndpointUrl() {
+        LOG.debug("Getting CaTH Health Endpoint URL {}", CATH_AZURE_HEALTH_ENDPOINT_URL);
+        String healthEndpointUrl = env.getProperty(CATH_AZURE_HEALTH_ENDPOINT_URL);
+        if (healthEndpointUrl == null) {
+            LOG.error("Health Endpoint URL property '{}' not found in environment.", CATH_AZURE_HEALTH_ENDPOINT_URL);
+            return "";
+        }
+        return env.getProperty(CATH_AZURE_HEALTH_ENDPOINT_URL);
+    }
+    
     @Override
     protected HttpRequest getAuthenticationRequest(String url) {
         LOG.info("getAuthenticationRequest({})", url);
@@ -114,6 +126,27 @@ public class CathOAuth2Helper extends OAuth2Helper {
         return parameters.keySet().stream()
             .map(key -> key + "=" + URLEncoder.encode(parameters.get(key), StandardCharsets.UTF_8))
             .collect(Collectors.joining("&"));
+    }
+    
+    public String getHealthEndpointStatus(String accessToken) {
+        LOG.debug("getHealthEndpointStatus()");
+        // Get the health endpoint request
+        HttpRequest request = getHealthEndpointRequest(accessToken);
+        // Send the request
+        return sendRequest(request);
+    }
+    
+    private HttpRequest getHealthEndpointRequest(String accessToken) {
+        String url = getHealthEndpointUrl();
+        // Build the health endpoint GET request
+        try {
+            return HttpRequest.newBuilder().uri(URI.create(url))
+                .headers("Authorization", "Bearer " + accessToken)
+                .GET().build();
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                String.format("Error in building HTTP request: %s", ex.getMessage()));
+        }
     }
 
 }
