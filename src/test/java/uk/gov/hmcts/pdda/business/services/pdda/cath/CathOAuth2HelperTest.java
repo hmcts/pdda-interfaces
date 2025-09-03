@@ -47,7 +47,7 @@ class CathOAuth2HelperTest {
     @BeforeEach
     void setUp() {
         mockEnv = Mockito.mock(Environment.class);
-        helper = new CathOAuth2Helper();
+        helper = Mockito.spy(new CathOAuth2Helper());
         helper.setEnvironment(mockEnv);
     }
 
@@ -162,6 +162,24 @@ class CathOAuth2HelperTest {
         // Assert
         assertNotNull(result, NOTNULL);
         assertTrue(result.contains("grant_type=client_credentials"), "Form should contain grant_type");
+    }
+    
+    @Test
+    void testGetHealthEndpointStatus() {
+        String accessToken = "test-token";
+        String expectedUrl = "https://health-endpoint";
+        String expectedResponse = "healthy";
+
+        // Mock environment property
+        Mockito.when(mockEnv.getProperty("cath.azure.oauth2.health-endpoint-url")).thenReturn(expectedUrl);
+
+        // Mock sendRequest to return expected response
+        Mockito.doReturn(expectedResponse).when(helper).sendRequest(Mockito.any());
+
+        String result = helper.getHealthEndpointStatus(accessToken);
+
+        assertEquals(expectedResponse, result);
+        Mockito.verify(helper).sendRequest(Mockito.any());
     }
     
     @Test

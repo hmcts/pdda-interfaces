@@ -153,7 +153,7 @@ public class OAuth2Helper implements Serializable {
     }
 
     @SuppressWarnings("squid:S2142")
-    protected String sendRequest(HttpRequest request) {
+    public String sendRequest(HttpRequest request) {
         LOG.info("sendRequest()");
         try {
             // Send the authentication request and get the response
