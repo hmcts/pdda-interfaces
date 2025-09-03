@@ -32,6 +32,7 @@ class CathOAuth2HelperTest {
     private static final String CLIENT_ID = "cath-client-id";
     private static final String CLIENT_SECRET = "cath-secret";
     private static final String AUTH_SCOPE = "auth-scope";
+    private static final String HEALTH_ENDPOINT_URL = "health-endpoint-url";
     private static final String NOTNULL = "Result is null";
 
     private Environment mockEnv;
@@ -109,6 +110,21 @@ class CathOAuth2HelperTest {
     }
     
     @Test
+    void shouldReturnCathHealthEndpointUrlWhenPropertyExists() {
+        Mockito.when(mockEnv.getProperty("cath.azure.oauth2.health-endpoint-url"))
+            .thenReturn(HEALTH_ENDPOINT_URL);
+        String result = helper.getHealthEndpointUrl();
+        assertEquals(HEALTH_ENDPOINT_URL, result);
+    }
+
+    @Test
+    void shouldReturnEmptyStringAndLogWhenHealthEndpointUrlMissing() {
+        Mockito.when(mockEnv.getProperty("cath.azure.oauth2.health-endpoint-url")).thenReturn(null);
+        String result = helper.getHealthEndpointUrl();
+        assertTrue(result.isEmpty());
+    }
+    
+    @Test
     void testGetAuthenticationRequest() throws Exception {
         try (MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class)) {
             staticHttpRequest.when(HttpRequest::newBuilder).thenReturn(mockBuilder);
@@ -146,6 +162,34 @@ class CathOAuth2HelperTest {
         // Assert
         assertNotNull(result, NOTNULL);
         assertTrue(result.contains("grant_type=client_credentials"), "Form should contain grant_type");
+    }
+    
+    @Test
+    void testGetHealthEndpointRequest() throws Exception {
+        try (MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class)) {
+            staticHttpRequest.when(HttpRequest::newBuilder).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.uri(Mockito.any(URI.class))).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.headers(Mockito.any(String[].class))).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.GET()).thenReturn(mockBuilder);
+            Mockito.when(mockBuilder.build()).thenReturn(mockHttpRequest);
+
+            // Stub URI
+            URI dummyUri = new URI("https://dummy.endpoint.url");
+            Mockito.when(mockHttpRequest.uri()).thenReturn(dummyUri);
+
+            // Stub headers
+            HttpHeaders mockHeaders = Mockito.mock(HttpHeaders.class);
+            Mockito.when(mockHttpRequest.headers()).thenReturn(mockHeaders);
+            Mockito.when(mockHeaders.map()).thenReturn(Map.of("Authorization", List.of("Basic dummyvalue")));
+
+            var method = CathOAuth2Helper.class.getDeclaredMethod("getHealthEndpointRequest", String.class);
+            method.setAccessible(true);
+            HttpRequest request = (HttpRequest) method.invoke(helper, "accessToken");
+
+            assertNotNull(request, NOTNULL);
+            assertTrue(request.headers().map().containsKey("Authorization"), "Authorization header missing");
+            assertTrue(request.uri().toString().equals("https://dummy.endpoint.url"), "URI mismatch");
+        }
     }
     
 }
