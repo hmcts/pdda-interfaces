@@ -5,7 +5,7 @@ cath:
   azure:
     oauth2:
       token-url: https://login.microsoftonline.com:443/${AZURE_TENANT_ID:AAAAAAAAAAAAAAAA}/oauth2/v2.0/token
-      health-endpoint-url: ${CATH_AZURE_HEALTH_ENDPOINT_URL}
+      health-endpoint-url: ${CATH_AZURE_HEALTH_ENDPOINT_URL:AAAAAAAAAAAAAAAA}
     active-directory:
       credential:
         client-id: ${CATH_AZURE_CLIENT_ID:AAAAAAAAAAAAAAAA}
