@@ -253,7 +253,7 @@ class OAuth2HelperTest {
 
     
     @Test
-    void testSendAuthenticationRequestException() throws Exception {
+    void testSendRequestException() throws Exception {
         try (MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)) {
             staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
             Mockito.when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any()))
@@ -264,7 +264,7 @@ class OAuth2HelperTest {
                 .POST(HttpRequest.BodyPublishers.ofString("test"))
                 .build();
 
-            var sendMethod = OAuth2Helper.class.getDeclaredMethod("sendAuthenticationRequest", HttpRequest.class);
+            var sendMethod = OAuth2Helper.class.getDeclaredMethod("sendRequest", HttpRequest.class);
             sendMethod.setAccessible(true);
 
             String result = (String) sendMethod.invoke(classUnderTest, request);
@@ -349,7 +349,7 @@ class OAuth2HelperTest {
 
     
     @Test
-    void testSendAuthenticationRequestWithRuntimeException() throws Exception {
+    void testSendRequestWithRuntimeException() throws Exception {
         try (MockedStatic<HttpClient> staticHttpClient = Mockito.mockStatic(HttpClient.class)) {
             staticHttpClient.when(HttpClient::newHttpClient).thenReturn(mockHttpClient);
             Mockito.when(mockHttpClient.send(Mockito.any(HttpRequest.class), Mockito.any()))
@@ -360,7 +360,7 @@ class OAuth2HelperTest {
                 .POST(HttpRequest.BodyPublishers.ofString("test"))
                 .build();
 
-            var sendMethod = OAuth2Helper.class.getDeclaredMethod("sendAuthenticationRequest", HttpRequest.class);
+            var sendMethod = OAuth2Helper.class.getDeclaredMethod("sendRequest", HttpRequest.class);
             sendMethod.setAccessible(true);
 
             String result = (String) sendMethod.invoke(classUnderTest, request);

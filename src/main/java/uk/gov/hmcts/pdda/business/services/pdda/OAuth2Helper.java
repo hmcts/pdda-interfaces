@@ -120,7 +120,7 @@ public class OAuth2Helper implements Serializable {
         // Get the authentication request
         HttpRequest request = getAuthenticationRequest(url);
         // Send the authentication request
-        String response = sendAuthenticationRequest(request);
+        String response = sendRequest(request);
         // Get the access token from the authentication response
         return getAccessTokenFromResponse(response);
     }
@@ -153,8 +153,8 @@ public class OAuth2Helper implements Serializable {
     }
 
     @SuppressWarnings("squid:S2142")
-    private String sendAuthenticationRequest(HttpRequest request) {
-        LOG.info("sendAuthorizationRequest()");
+    public String sendRequest(HttpRequest request) {
+        LOG.info("sendRequest()");
         try {
             // Send the authentication request and get the response
             HttpResponse<?> httpResponse =
