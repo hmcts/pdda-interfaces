@@ -138,6 +138,7 @@ public class CathOAuth2Helper extends OAuth2Helper {
     
     private HttpRequest getHealthEndpointRequest(String accessToken) {
         String url = getHealthEndpointUrl();
+        LOG.debug("getHealthEndpointRequest({})", url);
         // Build the health endpoint GET request
         try {
             return HttpRequest.newBuilder().uri(URI.create(url))
