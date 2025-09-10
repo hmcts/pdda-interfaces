@@ -40,12 +40,16 @@ public class CathServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String token = getToken();
+        
+        String healthEndpointStatus = getHealthEndpointStatus(token);
 
         LOG.debug("Output Stats");
         try (ServletOutputStream output = response.getOutputStream()) {
 
             output.print(documentWrapper(
-                bold("CaTH Token: ") + token + eol() + linebreak() + bold("Date/Time: ") + now()
+                bold("CaTH Access Token: ") + token + eol() + linebreak() + linebreak()
+                + bold("CaTH Health Endpoint Status: ") + healthEndpointStatus + eol() + linebreak() + linebreak()
+                + bold("Date/Time: ") + now()
                     + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
         } catch (IOException ex) {
             LOG.error("Error: {}", ex.getMessage()); 
@@ -56,6 +60,15 @@ public class CathServlet extends HttpServlet {
         LOG.debug("getToken()");
         try {
             return getCathOAuth2Helper().getAccessToken();
+        } catch (Exception ex) {
+            return "ERROR: " + ex.getMessage();
+        }
+    }
+    
+    private String getHealthEndpointStatus(String accessToken) {
+        LOG.debug("getHealthEndpointCheck()");
+        try {
+            return getCathOAuth2Helper().getHealthEndpointStatus(accessToken);
         } catch (Exception ex) {
             return "ERROR: " + ex.getMessage();
         }

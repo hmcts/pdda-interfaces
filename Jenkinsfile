@@ -11,9 +11,9 @@ def secrets = [
     secret('public-display-data-aggregator-POSTGRES-PASS', 'DB_PASSWORD'),
     secret('public-display-data-aggregator-POSTGRES-HOST', 'DB_HOST'),
     secret('public-display-data-aggregator-POSTGRES-PORT', 'DB_PORT'),
-    secret('public-display-data-aggregator-authentication-clientID', 'AZURE_CLIENT_ID'),
-    secret('public-display-data-aggregator-authentication-clientSecret', 'AZURE_CLIENT_SECRET'),
-    secret('public-display-data-aggregator-authentication-tenantID', 'AZURE_TENANT_ID'),
+    secret('public-display-data-aggregator-authentication-clientID', 'PDDA_AZURE_CLIENT_ID'),
+    secret('public-display-data-aggregator-authentication-clientSecret', 'PDDA_AZURE_CLIENT_SECRET'),
+    secret('public-display-data-aggregator-authentication-tenantID', 'PPDA_AZURE_TENANT_ID'),
     secret('public-display-data-aggregator-authentication-cath-clientID', 'CATH_AZURE_CLIENT_ID'),
     secret('public-display-data-aggregator-authentication-cath-clientSecret', 'CATH_AZURE_CLIENT_SECRET')
   ],
