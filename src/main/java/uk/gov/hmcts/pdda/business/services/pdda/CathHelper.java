@@ -12,6 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.io.IOException;
@@ -106,7 +107,8 @@ public class CathHelper {
     protected String getToken() {
         LOG.info("getToken()");
         if (CathUtils.isApimEnabled()) {
-            return getOAuth2Helper().getAccessToken();
+            // Calling the CathOAuth2Helper to use the CaTH specific key vault values
+            return getCathOAuth2Helper().getAccessToken();
         }
         return EMPTY_STRING;
     }
@@ -197,9 +199,9 @@ public class CathHelper {
         return null;
     }
 
-    private OAuth2Helper getOAuth2Helper() {
+    private OAuth2Helper getCathOAuth2Helper() {
         if (oauth2Helper == null) {
-            this.oauth2Helper = new OAuth2Helper();
+            this.oauth2Helper = new CathOAuth2Helper();
         }
         return oauth2Helper;
     }
