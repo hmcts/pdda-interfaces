@@ -81,7 +81,8 @@ public final class CathUtils {
             .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
             .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
-            .header(PublicationConfiguration.CONTENT_DATE, now).header(AUTHENTICATION, bearerToken)
+            .header(PublicationConfiguration.CONTENT_DATE, now)
+            .header(AUTHENTICATION, bearerToken)
             .header(CONTENT_TYPE, CONTENT_TYPE_JSON)
             .POST(BodyPublishers.ofString(courtelJson.getJson())).build();
         
