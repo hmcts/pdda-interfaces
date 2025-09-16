@@ -13,6 +13,7 @@ public abstract class CourtelJson {
     private Language language;
     private ArtefactType artefactType;
     private String token;
+    private String documentName;
 
     public String getJson() {
         return json;
@@ -84,6 +85,14 @@ public abstract class CourtelJson {
     
     public void setToken(String token) {
         this.token = token;
+    }
+    
+    public String getDocumentName() {
+        return documentName;
+    }
+    
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
     
     public abstract ListType getListType();
