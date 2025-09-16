@@ -24,19 +24,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * <p>
+
  * Title: CathHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  * @version 1.0
  */

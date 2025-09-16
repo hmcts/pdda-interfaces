@@ -39,19 +39,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
- * <p>
+
  * Title: CourtelHelper.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  * @version 1.0
  */
@@ -135,7 +134,7 @@ public class CourtelHelper {
     }
 
     public List<XhbCourtelListDao> getCourtelList() {
-        return getXhbCourtelListRepository().findCourtelList(
+        return getXhbCourtelListRepository().findCourtelListSafe(
             getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
             getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT));

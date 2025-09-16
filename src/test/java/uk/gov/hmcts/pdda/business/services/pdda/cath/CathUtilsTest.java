@@ -51,19 +51,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * <p>
+
  * Title: CathUtils Test.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Mark Harris
  */
 @ExtendWith(MockitoExtension.class)
@@ -224,7 +223,7 @@ class CathUtilsTest {
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDao =
             Optional.of(DummyFormattingUtil.getXhbXmlDocumentDao());
 
-        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbCourtelListRepository.findByXmlDocumentClobIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
