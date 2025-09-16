@@ -58,7 +58,7 @@ public class CathHelper {
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
     private XhbClobRepository xhbClobRepository;
 
-    private OAuth2Helper oauth2Helper;
+    private CathOAuth2Helper cathOAuth2Helper;
 
     public CathHelper(EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
@@ -70,10 +70,10 @@ public class CathHelper {
     }
 
     // JUnit
-    public CathHelper(OAuth2Helper oauth2Helper, EntityManager entityManager,
+    public CathHelper(CathOAuth2Helper cathOAuth2Helper, EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbClobRepository xhbClobRepository) {
-        this.oauth2Helper = oauth2Helper;
+        this.cathOAuth2Helper = cathOAuth2Helper;
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
@@ -199,11 +199,11 @@ public class CathHelper {
         return null;
     }
 
-    private OAuth2Helper getCathOAuth2Helper() {
-        if (oauth2Helper == null) {
-            this.oauth2Helper = new CathOAuth2Helper();
+    private CathOAuth2Helper getCathOAuth2Helper() {
+        if (cathOAuth2Helper == null) {
+            this.cathOAuth2Helper = new CathOAuth2Helper();
         }
-        return oauth2Helper;
+        return cathOAuth2Helper;
     }
 
     private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
