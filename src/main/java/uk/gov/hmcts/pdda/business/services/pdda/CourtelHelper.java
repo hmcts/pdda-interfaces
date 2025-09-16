@@ -206,6 +206,7 @@ public class CourtelHelper {
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         jsonObject.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
         jsonObject.setLanguage(Language.ENGLISH);
+        jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
         
         // Fetch and populate the end date from the clob
         try {

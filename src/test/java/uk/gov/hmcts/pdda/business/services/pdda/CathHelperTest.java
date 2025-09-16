@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
+import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.net.http.HttpClient;
@@ -64,7 +65,7 @@ class CathHelperTest {
     private BlobHelper mockBlobHelper;
 
     @Mock
-    private OAuth2Helper mockOAuth2Helper;
+    private CathOAuth2Helper mockCathOAuth2Helper;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -92,7 +93,7 @@ class CathHelperTest {
         Mockito.mockStatic(CathUtils.class);
         Mockito.mockStatic(HttpClient.class);
 
-        classUnderTest = new CathHelper(mockOAuth2Helper, mockEntityManager,
+        classUnderTest = new CathHelper(mockCathOAuth2Helper, mockEntityManager,
             mockXhbXmlDocumentRepository, mockXhbClobRepository);
     }
 
@@ -124,7 +125,7 @@ class CathHelperTest {
             CourtelJson json = DummyCourtelUtil.getListJson();
             String uri = "uri";
             // Expects
-            Mockito.when(mockOAuth2Helper.getAccessToken()).thenReturn("accessToken");
+            Mockito.when(mockCathOAuth2Helper.getAccessToken()).thenReturn("accessToken");
             Mockito.when(CathUtils.isApimEnabled()).thenReturn(true);
             Mockito.when(CathUtils.getApimUri()).thenReturn(uri);
             Mockito.when(CathUtils.getHttpPostRequest(uri, json)).thenReturn(mockHttpRequest);

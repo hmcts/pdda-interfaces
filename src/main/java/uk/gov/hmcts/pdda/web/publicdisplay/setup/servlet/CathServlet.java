@@ -47,8 +47,7 @@ public class CathServlet extends HttpServlet {
         try (ServletOutputStream output = response.getOutputStream()) {
 
             output.print(documentWrapper(
-                bold("CaTH Access Token: ") + token + eol() + linebreak() + linebreak()
-                + bold("CaTH Health Endpoint Status: ") + healthEndpointStatus + eol() + linebreak() + linebreak()
+                bold("CaTH Health Endpoint Status: ") + healthEndpointStatus + eol() + linebreak() + linebreak()
                 + bold("Date/Time: ") + now()
                     + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
         } catch (IOException ex) {

@@ -62,6 +62,7 @@ public final class DummyCourtelUtil {
         result.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
         result.setEndDate(LocalDate.now().plusDays(1).atTime(23, 59).atZone(ZoneOffset.UTC));
         result.setJson("");
+        result.setDocumentName("List.xml");
         return result;
     }
     
@@ -72,6 +73,7 @@ public final class DummyCourtelUtil {
         result.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
         result.setEndDate(LocalDate.now().plusDays(1).atTime(23, 59).atZone(ZoneOffset.UTC));
         result.setJson("");
+        result.setDocumentName("WebPage.htm");
         return result;
     }
 

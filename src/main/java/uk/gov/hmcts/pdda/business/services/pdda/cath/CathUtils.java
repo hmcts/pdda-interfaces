@@ -49,10 +49,10 @@ public final class CathUtils {
 
     private static final String APIM_ENABLED = "apim.enabled";
     private static final String APIM_URL = "apim.uri";
-    private static final String AUTHENTICATION = "Authorization";
+    private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer %s";
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String CONTENT_TYPE_JSON = "application/json";
+    private static final String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
     private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.nnn'Z'";
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
@@ -67,6 +67,18 @@ public final class CathUtils {
     }
 
     public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
+        // Build the multipart/form-data boundary
+        String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
+        String fileName = courtelJson.getDocumentName();
+        String fieldName = "file";
+        // Build multipart/form-data body
+        String body = 
+            "--" + boundary + "\r\n"
+            + "Content-Disposition: form-data; name=\""
+            + fieldName + "\"; filename=\"" + fileName + "\"\r\n" 
+            + "Content-Type: text/plain\r\n\r\n" 
+            + courtelJson.getJson() + "\r\n" 
+            + "--" + boundary + "--\r\n";
         // Get the times
         String now = getDateTimeAsString(courtelJson.getContentDate());
         String endDate = getDateTimeAsString(courtelJson.getEndDate());
@@ -82,9 +94,11 @@ public final class CathUtils {
             .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
             .header(PublicationConfiguration.CONTENT_DATE, now)
-            .header(AUTHENTICATION, bearerToken)
-            .header(CONTENT_TYPE, CONTENT_TYPE_JSON)
-            .POST(BodyPublishers.ofString(courtelJson.getJson())).build();
+            .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName())
+            .header(AUTHORIZATION, bearerToken)
+            .header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + boundary)
+            .POST(BodyPublishers.ofString(body))
+            .build();
         
         // If the courtelJson is a ListJson, copy the existing request and add the list type header
         if (courtelJson instanceof ListJson) {
@@ -96,7 +110,7 @@ public final class CathUtils {
                 // Add list type header
                 .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
                 // Re-create the body
-                .POST(BodyPublishers.ofString(courtelJson.getJson()))
+                .POST(BodyPublishers.ofString(body))
                 .build();
         }
         
