@@ -266,7 +266,7 @@ public class CourtelHelper {
     protected CathHelper getCathHelper() {
         if (cathHelper == null) {
             this.cathHelper = new CathHelper(getEntityManager(),
-                getXhbXmlDocumentRepository(), getXhbClobRepository());
+                getXhbXmlDocumentRepository(), getXhbClobRepository(), getXhbCourtRepository());
         }
         return cathHelper;
     }

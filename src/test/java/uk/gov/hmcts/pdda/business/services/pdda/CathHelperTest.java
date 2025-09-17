@@ -11,10 +11,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
@@ -75,6 +78,9 @@ class CathHelperTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private XhbCourtRepository mockXhbCourtRepository;
 
     @Mock
     private HttpRequest mockHttpRequest;
@@ -89,19 +95,20 @@ class CathHelperTest {
     private CathHelper classUnderTest;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Mockito.mockStatic(CathUtils.class);
         Mockito.mockStatic(HttpClient.class);
 
         classUnderTest = new CathHelper(mockCathOAuth2Helper, mockEntityManager,
-            mockXhbXmlDocumentRepository, mockXhbClobRepository);
+            mockXhbXmlDocumentRepository, mockXhbClobRepository, mockXhbCourtRepository);
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         // Test default constructor
         classUnderTest =
-            new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository, mockXhbClobRepository);
+            new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository, 
+                mockXhbClobRepository, mockXhbCourtRepository);
         // Clear down statics
         Mockito.clearAllCaches();
     }
@@ -157,38 +164,44 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessDocumentsSuccess() {
+    void testProcessDocuments() {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("ND"))
+            .thenReturn(xhbXmlDocumentDaoList);
+        
+        boolean result = true;
         // Run
-        boolean result = testProcessDocuments();
+        classUnderTest.processDocuments();
+        
         assertTrue(result, TRUE);
     }
 
-    private boolean testProcessDocuments() {
-        // Run
-        try {
-            classUnderTest.processDocuments();
-            return true;
-        } catch (Exception ex) {
-            fail(ex.getMessage());
-            return false;
-        }
-    }
-
-    private boolean testProcessFailedDocuments() {
-        // Run
-        try {
-            classUnderTest.processFailedDocuments();
-            return true;
-        } catch (Exception ex) {
-            fail(ex.getMessage());
-            return false;
-        }
-    }
-
     @Test
-    void testProcessFailedDocumentsSuccess() {
+    void testProcessFailedDocuments() {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("F1"))
+            .thenReturn(xhbXmlDocumentDaoList);
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("F2"))
+            .thenReturn(xhbXmlDocumentDaoList);
+        
+        boolean result = true;
         // Run
-        boolean result = testProcessFailedDocuments();
+        classUnderTest.processFailedDocuments();
+        
         assertTrue(result, TRUE);
     }
 
@@ -197,29 +210,31 @@ class CathHelperTest {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
-        xhbXmlDocumentDao.setXmlDocumentClobId(1L);
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
-
-        Optional<XhbClobDao> xhbClobDao =
-            Optional.of(DummyFormattingUtil.getXhbClobDao(1L, "test"));
-
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, "{\"some\":\"json\"}");
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbClobRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbCourtRepository.getEntityManager()).thenReturn(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Update status
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
-            .thenReturn(xhbClobDao);
+            .thenReturn(Optional.of(xhbClobDao));
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
+            .thenReturn(Optional.of(xhbCourtDao));
+        
+        boolean result = true;
         // Run
-        boolean result = testUpdateAndSend(xhbXmlDocumentDaoList);
-        // Verify
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
         assertTrue(result, TRUE);
-    }
-
-    private boolean testUpdateAndSend(List<XhbXmlDocumentDao> xhbXmlDocumentDaoList) {
-        // Run
-        try {
-            classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
-            return true;
-        } catch (Exception ex) {
-            fail(ex.getMessage());
-            return false;
-        }
     }
     
     @Test
@@ -227,12 +242,24 @@ class CathHelperTest {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
-        xhbXmlDocumentDao.setXmlDocumentClobId(1L);
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
-
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbClobRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Update status
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.anyLong()))
+            .thenReturn(Optional.empty());
+        
+        boolean result = true;
         // Run
-        boolean result = testUpdateAndSend(xhbXmlDocumentDaoList);
-        // Verify
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
         assertTrue(result, TRUE);
     }
 }
