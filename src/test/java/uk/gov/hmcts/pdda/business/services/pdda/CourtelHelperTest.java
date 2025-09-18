@@ -214,9 +214,7 @@ class CourtelHelperTest {
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
-        mockCathHelper.send(EasyMock.isA(CourtelJson.class));
-        EasyMock.expectLastCall();
-
+        
         expectFindByCourtId();
         expectGetEntityManager(mockXhbXmlDocumentRepository);
         expectGetEntityManager(mockXhbCourtRepository);

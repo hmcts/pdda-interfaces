@@ -169,8 +169,7 @@ public class CourtelHelper {
         if (courtelJson != null) {
             // Set the Json string
             courtelJson.setJson(getCathHelper().generateJsonString(xhbCourtelListDao, courtelJson));
-            // Send the Json to CaTH
-            getCathHelper().send(courtelJson);
+            // Sending documents to CaTH is done by the cathtask
         }
     }
 
@@ -266,7 +265,7 @@ public class CourtelHelper {
     protected CathHelper getCathHelper() {
         if (cathHelper == null) {
             this.cathHelper = new CathHelper(getEntityManager(),
-                getXhbXmlDocumentRepository(), getXhbClobRepository());
+                getXhbXmlDocumentRepository(), getXhbClobRepository(), getXhbCourtRepository());
         }
         return cathHelper;
     }
