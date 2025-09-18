@@ -32,19 +32,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * <p>
+
  * Title: CourtelHelperTest.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Luke Gittins
  */
 @SuppressWarnings("PMD")
@@ -277,7 +276,7 @@ class CourtelHelperTest {
         EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
             .andReturn(courtelLisAmount.toString());
         EasyMock
-            .expect(mockXhbCourtelListRepository.findCourtelList(EasyMock.isA(Integer.class),
+            .expect(mockXhbCourtelListRepository.findCourtelListSafe(EasyMock.isA(Integer.class),
                 EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelListDaoList);
         EasyMock.replay(mockEntityManager);

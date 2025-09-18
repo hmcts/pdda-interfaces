@@ -13,19 +13,18 @@ import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 
 /**
- * <p>
+
  * Title: Cath Controller Bean.
- * </p>
- * <p>
+
+
  * Description:
- * </p>
- * <p>
+
+
  * Copyright: Copyright (c) 2024
- * </p>
- * <p>
+
+
  * Company: CGI
- * </p>
- * 
+
  * @author Nathan Toft
  */
 @Stateless
@@ -52,7 +51,7 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     /**
      * Implementation of RemoteTask so that this process is called by the timer process. This
      * scheduled job sends documents to CaTH.
-     * 
+
      */
     @Override
     public void doTask() {
@@ -64,7 +63,7 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
 
     /**
      * Returns a reference to the cathHelper object.
-     * 
+
      * @return cathHelper
      */
     private CathHelper getCathHelper() {
