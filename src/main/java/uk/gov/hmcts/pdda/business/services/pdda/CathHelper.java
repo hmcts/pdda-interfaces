@@ -3,12 +3,24 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.pdda.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.Language;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListType;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.WebPageJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
@@ -16,30 +28,41 @@ import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
-
+ * <p>
  * Title: CathHelper.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings({"PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports",
+    "PMD.CognitiveComplexity", "PMD.GodClass"})
 public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
@@ -52,32 +75,37 @@ public class CathHelper {
     private static final String FAILED_STATUS_ONE = "F1";
     private static final String FAILED_STATUS_TWO = "F2";
     private static final String FAILED_STATUS_THREE = "F3";
+    protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
     
     private final EntityManager entityManager;
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
     private XhbClobRepository xhbClobRepository;
+    private XhbCourtRepository xhbCourtRepository;
 
     private CathOAuth2Helper cathOAuth2Helper;
 
     public CathHelper(EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
-        XhbClobRepository xhbClobRepository) {
+        XhbClobRepository xhbClobRepository,
+        XhbCourtRepository xhbCourtRepository) {
         super();
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
+        this.xhbCourtRepository = xhbCourtRepository;
     }
 
     // JUnit
     public CathHelper(CathOAuth2Helper cathOAuth2Helper, EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
-        XhbClobRepository xhbClobRepository) {
+        XhbClobRepository xhbClobRepository,
+        XhbCourtRepository xhbCourtRepository) {
         this.cathOAuth2Helper = cathOAuth2Helper;
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
+        this.xhbCourtRepository = xhbCourtRepository;
     }
-
 
     public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
         ObjectMapper mapper = new ObjectMapper();
@@ -180,11 +208,18 @@ public class CathHelper {
     }
 
     public Boolean sendToCath(XhbXmlDocumentDao document) {
+        LOG.debug("sendToCath()");
         String clobData = getDocumentClob(document);
         if (clobData != null && !"".equals(clobData)) {
-            LOG.debug("sendToCath");
             LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
-            return SUCCESS;
+            // Generate the CourtelJson object from the document type
+            CourtelJson courtelJson = getJsonObjectByDocType(document);
+            // If the courtelJson has been made, set the clob data and send it to CaTH
+            if (courtelJson != null) {
+                courtelJson.setJson(clobData);
+                send(courtelJson);
+                return SUCCESS;
+            }
         }
         return FAILED;
     }
@@ -197,7 +232,85 @@ public class CathHelper {
         }
         return null;
     }
+    
+    
+    protected CourtelJson getJsonObjectByDocType(XhbXmlDocumentDao xhbXmlDocumentDao) {
+        Optional<XhbCourtDao> xhbCourtDao =
+            getXhbCourtRepository().findByIdSafe(xhbXmlDocumentDao.getCourtId());
+        if (xhbCourtDao.isEmpty()) {
+            LOG.debug("No XhbCourtDao found for id {}", xhbXmlDocumentDao.getCourtId());
+            return null;
+        }
+        
+        // Check Document Type and create appropriate object
+        if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.getDocumentType())) {
+            return populateJsonObject(new ListJson(), xhbXmlDocumentDao, xhbCourtDao.get());
+        } else {
+            return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao,
+                xhbCourtDao.get());
+        }
+    }
 
+    private CourtelJson populateJsonObject(CourtelJson jsonObject,
+        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao) {
+        // Populate type specific fields
+        if (jsonObject instanceof ListJson listJson) {
+            listJson.setListType(ListType.fromString(xhbXmlDocumentDao.getDocumentType()));
+        }
+        // Populate shared fields
+        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
+        jsonObject.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
+        jsonObject.setLanguage(Language.ENGLISH);
+        jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
+        
+        // Fetch and populate the end date from the clob
+        try {
+            jsonObject.setEndDate(getEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId()));
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            LOG.debug("Error getting endDate from Clob: {}", e.getMessage());
+        }
+        return jsonObject;
+    }
+    
+    private ZonedDateTime getEndDateFromClob(Long clobId) 
+        throws ParserConfigurationException, SAXException, IOException {
+        // Get the clob data
+        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
+        if (!xhbClobDao.isEmpty()) {
+            // Perform a node search across the clob data and find the end date field
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            InputSource inputSource = new InputSource(new StringReader(xhbClobDao.get().getClobData()));
+            Document document = documentBuilder.parse(inputSource);
+
+            // Get the cs:ListHeader nodes. This is the clob before transformation, so it uses the cs namespace
+            Node listHeaderNode = document.getElementsByTagName("cs:ListHeader").item(0);
+            
+            if (listHeaderNode != null) {
+                NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
+                for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
+                    Node node = listHeaderChildNodes.item(i);
+                    if (node.getNodeType() == Node.ELEMENT_NODE
+                        && Objects.equals("cs:EndDate", node.getNodeName())) {
+                        String endDate = node.getTextContent();
+                        if (endDate != null) {
+                            try {
+                                // Convert the end date to LocalDateTime and return it
+                                return LocalDate.parse(endDate).atTime(23, 59).atZone(ZoneOffset.UTC);
+                            } catch (Exception e) {
+                                // If there is an error parsing the date, log it and return current date
+                                LOG.debug("Error parsing endDate: {}", e.getMessage());
+                                return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Default to todays date if any above conditions are not met
+        return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
+    }
+    
     private CathOAuth2Helper getCathOAuth2Helper() {
         if (cathOAuth2Helper == null) {
             this.cathOAuth2Helper = new CathOAuth2Helper();
@@ -206,14 +319,21 @@ public class CathHelper {
     }
 
     private XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
-        if (xhbXmlDocumentRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbXmlDocumentRepository)) {
             xhbXmlDocumentRepository = new XhbXmlDocumentRepository(entityManager);
         }
         return xhbXmlDocumentRepository;
     }
 
+    protected XhbCourtRepository getXhbCourtRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbCourtRepository)) {
+            xhbCourtRepository = new XhbCourtRepository(entityManager);
+        }
+        return xhbCourtRepository;
+    }
+    
     private XhbClobRepository getXhbClobRepository() {
-        if (xhbClobRepository == null) {
+        if (!RepositoryUtil.isRepositoryActive(xhbClobRepository)) {
             xhbClobRepository = new XhbClobRepository(entityManager);
         }
         return xhbClobRepository;

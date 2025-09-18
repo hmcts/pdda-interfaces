@@ -39,18 +39,19 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 /**
-
+ * <p>
  * Title: CourtelHelper.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Luke Gittins
  * @version 1.0
  */
@@ -134,7 +135,7 @@ public class CourtelHelper {
     }
 
     public List<XhbCourtelListDao> getCourtelList() {
-        return getXhbCourtelListRepository().findCourtelListSafe(
+        return getXhbCourtelListRepository().findCourtelList(
             getConfigPropValue(CONFIG_COURTEL_MAX_RETRY),
             getIntervalValue(getConfigPropValue(CONFIG_MESSAGE_LOOKUP_DELAY)),
             getConfigPropValue(CONFIG_COURTEL_LIST_AMOUNT));
@@ -168,8 +169,7 @@ public class CourtelHelper {
         if (courtelJson != null) {
             // Set the Json string
             courtelJson.setJson(getCathHelper().generateJsonString(xhbCourtelListDao, courtelJson));
-            // Send the Json to CaTH
-            getCathHelper().send(courtelJson);
+            // Sending documents to CaTH is done by the cathtask
         }
     }
 
@@ -265,7 +265,7 @@ public class CourtelHelper {
     protected CathHelper getCathHelper() {
         if (cathHelper == null) {
             this.cathHelper = new CathHelper(getEntityManager(),
-                getXhbXmlDocumentRepository(), getXhbClobRepository());
+                getXhbXmlDocumentRepository(), getXhbClobRepository(), getXhbCourtRepository());
         }
         return cathHelper;
     }

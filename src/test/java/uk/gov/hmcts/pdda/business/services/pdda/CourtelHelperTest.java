@@ -32,18 +32,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
+ * <p>
  * Title: CourtelHelperTest.
-
-
+ * </p>
+ * <p>
  * Description:
-
-
+ * </p>
+ * <p>
  * Copyright: Copyright (c) 2024
-
-
+ * </p>
+ * <p>
  * Company: CGI
-
+ * </p>
+ * 
  * @author Luke Gittins
  */
 @SuppressWarnings("PMD")
@@ -213,9 +214,7 @@ class CourtelHelperTest {
         EasyMock.expect(mockCathHelper.generateJsonString(EasyMock.isA(XhbCourtelListDao.class),
             EasyMock.isA(CourtelJson.class))).andReturn("");
         EasyMock.expect(mockBlobHelper.getBlob(EasyMock.isA(Long.class))).andReturn(xhbBlobDao);
-        mockCathHelper.send(EasyMock.isA(CourtelJson.class));
-        EasyMock.expectLastCall();
-
+        
         expectFindByCourtId();
         expectGetEntityManager(mockXhbXmlDocumentRepository);
         expectGetEntityManager(mockXhbCourtRepository);
@@ -278,7 +277,7 @@ class CourtelHelperTest {
         EasyMock.expect(mockConfigPropMaintainer.getPropertyValue(EasyMock.isA(String.class)))
             .andReturn(courtelLisAmount.toString());
         EasyMock
-            .expect(mockXhbCourtelListRepository.findCourtelListSafe(EasyMock.isA(Integer.class),
+            .expect(mockXhbCourtelListRepository.findCourtelList(EasyMock.isA(Integer.class),
                 EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
             .andReturn(xhbCourtelListDaoList);
         EasyMock.replay(mockEntityManager);
