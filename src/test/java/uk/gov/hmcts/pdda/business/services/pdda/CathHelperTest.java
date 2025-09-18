@@ -211,7 +211,8 @@ class CathHelperTest {
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, "{\"some\":\"json\"}");
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L,
+            "<cs:ListHeader><cs:EndDate>2020-01-21</cs:EndDate></cs:ListHeader>");
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
         
         // Ensure the entity managers are set
