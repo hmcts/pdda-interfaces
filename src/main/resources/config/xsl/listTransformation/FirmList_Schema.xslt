@@ -37,6 +37,8 @@
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:CourtHouseFax"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:Description"/>
 
+    <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:SittingSequenceNo"/>
+
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Judge/cs:CRESTjudgeID"/>
 
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Justice/cs:CRESTjudgeID"/>
@@ -44,9 +46,9 @@
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:StartDate"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:EndDate"/>
 
-    <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:HearingDetails/cs:ListNote"/>
-
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CRESThearingID"/>
+
+    <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:HearingDetails/cs:ListNote"/>
 
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:Advocate/cs:PersonalDetails/cs:DateOfBirth"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:Advocate/cs:PersonalDetails/cs:Age"/>
@@ -119,10 +121,10 @@
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Defendants/cs:Defendant/cs:HateCrime"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Defendants/cs:Defendant/cs:DefendantNumber"/>
 
-    <xsl:template match="cs:ReserveList/cs:HearingSequenceNumber"/>
-    <xsl:template match="cs:ReserveList/cs:HearingDetails/cs:ListNote"/>
-    <xsl:template match="cs:ReserveList/cs:CRESThearingID"/>
-    <xsl:template match="cs:ReserveList/cs:TimeMarkingNote"/>
+    <xsl:template match="cs:ReserveList/cs:Hearing/cs:HearingSequenceNumber"/>
+    <xsl:template match="cs:ReserveList/cs:Hearing/cs:CRESThearingID"/>
+    <xsl:template match="cs:ReserveList/cs:Hearing/cs:HearingDetails/cs:ListNote"/>
+    <xsl:template match="cs:ReserveList/cs:Hearing/cs:TimeMarkingNote"/>
 
     <xsl:template match="cs:ReserveList/cs:Prosecution/cs:Advocate/cs:PersonalDetails/cs:DateOfBirth"/>
     <xsl:template match="cs:ReserveList/cs:Prosecution/cs:Advocate/cs:PersonalDetails/cs:Age"/>

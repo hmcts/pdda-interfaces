@@ -38,6 +38,8 @@
   	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:CourtHouseFax"/>
   	<xsl:template match="cs:CourtLists/cs:CourtList/cs:CourtHouse/cs:Description"/>
 
+	  <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:SittingSequenceNo"/>
+
   	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Judge/cs:CRESTjudgeID"/>
   	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:Justice/cs:CRESTjudgeID"/>
   	<xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Judiciary/cs:StartDate"/>
