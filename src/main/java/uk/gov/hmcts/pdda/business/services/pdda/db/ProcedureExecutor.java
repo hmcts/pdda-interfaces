@@ -58,6 +58,11 @@ public class ProcedureExecutor {
 
         long start = System.nanoTime();
         try {
+            // Sonar java:S2077 justification:
+            // - `schema` validated by safeSchema() against [a-z_][a-z0-9_]{0,62}
+            // - procedure name comes from enum ProcedureDef (not user-controlled)
+            // - all values are bound via JDBC placeholders
+            @SuppressWarnings("java:S2077")
             int updated = jdbc.execute((ConnectionCallback<Integer>) con -> {
                 try (java.sql.CallableStatement cs = con.prepareCall(sql)) {
                     cs.setQueryTimeout(toSeconds(job.getTimeout() == null ? Duration.ofSeconds(30) : job.getTimeout()));
