@@ -37,6 +37,12 @@ public class ProcedureExecutor {
     }
 
 
+    /**
+     * Execute the given jobs stored procedure with parameters.
+     * This runs in a new transaction, separate from any caller.
+     * @param job The job to execute, containing procedure name and parameters.
+     * @return true if the procedure executed successfully, false otherwise.
+     */
     @SuppressWarnings("java:S2077")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean execute(JobToRun job) {
@@ -59,10 +65,6 @@ public class ProcedureExecutor {
 
         long start = System.nanoTime();
         try {
-            // Sonar java:S2077 justification:
-            // - `schema` validated by safeSchema() against [a-z_][a-z0-9_]{0,62}
-            // - procedure name comes from enum ProcedureDef (not user-controlled)
-            // - all values are bound via JDBC placeholders
             int updated = jdbc.execute((ConnectionCallback<Integer>) con -> {
                 try (java.sql.CallableStatement cs = con.prepareCall(sql)) {
                     cs.setQueryTimeout(toSeconds(job.getTimeout() == null ? Duration.ofSeconds(30) : job.getTimeout()));

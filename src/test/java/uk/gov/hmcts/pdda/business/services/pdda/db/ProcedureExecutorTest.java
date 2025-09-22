@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD","java:S6068"})
 class ProcedureExecutorTest {
 
     private JdbcTemplate jdbc;

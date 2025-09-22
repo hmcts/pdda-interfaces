@@ -17,9 +17,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@SuppressWarnings({"java:S2583", "java:S2629"})
 public class PddaDbSchedulerHelper extends AbstractControllerBean {
     
     private static final Logger LOG = LoggerFactory.getLogger(PddaDbSchedulerHelper.class);
+    private static final String JOB_PREFIX = "job__";
+    private static final String JOB_LASTRUNTIME_SUFFIX = "__lastruntime";
 
     private XhbConfigPropRepository xhbConfigPropRepository;
     
@@ -83,34 +86,8 @@ public class PddaDbSchedulerHelper extends AbstractControllerBean {
             // Step 3: For each job, get the last run time and check if it is to be run now
             LocalDateTime lastRunTime = null;
             for (String jobName : jobNames) {
-                jobName = jobName.trim();
-                if (!jobName.isEmpty()) {
-                    LOG.debug("Processing job: {}", jobName);
-                    // Fetch last run time
-                    List<XhbConfigPropDao> lastRunTimeList = xhbConfigPropRepository
-                        .findByPropertyNameSafe("job__" + jobName + "__lastruntime");
-                    String lastRunTimeAsString = (lastRunTimeList != null && !lastRunTimeList.isEmpty())
-                        ? lastRunTimeList.get(0).getPropertyValue() : null;
-                    lastRunTime = lastRunTimeAsString != null
-                        ? LocalDateTime.parse(lastRunTimeAsString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                        : null;
-                    LOG.debug("Last run time for {}: {}", jobName, lastRunTime);
-                }
-                
-                // Step 4: Check if lastRunTime is null or empty, or if it's not today's date
-                // If so, we consider it due to run now, so add it to the jobsToRun list
-                boolean dueToRun = (lastRunTime == null)
-                    || lastRunTime.toLocalDate().isBefore(LocalDateTime.now().toLocalDate());
-                
-                if (dueToRun) {
-                    LOG.debug("Job {} is due to run", jobName);
-                    if (jobsToRun == null) {
-                        jobsToRun = new java.util.ArrayList<>();
-                    }
-                    jobsToRun.add(new JobToRun(jobName, lastRunTime));
-                } else {
-                    LOG.debug("Job {} is not due to run", jobName);
-                }
+                jobsToRun = doWorkToGetJobDetails(jobName, lastRunTime, jobsToRun);
+                LOG.debug("Job to run added: {}", jobName);
             }
         }
         
@@ -118,6 +95,41 @@ public class PddaDbSchedulerHelper extends AbstractControllerBean {
     }
 
     
+    @SuppressWarnings("PMD")
+    private List<JobToRun> doWorkToGetJobDetails(String jobName, LocalDateTime lastRunTime,
+        List<JobToRun> jobsToRun) {
+        
+        jobName = jobName.trim();
+        if (!jobName.isEmpty()) {
+            LOG.debug("Processing job: {}", jobName);
+            // Fetch last run time
+            List<XhbConfigPropDao> lastRunTimeList = xhbConfigPropRepository
+                .findByPropertyNameSafe(JOB_PREFIX + jobName + JOB_LASTRUNTIME_SUFFIX);
+            String lastRunTimeAsString = (lastRunTimeList != null && !lastRunTimeList.isEmpty())
+                ? lastRunTimeList.get(0).getPropertyValue() : null;
+            lastRunTime = lastRunTimeAsString != null
+                ? LocalDateTime.parse(lastRunTimeAsString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                : null;
+            LOG.debug("Last run time for {}: {}", jobName, lastRunTime);
+        }
+        
+        // Step 4: Check if lastRunTime is null or empty, or if it's not today's date
+        // If so, we consider it due to run now, so add it to the jobsToRun list
+        boolean dueToRun = (lastRunTime == null)
+            || lastRunTime.toLocalDate().isBefore(LocalDateTime.now().toLocalDate());
+        
+        if (dueToRun) {
+            LOG.debug("Job {} is due to run", jobName);
+            if (jobsToRun == null) {
+                jobsToRun = new java.util.ArrayList<>();
+            }
+            jobsToRun.add(new JobToRun(jobName, lastRunTime));
+        } else {
+            LOG.debug("Job {} is not due to run", jobName);
+        }
+        return jobsToRun;
+    }
+
     /**
      * Fetch job details from the database and populate the JobToRun object.
      * @param job JobToRun object to populate
@@ -130,7 +142,7 @@ public class PddaDbSchedulerHelper extends AbstractControllerBean {
         String jobName = job.getJobName();
         // 1. Fetch number of parameters
         List<XhbConfigPropDao> numParamsList = xhbConfigPropRepository
-            .findByPropertyNameSafe("job__" + jobName + "__numparams");
+            .findByPropertyNameSafe(JOB_PREFIX + jobName + "__numparams");
         int numParams = 0;
         if (numParamsList != null && !numParamsList.isEmpty()) {
             try {
@@ -146,7 +158,7 @@ public class PddaDbSchedulerHelper extends AbstractControllerBean {
         String[] params = new String[numParams];
         for (int i = 1; i <= numParams; i++) {
             List<XhbConfigPropDao> paramList =
-                xhbConfigPropRepository.findByPropertyNameSafe("job__" + jobName + "__param" + i);
+                xhbConfigPropRepository.findByPropertyNameSafe(JOB_PREFIX + jobName + "__param" + i);
             params[i - 1] = (paramList != null && !paramList.isEmpty())
                     ? paramList.get(0).getPropertyValue()
                     : null;
@@ -219,13 +231,13 @@ public class PddaDbSchedulerHelper extends AbstractControllerBean {
      */
     private boolean updateLastRunTime(String jobName, String nowAsString) {
         List<XhbConfigPropDao> lastRunTimeList = xhbConfigPropRepository
-            .findByPropertyNameSafe("job__" + jobName + "__lastruntime");
+            .findByPropertyNameSafe(JOB_PREFIX + jobName + JOB_LASTRUNTIME_SUFFIX);
         XhbConfigPropDao lastRunTimeProp;
         if (lastRunTimeList == null || lastRunTimeList.isEmpty()) {
             // No existing record, this is wrong but we will create one
             LOG.warn("No existing last run time record for {}, creating new one", jobName);
             lastRunTimeProp = new XhbConfigPropDao();
-            lastRunTimeProp.setPropertyName("job__" + jobName + "__lastruntime");
+            lastRunTimeProp.setPropertyName(JOB_PREFIX + jobName + JOB_LASTRUNTIME_SUFFIX);
         } else {
             lastRunTimeProp = lastRunTimeList.get(0);
         }

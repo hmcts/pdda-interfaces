@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "java:S2696"})
 public class SpringContext implements ApplicationContextAware {
     private static ApplicationContext ctx;
 
