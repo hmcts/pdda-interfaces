@@ -37,6 +37,7 @@ public class ProcedureExecutor {
     }
 
 
+    @SuppressWarnings("java:S2077")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean execute(JobToRun job) {
         var def = ProcedureDef.resolve(job.getProcedureName())
@@ -54,7 +55,7 @@ public class ProcedureExecutor {
         }
 
         String placeholders = String.join(",", java.util.Collections.nCopies(expected, "?"));
-        String sql = "{ call " + schema + "." + def.getDbName() + "(" + placeholders + ") }";
+        String sql = "CALL " + schema + "." + def.getDbName() + "(" + placeholders + ")";
 
         long start = System.nanoTime();
         try {
@@ -62,7 +63,6 @@ public class ProcedureExecutor {
             // - `schema` validated by safeSchema() against [a-z_][a-z0-9_]{0,62}
             // - procedure name comes from enum ProcedureDef (not user-controlled)
             // - all values are bound via JDBC placeholders
-            @SuppressWarnings("java:S2077")
             int updated = jdbc.execute((ConnectionCallback<Integer>) con -> {
                 try (java.sql.CallableStatement cs = con.prepareCall(sql)) {
                     cs.setQueryTimeout(toSeconds(job.getTimeout() == null ? Duration.ofSeconds(30) : job.getTimeout()));
@@ -75,7 +75,8 @@ public class ProcedureExecutor {
                             cs.setObject(i + 1, v, sqlType);
                         }
                     }
-                    return cs.executeUpdate();
+                    cs.execute();           // <-- call procedures with execute()
+                    return 0;               // you can keep an int result if the caller logs rows
                 }
             });
 

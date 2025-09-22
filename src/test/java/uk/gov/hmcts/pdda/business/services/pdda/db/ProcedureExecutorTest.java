@@ -53,7 +53,7 @@ class ProcedureExecutorTest {
 
         when(conn.createStatement()).thenReturn(stmt);
         when(conn.prepareCall(any(String.class))).thenReturn(cstmt);
-        when(cstmt.executeUpdate()).thenReturn(0);
+        when(cstmt.execute()).thenReturn(true);
 
         // Stubs jdbc.execute(ConnectionCallback<T>) to invoke the callback with our mock Connection.
         stubJdbcExecuteReturnCallbackResult();
@@ -109,7 +109,7 @@ class ProcedureExecutorTest {
         assertEquals("SUCCESS", job.getJobStatus());
 
         // JDBC call-escape syntax
-        assertEquals("{ call my_schema.clear_audit_tables(?,?) }", callSqlCaptor.getValue());
+        assertEquals("CALL my_schema.clear_audit_tables(?,?)", callSqlCaptor.getValue());
 
         // Timeout now applied on the CallableStatement
         verify(cstmt).setQueryTimeout(5);
@@ -117,7 +117,7 @@ class ProcedureExecutorTest {
         // Coercion & SQL types unchanged
         verify(cstmt).setObject(eq(1), eq("NON_PROD"), eq(Types.VARCHAR));
         verify(cstmt).setObject(eq(2), eq(5000), eq(Types.INTEGER));
-        verify(cstmt).executeUpdate();
+        verify(cstmt).execute();
     }
 
 
@@ -134,7 +134,7 @@ class ProcedureExecutorTest {
 
         assertTrue(ok);
         assertEquals("SUCCESS", job.getJobStatus());
-        assertEquals("{ call pdda_housekeeping_pkg.nullify_live_display_fields() }", callSqlCaptor.getValue());
+        assertEquals("CALL pdda_housekeeping_pkg.nullify_live_display_fields()", callSqlCaptor.getValue());
     }
 
 
