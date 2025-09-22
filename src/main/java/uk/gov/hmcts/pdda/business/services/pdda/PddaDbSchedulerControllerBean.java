@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
@@ -45,6 +46,7 @@ public class PddaDbSchedulerControllerBean extends AbstractControllerBean implem
     private PddaDbSchedulerHelper pddaDbSchedulerHelper;
     
     // REQUIRED by the legacy scheduler (reflective new with EntityManager)
+    @Autowired
     public PddaDbSchedulerControllerBean(EntityManager entityManager) {
         super(entityManager);
     }
@@ -78,10 +80,10 @@ public class PddaDbSchedulerControllerBean extends AbstractControllerBean implem
     /**
      * Get the list of DB jobs to run.
      */
-    @SuppressWarnings("PMD")
     public List<JobToRun> getJobsToRun() {
         LOG.debug("Calling getJobsToRun()");
         List<JobToRun> jobs = getPddaDbSchedulerHelper().getJobsToRun();
+        LOG.debug("getJobsToRun() returned {} jobs", (jobs != null) ? jobs.size() : 0);
         return jobs;
     }
     

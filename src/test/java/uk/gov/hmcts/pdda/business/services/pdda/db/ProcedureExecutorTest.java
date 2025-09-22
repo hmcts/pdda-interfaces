@@ -95,16 +95,12 @@ class ProcedureExecutorTest {
 
     @Test
     void execute_success_honorsSchemaBuildsSql_setsTimeout_andCallsProcedure() throws Exception {
-        // Arrange a known proc with 2 params
         JobToRun job = new JobToRun("clear_audit_tables", null);
-        job.setSchema("my_schema"); // non-null schema should be used
-        job.setTimeout(Duration.ofSeconds(5)); // 5000 ms
+        job.setSchema("my_schema");
+        job.setTimeout(Duration.ofSeconds(5));
         job.setProcedureParams(new String[] {"NON_PROD", "5000"}); // VARCHAR, INTEGER
 
-        ArgumentCaptor<String> setLocalCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> callSqlCaptor = ArgumentCaptor.forClass(String.class);
-
-        when(stmt.execute(setLocalCaptor.capture())).thenReturn(true);
         when(conn.prepareCall(callSqlCaptor.capture())).thenReturn(cstmt);
 
         boolean ok = executor.execute(job);
@@ -112,25 +108,24 @@ class ProcedureExecutorTest {
         assertTrue(ok);
         assertEquals("SUCCESS", job.getJobStatus());
 
-        // Timeout applied with SET LOCAL statement_timeout = 5000
-        assertTrue(setLocalCaptor.getAllValues().stream()
-                .anyMatch(s -> s.equals("SET LOCAL statement_timeout = 5000")));
+        // JDBC call-escape syntax
+        assertEquals("{ call my_schema.clear_audit_tables(?,?) }", callSqlCaptor.getValue());
 
-        // Verify CALL built correctly (no space after comma per implementation)
-        String callSql = callSqlCaptor.getValue();
-        assertEquals("CALL my_schema.clear_audit_tables(?,?)", callSql);
+        // Timeout now applied on the CallableStatement
+        verify(cstmt).setQueryTimeout(5);
 
-        // Verify parameters coerced and set with sql types
-        verify(cstmt).setObject(eq(1), eq("NON_PROD"), eq(Types.VARCHAR)); // VARCHAR
-        verify(cstmt).setObject(eq(2), eq(5000), eq(Types.INTEGER));       // INTEGER coerced from "5000"
+        // Coercion & SQL types unchanged
+        verify(cstmt).setObject(eq(1), eq("NON_PROD"), eq(Types.VARCHAR));
+        verify(cstmt).setObject(eq(2), eq(5000), eq(Types.INTEGER));
         verify(cstmt).executeUpdate();
     }
+
 
     @Test
     void execute_success_withNullSchema_usesDefaultHousekeepingSchema() throws Exception {
         JobToRun job = new JobToRun("nullify_live_display_fields", null);
-        job.setSchema(null); // default expected: pdda_housekeeping_pkg
-        job.setProcedureParams(new String[] {}); // 0 expected
+        job.setSchema(null);
+        job.setProcedureParams(new String[] {});
 
         ArgumentCaptor<String> callSqlCaptor = ArgumentCaptor.forClass(String.class);
         when(conn.prepareCall(callSqlCaptor.capture())).thenReturn(cstmt);
@@ -139,8 +134,9 @@ class ProcedureExecutorTest {
 
         assertTrue(ok);
         assertEquals("SUCCESS", job.getJobStatus());
-        assertEquals("CALL pdda_housekeeping_pkg.nullify_live_display_fields()", callSqlCaptor.getValue());
+        assertEquals("{ call pdda_housekeeping_pkg.nullify_live_display_fields() }", callSqlCaptor.getValue());
     }
+
 
     @Test
     void execute_setsZeroTimeout_whenNegativeProvided() throws Exception {
@@ -148,31 +144,20 @@ class ProcedureExecutorTest {
         job.setTimeout(Duration.ofMillis(-123)); // becomes 0
         job.setProcedureParams(new String[] {});
 
-        ArgumentCaptor<String> setLocalCaptor = ArgumentCaptor.forClass(String.class);
-        when(stmt.execute(setLocalCaptor.capture())).thenReturn(true);
+        when(conn.prepareCall(any(String.class))).thenReturn(cstmt);
 
         boolean ok = executor.execute(job);
 
         assertTrue(ok);
-        assertTrue(setLocalCaptor.getAllValues().stream()
-                .anyMatch(s -> s.equals("SET LOCAL statement_timeout = 0")));
+        verify(cstmt).setQueryTimeout(0);
     }
 
-    @Test
+
     @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
     void execute_catchesDataAccessException_setsFailed_andReturnsFalse() {
-        // Two jdbc.execute() calls happen:
-        // 1) timeout SET LOCAL (should succeed)
-        // 2) CALL (should throw DataAccessException)
-        final int[] callIndex = {0};
         when(jdbc.execute((ConnectionCallback) any(ConnectionCallback.class)))
-            .thenAnswer((Answer) inv -> {
-                if (callIndex[0]++ == 0) {
-                    ConnectionCallback cb = inv.getArgument(0);
-                    return cb.doInConnection(conn); // timeout path ok
-                }
-                throw new DataAccessResourceFailureException("boom");
-            });
+            .thenThrow(new DataAccessResourceFailureException("boom"));
 
         JobToRun job = new JobToRun("clear_old_records", null);
         job.setProcedureParams(new String[] {"30", "100"});
@@ -182,6 +167,7 @@ class ProcedureExecutorTest {
         assertFalse(ok);
         assertEquals("FAILED", job.getJobStatus());
     }
+
 
     // ---- Focused unit tests for the private coerce(...) helper via reflection ----
 

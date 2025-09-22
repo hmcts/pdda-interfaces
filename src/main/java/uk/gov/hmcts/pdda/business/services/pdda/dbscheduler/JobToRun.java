@@ -136,7 +136,7 @@ public class JobToRun {
         } catch (Exception e) {
             this.jobStatus = "FAILED";
             // Log the exception
-            LOG.error("Error executing job " + jobName + ": " + e.getMessage());
+            LOG.error("Error executing job {} : {}", jobName, e.getMessage());
             return false;
         }
     }

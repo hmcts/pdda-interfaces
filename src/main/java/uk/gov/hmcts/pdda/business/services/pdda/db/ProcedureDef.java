@@ -7,27 +7,28 @@ import java.util.Locale;
 import java.util.Optional;
 
 public enum ProcedureDef {
+    
     CLEAR_AUDIT_TABLES(
         "clear_audit_tables",
         List.of(
-            new SqlParameter("p_env_in", java.sql.Types.VARCHAR),
-            new SqlParameter("p_limit_in", java.sql.Types.INTEGER)
+            new SqlParameter(ProcParamNames.ENV_IN, java.sql.Types.VARCHAR),
+            new SqlParameter(ProcParamNames.LIMIT_IN, java.sql.Types.INTEGER)
         )
     ),
     
     CLEAR_OBSOLETE_MESSAGES(
         "clear_obsolete_messages",
         List.of(
-            new SqlParameter("p_errortext_in", java.sql.Types.VARCHAR),
-            new SqlParameter("p_limit_in", java.sql.Types.INTEGER)
+            new SqlParameter(ProcParamNames.ERRORTEXT_IN, java.sql.Types.VARCHAR),
+            new SqlParameter(ProcParamNames.LIMIT_IN, java.sql.Types.INTEGER)
         )
     ),
         
     CLEAR_OLD_RECORDS(
         "clear_old_records",
         List.of(
-            new SqlParameter("p_days_in", java.sql.Types.INTEGER),
-            new SqlParameter("p_limit_in", java.sql.Types.INTEGER)
+            new SqlParameter(ProcParamNames.DAYS_IN, java.sql.Types.INTEGER),
+            new SqlParameter(ProcParamNames.LIMIT_IN, java.sql.Types.INTEGER)
         )
     ),
         
@@ -69,5 +70,6 @@ public enum ProcedureDef {
         }
         return Optional.empty();
     }
+    
 }
 
