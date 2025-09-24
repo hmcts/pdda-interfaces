@@ -271,8 +271,10 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         final String methodName = "initialiseDisplay(" + courtId + "," + displayId + METHOD_SUFFIX;
         LOG.debug(ENTERED, methodName);
 
+        Optional<XhbCourtDao> courts = getXhbCourtRepository().findByIdSafe(courtId);
+        String courtName = courts.isPresent() ? courts.get().getCourtName() : "Unknown Court";
         CourtConfigurationChange ccc =
-            new CourtDisplayConfigurationChange(courtId, displayId, true);
+            new CourtDisplayConfigurationChange(courtId, courtName, displayId, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Display initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);
@@ -289,7 +291,9 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
     public void initialiseCourt(final Integer courtId) {
         LOG.debug("initialiseCourt({})", courtId);
 
-        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, true);
+        Optional<XhbCourtDao> courts = getXhbCourtRepository().findByIdSafe(courtId);
+        String courtName = courts.isPresent() ? courts.get().getCourtName() : "Unknown Court";
+        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, courtName, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Court initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);

@@ -78,7 +78,7 @@ class DefaultEventWorkFlowTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(-99, null);
+        return new CourtRoomIdentifier(-99, null, "Test Court", 123);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

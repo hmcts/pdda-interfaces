@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtRotationSetConfigurationChange;
+import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdisplay.XhbDisplayDao;
@@ -40,13 +41,13 @@ import java.util.Optional;
  * @version $Id: RotationSetMaintainHelper.java,v 1.8 2006/04/12 13:18:29 bzjrnl Exp $
  */
 
-public class RotationSetMaintainHelper {
+public class RotationSetMaintainHelper extends AbstractControllerBean {
     private static final Logger LOG = LoggerFactory.getLogger(RotationSetMaintainHelper.class);
 
     private static final String YES = "Y";
     
     protected RotationSetMaintainHelper() {
-        // Protected constructor
+        super();
     }
 
     /**
@@ -97,12 +98,13 @@ public class RotationSetMaintainHelper {
         PublicDisplayNotifier notifier, final EntityManager entityManager) {
         LOG.debug("setDisplayDocumentsForRotationSet({},{},{})", rotationSet, notifier, entityManager);
         setDisplayDocumentsForRotationSet(rotationSet, notifier, new XhbRotationSetsRepository(entityManager),
-            new XhbRotationSetDdRepository(entityManager));
+            new XhbRotationSetDdRepository(entityManager), new XhbCourtRepository(entityManager));
     }
 
     public static void setDisplayDocumentsForRotationSet(RotationSetComplexValue rotationSet,
         PublicDisplayNotifier notifier, final XhbRotationSetsRepository xhbRotationSetsRepository,
-        final XhbRotationSetDdRepository xhbRotationSetDdRepository) {
+        final XhbRotationSetDdRepository xhbRotationSetDdRepository,
+        final XhbCourtRepository xhbCourtRepository) {
         LOG.debug("setDisplayDocumentsForRotationSet({},{},{},{})", rotationSet, notifier, xhbRotationSetsRepository,
             xhbRotationSetDdRepository);
 
@@ -134,7 +136,7 @@ public class RotationSetMaintainHelper {
         // then send a message.
         if (hasNotifyChanges) {
             LOG.debug("Sending Notification");
-            sendNotification(rotationSet, notifier);
+            sendNotification(rotationSet, notifier, new XhbCourtRepository(xhbCourtRepository.getEntityManager()));
         }
     }
 
@@ -256,13 +258,24 @@ public class RotationSetMaintainHelper {
 
      * @param rotationSet The rotation set that has been changed
      */
-    private static void sendNotification(RotationSetComplexValue rotationSet, PublicDisplayNotifier notifier) {
+    private static void sendNotification(RotationSetComplexValue rotationSet, PublicDisplayNotifier notifier,
+        XhbCourtRepository xhbCourtRepository) {
         LOG.debug("sendNotification({},{})", rotationSet, notifier);
+        Optional<XhbCourtDao> courts = Optional.empty();
+        try {
+            courts = xhbCourtRepository.findByIdSafe(rotationSet.getRotationSetsDao().getCourtId());
+        } catch (Exception e) {
+            LOG.error("Exception finding court for id {}: {}", rotationSet.getRotationSetsDao().getCourtId(),
+                e.getMessage(), e);
+        }
+        String courtName = courts.isPresent() ? courts.get().getCourtName() : "Unknown Court";
         CourtConfigurationChange ccc =
-            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId(),
+            new CourtRotationSetConfigurationChange(rotationSet.getRotationSetsDao().getCourtId(), courtName,
                 rotationSet.getRotationSetsDao().getPrimaryKey());
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }
+    
+    
 
 }

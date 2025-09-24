@@ -20,7 +20,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
 
     static final long serialVersionUID = 8303326719524067907L;
 
-    private final CourtConfigurationChange change;
+    private CourtConfigurationChange change;
 
     /**
      * Creates a new ConfigurationChangeEvent object.
@@ -39,6 +39,10 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
     public CourtConfigurationChange getChange() {
         return change;
     }
+    
+    public void setConfigurationChange(CourtConfigurationChange change) {
+        this.change = change;
+    }
 
     /**
      * getEventType.
@@ -49,12 +53,7 @@ public class ConfigurationChangeEvent implements PublicDisplayEvent {
     public EventType getEventType() {
         return EventType.getEventType(EventType.CONFIGURATION_EVENT);
     }
-
-    /**
-     * Get the court ID for this event.
-
-     * @return the court Id for this event.
-     */
+    
     @Override
     public Integer getCourtId() {
         return change.getCourtId();

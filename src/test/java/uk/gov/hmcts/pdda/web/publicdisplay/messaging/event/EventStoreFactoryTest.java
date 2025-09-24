@@ -81,8 +81,8 @@ class EventStoreFactoryTest {
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {
-        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null);
-        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null);
+        CourtRoomIdentifier from = new CourtRoomIdentifier(-99, null, "Test Court", 123);
+        CourtRoomIdentifier to = new CourtRoomIdentifier(-1, null, "Test Court", 123);
         return new MoveCaseEvent(from, to, null);
     }
 

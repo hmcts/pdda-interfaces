@@ -128,7 +128,8 @@ public class DocumentInitializer {
     }
     
     private CourtConfigurationChange getCourtConfigurationChange(int courtId) {
-        return new CourtConfigurationChange(courtId, true);
+        String courtName = ""; // We dont need to populate this variable here
+        return new CourtConfigurationChange(courtId, courtName, true);
     }
     
     private ConfigurationChangeEvent getConfigurationChangeEvent(CourtConfigurationChange change) {

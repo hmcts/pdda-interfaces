@@ -14,6 +14,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
@@ -63,9 +65,11 @@ public class SftpService extends XhibitPddaHelper {
      */
     public SftpService(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
         Environment environment, PddaMessageHelper pddaMessageHelper,
-        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
+        XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository) {
         super(entityManager, xhbConfigPropRepository, environment,
-            pddaMessageHelper, clobRepository, courtRepository);
+            pddaMessageHelper, clobRepository, courtRepository,
+            courtRoomRepository, courtSiteRepository);
     }
 
     public SftpService(EntityManager entityManager) {
@@ -301,6 +305,10 @@ public class SftpService extends XhibitPddaHelper {
             if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XPD_")) {
                 isList = false;
                 event = validation.getPublicDisplayEvent(filename, clobData);
+                
+                // Now translate the event so that the court room id is correct, if necessary
+                event = PddaMessageUtil.translatePublicDisplayEvent(event, getCourtRepository(),
+                    getCourtRoomRepository(), getCourtSiteRepository());
                 sendMessage(event);
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;

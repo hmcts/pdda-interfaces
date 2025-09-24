@@ -12,12 +12,14 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChang
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless
 @Service
@@ -144,7 +146,9 @@ public class CppFormattingControllerBean extends AbstractControllerBean implemen
      */
     public void refreshPublicDisplaysForCourt(Integer courtId) {
         LOG.debug("refreshPublicDisplaysForCourt({})", courtId);
-        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, true);
+        Optional<XhbCourtDao> courts = getXhbCourtRepository().findByIdSafe(courtId);
+        String courtName = courts.isPresent() ? courts.get().getCourtName() : "Unknown Court";
+        CourtConfigurationChange ccc = new CourtConfigurationChange(courtId, courtName, true);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         getPublicDisplayNotifier().sendMessage(ccEvent);
     }
