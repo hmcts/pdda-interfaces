@@ -21,6 +21,8 @@ import java.io.Serializable;
 @Access(AccessType.FIELD)
 @NamedQuery(name = "XHB_COURT.findByCrestCourtIdValue",
     query = "SELECT o from XHB_COURT o WHERE o.crestCourtId = :crestCourtId ")
+@NamedQuery(name = "XHB_COURT.findByCourtNameValue",
+    query = "SELECT o from XHB_COURT o WHERE o.courtName = :courtName ")
 public class XhbCourtDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = 6619741714677299473L;

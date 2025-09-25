@@ -70,6 +70,6 @@ class ConfigurationChangeWorkFlowTest {
     }
 
     private CourtConfigurationChange getDummyCourtConfigurationChange() {
-        return new CourtConfigurationChange(81);
+        return new CourtConfigurationChange(81, "Test Court Name");
     }
 }

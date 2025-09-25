@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RulesTest {
 
     private static final String TRUE = "Result is not True";
+    private static final String TESTCOURTNAME = "Test Court";
 
     @BeforeAll
     public static void setUp() {
@@ -88,11 +89,11 @@ class RulesTest {
     }
 
     private CourtConfigurationChange getDummyCourtConfigurationChange() {
-        return new CourtConfigurationChange(81);
+        return new CourtConfigurationChange(81, TESTCOURTNAME);
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(-99, null);
+        return new CourtRoomIdentifier(-99, null, TESTCOURTNAME, 123);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

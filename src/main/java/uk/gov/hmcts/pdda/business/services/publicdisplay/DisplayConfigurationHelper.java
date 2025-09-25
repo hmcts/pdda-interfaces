@@ -142,7 +142,8 @@ public class DisplayConfigurationHelper {
         final PublicDisplayNotifier notifier, final EntityManager entityManager) {
         updateDisplayConfiguration(displayConfiguration, notifier, new XhbDisplayRepository(entityManager),
             new XhbRotationSetsRepository(entityManager), new XhbCourtRoomRepository(entityManager),
-            new XhbDisplayLocationRepository(entityManager), new XhbCourtSiteRepository(entityManager));
+            new XhbDisplayLocationRepository(entityManager), new XhbCourtSiteRepository(entityManager),
+            new XhbCourtRepository(entityManager));
     }
 
     /**
@@ -155,9 +156,11 @@ public class DisplayConfigurationHelper {
     public static void updateDisplayConfiguration(final DisplayConfiguration displayConfiguration,
         final PublicDisplayNotifier notifier, XhbDisplayRepository xhbDisplayRepository,
         XhbRotationSetsRepository xhbRotationSetsRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
-        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository) {
-        LOG.debug("updateDisplayConfiguration({},{},{},{},{})", displayConfiguration, notifier, xhbDisplayRepository,
-            xhbRotationSetsRepository, xhbCourtRoomRepository);
+        XhbDisplayLocationRepository xhbDisplayLocationRepository, XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRepository xhbCourtRepository) {
+        LOG.debug("updateDisplayConfiguration({},{},{},{},{},{},{},{})", displayConfiguration, notifier,
+            xhbDisplayRepository, xhbRotationSetsRepository, xhbCourtRoomRepository,
+            xhbDisplayLocationRepository, xhbCourtSiteRepository, xhbCourtRepository);
 
         // Lookup the display local reference
         Optional<XhbDisplayDao> displayLocal =
@@ -182,7 +185,8 @@ public class DisplayConfigurationHelper {
 
             // if RS or courtrooms have changed send JMS message for displayId
             if (displayConfiguration.isCourtRoomsChanged() || displayConfiguration.isRotationSetChanged()) {
-                sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier);
+                sendNotification(displayConfiguration.getDisplayId(), displayLocal.get(), courtId, notifier,
+                    xhbCourtRepository);
             }
         }
     }
@@ -263,9 +267,11 @@ public class DisplayConfigurationHelper {
      * @param displayLocal Display local reference
      */
     private static void sendNotification(final Integer displayId, final XhbDisplayDao displayLocal,
-        final Integer courtId, PublicDisplayNotifier notifier) {
+        final Integer courtId, PublicDisplayNotifier notifier, XhbCourtRepository xhbCourtRepository) {
         LOG.debug("sendNotification({},{},{})", displayId, displayLocal, notifier);
-        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId, displayId);
+        Optional<XhbCourtDao> courts = xhbCourtRepository.findByIdSafe(courtId);
+        String courtName = courts.isPresent() ? courts.get().getCourtName() : "Unknown Court";
+        CourtConfigurationChange ccc = new CourtDisplayConfigurationChange(courtId, courtName, displayId);
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         notifier.sendMessage(ccEvent);
     }

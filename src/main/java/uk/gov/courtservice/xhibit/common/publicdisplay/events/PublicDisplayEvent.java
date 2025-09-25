@@ -20,16 +20,14 @@ import java.io.Serializable;
 public interface PublicDisplayEvent extends Serializable {
     /**
      * Returns an object that uniquely identifies the event.
-
      * @return EventType
      */
     EventType getEventType();
 
     /**
      * Get the court ID for this event.
-
      * @return the court Id for this event.
      */
     Integer getCourtId();
-
+    
 }

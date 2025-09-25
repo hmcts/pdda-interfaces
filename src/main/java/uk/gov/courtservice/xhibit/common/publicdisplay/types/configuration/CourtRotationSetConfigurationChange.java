@@ -31,8 +31,9 @@ public class CourtRotationSetConfigurationChange extends CourtConfigurationChang
      * @param courtId The database ID of the court involved in the change.
      * @param rotationSetId The database ID of the Rotation Set involved in the change.
      */
-    public CourtRotationSetConfigurationChange(final Integer courtId, final Integer rotationSetId) {
-        this(courtId, rotationSetId, Boolean.FALSE);
+    public CourtRotationSetConfigurationChange(final Integer courtId,
+        final String courtName, final Integer rotationSetId) {
+        this(courtId, courtName, rotationSetId, Boolean.FALSE);
     }
 
     /**
@@ -43,9 +44,9 @@ public class CourtRotationSetConfigurationChange extends CourtConfigurationChang
      * @param forceRecreate Whether to for the recreation of all documents associated with the
      *        rotation set.
      */
-    public CourtRotationSetConfigurationChange(final Integer courtId, final Integer rotationSetId,
-        boolean forceRecreate) {
-        super(courtId, forceRecreate);
+    public CourtRotationSetConfigurationChange(final Integer courtId, final String courtName,
+        final Integer rotationSetId, boolean forceRecreate) {
+        super(courtId, courtName, forceRecreate);
         this.rotationSetId = rotationSetId;
     }
 

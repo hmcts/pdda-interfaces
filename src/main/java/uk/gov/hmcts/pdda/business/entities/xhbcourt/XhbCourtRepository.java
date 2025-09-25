@@ -69,4 +69,23 @@ public class XhbCourtRepository extends AbstractRepository<XhbCourtDao> implemen
             return query.getResultList();
         }
     }
+
+    /**
+     * Get the court by court name.
+     * @param courtName The court name
+     * @return List of XhbCourtDao
+     */
+    public List<XhbCourtDao> findByCourtNameValueSafe(String courtName) {
+        LOG.debug("findByCourtNameValueSafe({})", courtName);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT.findByCourtNameValue");
+            query.setParameter("courtName", courtName);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtNameValueSafe({}): {}", courtName, e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid nulls and ensure predictable behaviour
+        }
+    }
 }

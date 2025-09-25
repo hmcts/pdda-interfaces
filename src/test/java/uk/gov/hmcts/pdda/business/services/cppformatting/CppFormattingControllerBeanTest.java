@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.cppformatting;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
@@ -56,6 +57,9 @@ class CppFormattingControllerBeanTest {
 
     @Mock
     private ConfigurationChangeEvent mockConfigurationChangeEvent;
+    
+    @Mock
+    private EntityTransaction mockTx;
 
     @TestSubject
     private final CppFormattingControllerBean classUnderTest =
@@ -93,6 +97,9 @@ class CppFormattingControllerBeanTest {
         EasyMock.expect(mockCppFormattingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
+        EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTx).anyTimes();
+        EasyMock.expect(mockTx.isActive()).andReturn(true).anyTimes();
+        
         EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
@@ -127,6 +134,9 @@ class CppFormattingControllerBeanTest {
         
         EasyMock.expect(mockCppFormattingRepo.getEntityManager()).andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTx).anyTimes();
+        EasyMock.expect(mockTx.isActive()).andReturn(true).anyTimes();
         
         EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);

@@ -115,8 +115,10 @@ public class PublicDisplayActivationHelper {
             // Notify Public display listener
             Integer courtRoomId = scheduledHearing.get().getXhbSitting().getCourtRoomId();
             Integer courtId = scheduledHearing.get().getXhbSitting().getXhbCourtSite().getCourtId();
+            String courtName = scheduledHearing.get().getXhbSitting().getXhbCourtSite().getCourtSiteName();
+            Integer courtRoomNo = scheduledHearing.get().getXhbSitting().getXhbCourtRoom().getCrestCourtRoomNo();
 
-            sendCaseActivateEvent(notifier, courtId, courtRoomId, activate);
+            sendCaseActivateEvent(notifier, courtId, courtRoomId, courtName, courtRoomNo, activate);
         }
     }
 
@@ -129,9 +131,9 @@ public class PublicDisplayActivationHelper {
      * @param activate Whether the display is activated or deactivated
      */
     private static void sendCaseActivateEvent(PublicDisplayNotifier notifier, Integer courtId,
-        Integer courtRoomId, boolean activate) {
+        Integer courtRoomId, String courtName, Integer courtRoomNo, boolean activate) {
         LOG.debug("sendCaseActivateEvent({},{},{},{})", notifier, courtId, courtRoomId, activate);
-        CourtRoomIdentifier courtRoomIdentifier = new CourtRoomIdentifier(courtId, courtRoomId);
+        CourtRoomIdentifier courtRoomIdentifier = new CourtRoomIdentifier(courtId, courtRoomId, courtName, courtRoomNo);
         ActivateCaseEvent ace =
             new ActivateCaseEvent(courtRoomIdentifier, new CaseChangeInformation(activate));
         notifier.sendMessage(ace);

@@ -22,6 +22,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
@@ -89,6 +91,12 @@ class SftpHelperUtilTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
+    
+    @Mock
+    private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
     private Session mockSession;
@@ -111,7 +119,9 @@ class SftpHelperUtilTest {
             mockEnvironment,
             mockPddaMessageHelper,
             mockXhbClobRepository,
-            mockXhbCourtRepository
+            mockXhbCourtRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbCourtSiteRepository
         );
     }
     

@@ -135,7 +135,7 @@ class DefaultDisplayConfigurationReaderTest {
         int[] courtsForPublicDisplay = {80};
         Integer courtId = -1;
         Integer courtRoomId = -1;
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(courtId, courtRoomId);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(courtId, courtRoomId, "Test Court", 123);
         DisplayDocumentType[] documentTypes = {displayDocumentType};
         Mockito.when(mockPdConfigurationController.getCourtsForPublicDisplay())
             .thenReturn(courtsForPublicDisplay);
@@ -201,7 +201,7 @@ class DefaultDisplayConfigurationReaderTest {
             new DefaultDisplayConfigurationReader(mockPdConfigurationController,
                 mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         RenderChanges result =
-            classUnderTest.getRenderChanges(new CourtConfigurationChange(COURT_ID));
+            classUnderTest.getRenderChanges(new CourtConfigurationChange(COURT_ID, TESTCOURT1));
 
         assertNotNull(result, NOTNULL);
     }
@@ -266,7 +266,7 @@ class DefaultDisplayConfigurationReaderTest {
             new DefaultDisplayConfigurationReader(mockPdConfigurationController,
                 mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         RenderChanges result = classUnderTest
-            .getRenderChanges(new CourtDisplayConfigurationChange(COURT_ID, DISPLAY_ID));
+            .getRenderChanges(new CourtDisplayConfigurationChange(COURT_ID, TESTCOURT1, DISPLAY_ID));
 
         assertNotNull(result, NOTNULL);
     }
@@ -331,7 +331,7 @@ class DefaultDisplayConfigurationReaderTest {
             new DefaultDisplayConfigurationReader(mockPdConfigurationController,
                 mockPdDataControllerBean, mockDisplayStoreControllerBean, mockWorker);
         RenderChanges result = classUnderTest
-            .getRenderChanges(new CourtRotationSetConfigurationChange(COURT_ID, ROTATION_SET_ID));
+            .getRenderChanges(new CourtRotationSetConfigurationChange(COURT_ID, TESTCOURT1, ROTATION_SET_ID));
 
         assertNotNull(result, NOTNULL);
     }
