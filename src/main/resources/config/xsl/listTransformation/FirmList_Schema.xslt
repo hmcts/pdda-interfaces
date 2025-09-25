@@ -21,6 +21,7 @@
     <xsl:template match="cs:DocumentID/cs:XSLstylesheetURL"/>
     <xsl:template match="cs:DocumentID/cs:WelshTranslation"/>
     <xsl:template match="cs:DocumentID/cs:DocumentInformation"/>
+    <xsl:template match="cs:DocumentID/cs:SellByDate"/>
 
     <xsl:template match="cs:ListHeader/cs:ListCategory"/>
     <xsl:template match="cs:ListHeader/cs:CRESTprintRef"/>
