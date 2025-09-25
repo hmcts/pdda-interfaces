@@ -9,7 +9,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import uk.gov.hmcts.framework.scheduler.web.SchedulerInitServlet;
-import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitServlet;
 
 public class WebAppInitializer implements ServletContextInitializer {
@@ -24,8 +23,6 @@ public class WebAppInitializer implements ServletContextInitializer {
     @Autowired
     private final Environment environment;
 
-    @Autowired
-    private CppStagingInboundControllerBean csicb;
 
     public WebAppInitializer(EntityManagerFactory entityManagerFactory, Environment environment) {
         this.entityManagerFactory = entityManagerFactory;
@@ -43,7 +40,7 @@ public class WebAppInitializer implements ServletContextInitializer {
             initServlet.setLoadOnStartup(1);
 
             ServletRegistration.Dynamic schedulerInitServlet = servletContext
-                .addServlet(SCHEDULER_INIT_SERVLET_NAME, new SchedulerInitServlet(csicb));
+                .addServlet(SCHEDULER_INIT_SERVLET_NAME, new SchedulerInitServlet());
             schedulerInitServlet.setLoadOnStartup(2);
         }
     }
