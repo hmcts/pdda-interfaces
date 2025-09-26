@@ -4,7 +4,7 @@
 
 buildscript {
   dependencies {
-    classpath("org.flywaydb:flyway-database-postgresql:11.10.5")
+    classpath("org.flywaydb:flyway-database-postgresql:11.13.2")
   }
 }
 
@@ -20,7 +20,7 @@ plugins {
   // Comment out id 'war' to work in Eclipse
   id 'war'
   id 'jacoco'
-  id 'org.flywaydb.flyway' version '11.10.5'
+  id 'org.flywaydb.flyway' version '11.13.2'
   id 'com.diffplug.spotless' version '7.2.1'
 }
 
@@ -322,9 +322,9 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
 
     // Flyway (already pulled via plugins, but OK to be explicit)
-    implementation 'org.flywaydb:flyway-core:11.10.5'
-    implementation 'org.flywaydb:flyway-database-postgresql:11.10.5'
-    implementation 'org.flywaydb:flyway-database-hsqldb:11.10.5'
+    implementation 'org.flywaydb:flyway-core:11.13.2'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.13.2'
+    implementation 'org.flywaydb:flyway-database-hsqldb:11.13.2'
 }
 
 application {
