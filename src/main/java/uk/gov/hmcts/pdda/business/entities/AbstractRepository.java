@@ -89,7 +89,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
             try {
                 LOG.debug("save({})", dao);
                 localEntityManager.getTransaction().begin();
-                localEntityManager.merge(dao);
+                localEntityManager.persist(dao);
                 localEntityManager.getTransaction().commit();
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());
