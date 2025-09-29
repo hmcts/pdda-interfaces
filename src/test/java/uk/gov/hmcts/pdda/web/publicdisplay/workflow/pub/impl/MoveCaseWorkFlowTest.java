@@ -79,7 +79,7 @@ class MoveCaseWorkFlowTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier(Integer id) {
-        return new CourtRoomIdentifier(id, null);
+        return new CourtRoomIdentifier(id, null, "Test Court", 123);
     }
 
     private CaseChangeInformation getDummyCaseChangeInformation() {

@@ -8,6 +8,8 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.PddaSftpHelperSshj;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
@@ -37,6 +39,8 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private PublicDisplayNotifier publicDisplayNotifier;
     private XhbCourtRepository courtRepository;
     private XhbClobRepository clobRepository;
+    private XhbCourtRoomRepository courtRoomRepository;
+    private XhbCourtSiteRepository courtSiteRepository;
     private PddaMessageHelper pddaMessageHelper;
     private CppStagingInboundHelper cppStagingInboundHelper;
     private PddaSftpHelper pddaSftpHelper;
@@ -63,12 +67,15 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     protected XhibitPddaHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
         PddaMessageHelper pddaMessageHelper,
-        XhbClobRepository clobRepository, XhbCourtRepository courtRepository) {
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
+        XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository) {
 
         super(entityManager, xhbConfigPropRepository, environment);
         this.pddaMessageHelper = pddaMessageHelper;
         this.clobRepository = clobRepository;
         this.courtRepository = courtRepository;
+        this.courtRoomRepository = courtRoomRepository;
+        this.courtSiteRepository = courtSiteRepository;
     }
 
     @Override
@@ -102,11 +109,25 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         return clobRepository;
     }
 
-    protected XhbCourtRepository getCourtRepository() {
+    public XhbCourtRepository getCourtRepository() {
         if (courtRepository == null || !isEntityManagerActive()) {
             courtRepository = new XhbCourtRepository(getEntityManager());
         }
         return courtRepository;
+    }
+    
+    protected XhbCourtRoomRepository getCourtRoomRepository() {
+        if (courtRoomRepository == null || !isEntityManagerActive()) {
+            courtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
+        }
+        return courtRoomRepository;
+    }
+    
+    protected XhbCourtSiteRepository getCourtSiteRepository() {
+        if (courtSiteRepository == null || !isEntityManagerActive()) {
+            courtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
+        }
+        return courtSiteRepository;
     }
 
     protected PddaMessageHelper getPddaMessageHelper() {
@@ -154,4 +175,12 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {
         this.publicDisplayNotifier = publicDisplayNotifier;
     }
+    
+    /**
+     * The data in the PublicDisplayEvent needs to be altered when passed from XHIBIT,
+     * as the case numbers, court IDs and courtroom IDs could be different in PDDA.
+     */
+    //public PublicDisplayEvent translateEvent(PublicDisplayEvent inEvent) {
+    //    return event;
+    // }
 }

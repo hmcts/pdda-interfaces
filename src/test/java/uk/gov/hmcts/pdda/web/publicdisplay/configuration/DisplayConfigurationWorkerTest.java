@@ -40,6 +40,7 @@ class DisplayConfigurationWorkerTest {
     private static final Integer COURT_ROOM_ID = 205;
     private static final Integer DISPLAY_ID = 30;
     private static final Integer ROTATION_SET_ID = 50;
+    private static final String COURT_NAME = "Test Court Name";
 
     private static final String VALID_DISPLAY_URL = "pd://display/snaresbrook/453/reception/mainscreen";
     private static final String VALID_DOCUMENT_URL = "pd://document:81/DailyList:";
@@ -77,7 +78,7 @@ class DisplayConfigurationWorkerTest {
     @Test
     void tesGetRenderChangesCourtConfigurationChangeFailure() {
         Assertions.assertThrows(RuntimeException.class, () -> {
-            CourtConfigurationChange courtConfigurationChange = new CourtConfigurationChange(COURT_ID + 1);
+            CourtConfigurationChange courtConfigurationChange = new CourtConfigurationChange(COURT_ID + 1, COURT_NAME);
             tesGetRenderChanges(courtConfigurationChange);
         });
     }
@@ -114,7 +115,7 @@ class DisplayConfigurationWorkerTest {
     @Test
     void tesGetRenderChangesArray() {
         DisplayDocumentType[] documentTypes = {DisplayDocumentTypeUtils.getDisplayDocumentType("DailyList")};
-        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(COURT_ID, COURT_ROOM_ID);
+        CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(COURT_ID, COURT_ROOM_ID, "Test Court", 123);
 
         RenderChanges results = classUnderTest.getRenderChanges(documentTypes, courtRoom);
 
@@ -125,7 +126,7 @@ class DisplayConfigurationWorkerTest {
     void tesGetRenderChangesArrayFailure() {
         Assertions.assertThrows(RuntimeException.class, () -> {
             DisplayDocumentType[] documentTypes = {DisplayDocumentTypeUtils.getDisplayDocumentType("DailyList")};
-            CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(COURT_ID + 1, COURT_ROOM_ID);
+            CourtRoomIdentifier courtRoom = new CourtRoomIdentifier(COURT_ID + 1, COURT_ROOM_ID, "Test Court", 123);
             classUnderTest.getRenderChanges(documentTypes, courtRoom);
         });
     }
@@ -144,14 +145,14 @@ class DisplayConfigurationWorkerTest {
     }
 
     private CourtConfigurationChange getDummyCourtConfigurationChange() {
-        return new CourtConfigurationChange(COURT_ID);
+        return new CourtConfigurationChange(COURT_ID, COURT_NAME);
     }
 
     private CourtDisplayConfigurationChange getDummyCourtDisplayConfigurationChange() {
-        return new CourtDisplayConfigurationChange(COURT_ID, DISPLAY_ID);
+        return new CourtDisplayConfigurationChange(COURT_ID, COURT_NAME, DISPLAY_ID);
     }
 
     private CourtRotationSetConfigurationChange getDummyCourtRotationSetConfigurationChange() {
-        return new CourtRotationSetConfigurationChange(COURT_ID, ROTATION_SET_ID);
+        return new CourtRotationSetConfigurationChange(COURT_ID, COURT_NAME, ROTATION_SET_ID);
     }
 }

@@ -57,7 +57,7 @@ public abstract class CourtRoomEvent implements PublicDisplayEvent {
 
      * @param courtRoomIdentifier CourtRoomIdentifier
      */
-    protected final void setCourtRoomIdentifier(CourtRoomIdentifier courtRoomIdentifier) {
+    public final void setCourtRoomIdentifier(CourtRoomIdentifier courtRoomIdentifier) {
         this.courtRoomIdentifier = courtRoomIdentifier;
     }
 

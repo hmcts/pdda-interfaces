@@ -15,6 +15,8 @@ import org.springframework.core.env.Environment;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
@@ -67,6 +69,12 @@ class SftpConfigHelperTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
+    
+    @Mock
+    private XhbCourtRoomRepository mockXhbCourtRoomRepository;
+    
+    @Mock
+    private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
     private Session mockSession;
@@ -82,6 +90,7 @@ class SftpConfigHelperTest {
     @TestSubject
     private final SftpConfigHelper classUnderTest =
         new SftpConfigHelper(EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository,
-            mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository);
+            mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
+            mockXhbCourtRoomRepository, mockXhbCourtSiteRepository);
 
 }

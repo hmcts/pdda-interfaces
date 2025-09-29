@@ -3,18 +3,12 @@ package uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration;
 import java.io.Serializable;
 
 /**
-
  * Title: A general public display configuration change for a court.
-
  * Description:
-
  * This class is used to signal a configuration change to the public displays for a given court.
  * Subtypes are used to identify specific areas of configuration that has changed.
-
  * Copyright: Copyright (c) 2003
-
  * Company: EDS
-
  * @author Bob Boothby
  * @version 1.0
  */
@@ -23,6 +17,8 @@ public class CourtConfigurationChange implements Serializable {
     static final long serialVersionUID = -3442982487610476239L;
 
     private final Integer courtId;
+    
+    private final String courtName;
 
     private boolean forceRecreate = Boolean.TRUE;
 
@@ -32,8 +28,8 @@ public class CourtConfigurationChange implements Serializable {
 
      * @param courtId The court for which the configuration has changed.
      */
-    public CourtConfigurationChange(final Integer courtId) {
-        this(courtId, Boolean.TRUE);
+    public CourtConfigurationChange(final Integer courtId, final String courtName) {
+        this(courtId, courtName, Boolean.TRUE);
     }
 
     /**
@@ -43,8 +39,9 @@ public class CourtConfigurationChange implements Serializable {
      * @param forceRecreate this flag is used to indicate whether all the court's display documents
      *        will have to be rerendered.
      */
-    public CourtConfigurationChange(final Integer courtId, final Boolean forceRecreate) {
+    public CourtConfigurationChange(final Integer courtId, final String courtName, final Boolean forceRecreate) {
         this.courtId = courtId;
+        this.courtName = courtName;
         setForceRecreate(forceRecreate);
     }
 
@@ -55,6 +52,10 @@ public class CourtConfigurationChange implements Serializable {
      */
     public Integer getCourtId() {
         return courtId;
+    }
+    
+    public String getCourtName() {
+        return courtName;
     }
 
     /**

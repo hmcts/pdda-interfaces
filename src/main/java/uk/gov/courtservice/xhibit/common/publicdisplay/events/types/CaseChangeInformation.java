@@ -48,4 +48,9 @@ public class CaseChangeInformation implements Serializable {
     public boolean isCaseActive() {
         return caseActive;
     }
+    
+    @Override
+    public String toString() {
+        return "CaseChangeInformation[caseActive=" + caseActive + "]";
+    }
 }

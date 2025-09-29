@@ -31,8 +31,9 @@ public class CourtDisplayConfigurationChange extends CourtConfigurationChange {
      * @param courtId The court for which this change applies.
      * @param displayId The display to which this change applies.
      */
-    public CourtDisplayConfigurationChange(final Integer courtId, final Integer displayId) {
-        this(courtId, displayId, Boolean.FALSE);
+    public CourtDisplayConfigurationChange(final Integer courtId, final String courtName,
+        final Integer displayId) {
+        this(courtId, courtName, displayId, Boolean.FALSE);
     }
 
     /**
@@ -43,9 +44,9 @@ public class CourtDisplayConfigurationChange extends CourtConfigurationChange {
      * @param forceRecreate this flag is used to indicate that the display documents connected to
      *        the display need to be rerendered
      */
-    public CourtDisplayConfigurationChange(final Integer courtId, final Integer displayId,
-        boolean forceRecreate) {
-        super(courtId, forceRecreate);
+    public CourtDisplayConfigurationChange(final Integer courtId, final String courtName, 
+        final Integer displayId, boolean forceRecreate) {
+        super(courtId, courtName, forceRecreate);
         this.displayId = displayId;
     }
 

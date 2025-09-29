@@ -247,7 +247,7 @@ public final class DummyCourtUtil {
     }
 
     public static CourtRoomIdentifier getCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(-99, 81);
+        return new CourtRoomIdentifier(-99, 81, "Test Court", 123);
     }
 
     public static CourtDetailValue getCourtDetailValue(boolean isHidden, String event) {

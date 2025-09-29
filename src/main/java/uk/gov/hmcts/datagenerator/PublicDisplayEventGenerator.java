@@ -94,7 +94,10 @@ public class PublicDisplayEventGenerator {
         int courtId = (overrideCourtId != null) ? overrideCourtId : 1 + RANDOM.nextInt(81);
         int courtRoomId =
             (overrideCourtRoomId != null) ? overrideCourtRoomId : 1 + RANDOM.nextInt(900);
-        CourtRoomIdentifier cri = new CourtRoomIdentifier(courtId, courtRoomId);
+        String courtName = "Court " + courtId;
+        Integer courtRoomNo = 100 + RANDOM.nextInt(900);
+        CourtRoomIdentifier cri = new CourtRoomIdentifier(courtId, courtRoomId, courtName,
+            courtRoomNo);
 
         switch (eventType) {
             case 0:
@@ -106,7 +109,10 @@ public class PublicDisplayEventGenerator {
             case 3:
                 CourtRoomIdentifier toCri = new CourtRoomIdentifier(
                     (overrideCourtId != null) ? overrideCourtId : 1 + RANDOM.nextInt(81),
-                    100 + RANDOM.nextInt(900));
+                    100 + RANDOM.nextInt(900),
+                    "Court " + courtId,
+                    100 + RANDOM.nextInt(900)
+                    );
                 return new MoveCaseEvent(cri, toCri, new CaseChangeInformation(true));
             case 4:
                 return new UpdateCaseEvent(cri, new CaseChangeInformation(false));
@@ -126,7 +132,8 @@ public class PublicDisplayEventGenerator {
     private static CourtConfigurationChange generateDummyConfigurationChange(int courtId) {
         int displayId = 1 + RANDOM.nextInt(50);
         boolean forceRecreate = RANDOM.nextBoolean();
-        return new CourtDisplayConfigurationChange(courtId, displayId, forceRecreate);
+        String courtName = "Court " + courtId;
+        return new CourtDisplayConfigurationChange(courtId, courtName, displayId, forceRecreate);
     }
 
     private static CaseCourtLogInformation generateDummyCaseCourtLogInformation(int courtId,

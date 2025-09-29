@@ -102,4 +102,19 @@ public class CourtLogSubscriptionValue extends CsAbstractValue {
     public Integer getScheduledHearingId() {
         return courtLogViewValue != null ? courtLogViewValue.getScheduledHearingId() : null;
     }
+    
+    @Override
+    @SuppressWarnings("PMD")
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CourtLogSubscriptionValue[");
+        sb.append("hearingId=").append(hearingId);
+        sb.append(", courtSiteId=").append(courtSiteId);
+        sb.append(", courtRoomId=").append(courtRoomId);
+        sb.append(", pnEventType=").append(pnEventType);
+        sb.append(", courtUrn=").append(courtUrn);
+        sb.append(", courtLogViewValue=").append(courtLogViewValue);
+        sb.append("]");
+        return sb.toString();
+    }
 }

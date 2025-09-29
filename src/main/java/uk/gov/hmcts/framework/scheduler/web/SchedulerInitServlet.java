@@ -1,5 +1,8 @@
 package uk.gov.hmcts.framework.scheduler.web;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -7,9 +10,10 @@ import jakarta.servlet.http.HttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.scheduler.Scheduler;
-import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerBean;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -67,13 +71,6 @@ public class SchedulerInitServlet extends HttpServlet implements ServletContextL
      */
     public static final String SCHEDULER_CONTEXT_KEY = "SchedulerInitServlet.scheduler";
 
-    private final CppStagingInboundControllerBean csicb;
-    
-    public SchedulerInitServlet(CppStagingInboundControllerBean csicb) {
-        super();
-        this.csicb = csicb;
-    }
-    
     /**
      * Called by the servlet container to indicate to a servlet that the servlet is being placed
      * into service.
@@ -88,7 +85,18 @@ public class SchedulerInitServlet extends HttpServlet implements ServletContextL
             String taskListFromDb = "";
             try {
                 LOG.info("CS1");
-                taskListFromDb = csicb.findConfigEntryByPropertyName("scheduledTasks.pdda");
+                // If you are not running in an EJB container, fetch the property directly using
+                // the EntityManager helper used across the project. This avoids relying on
+                // EJB injection timing.
+                try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+                    Query query = em.createNamedQuery("XHB_CONFIG_PROP.findByPropertyName");
+                    query.setParameter("propertyName", "scheduledtasks.pdda");
+                    @SuppressWarnings("unchecked")
+                    List<XhbConfigPropDao> results = query.getResultList();
+                    if (results != null && !results.isEmpty()) {
+                        taskListFromDb = results.get(0).getPropertyValue();
+                    }
+                }
                 LOG.info("CS2");
             } catch (Exception e) {
                 LOG.info("CS4 - {}", e.getMessage());

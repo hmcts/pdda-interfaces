@@ -198,7 +198,7 @@ class DisplayConfigurationHelperTest {
         // Run
         classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
             mockXhbDisplayRepository, mockXhbRotationSetsRepository, mockXhbCourtRoomRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRepository);
 
         assertTrue(result, NOT_TRUE);
     }
@@ -229,7 +229,7 @@ class DisplayConfigurationHelperTest {
         // Run
         classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
             mockXhbDisplayRepository, mockXhbRotationSetsRepository, mockXhbCourtRoomRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRepository);
 
         assertTrue(result, NOT_TRUE);
     }
@@ -280,7 +280,7 @@ class DisplayConfigurationHelperTest {
             // Run
             classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
                 mockXhbDisplayRepository, mockXhbRotationSetsRepository, mockXhbCourtRoomRepository,
-                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRepository);
         });
     }
 
@@ -314,7 +314,7 @@ class DisplayConfigurationHelperTest {
             // Run
             classUnderTest.updateDisplayConfiguration(displayConfiguration, mockPublicDisplayNotifier,
                 mockXhbDisplayRepository, mockXhbRotationSetsRepository, mockXhbCourtRoomRepository,
-                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository);
+                mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository, mockXhbCourtRepository);
         });
     }
 

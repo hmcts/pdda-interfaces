@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
 @SuppressWarnings("PMD.NullAssignment")
@@ -12,6 +13,7 @@ public class LighthousePddaControllerBeanHelper extends AbstractControllerBean {
 
     protected XhbPddaMessageRepository xhbPddaMessageRepository;
     protected XhbCppStagingInboundRepository xhbCppStagingInboundRepository;
+    protected XhbInternetHtmlRepository xhbInternetHtmlRepository;
     protected EntityManager entityManager;
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBeanHelper.class);
 
@@ -20,6 +22,7 @@ public class LighthousePddaControllerBeanHelper extends AbstractControllerBean {
         LOG.info("clearRepositories()");
         xhbPddaMessageRepository = null;
         xhbCppStagingInboundRepository = null;
+        xhbInternetHtmlRepository = null;
     }
 
     public XhbPddaMessageRepository getXhbPddaMessageRepository() {

@@ -77,7 +77,8 @@ public final class PublicNoticeChangeNotifier {
                 PddaEntityHelper.xcstFindByPrimaryKey(courtRoom.get().getCourtSiteId());
             if (courtSite.isPresent()) {
                 CourtRoomIdentifier courtRoomId =
-                    new CourtRoomIdentifier(courtSite.get().getCourtId(), courtRoom.get().getCourtRoomId());
+                    new CourtRoomIdentifier(courtSite.get().getCourtId(), courtRoom.get().getCourtRoomId(),
+                        courtSite.get().getCourtSiteName(), courtRoom.get().getCrestCourtRoomNo());
                 PublicDisplayNotifier publicDisplayNotifier = new PublicDisplayNotifier();
                 publicDisplayNotifier.sendMessage(new PublicNoticeEvent(courtRoomId, reportingRestrictionsChanged));
             }

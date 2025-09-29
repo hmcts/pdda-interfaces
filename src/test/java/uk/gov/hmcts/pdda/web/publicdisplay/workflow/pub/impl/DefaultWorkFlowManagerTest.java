@@ -155,7 +155,7 @@ class DefaultWorkFlowManagerTest {
     }
 
     private CourtRoomIdentifier getDummyCourtRoomIdentifier() {
-        return new CourtRoomIdentifier(-99, null);
+        return new CourtRoomIdentifier(-99, null, "Test Court", 123);
     }
 
     private ConfigurationChangeEvent getDummyConfigurationChangeEvent() {
@@ -163,7 +163,7 @@ class DefaultWorkFlowManagerTest {
     }
 
     private CourtConfigurationChange getDummyCourtConfigurationChange() {
-        return new CourtConfigurationChange(81);
+        return new CourtConfigurationChange(81, "Test Court");
     }
 
     private MoveCaseEvent getDummyMoveCaseEvent() {

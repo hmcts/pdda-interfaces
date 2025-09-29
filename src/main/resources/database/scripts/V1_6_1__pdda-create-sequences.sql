@@ -1,0 +1,2 @@
+DROP SEQUENCE IF EXISTS pdda.xhb_internet_html_seq CASCADE;
+CREATE SEQUENCE pdda.xhb_internet_html_seq INCREMENT 1 MINVALUE 1 NO MAXVALUE START 1;

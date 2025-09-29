@@ -103,7 +103,7 @@ class RotationSetMaintainHelperTest {
         boolean result = false;
         try {
             classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue, mockPublicDisplayNotifier,
-                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository);
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbCourtRepository);
             result = true;
         } catch (PublicDisplayCheckedException exception) {
             fail(exception);
@@ -123,7 +123,7 @@ class RotationSetMaintainHelperTest {
                 .thenReturn(Optional.of(xhbRotationSetDao));
             // Run
             classUnderTest.setDisplayDocumentsForRotationSet(rotationSetComplexValue, mockPublicDisplayNotifier,
-                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository);
+                mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository, mockXhbCourtRepository);
         });
     }
 

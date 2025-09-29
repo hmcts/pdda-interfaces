@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao;
+import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 
@@ -33,7 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD.DoNotUseThreads")
+@SuppressWarnings("PMD")
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -44,13 +46,17 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_INVALID = "INV"; // Invalid
     private static final String MESSAGE_STATUS_VALID_NOT_PROCESSED = "VN"; // PddaMessage status valid not processed
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
+    private static final String IWP_STATUS_CREATED = "C"; // Created
 
     @Autowired
     public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
-            XhbCppStagingInboundRepository xhbCppStagingInboundRepository, EntityManager entityManager) {
+            XhbCppStagingInboundRepository xhbCppStagingInboundRepository, 
+            XhbInternetHtmlRepository xhbInternetHtmlRepository,
+            EntityManager entityManager) {
         super();
         this.xhbPddaMessageRepository = xhbPddaMessageRepository;
         this.xhbCppStagingInboundRepository = xhbCppStagingInboundRepository;
+        this.xhbInternetHtmlRepository = xhbInternetHtmlRepository;
         this.entityManager = entityManager;
     }
 
@@ -100,13 +106,16 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             if (MESSAGE_STATUS_VALID_NOT_PROCESSED.equals(latest.getCpDocumentStatus())) {
                 LOG.warn("The file: {}{}{}", latest.getCpDocumentName(), 
                     " has already been sent for processing, setting it to: ", MESSAGE_STATUS_INVALID);
-                updatePddaMessageStatus(latest, MESSAGE_STATUS_INVALID);
+                updatePddaMessageStatus(latest, MESSAGE_STATUS_INVALID, 
+                    "Duplicate document - already processed");
             }
             return;
         }
         
         // Update the status to indicate it is being processed
-        updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS);
+        updatePddaMessageStatus(dao, MESSAGE_STATUS_INPROGRESS, null);
+        
+        // Fetch the latest XHB_PDDA_MESSAGE record for this file
         
         LOG.debug("File {} has not been processed before, proceeding with processing", dao.getCpDocumentName());
         
@@ -115,7 +124,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             if (!isDocumentNameValid(dao.getCpDocumentName())) {
                 LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
                 // Change the status of the XHB_PDDA_MESSAGE record to invalid
-                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID, "Filename is not valid");
                 return;
             }
 
@@ -153,19 +162,35 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 } else {
                     LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
                     // Change the status of the XHB_PDDA_MESSAGE record to invalid
-                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+                    updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID, "Filename is not valid");
                 }
-            } else {
+            } else if (dao.getCpDocumentName().contains("PDDA_XPD")) {
                 // Otherwise this is a public display event so is processed separately
                 // All we need to do is to set the message as processed already
-                updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSED);
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSED,
+                    "Public display XHIBIT event - no staging record created");
+            } else if (dao.getCpDocumentName().contains("PDDA_XWP")) {
+                // Otherwise this is a web page event so is processed separately
+                // All we need to do is to set the message as processed already
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSED,
+                    "Web page XHIBIT HTML document - no staging record created");
+                
+                // Now publish the web page to XHB_INTERNET_HTML
+                insertXhibitWebPage(IWP_STATUS_CREATED, dao.getCourtId(), dao.getPddaMessageDataId());
+            } else {
+                // This is an unknown document type so just log it and set the status to invalid
+                LOG.debug("This is an unknown document type - no staging record created for file: {}",
+                    dao.getCpDocumentName());
+                updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID,
+                    "Unknown document!!! - no staging record created");
             }
         } catch (RuntimeException e) {
             LOG.error(
                     "Error adding data to the database for file {} :{}",
                     dao.getCpDocumentName(), e.getStackTrace());
             // Change the status of the XHB_PDDA_MESSAGE record to invalid
-            updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID);
+            updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID, "Error adding data to the database: "
+                    + e.getMessage());
         }
     }
 
@@ -224,6 +249,28 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         Optional<XhbCppStagingInboundDao> opt = getXhbCppStagingInboundRepository().update(xhbCppStagingInboundDao);
         return opt.isPresent() ? opt.get().getCppStagingInboundId() : null;
     }
+    
+    
+    /**
+     * Insert the row into XHB_INTERNET_HTML.
+
+     * @param status - set to 'C' for created.
+     * @param courtId - court id.
+     * @param blobId - blob id of the html content.
+     * @return the internet html id for debugging/logging purposes
+     * @throws SQLException Exception
+     */
+    private Integer insertXhibitWebPage(final String status, final Integer courtId, final Long blobId) {
+
+        writeToLog("status " + status + " courtId: " + courtId + " blobId :" + blobId);
+        
+        XhbInternetHtmlDao xhbInternetHtmlDao = new XhbInternetHtmlDao();
+        xhbInternetHtmlDao.setStatus(status);
+        xhbInternetHtmlDao.setCourtId(courtId);
+        xhbInternetHtmlDao.setHtmlBlobId(blobId);
+        Optional<XhbInternetHtmlDao> opt = getXhbInternetHtmlRepository().update(xhbInternetHtmlDao);
+        return opt.isPresent() ? opt.get().getInternetHtmlId() : null;
+    }
 
     /**
      * Update the XHB_PDA_MESSAGE record.
@@ -256,7 +303,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     /**
      * Updates the XHB_PDDA_MESSAGE record.
      */
-    void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus) {
+    void updatePddaMessageStatus(XhbPddaMessageDao dao, String messageStatus, String optionalError) {
         LOG.debug("updatePddaMessageStatus for DAO ID: {}", dao.getPrimaryKey());
 
         XhbPddaMessageDao latest = fetchLatestXhbPddaMessageDao(dao);
@@ -264,6 +311,9 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             latest.getVersion());
 
         latest.setCpDocumentStatus(messageStatus);
+        if (optionalError != null && !optionalError.isBlank()) {
+            latest.setErrorMessage(optionalError);
+        }
         getXhbPddaMessageRepository().update(latest).ifPresentOrElse(
             updated -> LOG.debug("Successfully updated status to {} for DAO ID: {}", messageStatus,
                 updated.getPrimaryKey()),
@@ -332,14 +382,15 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         writeToLog("METHOD ENTRY: checkDocumentNameIsValid");
 
         String regexPdda =
-            "^PDDA_(XDL|CPD)_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14} "
+            "^PDDA_(XDL|CPD|XWP)_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14} "
                 + "(list_filename = DailyList_\\d{3}_\\d{14}.xml|pd_filename = PublicDisplay_\\d{3}_\\d{14}.xml)$";
         String regexPddaXpd = "^PDDA_XPD_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}$";
+        String regexPddaXwp = "^PDDA_XWP_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}$";
         String regexOther =
             "^(DailyList_|FirmList_|WarnedList_|PublicDisplay_|WebPage_).+\\d{14}.xml$";
 
         return documentName.matches(regexPdda) || documentName.matches(regexPddaXpd)
-            || documentName.matches(regexOther);
+            || documentName.matches(regexPddaXwp) || documentName.matches(regexOther);
     }
 
 }

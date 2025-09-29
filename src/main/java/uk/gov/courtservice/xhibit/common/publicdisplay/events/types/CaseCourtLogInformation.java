@@ -50,4 +50,15 @@ public class CaseCourtLogInformation extends CaseChangeInformation {
     public CourtLogSubscriptionValue getCourtLogSubscriptionValue() {
         return clSubscriptionValue;
     }
+    
+    @Override
+    @SuppressWarnings("PMD")
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CaseCourtLogInformation[");
+        sb.append("caseActive=").append(isCaseActive());
+        sb.append(", clSubscriptionValue=").append(clSubscriptionValue);
+        sb.append("]");
+        return sb.toString();
+    }
 }
