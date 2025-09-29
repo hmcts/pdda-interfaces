@@ -254,7 +254,7 @@ dependencies {
       exclude group: "org.apache.geronimo.components", module: "geronimo-connector"
     }
     implementation 'org.slf4j:slf4j-api:2.0.17'
-    implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
+    implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.2'
     implementation 'org.yaml:snakeyaml:2.4'
     compileOnly group: 'org.apache.tomee', name: 'jakartaee-api', version: '10.0.1', {
       exclude group: "org.apache.geronimo.mail", module: "geronimo-mail_2.1_provider"
@@ -274,7 +274,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.19.2'
 
     // Hadoop Client (only if required)
-    implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.1'
+    implementation 'org.apache.hadoop:hadoop-hdfs-client:3.4.2'
 
     // REST Testing
     implementation 'io.rest-assured:rest-assured'
