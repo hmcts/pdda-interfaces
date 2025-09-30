@@ -14,7 +14,7 @@ plugins {
 	id 'org.springframework.boot' version '3.5.6'
 	id 'com.github.ben-manes.versions' version '0.53.0'
 	id 'org.owasp.dependencycheck' version '12.1.6'
-	id 'org.sonarqube' version '6.2.0.5505'
+	id 'org.sonarqube' version '6.3.1.5724'
 	id 'checkstyle'
   	id 'pmd'
   // Comment out id 'war' to work in Eclipse
