@@ -319,7 +319,7 @@ dependencies {
     // implementation files('lib/jsch-0.1.54.jar')
 
     // Security
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.81'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.82'
 
     // Flyway (already pulled via plugins, but OK to be explicit)
     implementation 'org.flywaydb:flyway-core:11.13.2'
