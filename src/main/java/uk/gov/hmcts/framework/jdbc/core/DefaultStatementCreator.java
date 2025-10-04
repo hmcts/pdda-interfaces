@@ -127,7 +127,7 @@ public class DefaultStatementCreator implements StatementCreator {
 
      * Note: CLOBs and BLOBs have different processing as going via the normal mechanism leads to
      * database exceptions (ORA-01460) when inserting CLOBs or BLOBs of larger than 3k that contain
-     * National Characters (eg �) due to an Oracle bug
+     * National Characters due to an Oracle bug
 
      * This CLOB and BLOB processing can be enabled via configurable properties, however only the
      * CLOB processing is enabled by default (as this is required for XHIBIT 8.1 requirements)
