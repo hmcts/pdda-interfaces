@@ -3,6 +3,7 @@ SET client_encoding TO 'UTF8';
 /* Update XHB_BLOB trigger */
 /* Replace the trigger for xhb_blob_bur_tr */
 DROP TRIGGER IF EXISTS xhb_blob_bur_tr ON pdda.xhb_blob CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_blob_bur_tr ON pdda.xhb_blob CASCADE;
 CREATE OR REPLACE FUNCTION pdda.xhb_blob_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -89,6 +90,7 @@ CREATE TRIGGER xhb_blob_bur_tr
 /* Update XHB_CATH_DOCUMENT_LINK trigger */
 /* Replace the trigger for xhb_cath_document_link_bur_tr */
 DROP TRIGGER IF EXISTS xhb_cath_document_link_bur_tr ON pdda.xhb_cath_document_link CASCADE;
+DROP TRIGGER IF EXISTS trigger_fct_xhb_cath_document_link_bur_tr ON pdda.xhb_cath_document_link CASCADE;
 CREATE OR REPLACE FUNCTION pdda.xhb_cath_document_link_bur_tr()
 RETURNS TRIGGER AS $$
 DECLARE
