@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.LawOfDemeter"})
+@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
 public abstract class AbstractRepository<T extends AbstractDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRepository.class);
@@ -90,6 +90,28 @@ public abstract class AbstractRepository<T extends AbstractDao> {
                 LOG.debug("save({})", dao);
                 localEntityManager.getTransaction().begin();
                 localEntityManager.merge(dao);
+                localEntityManager.getTransaction().commit();
+            } catch (Exception e) {
+                LOG.error(ERROR, e.getMessage());
+                LOG.error("Stacktrace doing a database save; dao: {}: {}", dao,
+                    ExceptionUtils.getStackTrace(e));
+                if (localEntityManager != null && localEntityManager.getTransaction().isActive()) {
+                    localEntityManager.getTransaction().rollback();
+                }
+            }
+        }
+    }
+    
+    /**
+     * save.
+     * @param dao Dao
+     */
+    public void savePersist(T dao) {
+        try (EntityManager localEntityManager = createEntityManager()) {
+            try {
+                LOG.debug("savePersist({})", dao);
+                localEntityManager.getTransaction().begin();
+                localEntityManager.persist(dao);
                 localEntityManager.getTransaction().commit();
             } catch (Exception e) {
                 LOG.error(ERROR, e.getMessage());

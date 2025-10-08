@@ -180,7 +180,7 @@ public final class CathUtils {
                 // Save the transformed Xml to the clob table
                 XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
                 xhbClobDaoTransformedXml.setClobData(outWriterWithRemovedNameSpaces.toString());
-                xhbClobRepository.save(xhbClobDaoTransformedXml);
+                xhbClobRepository.savePersist(xhbClobDaoTransformedXml);
 
                 // Save the transformed xml to xml_document table
                 XhbXmlDocumentDao xhbXmlDocumentDaoTransformedXml = new XhbXmlDocumentDao();
@@ -197,7 +197,7 @@ public final class CathUtils {
                     .setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
                 xhbXmlDocumentDaoTransformedXml
                     .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
-                xhbXmlDocumentRepository.save(xhbXmlDocumentDaoTransformedXml);
+                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoTransformedXml);
 
                 // Save to the cath_document_link table with the original and transformed xml
                 // id's
@@ -206,7 +206,7 @@ public final class CathUtils {
                     .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
                 xhbCathDocumentLinkDao
                     .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
-                xhbCathDocumentLinkRepository.save(xhbCathDocumentLinkDao);
+                xhbCathDocumentLinkRepository.savePersist(xhbCathDocumentLinkDao);
 
                 // Return the cath_document_link record
                 return xhbCathDocumentLinkDao;
@@ -237,7 +237,7 @@ public final class CathUtils {
                 xhbClobDaoJson.setClobData(
                     generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData())
                         .toString());
-                xhbClobRepository.save(xhbClobDaoJson);
+                xhbClobRepository.savePersist(xhbClobDaoJson);
 
                 // Save the json record to the xml_document table
                 XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
@@ -255,7 +255,7 @@ public final class CathUtils {
                     .setExpiryDate(xhbXmlDocumentDaoTransformedXml.get().getExpiryDate());
                 xhbXmlDocumentDaoJson
                     .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
-                xhbXmlDocumentRepository.save(xhbXmlDocumentDaoJson);
+                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoJson);
 
                 // Update the cath_document_link record with the cathJsonId
                 updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
