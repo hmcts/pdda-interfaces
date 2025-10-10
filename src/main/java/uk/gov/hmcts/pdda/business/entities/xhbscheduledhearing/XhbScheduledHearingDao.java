@@ -20,6 +20,9 @@ import java.util.Collection;
 @Entity(name = "XHB_SCHEDULED_HEARING")
 @NamedQuery(name = "XHB_SCHEDULED_HEARING.findByHearingId",
     query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.hearingId = :hearingId")
+@NamedQuery(name = "XHB_SCHEDULED_HEARING.findBySittingIdAndHearingId",
+    query = "SELECT o from XHB_SCHEDULED_HEARING o WHERE o.hearingId = :hearingId"
+        + " AND o.sittingId = :sittingId")
 @NamedQuery(name = "XHB_SCHEDULED_HEARING.findActiveCasesInRoom",
     query = "SELECT o from XHB_SCHEDULED_HEARING o, XHB_SITTING s WHERE o.scheduledHearingId != :scheduledHearingId "
         + "AND o.isCaseActive = 'Y' AND s.sittingId = o.sittingId AND s.listId = :listId AND s.courtRoomId = "

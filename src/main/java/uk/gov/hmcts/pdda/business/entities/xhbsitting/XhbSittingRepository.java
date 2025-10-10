@@ -157,5 +157,33 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
             return Optional.empty();
         }
     }
+    
+    
+    /**
+     * findByCourtRoomIdAndCourtSiteIdSafe.
+
+     * @param courtRoomId Integer
+     * @param courtSiteId Integer
+     * @return XhbSittingDao
+     */
+    @SuppressWarnings("unchecked")
+    public List<XhbSittingDao> findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(Integer courtRoomId, 
+        Integer courtSiteId, String sittingTime) {
+        LOG.debug("findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe({}, {}, {})",
+            courtRoomId, courtSiteId, sittingTime);
+        // This will call the same query as above but will return a list of sittings
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SITTING.findByCourtRoomAndSittingTime");
+            query.setParameter("courtRoomId", courtRoomId);
+            query.setParameter("courtSiteId", courtSiteId);
+            query.setParameter("sittingTime", sittingTime);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomIdAndCourtSiteIdSafe({},{}, {}): {}",
+                courtRoomId, courtSiteId, sittingTime, e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid nulls
+        }
+    }
 
 }
