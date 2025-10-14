@@ -21,8 +21,9 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     private Integer hearingProgressIndicator;
     private Integer caseNumber;
     private String caseType;
-    private String courtRoomName;
+    private Integer courtId;
     private String courtName;
+    private String courtRoomName;
     private String isCaseActive;
 
 
@@ -41,7 +42,7 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     public void setCaseNumber(Integer caseNumber) {
         this.caseNumber = caseNumber;
     }
-
+    
     public String getCaseType() {
         return caseType;
     }
@@ -49,15 +50,16 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     public void setCaseType(String caseType) {
         this.caseType = caseType;
     }
-
-    public String getCourtRoomName() {
-        return courtRoomName;
+    
+    @Override
+    public Integer getCourtId() {
+        return courtId;
     }
-
-    public void setCourtRoomName(String courtRoomName) {
-        this.courtRoomName = courtRoomName;
+    
+    public void setCourtId(Integer courtId) {
+        this.courtId = courtId;
     }
-
+    
     public String getCourtName() {
         return courtName;
     }
@@ -66,6 +68,14 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
         this.courtName = courtName;
     }
     
+    public String getCourtRoomName() {
+        return courtRoomName;
+    }
+
+    public void setCourtRoomName(String courtRoomName) {
+        this.courtRoomName = courtRoomName;
+    }
+
     public String getIsCaseActive() {
         return isCaseActive;
     }

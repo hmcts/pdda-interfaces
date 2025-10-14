@@ -16,6 +16,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
@@ -379,40 +380,44 @@ public class SftpService extends XhibitPddaHelper {
     }
 
     private void processHearingProgressEvent(PddaHearingProgressEvent event) {
-        // 1) Get the court site from the court id from the event
-        XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
-            .findByCourtIdSafe(event.getCourtId()).get(0);
+        // 1) Get the courtId from the courtName from the event
+        List<XhbCourtDao> xhbCourtDao = getCourtRepository()
+            .findByCourtNameValueSafe(event.getCourtName());
         
-        // 2) Get the caseType and caseNumber from the event
+        // 2) Get the courtSiteId from the courtId
+        XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
+            .findByCourtIdSafe(xhbCourtDao.get(0).getCourtId()).get(0);
+        
+        // 3) Get the caseType and caseNumber from the event
         String caseType = event.getCaseType();
         Integer caseNumber = event.getCaseNumber();
         
-        // 3) Get caseId using the case number from the event
+        // 4) Get caseId using the case number from the event
         Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
             .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
         
         if (xhbCaseDao.isPresent()) {
-            // 4) Get the hearingId using the caseId
+            // 5) Get the hearingId using the caseId
             List<XhbHearingDao> xhbHearingDao = getHearingRepository()
                 .findByCaseIdSafe(xhbCaseDao.get().getCaseId());
             
-            // 5) Get the courtRoomId from the courtSiteId and courtRoomName
+            // 6) Get the courtRoomId from the courtSiteId and courtRoomName
             String courtRoomName = event.getCourtRoomName();
             XhbCourtRoomDao xhbCourtRoomDao = getCourtRoomRepository()
                 .findByCourtSiteIdAndCourtRoomNameSafe(xhbCourtSiteDao.getCourtSiteId(), courtRoomName).get(0);
             
-            // 6) Get the SittingId using the courtRoomId and courtSiteId
+            // 7) Get the SittingId using the courtRoomId and courtSiteId
             List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
                 .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(xhbCourtRoomDao.getCourtRoomId(),
                     xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay().toString());
             
-            // 7) Loop through the SittingId's to get a match with the hearingId for the xhb_scheduled_hearing record
+            // 8) Loop through the SittingId's to get a match with the hearingId for the xhb_scheduled_hearing record
             for (XhbSittingDao sittingDao : xhbSittingDaos) {
                 Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
                     .findBySittingIdAndHearingIdSafe(xhbHearingDao.get(0).getHearingId(),
                         sittingDao.getSittingId());
                 
-                // 8) Update the fields in the xhb_scheduled_hearing record
+                // 9) Update the fields in the xhb_scheduled_hearing record
                 if (!scheduledHearingDao.isEmpty()) {
                     scheduledHearingDao.get().setHearingProgress(event.getHearingProgressIndicator());
                     scheduledHearingDao.get().setIsCaseActive(event.getIsCaseActive());
