@@ -1,4 +1,6 @@
-package uk.gov.courtservice.xhibit.common.publicdisplay.events;
+package uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda;
+
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 
 /**
 
@@ -16,7 +18,7 @@ package uk.gov.courtservice.xhibit.common.publicdisplay.events;
 @SuppressWarnings("PMD.LinguisticNaming")
 public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     
-    private static final long serialVersionUID = -5224832990492817778L;
+    private static final long serialVersionUID = -8013651434648029138L;
     
     private Integer hearingProgressIndicator;
     private Integer caseNumber;
