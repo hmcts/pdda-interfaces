@@ -1,6 +1,7 @@
 package uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda;
 
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 
 /**
 
@@ -16,7 +17,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
  */
 
 @SuppressWarnings("PMD.LinguisticNaming")
-public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
+public class PddaHearingProgressEvent implements PublicDisplayEvent {
     
     private static final long serialVersionUID = -8013651434648029138L;
     
@@ -28,7 +29,10 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     private String courtRoomName;
     private String isCaseActive;
 
-
+    protected PddaHearingProgressEvent() {
+        super();
+    }
+    
     public Integer getHearingProgressIndicator() {
         return hearingProgressIndicator;
     }
@@ -84,5 +88,10 @@ public abstract class PddaHearingProgressEvent implements PublicDisplayEvent {
     
     public void setIsCaseActive(String isCaseActive) {
         this.isCaseActive = isCaseActive;
+    }
+
+    @Override
+    public EventType getEventType() {
+        return null;
     }
 }

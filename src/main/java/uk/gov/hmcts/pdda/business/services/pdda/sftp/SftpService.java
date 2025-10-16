@@ -409,7 +409,7 @@ public class SftpService extends XhibitPddaHelper {
             // 7) Get the SittingId using the courtRoomId and courtSiteId
             List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
                 .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(xhbCourtRoomDao.getCourtRoomId(),
-                    xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay().toString());
+                    xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
             
             // 8) Loop through the SittingId's to get a match with the hearingId for the xhb_scheduled_hearing record
             for (XhbSittingDao sittingDao : xhbSittingDaos) {
