@@ -28,6 +28,10 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "XHB_SITTING.findByCourtRoomAndSittingTime",
     query = "SELECT o from XHB_SITTING o WHERE o.courtSiteId = :courtSiteId "
         + "AND o.courtRoomId = :courtRoomId AND o.sittingTime = :sittingTime")
+@NamedQuery(name = "XHB_SITTING.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDate",
+    query = "SELECT o from XHB_SITTING o WHERE o.courtSiteId = :courtSiteId "
+        + "AND o.courtRoomId = :courtRoomId AND o.sittingTime >= :sittingTimeToday "
+        + "AND o.sittingTime < :sittingTimeTomorrow")
 public class XhbSittingDao extends AbstractVersionedDao implements Serializable {
 
 

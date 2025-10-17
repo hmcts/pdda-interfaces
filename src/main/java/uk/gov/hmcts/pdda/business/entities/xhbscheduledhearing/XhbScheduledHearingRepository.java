@@ -27,6 +27,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
     private static final String COURT_ROOM_ID = "courtId";
     private static final String SCHEDULED_HEARING_ID = "scheduledHearingId";
     private static final String SITTING_ID = "sittingId";
+    private static final String HEARING_ID = "hearingId";
 
     public XhbScheduledHearingRepository(EntityManager em) {
         super(em);
@@ -85,6 +86,32 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
             return List.of(); // Safe fallback to avoid null or exception
         }
     }
+    
+    
+    /**
+     * findBySittingIdAndHearingIdSafe.
+
+     * @param sittingId Integer
+     * @param hearingId Integer
+     * @return List
+     */
+    @SuppressWarnings("unchecked")
+    public Optional<XhbScheduledHearingDao> findBySittingIdAndHearingIdSafe(Integer sittingId, Integer hearingId) {
+        LOG.debug("findBySittingIdAndHearingIdSafe({}{})", sittingId, hearingId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingIdAndHearingId");
+            query.setParameter(SITTING_ID, sittingId);
+            query.setParameter(HEARING_ID, hearingId);
+
+            XhbScheduledHearingDao dao = query.getResultList().isEmpty() ? null
+                : (XhbScheduledHearingDao) query.getSingleResult();
+            return dao != null ? Optional.of(dao) : Optional.empty();
+        } catch (Exception e) {
+            LOG.error("Error in findBySittingIdSafe({}): {}", sittingId, e.getMessage(), e);
+            return Optional.empty(); // Safe fallback to avoid null or exception
+        }
+    }
 
 
     /**
@@ -98,7 +125,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
         Query query =
             getEntityManager().createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingDate");
         query.setParameter(SITTING_ID, sittingId);
-        query.setParameter("hearingId", hearingId);
+        query.setParameter(HEARING_ID, hearingId);
         query.setParameter("notBeforeTime", notBeforeTime);
         XhbScheduledHearingDao dao = query.getResultList().isEmpty() ? null
             : (XhbScheduledHearingDao) query.getSingleResult();
@@ -115,7 +142,7 @@ public class XhbScheduledHearingRepository extends AbstractRepository<XhbSchedul
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_SCHEDULED_HEARING.findBySittingDate");
             query.setParameter(SITTING_ID, sittingId);
-            query.setParameter("hearingId", hearingId);
+            query.setParameter(HEARING_ID, hearingId);
             query.setParameter("notBeforeTime", notBeforeTime);
 
             List<?> resultList = query.getResultList();

@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
@@ -17,7 +18,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefinitivepublicnotice.XhbDefinitivePublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

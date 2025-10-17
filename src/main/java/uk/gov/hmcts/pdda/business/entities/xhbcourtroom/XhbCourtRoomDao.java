@@ -19,6 +19,10 @@ import java.util.Collection;
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteId",
     query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId ")
 
+@NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteIdAndCourtRoomName",
+    query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId "
+    + "AND o.courtRoomName = :courtRoomName ")
+
 @NamedQuery(name = "XHB_COURT_ROOM.findByDisplayId", query = "SELECT o FROM XHB_COURT_ROOM o "
     + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
     + "XHB_DISPLAY_COURT_ROOM dcr WHERE dcr.displayId = :displayId)")

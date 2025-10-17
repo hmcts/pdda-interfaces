@@ -1,6 +1,8 @@
 package uk.gov.hmcts;
 
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogeventdesc.XhbCourtLogEventDescDao;
@@ -9,8 +11,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtDetailValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.vos.publicdisplay.CourtSitePdComplexValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.AllCourtStatusCompiledRendererDelegate;
 
 import java.time.LocalDateTime;

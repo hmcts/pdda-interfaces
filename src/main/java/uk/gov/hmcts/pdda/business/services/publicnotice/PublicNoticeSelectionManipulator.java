@@ -2,10 +2,10 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.framework.services.XmlServices;
 import uk.gov.hmcts.framework.services.xml.XmlServicesImpl;
 import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DefinitivePublicNoticeStatusValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 import java.util.Iterator;
 import java.util.List;

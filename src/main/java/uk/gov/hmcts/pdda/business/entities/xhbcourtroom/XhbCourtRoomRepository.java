@@ -59,6 +59,21 @@ public class XhbCourtRoomRepository extends AbstractRepository<XhbCourtRoomDao>
             return List.of(); // Return empty list on failure
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtRoomDao> findByCourtSiteIdAndCourtRoomNameSafe(Integer courtSiteId, String courtRoomName) {
+        LOG.debug("findByCourtSiteIdAndCourtRoomNameSafe({},{})", courtSiteId, courtRoomName);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_ROOM.findByCourtSiteIdAndCourtRoomName");
+            query.setParameter("courtSiteId", courtSiteId);
+            query.setParameter("courtRoomName", courtRoomName);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtSiteIdAndCourtRoomNameSafe({},{}): {}",
+                courtSiteId, courtRoomName, e.getMessage(), e);
+            return List.of(); // Return empty list on failure
+        }
+    }
 
 
     /**
