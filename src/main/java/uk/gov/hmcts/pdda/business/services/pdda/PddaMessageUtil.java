@@ -11,6 +11,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.UpdateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -210,6 +211,12 @@ public final class PddaMessageUtil {
             remapUsing(newEvent::getCourtRoomIdentifier, newEvent::setCourtRoomIdentifier, courtRepository,
                 courtRoomRepository, courtSiteRepository);
 
+        } else if (event instanceof PddaHearingProgressEvent newEvent) {
+            LOG.debug("translatePublicDisplayEvent({}) for PddaHearingProgressEvent for court {}", event,
+                newEvent.getCourtName());
+            // Set the courtId from the pdda database using the courtName from xhibit
+            List<XhbCourtDao> courtDao = courtRepository.findByCourtNameValueSafe(newEvent.getCourtName());
+            newEvent.setCourtId(courtDao.get(0).getCourtId());
         } else {
             LOG.debug("translatePublicDisplayEvent({}) for unknown event type", event);
         }

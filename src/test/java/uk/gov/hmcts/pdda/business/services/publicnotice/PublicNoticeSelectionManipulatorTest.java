@@ -4,8 +4,8 @@ import org.easymock.EasyMockExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.DummyEventUtil;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 

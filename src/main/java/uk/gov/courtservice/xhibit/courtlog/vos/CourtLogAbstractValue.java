@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.courtlog.vos;
+package uk.gov.courtservice.xhibit.courtlog.vos;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -414,8 +414,8 @@ public class SftpService extends XhibitPddaHelper {
             // 8) Loop through the SittingId's to get a match with the hearingId for the xhb_scheduled_hearing record
             for (XhbSittingDao sittingDao : xhbSittingDaos) {
                 Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
-                    .findBySittingIdAndHearingIdSafe(xhbHearingDao.get(0).getHearingId(),
-                        sittingDao.getSittingId());
+                    .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
+                        xhbHearingDao.get(0).getHearingId());
                 
                 // 9) Update the fields in the xhb_scheduled_hearing record
                 if (!scheduledHearingDao.isEmpty()) {

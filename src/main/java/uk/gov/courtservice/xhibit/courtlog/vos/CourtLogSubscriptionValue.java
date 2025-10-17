@@ -1,7 +1,6 @@
 package uk.gov.courtservice.xhibit.courtlog.vos;
 
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 
 /**
 
