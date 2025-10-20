@@ -36,7 +36,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
  * @author Mark Harris
  * @version 1.0
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S107"})
 public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(XhibitPddaHelper.class);
 
