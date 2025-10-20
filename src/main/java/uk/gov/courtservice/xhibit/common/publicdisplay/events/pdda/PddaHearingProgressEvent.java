@@ -16,7 +16,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
  * @author Luke Gittins
  */
 
-@SuppressWarnings("PMD.LinguisticNaming")
+@SuppressWarnings({"PMD.LinguisticNaming", "PMD.UnnecessaryConstructor"})
 public class PddaHearingProgressEvent implements PublicDisplayEvent {
     
     private static final long serialVersionUID = -8013651434648029138L;
@@ -29,7 +29,8 @@ public class PddaHearingProgressEvent implements PublicDisplayEvent {
     private String courtRoomName;
     private String isCaseActive;
 
-    protected PddaHearingProgressEvent() {
+    // Used for JUnit testing
+    public PddaHearingProgressEvent() {
         super();
     }
     
