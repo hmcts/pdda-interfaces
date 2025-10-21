@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
  * @author Luke Gittins
  */
-// TODO Remove PMD.DetachedTestCase when certificate is updated
-@SuppressWarnings({"PMD.SystemPrintln", "PMD.DetachedTestCase"})
+
+@SuppressWarnings("PMD.SystemPrintln")
 class PddaCathRequestTest {
 
     // * NOTE * - Before running the tests populate these with the values from the Key Vault.
@@ -76,8 +76,7 @@ class PddaCathRequestTest {
         assertTrue(result, DUMMY_ASSERTION);
     }
     
-    // TODO Uncomment this test when the certificate is updated
-    // @Test
+    @Test
     void testConnectionToHealthEndpoint() {
         // GET to the CaTH Health Endpoint
         Response response = given()
