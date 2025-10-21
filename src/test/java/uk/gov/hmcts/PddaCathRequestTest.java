@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
  * @author Luke Gittins
  */
-@SuppressWarnings({"PMD.SystemPrintln"})
+// TODO Remove PMD.DetachedTestCase when certificate is updated
+@SuppressWarnings({"PMD.SystemPrintln", "PMD.DetachedTestCase"})
 class PddaCathRequestTest {
 
     // * NOTE * - Before running the tests populate these with the values from the Key Vault.
@@ -41,6 +42,8 @@ class PddaCathRequestTest {
     private static final String CATH_PUBLICATION_ENDPOINT = 
         CATH_HEALTH_ENDPOINT + "/publication";
     
+    private static final String DUMMY_ASSERTION = 
+        "Dummy assertion to allow test to pass";
     
     private String getAccessToken() {
         String url = 
@@ -70,10 +73,11 @@ class PddaCathRequestTest {
         // Get the Access Token from Azure AD
         getAccessToken();
         boolean result = true;
-        assertTrue(result, "Dummy assertion to allow test to pass");
+        assertTrue(result, DUMMY_ASSERTION);
     }
     
-    @Test
+    // TODO Uncomment this test when the certificate is updated
+    // @Test
     void testConnectionToHealthEndpoint() {
         // GET to the CaTH Health Endpoint
         Response response = given()
@@ -88,11 +92,11 @@ class PddaCathRequestTest {
         System.out.println(response.asPrettyString());
         
         boolean result = true;
-        assertTrue(result, "Dummy assertion to allow test to pass");
+        assertTrue(result, DUMMY_ASSERTION);
     }
     
     @Test
-    void testConnectionToPublicationEndpoint() {
+    void testWebPageConnectionToPublicationEndpoint() {
         // POST to the CaTH Publication Endpoint with a test file
         File file = new File("src/main/resources/database/test-data/cath_test_files/Snaresbrook_en.htm");
         
@@ -118,6 +122,37 @@ class PddaCathRequestTest {
         System.out.println(response.asPrettyString());
         
         boolean result = true;
-        assertTrue(result, "Dummy assertion to allow test to pass");
+        assertTrue(result, DUMMY_ASSERTION);
+    }
+    
+    @Test
+    void testListConnectionToPublicationEndpoint() {
+        // POST to the CaTH Publication Endpoint with a test file
+        File file = new File("src/main/resources/database/test-data/cath_test_files/DailyList_Example.json");
+        
+        Response response = given()
+                .header("x-provenance", "PDDA")
+                .header("x-type", "LIST")
+                .header("x-list-type", "CROWN_DAILY_PDDA_LIST")
+                .header("x-court-id", "4")
+                .header("x-content-date", "2025-10-17T00:00")
+                .header("x-sensitivity", "CLASSIFIED")
+                .header("x-language", "ENGLISH")
+                .header("x-display-from", "2025-10-17T14:00:00.001Z")
+                .header("x-display-to", "2025-10-18T14:00:00.001Z")
+                .header("x-source-artefact-id", file.getName())
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + getAccessToken())
+                .body(file)
+                .when()
+                .post(CATH_PUBLICATION_ENDPOINT)
+                .then()
+                .log().all()
+                .extract().response();
+
+        System.out.println(response.asPrettyString());
+        
+        boolean result = true;
+        assertTrue(result, DUMMY_ASSERTION);
     }
 }

@@ -157,5 +157,36 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
             return Optional.empty();
         }
     }
+    
+    
+    /**
+     * findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe.
+
+     * @param courtRoomId Integer
+     * @param courtSiteId Integer
+     * @return XhbSittingDao
+     */
+    @SuppressWarnings("unchecked")
+    public List<XhbSittingDao> findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(Integer courtRoomId, 
+        Integer courtSiteId, LocalDateTime sittingTimeToday) {
+        LOG.debug("findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe({}, {}, {})",
+            courtRoomId, courtSiteId, sittingTimeToday);
+        // Get tomorrow's date by adding one day to today's date
+        LocalDateTime sittingTimeTomorrow = sittingTimeToday.plusDays(1);
+        // This will call the same query as above but will return a list of sittings
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_SITTING.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDate");
+            query.setParameter("courtRoomId", courtRoomId);
+            query.setParameter("courtSiteId", courtSiteId);
+            query.setParameter("sittingTimeToday", sittingTimeToday);
+            query.setParameter("sittingTimeTomorrow", sittingTimeTomorrow);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomIdAndCourtSiteIdSafe({},{}, {}): {}",
+                courtRoomId, courtSiteId, sittingTimeToday, e.getMessage(), e);
+            return List.of(); // Safe fallback to avoid nulls
+        }
+    }
 
 }

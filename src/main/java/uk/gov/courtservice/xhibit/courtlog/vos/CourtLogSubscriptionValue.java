@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.courtlog.vos;
+package uk.gov.courtservice.xhibit.courtlog.vos;
 
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
@@ -7,16 +7,15 @@ import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
  * Title: CourtLogSubscriptionValue.
 
 
- * Description:
+ * Description: This is the instance of CourtLogSubscriptionValue using the xhibit path rather than the pdda path.
 
 
- * Copyright: Copyright (c) 2002
+ * Copyright: Copyright (c) 2025
 
 
- * Company: EDS
+ * Company: CGI
 
- * @author Joseph Babad
- * @version $Id: CourtLogSubscriptionValue.java,v 1.3 2004/04/22 06:51:49 tz0d5m Exp $
+ * @author Luke Gittins
  */
 public class CourtLogSubscriptionValue extends CsAbstractValue {
 

@@ -15,9 +15,9 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLog
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtDisplayConfigurationChange;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 
 import java.io.File;
 import java.io.FileOutputStream;

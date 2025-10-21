@@ -1,6 +1,6 @@
 package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 
 /**
 

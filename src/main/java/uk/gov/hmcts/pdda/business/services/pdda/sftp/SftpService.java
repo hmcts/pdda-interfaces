@@ -9,15 +9,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.hmcts.framework.services.CsServices;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
@@ -27,13 +39,15 @@ import uk.gov.hmcts.pdda.business.services.pdda.XhibitPddaHelper;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.CyclomaticComplexity"})
+@SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.ExcessiveParameterList", 
+    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -66,10 +80,13 @@ public class SftpService extends XhibitPddaHelper {
     public SftpService(EntityManager entityManager, XhbConfigPropRepository xhbConfigPropRepository,
         Environment environment, PddaMessageHelper pddaMessageHelper,
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
-        XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository) {
+        XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository,
+        XhbCaseRepository xhbCaseRepository, XhbHearingRepository hearingRepository,
+        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository) {
         super(entityManager, xhbConfigPropRepository, environment,
             pddaMessageHelper, clobRepository, courtRepository,
-            courtRoomRepository, courtSiteRepository);
+            courtRoomRepository, courtSiteRepository, xhbCaseRepository,
+            hearingRepository, sittingRepository, scheduledHearingRepository);
     }
 
     public SftpService(EntityManager entityManager) {
@@ -305,11 +322,16 @@ public class SftpService extends XhibitPddaHelper {
             if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XPD_")) {
                 isList = false;
                 event = validation.getPublicDisplayEvent(filename, clobData);
-                
                 // Now translate the event so that the court room id is correct, if necessary
                 event = PddaMessageUtil.translatePublicDisplayEvent(event, getCourtRepository(),
                     getCourtRoomRepository(), getCourtSiteRepository());
-                sendMessage(event);
+                // Check what type of event it is
+                if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
+                    LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
+                    processHearingProgressEvent(pddaHearingProgressEvent);
+                } else {
+                    sendMessage(event);
+                }
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;
                 // We don't want to send a message for CPD files
@@ -357,7 +379,56 @@ public class SftpService extends XhibitPddaHelper {
         }
     }
 
-
+    private void processHearingProgressEvent(PddaHearingProgressEvent event) {
+        // 1) Get the courtId from the courtName from the event
+        List<XhbCourtDao> xhbCourtDao = getCourtRepository()
+            .findByCourtNameValueSafe(event.getCourtName());
+        
+        // 2) Get the courtSiteId from the courtId
+        XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
+            .findByCourtIdSafe(xhbCourtDao.get(0).getCourtId()).get(0);
+        
+        // 3) Get the caseType and caseNumber from the event
+        String caseType = event.getCaseType();
+        Integer caseNumber = event.getCaseNumber();
+        
+        // 4) Get caseId using the case number from the event
+        Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
+            .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
+        
+        if (xhbCaseDao.isPresent()) {
+            // 5) Get the hearingId using the caseId
+            List<XhbHearingDao> xhbHearingDao = getHearingRepository()
+                .findByCaseIdSafe(xhbCaseDao.get().getCaseId());
+            
+            // 6) Get the courtRoomId from the courtSiteId and courtRoomName
+            String courtRoomName = event.getCourtRoomName();
+            XhbCourtRoomDao xhbCourtRoomDao = getCourtRoomRepository()
+                .findByCourtSiteIdAndCourtRoomNameSafe(xhbCourtSiteDao.getCourtSiteId(), courtRoomName).get(0);
+            
+            // 7) Get the SittingId using the courtRoomId and courtSiteId
+            List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
+                .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(xhbCourtRoomDao.getCourtRoomId(),
+                    xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
+            
+            // 8) Loop through the SittingId's to get a match with the hearingId for the xhb_scheduled_hearing record
+            for (XhbSittingDao sittingDao : xhbSittingDaos) {
+                Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
+                    .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
+                        xhbHearingDao.get(0).getHearingId());
+                
+                // 9) Update the fields in the xhb_scheduled_hearing record
+                if (!scheduledHearingDao.isEmpty()) {
+                    scheduledHearingDao.get().setHearingProgress(event.getHearingProgressIndicator());
+                    scheduledHearingDao.get().setIsCaseActive(event.getIsCaseActive());
+                    getScheduledHearingRepository().update(scheduledHearingDao.get());
+                    // Exit the loop when the record is updated
+                    break;
+                }
+            }
+        }
+    }
+    
     /**
      * Add a message retrieved from BAIS into the PDDA database.
 
