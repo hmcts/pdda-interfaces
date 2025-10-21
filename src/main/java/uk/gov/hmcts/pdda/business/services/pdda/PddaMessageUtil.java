@@ -217,6 +217,8 @@ public final class PddaMessageUtil {
             // Set the courtId from the pdda database using the courtName from xhibit
             List<XhbCourtDao> courtDao = courtRepository.findByCourtNameValueSafe(newEvent.getCourtName());
             newEvent.setCourtId(courtDao.get(0).getCourtId());
+            LOG.debug("Court name from XHIBIT: {} mapped to court id {}, on PDDA",
+                newEvent.getCourtName(), newEvent.getCourtId());
         } else {
             LOG.debug("translatePublicDisplayEvent({}) for unknown event type", event);
         }
