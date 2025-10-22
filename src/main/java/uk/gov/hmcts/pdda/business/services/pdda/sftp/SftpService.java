@@ -472,12 +472,21 @@ public class SftpService extends XhibitPddaHelper {
                     if (!scheduledHearingDao.isEmpty()) {
                         LOG.debug("ScheduledHearing found with ID: {}",
                             scheduledHearingDao.get().getScheduledHearingId());
-                        scheduledHearingDao.get().setHearingProgress(hearingProgressIndicator);
-                        scheduledHearingDao.get().setIsCaseActive(caseActive);
+                        // Update hearingProgressIndicator if its present
+                        if (hearingProgressIndicator != null) {
+                            scheduledHearingDao.get().setHearingProgress(hearingProgressIndicator);
+                            LOG.debug("ScheduledHearing hearingProgress set to: {}",
+                                hearingProgressIndicator);
+                        }
+                        // Update isCaseActive if its present
+                        if (caseActive != null) {
+                            scheduledHearingDao.get().setIsCaseActive(caseActive);
+                            LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                                caseActive);
+                        }
                         getScheduledHearingRepository().update(scheduledHearingDao.get());
-                        LOG.debug("ScheduledHearing with ID: {} updated with HearingProgress: {} and IsCaseActive: {}",
-                            scheduledHearingDao.get().getScheduledHearingId(),
-                            event.getHearingProgressIndicator(), event.getIsCaseActive());
+                        LOG.debug("ScheduledHearing with ID: {} updated", 
+                            scheduledHearingDao.get().getScheduledHearingId());
                         // Exit the loop when the record is updated
                         break;
                     }
