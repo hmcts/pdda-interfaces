@@ -339,7 +339,6 @@ class SftpServiceTest {
     }
     
     @Test
-    @SuppressWarnings("PMD")
     void testProcessBaisPddaHearingProgressEvent() {
         // --- Arrange ---
         setupPddaHearingProgressEventFile();
@@ -421,23 +420,9 @@ class SftpServiceTest {
             mockEntityManager
         );
 
-        // Stub the static remapper so it doesn't hit room/site lookups
-        try (MockedStatic<PddaMessageUtil> mocked =
-                 Mockito.mockStatic(PddaMessageUtil.class, Mockito.CALLS_REAL_METHODS)) {
-            mocked.when(() -> PddaMessageUtil.translatePublicDisplayEvent(
-                        Mockito.any(PublicDisplayEvent.class),
-                        Mockito.any(XhbCourtRepository.class),
-                        Mockito.any(XhbCourtRoomRepository.class),
-                        Mockito.any(XhbCourtSiteRepository.class)))
-                  .thenAnswer(inv -> inv.getArgument(0));
-
-            // Run
-            classUnderTest.setupSftpClientAndProcessBaisData(
-                sftpConfig, sftpConfig.getSshClient(), false);
-        } catch (Exception e) {
-            fail(e);
-        }
-
+        // Run
+        classUnderTest.setupSftpClientAndProcessBaisData(sftpConfig, sftpConfig.getSshClient(), false);
+        
         // Verify
         EasyMock.verify(
             mockXhbCourtRepository,
