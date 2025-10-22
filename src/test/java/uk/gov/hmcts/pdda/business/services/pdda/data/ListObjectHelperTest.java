@@ -698,5 +698,38 @@ class ListObjectHelperTest {
         LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(23, 0));
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
     }
+    
+    @Test
+    void testGetTime() {
+        // These values need to be parsed correctly
+        // 
+        String notBeforeTime1 = "14:30"; // 24h
+        String notBeforeTime2 = "02:15 PM"; // 12h with space
+        String notBeforeTime3 = "11:45am"; // 12h no space
+        String notBeforeTime4 = "10:00 AM"; // 12h hour only
+        String notBeforeTime5 = "09:45 AM"; // 12h hour only
+        String notBeforeTime6 = "9:45 AM"; // 12h hour only
+        String notBeforeTime7 = "12:00 PM"; // 12h hour only
+        String notBeforeTime8 = "9:30 AM"; // 12h hour only
+        
+        // Act & Assert
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime1));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime2));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime3));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime4));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime5));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime6));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime7));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime8));
+            
+    }
 
 }

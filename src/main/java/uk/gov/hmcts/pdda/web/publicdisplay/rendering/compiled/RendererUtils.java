@@ -2,6 +2,7 @@
 package uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled;
 
 import uk.gov.hmcts.pdda.common.publicdisplay.data.Data;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtListValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
@@ -94,6 +95,8 @@ public final class RendererUtils {
             return summaryByNameValue.isFloating();
         } else if (item instanceof JuryStatusDailyListValue juryStatusDailyListValue) {
             return juryStatusDailyListValue.isFloating();
+        } else if (item instanceof AllCaseStatusValue allCaseStatusValue) {
+            return allCaseStatusValue.isFloating();
         }
         return false;
     }
