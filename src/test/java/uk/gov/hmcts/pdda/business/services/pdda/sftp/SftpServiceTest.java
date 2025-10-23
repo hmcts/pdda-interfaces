@@ -714,6 +714,7 @@ class SftpServiceTest {
     private void setupPddaHearingProgressEventFile() {
         try {
             PddaHearingProgressEvent pddaHearingProgressEvent = new PddaHearingProgressEvent();
+            pddaHearingProgressEvent.setCourtId(1);
             pddaHearingProgressEvent.setCourtName(COURT1);
             pddaHearingProgressEvent.setCourtRoomName(COURTROOM1);
             pddaHearingProgressEvent.setCaseType("T");
