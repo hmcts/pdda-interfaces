@@ -21,6 +21,10 @@ import java.util.Collection;
 @NamedQuery(name = "XHB_HEARING.findByCaseIdAndStartDate",
     query = "SELECT o from XHB_HEARING o WHERE o.caseId = :caseId "
         + "AND o.courtId = :courtId AND o.hearingStartDate = :hearingStartDate")
+@NamedQuery(name = "XHB_HEARING.findByCaseIdWithTodaysStartDateSafe",
+    query = "SELECT o from XHB_HEARING o WHERE o.caseId = :caseId "
+        + "AND o.hearingStartDate >= :hearingStartDate "
+        + "AND o.hearingStartDate < :hearingDateTomorrow")
 public class XhbHearingDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -6844793990175522946L;

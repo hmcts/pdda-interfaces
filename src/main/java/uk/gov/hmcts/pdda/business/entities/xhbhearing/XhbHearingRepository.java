@@ -20,6 +20,10 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
 
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = LoggerFactory.getLogger(XhbHearingRepository.class);
+    
+    private static final String HEARING_START_DATE = "hearingStartDate";
+    private static final String CASE_ID = "caseId";
+    
 
     public XhbHearingRepository(EntityManager em) {
         super(em);
@@ -39,7 +43,7 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
     public List<XhbHearingDao> findByCaseId(Integer caseId) {
         LOG.debug("In XhbHearingRepository.findByCaseId");
         Query query = getEntityManager().createNamedQuery("XHB_HEARING.findByCaseId");
-        query.setParameter("caseId", caseId);
+        query.setParameter(CASE_ID, caseId);
         return query.getResultList();
     }
 
@@ -49,7 +53,7 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_HEARING.findByCaseId");
-            query.setParameter("caseId", caseId);
+            query.setParameter(CASE_ID, caseId);
 
             return query.getResultList(); // Safe as-is when wrapped in try-catch
         } catch (Exception e) {
@@ -72,8 +76,8 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
         LOG.debug("findByDefendantAndCase()");
         Query query = getEntityManager().createNamedQuery("XHB_HEARING.findByCaseIdAndStartDate");
         query.setParameter("courtId", courtId);
-        query.setParameter("caseId", caseId);
-        query.setParameter("hearingStartDate", hearingStartDate);
+        query.setParameter(CASE_ID, caseId);
+        query.setParameter(HEARING_START_DATE, hearingStartDate);
         XhbHearingDao dao =
             query.getResultList().isEmpty() ? null : (XhbHearingDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
@@ -88,8 +92,8 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_HEARING.findByCaseIdAndStartDate");
             query.setParameter("courtId", courtId);
-            query.setParameter("caseId", caseId);
-            query.setParameter("hearingStartDate", hearingStartDate);
+            query.setParameter(CASE_ID, caseId);
+            query.setParameter(HEARING_START_DATE, hearingStartDate);
 
             List<?> resultList = query.getResultList();
 
@@ -101,9 +105,9 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
             }
 
             Object result = resultList.get(0);
-            if (result instanceof XhbHearingDao) {
+            if (result instanceof XhbHearingDao xhbHearingDao) {
                 LOG.debug("findByCaseIdAndStartDateSafe - Returning result for caseId: {}", caseId);
-                return Optional.of((XhbHearingDao) result);
+                return Optional.of(xhbHearingDao);
             } else {
                 LOG.warn("findByCaseIdAndStartDateSafe - Unexpected result type: {}",
                     result.getClass().getName());
@@ -112,6 +116,51 @@ public class XhbHearingRepository extends AbstractRepository<XhbHearingDao>
 
         } catch (Exception e) {
             LOG.error("Error in findByCaseIdAndStartDateSafe({}, {}, {}): {}", courtId, caseId,
+                hearingStartDate, e.getMessage(), e);
+            return Optional.empty();
+        }
+    }
+    
+    /**
+     * findByCaseIdWithTodaysStartDateSafe.
+
+     * @param caseId Integer
+     * @param hearingStartDate LocalDateTime
+     * @return XhbHearingDao
+     */
+    @SuppressWarnings("unchecked")
+    public Optional<XhbHearingDao> findByCaseIdWithTodaysStartDateSafe(Integer caseId, LocalDateTime hearingStartDate) {
+        LOG.debug("findByCaseIdWithTodaysStartDateSafe({}, {})", caseId, hearingStartDate);
+        // Get tomorrow's date by adding one day to today's date
+        LocalDateTime hearingDateTomorrow = hearingStartDate.plusDays(1);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_HEARING.findByCaseIdWithTodaysStartDateSafe");
+            query.setParameter(CASE_ID, caseId);
+            query.setParameter(HEARING_START_DATE, hearingStartDate);
+            query.setParameter("hearingDateTomorrow", hearingDateTomorrow);
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug(
+                    "findByCaseIdWithTodaysStartDateSafe - No results found for caseId: {}, hearingStartDate: {}",
+                    caseId, hearingStartDate);
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbHearingDao xhbHearingDao) {
+                LOG.debug("findByCaseIdWithTodaysStartDateSafe - Returning result for caseId: {} hearingStartDate: {}",
+                    caseId, hearingStartDate);
+                return Optional.of(xhbHearingDao);
+            } else {
+                LOG.warn("findByCaseIdWithTodaysStartDateSafe - Unexpected result type: {}",
+                    result.getClass().getName());
+                return Optional.empty();
+            }
+
+        } catch (Exception e) {
+            LOG.error("Error in findByCaseIdWithTodaysStartDateSafe({}, {}): {}", caseId,
                 hearingStartDate, e.getMessage(), e);
             return Optional.empty();
         }

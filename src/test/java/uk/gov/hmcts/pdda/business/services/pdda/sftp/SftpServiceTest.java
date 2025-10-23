@@ -360,8 +360,9 @@ class SftpServiceTest {
             EasyMock.isA(Integer.class), EasyMock.isA(String.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(xhbCaseDao);
         
-        List<XhbHearingDao> xhbHearingDao = List.of(DummyHearingUtil.getXhbHearingDao());
-        EasyMock.expect(mockXhbHearingRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
+        Optional<XhbHearingDao> xhbHearingDao = Optional.of(DummyHearingUtil.getXhbHearingDao());
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
                 .andStubReturn(xhbHearingDao);
         
         List<XhbCourtRoomDao> xhbCourtRoomDao = List.of(DummyCourtUtil.getXhbCourtRoomDao());
@@ -435,6 +436,71 @@ class SftpServiceTest {
             mockPddaMessageHelper,
             mockXhbClobRepository,
             mockEntityManager
+        );
+    }
+    
+    @Test
+    void testProcessBaisEmptyPddaHearingProgressEvent() {
+        // --- Arrange ---
+        setupEmptyPddaHearingProgressEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("PddaHearingProgress"))
+                .andReturn(pddaRefMessageTypeDao);
+        
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+        
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+        
+        EasyMock.replay(
+            mockEntityManager,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository
+        );
+
+        // Stub the static remapper so it doesn't hit room/site lookups
+        try (MockedStatic<PddaMessageUtil> mocked =
+                 Mockito.mockStatic(PddaMessageUtil.class, Mockito.CALLS_REAL_METHODS)) {
+            mocked.when(() -> PddaMessageUtil.translatePublicDisplayEvent(
+                        Mockito.any(PublicDisplayEvent.class),
+                        Mockito.any(XhbCourtRepository.class),
+                        Mockito.any(XhbCourtRoomRepository.class),
+                        Mockito.any(XhbCourtSiteRepository.class)))
+                  .thenAnswer(inv -> inv.getArgument(0));
+
+            // --- Act ---
+            classUnderTest.setupSftpClientAndProcessBaisData(
+                sftpConfig, sftpConfig.getSshClient(), false);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        // Verify
+        EasyMock.verify(
+            mockEntityManager,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository
         );
     }
     
@@ -713,6 +779,7 @@ class SftpServiceTest {
     private void setupPddaHearingProgressEventFile() {
         try {
             PddaHearingProgressEvent pddaHearingProgressEvent = new PddaHearingProgressEvent();
+            pddaHearingProgressEvent.setCourtId(1);
             pddaHearingProgressEvent.setCourtName(COURT1);
             pddaHearingProgressEvent.setCourtRoomName(COURTROOM1);
             pddaHearingProgressEvent.setCaseType("T");
@@ -725,6 +792,21 @@ class SftpServiceTest {
             String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
 
             sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251020090501.xml", encoded,
+                Charset.defaultCharset());
+        } catch (IOException e) {
+            LOG.error("Error putting file", e);
+        }
+    }
+    
+    private void setupEmptyPddaHearingProgressEventFile() {
+        try {
+            PddaHearingProgressEvent pddaHearingProgressEvent = new PddaHearingProgressEvent();
+            
+            byte[] serializedObject =
+                PddaSerializationUtils.serializePublicEvent(pddaHearingProgressEvent);
+            String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
+
+            sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251023090501.xml", encoded,
                 Charset.defaultCharset());
         } catch (IOException e) {
             LOG.error("Error putting file", e);
