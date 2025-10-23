@@ -105,7 +105,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
 
             for (int ci = 0; ci < caseNodes.getLength(); ci++) {
                 // For each case, extract all the defendants for that case node
-                cppData.addAll(getDefendantData(caseNodes, ci, courtRoomValue, courtSiteValue));
+                cppData.addAll(getDefendantData(caseNodes, ci, courtRoomValue, courtSiteValue, false));
             }
         }
         return cppData;
@@ -129,7 +129,7 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
                             getXPath().evaluate(XPATH_COURTSITENAME, courtSiteNodes.item(csi)));
                         for (int fci = 0; fci < floatingCaseNodes.getLength(); fci++) {
                             // For each case, extract all the defendants for that case node
-                            cppData.addAll(getDefendantData(floatingCaseNodes, fci, null, courtSiteValue));
+                            cppData.addAll(getDefendantData(floatingCaseNodes, fci, null, courtSiteValue, true));
                         }
                     }
                 }
@@ -146,8 +146,8 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
     }
 
     private List<AllCaseStatusValue> getDefendantData(NodeList nodeList, int rowNo, XhbCourtRoomDao courtRoomValue,
-        XhbCourtSiteDao courtSiteValue) throws XPathExpressionException {
-        LOG.debug("getDefendantData({},{},{},{})", nodeList, rowNo, courtRoomValue, courtSiteValue);
+        XhbCourtSiteDao courtSiteValue, boolean isFloating) throws XPathExpressionException {
+        LOG.debug("getDefendantData({},{},{},{},{})", nodeList, rowNo, courtRoomValue, courtSiteValue, isFloating);
         List<AllCaseStatusValue> cppData = new ArrayList<>();
         AllCaseStatusValue allCaseStatusValue;
         NodeList defendantNodes = getDefendantNodeList(nodeList.item(rowNo));
@@ -160,8 +160,8 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
                 populateCourtSiteRoomData(allCaseStatusValue, courtRoomValue, courtSiteValue);
 
                 // Populate the AllCaseStatusValue specific fields
-                populateData(allCaseStatusValue, (Element) defendantNodes.item(di), (Element) nodeList.item(rowNo));
-                allCaseStatusValue.setFloating("1");
+                populateData(allCaseStatusValue, (Element) defendantNodes.item(di),
+                    (Element) nodeList.item(rowNo), isFloating);
 
                 // Add the populated AllCaseStatusValue to cppData
                 cppData.add(allCaseStatusValue);
@@ -170,22 +170,14 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
         return cppData;
     }
 
-    private boolean isFloatingCases(NodeList floatingCaseNodes) {
-        return floatingCaseNodes.getLength() > 0 && null != floatingCaseNodes.item(0);
-    }
-
-    private AllCaseStatusValue getAllCaseStatusValue() {
-        return new AllCaseStatusValue();
-    }
-
     /**
      * Populates the AllCaseStatusValue object with data from the courtroom XML element.
-
      * @param value AllCaseStatusValue
      * @param defNode XML element for the defendant
      * @throws XPathExpressionException Exception
      */
-    protected void populateData(AllCaseStatusValue value, Element defNode, Element caseNode)
+    @SuppressWarnings("PMD")
+    protected void populateData(AllCaseStatusValue value, Element defNode, Element caseNode, boolean isFloating)
         throws XPathExpressionException {
         // Populate the SummaryByNameValue specific fields
         super.populateData(value, defNode, caseNode);
@@ -237,5 +229,20 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
         if (null != listCourtRoomValue) {
             value.setListCourtRoomId(listCourtRoomValue.getCourtRoomId());
         }
+
+        // Set floating only if isFloating is true
+        if (isFloating) {
+            value.setFloating("1");
+        }
+    }
+
+    // Returns true if the floatingCaseNodes NodeList contains any <caseDetails> nodes
+    private boolean isFloatingCases(NodeList floatingCaseNodes) {
+        return floatingCaseNodes != null && floatingCaseNodes.getLength() > 0;
+    }
+
+    // Returns a new AllCaseStatusValue instance
+    private AllCaseStatusValue getAllCaseStatusValue() {
+        return new AllCaseStatusValue();
     }
 }
