@@ -360,8 +360,9 @@ class SftpServiceTest {
             EasyMock.isA(Integer.class), EasyMock.isA(String.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(xhbCaseDao);
         
-        List<XhbHearingDao> xhbHearingDao = List.of(DummyHearingUtil.getXhbHearingDao());
-        EasyMock.expect(mockXhbHearingRepository.findByCaseIdSafe(EasyMock.isA(Integer.class)))
+        Optional<XhbHearingDao> xhbHearingDao = Optional.of(DummyHearingUtil.getXhbHearingDao());
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
                 .andStubReturn(xhbHearingDao);
         
         List<XhbCourtRoomDao> xhbCourtRoomDao = List.of(DummyCourtUtil.getXhbCourtRoomDao());
