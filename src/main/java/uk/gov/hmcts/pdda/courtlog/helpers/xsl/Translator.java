@@ -1,0 +1,25 @@
+package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
+
+import java.util.Date;
+import java.util.Locale;
+import org.w3c.dom.Document;
+
+/**
+ * @author pznwc5
+ * 
+ * Interface for court log translation
+ */
+public abstract class Translator {
+
+    protected static final String[] XSL_TYPE = { "client", "public_display", "public_notice", "cjse", "internet" };
+
+    protected int type;
+
+    public Translator(int type) {
+        this.type = type;
+    }
+
+    public abstract String translate(TranslationContext context, Locale locale, Document input, Date entryDate,
+            Integer eventType);
+
+}

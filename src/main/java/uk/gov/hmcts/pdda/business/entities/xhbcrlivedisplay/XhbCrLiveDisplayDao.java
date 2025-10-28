@@ -12,6 +12,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CR_LIVE_DISPLAY")
@@ -118,6 +120,16 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
 
     public void setXhbScheduledHearing(XhbScheduledHearingDao xsh) {
         this.xhbScheduledHearing = xsh;
+    }
+
+    public void setTimeStatusSet(Date entryDate) {
+        if (entryDate != null) {
+            this.timeStatusSet = entryDate.toInstant()
+                                  .atZone(ZoneId.systemDefault())
+                                  .toLocalDateTime();
+        } else {
+            this.timeStatusSet = null;
+        }
     }
 
 }

@@ -329,7 +329,14 @@ public class SftpService extends XhibitPddaHelper {
                     LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
                     processHearingProgressEvent(pddaHearingProgressEvent);
                 } else {
+                    if (event instanceof CaseStatusEvent) {
+                        LOG.debug("Case Status Event received from XHIBIT");
+                        CourtLogViewValue clvv = PddaSerializationUtils
+                            .deserializeCourtLogViewValue(clobData);
+                        crLiveStatusHelper.updatePublicDisplayStatus();
+                    }
                     sendMessage(event);
+                    
                 }
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;
