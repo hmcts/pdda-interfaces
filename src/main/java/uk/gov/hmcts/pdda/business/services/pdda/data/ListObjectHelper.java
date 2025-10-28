@@ -240,7 +240,7 @@ public class ListObjectHelper implements Serializable {
         if (xhbCourtRoomDao.isPresent() && xhbHearingListDao.isPresent()) {
             Integer courtSiteId = xhbCourtRoomDao.get().getCourtSiteId();
             Integer courtRoomId = xhbCourtRoomDao.get().getCourtRoomId();
-            final String floating = "N";
+            final String floating = "0";
             final Integer listId = xhbHearingListDao.get().getListId();
             final LocalDateTime listDate = xhbHearingListDao.get().getStartDate();
             String sittingTimeString = nodesMap.get(SITTINGTIME);
@@ -320,10 +320,16 @@ public class ListObjectHelper implements Serializable {
             String firstName = nodesMap.get(FIRSTNAME + ".1");
             String surname = nodesMap.get(SURNAME);
             // Correct any invalid data with only a surname populated
-            if (firstName == null && surname != null && surname.contains(",")) {
-                int commaPosition = surname.indexOf(',');
-                firstName = surname.substring(commaPosition + 1).trim();
-                surname = surname.substring(0, commaPosition);
+            if (firstName == null && surname != null) {
+                if (surname.contains(",")) {
+                    // If firstname & surname are combined in surname field, split them
+                    int commaPosition = surname.indexOf(',');
+                    firstName = surname.substring(commaPosition + 1).trim();
+                    surname = surname.substring(0, commaPosition);
+                } else {
+                    // If only surname is populated, set firstname to "" and continue processing
+                    firstName = "";
+                }
             }
             LOG.debug("Validating defendant with first name: {}, surname: {}", firstName, surname);
             String publicDisplayHide = "N";
