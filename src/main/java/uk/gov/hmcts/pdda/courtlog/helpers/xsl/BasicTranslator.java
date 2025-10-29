@@ -1,7 +1,7 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
 import java.text.DateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import org.w3c.dom.Document;
 import uk.gov.hmcts.framework.services.CsServices;
@@ -34,7 +34,8 @@ public class BasicTranslator extends Translator {
         this.xsl = xsl;
     }
 
-    public String translate(TranslationContext context, Locale locale, Document input, Date entryDate, Integer eventType) {
+    public String translate(TranslationContext context, Locale locale, Document input,
+        LocalDateTime entryDate, Integer eventType) {
         formatDateAndTime(locale, input, entryDate);
 
         if (xsl == null) {
@@ -48,7 +49,7 @@ public class BasicTranslator extends Translator {
      * 
      * @throws CourtLogException
      */
-    private void formatDateAndTime(final Locale locale, final Document input, final Date entryDate) {
+    private void formatDateAndTime(final Locale locale, final Document input, final LocalDateTime entryDate) {
 
         XmlServices xmlServices = CsServices.getXmlServices();
 

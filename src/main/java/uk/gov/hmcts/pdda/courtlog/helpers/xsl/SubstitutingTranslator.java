@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.xml.XMLConstants;
@@ -38,7 +38,8 @@ public class SubstitutingTranslator extends Translator {
     /**
      * Decorate with substitution
      */
-    public String translate(TranslationContext context, Locale locale, Document input, Date entryDate, Integer eventType) {
+    public String translate(TranslationContext context, Locale locale, Document input,
+        LocalDateTime entryDate, Integer eventType) {
         // System.out.println("Before:" +
         // CSServices.getXMLServices().getStringXML(input));
         substituteValues(type, locale, input, eventType);

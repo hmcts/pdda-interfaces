@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import org.w3c.dom.Document;
 
@@ -19,7 +19,7 @@ public abstract class Translator {
         this.type = type;
     }
 
-    public abstract String translate(TranslationContext context, Locale locale, Document input, Date entryDate,
+    public abstract String translate(TranslationContext context, Locale locale, Document input, LocalDateTime entryDate,
             Integer eventType);
 
 }

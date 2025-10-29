@@ -1,6 +1,6 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,7 +40,8 @@ public class MaskingTranslator extends Translator {
     /**
      * Decorate with masking
      */
-    public String translate(TranslationContext context, Locale locale, Document input, Date entryDate, Integer eventType) {
+    public String translate(TranslationContext context, Locale locale, Document input,
+        LocalDateTime entryDate, Integer eventType) {
 
         String maskedName = (String) context.get(MASKED_NAME);
         String maskedFlag = (String) context.get(MASKED_FLAG);

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.hmcts.framework.services.CsServices;
@@ -329,11 +330,12 @@ public class SftpService extends XhibitPddaHelper {
                     LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
                     processHearingProgressEvent(pddaHearingProgressEvent);
                 } else {
-                    if (event instanceof CaseStatusEvent) {
+                    if (event instanceof CaseStatusEvent caseStatusEvent) {
                         LOG.debug("Case Status Event received from XHIBIT");
-                        CourtLogViewValue clvv = PddaSerializationUtils
-                            .deserializeCourtLogViewValue(clobData);
-                        crLiveStatusHelper.updatePublicDisplayStatus();
+                        
+                        // 1) Get the CourtLogViewValue from the event
+                        
+                        // 2) crLiveStatusHelper.updatePublicDisplayStatus();
                     }
                     sendMessage(event);
                     
