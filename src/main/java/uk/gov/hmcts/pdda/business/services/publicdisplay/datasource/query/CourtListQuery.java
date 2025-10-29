@@ -202,14 +202,16 @@ public class CourtListQuery extends PublicDisplayQuery {
     }
     
     private String getRefHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
-        if (hearingDao != null && hearingDao.isPresent()) {
+        if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository().findByIdSafe(hearingDao.get().getRefHearingTypeId());
+                getXhbRefHearingTypeRepository()
+                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
             if (refHearingTypeDao.isPresent()) {
                 return refHearingTypeDao.get().getHearingTypeDesc();
             }
         }
         return null;
     }
+
 
 }
