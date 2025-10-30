@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -24,20 +25,20 @@ class CourtLogMarshaller {
     // is
     // currently being processed should be held in a Map or Collection
     /** Holds unmarshalled nodes in a map where duplicate keys become lists. */
-    private class CourtLogUnmarshalledNode {
+    private final class CourtLogUnmarshalledNode {
 
-        private static final Logger log =
+        private static final Logger LOG =
                 LoggerFactory.getLogger(CourtLogUnmarshalledNode.class);
 
-        private final Map<String, Object> nodeAsMap = new HashMap<>();
+        private final Map<String, Object> nodeAsMap = new ConcurrentHashMap<>();
 
-        protected void put(String nodeName, Object nodeValue) {
+        private void put(String nodeName, Object nodeValue) {
             Objects.requireNonNull(nodeName, "nodeName");
 
-            log.debug("put: nodeName={}, nodeValue={}", nodeName, nodeValue);
+            LOG.debug("put: nodeName={}, nodeValue={}", nodeName, nodeValue);
 
             Object current = nodeAsMap.get(nodeName);
-            log.debug("put: currentValue={}", current);
+            LOG.debug("put: currentValue={}", current);
 
             if (current == null) {
                 // First value for this key
@@ -60,7 +61,7 @@ class CourtLogMarshaller {
         }
 
         /** Returns an unmodifiable snapshot of the underlying map. */
-        protected Map<String, Object> getUnmarshalledNode() {
+        private Map<String, Object> getUnmarshalledNode() {
             return Collections.unmodifiableMap(new HashMap<>(nodeAsMap));
             // or: return Map.copyOf(nodeAsMap);  // if you don't need a deep copy
         }
@@ -71,13 +72,13 @@ class CourtLogMarshaller {
         return XmlServicesImpl.getInstance().generateXMLFromPropSet(props, rootNodeName);
     }
 
-    public Map unmarshall(String xml) {
-        LOG.debug("unmarshall() - entry - xml : " + xml);
+    public Map<String, Object> unmarshall(String xml) {
+        LOG.debug("unmarshall() - entry - xml : {}", xml);
 
         Document doc = CourtLogXmlHelper.createDocument(xml);
-        Map props = unmarshallNode(doc.getDocumentElement()).getUnmarshalledNode();
+        Map<String, Object> props = unmarshallNode(doc.getDocumentElement()).getUnmarshalledNode();
 
-        return ((props != null) ? props : new HashMap());
+        return (props != null) ? props : new HashMap<>();
     }
 
     /*
@@ -90,7 +91,7 @@ class CourtLogMarshaller {
      * CourtLogUnmarshalledNode
      */
     private CourtLogUnmarshalledNode unmarshallNode(Node rootNode) {
-        LOG.debug("unmarshallNode() - entry - processing Node : " + rootNode.getNodeName());
+        LOG.debug("unmarshallNode() - entry - processing Node : {}", rootNode.getNodeName());
 
         CourtLogUnmarshalledNode cLUNode = new CourtLogUnmarshalledNode();
 
@@ -98,7 +99,7 @@ class CourtLogMarshaller {
         Node node;
 
         if (nodes.getLength() > 0) {
-            for (int i = 0, n = nodes.getLength(); i < n; i++) {
+            for (int i = 0; i < nodes.getLength(); i++) {
                 node = nodes.item(i);
 
                 if (node.hasChildNodes()) {

@@ -5,8 +5,12 @@ package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
  * 
  * Factory that creates a translator
  */
-public class TranslatorFactory {
+public final class TranslatorFactory {
 
+    private TranslatorFactory() {
+        super();
+    }
+    
     /**
      * Get the translator for the specified type
      * 
@@ -15,19 +19,18 @@ public class TranslatorFactory {
      * @return Translator
      */
     public static Translator getTranslator(TranslationType translationType) {
-
         int type = translationType.getType();
         BasicTranslator basicTranslator = new BasicTranslator(type);
 
-        if (translationType == TranslationType.PUBLIC_DISPLAY)
+        if (translationType == TranslationType.PUBLIC_DISPLAY) {
             return basicTranslator;
-        else if (translationType == TranslationType.INTERNET)
+        } else if (translationType == TranslationType.INTERNET) {
             // Internet
             return new MaskingTranslator(type, basicTranslator);
-        else
+        } else {
             // Public notice, thick client and CJSE
             return new SubstitutingTranslator(type, basicTranslator);
-
+        }
     }
 
     /**
@@ -38,19 +41,18 @@ public class TranslatorFactory {
      * @return Translator
      */
     public static Translator getTranslator(TranslationType translationType, String xsl) {
-
         int type = translationType.getType();
         BasicTranslator basicTranslator = new BasicTranslator(type, xsl);
 
-        if (translationType == TranslationType.PUBLIC_DISPLAY)
+        if (translationType == TranslationType.PUBLIC_DISPLAY) {
             return basicTranslator;
-        else if (translationType == TranslationType.INTERNET)
+        } else if (translationType == TranslationType.INTERNET) {
             // Internet
             return new MaskingTranslator(type, basicTranslator);
-        else
+        } else {
             // Public notice, thick client and CJSE
             return new SubstitutingTranslator(type, basicTranslator);
-
+        }
     }
 }
 

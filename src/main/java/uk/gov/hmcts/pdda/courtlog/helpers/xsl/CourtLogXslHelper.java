@@ -17,7 +17,7 @@ import uk.gov.hmcts.pdda.courtlog.helpers.xml.CourtLogXmlHelper;
  * @version $Revision: 1.8 $
  * @see uk.gov.courtservice.xhibit.courtlog.helpers.xsl.Translator
  */
-public class CourtLogXslHelper {
+public final class CourtLogXslHelper {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(CourtLogXslHelper.class);
 
     private CourtLogXslHelper() {
@@ -169,14 +169,15 @@ public class CourtLogXslHelper {
         }
 
         // if the context is null, then create a new one...
-        if (context == null) {
-            context = new TranslationContext();
+        TranslationContext newContext = context;
+        if (newContext == null) {
+            newContext = new TranslationContext();
         }
 
         Document document = CourtLogXmlHelper.createDocument(xml);
         Translator translator = getTranslator(translationType, xsl);
 
-        return translator.translate(context, locale, document, entryDate, eventType);
+        return translator.translate(newContext, locale, document, entryDate, eventType);
     }
 
     /**

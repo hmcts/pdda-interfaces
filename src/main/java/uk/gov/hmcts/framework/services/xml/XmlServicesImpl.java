@@ -89,13 +89,12 @@ import javax.xml.validation.Validator;
  * 
  */
 
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
 public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlServicesImpl.class);
 
-    private static ErrorChecker DEFAULT_ERROR_HANDLER = new ErrorChecker();
-
-    private static SystemIdEntityResolver DEFAULT_RESOLVER = new SystemIdEntityResolver();
+    private static final ErrorChecker DEFAULT_ERROR_HANDLER = new ErrorChecker();
 
     private static final DocumentBuilderFactory DOCUMENTBUILDERFACTORY =
         DocumentBuilderFactory.newInstance();
@@ -106,7 +105,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     private static final String ENCODING = "UTF-8";
 
-    private static final DocumentBuilderFactory documentBuilderFactory =
+    private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY =
         DocumentBuilderFactory.newInstance();
 
     protected XmlServicesImpl() {
@@ -346,7 +345,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
         try {
             // Get DocumentBuilder
-            DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+            DocumentBuilder builder = DOCUMENT_BUILDER_FACTORY.newDocumentBuilder();
             doc = builder.newDocument();
         } catch (ParserConfigurationException e) {
             LOG.debug("ParserConfigurationException " + e);
@@ -368,7 +367,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @return String The XML String representation of the Document.
      * @throws CsXmlServicesException If an error occurs during the transformation.
      */
-    public String getStringXML(Document doc) throws CsXmlServicesException {
+    public String getStringXML(Document doc) {
         String methodName = "getStringXML() - ";
         if (LOG.isDebugEnabled()) {
             LOG.debug(methodName + "called");
@@ -388,7 +387,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
         return xmlout;
     }
 
-
+    @SuppressWarnings("unchecked")
     private Element addPropertyMapToXMLDoc(Document doc, Map<String, ?> xmlToConvert, String tag) {
         Objects.requireNonNull(doc, "doc");
         Objects.requireNonNull(xmlToConvert, "xmlToConvert");
@@ -405,13 +404,11 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
             if (value instanceof Map<?, ?> nestedMap) {
                 // Safe cast assumes keys are strings; adjust if your data differs
-                @SuppressWarnings("unchecked")
                 Map<String, ?> typed = (Map<String, ?>) nestedMap;
                 Element child = addPropertyMapToXMLDoc(doc, typed, key);
                 node.appendChild(child);
 
             } else if (value instanceof Collection<?> coll) {
-                @SuppressWarnings("unchecked")
                 Collection<Map<String, ?>> typed =
                     (Collection<Map<String, ?>>) (Collection<?>) coll;
 
@@ -439,6 +436,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @param xmlString XML to be validated
      * @param schemaLocation Schema to use for validation
      */
+    @Override
     public void validateXml(String xmlString, String schemaLocation) {
         try {
             // Resolve XSD from classpath (e.g., "/schemas/my.xsd")
@@ -542,16 +540,16 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @throws CSXMLServicesException
      */
     private void transform(Source source, Result result, Source xslSource, URIResolver resolver,
-        boolean omitHeader) throws CsXmlServicesException {
+        boolean omitHeader) {
         try {
-
             Transformer transformer = getTransformer(xslSource, resolver);
-            if (omitHeader == true)
+            if (omitHeader) {
                 transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, XmlServicesImpl.ENCODING);
+            }
+            transformer.setOutputProperty(OutputKeys.ENCODING, ENCODING);
             transformer.transform(source, result);
         } catch (TransformerException e) {
-            CsXmlServicesException ex = new CsXmlServicesException();
+            CsXmlServicesException ex = new CsXmlServicesException(e);
             CsServices.getDefaultErrorHandler().handleError(ex, XmlServicesImpl.class);
             throw ex;
         }

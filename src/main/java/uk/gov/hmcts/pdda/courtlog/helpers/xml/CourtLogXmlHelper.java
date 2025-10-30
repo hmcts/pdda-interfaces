@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogCrudValue;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogCrudValue;
 
 /**
  * <p>
@@ -74,22 +74,18 @@ public class CourtLogXmlHelper {
      * @return
      */
     private static String addSchema(String xml, Integer eventType) {
-        LOG.debug("addSchema() - eventType = " + eventType + "; xml = " + xml);
+        LOG.debug("addSchema() - eventType = {}{}{}", eventType, "; xml = ", xml);
 
         final int start = xml.indexOf("<event>");
-
+        String resultXml = xml;
+        
         if (start != -1) {
             String schema = "<event xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
                     + "xsi:noNamespaceSchemaLocation='" + eventType + ".xsd'>";
 
-            final int end = start + "<event>".length();
-            final StringBuffer tempXML = new StringBuffer(xml);
-            tempXML.replace(start, end, schema);
-
-            xml = tempXML.toString();
+            resultXml = xml.replaceFirst("<event>", schema);
         }
-
-        return xml.trim();
+        return resultXml.trim();
     }
 
     /**

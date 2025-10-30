@@ -3,7 +3,7 @@ package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author pznwc5
@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class TranslationContext {
 
     // Use generics and an ordered map for automatic key sorting
-    private final Map<String, Object> values = new TreeMap<>();
+    private final Map<String, Object> values = new ConcurrentHashMap<>();
 
     /**
      * Retrieves a named attribute.

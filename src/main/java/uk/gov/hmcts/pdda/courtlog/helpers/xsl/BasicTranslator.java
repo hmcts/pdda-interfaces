@@ -4,9 +4,9 @@ import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import org.w3c.dom.Document;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogCrudValue;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.XmlServices;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogCrudValue;
 
 /**
  * @author pznwc5
@@ -34,6 +34,7 @@ public class BasicTranslator extends Translator {
         this.xsl = xsl;
     }
 
+    @Override
     public String translate(TranslationContext context, Locale locale, Document input,
         LocalDateTime entryDate, Integer eventType) {
         formatDateAndTime(locale, input, entryDate);

@@ -1,8 +1,9 @@
-package uk.gov.hmcts.pdda.courtlog.vos;
+package uk.gov.courtservice.xhibit.courtlog.vos;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CourtLogCrudValue extends CourtLogAbstractValue {
 
@@ -20,7 +21,7 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
     /**
      * Used to hold the event-specific properties, which are converted to XML.
      */
-    private Map<String, Object> propertyMap = new HashMap<>();
+    private Map<String, Object> propertyMap = new ConcurrentHashMap<>();
 
     /** Indicates whether the Court Log entry has been made in court. */
     private boolean inCourt;

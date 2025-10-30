@@ -24,7 +24,7 @@ public class MaskingTranslator extends Translator {
     public static final String MASKED_FLAG = "MASKED_FLAG";
 
     /** Parent translator */
-    private Translator next;
+    private final Translator next;
 
     /**
      * Initialize with the parent
@@ -40,6 +40,7 @@ public class MaskingTranslator extends Translator {
     /**
      * Decorate with masking
      */
+    @Override
     public String translate(TranslationContext context, Locale locale, Document input,
         LocalDateTime entryDate, Integer eventType) {
 
@@ -81,17 +82,19 @@ public class MaskingTranslator extends Translator {
      */
     private void resetValue(final Document doc, final String tagname, String value) {
         final NodeList nodelist = doc.getElementsByTagName(tagname);
-        if (nodelist.getLength() == 0)
+        if (nodelist.getLength() == 0) {
             return;
+        }
         final Node node = nodelist.item(0);
-        if (node == null)
+        if (node == null) {
             return;
-
+        }
         final Node firstChild = node.getFirstChild();
-        if (firstChild != null)
+        if (firstChild != null) {
             firstChild.setNodeValue(value);
-        else
+        } else {
             node.appendChild(doc.createTextNode(value));
+        }
     }
 }
 

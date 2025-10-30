@@ -29,6 +29,7 @@ import java.util.Optional;
  * @author tz0d5m
  * @version $Revision: 1.7 $
  */
+@SuppressWarnings({"PMD.AvoidDeeplyNestedIfStmts", "PMD.NullAssignment"})
 public final class CrLiveStatusHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
     private static final String REMOVE_FREE_TEXT_STYLESHEET = "config/courtlog/transformer/remove_free_text.xsl";
@@ -186,11 +187,11 @@ public final class CrLiveStatusHelper {
         crLiveDisplay.setStatus(null);
     }
     
-    protected boolean isEntityManagerActive() {
+    private boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
     }
     
-    protected EntityManager getEntityManager() {
+    private EntityManager getEntityManager() {
         if (entityManager == null) {
             LOG.debug("getEntityManager() - Creating new entityManager");
             clearRepositories();
@@ -199,7 +200,7 @@ public final class CrLiveStatusHelper {
         return entityManager;
     }
     
-    protected void clearRepositories() {
+    private void clearRepositories() {
         LOG.info("clearRepositories()");
         xhbScheduledHearingRepository = null;
         xhbSittingRepository = null;

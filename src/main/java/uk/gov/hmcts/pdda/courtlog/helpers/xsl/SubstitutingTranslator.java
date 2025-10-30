@@ -7,7 +7,9 @@ import javax.xml.XMLConstants;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -38,6 +40,7 @@ public class SubstitutingTranslator extends Translator {
     /**
      * Decorate with substitution
      */
+    @Override
     public String translate(TranslationContext context, Locale locale, Document input,
         LocalDateTime entryDate, Integer eventType) {
         // System.out.println("Before:" +
@@ -73,13 +76,14 @@ public class SubstitutingTranslator extends Translator {
                 // System.out.println("After ===>" +
                 // textNodes.item(i).getNodeValue());
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass(), e.toString());
             throw new CourtLogRuntimeException(e);
         }
     }
     
-    public NodeList allTextNodes(Document input) throws Exception {
+    public NodeList allTextNodes(Document input) throws XPathFactoryConfigurationException,
+        XPathExpressionException {
         XPathFactory xf = XPathFactory.newInstance();
         // (Optional but recommended) secure processing
         xf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -96,16 +100,17 @@ public class SubstitutingTranslator extends Translator {
      */
     private void substituteXMLValues(Node textNode, Integer eventType, ResourceBundle bundle) {
         String text = textNode.getNodeValue();
-        if (text.length() <= 0)
+        if (text.length() <= 0) {
             return;
+        }
 
         String eventNo = "E" + eventType;
-        String newValue = null;
-
-        if (text.indexOf(eventNo) == -1)
+        
+        if (text.indexOf(eventNo) == -1) {
             return;
+        }
         // Determine a key...
-        newValue = bundle.getString(text);
+        String newValue = bundle.getString(text);
         // Find start and end index for substitution...
         int start = newValue.indexOf('[');
         int end = newValue.indexOf(']') + 1;
@@ -117,8 +122,9 @@ public class SubstitutingTranslator extends Translator {
             newValue = sb.toString().trim();
         }
 
-        if (newValue != null)
+        if (newValue != null) {
             textNode.setNodeValue(newValue);
+        }
     }
 }
 
