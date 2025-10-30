@@ -1,18 +1,17 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
-
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
-
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.courtlog.helpers.xml.CourtLogXmlHelper;
+
+import java.time.LocalDateTime;
+import java.util.Locale;
 
 /**
  * Helper class used to provide several delegate methods that perform XML
  * transformation using XSL.
- * 
+
  * @author tz0d5m
  * @version $Revision: 1.8 $
  * @see uk.gov.courtservice.xhibit.courtlog.helpers.xsl.Translator
@@ -27,7 +26,7 @@ public final class CourtLogXslHelper {
     /**
      * Delegate method to provide a simpler interface for transformations to the
      * calling code.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -41,7 +40,7 @@ public final class CourtLogXslHelper {
     /**
      * Delegate method to provide a simpler interface for transformations to the
      * calling code.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -55,7 +54,7 @@ public final class CourtLogXslHelper {
     /**
      * Delegate method to provide a simpler interface for transformations to the
      * calling code.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -70,7 +69,7 @@ public final class CourtLogXslHelper {
      * Delegate method to provide a simpler interface for transformations to the
      * calling code. The xml to transform, the entry date and the event type are
      * all taken from the passed in <code>CourtLogViewValue</code>.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -84,7 +83,7 @@ public final class CourtLogXslHelper {
      * Delegate method to provide a simpler interface for transformations to the
      * calling code. The xml to transform, the entry date and the event type are
      * all taken from the passed in <code>CourtLogViewValue</code>.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -99,7 +98,7 @@ public final class CourtLogXslHelper {
      * Delegate method to provide a simpler interface for transformations to the
      * calling code. The xml to transform, the entry date and the event type are
      * all taken from the passed in <code>CourtLogViewValue</code>.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -114,7 +113,7 @@ public final class CourtLogXslHelper {
      * Delegate method to provide a simpler interface for transformations to the
      * calling code. The xml to transform, the entry date and the event type are
      * all taken from the passed in <code>CourtLogViewValue</code>.
-     * 
+
      * @see #translateEvent(java.lang.String, java.util.Date, java.lang.Integer,
      *      java.util.Locale, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
@@ -129,7 +128,7 @@ public final class CourtLogXslHelper {
     /**
      * Method to translate and return the passed in xml using the required xsl
      * stylesheet.
-     * 
+
      * @param xml
      *            The xml text we want to transform, cannot be <i>null</i>.
      * @param entryDate
@@ -150,7 +149,7 @@ public final class CourtLogXslHelper {
      *            The path of the XSL file to use for the transform, or <i>null</i>
      *            if could be worked out later.
      * @return The passed in xml translated using a <code>Translator</code>
-     * 
+
      * @see uk.gov.courtservice.xhibit.courtlog.helpers.xsl.Translator
      *      #translate(uk.gov.courtservice.xhibit.courtlog.helpers.xsl
      *      .TranslationContext, java.util.Locale, org.w3c.dom.Document,
@@ -183,13 +182,13 @@ public final class CourtLogXslHelper {
     /**
      * Simple extracted method to provide the required <code>Translator</code>
      * for the passed in parameters.
-     * 
+
      * @param translationType
      *            The translation type to use.
      * @param xsl
      *            The path of the XSL file to use for the transform.
      * @return The required <code>Translator</code>
-     * 
+
      * @see uk.gov.courtservice.xhibit.courtlog.helpers.xsl.TranslatorFactory
      *      #getTranslator(uk.gov.courtservice.xhibit.courtlog.helpers.xsl
      *      .TranslationType)

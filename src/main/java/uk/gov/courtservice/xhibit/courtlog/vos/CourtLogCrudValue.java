@@ -39,7 +39,7 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     /**
      * Sets the entire property map.
-     *
+
      * @param propertyMap the map of properties to set
      */
     public void setPropertyMap(Map<String, Object> propertyMap) {
@@ -48,7 +48,7 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     /**
      * Returns the current property map.
-     *
+
      * @return an unmodifiable view of the property map
      */
     public Map<String, Object> getPropertyMap() {
@@ -57,7 +57,7 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     /**
      * Sets or updates an individual event property.
-     *
+
      * @param key   the property name
      * @param value the property value
      */
@@ -66,11 +66,10 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
     }
 
     /**
-     * Retrieve an event property
-     * 
-     * @param key
-     *            The name of the property.
-     * @return
+     * Retrieve an event property.
+
+     * @param key name of the property.
+     * @return The value of the property.
      */
     public Object getProperty(Object key) {
         return this.propertyMap.get(key);
@@ -86,8 +85,8 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     /**
      * Set the Free text for the entry.
-     * 
-     * @param entryFreeText
+
+     * @param entryFreeText text to set.
      */
     public void setEntryFreeText(String entryFreeText) {
         this.entryFreeText = entryFreeText;
@@ -95,8 +94,8 @@ public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     /**
      * Get the entry free text.
-     * 
-     * @return
+
+     * @return the entry free text.
      */
     public String getEntryFreeText() {
         return this.entryFreeText;

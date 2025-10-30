@@ -50,34 +50,26 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 /**
- * 
  * Title: XMLServices.
- * 
- * 
  * Description: This class handles loading and creation of xml documents.
- * 
- * 
  * Copyright: Copyright (c) 2002
- * 
- * 
  * Company: EDS
- * 
  * @author Faisal Shoukat
  * @version $Id: XMLServicesImpl.java,v 1.42 2009/06/17 10:05:12 hewittm Exp $
- * 
+
  *          Change History -
- * 
+
  *          01/11/02 - JB - generateXMLFromPropSet now handles embedded property sets.
- * 
+
  *          22/11/02 - KB - added public Document createDocFromValue( CSValueObject obj ) throws
  *          CSXMLServicesException
- * 
+
  *          17/02/03 - AWD - Fixed bug Test Obs Id 49, Test Case 51994
- * 
+
  *          17/02/03 - AWD - generateXMLFromPropSet modified to build up an XML DOM document rather
  *          than a StringBuilder. Advantage is that substitution of special markup characters into
  *          entities is handled.
- * 
+
  *          03/03/03 - AWD - Method added to provide support for XML transformations 05/03/03 - JB -
  *          Added addCollectionToXMLDoc to generate XML from collections 03/04/03 - JB - The
  *          transformer now ouputs the XML header 03/04/03 - JB - Backed out last change 08/04/03 -
@@ -86,7 +78,6 @@ import javax.xml.validation.Validator;
  *          Applying ISO-8859-1 encoding as this handles special chars better. 19/11/03 - RL -
  *          Changing encoding to UTF-8 as this handles special chars even better!<br>
  *          Removing XMLTransform as XSLServices should be used
- * 
  */
 
 @SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
@@ -114,7 +105,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Get singleton instance of XMLServicesImpl.
-     * 
+
      * @return XmlServicesImpl
      */
     public static XmlServicesImpl getInstance() {
@@ -123,7 +114,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Convert a object implementing the CSValueObject interface to an xml document.
-     * 
+
      * @param obj To work effectively the CSValueObject requires a default public constructor and
      *        public get methods for all vos that are required in the resulting xml document
      * @return Document xml representation of the CSValueObject
@@ -150,7 +141,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Add a collection to the XML document being created.
-     * 
+
      * @param doc Document
      * @param xmlToConvert Collection
      * @param tag String
@@ -177,7 +168,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Recursive method to handle embedded property sets.
-     * 
+
      * @param doc document that the property map will be added to
      * @param xmlToConvert the properties object which contains the key value pairs
      * @param tag The root element of the xml document
@@ -234,7 +225,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * createDocFromString.
-     * 
+
      * @param xmlContent String
      * @return Document
      * @throws CsXmlServicesException Exception
@@ -260,7 +251,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Retrieves the value of an xpath from an xml string.
-     * 
+
      * @param xmlString The xml to search
      * @param xpath The xpath to search for
      * @return The value of the xpath
@@ -303,7 +294,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Adds the specified element before the beforeTag in the passed document.
-     * 
+
      * @param document Document to which the element is added
      * @param tagName Name of the element that is added
      * @param value Node value of the element
@@ -331,13 +322,13 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     /**
      * Generates an xml document from a properties set.
-     * 
+
      * @param xmlToConvert the properties object which contains the key value pairs.
      * @param tag The root element of the xml document.
      * @return String the xml document.
      */
     @SuppressWarnings("unchecked")
-    public String generateXMLFromPropSet(Map xmlToConvert, String tag) {
+    public String generateXmlFromPropSet(Map xmlToConvert, String tag) {
         String methodName = "generateXMLFromPropSet() - ";
         LOG.debug(methodName + "called :: tag: " + tag + " Map: " + xmlToConvert);
 
@@ -354,20 +345,20 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
             throw ex;
         }
 
-        Element root = addPropertyMapToXMLDoc(doc, xmlToConvert, tag);
+        Element root = addPropertyMapToXmlDocument(doc, xmlToConvert, tag);
         doc.appendChild(root);
 
-        return getStringXML(doc);
+        return getStringXml(doc);
     }
 
     /**
      * Converts a Document to its String XML representation.
-     *
+
      * @param doc The Document to be converted.
      * @return String The XML String representation of the Document.
      * @throws CsXmlServicesException If an error occurs during the transformation.
      */
-    public String getStringXML(Document doc) {
+    public String getStringXml(Document doc) {
         String methodName = "getStringXML() - ";
         if (LOG.isDebugEnabled()) {
             LOG.debug(methodName + "called");
@@ -388,7 +379,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
     }
 
     @SuppressWarnings("unchecked")
-    private Element addPropertyMapToXMLDoc(Document doc, Map<String, ?> xmlToConvert, String tag) {
+    private Element addPropertyMapToXmlDocument(Document doc, Map<String, ?> xmlToConvert, String tag) {
         Objects.requireNonNull(doc, "doc");
         Objects.requireNonNull(xmlToConvert, "xmlToConvert");
         Objects.requireNonNull(tag, "tag");
@@ -405,14 +396,14 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
             if (value instanceof Map<?, ?> nestedMap) {
                 // Safe cast assumes keys are strings; adjust if your data differs
                 Map<String, ?> typed = (Map<String, ?>) nestedMap;
-                Element child = addPropertyMapToXMLDoc(doc, typed, key);
+                Element child = addPropertyMapToXmlDocument(doc, typed, key);
                 node.appendChild(child);
 
             } else if (value instanceof Collection<?> coll) {
                 Collection<Map<String, ?>> typed =
                     (Collection<Map<String, ?>>) (Collection<?>) coll;
 
-                for (Element e : addCollectionToXMLDoc(doc, typed, key)) {
+                for (Element e : addCollectionToXmlDocument(doc, typed, key)) {
                     node.appendChild(e);
                 }
             } else {
@@ -430,9 +421,9 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
 
     /**
-     * Validates the XML specified in <code>xmlString<code> against the schema specified
-     * by the argument <code>schemaBase</code>
-     *
+     * Validates the XML specified in <code>xmlString</code> against the schema specified
+     * by the argument <code>schemaBase</code>.
+
      * @param xmlString XML to be validated
      * @param schemaLocation Schema to use for validation
      */
@@ -447,13 +438,11 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
             // Security hardening
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // disallow fetching
-                                                                          // remote schemas
+            factory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // disallow fetching remote schemas
             factory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // disallow external DTDs
 
             // Build schema and validator
-            Schema schema = factory.newSchema(schemaUrl); // imports/includes resolve relative to
-                                                          // this URL
+            Schema schema = factory.newSchema(schemaUrl); // imports/includes resolve relative to this URL
             Validator validator = schema.newValidator();
 
             // Keep your existing error handler
@@ -469,14 +458,14 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
 
     /**
-     * Add a collection to the XML document being created
-     *
-     * @param doc
-     * @param xmlToConvert
-     * @param tag
+     * Add a collection to the XML document being created.
+
+     * @param doc the document.
+     * @param xmlToConvert the xml to convert.
+     * @param tag the tag.
      * @return Collection of DOM Elements
      */
-    private Collection<Element> addCollectionToXMLDoc(Document doc,
+    private Collection<Element> addCollectionToXmlDocument(Document doc,
         Collection<Map<String, ?>> xmlToConvert, String tag) {
         Objects.requireNonNull(doc, "doc");
         Objects.requireNonNull(xmlToConvert, "xmlToConvert");
@@ -488,7 +477,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
         List<Element> elements = new ArrayList<>(xmlToConvert.size());
 
         for (Map<String, ?> currentMap : xmlToConvert) {
-            Element collectionElement = addPropertyMapToXMLDoc(doc, currentMap, tag);
+            Element collectionElement = addPropertyMapToXmlDocument(doc, currentMap, tag);
             elements.add(collectionElement);
         }
 
@@ -498,13 +487,13 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
 
     /**
-     * Returns the transformer for the specified Style Sheet and resolver
-     *
+     * Returns the transformer for the specified Style Sheet and resolver.
+
      * @param xslSource The style sheet Source.
      * @param resolver An object called by the processor to turn a URI used in document(),
      *        xsl:import, or xsl:include into a Source object. can be null
      * @return transformer
-     * @throws TransformerConfigurationException
+     * @throws TransformerConfigurationException exception that can be thrown.
      */
     private Transformer getTransformer(Source xslSource, URIResolver resolver)
         throws TransformerConfigurationException {
@@ -530,14 +519,15 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
 
     /**
-     * Performs the transformation
-     *
-     * @param xmlToTransform xmlToTransform held in a String
-     * @param Result the result of the transformation
-     * @param styleSheetName Style Sheet to apply (full path) can be null
+     * Performs the transformation.
+
+     * @param source xml to transform.
+     * @param result the result of the transformation.
+     * @param xslSource the style sheet to apply (full path) can be null.
      * @param resolver An object called by the processor to turn a URI used in document(),
      *        xsl:import, or xsl:include into a Source object. can be null
-     * @throws CSXMLServicesException
+     * @param omitHeader omit the XML header in the output.
+     * @throws CSXMLServicesException exception that can be thrown.
      */
     private void transform(Source source, Result result, Source xslSource, URIResolver resolver,
         boolean omitHeader) {

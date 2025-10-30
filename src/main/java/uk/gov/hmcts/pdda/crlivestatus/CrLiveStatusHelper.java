@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.CourtLogXslHelper;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.TranslationType;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -102,7 +103,7 @@ public final class CrLiveStatusHelper {
      * Update the public display status if the passed in court log event is more
      * recent than the last displayed public display event for the case whose
      * scheduled hearing is passed in on the view value.
-     * 
+
      * @param courtLogViewValue
      *            The <code>CourtLogViewValue</code> of the event that was
      *            created or updated.
@@ -152,8 +153,8 @@ public final class CrLiveStatusHelper {
     /**
      * Get the public display status by transforming the passed in value object
      * by removing the free text.
-     * 
-     * @param viewValue
+
+     * @param viewValue the CourtLogViewValue
      * @return The translated xml <code>String</code>.
      */
     private static String getPublicDisplayStatus(CourtLogViewValue viewValue) {

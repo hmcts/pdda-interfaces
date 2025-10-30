@@ -1,17 +1,19 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.text.DateFormat;
-import java.time.LocalDateTime;
-import java.util.Locale;
 import org.w3c.dom.Document;
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogCrudValue;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.XmlServices;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.util.Locale;
+
 /**
+ * Basic translator.
+
  * @author pznwc5
- * 
- * Basic translator
+
  */
 public class BasicTranslator extends Translator {
 
@@ -26,8 +28,10 @@ public class BasicTranslator extends Translator {
     }
 
     /**
-     * @param type
-     * @param xsl
+     * Constructor with xsl.
+
+     * @param type passed in
+     * @param xsl passed in
      */
     public BasicTranslator(int type, String xsl) {
         super(type);
@@ -46,9 +50,9 @@ public class BasicTranslator extends Translator {
     }
 
     /**
-     * Translates a date and a time into the required locale format
-     * 
-     * @throws CourtLogException
+     * Translates a date and a time into the required locale format.
+
+     * @throws CourtLogException exception
      */
     private void formatDateAndTime(final Locale locale, final Document input, final LocalDateTime entryDate) {
 
@@ -65,15 +69,15 @@ public class BasicTranslator extends Translator {
 
     /**
      * Applies an xsl template to xml and send result to requested stream.
-     * 
+
      * @param input
      *            The document to transform
-     * 
+
      * @param xslFileName
      *            the transformation to apply
-     * 
+
      * @return The transformed document as a string
-     * 
+
      * @throws EDSException
      *             if anything fails.
      */

@@ -1,5 +1,13 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogCrudValue;
+import uk.gov.hmcts.framework.services.CsServices;
+import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,32 +17,18 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogCrudValue;
-import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
 
 /**
- * <p>
- * Title:
- * </p>
- * <p>
- * Description:
- * </p>
- * <p>
+ * Title: CourtLogXmlHelper.
+
  * Copyright: Copyright (c) 2002
- * </p>
- * <p>
+
  * Company: EDS
- * </p>
- * 
+
  * @author Joseph Babad / Paul Fitton
  * @version $Revision: 1.9 $
  */
-public class CourtLogXmlHelper {
+public final class CourtLogXmlHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CourtLogXmlHelper.class);
 
     private static final String SCHEMA_BASE = "/config/courtlog/schemas/";
@@ -44,34 +38,39 @@ public class CourtLogXmlHelper {
     // XML
     private static final String ROOT_NODE_NAME = "event";
 
+    private CourtLogXmlHelper() {
+        super();
+    }
+    
     /**
-     * Return an XML representation of the vos properties
-     * 
-     * @param courtLogCRUDValue
+     * Return an XML representation of the vos properties.
+
+     * @param courtLogCrudValue object
      * @return xml string
      */
-    public static String getXML(CourtLogCrudValue courtLogCRUDValue) {
+    public static String getXml(CourtLogCrudValue courtLogCrudValue) {
         String methodName = "getXML() - ";
-        LOG.debug(methodName + "entry - value : " + courtLogCRUDValue);
+        LOG.debug(methodName + "entry - value : " + courtLogCrudValue);
 
-        courtLogCRUDValue.setProperty(CourtLogCrudValue.EVENT_TYPE, courtLogCRUDValue.getEventType().toString());
-        courtLogCRUDValue.setProperty(CourtLogCrudValue.ENTRY_FREE_TEXT, courtLogCRUDValue.getEntryFreeText());
+        courtLogCrudValue.setProperty(CourtLogCrudValue.EVENT_TYPE, courtLogCrudValue.getEventType().toString());
+        courtLogCrudValue.setProperty(CourtLogCrudValue.ENTRY_FREE_TEXT, courtLogCrudValue.getEntryFreeText());
 
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
-        String xml = marshaller.marshall(courtLogCRUDValue.getPropertyMap(), ROOT_NODE_NAME);
+        String xml = marshaller.marshall(courtLogCrudValue.getPropertyMap(), ROOT_NODE_NAME);
 
         // Add no name space schema location to the generated xml...
-        String schemaXML = addSchema(xml, courtLogCRUDValue.getEventType());
+        String schemaXml = addSchema(xml, courtLogCrudValue.getEventType());
 
-        LOG.debug(methodName + "Generated XML : " + schemaXML);
+        LOG.debug(methodName + "Generated XML : " + schemaXml);
 
-        return schemaXML;
+        return schemaXml;
     }
 
     /**
-     * @param xml
-     *            generated xml
-     * @return
+     * Add schema to the xml.
+
+     * @param xml generated xml
+     * @return xml with schema added
      */
     private static String addSchema(String xml, Integer eventType) {
         LOG.debug("addSchema() - eventType = {}{}{}", eventType, "; xml = ", xml);
@@ -91,23 +90,16 @@ public class CourtLogXmlHelper {
     /**
      * Ensure that the passed in xml is valid, determined by the schema of the
      * event type passed in.
-     * 
-     * @param xmlString
-     *            The xml to validate
-     * @param eventType
-     *            The event type used to acquire the xsd file to validate
-     *            against
+
+     * @param xmlString the xml to validate
+     * @param eventType the event type used to acquire the xsd file to validate against
      * @see #getSchema(Integer)
      */
-    public static void validateXML(String xmlString, Integer eventType) {
+    public static void validateXml(String xmlString, Integer eventType) {
         String schemaLocation = getSchema(eventType);
         CsServices.getXmlServices().validateXml(xmlString, schemaLocation);
     }
 
-    /**
-     * @see uk.gov.courtservice.xhibit.courtlog.helpers.xml.CourtLogMarshaller
-     *      #unmarshall(java.lang.String)
-     */
     public static Map getPropertySet(String xmlFragment) {
         LOG.debug("getPropertySet() - entry - xml : " + xmlFragment);
 
@@ -131,7 +123,7 @@ public class CourtLogXmlHelper {
 
     /**
      * Method to acquire the full schema location for the passed in event type.
-     * 
+
      * @param eventType
      *            The event type that we want the full location for.
      * @return A <code>String</code> of the full location.
@@ -143,7 +135,7 @@ public class CourtLogXmlHelper {
 
     /**
      * Create a <code>Document</code> object from the passed in source.
-     * 
+
      * @param src
      *            The <code>InputStream</code> that the xml document is to be
      *            read from
@@ -163,7 +155,7 @@ public class CourtLogXmlHelper {
 
     /**
      * Create a <code>Document</code> object from the passed in xml.
-     * 
+
      * @param xml
      *            The xml we want as a Document
      * @return An implementation of <code>Document</code>

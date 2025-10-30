@@ -1,13 +1,14 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
 import org.w3c.dom.Document;
 
+import java.time.LocalDateTime;
+import java.util.Locale;
+
 /**
+ * Translator Interface for court log translations.
+
  * @author pznwc5
- * 
- * Interface for court log translation
  */
 public abstract class Translator {
 

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author pznwc5
- * 
+
  * Context for passing attributes
  */
 /**
@@ -20,7 +20,7 @@ public class TranslationContext {
 
     /**
      * Retrieves a named attribute.
-     *
+
      * @param name the name of the attribute
      * @return the value of the attribute, or {@code null} if not present
      */
@@ -30,7 +30,7 @@ public class TranslationContext {
 
     /**
      * Adds or updates a named attribute.
-     *
+
      * @param name the name of the attribute
      * @param value the value to associate
      */
@@ -40,7 +40,7 @@ public class TranslationContext {
 
     /**
      * Returns a string representation of the translation context.
-     *
+
      * @return a string listing all key-value pairs
      */
     @Override

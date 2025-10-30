@@ -1,5 +1,12 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import uk.gov.hmcts.framework.services.xml.XmlServicesImpl;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,12 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import uk.gov.hmcts.framework.services.xml.XmlServicesImpl;
 
 class CourtLogMarshaller {
     private static final Logger LOG = LoggerFactory.getLogger(CourtLogMarshaller.class);
@@ -69,7 +70,7 @@ class CourtLogMarshaller {
 
     public String marshall(Map props, String rootNodeName) {
         LOG.debug("marshall() - entry");
-        return XmlServicesImpl.getInstance().generateXMLFromPropSet(props, rootNodeName);
+        return XmlServicesImpl.getInstance().generateXmlFromPropSet(props, rootNodeName);
     }
 
     public Map<String, Object> unmarshall(String xml) {
@@ -93,7 +94,7 @@ class CourtLogMarshaller {
     private CourtLogUnmarshalledNode unmarshallNode(Node rootNode) {
         LOG.debug("unmarshallNode() - entry - processing Node : {}", rootNode.getNodeName());
 
-        CourtLogUnmarshalledNode cLUNode = new CourtLogUnmarshalledNode();
+        CourtLogUnmarshalledNode cluNode = new CourtLogUnmarshalledNode();
 
         NodeList nodes = rootNode.getChildNodes();
         Node node;
@@ -104,14 +105,14 @@ class CourtLogMarshaller {
 
                 if (node.hasChildNodes()) {
                     if (node.getFirstChild().getNodeType() == Node.TEXT_NODE) {
-                        cLUNode.put(node.getNodeName(), node.getFirstChild().getNodeValue());
+                        cluNode.put(node.getNodeName(), node.getFirstChild().getNodeValue());
                     } else {
-                        cLUNode.put(node.getNodeName(), unmarshallNode(node).getUnmarshalledNode());
+                        cluNode.put(node.getNodeName(), unmarshallNode(node).getUnmarshalledNode());
                     }
                 }
             }
         }
 
-        return cLUNode;
+        return cluNode;
     }
 }

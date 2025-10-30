@@ -1,10 +1,9 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
 /**
+ * TranslationType.
+
  * @author pznwc5
- * 
- * To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Generation - Code and Comments
  */
 public final class TranslationType {
     public static final TranslationType GUI = new TranslationType(0);

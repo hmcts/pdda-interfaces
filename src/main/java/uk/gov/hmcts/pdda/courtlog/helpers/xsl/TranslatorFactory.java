@@ -1,9 +1,10 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
 /**
+ * TranslatorFactory that creates a translator.
+
  * @author pznwc5
- * 
- * Factory that creates a translator
+
  */
 public final class TranslatorFactory {
 
@@ -12,10 +13,9 @@ public final class TranslatorFactory {
     }
     
     /**
-     * Get the translator for the specified type
-     * 
-     * @param type
-     *            Translation type
+     * Get the translator for the specified type.
+
+     * @param translationType Translation type.
      * @return Translator
      */
     public static Translator getTranslator(TranslationType translationType) {
@@ -34,10 +34,10 @@ public final class TranslatorFactory {
     }
 
     /**
-     * Get the translator for the specified type
-     * 
-     * @param type
-     *            Translation type
+     * Get the translator for the specified type.
+
+     * @param translationType the translation type.
+     * @param xsl to use.
      * @return Translator
      */
     public static Translator getTranslator(TranslationType translationType, String xsl) {

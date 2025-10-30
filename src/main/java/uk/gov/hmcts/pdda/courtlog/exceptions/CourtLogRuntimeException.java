@@ -3,8 +3,8 @@ package uk.gov.hmcts.pdda.courtlog.exceptions;
 import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 
 /**
- * Super class of all runtime exceptions used by the court log component
- * 
+ * Super class of all runtime exceptions used by the court log component.
+
  * @author pznwc5
  */
 public class CourtLogRuntimeException extends CsUnrecoverableException {
@@ -13,7 +13,7 @@ public class CourtLogRuntimeException extends CsUnrecoverableException {
     
     /**
      * Creates a new CourtLogRuntimeException object.
-     * 
+
      * @param message
      *            the message.
      */
@@ -23,7 +23,7 @@ public class CourtLogRuntimeException extends CsUnrecoverableException {
 
     /**
      * Creates a new CourtLogRuntimeException object.
-     * 
+
      * @param throwable
      *            the root cause.
      */
@@ -33,7 +33,7 @@ public class CourtLogRuntimeException extends CsUnrecoverableException {
 
     /**
      * Creates a new CourtLogRuntimeException object.
-     * 
+
      * @param message
      *            the message.
      * @param throwable

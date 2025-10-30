@@ -1,5 +1,11 @@
 package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import uk.gov.hmcts.framework.services.CsServices;
+import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
+
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -10,27 +16,18 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPathFactoryConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
 
 /**
- * This translator does substitution
- *
+ * This translator does substitution.
+
  * @author pznwc5
  */
 public class SubstitutingTranslator extends Translator {
-    /** Parent translator */
+    /** Parent translator. */
     private final Translator next;
 
     /**
-     * Initialize with the parent
-     *
-     * @param parent
-     *            Parent translator
+     * Initialize with the parent.
      */
     public SubstitutingTranslator(int type, Translator next) {
         super(type);
@@ -38,7 +35,7 @@ public class SubstitutingTranslator extends Translator {
     }
 
     /**
-     * Decorate with substitution
+     * Decorate with substitution.
      */
     @Override
     public String translate(TranslationContext context, Locale locale, Document input,
@@ -52,10 +49,7 @@ public class SubstitutingTranslator extends Translator {
     }
 
     /**
-     * Performs the substitution of generic value related data with end user
-     * friendly text
-     *
-     * @throws CourtLogException
+     * Performs the substitution of generic value related data with end user friendly text.
      */
     private void substituteValues(final int translateForType, final Locale locale, Document input,
             final Integer eventType) {
@@ -72,7 +66,7 @@ public class SubstitutingTranslator extends Translator {
             for (int i = 0; i < textNodes.getLength(); i++) {
                 // System.out.println("Before ===>" +
                 // textNodes.item(i).getNodeValue());
-                substituteXMLValues(textNodes.item(i), eventType, bundle);
+                substituteXmlValues(textNodes.item(i), eventType, bundle);
                 // System.out.println("After ===>" +
                 // textNodes.item(i).getNodeValue());
             }
@@ -94,11 +88,13 @@ public class SubstitutingTranslator extends Translator {
     }
 
     /**
-     * @param textNodes
-     * @param eventType
-     * @param bundle
+     * Substitutes XML values.
+
+     * @param textNode passed in
+     * @param eventType passed in
+     * @param bundle passed in
      */
-    private void substituteXMLValues(Node textNode, Integer eventType, ResourceBundle bundle) {
+    private void substituteXmlValues(Node textNode, Integer eventType, ResourceBundle bundle) {
         String text = textNode.getNodeValue();
         if (text.length() <= 0) {
             return;
