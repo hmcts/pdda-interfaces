@@ -194,6 +194,10 @@ public class CourtListQuery extends PublicDisplayQuery {
                             defendantDao.get().getMiddleName(), defendantDao.get().getSurname(), isHidden);
                         result.addDefendantName(defendantName);
                     }
+                    result.setReportingRestricted(isHidden);
+                    result.setHearingProgress(
+                        scheduledHearingDao.getHearingProgress() != null ? 
+                            scheduledHearingDao.getHearingProgress() : 0);
                 }
             }
         }
