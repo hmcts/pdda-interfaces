@@ -196,8 +196,8 @@ public class CourtListQuery extends PublicDisplayQuery {
                     }
                     result.setReportingRestricted(isHidden);
                     result.setHearingProgress(
-                        scheduledHearingDao.getHearingProgress() != null ? 
-                            scheduledHearingDao.getHearingProgress() : 0);
+                        scheduledHearingDao.getHearingProgress() != null 
+                            ? scheduledHearingDao.getHearingProgress() : 0);
                 }
             }
         }
