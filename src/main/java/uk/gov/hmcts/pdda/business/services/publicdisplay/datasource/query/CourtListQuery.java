@@ -174,37 +174,78 @@ public class CourtListQuery extends PublicDisplayQuery {
         // Loop the schedHearingDefendants
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
             getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
-        
+
+        populateResultWithDefendants(result, scheduledHearingDao, schedHearingDefDaos, isHidden);
+
+        return result;
+    }
+
+    /**
+     * Reducing the complexity of getCourtListValue by moving defendant population to its own method.
+     * @param result The CourtListValue being populated
+     * @param scheduledHearingDao The scheduled hearing DAO
+     * @param schedHearingDefDaos The scheduled hearing defendant DAOs
+     * @param isHidden True if the case is hidden
+     * @return Populated CourtListValue
+     */
+    private CourtListValue populateResultWithDefendants(CourtListValue result,
+        XhbScheduledHearingDao scheduledHearingDao,
+        List<XhbSchedHearingDefendantDao> schedHearingDefDaos, boolean isHidden) {
+
         if (!schedHearingDefDaos.isEmpty()) {
             for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
-        
+
                 // Get the defendant on case
                 Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
                     getXhbDefendantOnCaseRepository()
                         .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
                 if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
-        
-                    // Get the defendant
-                    Optional<XhbDefendantDao> defendantDao =
-                        getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
-                    if (defendantDao.isPresent()) {
-                        isHidden = isHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
-                            || YES.contentEquals(defendantDao.get().getPublicDisplayHide());
-                        DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
-                            defendantDao.get().getMiddleName(), defendantDao.get().getSurname(), isHidden);
-                        result.addDefendantName(defendantName);
-                    }
-                    result.setReportingRestricted(isHidden);
+
+                    // Populate the single defendant and accumulate hidden state
+                    result = populateResultWithDefendant(result, defendantOnCaseDao, isHidden);
+
+                    // Ensure hearing progress is set (null-safe)
                     result.setHearingProgress(
-                        scheduledHearingDao.getHearingProgress() != null ? 
-                            scheduledHearingDao.getHearingProgress() : 0);
+                        scheduledHearingDao.getHearingProgress() != null
+                            ? scheduledHearingDao.getHearingProgress()
+                            : 0);
                 }
             }
         }
-                
+
         return result;
     }
-    
+
+    /**
+     * Populates a CourtListValue with a defendant.
+     * @param result The CourtListValue being populated
+     * @param defendantOnCaseDao The defendant on case DAO
+     * @param isHidden True if the case is hidden
+     * @return Populated CourtListValue
+     */
+    private CourtListValue populateResultWithDefendant(CourtListValue result,
+        Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isHidden) {
+
+        // Get the defendant
+        if (!defendantOnCaseDao.isPresent()) {
+            return result;
+        }
+        Optional<XhbDefendantDao> defendantDao =
+            getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
+        if (defendantDao.isPresent()) {
+            boolean tmpIsHidden = isHidden
+                || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
+                || YES.contentEquals(defendantDao.get().getPublicDisplayHide());
+
+            DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
+                defendantDao.get().getMiddleName(), defendantDao.get().getSurname(), tmpIsHidden);
+
+            result.setReportingRestricted(tmpIsHidden);
+            result.addDefendantName(defendantName);
+        }
+        return result;
+    }
+
     private String getRefHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
         if (hearingDao.isPresent()) {
             Optional<XhbRefHearingTypeDao> refHearingTypeDao =
@@ -216,6 +257,4 @@ public class CourtListQuery extends PublicDisplayQuery {
         }
         return null;
     }
-
-
 }
