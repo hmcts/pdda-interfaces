@@ -174,7 +174,7 @@ public class CourtListQuery extends PublicDisplayQuery {
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
             getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
         
-        result = populateResultWithDefendants(result, scheduledHearingDao, schedHearingDefDaos, isHidden);
+        populateResultWithDefendants(result, scheduledHearingDao, schedHearingDefDaos, isHidden);
                 
         return result;
     }
@@ -223,6 +223,9 @@ public class CourtListQuery extends PublicDisplayQuery {
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isHidden) {
         
         // Get the defendant
+        if (!defendantOnCaseDao.isPresent()) {
+            return result;
+        }
         Optional<XhbDefendantDao> defendantDao =
             getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
         if (defendantDao.isPresent()) {
