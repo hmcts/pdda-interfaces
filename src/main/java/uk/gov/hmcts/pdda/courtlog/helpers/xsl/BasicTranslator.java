@@ -6,7 +6,7 @@ import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.XmlServices;
 
 import java.text.DateFormat;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -40,7 +40,7 @@ public class BasicTranslator extends Translator {
 
     @Override
     public String translate(TranslationContext context, Locale locale, Document input,
-        LocalDateTime entryDate, Integer eventType) {
+        Date entryDate, Integer eventType) {
         formatDateAndTime(locale, input, entryDate);
 
         if (xsl == null) {
@@ -54,7 +54,7 @@ public class BasicTranslator extends Translator {
 
      * @throws CourtLogException exception
      */
-    private void formatDateAndTime(final Locale locale, final Document input, final LocalDateTime entryDate) {
+    private void formatDateAndTime(final Locale locale, final Document input, final Date entryDate) {
 
         XmlServices xmlServices = CsServices.getXmlServices();
 

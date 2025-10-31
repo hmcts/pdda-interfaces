@@ -11,6 +11,8 @@ import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
@@ -47,7 +49,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.ExcessiveParameterList", 
-    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.CognitiveComplexity"})
+    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.TooManyMethods"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -332,10 +334,16 @@ public class SftpService extends XhibitPddaHelper {
                 } else {
                     if (event instanceof CaseStatusEvent caseStatusEvent) {
                         LOG.debug("Case Status Event received from XHIBIT");
-                        
-                        // 1) Get the CourtLogViewValue from the event
-                        
-                        // 2) crLiveStatusHelper.updatePublicDisplayStatus();
+                        // TODO - remove hardcoded case details when values are set in xhibit for this event
+                        String caseNumber = "20250003";
+                        String caseType = "T";
+                        // Update fields in the CourtLogViewValue from the event
+                        CourtLogViewValue courtLogViewValue = processCaseStatusEvent(caseStatusEvent,
+                            caseType, Integer.valueOf(caseNumber));
+                        // If updated value is not null, update the public display status
+                        if (courtLogViewValue != null) {
+                            getCrLiveStatusHelper().updatePublicDisplayStatus(courtLogViewValue);
+                        }
                     }
                     sendMessage(event);
                     
@@ -434,68 +442,128 @@ public class SftpService extends XhibitPddaHelper {
                         if (xhbCourtRoomDao != null) {
                             LOG.debug("Court room found with ID: {}", xhbCourtRoomDao.getCourtRoomId());
                         
-                            // Find possible sittings and update the scheduled hearing record
-                            findSittingsAndUpdateScheduledHearing(event, xhbCourtRoomDao,
-                                xhbCourtSiteDao, xhbHearingDao.get());
+                            // 5) Find scheduled hearing record
+                            XhbScheduledHearingDao scheduledHearingDao = findScheduledHearing(
+                                xhbCourtRoomDao.getCourtRoomId(), xhbCourtSiteDao, xhbHearingDao.get());
+                            
+                            if (scheduledHearingDao != null) {
+                                LOG.debug("ScheduledHearing found with ID: {}",
+                                    scheduledHearingDao.getScheduledHearingId());
+                                Integer hearingProgressIndicator = event.getHearingProgressIndicator();
+                                String caseActive = event.getIsCaseActive();
+                                
+                                // 8) Update hearingProgressIndicator if its present
+                                if (hearingProgressIndicator != null) {
+                                    scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
+                                    LOG.debug("ScheduledHearing hearingProgress set to: {}",
+                                        hearingProgressIndicator);
+                                }
+                                // 9) Update isCaseActive if its present
+                                if (caseActive != null) {
+                                    scheduledHearingDao.setIsCaseActive(caseActive);
+                                    LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                                        caseActive);
+                                }
+                                getScheduledHearingRepository().update(scheduledHearingDao);
+                                LOG.debug("ScheduledHearing with ID: {} updated", 
+                                    scheduledHearingDao.getScheduledHearingId());
+                            }
                         }
                     }
                 }
             }
-            
         }
+    }
+    
+    private CourtLogViewValue processCaseStatusEvent(CaseStatusEvent event,
+        String caseType, Integer caseNumber) {
+        // 1) Get the CourtRoomIdentifier from the event, which has been previously translated
+        CourtRoomIdentifier courtRoomIdentifier = event.getCourtRoomIdentifier();
+        
+        if (courtRoomIdentifier != null) {
+            LOG.debug("CourtRoomIdentifier found for event: {}, {}", event, courtRoomIdentifier);
+            // Check fields are present
+            if (caseType != null 
+                && caseNumber != null
+                && courtRoomIdentifier.getCourtId() != null
+                && courtRoomIdentifier.getCourtRoomId() != null) {
+                LOG.debug("All fields present for CaseStatusEvent: {}, {}, {}, {}",
+                    caseType, caseNumber, courtRoomIdentifier.getCourtId(), courtRoomIdentifier.getCourtRoomId());
+                
+                // 2) Get XhbCourtSiteDao using courtId
+                XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
+                    .findByCourtIdSafe(courtRoomIdentifier.getCourtId()).get(0);
+                
+                if (xhbCourtSiteDao != null) {
+                    LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
+                    LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
+                    
+                    // 3) Get caseId using the case number from the event
+                    Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
+                        .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
+                    
+                    if (xhbCaseDao.isPresent()) {
+                        LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
+                        
+                        // 4) Get the hearingId using the caseId and todays date
+                        Optional<XhbHearingDao> xhbHearingDao = getHearingRepository()
+                            .findByCaseIdWithTodaysStartDateSafe(xhbCaseDao.get().getCaseId(),
+                                LocalDate.now().atStartOfDay());
+                        if (!xhbHearingDao.isEmpty()) {
+                            LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
+                        
+                            // 5) Find scheduled hearing record
+                            XhbScheduledHearingDao scheduledHearingDao = findScheduledHearing(
+                                courtRoomIdentifier.getCourtRoomId(), xhbCourtSiteDao, xhbHearingDao.get());
+                            
+                            // 8) If found, get the CourtLogViewValue from the event
+                            CourtLogViewValue courtLogViewValue = event.getCaseCourtLogInformation()
+                                .getCourtLogSubscriptionValue().getCourtLogViewValue();
+                            
+                            if (scheduledHearingDao != null && courtLogViewValue != null) {
+                                // 9) Update the CourtLogViewValue with the scheduledHearingId
+                                LOG.debug("ScheduledHearing found with ID: {}",
+                                    scheduledHearingDao.getScheduledHearingId());
+                                courtLogViewValue.setScheduledHearingId(
+                                    scheduledHearingDao.getScheduledHearingId());
+                                LOG.debug("CourtLogViewValue updated with scheduledhearingID: {}",
+                                    scheduledHearingDao.getScheduledHearingId());
+                                return courtLogViewValue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
     
-    private void findSittingsAndUpdateScheduledHearing(PddaHearingProgressEvent event, XhbCourtRoomDao xhbCourtRoomDao,
+    private XhbScheduledHearingDao findScheduledHearing(Integer courtRoomId,
         XhbCourtSiteDao xhbCourtSiteDao, XhbHearingDao xhbHearingDao) {
         
-        Integer hearingProgressIndicator = event.getHearingProgressIndicator();
-        String caseActive = event.getIsCaseActive();
+        // 5) Get the SittingId using the courtRoomId and courtSiteId
+        List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
+            .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(courtRoomId,
+                xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
+        if (!xhbSittingDaos.isEmpty()) {
+            LOG.debug("No. of Sittings found using courtRoomId: {} and courtSiteId: {} is: {}",
+                courtRoomId, xhbCourtSiteDao.getCourtSiteId(), xhbSittingDaos.size());
         
-        if (hearingProgressIndicator != null || caseActive != null) {
-            LOG.debug("hearingProgressIndicator: {}, isCaseActive: {}",
-                hearingProgressIndicator, caseActive);
-        
-            // 5) Get the SittingId using the courtRoomId and courtSiteId
-            List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
-                .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(xhbCourtRoomDao.getCourtRoomId(),
-                    xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
-            if (!xhbSittingDaos.isEmpty()) {
-                LOG.debug("No. of Sittings found using courtRoomId: {} and courtSiteId: {} is: {}",
-                    xhbCourtRoomDao.getCourtRoomId(), xhbCourtSiteDao.getCourtSiteId(), xhbSittingDaos.size());
-            
-                // 6) Loop through the SittingId's to match with hearingId for the xhb_scheduled_hearing record
-                for (XhbSittingDao sittingDao : xhbSittingDaos) {
-                    LOG.debug("Attempting to find ScheduledHearing using sittingId: {} and hearingId: {}",
-                        sittingDao.getSittingId(), xhbHearingDao.getHearingId());
-                    Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
-                        .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
-                            xhbHearingDao.getHearingId());
-                    
-                    // 7) Update the fields in the xhb_scheduled_hearing record
-                    if (!scheduledHearingDao.isEmpty()) {
-                        LOG.debug("ScheduledHearing found with ID: {}",
-                            scheduledHearingDao.get().getScheduledHearingId());
-                        // Update hearingProgressIndicator if its present
-                        if (hearingProgressIndicator != null) {
-                            scheduledHearingDao.get().setHearingProgress(hearingProgressIndicator);
-                            LOG.debug("ScheduledHearing hearingProgress set to: {}",
-                                hearingProgressIndicator);
-                        }
-                        // Update isCaseActive if its present
-                        if (caseActive != null) {
-                            scheduledHearingDao.get().setIsCaseActive(caseActive);
-                            LOG.debug("ScheduledHearing isCaseActive set to: {}",
-                                caseActive);
-                        }
-                        getScheduledHearingRepository().update(scheduledHearingDao.get());
-                        LOG.debug("ScheduledHearing with ID: {} updated", 
-                            scheduledHearingDao.get().getScheduledHearingId());
-                        // Exit the loop when the record is updated
-                        break;
-                    }
+            // 6) Loop through the SittingId's to match with hearingId for the xhb_scheduled_hearing record
+            for (XhbSittingDao sittingDao : xhbSittingDaos) {
+                LOG.debug("Attempting to find ScheduledHearing using sittingId: {} and hearingId: {}",
+                    sittingDao.getSittingId(), xhbHearingDao.getHearingId());
+                Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
+                    .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
+                        xhbHearingDao.getHearingId());
+                
+                // 7) Return the xhb_scheduled_hearing record
+                if (!scheduledHearingDao.isEmpty()) {
+                    return scheduledHearingDao.get();
                 }
             }
         }
+        return null;
     }
     
     /**

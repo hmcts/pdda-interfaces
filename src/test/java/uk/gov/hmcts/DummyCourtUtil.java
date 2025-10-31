@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.AllCourtStatusComp
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -213,7 +214,7 @@ public final class DummyCourtUtil {
 
     public static CourtLogViewValue getCourtLogViewValue() {
         CourtLogViewValue result = new CourtLogViewValue(1);
-        result.setEntryDate(LocalDateTime.now());
+        result.setEntryDate(new Date());
         result.setLogEntry(result.getLogEntry());
         result.setCaseId(result.getCaseId());
         result.setDefendantOnOffenceId(result.getDefendantOnOffenceId());

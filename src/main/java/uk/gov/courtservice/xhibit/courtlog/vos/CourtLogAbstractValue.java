@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
 
@@ -35,9 +35,9 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     private Integer eventType;
 
     /** The date of the entry. */
-    private LocalDateTime entryDate;
+    private Date entryDate;
 
-    private LocalDateTime lastUpdateDate;
+    private Date lastUpdateDate;
 
     /** The Case ID that this entry was made against. */
     private Integer caseId;
@@ -150,7 +150,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
      * @param date Date
      */
-    public void setEntryDate(LocalDateTime date) {
+    public void setEntryDate(Date date) {
         this.entryDate = date;
     }
 
@@ -159,7 +159,7 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
      * @return Date
      */
-    public LocalDateTime getEntryDate() {
+    public Date getEntryDate() {
         return this.entryDate;
     }
 
@@ -178,11 +178,11 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     }
 
     // Get the update date
-    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
+    public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public LocalDateTime getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return this.lastUpdateDate;
     }
 

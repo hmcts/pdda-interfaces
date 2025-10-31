@@ -5,7 +5,7 @@ import org.w3c.dom.Document;
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.courtlog.helpers.xml.CourtLogXmlHelper;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -32,7 +32,7 @@ public final class CourtLogXslHelper {
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationContext, java.lang.String)
      */
-    public static String translateEvent(String xml, LocalDateTime entryDate, Integer eventType, Locale locale,
+    public static String translateEvent(String xml, Date entryDate, Integer eventType, Locale locale,
             TranslationType translationType) {
         return translateEvent(xml, entryDate, eventType, locale, translationType, null, null);
     }
@@ -46,7 +46,7 @@ public final class CourtLogXslHelper {
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationContext, java.lang.String)
      */
-    public static String translateEvent(String xml, LocalDateTime entryDate, Integer eventType, Locale locale,
+    public static String translateEvent(String xml, Date entryDate, Integer eventType, Locale locale,
             TranslationType translationType, TranslationContext context) {
         return translateEvent(xml, entryDate, eventType, locale, translationType, context, null);
     }
@@ -60,7 +60,7 @@ public final class CourtLogXslHelper {
      *      .courtlog.helpers.xsl.TranslationType, uk.gov.courtservice.xhibit
      *      .courtlog.helpers.xsl.TranslationContext, java.lang.String)
      */
-    public static String translateEvent(String xml, LocalDateTime entryDate, Integer eventType, Locale locale,
+    public static String translateEvent(String xml, Date entryDate, Integer eventType, Locale locale,
             TranslationType translationType, String xsl) {
         return translateEvent(xml, entryDate, eventType, locale, translationType, null, xsl);
     }
@@ -155,7 +155,7 @@ public final class CourtLogXslHelper {
      *      .TranslationContext, java.util.Locale, org.w3c.dom.Document,
      *      java.util.Date, java.lang.Integer)
      */
-    public static String translateEvent(String xml, LocalDateTime entryDate, Integer eventType, Locale locale,
+    public static String translateEvent(String xml, Date entryDate, Integer eventType, Locale locale,
             TranslationType translationType, TranslationContext context, String xsl) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("translateEvent() - xml = " + xml + "; entryDate = " + entryDate + "; eventType = " + eventType

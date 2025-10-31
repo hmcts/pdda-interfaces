@@ -2,7 +2,7 @@ package uk.gov.hmcts.pdda.courtlog.helpers.xsl;
 
 import org.w3c.dom.Document;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -20,7 +20,7 @@ public abstract class Translator {
         this.type = type;
     }
 
-    public abstract String translate(TranslationContext context, Locale locale, Document input, LocalDateTime entryDate,
+    public abstract String translate(TranslationContext context, Locale locale, Document input, Date entryDate,
             Integer eventType);
 
 }

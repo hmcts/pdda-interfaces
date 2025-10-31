@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.courtlog.helpers.xsl.CourtLogXslHelper;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.TranslationType;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +32,7 @@ import java.util.Optional;
  * @version $Revision: 1.7 $
  */
 @SuppressWarnings({"PMD.AvoidDeeplyNestedIfStmts", "PMD.NullAssignment"})
-public final class CrLiveStatusHelper {
+public class CrLiveStatusHelper {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
     private static final String REMOVE_FREE_TEXT_STYLESHEET = "config/courtlog/transformer/remove_free_text.xsl";
 
@@ -39,10 +40,6 @@ public final class CrLiveStatusHelper {
     private XhbScheduledHearingRepository xhbScheduledHearingRepository;
     private XhbSittingRepository xhbSittingRepository;
     
-    private CrLiveStatusHelper() {
-        // prevent external instantiation
-    }
-
     /**
      * Method to indicate that the public display should be activated. This will clear out the
      * xhb_cr_live_display row entries for the court room that the scheduled hearing is assigned to,
@@ -114,6 +111,10 @@ public final class CrLiveStatusHelper {
      */
     public boolean updatePublicDisplayStatus(CourtLogViewValue courtLogViewValue) {
         LOG.debug("updatePublicDisplayStatus() - start");
+        // Convert the entry date to LocalDateTime from Date
+        LocalDateTime entryDateTime = courtLogViewValue.getEntryDate().toInstant()
+            .atZone(ZoneId.systemDefault()).toLocalDateTime();
+        
         // 1) Get the scheduled hearing
         LOG.debug("Finding XhbScheduledHearingDao with ID: {}", courtLogViewValue.getScheduledHearingId());
         Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = getXhbScheduledHearingRepository()
@@ -130,12 +131,12 @@ public final class CrLiveStatusHelper {
                 LOG.debug("XhbSittingDao found with ID: {}", xhbSittingDao.get().getSittingId());
                 // 3) Get the cr live display from the court room on the sitting
                 Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao =
-                    getCrLiveDisplay(xhbSittingDao.get().getXhbCourtRoom());
+                    getCrLiveDisplay(xhbSittingDao.get().getXhbCourtRoom()); // CourtRoom null here
         
                 if (xhbCrLiveDisplayDao.isPresent()) {
                     LOG.debug("XhbCrLiveDisplayDao found with ID: {}", xhbCrLiveDisplayDao.get().getCrLiveDisplayId());
-                    if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(courtLogViewValue.getEntryDate())) {
-                        xhbCrLiveDisplayDao.get().setTimeStatusSet(courtLogViewValue.getEntryDate());
+                    if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
+                        xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
                         xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
                         //xcld.setStatus("<?xml version=\"1.0\" encoding=\"UTF-8\"?><event xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"30600.xsd\"><time>15:31</time><date>28/10/25</date><hearing_id>770221</hearing_id><free_text/><process_linked_cases>false</process_linked_cases><defendant_on_case_id>1</defendant_on_case_id><type>30600</type><defendant_name>BLAGGINA BLAGGER</defendant_name><scheduled_hearing_id>767898</scheduled_hearing_id><defendant_masked_name/><defendant_masked_flag>N</defendant_masked_flag></event>");
                         LOG.debug("updatePublicDisplayStatus() - returning true");
@@ -144,7 +145,6 @@ public final class CrLiveStatusHelper {
                 }
             }
         }
-
         LOG.debug("updatePublicDisplayStatus() - returning false");
         return false;
     }

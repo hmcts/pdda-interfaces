@@ -19,6 +19,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.PddaSftpHelperSshj;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
+import uk.gov.hmcts.pdda.crlivestatus.CrLiveStatusHelper;
 
 /**
 
@@ -55,6 +56,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private SftpConfigHelper sftpConfigHelper;
     private SftpHelperUtil sftpHelperUtil;
     private PddaSftpHelperSshj pddaSftpHelperSshj;
+    private CrLiveStatusHelper crLiveStatusHelper;
 
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
@@ -218,6 +220,13 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
             pddaSftpHelperSshj = new PddaSftpHelperSshj();
         }
         return pddaSftpHelperSshj;
+    }
+    
+    protected CrLiveStatusHelper getCrLiveStatusHelper() {
+        if (crLiveStatusHelper == null) {
+            crLiveStatusHelper = new CrLiveStatusHelper();
+        }
+        return crLiveStatusHelper;
     }
 
     public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {

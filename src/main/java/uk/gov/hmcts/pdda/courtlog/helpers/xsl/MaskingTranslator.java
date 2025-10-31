@@ -4,7 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -43,7 +43,7 @@ public class MaskingTranslator extends Translator {
      */
     @Override
     public String translate(TranslationContext context, Locale locale, Document input,
-        LocalDateTime entryDate, Integer eventType) {
+        Date entryDate, Integer eventType) {
 
         String maskedName = (String) context.get(MASKED_NAME);
         String maskedFlag = (String) context.get(MASKED_FLAG);

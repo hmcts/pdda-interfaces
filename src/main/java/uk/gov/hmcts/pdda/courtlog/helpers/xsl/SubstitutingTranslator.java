@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.courtlog.exceptions.CourtLogRuntimeException;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.xml.XMLConstants;
@@ -39,7 +39,7 @@ public class SubstitutingTranslator extends Translator {
      */
     @Override
     public String translate(TranslationContext context, Locale locale, Document input,
-        LocalDateTime entryDate, Integer eventType) {
+        Date entryDate, Integer eventType) {
         // System.out.println("Before:" +
         // CSServices.getXMLServices().getStringXML(input));
         substituteValues(type, locale, input, eventType);
