@@ -150,9 +150,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
     private Collection<Element> addCollectionToXmlDoc(Document doc, Collection<?> xmlToConvert,
         String tag) {
         String methodName = "addCollectionToXMLDoc() - ";
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(methodName + "called :: collection: " + xmlToConvert + " tag: " + tag);
-        }
+        LOG.debug(methodName + "called :: collection: " + xmlToConvert + " tag: " + tag);
         List<Element> array = new ArrayList<>();
 
         Iterator<?> it = xmlToConvert.iterator();
