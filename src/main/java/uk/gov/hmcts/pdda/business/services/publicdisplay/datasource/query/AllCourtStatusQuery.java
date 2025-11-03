@@ -6,6 +6,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
@@ -164,14 +165,10 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
                     // Prefer the row that shows progress
                     bestByHearing.put(sh.getHearingId(), sh);
                 }
-                // Optional tie-breaker if both equal on progress:
-                // else if (sh.getCreationDate() != null &&
-                //         (current.getCreationDate() == null ||
-                //          sh.getCreationDate().isBefore(current.getCreationDate()))) {
-                //     bestByHearing.put(sh.getHearingId(), sh);
-                // }
             }
         }
+        
+        
     
         // Emit only the chosen scheduled hearing per hearingId
         for (XhbScheduledHearingDao sh : bestByHearing.values()) {
@@ -264,7 +261,7 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
             for (var room : allRooms) {
                 Integer roomId = room.getCourtRoomId();
                 if (roomId != null && !presentRoomIds.contains(roomId)) {
-                    rows.add(buildEmptyAllCourtStatusRow(siteId, room));
+                    rows.add(buildEmptyAllCourtStatusRow(room));
                 }
             }
         }
@@ -319,12 +316,9 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
         return resolved;
     }
     
-    private AllCourtStatusValue buildEmptyAllCourtStatusRow(
-        Integer courtSiteId,
-        uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao room) {
+    private AllCourtStatusValue buildEmptyAllCourtStatusRow(XhbCourtRoomDao room) {
         AllCourtStatusValue v = new AllCourtStatusValue();
         // carry site/room identity into the row so the renderer prints the court name
-        //v.setCourtSiteId(courtSiteId);                     // add this setter if your DTO has it
         v.setCourtRoomId(room.getCourtRoomId());
         v.setCourtRoomName(room.getCourtRoomName());
         // leave case/status fields null -> hasInformationForDisplay() returns false,
