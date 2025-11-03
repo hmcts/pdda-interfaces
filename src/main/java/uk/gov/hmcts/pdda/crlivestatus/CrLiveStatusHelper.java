@@ -1,7 +1,5 @@
 package uk.gov.hmcts.pdda.crlivestatus;
 
-import com.pdda.hb.jpa.EntityManagerUtil;
-import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
@@ -10,9 +8,7 @@ import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
-import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.CourtLogXslHelper;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.TranslationType;
 
@@ -31,14 +27,18 @@ import java.util.Optional;
  * @author tz0d5m
  * @version $Revision: 1.7 $
  */
-@SuppressWarnings({"PMD.AvoidDeeplyNestedIfStmts", "PMD.NullAssignment"})
-public class CrLiveStatusHelper {
+@SuppressWarnings({"PMD.AvoidDeeplyNestedIfStmts", "PMD.CognitiveComplexity"})
+public class CrLiveStatusHelper extends CrLiveStatusRepositories {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
     private static final String REMOVE_FREE_TEXT_STYLESHEET = "config/courtlog/transformer/remove_free_text.xsl";
 
-    private EntityManager entityManager;
-    private XhbScheduledHearingRepository xhbScheduledHearingRepository;
-    private XhbSittingRepository xhbSittingRepository;
+    private static final String PUBLIC_DISPLAY_STATUS_TEST =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><event xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+        + " xsi:noNamespaceSchemaLocation=\"30600.xsd\"><time>12:05</time><date>03/11/25</date><hearing_id>761943"
+        + "</hearing_id><free_text/><process_linked_cases>false</process_linked_cases><defendant_on_case_id>"
+        + "1</defendant_on_case_id><type>30600</type><defendant_name>BLAGGINA BLAGGER</defendant_name>"
+        + "<scheduled_hearing_id>767898</scheduled_hearing_id><defendant_masked_name/>"
+        + "<defendant_masked_flag>N</defendant_masked_flag></event>";
     
     /**
      * Method to indicate that the public display should be activated. This will clear out the
@@ -116,31 +116,41 @@ public class CrLiveStatusHelper {
             .atZone(ZoneId.systemDefault()).toLocalDateTime();
         
         // 1) Get the scheduled hearing
-        LOG.debug("Finding XhbScheduledHearingDao with ID: {}", courtLogViewValue.getScheduledHearingId());
+        LOG.debug("CRLive - Finding XhbScheduledHearingDao with ID: {}", courtLogViewValue.getScheduledHearingId());
         Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = getXhbScheduledHearingRepository()
             .findByIdSafe(courtLogViewValue.getScheduledHearingId());
         
         if (xhbScheduledHearingDao.isPresent()) {
-            LOG.debug("XhbScheduledHearingDao found with ID: {}", courtLogViewValue.getScheduledHearingId());
+            LOG.debug("CRLive - XhbScheduledHearingDao found with ID: {}", courtLogViewValue.getScheduledHearingId());
             
             // 2) Get the sitting from the scheduled hearing
             Optional<XhbSittingDao> xhbSittingDao = getXhbSittingRepository()
                 .findByIdSafe(xhbScheduledHearingDao.get().getSittingId());
             
             if (xhbSittingDao.isPresent()) {
-                LOG.debug("XhbSittingDao found with ID: {}", xhbSittingDao.get().getSittingId());
-                // 3) Get the cr live display from the court room on the sitting
-                Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao =
-                    getCrLiveDisplay(xhbSittingDao.get().getXhbCourtRoom()); // CourtRoom null here
-        
-                if (xhbCrLiveDisplayDao.isPresent()) {
-                    LOG.debug("XhbCrLiveDisplayDao found with ID: {}", xhbCrLiveDisplayDao.get().getCrLiveDisplayId());
-                    if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
-                        xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
-                        xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
-                        //xcld.setStatus("<?xml version=\"1.0\" encoding=\"UTF-8\"?><event xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"30600.xsd\"><time>15:31</time><date>28/10/25</date><hearing_id>770221</hearing_id><free_text/><process_linked_cases>false</process_linked_cases><defendant_on_case_id>1</defendant_on_case_id><type>30600</type><defendant_name>BLAGGINA BLAGGER</defendant_name><scheduled_hearing_id>767898</scheduled_hearing_id><defendant_masked_name/><defendant_masked_flag>N</defendant_masked_flag></event>");
-                        LOG.debug("updatePublicDisplayStatus() - returning true");
-                        return true;
+                LOG.debug("CRLive - XhbSittingDao found with ID: {}", xhbSittingDao.get().getSittingId());
+                
+                // 3) Get the court room from the sitting
+                Optional<XhbCourtRoomDao> xhbCourtRoomDao = getXhbCourtRoomRepository()
+                    .findByIdSafe(xhbSittingDao.get().getCourtRoomId());
+                
+                if (xhbCourtRoomDao.isPresent()) {
+                    LOG.debug("CRLive - XhbCourtRoomDao found with ID: {}", xhbCourtRoomDao.get().getCourtRoomId());
+                    // 4) Get the cr live display from the court room
+                    Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao =
+                        getNonStaticCrLiveDisplay(xhbCourtRoomDao.get());
+                    
+                    if (xhbCrLiveDisplayDao.isPresent()) {
+                        LOG.debug("XhbCrLiveDisplayDao found with ID: {}", xhbCrLiveDisplayDao.get()
+                            .getCrLiveDisplayId());
+                        if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
+                            xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
+                            // TODO Revert to real public display status below once testing is complete
+                            // xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
+                            xhbCrLiveDisplayDao.get().setStatus(PUBLIC_DISPLAY_STATUS_TEST);
+                            getXhbCrLiveDisplayRepository().update(xhbCrLiveDisplayDao.get());
+                            LOG.debug("Updated CrLiveDisplay status");
+                        }
                     }
                 }
             }
@@ -149,7 +159,6 @@ public class CrLiveStatusHelper {
         return false;
     }
     
-    
     /**
      * Get the public display status by transforming the passed in value object
      * by removing the free text.
@@ -157,12 +166,34 @@ public class CrLiveStatusHelper {
      * @param viewValue the CourtLogViewValue
      * @return The translated xml <code>String</code>.
      */
+    // TODO Remove this warning when testing is complete and this method is used
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static String getPublicDisplayStatus(CourtLogViewValue viewValue) {
         LOG.debug("getPublicDisplayStatus() - start and finish");
         return CourtLogXslHelper.translateEvent(viewValue, Locale.UK, TranslationType.PUBLIC_DISPLAY,
                 REMOVE_FREE_TEXT_STYLESHEET);
     }
 
+    private Optional<XhbCrLiveDisplayDao> getNonStaticCrLiveDisplay(XhbCourtRoomDao xhbCourtRoomDao) {
+        LOG.debug("getNonStaticCrLiveDisplay()");
+        Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao = getXhbCrLiveDisplayRepository()
+            .findByCourtRoomSafe(xhbCourtRoomDao.getCourtRoomId());
+
+        // This will always be 0 or 1 due to a unique constraint in the database
+        if (!xhbCrLiveDisplayDao.isEmpty()) {
+            LOG.debug("CR live Internet found");
+            return xhbCrLiveDisplayDao;
+        }
+
+        // otherwise, create a new one...
+        LOG.debug("Creating CR live internet");
+        final XhbCrLiveDisplayDao xcldbv = new XhbCrLiveDisplayDao();
+        xcldbv.setTimeStatusSet(LocalDateTime.now());
+        xcldbv.setCourtRoomId(xhbCourtRoomDao.getCourtRoomId());
+        
+        return PddaEntityHelper.xcldSave(xcldbv);
+    }
+    
     private static Optional<XhbCrLiveDisplayDao> getCrLiveDisplay(XhbCourtRoomDao xhbCourtRoomDao) {
         List<XhbCrLiveDisplayDao> liveStatuses =
             (List<XhbCrLiveDisplayDao>) xhbCourtRoomDao.getXhbCrLiveDisplays();
@@ -186,38 +217,5 @@ public class CrLiveStatusHelper {
         LOG.debug("clearCRLiveDisplayStatus() - for id {}", crLiveDisplay.getCrLiveDisplayId());
         crLiveDisplay.setXhbScheduledHearing(null);
         crLiveDisplay.setStatus(null);
-    }
-    
-    private boolean isEntityManagerActive() {
-        return EntityManagerUtil.isEntityManagerActive(entityManager);
-    }
-    
-    private EntityManager getEntityManager() {
-        if (entityManager == null) {
-            LOG.debug("getEntityManager() - Creating new entityManager");
-            clearRepositories();
-            entityManager = EntityManagerUtil.getEntityManager();
-        }
-        return entityManager;
-    }
-    
-    private void clearRepositories() {
-        LOG.info("clearRepositories()");
-        xhbScheduledHearingRepository = null;
-        xhbSittingRepository = null;
-    }
-    
-    private XhbScheduledHearingRepository getXhbScheduledHearingRepository() {
-        if (xhbScheduledHearingRepository == null || !isEntityManagerActive()) {
-            xhbScheduledHearingRepository = new XhbScheduledHearingRepository(getEntityManager());
-        }
-        return xhbScheduledHearingRepository;
-    }
-    
-    private XhbSittingRepository getXhbSittingRepository() {
-        if (xhbSittingRepository == null || !isEntityManagerActive()) {
-            xhbSittingRepository = new XhbSittingRepository(getEntityManager());
-        }
-        return xhbSittingRepository;
     }
 }
