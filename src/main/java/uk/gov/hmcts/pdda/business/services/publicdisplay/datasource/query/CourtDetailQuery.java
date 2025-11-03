@@ -145,11 +145,6 @@ public class CourtDetailQuery extends PublicDisplayQuery {
                     if (!currHasProgress && candHasProgress) {
                         bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
                     }
-                    // Optional tie-breaker if needed:
-                    // else if (Objects.compare(sh.getCreationDate(), current.getCreationDate(),
-                    //         Comparator.nullsLast(Comparator.naturalOrder())) < 0) {
-                    //     bestByHearing.put(sh.getHearingId(), sh);
-                    // }
                 }
             }
 
