@@ -28,7 +28,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -121,30 +120,9 @@ public class CourtListQuery extends PublicDisplayQuery {
         log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
         List<CourtListValue> results = new ArrayList<>();
     
-        // Deduplicate: one scheduled hearing per hearingId, prefer non-null hearingProgress
-        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        Map<Integer, XhbScheduledHearingDao> bestByHearing =
+                pickBestScheduledPerHearing(scheduledHearingDaos, sittingDao.getCourtRoomId(), courtRoomIds);
     
-        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
-            // respect court room filter
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())) {
-                continue;
-            }
-    
-            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
-            if (current == null) {
-                bestByHearing.put(sh.getHearingId(), sh);
-            } else {
-                boolean currHasProg = current.getHearingProgress() != null;
-                boolean candHasProg = sh.getHearingProgress() != null;
-    
-                if (!currHasProg && candHasProg) {
-                    // prefer the row that has a progress value
-                    bestByHearing.put(sh.getHearingId(), sh);
-                }
-            }
-        }
-    
-        // Emit only the chosen scheduled hearing per hearingId
         for (XhbScheduledHearingDao sh : bestByHearing.values()) {
             CourtListValue row = getCourtListValue(sittingDao, sh);
             results.add(row);
@@ -152,6 +130,7 @@ public class CourtListQuery extends PublicDisplayQuery {
     
         return results;
     }
+
 
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {

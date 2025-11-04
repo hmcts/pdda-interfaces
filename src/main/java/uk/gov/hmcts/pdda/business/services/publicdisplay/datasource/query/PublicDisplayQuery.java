@@ -32,7 +32,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
@@ -138,6 +140,37 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected boolean isFloatingIncluded() {
         // default; subclasses can override
         return false;
+    }
+    
+    protected final Map<Integer, XhbScheduledHearingDao> pickBestScheduledPerHearing(
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        int sittingCourtRoomId,
+        int... selectedCourtRoomIds) {
+
+        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        if (scheduledHearingDaos == null || scheduledHearingDaos.isEmpty()) {
+            return bestByHearing;
+        }
+    
+        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+            // respect courtroom selection
+            if (!isSelectedCourtRoom(selectedCourtRoomIds, sittingCourtRoomId, sh.getMovedFromCourtRoomId())) {
+                continue;
+            }
+    
+            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+            if (current == null) {
+                bestByHearing.put(sh.getHearingId(), sh);
+            } else {
+                boolean currHasProg = current.getHearingProgress() != null;
+                boolean candHasProg = sh.getHearingProgress() != null;
+                if (!currHasProg && candHasProg) {
+                    bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
+                }
+            }
+        }
+    
+        return bestByHearing;
     }
 
     protected void populateData(PublicDisplayValue result, Integer courtSiteId, Integer courtRoomId,
