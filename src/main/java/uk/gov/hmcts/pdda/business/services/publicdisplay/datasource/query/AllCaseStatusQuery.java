@@ -3,7 +3,6 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -16,7 +15,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
@@ -84,32 +82,9 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
-
-        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-
-        List<AllCaseStatusValue> results = new ArrayList<>();
-
-        // Loop the hearing lists
-        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
-        if (hearingListDaos.isEmpty()) {
-            log.debug("AllCaseStatusQuery - No Hearing Lists found for today");
-        } else {
-            for (XhbHearingListDao hearingListDao : hearingListDaos) {
-                // Loop the sittings
-                List<XhbSittingDao> sittingDaos;
-                if (isFloatingIncluded()) {
-                    sittingDaos = getSittingListDaos(hearingListDao.getListId());
-                } else {
-                    sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
-                }
-                if (!sittingDaos.isEmpty()) {
-                    results.addAll(getSittingData(sittingDaos, courtRoomIds));
-                }
-            }
-        }
-
-        return results;
+        return getDataTemplate(date, courtId, this::getSittingData, courtRoomIds);
     }
+
 
     private List<AllCaseStatusValue> getSittingData(List<XhbSittingDao> sittingDaos,
         int... courtRoomIds) {

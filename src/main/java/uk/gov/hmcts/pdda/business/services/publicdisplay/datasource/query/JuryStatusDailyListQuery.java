@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -14,7 +13,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
@@ -79,37 +77,12 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
 
-     * @return Suumary by name data for the specified court rooms
+     * @return Summary by name data for the specified court rooms
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
         log.debug("Entering getData(LocalDateTime, int, int...)");
-
-        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-        log.debug("Start date: {}", startDate);
-
-        List<JuryStatusDailyListValue> results = new ArrayList<>();
-
-        // Loop the hearing lists
-        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
-        if (hearingListDaos.isEmpty()) {
-            log.debug("JuryStatusDailyListQuery - No Hearing Lists found for today");
-        } else {
-            for (XhbHearingListDao hearingListDao : hearingListDaos) {
-                // Loop the sittings
-                List<XhbSittingDao> sittingDaos;
-                if (isFloatingIncluded()) {
-                    sittingDaos = getSittingListDaos(hearingListDao.getListId());
-                } else {
-                    sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
-                }
-                if (!sittingDaos.isEmpty()) {
-                    results.addAll(getSittingData(sittingDaos, courtRoomIds));
-                }
-            }
-        }
-
-        return results;
+        return getDataTemplate(date, courtId, this::getSittingData, courtRoomIds);
     }
 
     protected boolean isFloatingIncluded() {
