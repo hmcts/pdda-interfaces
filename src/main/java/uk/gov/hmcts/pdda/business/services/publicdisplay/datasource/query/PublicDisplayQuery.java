@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -29,9 +30,13 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Abstract query class used by public display.
@@ -93,6 +98,80 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
      * @return Summary by name data for the specified court rooms
      */
     public abstract Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds);
+    
+    
+    /**
+     * Template to collect results for a day across hearing lists and sittings.
+     * Subclasses provide how to turn a list of sittings into their specific result rows.
+     */
+    protected final <T> List<T> getDataTemplate(
+            LocalDateTime date,
+            int courtId,
+            BiFunction<List<XhbSittingDao>, int[], List<T>> sittingProcessor,
+            int... courtRoomIds) {
+
+        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
+        List<T> results = new ArrayList<>();
+
+        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
+        if (hearingListDaos.isEmpty()) {
+            log.debug("{} - No Hearing Lists found for {}", getClass().getSimpleName(), startDate);
+            return results;
+        }
+
+        for (XhbHearingListDao hearingListDao : hearingListDaos) {
+            List<XhbSittingDao> sittingDaos = loadSittingsForList(hearingListDao.getListId());
+            if (!sittingDaos.isEmpty()) {
+                results.addAll(sittingProcessor.apply(sittingDaos, courtRoomIds));
+            }
+        }
+
+
+        return results;
+    }
+    
+    protected final List<XhbSittingDao> loadSittingsForList(int hearingListId) {
+        return isFloatingIncluded()
+                ? getSittingListDaos(hearingListId)
+                : getNonFloatingSittingListDaos(hearingListId);
+    }
+
+    
+    protected boolean isFloatingIncluded() {
+        // default; subclasses can override
+        return false;
+    }
+    
+    protected final Map<Integer, XhbScheduledHearingDao> pickBestScheduledPerHearing(
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        int sittingCourtRoomId,
+        int... selectedCourtRoomIds) {
+
+        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        if (scheduledHearingDaos == null || scheduledHearingDaos.isEmpty()) {
+            return bestByHearing;
+        }
+    
+        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+            // respect courtroom selection
+            if (!isSelectedCourtRoom(selectedCourtRoomIds, sittingCourtRoomId, sh.getMovedFromCourtRoomId())) {
+                continue;
+            }
+    
+            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+            if (current == null) {
+                bestByHearing.put(sh.getHearingId(), sh);
+            } else {
+                boolean currHasProg = current.getHearingProgress() != null;
+                boolean candHasProg = sh.getHearingProgress() != null;
+                if (!currHasProg && candHasProg) {
+                    bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
+                }
+            }
+        }
+    
+        return bestByHearing;
+    }
 
     protected void populateData(PublicDisplayValue result, Integer courtSiteId, Integer courtRoomId,
         Integer movedFromCourtRoomId, LocalDateTime notBeforeTime) {
