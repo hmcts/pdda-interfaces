@@ -224,7 +224,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     
     protected CrLiveStatusHelper getCrLiveStatusHelper() {
         if (crLiveStatusHelper == null) {
-            crLiveStatusHelper = new CrLiveStatusHelper();
+            crLiveStatusHelper = new CrLiveStatusHelper(entityManager);
         }
         return crLiveStatusHelper;
     }

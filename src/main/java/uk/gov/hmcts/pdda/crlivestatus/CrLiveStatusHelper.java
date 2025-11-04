@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.crlivestatus;
 
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
@@ -39,6 +40,10 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
         + "1</defendant_on_case_id><type>30600</type><defendant_name>BLAGGINA BLAGGER</defendant_name>"
         + "<scheduled_hearing_id>767898</scheduled_hearing_id><defendant_masked_name/>"
         + "<defendant_masked_flag>N</defendant_masked_flag></event>";
+    
+    public CrLiveStatusHelper(EntityManager entityManager) {
+        super(entityManager);
+    }
     
     /**
      * Method to indicate that the public display should be activated. This will clear out the

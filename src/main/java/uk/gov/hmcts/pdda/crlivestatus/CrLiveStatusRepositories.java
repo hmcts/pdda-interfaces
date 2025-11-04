@@ -25,6 +25,9 @@ public class CrLiveStatusRepositories {
     private XhbSittingRepository xhbSittingRepository;
     private XhbCrLiveDisplayRepository xhbCrLiveDisplayRepository;
     
+    public CrLiveStatusRepositories(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
     
     private boolean isEntityManagerActive() {
         return EntityManagerUtil.isEntityManagerActive(entityManager);
@@ -42,7 +45,9 @@ public class CrLiveStatusRepositories {
     private void clearRepositories() {
         LOG.info("clearRepositories()");
         xhbScheduledHearingRepository = null;
+        xhbCourtRoomRepository = null;
         xhbSittingRepository = null;
+        xhbCrLiveDisplayRepository = null;
     }
     
     protected XhbScheduledHearingRepository getXhbScheduledHearingRepository() {
