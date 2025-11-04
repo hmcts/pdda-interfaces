@@ -132,6 +132,10 @@ public final class CourtLogXmlHelper {
         LOG.debug("getSchema() - entry - eventType : " + eventType);
         return SCHEMA_BASE + eventType.toString() + SCHEMA_FILE_EXTENSION;
     }
+    
+    public static String getSchemaFromJunit(Integer eventType) {
+        return getSchema(eventType);
+    }
 
     /**
      * Create a <code>Document</code> object from the passed in source.
