@@ -39,6 +39,7 @@ import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -55,8 +56,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"unchecked", "PMD.ExcessiveImports", "PMD.TooManyMethods",
-    "PMD.AvoidAccessibilityAlteration", "PMD.UnitTestContainsTooManyAsserts"})
+@SuppressWarnings({"unchecked", "PMD"})
 class XmlServicesImplTest {
     
     private static final String NULL = "Result is Null";
@@ -463,6 +463,55 @@ class XmlServicesImplTest {
 
         // Assert
         assertNotNull(xml, NULL);
+    }
+    
+    @Test
+    void testGenerateXmlFromPropSetHandlesNestedMap() {
+        // Arrange: create a nested map so the 'instanceof Map' branch executes
+        Map<String, Object> innerMap = new ConcurrentHashMap<>();
+        innerMap.put("innerKey", "innerValue");
+
+        Map<String, Object> outerMap = new ConcurrentHashMap<>();
+        outerMap.put("nested", innerMap);
+
+        XmlServicesImpl xmlServices = new XmlServicesImpl();
+
+        // Act
+        String xml = xmlServices.generateXmlFromPropSet(outerMap, "root");
+
+        // Assert
+        assertNotNull(xml, "Result should not be null");
+        assertTrue(xml.contains("<nested>"));
+        assertTrue(xml.contains("<innerKey>innerValue</innerKey>"));
+    }
+    
+    @Test
+    void testGenerateXmlFromPropSetHandlesCollectionOfMaps() {
+        // Arrange: Create a collection that contains maps (to trigger the 'instanceof Collection' branch)
+        Map<String, Object> innerMap1 = new ConcurrentHashMap<>();
+        innerMap1.put("itemKey1", "itemValue1");
+
+        Map<String, Object> innerMap2 = new ConcurrentHashMap<>();
+        innerMap2.put("itemKey2", "itemValue2");
+
+        List<Map<String, ?>> collectionOfMaps = new ArrayList<>();
+        collectionOfMaps.add(innerMap1);
+        collectionOfMaps.add(innerMap2);
+
+        // Outer map uses the collection to trigger the 'else if (value instanceof Collection)' block
+        Map<String, Object> outerMap = new ConcurrentHashMap<>();
+        outerMap.put("collectionNode", collectionOfMaps);
+
+        XmlServicesImpl xmlServices = new XmlServicesImpl();
+
+        // Act
+        String xml = xmlServices.generateXmlFromPropSet(outerMap, "root");
+
+        // Assert
+        assertNotNull(xml, "Resulting XML should not be null");
+        assertTrue(xml.contains("<collectionNode>"));
+        assertTrue(xml.contains("<itemKey1>itemValue1</itemKey1>"));
+        assertTrue(xml.contains("<itemKey2>itemValue2</itemKey2>"));
     }
     
     @Test
