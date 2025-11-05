@@ -80,7 +80,7 @@ import javax.xml.validation.Validator;
  *          Removing XMLTransform as XSLServices should be used
  */
 
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.CouplingBetweenObjects", "PMD.TooManyMethods", "squid:S2755"})
 public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlServicesImpl.class);
