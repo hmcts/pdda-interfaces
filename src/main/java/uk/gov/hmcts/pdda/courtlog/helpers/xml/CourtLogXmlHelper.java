@@ -108,16 +108,12 @@ public final class CourtLogXmlHelper {
         Map propertyMap = marshaller.unmarshall(xmlFragment);
 
         // Diagnostic Logging
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getPropertySet() - Newly generated HashMap size : " + propertyMap.size());
-
-            Iterator keys = propertyMap.keySet().iterator();
-            while (keys.hasNext()) {
-                String key = (String) keys.next();
-                LOG.debug("getPropertySet() - key : " + key + ", value : " + propertyMap.get(key));
-            }
+        LOG.debug("getPropertySet() - Newly generated HashMap size : " + propertyMap.size());
+        Iterator keys = propertyMap.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            LOG.debug("getPropertySet() - key : " + key + ", value : " + propertyMap.get(key));
         }
-
         return propertyMap;
     }
 
@@ -133,10 +129,6 @@ public final class CourtLogXmlHelper {
         return SCHEMA_BASE + eventType.toString() + SCHEMA_FILE_EXTENSION;
     }
     
-    public static String getSchemaFromJunit(Integer eventType) {
-        return getSchema(eventType);
-    }
-
     /**
      * Create a <code>Document</code> object from the passed in source.
 
