@@ -27,13 +27,13 @@ import static org.mockito.Mockito.when;
 class CourtLogMarshallerTest {
 
     @Test
-    void constructorInitializesSuccessfully() {
+    void testConstructorInitializesSuccessfully() {
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
         assertNotNull(marshaller);
     }
 
     @Test
-    void marshallDelegatesToXmlServicesImpl() {
+    void testMarshallDelegatesToXmlServicesImpl() {
         // Arrange
         Map<String, Object> props = new HashMap<>();
         props.put("key", "value");
@@ -56,7 +56,7 @@ class CourtLogMarshallerTest {
     }
 
     @Test
-    void unmarshallConvertsXmlToMap() {
+    void testUnmarshallConvertsXmlToMap() {
         // Arrange
         String xml = "<event><key>value</key><list>one</list><list>two</list></event>";
 
@@ -84,7 +84,7 @@ class CourtLogMarshallerTest {
     }
 
     @Test
-    void unmarshallHandlesEmptyNodeGracefully() {
+    void testUnmarshallHandlesEmptyNodeGracefully() {
         String xml = "<event></event>";
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
 
@@ -95,7 +95,7 @@ class CourtLogMarshallerTest {
     }
 
     @Test
-    void unmarshallHandlesNestedElementsRecursively() {
+    void testUnmarshallHandlesNestedElementsRecursively() {
         String xml = "<event><outer><inner>deepValue</inner></outer></event>";
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
 
@@ -109,7 +109,7 @@ class CourtLogMarshallerTest {
     }
 
     @Test
-    void unmarshallReturnsEmptyMapWhenNoElementsPresent() {
+    void testUnmarshallReturnsEmptyMapWhenNoElementsPresent() {
         String xml = "<event/>";
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
         Map<String, Object> result = marshaller.unmarshall(xml);
