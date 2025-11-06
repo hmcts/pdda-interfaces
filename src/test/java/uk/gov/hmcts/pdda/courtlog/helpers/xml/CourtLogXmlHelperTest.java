@@ -102,7 +102,7 @@ class CourtLogXmlHelperTest {
         try (MockedConstruction<CourtLogMarshaller> mocked =
             Mockito.mockConstruction(CourtLogMarshaller.class, (mock,
                 context) -> when(mock.unmarshall(Mockito.any(String.class))).thenReturn(mockMap))) {
-            Map<String, Object> result = CourtLogXmlHelper.getPropertySet(xml);
+            Map<?, ?> result = CourtLogXmlHelper.getPropertySet(xml);
             assertNotNull(result);
             assertEquals("value", result.get("key"));
             Mockito.verify(mocked.constructed().get(0)).unmarshall(xml);

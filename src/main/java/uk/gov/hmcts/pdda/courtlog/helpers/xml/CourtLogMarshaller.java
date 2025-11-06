@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings({"squid:S3824"})
 class CourtLogMarshaller {
     private static final Logger LOG = LoggerFactory.getLogger(CourtLogMarshaller.class);
 
@@ -68,7 +69,7 @@ class CourtLogMarshaller {
         }
     }
 
-    public String marshall(Map props, String rootNodeName) {
+    public String marshall(Map<?, ?> props, String rootNodeName) {
         LOG.debug("marshall() - entry");
         return XmlServicesImpl.getInstance().generateXmlFromPropSet(props, rootNodeName);
     }
