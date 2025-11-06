@@ -16,7 +16,7 @@ public abstract class Translator {
 
     protected int type;
 
-    public Translator(int type) {
+    protected Translator(int type) {
         this.type = type;
     }
 

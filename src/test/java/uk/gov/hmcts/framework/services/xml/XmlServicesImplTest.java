@@ -36,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import static org.junit.Assert.assertTrue;
@@ -56,7 +55,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"unchecked", "PMD"})
+@SuppressWarnings({"unchecked", "PMD", "squid:S5778"})
 class XmlServicesImplTest {
     
     private static final String NULL = "Result is Null";
@@ -117,8 +116,7 @@ class XmlServicesImplTest {
     }
 
     @Test
-    void testCreateDocFromValueFail()
-        throws ParserConfigurationException, MarshalException, ValidationException {
+    void testCreateDocFromValueFail() throws MarshalException, ValidationException {
         CsValueObject vo = mock(CsValueObject.class);
         // Make the constructed Marshaller throw MarshalException on marshal()
         try (MockedConstruction<Marshaller> cons = mockConstruction(
@@ -450,7 +448,7 @@ class XmlServicesImplTest {
     }
     
     @Test
-    void testGenerateXmlFromPropSetSuccess() throws Exception {
+    void testGenerateXmlFromPropSetSuccess() {
         // Arrange
         Map<String, Object> props = new ConcurrentHashMap<>();
         props.put(NAME, "Alice");
@@ -487,7 +485,7 @@ class XmlServicesImplTest {
     
     @Test
     void testGenerateXmlFromPropSetHandlesCollectionOfMaps() {
-        // Arrange: Create a collection that contains maps (to trigger the 'instanceof Collection' branch)
+        // Arrange
         Map<String, Object> innerMap1 = new ConcurrentHashMap<>();
         innerMap1.put("itemKey1", "itemValue1");
 
@@ -498,7 +496,6 @@ class XmlServicesImplTest {
         collectionOfMaps.add(innerMap1);
         collectionOfMaps.add(innerMap2);
 
-        // Outer map uses the collection to trigger the 'else if (value instanceof Collection)' block
         Map<String, Object> outerMap = new ConcurrentHashMap<>();
         outerMap.put("collectionNode", collectionOfMaps);
 

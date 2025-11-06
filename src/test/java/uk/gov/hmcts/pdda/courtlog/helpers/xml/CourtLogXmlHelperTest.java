@@ -58,7 +58,6 @@ class CourtLogXmlHelperTest {
     @Test
     void testGetXmlTriggersAddSchemaBlock() {
         // Arrange
-        CourtLogCrudValue crudValueMock = mock(CourtLogCrudValue.class);
         when(crudValueMock.getEventType()).thenReturn(42);
         when(crudValueMock.getEntryFreeText()).thenReturn("Some text");
         when(crudValueMock.getPropertyMap()).thenReturn(new ConcurrentHashMap<>());

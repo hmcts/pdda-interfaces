@@ -7,6 +7,7 @@ import uk.gov.hmcts.framework.exception.CsUnrecoverableException;
 
  * @author pznwc5
  */
+@SuppressWarnings("squid:S110")
 public class CourtLogRuntimeException extends CsUnrecoverableException {
     
     static final long serialVersionUID = 1375974185625217549L;
