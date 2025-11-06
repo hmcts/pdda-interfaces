@@ -40,11 +40,7 @@ public class SubstitutingTranslator extends Translator {
     @Override
     public String translate(TranslationContext context, Locale locale, Document input,
         Date entryDate, Integer eventType) {
-        // System.out.println("Before:" +
-        // CSServices.getXMLServices().getStringXML(input));
         substituteValues(type, locale, input, eventType);
-        // System.out.println("After:" +
-        // CSServices.getXMLServices().getStringXML(input));
         return next.translate(context, locale, input, entryDate, eventType);
     }
 
@@ -64,11 +60,7 @@ public class SubstitutingTranslator extends Translator {
 
             NodeList textNodes = allTextNodes(input);
             for (int i = 0; i < textNodes.getLength(); i++) {
-                // System.out.println("Before ===>" +
-                // textNodes.item(i).getNodeValue());
                 substituteXmlValues(textNodes.item(i), eventType, bundle);
-                // System.out.println("After ===>" +
-                // textNodes.item(i).getNodeValue());
             }
         } catch (Exception e) {
             CsServices.getDefaultErrorHandler().handleError(e, getClass(), e.toString());
@@ -96,7 +88,7 @@ public class SubstitutingTranslator extends Translator {
      */
     private void substituteXmlValues(Node textNode, Integer eventType, ResourceBundle bundle) {
         String text = textNode.getNodeValue();
-        if (text.length() <= 0) {
+        if (text.isEmpty()) {
             return;
         }
 
@@ -113,7 +105,7 @@ public class SubstitutingTranslator extends Translator {
         if (start != -1 && end != -1) {
             // Convert string content into string buffer, before
             // removing (xxx)...
-            StringBuffer sb = new StringBuffer(newValue);
+            StringBuilder sb = new StringBuilder(newValue);
             sb.replace(start, end, "");
             newValue = sb.toString().trim();
         }

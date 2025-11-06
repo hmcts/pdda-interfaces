@@ -49,8 +49,8 @@ public final class CourtLogXmlHelper {
      * @return xml string
      */
     public static String getXml(CourtLogCrudValue courtLogCrudValue) {
-        String methodName = "getXML() - ";
-        LOG.debug(methodName + "entry - value : " + courtLogCrudValue);
+        String methodName = "getXML() - {}{}";
+        LOG.debug(methodName, "entry - value : {}", courtLogCrudValue);
 
         courtLogCrudValue.setProperty(CourtLogCrudValue.EVENT_TYPE, courtLogCrudValue.getEventType().toString());
         courtLogCrudValue.setProperty(CourtLogCrudValue.ENTRY_FREE_TEXT, courtLogCrudValue.getEntryFreeText());
@@ -61,7 +61,7 @@ public final class CourtLogXmlHelper {
         // Add no name space schema location to the generated xml...
         String schemaXml = addSchema(xml, courtLogCrudValue.getEventType());
 
-        LOG.debug(methodName + "Generated XML : " + schemaXml);
+        LOG.debug(methodName, "Generated XML : {}", schemaXml);
 
         return schemaXml;
     }
@@ -101,18 +101,18 @@ public final class CourtLogXmlHelper {
     }
 
     public static Map getPropertySet(String xmlFragment) {
-        LOG.debug("getPropertySet() - entry - xml : " + xmlFragment);
+        LOG.debug("getPropertySet() - entry - xml : {}", xmlFragment);
 
         // Generate multi-level hash map from xml
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
         Map propertyMap = marshaller.unmarshall(xmlFragment);
 
         // Diagnostic Logging
-        LOG.debug("getPropertySet() - Newly generated HashMap size : " + propertyMap.size());
+        LOG.debug("getPropertySet() - Newly generated HashMap size : {}", propertyMap.size());
         Iterator keys = propertyMap.keySet().iterator();
         while (keys.hasNext()) {
             String key = (String) keys.next();
-            LOG.debug("getPropertySet() - key : " + key + ", value : " + propertyMap.get(key));
+            LOG.debug("getPropertySet() - key : {}{}{}", key, ", value : ", propertyMap.get(key));
         }
         return propertyMap;
     }
@@ -125,7 +125,7 @@ public final class CourtLogXmlHelper {
      * @return A <code>String</code> of the full location.
      */
     private static String getSchema(Integer eventType) {
-        LOG.debug("getSchema() - entry - eventType : " + eventType);
+        LOG.debug("getSchema() - entry - eventType : {}", eventType);
         return SCHEMA_BASE + eventType.toString() + SCHEMA_FILE_EXTENSION;
     }
     

@@ -157,9 +157,9 @@ public final class CourtLogXslHelper {
      */
     public static String translateEvent(String xml, Date entryDate, Integer eventType, Locale locale,
             TranslationType translationType, TranslationContext context, String xsl) {
-        LOG.debug("translateEvent() - xml = " + xml + "; entryDate = " + entryDate + "; eventType = " + eventType
-                + "; locale = " + locale + "; translationType = " + translationType + "; context = " + context
-                + "; xsl = " + xsl);
+        LOG.debug("translateEvent() - xml = {}{}{}{}{}{}{}{}{}{}{}{}{}", xml, "; entryDate = ", entryDate, 
+            "; eventType = ", eventType, "; locale = ", locale, "; translationType = ", translationType, 
+            "; context = ", context, "; xsl = ", xsl);
         
         if ((xml == null) || (locale == null) || (translationType == null)) {
             throw new IllegalArgumentException("Required property supplied is null");
