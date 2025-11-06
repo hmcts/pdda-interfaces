@@ -100,18 +100,18 @@ public final class CourtLogXmlHelper {
         CsServices.getXmlServices().validateXml(xmlString, schemaLocation);
     }
 
-    public static Map<?, ?> getPropertySet(String xmlFragment) {
+    public static Map<String, Object> getPropertySet(String xmlFragment) {
         LOG.debug("getPropertySet() - entry - xml : {}", xmlFragment);
 
         // Generate multi-level hash map from xml
         CourtLogMarshaller marshaller = new CourtLogMarshaller();
-        Map<?, ?> propertyMap = marshaller.unmarshall(xmlFragment);
+        Map<String, Object> propertyMap = marshaller.unmarshall(xmlFragment);
 
         // Diagnostic Logging
         LOG.debug("getPropertySet() - Newly generated HashMap size : {}", propertyMap.size());
-        Iterator<?> keys = propertyMap.keySet().iterator();
+        Iterator<String> keys = propertyMap.keySet().iterator();
         while (keys.hasNext()) {
-            String key = (String) keys.next();
+            String key = keys.next();
             LOG.debug("getPropertySet() - key : {}{}{}", key, ", value : ", propertyMap.get(key));
         }
         return propertyMap;

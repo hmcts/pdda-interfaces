@@ -325,7 +325,7 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
      * @return String the xml document.
      */
     @SuppressWarnings("unchecked")
-    public String generateXmlFromPropSet(Map xmlToConvert, String tag) {
+    public String generateXmlFromPropSet(Map<String, Object> xmlToConvert, String tag) {
         String methodName = "generateXMLFromPropSet() - {}{}{}{}";
         LOG.debug(methodName, "called :: tag: ", tag, " Map: ", xmlToConvert);
 

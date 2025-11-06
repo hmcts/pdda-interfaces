@@ -69,7 +69,7 @@ class CourtLogMarshaller {
         }
     }
 
-    public String marshall(Map<?, ?> props, String rootNodeName) {
+    public String marshall(Map<String, Object> props, String rootNodeName) {
         LOG.debug("marshall() - entry");
         return XmlServicesImpl.getInstance().generateXmlFromPropSet(props, rootNodeName);
     }
