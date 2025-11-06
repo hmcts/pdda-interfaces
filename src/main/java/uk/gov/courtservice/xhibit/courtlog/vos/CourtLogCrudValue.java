@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("squid:S1948")
 public class CourtLogCrudValue extends CourtLogAbstractValue {
 
     private static final long serialVersionUID = 371289955235964063L;
