@@ -284,7 +284,6 @@ public class XmlServicesImpl extends AbstractXmlUtils implements XmlServices {
             }
         } catch (ParserConfigurationException | FactoryConfigurationError | IOException
             | SAXException | TransformerException exception) {
-            LOG.error("Error reading input XML: {}{}", xmlString, exception);
             CsServices.getDefaultErrorHandler().handleError(exception, getClass());
             throw new CsUnrecoverableException("Error reading input XML: " + xmlString, exception);
         }

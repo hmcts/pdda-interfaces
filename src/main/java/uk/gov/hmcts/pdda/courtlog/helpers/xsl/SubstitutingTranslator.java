@@ -22,7 +22,6 @@ import javax.xml.xpath.XPathFactoryConfigurationException;
 
  * @author pznwc5
  */
-@SuppressWarnings("squid:S5778")
 public class SubstitutingTranslator extends Translator {
     /** Parent translator. */
     private final Translator next;

@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-@SuppressWarnings({"PMD"})
+@SuppressWarnings({"PMD", "squid:S5778"})
 class SubstitutingTranslatorTest {
     
     private static final int TRANSLATE_TYPE = 0;
