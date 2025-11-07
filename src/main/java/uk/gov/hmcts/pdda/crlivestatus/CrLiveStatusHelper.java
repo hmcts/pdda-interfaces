@@ -33,14 +33,6 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
     private static final String REMOVE_FREE_TEXT_STYLESHEET = "config/courtlog/transformer/remove_free_text.xsl";
 
-    private static final String PUBLIC_DISPLAY_STATUS_TEST =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><event xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
-        + " xsi:noNamespaceSchemaLocation=\"30600.xsd\"><time>12:05</time><date>03/11/25</date><hearing_id>761943"
-        + "</hearing_id><free_text/><process_linked_cases>false</process_linked_cases><defendant_on_case_id>"
-        + "1</defendant_on_case_id><type>30600</type><defendant_name>BLAGGINA BLAGGER</defendant_name>"
-        + "<scheduled_hearing_id>767898</scheduled_hearing_id><defendant_masked_name/>"
-        + "<defendant_masked_flag>N</defendant_masked_flag></event>";
-    
     public CrLiveStatusHelper(EntityManager entityManager) {
         super(entityManager);
     }
@@ -150,11 +142,10 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
                             .getCrLiveDisplayId());
                         if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
                             xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
-                            // TODO Revert to real public display status below once testing is complete
-                            // xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
-                            xhbCrLiveDisplayDao.get().setStatus(PUBLIC_DISPLAY_STATUS_TEST);
+                            xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
                             getXhbCrLiveDisplayRepository().update(xhbCrLiveDisplayDao.get());
-                            LOG.debug("Updated CrLiveDisplay status");
+                            LOG.debug("Updated CrLiveDisplay status - returning true");
+                            return true;
                         }
                     }
                 }
@@ -171,8 +162,6 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
      * @param viewValue the CourtLogViewValue
      * @return The translated xml <code>String</code>.
      */
-    // TODO Remove this warning when testing is complete and this method is used
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static String getPublicDisplayStatus(CourtLogViewValue viewValue) {
         LOG.debug("getPublicDisplayStatus() - start and finish");
         return CourtLogXslHelper.translateEvent(viewValue, Locale.UK, TranslationType.PUBLIC_DISPLAY,
