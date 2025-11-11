@@ -923,14 +923,20 @@ class SftpServiceTest {
     
     private void setupCaseStatusEventFile() {
         try {
-            CourtRoomIdentifier courtRoomIdentifier =
-                new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
-            CourtLogSubscriptionValue courtLogSubscriptionValue = new CourtLogSubscriptionValue();
+            // Populate the CourtLogViewValue
             CourtLogViewValue courtLogViewValue = new CourtLogViewValue();
             courtLogViewValue.setEntryDate(new Date());
+            courtLogViewValue.setCaseNumber(20250003);
+            courtLogViewValue.setCaseType("T");
+            // Populate the CourtLogSubscriptionValue with the CourtLogViewValue
+            CourtLogSubscriptionValue courtLogSubscriptionValue = new CourtLogSubscriptionValue();
             courtLogSubscriptionValue.setCourtLogViewValue(courtLogViewValue);
+            // Populate the CaseCourtLogInformation with the CourtLogSubscriptionValue
             CaseCourtLogInformation caseCourtLogInformation =
                 new CaseCourtLogInformation(courtLogSubscriptionValue, true);
+            // Populate the CaseStatusEvent with the CourtRoomIdentifier & CaseCourtLogInformation
+            CourtRoomIdentifier courtRoomIdentifier =
+                new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
             CaseStatusEvent caseStatusEvent = new CaseStatusEvent(courtRoomIdentifier, caseCourtLogInformation);
             
             byte[] serializedObject =

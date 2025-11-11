@@ -48,6 +48,14 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
     private Integer defendantOnOffenceId;
 
     private Integer scheduledHearingId;
+    
+    private String caseType;
+    
+    private Integer caseNumber;
+    
+    private String courtSiteName;
+    
+    private String defendantName;
 
     protected CourtLogAbstractValue() {
         super();
@@ -184,6 +192,38 @@ public abstract class CourtLogAbstractValue extends CsAbstractValue implements C
 
     public Date getLastUpdateDate() {
         return this.lastUpdateDate;
+    }
+    
+    public String getCaseType() {
+        return caseType;
+    }
+
+    public void setCaseType(String caseType) {
+        this.caseType = caseType;
+    }
+
+    public Integer getCaseNumber() {
+        return caseNumber;
+    }
+
+    public void setCaseNumber(Integer caseNumber) {
+        this.caseNumber = caseNumber;
+    }
+
+    public String getCourtSiteName() {
+        return courtSiteName;
+    }
+
+    public void setCourtSiteName(String courtSiteName) {
+        this.courtSiteName = courtSiteName;
+    }
+
+    public String getDefendantName() {
+        return defendantName;
+    }
+
+    public void setDefendantName(String defendantName) {
+        this.defendantName = defendantName;
     }
 
     /**
