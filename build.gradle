@@ -201,6 +201,12 @@ ext {
 
 ext['snakeyaml.version'] = '2.4'
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework:spring-framework-bom:6.2.11"
+    }
+}
+
 dependencies {
     // Spring Boot Starters
     implementation 'org.springframework.boot:spring-boot-starter-web'
