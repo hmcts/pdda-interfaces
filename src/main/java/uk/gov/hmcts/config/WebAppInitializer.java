@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.env.Environment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -17,10 +16,8 @@ public class WebAppInitializer implements ServletContextInitializer {
 
     public static final String SCHEDULER_INIT_SERVLET_NAME = "SchedulerInitServlet";
 
-    @Autowired
     private final EntityManagerFactory entityManagerFactory;
 
-    @Autowired
     private final Environment environment;
 
 
