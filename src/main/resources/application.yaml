@@ -1,3 +1,5 @@
+debug: true
+
 server:
   port: 8080
 
@@ -69,11 +71,13 @@ management:
       # group:
       #  readiness:
       #   include: "db"
+    env:
+      show-values: when_authorized
   endpoints:
     web:
       base-path: /
       exposure:
-        include: health, info, prometheus
+        include: health,info,prometheus,conditions,env,beans,loggers
 
 logging:
   level:
@@ -82,3 +86,6 @@ logging:
     org.springframework.boot.autoconfigure.orm.jpa: DEBUG
     org.springframework.orm.jpa: DEBUG
     org.hibernate: INFO
+    com.zaxxer.hikari: DEBUG
+    org.hibernate.engine.jdbc.env.internal: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG
