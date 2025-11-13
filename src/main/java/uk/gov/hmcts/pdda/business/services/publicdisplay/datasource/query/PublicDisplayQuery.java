@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -26,6 +27,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.time.LocalDateTime;
@@ -236,4 +238,49 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected Optional<XhbHearingDao> getXhbHearingDao(Integer hearingId) {
         return getXhbHearingRepository().findByIdSafe(hearingId);
     }
+
+    /**
+     * Small holder returned by {@link #populateHearingAndCaseData} so callers can
+     * access the hearing DAO and the derived "isCaseHidden" flag without
+     * duplicating the DB lookups.
+     */
+    protected static class HearingCaseInfo {
+        public final Optional<XhbHearingDao> hearingDao;
+        public final boolean isCaseHidden;
+
+        public HearingCaseInfo(Optional<XhbHearingDao> hearingDao, boolean isCaseHidden) {
+            this.hearingDao = hearingDao;
+            this.isCaseHidden = isCaseHidden;
+        }
+    }
+
+    /**
+     * Reusable method to populate reporting/case/event information from a hearing id.
+     * Sets reportingRestricted, case number/title and populates event data on the
+     * provided PublicDisplayValue. Returns the hearing DAO (if any) and whether the
+     * case is marked as hidden.
+     */
+    protected HearingCaseInfo populateHearingAndCaseData(AllCourtStatusValue result, Integer hearingId) {
+        Optional<XhbHearingDao> hearingDao = getXhbHearingDao(hearingId);
+        boolean isCaseHidden = false;
+
+        if (hearingDao.isPresent()) {
+            Integer caseId = hearingDao.get().getCaseId();
+            result.setReportingRestricted(isReportingRestricted(caseId));
+
+            // Get the case
+            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findByIdSafe(caseId);
+            if (caseDao.isPresent()) {
+                result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
+                result.setCaseTitle(caseDao.get().getCaseTitle());
+                isCaseHidden = YES.equals(caseDao.get().getPublicDisplayHide());
+
+                // Populate the event
+                populateEventData(result, caseId);
+            }
+        }
+
+        return new HearingCaseInfo(hearingDao, isCaseHidden);
+    }
+
 }

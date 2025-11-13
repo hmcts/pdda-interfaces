@@ -2,7 +2,6 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
 import uk.gov.hmcts.framework.util.DateTimeUtilities;
-import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
@@ -42,8 +41,7 @@ import java.util.Optional;
 
  * @author
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.ExcessiveImports",
-    "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
 public class CourtDetailQuery extends PublicDisplayQuery {
 
     private PublicNoticeQuery mockPublicNoticeQuery;
@@ -183,30 +181,15 @@ public class CourtDetailQuery extends PublicDisplayQuery {
     private CourtDetailValue getCourtDetailValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao) {
         CourtDetailValue result = new CourtDetailValue();
-        boolean isCaseHidden = false;
+        boolean isCaseHidden;
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
             scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
 
-        // Get the hearing
-        Optional<XhbHearingDao> hearingDao = getXhbHearingDao(scheduledHearingDao.getHearingId());
-        if (hearingDao.isPresent()) {
-            result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
-
-            // Get the case
-            Optional<XhbCaseDao> caseDao =
-                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
-            if (caseDao.isPresent()) {
-                result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
-                result.setCaseTitle(caseDao.get().getCaseTitle());
-                isCaseHidden = YES.equals(caseDao.get().getPublicDisplayHide());
-
-                // Populate the event
-                populateEventData(result, hearingDao.get().getCaseId());
-            }
-
-            // Get the ref hearing type
-            result.setHearingDescription(getHearingTypeDesc(hearingDao));
-        }
+        // Get the hearing and case info using shared helper
+        HearingCaseInfo info = populateHearingAndCaseData(result, scheduledHearingDao.getHearingId());
+        isCaseHidden = info.isCaseHidden;
+        // Get the ref hearing type
+        result.setHearingDescription(getHearingTypeDesc(info.hearingDao));
 
         // Loop the schedHearingDefendants
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
