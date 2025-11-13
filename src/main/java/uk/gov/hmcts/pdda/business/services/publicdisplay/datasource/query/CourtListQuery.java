@@ -29,7 +29,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -37,7 +36,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD"})
+@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
 public class CourtListQuery extends PublicDisplayQuery {
 
     /**
@@ -112,26 +111,25 @@ public class CourtListQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtListValue> getScheduledHearingData(
-        XhbSittingDao sittingDao,
-        List<XhbScheduledHearingDao> scheduledHearingDaos,
-        int... courtRoomIds) {
-
+    private List<CourtListValue> getScheduledHearingData(XhbSittingDao sittingDao,
+        List<XhbScheduledHearingDao> scheduledHearingDaos, int... courtRoomIds) {
         log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
         List<CourtListValue> results = new ArrayList<>();
-    
-        Map<Integer, XhbScheduledHearingDao> bestByHearing =
-                pickBestScheduledPerHearing(scheduledHearingDaos, sittingDao.getCourtRoomId(), courtRoomIds);
-    
-        for (XhbScheduledHearingDao sh : bestByHearing.values()) {
-            CourtListValue row = getCourtListValue(sittingDao, sh);
-            results.add(row);
+        for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
+
+            // Check if this courtroom has been selected
+            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
+                scheduledHearingDao.getMovedFromCourtRoomId())) {
+                continue;
+            }
+
+            CourtListValue result =
+                getCourtListValue(sittingDao, scheduledHearingDao);
+            results.add(result);
+
         }
-    
         return results;
     }
-
-
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
         log.debug("Entering getDefendantName(String, String, String, boolean)");
