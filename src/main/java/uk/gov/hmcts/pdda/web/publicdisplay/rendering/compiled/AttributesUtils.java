@@ -16,7 +16,6 @@ import uk.gov.hmcts.pdda.web.publicdisplay.types.document.DisplayDocument;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@SuppressWarnings("PMD")
 public final class AttributesUtils {
 
     private static final String EMPTY_STRING = "";
@@ -130,16 +129,16 @@ public final class AttributesUtils {
     public static String getJudgeName(TranslationBundle documenti18n, Object item) {
         if (item instanceof CourtDetailValue) {
             JudgeName name = ((CourtDetailValue) item).getJudgeName();
-            if ((name != null) && (name.getName() != null) && (name.getName().length() > 0)) {
+            if (name != null) {
                 return TranslationUtils.translateData(documenti18n, name.toString());
             }
         } else if (item instanceof JuryStatusDailyListValue) {
             JudgeName name = ((JuryStatusDailyListValue) item).getJudgeName();
-            if ((name != null) && (name.getName() != null) && (name.getName().length() > 0)) {
+            if (name != null) {
                 return TranslationUtils.translateData(documenti18n, name.toString());
             }
         }
-        return "";
+        return null;
     }
 
     /**
