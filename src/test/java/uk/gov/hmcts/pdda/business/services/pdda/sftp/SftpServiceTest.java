@@ -37,6 +37,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -48,6 +49,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
@@ -172,6 +174,12 @@ class SftpServiceTest {
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
     
     @Mock
+    private XhbPublicNoticeRepository mockXhbPublicNoticeRepository;
+    
+    @Mock
+    private XhbConfiguredPublicNoticeRepository mockXhbConfiguredPublicNoticeRepository;
+    
+    @Mock
     private XhbClobRepository mockXhbClobRepository;
 
     @Mock
@@ -203,7 +211,8 @@ class SftpServiceTest {
         new SftpService(mockEntityManager, mockXhbConfigPropRepository,
             mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository);
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
 
 
     @TestSubject
@@ -218,7 +227,8 @@ class SftpServiceTest {
         new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository);
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -1018,7 +1028,9 @@ class SftpServiceTest {
                 mockXhbCaseRepository,
                 mockXhbHearingRepository,
                 mockXhbSittingRepository,
-                mockXhbScheduledHearingRepository)
+                mockXhbScheduledHearingRepository,
+                mockXhbPublicNoticeRepository,
+                mockXhbConfiguredPublicNoticeRepository)
             .addMockedMethod("retrieveFromBais", SftpConfig.class, BaisValidation.class)
             .addMockedMethod("getCourtRepository")
             .createMock();
@@ -1056,7 +1068,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() { 
                 return fake;
@@ -1081,7 +1094,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return throwing;
@@ -1131,7 +1145,8 @@ class SftpServiceTest {
         return new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1224,7 +1239,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1264,7 +1280,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return throwing;
@@ -1291,7 +1308,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1348,7 +1366,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1410,7 +1429,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;

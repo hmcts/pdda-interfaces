@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
@@ -19,6 +20,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
@@ -27,6 +30,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
@@ -38,6 +43,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpValidationUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.XhibitPddaHelper;
+import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;
@@ -49,7 +55,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.ExcessiveParameterList", 
-    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.TooManyMethods"})
+    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.TooManyMethods",
+    "PMD.CognitiveComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -84,11 +91,14 @@ public class SftpService extends XhibitPddaHelper {
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
         XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository,
         XhbCaseRepository xhbCaseRepository, XhbHearingRepository hearingRepository,
-        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository) {
+        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository,
+        XhbPublicNoticeRepository publicNoticeRepository, XhbConfiguredPublicNoticeRepository
+            configuredPublicNoticeRepository) {
         super(entityManager, xhbConfigPropRepository, environment,
             pddaMessageHelper, clobRepository, courtRepository,
             courtRoomRepository, courtSiteRepository, xhbCaseRepository,
-            hearingRepository, sittingRepository, scheduledHearingRepository);
+            hearingRepository, sittingRepository, scheduledHearingRepository,
+            publicNoticeRepository, configuredPublicNoticeRepository);
     }
 
     public SftpService(EntityManager entityManager) {
@@ -371,6 +381,9 @@ public class SftpService extends XhibitPddaHelper {
                     // Update the public display status
                     getCrLiveStatusHelper().updatePublicDisplayStatus(updatedCourtLogViewValue);
                 }
+            } else if (event instanceof PublicNoticeEvent publicNoticeEvent) {
+                LOG.debug("Public Notice Event received from XHIBIT");
+                processPublicNoticeEvent(publicNoticeEvent);
             }
             sendMessage(event);
         }
@@ -595,6 +608,50 @@ public class SftpService extends XhibitPddaHelper {
             }
         }
         return null;
+    }
+    
+    private void processPublicNoticeEvent(PublicNoticeEvent event) {
+        // Get Court Room Identifier from the event
+        CourtRoomIdentifier courtRoomIdentifier = event.getCourtRoomIdentifier();
+        
+        // TODO If all public notices for that court room are present in the event then reset them here.
+        
+        if (courtRoomIdentifier != null) {
+            DisplayablePublicNoticeValue[] publicNotices = courtRoomIdentifier.getPublicNotices();
+            
+            if (publicNotices.length > 0) {
+                LOG.debug("No. of DisplayablePublicNoticeValue's: {}", publicNotices.length);
+                
+                for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
+                    // Get the XhbPublicNoticeDao
+                    Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = getPublicNoticeRepository()
+                        .findByCourtIdAndDefPublicNoticeId(courtRoomIdentifier.getCourtId(),
+                            publicNotice.getDefinitivePublicNotice());
+                    
+                    if (xhbPublicNoticeDao.isPresent()) {
+                        LOG.debug("XhbPublicNoticeDao found with ID: {}",
+                            xhbPublicNoticeDao.get().getPublicNoticeId());
+                        
+                        // Get the XhbConfiguredPublicNoticeDao
+                        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao =
+                            getConfiguredPublicNoticeRepository().findByDefinitivePnCourtRoomValueSafe(
+                                courtRoomIdentifier.getCourtRoomId(), xhbPublicNoticeDao.get()
+                                .getPublicNoticeId()).get(0);
+                        
+                        if (xhbConfiguredPublicNoticeDao != null) {
+                            LOG.debug("XhbConfiguredPublicNoticeDao found with ID: {}",
+                                xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
+                            if (publicNotice.isActive()) {
+                                // TODO Check if we need to update the inactive displays too 
+                                // or if the isActive var is populated
+                                xhbConfiguredPublicNoticeDao.setIsActive("1");
+                                getConfiguredPublicNoticeRepository().update(xhbConfiguredPublicNoticeDao);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /**
