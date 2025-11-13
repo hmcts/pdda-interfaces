@@ -31,9 +31,11 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Abstract query class used by public display.
@@ -83,6 +85,48 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         this.xhbDefendantRepository = xhbDefendantRepository;
         this.xhbRefHearingTypeRepository = xhbRefHearingTypeRepository;
         this.xhbRefJudgeRepository = xhbRefJudgeRepository;
+    }
+
+    /**
+     * Generic helper that iterates the hearing lists for a given court/date and
+     * for each sitting calls the supplied BiFunction to convert the sitting list
+     * into result items. This centralises the duplicated loop present in several
+     * query classes.
+
+     * @param date start date (already stripped of time)
+     * @param courtId court identifier
+     * @param sittingListProcessor function that converts a {@code List<XhbSittingDao>}
+     *                             and the selected court rooms ({@code int[]}) into a
+     *                             {@code List} of result items
+     * @param courtRoomIds optional selected court room ids
+     * @param <T> result element type
+     * @return aggregated list of results produced by the processor
+     */
+    protected <T> List<T> processHearingLists(LocalDateTime date, int courtId,
+        BiFunction<List<XhbSittingDao>, int[], List<T>> sittingListProcessor, int... courtRoomIds) {
+        List<T> results = new ArrayList<>();
+        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, date);
+        if (hearingListDaos.isEmpty()) {
+            log.debug("No Hearing Lists found for date {} court {}", date, courtId);
+            return results;
+        }
+
+        for (XhbHearingListDao hearingListDao : hearingListDaos) {
+            List<XhbSittingDao> sittingDaos;
+            if (isFloatingIncluded()) {
+                sittingDaos = getSittingListDaos(hearingListDao.getListId());
+            } else {
+                sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
+            }
+            if (!sittingDaos.isEmpty()) {
+                List<T> produced = sittingListProcessor.apply(sittingDaos, courtRoomIds);
+                if (produced != null && !produced.isEmpty()) {
+                    results.addAll(produced);
+                }
+            }
+        }
+
+        return results;
     }
 
     /**
@@ -237,6 +281,15 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected Optional<XhbHearingDao> getXhbHearingDao(Integer hearingId) {
         return getXhbHearingRepository().findByIdSafe(hearingId);
+    }
+
+    /**
+     * Default implementation for whether floating sittings are included.
+     * Subclasses may override to change behaviour.
+     */
+    protected boolean isFloatingIncluded() {
+        // Default to only non-floating (maintains previous behaviour in subclasses that returned false)
+        return false;
     }
 
     /**
