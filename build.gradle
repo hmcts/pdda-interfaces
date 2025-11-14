@@ -260,7 +260,7 @@ dependencies {
 	
     // Optional embedded JSP support (if actually using JSPs)
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:11.0.11'
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.13'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.14'
     
     // Bytecode / Proxying
     implementation 'net.bytebuddy:byte-buddy:1.17.8'
