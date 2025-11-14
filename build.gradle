@@ -263,7 +263,7 @@ dependencies {
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:11.0.14'
     
     // Bytecode / Proxying
-    implementation 'net.bytebuddy:byte-buddy:1.17.8'
+    implementation 'net.bytebuddy:byte-buddy:1.18.1'
     implementation 'org.javassist:javassist:3.30.2-GA'
 
     // JSON
