@@ -143,7 +143,6 @@ public class CourtListQuery extends PublicDisplayQuery {
      * @param scheduledHearingDao The scheduled hearing DAO
      * @return Populated CourtListValue
      */
-    @SuppressWarnings("PMD.CognitiveComplexity")
     private CourtListValue getCourtListValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao) {
 
@@ -202,7 +201,7 @@ public class CourtListQuery extends PublicDisplayQuery {
                 if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
 
                     // Populate the single defendant and accumulate hidden state
-                    result = populateResultWithDefendant(result, defendantOnCaseDao, isHidden);
+                    populateResultWithDefendant(result, defendantOnCaseDao, isHidden);
 
                     // Ensure hearing progress is set (null-safe)
                     result.setHearingProgress(
