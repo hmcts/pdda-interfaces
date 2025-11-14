@@ -8,6 +8,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
@@ -43,7 +44,6 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpValidationUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.XhibitPddaHelper;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
 import java.io.IOException;

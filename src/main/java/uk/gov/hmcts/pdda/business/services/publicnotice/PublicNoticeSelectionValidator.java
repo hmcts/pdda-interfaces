@@ -3,9 +3,9 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 import jakarta.ejb.EJBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.framework.exception.CsConfigurationException;
 import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 
 import java.util.Properties;
 

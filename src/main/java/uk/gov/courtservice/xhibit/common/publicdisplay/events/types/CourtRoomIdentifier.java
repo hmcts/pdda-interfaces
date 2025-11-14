@@ -1,6 +1,6 @@
 package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 
 import java.io.Serializable;
 
