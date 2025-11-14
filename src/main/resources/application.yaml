@@ -74,8 +74,6 @@ management:
       base-path: /
       exposure:
         include: health, info, prometheus
-<<<<<<< HEAD
-=======
 
 logging:
   level:
@@ -84,4 +82,4 @@ logging:
     org.springframework.boot.autoconfigure.orm.jpa: DEBUG
     org.springframework.orm.jpa: DEBUG
     org.hibernate: INFO
->>>>>>> parent of 29124326 (Merge pull request #690 from hmcts/addAdditionalLoggingForDebuggingFailedMaster)
+

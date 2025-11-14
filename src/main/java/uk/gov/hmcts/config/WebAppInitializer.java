@@ -5,12 +5,16 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import uk.gov.hmcts.framework.scheduler.web.SchedulerInitServlet;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitServlet;
 
+@Configuration
+@ConditionalOnBean(EntityManagerFactory.class)
 public class WebAppInitializer implements ServletContextInitializer {
 
     public static final String INIT_SERVLET_NAME = "InitServlet";
