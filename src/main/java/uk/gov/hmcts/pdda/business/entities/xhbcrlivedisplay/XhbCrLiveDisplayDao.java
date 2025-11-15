@@ -119,5 +119,4 @@ public class XhbCrLiveDisplayDao extends AbstractVersionedDao implements Seriali
     public void setXhbScheduledHearing(XhbScheduledHearingDao xsh) {
         this.xhbScheduledHearing = xsh;
     }
-
 }

@@ -1,16 +1,23 @@
 package uk.gov.hmcts.pdda.crlivestatus;
 
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.framework.services.conversion.DateConverter;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
+import uk.gov.hmcts.pdda.courtlog.helpers.xsl.CourtLogXslHelper;
+import uk.gov.hmcts.pdda.courtlog.helpers.xsl.TranslationType;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -21,14 +28,15 @@ import java.util.Optional;
  * @author tz0d5m
  * @version $Revision: 1.7 $
  */
-public final class CrLiveStatusHelper {
+@SuppressWarnings({"PMD.AvoidDeeplyNestedIfStmts", "PMD.CognitiveComplexity"})
+public class CrLiveStatusHelper extends CrLiveStatusRepositories {
     private static final Logger LOG = LoggerFactory.getLogger(CrLiveStatusHelper.class);
+    private static final String REMOVE_FREE_TEXT_STYLESHEET = "config/courtlog/transformer/remove_free_text.xsl";
 
-    private CrLiveStatusHelper() {
-        // prevent external instantiation
+    public CrLiveStatusHelper(EntityManager entityManager) {
+        super(entityManager);
     }
-
-
+    
     /**
      * Method to indicate that the public display should be activated. This will clear out the
      * xhb_cr_live_display row entries for the court room that the scheduled hearing is assigned to,
@@ -84,10 +92,105 @@ public final class CrLiveStatusHelper {
 
         LOG.debug("deactivatePublicDisplay() - end");
     }
+    
+    /**
+     * Update the public display status if the passed in court log event is more
+     * recent than the last displayed public display event for the case whose
+     * scheduled hearing is passed in on the view value.
 
-    private static Optional<XhbCrLiveDisplayDao> getCrLiveDisplay(XhbCourtRoomDao courtRoom) {
+     * @param courtLogViewValue
+     *            The <code>CourtLogViewValue</code> of the event that was
+     *            created or updated.
+     * @return <i>true</i> if there is a cr live status entry for the scheduled
+     *         hearing on the log event passed in and the court log event passed
+     *         in is more recent than the time status set of the live status
+     *         entry, <i>false</i> will be returned otherwise.
+     */
+    public boolean updatePublicDisplayStatus(CourtLogViewValue courtLogViewValue) {
+        LOG.debug("updatePublicDisplayStatus() - start");
+        // Convert the entry date to LocalDateTime from Date
+        LocalDateTime entryDateTime = courtLogViewValue.getEntryDate().toInstant()
+            .atZone(ZoneId.systemDefault()).toLocalDateTime();
+        
+        // 1) Get the scheduled hearing
+        LOG.debug("CRLive - Finding XhbScheduledHearingDao with ID: {}", courtLogViewValue.getScheduledHearingId());
+        Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = getXhbScheduledHearingRepository()
+            .findByIdSafe(courtLogViewValue.getScheduledHearingId());
+        
+        if (xhbScheduledHearingDao.isPresent()) {
+            LOG.debug("CRLive - XhbScheduledHearingDao found with ID: {}", courtLogViewValue.getScheduledHearingId());
+            
+            // 2) Get the sitting from the scheduled hearing
+            Optional<XhbSittingDao> xhbSittingDao = getXhbSittingRepository()
+                .findByIdSafe(xhbScheduledHearingDao.get().getSittingId());
+            
+            if (xhbSittingDao.isPresent()) {
+                LOG.debug("CRLive - XhbSittingDao found with ID: {}", xhbSittingDao.get().getSittingId());
+                
+                // 3) Get the court room from the sitting
+                Optional<XhbCourtRoomDao> xhbCourtRoomDao = getXhbCourtRoomRepository()
+                    .findByIdSafe(xhbSittingDao.get().getCourtRoomId());
+                
+                if (xhbCourtRoomDao.isPresent()) {
+                    LOG.debug("CRLive - XhbCourtRoomDao found with ID: {}", xhbCourtRoomDao.get().getCourtRoomId());
+                    // 4) Get the cr live display from the court room
+                    Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao =
+                        getNonStaticCrLiveDisplay(xhbCourtRoomDao.get());
+                    
+                    if (xhbCrLiveDisplayDao.isPresent()) {
+                        LOG.debug("XhbCrLiveDisplayDao found with ID: {}", xhbCrLiveDisplayDao.get()
+                            .getCrLiveDisplayId());
+                        if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
+                            xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
+                            xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
+                            getXhbCrLiveDisplayRepository().update(xhbCrLiveDisplayDao.get());
+                            LOG.debug("Updated CrLiveDisplay status - returning true");
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        LOG.debug("updatePublicDisplayStatus() - returning false");
+        return false;
+    }
+    
+    /**
+     * Get the public display status by transforming the passed in value object
+     * by removing the free text.
+
+     * @param viewValue the CourtLogViewValue
+     * @return The translated xml <code>String</code>.
+     */
+    private static String getPublicDisplayStatus(CourtLogViewValue viewValue) {
+        LOG.debug("getPublicDisplayStatus() - start and finish");
+        return CourtLogXslHelper.translateEvent(viewValue, Locale.UK, TranslationType.PUBLIC_DISPLAY,
+                REMOVE_FREE_TEXT_STYLESHEET);
+    }
+
+    private Optional<XhbCrLiveDisplayDao> getNonStaticCrLiveDisplay(XhbCourtRoomDao xhbCourtRoomDao) {
+        LOG.debug("getNonStaticCrLiveDisplay()");
+        Optional<XhbCrLiveDisplayDao> xhbCrLiveDisplayDao = getXhbCrLiveDisplayRepository()
+            .findByCourtRoomSafe(xhbCourtRoomDao.getCourtRoomId());
+
+        // This will always be 0 or 1 due to a unique constraint in the database
+        if (!xhbCrLiveDisplayDao.isEmpty()) {
+            LOG.debug("CR live Internet found");
+            return xhbCrLiveDisplayDao;
+        }
+
+        // otherwise, create a new one...
+        LOG.debug("Creating CR live internet");
+        final XhbCrLiveDisplayDao xcldbv = new XhbCrLiveDisplayDao();
+        xcldbv.setTimeStatusSet(LocalDateTime.now());
+        xcldbv.setCourtRoomId(xhbCourtRoomDao.getCourtRoomId());
+        
+        return PddaEntityHelper.xcldSave(xcldbv);
+    }
+    
+    private static Optional<XhbCrLiveDisplayDao> getCrLiveDisplay(XhbCourtRoomDao xhbCourtRoomDao) {
         List<XhbCrLiveDisplayDao> liveStatuses =
-            (List<XhbCrLiveDisplayDao>) courtRoom.getXhbCrLiveDisplays();
+            (List<XhbCrLiveDisplayDao>) xhbCourtRoomDao.getXhbCrLiveDisplays();
 
         // This will always be 0 or 1 due to a unique constraint in the database
         if (!liveStatuses.isEmpty()) {
@@ -99,8 +202,8 @@ public final class CrLiveStatusHelper {
         LOG.debug("Creating CR live internet");
         final XhbCrLiveDisplayDao xcldbv = new XhbCrLiveDisplayDao();
         xcldbv.setTimeStatusSet(LocalDateTime.now());
-        xcldbv.setCourtRoomId(courtRoom.getCourtRoomId());
-
+        xcldbv.setCourtRoomId(xhbCourtRoomDao.getCourtRoomId());
+        
         return PddaEntityHelper.xcldSave(xcldbv);
     }
 

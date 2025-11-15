@@ -1,4 +1,4 @@
-package uk.gov.hmcts.pdda.business.vos.services.publicnotice;
+package uk.gov.courtservice.xhibit.business.vos.services.publicnotice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

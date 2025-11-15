@@ -8,14 +8,21 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
@@ -24,6 +31,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
@@ -46,7 +55,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.ExcessiveParameterList", 
-    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.CognitiveComplexity"})
+    "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports", "PMD.TooManyMethods",
+    "PMD.CognitiveComplexity"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -81,11 +91,14 @@ public class SftpService extends XhibitPddaHelper {
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
         XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository,
         XhbCaseRepository xhbCaseRepository, XhbHearingRepository hearingRepository,
-        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository) {
+        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository,
+        XhbPublicNoticeRepository publicNoticeRepository, XhbConfiguredPublicNoticeRepository
+            configuredPublicNoticeRepository) {
         super(entityManager, xhbConfigPropRepository, environment,
             pddaMessageHelper, clobRepository, courtRepository,
             courtRoomRepository, courtSiteRepository, xhbCaseRepository,
-            hearingRepository, sittingRepository, scheduledHearingRepository);
+            hearingRepository, sittingRepository, scheduledHearingRepository,
+            publicNoticeRepository, configuredPublicNoticeRepository);
     }
 
     public SftpService(EntityManager entityManager) {
@@ -324,13 +337,10 @@ public class SftpService extends XhibitPddaHelper {
                 // Now translate the event so that the court room id is correct, if necessary
                 event = PddaMessageUtil.translatePublicDisplayEvent(event, getCourtRepository(),
                     getCourtRoomRepository(), getCourtSiteRepository());
-                // Check what type of event it is
-                if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
-                    LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
-                    processHearingProgressEvent(pddaHearingProgressEvent);
-                } else {
-                    sendMessage(event);
-                }
+                
+                // Check what type of event it is, process and send it
+                checkProcessAndSendEvent(event);
+                
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_CPD_")) {
                 isList = false;
                 // We don't want to send a message for CPD files
@@ -342,31 +352,11 @@ public class SftpService extends XhibitPddaHelper {
                 LOG.debug("Getting the list type.");
                 listType = getListType(clobData);
             }
-
-            // Validate the filename
-            String errorMessage = validation.validateFilename(filename, event, isList);
-
-            // Validate messageType
-            String messageType = validation.getMessageType(filename, event);
-            if (INVALID_MESSAGE_TYPE.equals(messageType)) {
-                errorMessage = "Invalid filename - MessageType";
-            }
-
-            if (errorMessage != null) {
-                LOG.debug("Filename {}{}", filename, " is invalid");
-                // Continue to process though as we need a record of the file in the database
-            }
-
-            // Get the crestCourtId (should have already been validated by this point)
-            Integer courtId = validation.getCourtId(filename, event);
-            LOG.debug("CourtId is {}", courtId);
-            LOG.debug("Validation of filename {} is now complete, attempting to process the file.",
-                filename);
-
-            // Write the pddaMessage
-            createBaisMessage(courtId, messageType, filename, clobData, errorMessage, listType);
-
+            
+            // Validate filename and process the message
+            validateAndProcessMessage(validation, filename, event, isList, clobData, listType);
             LOG.debug("Processed file {}", filename);
+            
         } catch (IOException | NotFoundException ex) {
             LOG.error("Error processing BAIS file {} ", ExceptionUtils.getStackTrace(ex));
             CsServices.getDefaultErrorHandler().handleError(ex, getClass());
@@ -376,6 +366,54 @@ public class SftpService extends XhibitPddaHelper {
                 config.getActiveRemoteFolder(), filename, validation);
             LOG.debug("Removed file from bais after processing: {}", filename);
         }
+    }
+    
+    private void checkProcessAndSendEvent(PublicDisplayEvent event) {
+        if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
+            LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
+            processHearingProgressEvent(pddaHearingProgressEvent);
+        } else {
+            if (event instanceof CaseStatusEvent caseStatusEvent) {
+                LOG.debug("Case Status Event received from XHIBIT");
+                // Process the CaseStatusEvent
+                CourtLogViewValue updatedCourtLogViewValue = processCaseStatusEvent(caseStatusEvent);
+                if (updatedCourtLogViewValue != null) {
+                    // Update the public display status
+                    getCrLiveStatusHelper().updatePublicDisplayStatus(updatedCourtLogViewValue);
+                }
+            } else if (event instanceof PublicNoticeEvent publicNoticeEvent) {
+                LOG.debug("Public Notice Event received from XHIBIT");
+                processPublicNoticeEvent(publicNoticeEvent);
+            }
+            sendMessage(event);
+        }
+    }
+    
+    private void validateAndProcessMessage(BaisValidation validation, String filename,
+        PublicDisplayEvent event, boolean isList,
+        String clobData, String listType) throws NotFoundException {
+        // Validate the filename
+        String errorMessage = validation.validateFilename(filename, event, isList);
+
+        // Validate messageType
+        String messageType = validation.getMessageType(filename, event);
+        if (INVALID_MESSAGE_TYPE.equals(messageType)) {
+            errorMessage = "Invalid filename - MessageType";
+        }
+
+        if (errorMessage != null) {
+            LOG.debug("Filename {}{}", filename, " is invalid");
+            // Continue to process though as we need a record of the file in the database
+        }
+
+        // Get the crestCourtId (should have already been validated by this point)
+        Integer courtId = validation.getCourtId(filename, event);
+        LOG.debug("CourtId is {}", courtId);
+        LOG.debug("Validation of filename {} is now complete, attempting to process the file.",
+            filename);
+
+        // Write the pddaMessage
+        createBaisMessage(courtId, messageType, filename, clobData, errorMessage, listType);
     }
 
     private void processHearingProgressEvent(PddaHearingProgressEvent event) {
@@ -394,95 +432,222 @@ public class SftpService extends XhibitPddaHelper {
             LOG.debug("All case & court fields for PddaHearingProgressEvent are present: {}{}{}{}{}",
                 courtId, courtName, caseType, caseNumber, courtRoomName);
         
-            // 1) Get the courtSiteId from the courtId
-            XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
-                .findByCourtIdSafe(courtId).get(0);
+            // Drill down to the scheduledHearingDao record
+            XhbScheduledHearingDao scheduledHearingDao = hearingProgressDrillDown(courtId, 
+                caseType, caseNumber, courtRoomName);
             
-            if (xhbCourtSiteDao != null) {
-                LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
-                LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
+            if (scheduledHearingDao != null) {
+                LOG.debug("ScheduledHearing found with ID: {}",
+                    scheduledHearingDao.getScheduledHearingId());
+                Integer hearingProgressIndicator = event.getHearingProgressIndicator();
+                String caseActive = event.getIsCaseActive();
                 
-                // 2) Get caseId using the case number from the event
-                Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
-                    .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
-                
-                if (xhbCaseDao.isPresent()) {
-                    LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
-                    
-                    // 3) Get the hearingId using the caseId and todays date
-                    Optional<XhbHearingDao> xhbHearingDao = getHearingRepository()
-                        .findByCaseIdWithTodaysStartDateSafe(xhbCaseDao.get().getCaseId(),
-                            LocalDate.now().atStartOfDay());
-                    if (!xhbHearingDao.isEmpty()) {
-                        LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
-                    
-                        // 4) Get the courtRoomId from the courtSiteId and courtRoomName
-                        LOG.debug("Finding court room using court room name: {} and court site id: {}",
-                            courtRoomName, xhbCourtSiteDao.getCourtSiteId());
-                        XhbCourtRoomDao xhbCourtRoomDao = getCourtRoomRepository()
-                            .findByCourtSiteIdAndCourtRoomNameSafe(xhbCourtSiteDao.getCourtSiteId(),
-                                courtRoomName).get(0);
-                        if (xhbCourtRoomDao != null) {
-                            LOG.debug("Court room found with ID: {}", xhbCourtRoomDao.getCourtRoomId());
-                        
-                            // Find possible sittings and update the scheduled hearing record
-                            findSittingsAndUpdateScheduledHearing(event, xhbCourtRoomDao,
-                                xhbCourtSiteDao, xhbHearingDao.get());
-                        }
-                    }
+                // Update hearingProgressIndicator if its present
+                if (hearingProgressIndicator != null) {
+                    scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
+                    LOG.debug("ScheduledHearing hearingProgress set to: {}",
+                        hearingProgressIndicator);
                 }
+                // Update isCaseActive if its present
+                if (caseActive != null) {
+                    scheduledHearingDao.setIsCaseActive(caseActive);
+                    LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                        caseActive);
+                }
+                getScheduledHearingRepository().update(scheduledHearingDao);
+                LOG.debug("ScheduledHearing with ID: {} updated", 
+                    scheduledHearingDao.getScheduledHearingId());
             }
-            
         }
     }
     
-    private void findSittingsAndUpdateScheduledHearing(PddaHearingProgressEvent event, XhbCourtRoomDao xhbCourtRoomDao,
+    private XhbScheduledHearingDao hearingProgressDrillDown(Integer courtId,
+        String caseType, Integer caseNumber, String courtRoomName) {
+
+        // Get the courtSiteId from the courtId
+        XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
+            .findByCourtIdSafe(courtId).get(0);
+        
+        if (xhbCourtSiteDao != null) {
+            LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
+            LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
+            
+            // Get caseId using the case number from the event
+            Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
+                .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
+            
+            if (xhbCaseDao.isPresent()) {
+                LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
+                
+                // Get the hearingId using the caseId and todays date
+                Optional<XhbHearingDao> xhbHearingDao = getHearingRepository()
+                    .findByCaseIdWithTodaysStartDateSafe(xhbCaseDao.get().getCaseId(),
+                        LocalDate.now().atStartOfDay());
+                if (!xhbHearingDao.isEmpty()) {
+                    LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
+                
+                    // Get the courtRoomId from the courtSiteId and courtRoomName
+                    LOG.debug("Finding court room using court room name: {} and court site id: {}",
+                        courtRoomName, xhbCourtSiteDao.getCourtSiteId());
+                    XhbCourtRoomDao xhbCourtRoomDao = getCourtRoomRepository()
+                        .findByCourtSiteIdAndCourtRoomNameSafe(xhbCourtSiteDao.getCourtSiteId(),
+                            courtRoomName).get(0);
+                    if (xhbCourtRoomDao != null) {
+                        LOG.debug("Court room found with ID: {}", xhbCourtRoomDao.getCourtRoomId());
+                    
+                        // Find scheduled hearing record
+                        return findScheduledHearing(
+                            xhbCourtRoomDao.getCourtRoomId(), xhbCourtSiteDao, xhbHearingDao.get());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    private CourtLogViewValue processCaseStatusEvent(CaseStatusEvent event) {
+        // Get the CourtRoomIdentifier from the event, which has been previously translated
+        CourtRoomIdentifier courtRoomIdentifier = event.getCourtRoomIdentifier();
+        // Get the CourtLogViewValue from the event
+        CourtLogViewValue courtLogViewValue = event.getCaseCourtLogInformation()
+            .getCourtLogSubscriptionValue().getCourtLogViewValue();
+        
+        if (courtLogViewValue != null) {
+            // Get the caseType and caseNumber from the CourtLogViewValue
+            String caseType = courtLogViewValue.getCaseType();
+            Integer caseNumber = courtLogViewValue.getCaseNumber();
+        
+            if (courtRoomIdentifier != null) {
+                LOG.debug("CourtRoomIdentifier found for event: {}, {}", event, courtRoomIdentifier);
+                // Check fields are present
+                if (caseType != null 
+                    && caseNumber != null
+                    && courtRoomIdentifier.getCourtId() != null
+                    && courtRoomIdentifier.getCourtRoomId() != null) {
+                    LOG.debug("All fields present for CaseStatusEvent: {}, {}, {}, {}",
+                        caseType, caseNumber, courtRoomIdentifier.getCourtId(),
+                        courtRoomIdentifier.getCourtRoomId());
+                     
+                    // Drill down to the scheduledHearingDao record
+                    XhbScheduledHearingDao scheduledHearingDao = 
+                        caseStatusDrillDown(courtRoomIdentifier, caseType, caseNumber);
+                    
+                    // Set values in CourtLogViewValue
+                    if (scheduledHearingDao != null) {
+                        // Update the CourtLogViewValue with the scheduledHearingId
+                        LOG.debug("ScheduledHearing found with ID: {}",
+                            scheduledHearingDao.getScheduledHearingId());
+                        courtLogViewValue.setScheduledHearingId(
+                            scheduledHearingDao.getScheduledHearingId());
+                        LOG.debug("CourtLogViewValue updated with scheduledhearingID: {}",
+                            scheduledHearingDao.getScheduledHearingId());
+                        return courtLogViewValue;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    private XhbScheduledHearingDao caseStatusDrillDown(CourtRoomIdentifier courtRoomIdentifier,
+        String caseType, Integer caseNumber) {
+        // Get XhbCourtSiteDao using courtId
+        XhbCourtSiteDao xhbCourtSiteDao = getCourtSiteRepository()
+            .findByCourtIdSafe(courtRoomIdentifier.getCourtId()).get(0);
+        
+        if (xhbCourtSiteDao != null) {
+            LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
+            LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
+            
+            // Get caseId using the case number from the event
+            Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
+                .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
+            
+            if (xhbCaseDao.isPresent()) {
+                LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
+                
+                // Get the hearingId using the caseId and todays date
+                Optional<XhbHearingDao> xhbHearingDao = getHearingRepository()
+                    .findByCaseIdWithTodaysStartDateSafe(xhbCaseDao.get().getCaseId(),
+                        LocalDate.now().atStartOfDay());
+                if (!xhbHearingDao.isEmpty()) {
+                    LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
+                
+                    // Find scheduled hearing record
+                    return findScheduledHearing(
+                        courtRoomIdentifier.getCourtRoomId(), xhbCourtSiteDao, xhbHearingDao.get());
+                }
+            }
+        }
+        return null;
+    }
+    
+    private XhbScheduledHearingDao findScheduledHearing(Integer courtRoomId,
         XhbCourtSiteDao xhbCourtSiteDao, XhbHearingDao xhbHearingDao) {
         
-        Integer hearingProgressIndicator = event.getHearingProgressIndicator();
-        String caseActive = event.getIsCaseActive();
+        // Get the SittingId using the courtRoomId and courtSiteId
+        List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
+            .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(courtRoomId,
+                xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
+        if (!xhbSittingDaos.isEmpty()) {
+            LOG.debug("No. of Sittings found using courtRoomId: {} and courtSiteId: {} is: {}",
+                courtRoomId, xhbCourtSiteDao.getCourtSiteId(), xhbSittingDaos.size());
         
-        if (hearingProgressIndicator != null || caseActive != null) {
-            LOG.debug("hearingProgressIndicator: {}, isCaseActive: {}",
-                hearingProgressIndicator, caseActive);
+            // Loop through the SittingId's to match with hearingId for the xhb_scheduled_hearing record
+            for (XhbSittingDao sittingDao : xhbSittingDaos) {
+                LOG.debug("Attempting to find ScheduledHearing using sittingId: {} and hearingId: {}",
+                    sittingDao.getSittingId(), xhbHearingDao.getHearingId());
+                Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
+                    .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
+                        xhbHearingDao.getHearingId());
+                
+                // Return the xhb_scheduled_hearing record
+                if (!scheduledHearingDao.isEmpty()) {
+                    return scheduledHearingDao.get();
+                }
+            }
+        }
+        return null;
+    }
+    
+    private void processPublicNoticeEvent(PublicNoticeEvent event) {
+        // Get Court Room Identifier from the event
+        CourtRoomIdentifier courtRoomIdentifier = event.getCourtRoomIdentifier();
         
-            // 5) Get the SittingId using the courtRoomId and courtSiteId
-            List<XhbSittingDao> xhbSittingDaos = getSittingRepository()
-                .findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(xhbCourtRoomDao.getCourtRoomId(),
-                    xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
-            if (!xhbSittingDaos.isEmpty()) {
-                LOG.debug("No. of Sittings found using courtRoomId: {} and courtSiteId: {} is: {}",
-                    xhbCourtRoomDao.getCourtRoomId(), xhbCourtSiteDao.getCourtSiteId(), xhbSittingDaos.size());
+        // TODO If all public notices for that court room are present in the event then reset them here.
+        
+        if (courtRoomIdentifier != null) {
+            DisplayablePublicNoticeValue[] publicNotices = courtRoomIdentifier.getPublicNotices();
             
-                // 6) Loop through the SittingId's to match with hearingId for the xhb_scheduled_hearing record
-                for (XhbSittingDao sittingDao : xhbSittingDaos) {
-                    LOG.debug("Attempting to find ScheduledHearing using sittingId: {} and hearingId: {}",
-                        sittingDao.getSittingId(), xhbHearingDao.getHearingId());
-                    Optional<XhbScheduledHearingDao> scheduledHearingDao = getScheduledHearingRepository()
-                        .findBySittingIdAndHearingIdSafe(sittingDao.getSittingId(), 
-                            xhbHearingDao.getHearingId());
+            if (publicNotices.length > 0) {
+                LOG.debug("No. of DisplayablePublicNoticeValue's: {}", publicNotices.length);
+                
+                for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
+                    // Get the XhbPublicNoticeDao
+                    Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = getPublicNoticeRepository()
+                        .findByCourtIdAndDefPublicNoticeId(courtRoomIdentifier.getCourtId(),
+                            publicNotice.getDefinitivePublicNotice());
                     
-                    // 7) Update the fields in the xhb_scheduled_hearing record
-                    if (!scheduledHearingDao.isEmpty()) {
-                        LOG.debug("ScheduledHearing found with ID: {}",
-                            scheduledHearingDao.get().getScheduledHearingId());
-                        // Update hearingProgressIndicator if its present
-                        if (hearingProgressIndicator != null) {
-                            scheduledHearingDao.get().setHearingProgress(hearingProgressIndicator);
-                            LOG.debug("ScheduledHearing hearingProgress set to: {}",
-                                hearingProgressIndicator);
+                    if (xhbPublicNoticeDao.isPresent()) {
+                        LOG.debug("XhbPublicNoticeDao found with ID: {}",
+                            xhbPublicNoticeDao.get().getPublicNoticeId());
+                        
+                        // Get the XhbConfiguredPublicNoticeDao
+                        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao =
+                            getConfiguredPublicNoticeRepository().findByDefinitivePnCourtRoomValueSafe(
+                                courtRoomIdentifier.getCourtRoomId(), xhbPublicNoticeDao.get()
+                                .getPublicNoticeId()).get(0);
+                        
+                        if (xhbConfiguredPublicNoticeDao != null) {
+                            LOG.debug("XhbConfiguredPublicNoticeDao found with ID: {}",
+                                xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
+                            if (publicNotice.isActive()) {
+                                // TODO Check if we need to update the inactive displays too 
+                                // or if the isActive var is populated
+                                xhbConfiguredPublicNoticeDao.setIsActive("1");
+                                getConfiguredPublicNoticeRepository().update(xhbConfiguredPublicNoticeDao);
+                            }
                         }
-                        // Update isCaseActive if its present
-                        if (caseActive != null) {
-                            scheduledHearingDao.get().setIsCaseActive(caseActive);
-                            LOG.debug("ScheduledHearing isCaseActive set to: {}",
-                                caseActive);
-                        }
-                        getScheduledHearingRepository().update(scheduledHearingDao.get());
-                        LOG.debug("ScheduledHearing with ID: {} updated", 
-                            scheduledHearingDao.get().getScheduledHearingId());
-                        // Exit the loop when the record is updated
-                        break;
                     }
                 }
             }
