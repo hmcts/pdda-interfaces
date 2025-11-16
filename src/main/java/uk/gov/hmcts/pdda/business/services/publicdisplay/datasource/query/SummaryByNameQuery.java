@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -29,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -39,7 +39,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 public class SummaryByNameQuery extends PublicDisplayQuery {
 
     /**
@@ -66,14 +66,10 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
 
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
-
-        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-
-        // Delegate the repeated hearing-list / sitting iteration to the shared helper
-        return processHearingLists(startDate, courtId, this::getSittingData, courtRoomIds);
+        return getDataTemplate(date, courtId, this::getSittingData, courtRoomIds);
     }
 
-    @Override
+
     protected boolean isFloatingIncluded() {
         // Only show isFloating = '0'
         return false;
@@ -95,31 +91,32 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<SummaryByNameValue> getScheduleHearingData(XhbSittingDao sittingDao,
-        List<XhbScheduledHearingDao> scheduledHearingDaos, String floating, int... courtRoomIds) {
+    private List<SummaryByNameValue> getScheduleHearingData(
+        XhbSittingDao sittingDao,
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        String floating,
+        int... courtRoomIds) {
+
         List<SummaryByNameValue> results = new ArrayList<>();
-        for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
-
-            // Check if this courtroom has been selected
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                scheduledHearingDao.getMovedFromCourtRoomId())) {
-                continue;
-            }
-
-            // Loop the schedHearingDefendants
-            List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
-                getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
-            if (!schedHearingDefDaos.isEmpty()) {
-                for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
-
-                    SummaryByNameValue result =
-                        getSummaryByNameValue(sittingDao, scheduledHearingDao, schedHearingDefendantDao, floating);
-                    results.add(result);
+    
+        Map<Integer, XhbScheduledHearingDao> bestByHearing =
+                pickBestScheduledPerHearing(scheduledHearingDaos, sittingDao.getCourtRoomId(), courtRoomIds);
+    
+        for (XhbScheduledHearingDao sh : bestByHearing.values()) {
+            List<XhbSchedHearingDefendantDao> shdList =
+                    getSchedHearingDefendantDaos(sh.getScheduledHearingId());
+            if (!shdList.isEmpty()) {
+                for (XhbSchedHearingDefendantDao shd : shdList) {
+                    SummaryByNameValue row = getSummaryByNameValue(sittingDao, sh, shd, floating);
+                    results.add(row);
                 }
             }
         }
+    
         return results;
     }
+
+
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
         return new DefendantName(firstName, middleName, surname, hide);
