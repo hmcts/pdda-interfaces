@@ -17,10 +17,12 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLogInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
@@ -32,11 +34,13 @@ import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
@@ -49,6 +53,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
@@ -184,7 +189,7 @@ class SftpServiceTest {
 
     @Mock
     private XhbPddaMessageRepository mockXhbPddaMessageRepository;
-
+    
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
@@ -623,6 +628,91 @@ class SftpServiceTest {
     }
     
     @Test
+    void testProcessBaisPublicNoticeEvent() {
+        // --- Arrange ---
+        setupPublicNoticeEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Entered processPublicNoticeEvent(...)
+        Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = 
+            Optional.of(DummyPublicDisplayUtil.getXhbPublicNoticeDao());
+        EasyMock.expect(mockXhbPublicNoticeRepository
+            .findByCourtIdAndDefPublicNoticeId(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbPublicNoticeDao);
+        
+        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao = 
+            DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("1");
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+            .findByDefinitivePnCourtRoomValueSafe(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(List.of(xhbConfiguredPublicNoticeDao));
+        
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.update(xhbConfiguredPublicNoticeDao))
+            .andStubReturn(Optional.of(xhbConfiguredPublicNoticeDao));
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("PublicNotice"))
+                .andReturn(pddaRefMessageTypeDao);
+
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(
+            mockXhbPublicNoticeRepository,
+            mockXhbConfiguredPublicNoticeRepository,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+
+        // Stub the static remapper so it doesn't hit room/site lookups
+        try (MockedStatic<PddaMessageUtil> mocked =
+                 Mockito.mockStatic(PddaMessageUtil.class, Mockito.CALLS_REAL_METHODS)) {
+            mocked.when(() -> PddaMessageUtil.translatePublicDisplayEvent(
+                        Mockito.any(PublicDisplayEvent.class),
+                        Mockito.any(XhbCourtRepository.class),
+                        Mockito.any(XhbCourtRoomRepository.class),
+                        Mockito.any(XhbCourtSiteRepository.class)))
+                  .thenAnswer(inv -> inv.getArgument(0));
+
+            // --- Act ---
+            classUnderTest.setupSftpClientAndProcessBaisData(
+                sftpConfig, sftpConfig.getSshClient(), false);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        // Verify
+        EasyMock.verify(
+            mockXhbPublicNoticeRepository,
+            mockXhbConfiguredPublicNoticeRepository,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+    }
+    
+    @Test
     void testUpdateCppStagingInboundRecords() {
         // Setup
         XhbCppStagingInboundDao xhbCppStagingInboundDao =
@@ -951,6 +1041,33 @@ class SftpServiceTest {
             
             byte[] serializedObject =
                 PddaSerializationUtils.serializePublicEvent(caseStatusEvent);
+            String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
+
+            sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251104090501.xml", encoded,
+                Charset.defaultCharset());
+        } catch (IOException e) {
+            LOG.error("Error putting file", e);
+        }
+    }
+    
+    private void setupPublicNoticeEventFile() {
+        try {
+            // Populate the PublicNoticeEvent with the CourtRoomIdentifier
+            CourtRoomIdentifier courtRoomIdentifier =
+                new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
+            // Add a DisplayablePublicNoticeValues to the CourtRoomIdentifier
+            DisplayablePublicNoticeValue displayablePublicNoticeValue =
+                new DisplayablePublicNoticeValue();
+            displayablePublicNoticeValue.setIsActive(true);
+            displayablePublicNoticeValue.setDefinitivePublicNotice(1);
+            DisplayablePublicNoticeValue[] displayablePublicNoticeValues =
+                new DisplayablePublicNoticeValue[] { displayablePublicNoticeValue };
+            courtRoomIdentifier.setPublicNotices(displayablePublicNoticeValues);
+            // Create the PublicNoticeEvent
+            PublicNoticeEvent publicNoticeEvent = new PublicNoticeEvent(courtRoomIdentifier);
+            
+            byte[] serializedObject =
+                PddaSerializationUtils.serializePublicEvent(publicNoticeEvent);
             String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
 
             sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251104090501.xml", encoded,
