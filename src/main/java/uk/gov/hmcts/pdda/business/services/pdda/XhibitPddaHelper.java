@@ -8,10 +8,12 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
@@ -19,6 +21,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.sftp.PddaSftpHelperSshj;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpConfigHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.sftp.SftpHelperUtil;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
+import uk.gov.hmcts.pdda.crlivestatus.CrLiveStatusHelper;
 
 /**
 
@@ -49,12 +52,15 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     private XhbHearingRepository hearingRepository;
     private XhbScheduledHearingRepository scheduledHearingRepository;
     private XhbSittingRepository sittingRepository;
+    private XhbPublicNoticeRepository publicNoticeRepository;
+    private XhbConfiguredPublicNoticeRepository configuredPublicNoticeRepository;
     private PddaMessageHelper pddaMessageHelper;
     private CppStagingInboundHelper cppStagingInboundHelper;
     private PddaSftpHelper pddaSftpHelper;
     private SftpConfigHelper sftpConfigHelper;
     private SftpHelperUtil sftpHelperUtil;
     private PddaSftpHelperSshj pddaSftpHelperSshj;
+    private CrLiveStatusHelper crLiveStatusHelper;
 
     protected XhibitPddaHelper(EntityManager entityManager, Environment environment) {
         super(entityManager, environment);
@@ -66,7 +72,9 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         PddaSftpHelper pddaSftpHelper, PddaMessageHelper pddaMessageHelper,
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository, 
         XhbCaseRepository caseRepository, XhbHearingRepository hearingRepository,
-        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository) {
+        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository,
+        XhbPublicNoticeRepository publicNoticeRepository,
+        XhbConfiguredPublicNoticeRepository configuredPublicNoticeRepository) {
         super(entityManager, xhbConfigPropRepository, environment);
         this.pddaSftpHelper = pddaSftpHelper;
         this.pddaMessageHelper = pddaMessageHelper;
@@ -76,6 +84,8 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         this.hearingRepository = hearingRepository;
         this.sittingRepository = sittingRepository;
         this.scheduledHearingRepository = scheduledHearingRepository;
+        this.publicNoticeRepository = publicNoticeRepository;
+        this.configuredPublicNoticeRepository = configuredPublicNoticeRepository;
     }
 
     protected XhibitPddaHelper(EntityManager entityManager,
@@ -84,7 +94,9 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
         XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository,
         XhbCaseRepository caseRepository, XhbHearingRepository hearingRepository,
-        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository) {
+        XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository,
+        XhbPublicNoticeRepository publicNoticeRepository,
+        XhbConfiguredPublicNoticeRepository configuredPublicNoticeRepository) {
 
         super(entityManager, xhbConfigPropRepository, environment);
         this.pddaMessageHelper = pddaMessageHelper;
@@ -96,6 +108,8 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         this.hearingRepository = hearingRepository;
         this.sittingRepository = sittingRepository;
         this.scheduledHearingRepository = scheduledHearingRepository;
+        this.publicNoticeRepository = publicNoticeRepository;
+        this.configuredPublicNoticeRepository = configuredPublicNoticeRepository;
     }
 
     @Override
@@ -171,6 +185,20 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         return scheduledHearingRepository;
     }
     
+    protected XhbPublicNoticeRepository getPublicNoticeRepository() {
+        if (publicNoticeRepository == null || !isEntityManagerActive()) {
+            publicNoticeRepository = new XhbPublicNoticeRepository(getEntityManager());
+        }
+        return publicNoticeRepository;
+    }
+    
+    protected XhbConfiguredPublicNoticeRepository getConfiguredPublicNoticeRepository() {
+        if (configuredPublicNoticeRepository == null || !isEntityManagerActive()) {
+            configuredPublicNoticeRepository = new XhbConfiguredPublicNoticeRepository(getEntityManager());
+        }
+        return configuredPublicNoticeRepository;
+    }
+    
     protected XhbSittingRepository getSittingRepository() {
         if (sittingRepository == null || !isEntityManagerActive()) {
             sittingRepository = new XhbSittingRepository(getEntityManager());
@@ -218,6 +246,13 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
             pddaSftpHelperSshj = new PddaSftpHelperSshj();
         }
         return pddaSftpHelperSshj;
+    }
+    
+    protected CrLiveStatusHelper getCrLiveStatusHelper() {
+        if (crLiveStatusHelper == null) {
+            crLiveStatusHelper = new CrLiveStatusHelper(entityManager);
+        }
+        return crLiveStatusHelper;
     }
 
     public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {

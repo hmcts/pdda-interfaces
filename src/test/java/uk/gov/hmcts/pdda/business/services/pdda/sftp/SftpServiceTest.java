@@ -17,22 +17,31 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.HearingStatusEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLogInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.DummyCaseUtil;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.DummyPublicDisplayUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -44,6 +53,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
@@ -63,6 +74,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -165,13 +177,19 @@ class SftpServiceTest {
     
     @Mock
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
-
+    
+    @Mock
+    private XhbPublicNoticeRepository mockXhbPublicNoticeRepository;
+    
+    @Mock
+    private XhbConfiguredPublicNoticeRepository mockXhbConfiguredPublicNoticeRepository;
+    
     @Mock
     private XhbClobRepository mockXhbClobRepository;
 
     @Mock
     private XhbPddaMessageRepository mockXhbPddaMessageRepository;
-
+    
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
@@ -198,7 +216,8 @@ class SftpServiceTest {
         new SftpService(mockEntityManager, mockXhbConfigPropRepository,
             mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository);
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
 
 
     @TestSubject
@@ -213,7 +232,8 @@ class SftpServiceTest {
         new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository);
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
         assertTrue(result, NOT_TRUE);
     }
 
@@ -501,6 +521,194 @@ class SftpServiceTest {
             mockXhbCourtRepository,
             mockPddaMessageHelper,
             mockXhbClobRepository
+        );
+    }
+    
+    @Test
+    void testProcessBaisCaseStatusEvent() {
+        // --- Arrange ---
+        setupCaseStatusEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Entered processCaseStatusEvent(...)
+        List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCourtSiteDao);
+        
+        Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCaseDao);
+        
+        Optional<XhbHearingDao> xhbHearingDao = Optional.of(DummyHearingUtil.getXhbHearingDao());
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbHearingDao);
+        
+        List<XhbSittingDao> xhbSittingDao = List.of(DummyHearingUtil.getXhbSittingDao());
+        EasyMock.expect(mockXhbSittingRepository.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbSittingDao);
+        
+        Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = 
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao());
+        EasyMock.expect(mockXhbScheduledHearingRepository.findBySittingIdAndHearingIdSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbScheduledHearingDao);
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("CaseStatus"))
+                .andReturn(pddaRefMessageTypeDao);
+
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+
+        // Stub the static remapper so it doesn't hit room/site lookups
+        try (MockedStatic<PddaMessageUtil> mocked =
+                 Mockito.mockStatic(PddaMessageUtil.class, Mockito.CALLS_REAL_METHODS)) {
+            mocked.when(() -> PddaMessageUtil.translatePublicDisplayEvent(
+                        Mockito.any(PublicDisplayEvent.class),
+                        Mockito.any(XhbCourtRepository.class),
+                        Mockito.any(XhbCourtRoomRepository.class),
+                        Mockito.any(XhbCourtSiteRepository.class)))
+                  .thenAnswer(inv -> inv.getArgument(0));
+
+            // --- Act ---
+            classUnderTest.setupSftpClientAndProcessBaisData(
+                sftpConfig, sftpConfig.getSshClient(), false);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        // Verify
+        EasyMock.verify(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+    }
+    
+    @Test
+    void testProcessBaisPublicNoticeEvent() {
+        // --- Arrange ---
+        setupPublicNoticeEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Entered processPublicNoticeEvent(...)
+        Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = 
+            Optional.of(DummyPublicDisplayUtil.getXhbPublicNoticeDao());
+        EasyMock.expect(mockXhbPublicNoticeRepository
+            .findByCourtIdAndDefPublicNoticeId(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbPublicNoticeDao);
+        
+        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao = 
+            DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("1");
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+            .findByDefinitivePnCourtRoomValueSafe(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(List.of(xhbConfiguredPublicNoticeDao));
+        
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository.update(xhbConfiguredPublicNoticeDao))
+            .andStubReturn(Optional.of(xhbConfiguredPublicNoticeDao));
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("PublicNotice"))
+                .andReturn(pddaRefMessageTypeDao);
+
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(
+            mockXhbPublicNoticeRepository,
+            mockXhbConfiguredPublicNoticeRepository,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+
+        // Stub the static remapper so it doesn't hit room/site lookups
+        try (MockedStatic<PddaMessageUtil> mocked =
+                 Mockito.mockStatic(PddaMessageUtil.class, Mockito.CALLS_REAL_METHODS)) {
+            mocked.when(() -> PddaMessageUtil.translatePublicDisplayEvent(
+                        Mockito.any(PublicDisplayEvent.class),
+                        Mockito.any(XhbCourtRepository.class),
+                        Mockito.any(XhbCourtRoomRepository.class),
+                        Mockito.any(XhbCourtSiteRepository.class)))
+                  .thenAnswer(inv -> inv.getArgument(0));
+
+            // --- Act ---
+            classUnderTest.setupSftpClientAndProcessBaisData(
+                sftpConfig, sftpConfig.getSshClient(), false);
+        } catch (Exception e) {
+            fail(e);
+        }
+        
+        // Verify
+        EasyMock.verify(
+            mockXhbPublicNoticeRepository,
+            mockXhbConfiguredPublicNoticeRepository,
+            mockXhbCourtRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
         );
     }
     
@@ -812,6 +1020,62 @@ class SftpServiceTest {
             LOG.error("Error putting file", e);
         }
     }
+    
+    private void setupCaseStatusEventFile() {
+        try {
+            // Populate the CourtLogViewValue
+            CourtLogViewValue courtLogViewValue = new CourtLogViewValue();
+            courtLogViewValue.setEntryDate(new Date());
+            courtLogViewValue.setCaseNumber(20250003);
+            courtLogViewValue.setCaseType("T");
+            // Populate the CourtLogSubscriptionValue with the CourtLogViewValue
+            CourtLogSubscriptionValue courtLogSubscriptionValue = new CourtLogSubscriptionValue();
+            courtLogSubscriptionValue.setCourtLogViewValue(courtLogViewValue);
+            // Populate the CaseCourtLogInformation with the CourtLogSubscriptionValue
+            CaseCourtLogInformation caseCourtLogInformation =
+                new CaseCourtLogInformation(courtLogSubscriptionValue, true);
+            // Populate the CaseStatusEvent with the CourtRoomIdentifier & CaseCourtLogInformation
+            CourtRoomIdentifier courtRoomIdentifier =
+                new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
+            CaseStatusEvent caseStatusEvent = new CaseStatusEvent(courtRoomIdentifier, caseCourtLogInformation);
+            
+            byte[] serializedObject =
+                PddaSerializationUtils.serializePublicEvent(caseStatusEvent);
+            String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
+
+            sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251104090501.xml", encoded,
+                Charset.defaultCharset());
+        } catch (IOException e) {
+            LOG.error("Error putting file", e);
+        }
+    }
+    
+    private void setupPublicNoticeEventFile() {
+        try {
+            // Populate the PublicNoticeEvent with the CourtRoomIdentifier
+            CourtRoomIdentifier courtRoomIdentifier =
+                new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
+            // Add a DisplayablePublicNoticeValues to the CourtRoomIdentifier
+            DisplayablePublicNoticeValue displayablePublicNoticeValue =
+                new DisplayablePublicNoticeValue();
+            displayablePublicNoticeValue.setIsActive(true);
+            displayablePublicNoticeValue.setDefinitivePublicNotice(1);
+            DisplayablePublicNoticeValue[] displayablePublicNoticeValues =
+                new DisplayablePublicNoticeValue[] { displayablePublicNoticeValue };
+            courtRoomIdentifier.setPublicNotices(displayablePublicNoticeValues);
+            // Create the PublicNoticeEvent
+            PublicNoticeEvent publicNoticeEvent = new PublicNoticeEvent(courtRoomIdentifier);
+            
+            byte[] serializedObject =
+                PddaSerializationUtils.serializePublicEvent(publicNoticeEvent);
+            String encoded = PddaSerializationUtils.encodePublicEvent(serializedObject);
+
+            sftpServer.putFile("/directory/PDDA_XPD_34_1_457_20251104090501.xml", encoded,
+                Charset.defaultCharset());
+        } catch (IOException e) {
+            LOG.error("Error putting file", e);
+        }
+    }
 
     @SuppressWarnings("PMD")
     private void setupSftpConfig() {
@@ -881,7 +1145,9 @@ class SftpServiceTest {
                 mockXhbCaseRepository,
                 mockXhbHearingRepository,
                 mockXhbSittingRepository,
-                mockXhbScheduledHearingRepository)
+                mockXhbScheduledHearingRepository,
+                mockXhbPublicNoticeRepository,
+                mockXhbConfiguredPublicNoticeRepository)
             .addMockedMethod("retrieveFromBais", SftpConfig.class, BaisValidation.class)
             .addMockedMethod("getCourtRepository")
             .createMock();
@@ -919,7 +1185,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() { 
                 return fake;
@@ -944,7 +1211,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return throwing;
@@ -994,7 +1262,8 @@ class SftpServiceTest {
         return new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1087,7 +1356,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1127,7 +1397,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return throwing;
@@ -1154,7 +1425,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1211,7 +1483,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;
@@ -1273,7 +1546,8 @@ class SftpServiceTest {
         SftpService svc = new SftpService(mockEntityManager, mockXhbConfigPropRepository, mockEnvironment,
             mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
             mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
-            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository) {
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository, 
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository) {
             @Override
             protected PddaSftpHelperSshj getPddaSftpHelperSshj() {
                 return fake;

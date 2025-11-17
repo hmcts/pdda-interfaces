@@ -103,4 +103,6 @@ public interface XmlServices {
      * @throws IOException if an error occures creating the content handler
      */
     ContentHandler createHtmlSerializer(Writer writer) throws IOException;
+    
+    void validateXml(String xmlString, String schemaLocation);
 }
