@@ -14,7 +14,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
@@ -49,18 +48,38 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         log.debug("Query object created");
     }
 
-    public AllCaseStatusQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
-        XhbCaseReferenceRepository xhbCaseReferenceRepository, XhbHearingListRepository xhbHearingListRepository,
-        XhbSittingRepository xhbSittingRepository, XhbScheduledHearingRepository xhbScheduledHearingRepository,
-        XhbCourtSiteRepository xhbCourtSiteRepository, XhbCourtRoomRepository xhbCourtRoomRepository,
+    public AllCaseStatusQuery(
+        EntityManager entityManager,
+        XhbCaseRepository xhbCaseRepository,
+        XhbCaseReferenceRepository xhbCaseReferenceRepository,
+        XhbHearingListRepository xhbHearingListRepository,
+        XhbSittingRepository xhbSittingRepository,
+        XhbScheduledHearingRepository xhbScheduledHearingRepository,
+        XhbCourtSiteRepository xhbCourtSiteRepository,
+        XhbCourtRoomRepository xhbCourtRoomRepository,
         XhbSchedHearingDefendantRepository xhbSchedHearingDefendantRepository,
-        XhbHearingRepository xhbHearingRepository, XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
-        XhbDefendantRepository xhbDefendantRepository, XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
+        XhbHearingRepository xhbHearingRepository,
+        XhbDefendantOnCaseRepository xhbDefendantOnCaseRepository,
+        XhbDefendantRepository xhbDefendantRepository,
+        XhbCourtLogEntryRepository xhbCourtLogEntryRepository,
         XhbRefHearingTypeRepository xhbRefHearingTypeRepository) {
-        super(entityManager, xhbCaseRepository, xhbCaseReferenceRepository, xhbHearingListRepository,
-            xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
-            xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
-            xhbDefendantRepository, xhbCourtLogEntryRepository, xhbRefHearingTypeRepository, null);
+        super(
+            entityManager,
+            xhbCaseRepository,
+            xhbCaseReferenceRepository,
+            xhbHearingListRepository,
+            xhbSittingRepository,
+            xhbScheduledHearingRepository,
+            xhbCourtSiteRepository,
+            xhbCourtRoomRepository,
+            xhbSchedHearingDefendantRepository,
+            xhbHearingRepository,
+            xhbDefendantOnCaseRepository,
+            xhbDefendantRepository,
+            xhbCourtLogEntryRepository,
+            xhbRefHearingTypeRepository,
+            null
+        );
     }
 
     /**
@@ -77,28 +96,8 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
 
-        List<AllCaseStatusValue> results = new ArrayList<>();
-
-        // Loop the hearing lists
-        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
-        if (hearingListDaos.isEmpty()) {
-            log.debug("AllCaseStatusQuery - No Hearing Lists found for today");
-        } else {
-            for (XhbHearingListDao hearingListDao : hearingListDaos) {
-                // Loop the sittings
-                List<XhbSittingDao> sittingDaos;
-                if (isFloatingIncluded()) {
-                    sittingDaos = getSittingListDaos(hearingListDao.getListId());
-                } else {
-                    sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
-                }
-                if (!sittingDaos.isEmpty()) {
-                    results.addAll(getSittingData(sittingDaos, courtRoomIds));
-                }
-            }
-        }
-
-        return results;
+        // Delegate the repeated hearing-list / sitting iteration to the shared helper
+        return processHearingLists(startDate, courtId, this::getSittingData, courtRoomIds);
     }
 
     private List<AllCaseStatusValue> getSittingData(List<XhbSittingDao> sittingDaos, int... courtRoomIds) {
@@ -218,6 +217,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         return null;
     }
 
+    @Override
     protected boolean isFloatingIncluded() {
         // Only show isFloating = '0'
         return false;

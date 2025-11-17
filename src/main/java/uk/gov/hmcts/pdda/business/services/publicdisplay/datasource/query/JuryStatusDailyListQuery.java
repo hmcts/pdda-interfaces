@@ -14,7 +14,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
@@ -86,30 +85,11 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
         log.debug("Start date: {}", startDate);
 
-        List<JuryStatusDailyListValue> results = new ArrayList<>();
-
-        // Loop the hearing lists
-        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
-        if (hearingListDaos.isEmpty()) {
-            log.debug("JuryStatusDailyListQuery - No Hearing Lists found for today");
-        } else {
-            for (XhbHearingListDao hearingListDao : hearingListDaos) {
-                // Loop the sittings
-                List<XhbSittingDao> sittingDaos;
-                if (isFloatingIncluded()) {
-                    sittingDaos = getSittingListDaos(hearingListDao.getListId());
-                } else {
-                    sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
-                }
-                if (!sittingDaos.isEmpty()) {
-                    results.addAll(getSittingData(sittingDaos, courtRoomIds));
-                }
-            }
-        }
-
-        return results;
+        // Delegate the repeated hearing-list / sitting iteration to the shared helper
+        return processHearingLists(startDate, courtId, this::getSittingData, courtRoomIds);
     }
 
+    @Override
     protected boolean isFloatingIncluded() {
         log.debug("Entering isFloatingIncluded()");
         // Only show isFloating = '0'
@@ -165,8 +145,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao> caseDao =
-                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao>
+                caseDao = getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                 result.setCaseTitle(caseDao.get().getCaseTitle());

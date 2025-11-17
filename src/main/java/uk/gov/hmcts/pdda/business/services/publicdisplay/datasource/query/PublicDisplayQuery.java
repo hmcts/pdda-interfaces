@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -26,12 +27,15 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Abstract query class used by public display.
@@ -81,6 +85,48 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
         this.xhbDefendantRepository = xhbDefendantRepository;
         this.xhbRefHearingTypeRepository = xhbRefHearingTypeRepository;
         this.xhbRefJudgeRepository = xhbRefJudgeRepository;
+    }
+
+    /**
+     * Generic helper that iterates the hearing lists for a given court/date and
+     * for each sitting calls the supplied BiFunction to convert the sitting list
+     * into result items. This centralises the duplicated loop present in several
+     * query classes.
+
+     * @param date start date (already stripped of time)
+     * @param courtId court identifier
+     * @param sittingListProcessor function that converts a {@code List<XhbSittingDao>}
+     *                             and the selected court rooms ({@code int[]}) into a
+     *                             {@code List} of result items
+     * @param courtRoomIds optional selected court room ids
+     * @param <T> result element type
+     * @return aggregated list of results produced by the processor
+     */
+    protected <T> List<T> processHearingLists(LocalDateTime date, int courtId,
+        BiFunction<List<XhbSittingDao>, int[], List<T>> sittingListProcessor, int... courtRoomIds) {
+        List<T> results = new ArrayList<>();
+        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, date);
+        if (hearingListDaos.isEmpty()) {
+            log.debug("No Hearing Lists found for date {} court {}", date, courtId);
+            return results;
+        }
+
+        for (XhbHearingListDao hearingListDao : hearingListDaos) {
+            List<XhbSittingDao> sittingDaos;
+            if (isFloatingIncluded()) {
+                sittingDaos = getSittingListDaos(hearingListDao.getListId());
+            } else {
+                sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
+            }
+            if (!sittingDaos.isEmpty()) {
+                List<T> produced = sittingListProcessor.apply(sittingDaos, courtRoomIds);
+                if (produced != null && !produced.isEmpty()) {
+                    results.addAll(produced);
+                }
+            }
+        }
+
+        return results;
     }
 
     /**
@@ -236,4 +282,58 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected Optional<XhbHearingDao> getXhbHearingDao(Integer hearingId) {
         return getXhbHearingRepository().findByIdSafe(hearingId);
     }
+
+    /**
+     * Default implementation for whether floating sittings are included.
+     * Subclasses may override to change behaviour.
+     */
+    protected boolean isFloatingIncluded() {
+        // Default to only non-floating (maintains previous behaviour in subclasses that returned false)
+        return false;
+    }
+
+    /**
+     * Small holder returned by {@link #populateHearingAndCaseData} so callers can
+     * access the hearing DAO and the derived "isCaseHidden" flag without
+     * duplicating the DB lookups.
+     */
+    protected static class HearingCaseInfo {
+        public final Optional<XhbHearingDao> hearingDao;
+        public final boolean isCaseHidden;
+
+        public HearingCaseInfo(Optional<XhbHearingDao> hearingDao, boolean isCaseHidden) {
+            this.hearingDao = hearingDao;
+            this.isCaseHidden = isCaseHidden;
+        }
+    }
+
+    /**
+     * Reusable method to populate reporting/case/event information from a hearing id.
+     * Sets reportingRestricted, case number/title and populates event data on the
+     * provided PublicDisplayValue. Returns the hearing DAO (if any) and whether the
+     * case is marked as hidden.
+     */
+    protected HearingCaseInfo populateHearingAndCaseData(AllCourtStatusValue result, Integer hearingId) {
+        Optional<XhbHearingDao> hearingDao = getXhbHearingDao(hearingId);
+        boolean isCaseHidden = false;
+
+        if (hearingDao.isPresent()) {
+            Integer caseId = hearingDao.get().getCaseId();
+            result.setReportingRestricted(isReportingRestricted(caseId));
+
+            // Get the case
+            Optional<XhbCaseDao> caseDao = getXhbCaseRepository().findByIdSafe(caseId);
+            if (caseDao.isPresent()) {
+                result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
+                result.setCaseTitle(caseDao.get().getCaseTitle());
+                isCaseHidden = YES.equals(caseDao.get().getPublicDisplayHide());
+
+                // Populate the event
+                populateEventData(result, caseId);
+            }
+        }
+
+        return new HearingCaseInfo(hearingDao, isCaseHidden);
+    }
+
 }
