@@ -33,7 +33,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicNoticeValue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -41,7 +43,7 @@ import java.util.Optional;
 
  * @author
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD")
 public class CourtDetailQuery extends PublicDisplayQuery {
 
     private PublicNoticeQuery mockPublicNoticeQuery;
@@ -112,32 +114,49 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtDetailValue> getSittingData(List<XhbSittingDao> sittingDaos,
-        int... courtRoomIds) {
+    private List<CourtDetailValue> getSittingData(List<XhbSittingDao> sittingDaos, int... courtRoomIds) {
         List<CourtDetailValue> results = new ArrayList<>();
+
         for (XhbSittingDao sittingDao : sittingDaos) {
+            // Fetch all scheduled hearings for this sitting
+            List<XhbScheduledHearingDao> shDaos = getScheduledHearingDaos(sittingDao.getSittingId());
+            if (shDaos.isEmpty()) {
+                continue;
+            }
 
-            // Loop the scheduledHearings
-            List<XhbScheduledHearingDao> scheduledHearingDaos =
-                getScheduledHearingDaos(sittingDao.getSittingId());
-            if (!scheduledHearingDaos.isEmpty()) {
-                for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
+            // Deduplicate: one scheduled hearing per hearingId,
+            // keeping the one with non-null hearingProgress.
+            Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
 
-                    // Check if this courtroom has been selected
-                    // ... and is active
-                    if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                        scheduledHearingDao.getMovedFromCourtRoomId())
-                        || !YES.equals(scheduledHearingDao.getIsCaseActive())) {
-                        continue;
+            for (XhbScheduledHearingDao sh : shDaos) {
+                // Keep existing filters (room selection and active flag)
+                if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())
+                        || !YES.equals(sh.getIsCaseActive())) {
+                    continue;
+                }
+
+                XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+                if (current == null) {
+                    bestByHearing.put(sh.getHearingId(), sh);
+                } else {
+                    boolean currHasProgress = current.getHearingProgress() != null;
+                    boolean candHasProgress = sh.getHearingProgress() != null;
+                    if (!currHasProgress && candHasProgress) {
+                        bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
                     }
-
-                    CourtDetailValue result = getCourtDetailValue(sittingDao, scheduledHearingDao);
-                    results.add(result);
                 }
             }
+
+            // Now emit exactly one row per hearing
+            for (XhbScheduledHearingDao chosen : bestByHearing.values()) {
+                CourtDetailValue row = getCourtDetailValue(sittingDao, chosen);
+                results.add(row);
+            }
         }
+
         return results;
     }
+
 
     private boolean isDefendantHidden(Optional<XhbDefendantDao> defendantDao,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isCaseHidden) {

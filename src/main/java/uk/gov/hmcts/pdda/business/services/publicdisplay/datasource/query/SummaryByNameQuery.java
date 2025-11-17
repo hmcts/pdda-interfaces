@@ -28,7 +28,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.SummaryByNameValue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -39,7 +41,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD")
 public class SummaryByNameQuery extends PublicDisplayQuery {
 
     /**
@@ -95,29 +97,54 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<SummaryByNameValue> getScheduleHearingData(XhbSittingDao sittingDao,
-        List<XhbScheduledHearingDao> scheduledHearingDaos, String floating, int... courtRoomIds) {
-        List<SummaryByNameValue> results = new ArrayList<>();
-        for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
+    private List<SummaryByNameValue> getScheduleHearingData(
+        XhbSittingDao sittingDao,
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        String floating,
+        int... courtRoomIds) {
 
-            // Check if this courtroom has been selected
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                scheduledHearingDao.getMovedFromCourtRoomId())) {
+        List<SummaryByNameValue> results = new ArrayList<>();
+
+        // Deduplicate: one scheduled hearing per hearingId, prefer non-null hearingProgress
+        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+
+            // respect courtroom selection (unless floating means include all)
+            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())) {
                 continue;
             }
 
-            // Loop the schedHearingDefendants
-            List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
-                getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
-            if (!schedHearingDefDaos.isEmpty()) {
-                for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
+            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+            if (current == null) {
+                bestByHearing.put(sh.getHearingId(), sh);
+            } else {
+                boolean currHasProg = current.getHearingProgress() != null;
+                boolean candHasProg = sh.getHearingProgress() != null;
 
-                    SummaryByNameValue result =
-                        getSummaryByNameValue(sittingDao, scheduledHearingDao, schedHearingDefendantDao, floating);
-                    results.add(result);
+                if (!currHasProg && candHasProg) {
+                    bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
+                }
+                // Optional tie-breaker if both equal on progress:
+                // else if (sh.getCreationDate() != null && (current.getCreationDate() == null
+                //        || sh.getCreationDate().isBefore(current.getCreationDate()))) {
+                //     bestByHearing.put(sh.getHearingId(), sh);
+                // }
+            }
+        }
+
+        // Now emit defendants only for the chosen scheduled hearing per hearingId
+        for (XhbScheduledHearingDao sh : bestByHearing.values()) {
+            List<XhbSchedHearingDefendantDao> shdList =
+                getSchedHearingDefendantDaos(sh.getScheduledHearingId());
+            if (!shdList.isEmpty()) {
+                for (XhbSchedHearingDefendantDao shd : shdList) {
+                    SummaryByNameValue row =
+                        getSummaryByNameValue(sittingDao, sh, shd, floating);
+                    results.add(row);
                 }
             }
         }
+
         return results;
     }
 

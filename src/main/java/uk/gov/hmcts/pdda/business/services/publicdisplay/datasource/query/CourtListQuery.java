@@ -28,7 +28,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,7 +38,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings("PMD")
 public class CourtListQuery extends PublicDisplayQuery {
 
     /**
@@ -111,25 +113,46 @@ public class CourtListQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtListValue> getScheduledHearingData(XhbSittingDao sittingDao,
-        List<XhbScheduledHearingDao> scheduledHearingDaos, int... courtRoomIds) {
+    private List<CourtListValue> getScheduledHearingData(
+        XhbSittingDao sittingDao,
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        int... courtRoomIds) {
+
         log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
         List<CourtListValue> results = new ArrayList<>();
-        for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
-
-            // Check if this courtroom has been selected
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                scheduledHearingDao.getMovedFromCourtRoomId())) {
+    
+        // Deduplicate: one scheduled hearing per hearingId, prefer non-null hearingProgress
+        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+    
+        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+            // respect court room filter
+            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())) {
                 continue;
             }
-
-            CourtListValue result =
-                getCourtListValue(sittingDao, scheduledHearingDao);
-            results.add(result);
-
+    
+            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+            if (current == null) {
+                bestByHearing.put(sh.getHearingId(), sh);
+            } else {
+                boolean currHasProg = current.getHearingProgress() != null;
+                boolean candHasProg = sh.getHearingProgress() != null;
+    
+                if (!currHasProg && candHasProg) {
+                    // prefer the row that has a progress value
+                    bestByHearing.put(sh.getHearingId(), sh);
+                }
+            }
         }
+    
+        // Emit only the chosen scheduled hearing per hearingId
+        for (XhbScheduledHearingDao sh : bestByHearing.values()) {
+            CourtListValue row = getCourtListValue(sittingDao, sh);
+            results.add(row);
+        }
+    
         return results;
     }
+
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
         log.debug("Entering getDefendantName(String, String, String, boolean)");
