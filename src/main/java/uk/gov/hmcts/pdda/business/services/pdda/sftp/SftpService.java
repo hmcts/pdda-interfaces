@@ -443,7 +443,7 @@ public class SftpService extends XhibitPddaHelper {
                 String caseActive = event.getIsCaseActive();
                 
                 // Update hearingProgressIndicator if its present
-                if (hearingProgressIndicator != null) {
+                if (hearingProgressIndicator != null && hearingProgressIndicator != 0) {
                     scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
                     LOG.debug("ScheduledHearing hearingProgress set to: {}",
                         hearingProgressIndicator);
