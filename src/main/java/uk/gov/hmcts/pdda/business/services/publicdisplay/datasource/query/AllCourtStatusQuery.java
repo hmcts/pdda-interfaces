@@ -6,6 +6,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtlogentry.XhbCourtLogEntryRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbdefendant.XhbDefendantDao;
@@ -115,8 +116,6 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
             )
         );
 
-
-
         return results;
     }
 
@@ -196,9 +195,10 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
     
             results.add(row);
         }
-    
+
         return results;
     }
+
 
     private void populateScheduleDefendantData(AllCourtStatusValue result,
         List<XhbSchedHearingDefendantDao> schedDaos, boolean isCaseHidden) {
@@ -257,7 +257,7 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
             for (var room : allRooms) {
                 Integer roomId = room.getCourtRoomId();
                 if (roomId != null && !presentRoomIds.contains(roomId)) {
-                    rows.add(buildEmptyAllCourtStatusRow(siteId, room));
+                    rows.add(buildEmptyAllCourtStatusRow(room));
                 }
             }
         }
@@ -312,16 +312,14 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
         return resolved;
     }
     
-    private AllCourtStatusValue buildEmptyAllCourtStatusRow(
-        Integer courtSiteId,
-        uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao room) {
+    private AllCourtStatusValue buildEmptyAllCourtStatusRow(XhbCourtRoomDao room) {
         AllCourtStatusValue v = new AllCourtStatusValue();
         // carry site/room identity into the row so the renderer prints the court name
-        //v.setCourtSiteId(courtSiteId);                     // add this setter if your DTO has it
         v.setCourtRoomId(room.getCourtRoomId());
         v.setCourtRoomName(room.getCourtRoomName());
         // leave case/status fields null -> hasInformationForDisplay() returns false,
         // and the renderer will show “No information to display” for that row.
         return v;
     }
+
 }

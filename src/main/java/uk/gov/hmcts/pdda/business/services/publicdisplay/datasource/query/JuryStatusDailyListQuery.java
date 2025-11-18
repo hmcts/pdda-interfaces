@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -43,7 +42,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD"})
 public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     /**
@@ -78,20 +77,14 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
 
-     * @return Suumary by name data for the specified court rooms
+     * @return Summary by name data for the specified court rooms
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
         log.debug("Entering getData(LocalDateTime, int, int...)");
-
-        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-        log.debug("Start date: {}", startDate);
-
-        // Delegate the repeated hearing-list / sitting iteration to the shared helper
-        return processHearingLists(startDate, courtId, this::getSittingData, courtRoomIds);
+        return getDataTemplate(date, courtId, this::getSittingData, courtRoomIds);
     }
 
-    @Override
     protected boolean isFloatingIncluded() {
         log.debug("Entering isFloatingIncluded()");
         // Only show isFloating = '0'
@@ -163,8 +156,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             result.setReportingRestricted(isReportingRestricted(hearingDao.get().getCaseId()));
 
             // Get the case
-            Optional<XhbCaseDao>
-                caseDao = getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
+            Optional<XhbCaseDao> caseDao =
+                getXhbCaseRepository().findByIdSafe(hearingDao.get().getCaseId());
             if (caseDao.isPresent()) {
                 result.setCaseNumber(caseDao.get().getCaseType() + caseDao.get().getCaseNumber());
                 result.setCaseTitle(caseDao.get().getCaseTitle());
