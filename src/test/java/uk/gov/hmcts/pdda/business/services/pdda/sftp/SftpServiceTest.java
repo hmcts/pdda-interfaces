@@ -992,7 +992,7 @@ class SftpServiceTest {
             pddaHearingProgressEvent.setCourtRoomName(COURTROOM1);
             pddaHearingProgressEvent.setCaseType("T");
             pddaHearingProgressEvent.setCaseNumber(20250001);
-            pddaHearingProgressEvent.setHearingProgressIndicator(0);
+            pddaHearingProgressEvent.setHearingProgressIndicator(5);
             pddaHearingProgressEvent.setIsCaseActive("Y");
             
             byte[] serializedObject =
