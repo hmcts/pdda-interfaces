@@ -28,7 +28,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +37,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD"})
 public class CourtListQuery extends PublicDisplayQuery {
 
     /**
@@ -119,37 +118,17 @@ public class CourtListQuery extends PublicDisplayQuery {
         int... courtRoomIds) {
 
         log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
-        List<CourtListValue> results = new ArrayList<>();
-    
-        // Deduplicate: one scheduled hearing per hearingId, prefer non-null hearingProgress
-        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
-    
-        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
-            // respect court room filter
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())) {
-                continue;
-            }
-    
-            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
-            if (current == null) {
-                bestByHearing.put(sh.getHearingId(), sh);
-            } else {
-                boolean currHasProg = current.getHearingProgress() != null;
-                boolean candHasProg = sh.getHearingProgress() != null;
-    
-                if (!currHasProg && candHasProg) {
-                    // prefer the row that has a progress value
-                    bestByHearing.put(sh.getHearingId(), sh);
-                }
-            }
-        }
-    
-        // Emit only the chosen scheduled hearing per hearingId
+
+        // Choose one scheduled hearing per hearingId, preferring those with hearingProgress,
+        // and respecting the courtroom filter (helper already does this).
+        Map<Integer, XhbScheduledHearingDao> bestByHearing =
+            pickBestScheduledPerHearing(scheduledHearingDaos, sittingDao.getCourtRoomId(), courtRoomIds);
+
+        List<CourtListValue> results = new ArrayList<>(bestByHearing.size());
         for (XhbScheduledHearingDao sh : bestByHearing.values()) {
             CourtListValue row = getCourtListValue(sittingDao, sh);
             results.add(row);
         }
-    
         return results;
     }
 
@@ -196,12 +175,12 @@ public class CourtListQuery extends PublicDisplayQuery {
         // Loop the schedHearingDefendants
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
             getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
-
+        
         populateResultWithDefendants(result, scheduledHearingDao, schedHearingDefDaos, isHidden);
-
+                
         return result;
     }
-
+    
     /**
      * Reducing the complexity of getCourtListValue by moving defendant population to its own method.
      * @param result The CourtListValue being populated
@@ -213,31 +192,28 @@ public class CourtListQuery extends PublicDisplayQuery {
     private CourtListValue populateResultWithDefendants(CourtListValue result,
         XhbScheduledHearingDao scheduledHearingDao,
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos, boolean isHidden) {
-
+        
         if (!schedHearingDefDaos.isEmpty()) {
             for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
-
+        
                 // Get the defendant on case
                 Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
                     getXhbDefendantOnCaseRepository()
                         .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
                 if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
-
-                    // Populate the single defendant and accumulate hidden state
+        
                     populateResultWithDefendant(result, defendantOnCaseDao, isHidden);
-
-                    // Ensure hearing progress is set (null-safe)
+                    
                     result.setHearingProgress(
-                        scheduledHearingDao.getHearingProgress() != null
-                            ? scheduledHearingDao.getHearingProgress()
-                            : 0);
+                        scheduledHearingDao.getHearingProgress() != null 
+                            ? scheduledHearingDao.getHearingProgress() : 0);
                 }
             }
         }
-
+        
         return result;
     }
-
+    
     /**
      * Populates a CourtListValue with a defendant.
      * @param result The CourtListValue being populated
@@ -247,7 +223,7 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     private CourtListValue populateResultWithDefendant(CourtListValue result,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isHidden) {
-
+        
         // Get the defendant
         if (!defendantOnCaseDao.isPresent()) {
             return result;
@@ -255,14 +231,11 @@ public class CourtListQuery extends PublicDisplayQuery {
         Optional<XhbDefendantDao> defendantDao =
             getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
         if (defendantDao.isPresent()) {
-            boolean tmpIsHidden = isHidden
-                || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
-                || YES.contentEquals(defendantDao.get().getPublicDisplayHide());
-
+            boolean tmpIsHidden = isHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
+                || YES.equals(defendantDao.get().getPublicDisplayHide());
             DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
                 defendantDao.get().getMiddleName(), defendantDao.get().getSurname(), tmpIsHidden);
-
-            result.setReportingRestricted(tmpIsHidden);
+            result.setReportingRestricted(result.isReportingRestricted() || tmpIsHidden);
             result.addDefendantName(defendantName);
         }
         return result;
@@ -279,4 +252,6 @@ public class CourtListQuery extends PublicDisplayQuery {
         }
         return null;
     }
+
+
 }
