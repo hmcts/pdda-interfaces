@@ -31,7 +31,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.JuryStatusDailyListValu
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -96,39 +95,35 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         List<JuryStatusDailyListValue> results = new ArrayList<>();
 
         for (XhbSittingDao sittingDao : sittingDaos) {
-            // Is this a floating sitting
-            String floating = getIsFloating(sittingDao.getIsFloating());
-
+            
             // Gather scheduled hearings for this sitting
             List<XhbScheduledHearingDao> scheduledHearingDaos = getScheduledHearingDaos(sittingDao.getSittingId());
             if (scheduledHearingDaos.isEmpty()) {
                 continue;
             }
 
-            // Deduplicate: pick one scheduled hearing per hearingId,
-            // preferring the one with non-null hearingProgress.
-            Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+            // Filter by selection/floating rules first, then deduplicate by hearingId preferring
+            // the row with non-null hearingProgress (preserves insertion order).
+            List<XhbScheduledHearingDao> filtered = new ArrayList<>();
             for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
                 // If we are including all floating then include all court rooms; otherwise filter by selection.
                 if (!isFloatingIncluded() && !isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
                         sh.getMovedFromCourtRoomId())) {
                     continue;
                 }
-
-                XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
-                if (current == null) {
-                    bestByHearing.put(sh.getHearingId(), sh);
-                } else {
-                    boolean currentHasProgress  = current.getHearingProgress()  != null;
-                    boolean candidateHasProgress = sh.getHearingProgress() != null;
-
-                    if (!currentHasProgress && candidateHasProgress) {
-                        // Prefer the row that has a progress value
-                        bestByHearing.put(sh.getHearingId(), sh);
-                    }
-                }
+                filtered.add(sh);
             }
 
+            if (filtered.isEmpty()) {
+                continue;
+            }
+
+            Map<Integer, XhbScheduledHearingDao> bestByHearing = 
+                PublicDisplayQueryHelpers.pickBestByHearing(filtered);
+
+            // Is this a floating sitting
+            String floating = getIsFloating(sittingDao.getIsFloating());
+            
             // Render only the chosen scheduled hearing per hearingId
             for (XhbScheduledHearingDao sh : bestByHearing.values()) {
                 JuryStatusDailyListValue result = getJuryStatusDailyListValue(sittingDao, sh, floating);
@@ -137,6 +132,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         }
         return results;
     }
+
 
     private JuryStatusDailyListValue getJuryStatusDailyListValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao, String floating) {

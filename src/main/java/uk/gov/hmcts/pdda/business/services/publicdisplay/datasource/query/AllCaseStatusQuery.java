@@ -30,7 +30,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -109,29 +108,22 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
         List<AllCaseStatusValue> results = new ArrayList<>();
 
-        // Pick one scheduled hearing per hearingId, preferring non-null hearingProgress
-        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        // Filter scheduled hearings by selected court rooms first
+        List<XhbScheduledHearingDao> filtered = new ArrayList<>();
         for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
-
-            // Skip if not in selected rooms
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                sh.getMovedFromCourtRoomId())) {
+            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(), sh.getMovedFromCourtRoomId())) {
                 continue;
             }
-
-            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
-            if (current == null) {
-                bestByHearing.put(sh.getHearingId(), sh);
-            } else {
-                // Prefer the one with non-null hearingProgress
-                boolean currentHasProgress = current.getHearingProgress() != null;
-                boolean candidateHasProgress = sh.getHearingProgress() != null;
-                if (!currentHasProgress && candidateHasProgress) {
-                    bestByHearing.put(sh.getHearingId(), sh);
-                }
-                // (tie-breakers are optional; keep existing if both null or both non-null)
-            }
+            filtered.add(sh);
         }
+
+        if (filtered.isEmpty()) {
+            return results;
+        }
+
+        // Pick one scheduled hearing per hearingId, preferring non-null hearingProgress
+        Map<Integer, XhbScheduledHearingDao> bestByHearing =
+            PublicDisplayQueryHelpers.pickBestByHearing(filtered);
 
         // Now only process the chosen scheduled hearing per hearingId
         for (XhbScheduledHearingDao sh : bestByHearing.values()) {
@@ -144,6 +136,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
 
         return results;
     }
+
 
 
     private List<AllCaseStatusValue> getSchedHearingDefendantData(XhbSittingDao sittingDao,
