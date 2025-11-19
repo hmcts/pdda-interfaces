@@ -14,7 +14,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
@@ -165,7 +164,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             }
 
             // Get the ref hearing type
-            result.setHearingDescription(getHearingTypeDesc(hearingDao));
+            result.setHearingDescription(PublicDisplayQueryHelpers.resolveHearingTypeDesc(hearingDao,
+                id -> getXhbRefHearingTypeRepository().findByIdSafe(id)));
         }
 
         // Loop the schedHearingDefendants
@@ -224,16 +224,4 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         return null;
     }
 
-    private String getHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
-        log.debug("Entering getHearingTypeDesc(Optional<XhbHearingDao>)");
-        if (hearingDao.isPresent()) {
-            Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository()
-                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
-            if (refHearingTypeDao.isPresent()) {
-                return refHearingTypeDao.get().getHearingTypeDesc();
-            }
-        }
-        return null;
-    }
 }

@@ -16,7 +16,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
 import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository;
@@ -151,19 +150,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         // Choose exactly ONE defendant to display:
         // Prefer the first non-observed (OBS_IND != 'Y') defendant-on-case; otherwise the first
         // item.
-        XhbSchedHearingDefendantDao chosen = null;
-        for (XhbSchedHearingDefendantDao shd : schedHearingDefDaos) {
-            Optional<XhbDefendantOnCaseDao> doc =
-                getXhbDefendantOnCaseRepository().findByIdSafe(shd.getDefendantOnCaseId());
-            if (doc.isPresent() && !YES.equals(doc.get().getObsInd())) {
-                chosen = shd; // prefer a non-OBS defendant
-                break; // <-- conditional, allowed; we exit the selection loop only when found
-            }
-            if (chosen == null) {
-                chosen = shd; // fallback to the first item if no better candidate appears
-            }
-        }
-
+        
         // Build ONE row using the chosen defendant
         AllCaseStatusValue result = getAllCaseStatusValue();
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
@@ -189,10 +176,16 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
                 populateEventData(result, hearingDao.get().getCaseId());
             }
 
-            result.setHearingDescription(getRefHearingTypeDesc(hearingDao));
+            result.setHearingDescription(PublicDisplayQueryHelpers.resolveHearingTypeDesc(hearingDao,
+                id -> getXhbRefHearingTypeRepository().findByIdSafe(id)));
         }
 
         // Populate chosen defendant's name (if available)
+        XhbSchedHearingDefendantDao chosen = PublicDisplayQueryHelpers.chooseOneDefendant(
+            schedHearingDefDaos,
+            id -> getXhbDefendantOnCaseRepository().findByIdSafe(id) // method reference lambda
+        );
+
         if (chosen != null) {
             result.setDefendantName(getDefendantName(chosen, isHidden));
         } else {
@@ -237,16 +230,6 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
                 && YES.contentEquals(defendantDao.get().getPublicDisplayHide());
     }
 
-    private String getRefHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
-        if (hearingDao.isPresent()) {
-            Optional<XhbRefHearingTypeDao> refHearingTypeDao = getXhbRefHearingTypeRepository()
-                .findByIdSafe(hearingDao.get().getRefHearingTypeId());
-            if (refHearingTypeDao.isPresent()) {
-                return refHearingTypeDao.get().getHearingTypeDesc();
-            }
-        }
-        return null;
-    }
 
     protected boolean isFloatingIncluded() {
         // Only show isFloating = '0'
