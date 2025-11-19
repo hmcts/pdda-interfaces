@@ -35,10 +35,12 @@ import uk.gov.hmcts.DummyFormattingUtil;
 import uk.gov.hmcts.DummyHearingUtil;
 import uk.gov.hmcts.DummyPdNotifierUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
+import uk.gov.hmcts.DummyServicesUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
@@ -401,6 +403,11 @@ class SftpServiceTest {
             EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(xhbScheduledHearingDao);
         
+        Optional<XhbConfigPropDao> xhbConfigPropDao = 
+            Optional.of(DummyServicesUtil.getXhbConfigPropDao("delay", "0"));
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(EasyMock.isA(String.class)))
+                .andStubReturn(List.of(xhbConfigPropDao.get()));
+        
         EasyMock.expect(mockXhbScheduledHearingRepository.update(xhbScheduledHearingDao.get()))
                 .andStubReturn(xhbScheduledHearingDao);
         
@@ -436,6 +443,7 @@ class SftpServiceTest {
             mockXhbCourtRoomRepository,
             mockXhbSittingRepository,
             mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
             mockPddaMessageHelper,
             mockXhbClobRepository,
             mockEntityManager
@@ -453,6 +461,7 @@ class SftpServiceTest {
             mockXhbCourtRoomRepository,
             mockXhbSittingRepository,
             mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
             mockPddaMessageHelper,
             mockXhbClobRepository,
             mockEntityManager
