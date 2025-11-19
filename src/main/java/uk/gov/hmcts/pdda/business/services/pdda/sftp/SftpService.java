@@ -439,35 +439,37 @@ public class SftpService extends XhibitPddaHelper {
                 caseType, caseNumber, courtRoomName);
             
             // Get the delay period from xhb_config_prop
-            XhbConfigPropDao xhbConfigPropDao = getXhbConfigPropRepository()
-                .findByPropertyNameSafe(HEARING_PROGRESS_DELAY_MINUTES).get(0);
-            Integer delay =  Integer.parseInt(xhbConfigPropDao.getPropertyValue());
+            List<XhbConfigPropDao> xhbConfigPropDao = getXhbConfigPropRepository()
+                .findByPropertyNameSafe(HEARING_PROGRESS_DELAY_MINUTES);
             
-            // Ensure last update date is outside of the delay period to prevent processing a duplicate
-            if (scheduledHearingDao != null && delay != null 
-                && scheduledHearingDao.getLastUpdateDate().plusMinutes(delay)
-                .isBefore(LocalDateTime.now())) {
-                LOG.debug("ScheduledHearing found with ID: {}",
-                    scheduledHearingDao.getScheduledHearingId());
-                Integer hearingProgressIndicator = event.getHearingProgressIndicator();
-                String caseActive = event.getIsCaseActive();
-                
-                // Update hearingProgressIndicator if its present and not the same as current value
-                if (hearingProgressIndicator != null 
-                    && !hearingProgressIndicator.equals(scheduledHearingDao.getHearingProgress())) {
-                    scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
-                    LOG.debug("ScheduledHearing hearingProgress set to: {}",
-                        hearingProgressIndicator);
+            if (!xhbConfigPropDao.isEmpty()) {
+                Integer delay =  Integer.parseInt(xhbConfigPropDao.get(0).getPropertyValue());
+                // Ensure last update date is outside of the delay period to prevent processing a duplicate
+                if (scheduledHearingDao != null 
+                    && scheduledHearingDao.getLastUpdateDate().plusMinutes(delay)
+                    .isBefore(LocalDateTime.now())) {
+                    LOG.debug("ScheduledHearing found with ID: {}",
+                        scheduledHearingDao.getScheduledHearingId());
+                    Integer hearingProgressIndicator = event.getHearingProgressIndicator();
+                    String caseActive = event.getIsCaseActive();
+                    
+                    // Update hearingProgressIndicator if its present and not the same as current value
+                    if (hearingProgressIndicator != null 
+                        && !hearingProgressIndicator.equals(scheduledHearingDao.getHearingProgress())) {
+                        scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
+                        LOG.debug("ScheduledHearing hearingProgress set to: {}",
+                            hearingProgressIndicator);
+                    }
+                    // Update isCaseActive if its present
+                    if (caseActive != null) {
+                        scheduledHearingDao.setIsCaseActive(caseActive);
+                        LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                            caseActive);
+                    }
+                    getScheduledHearingRepository().update(scheduledHearingDao);
+                    LOG.debug("ScheduledHearing with ID: {} updated", 
+                        scheduledHearingDao.getScheduledHearingId());
                 }
-                // Update isCaseActive if its present
-                if (caseActive != null) {
-                    scheduledHearingDao.setIsCaseActive(caseActive);
-                    LOG.debug("ScheduledHearing isCaseActive set to: {}",
-                        caseActive);
-                }
-                getScheduledHearingRepository().update(scheduledHearingDao);
-                LOG.debug("ScheduledHearing with ID: {} updated", 
-                    scheduledHearingDao.getScheduledHearingId());
             }
         }
     }

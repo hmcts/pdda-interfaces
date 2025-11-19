@@ -469,6 +469,212 @@ class SftpServiceTest {
     }
     
     @Test
+    void testProcessBaisEmptyScheduledHearingPddaHearingProgressEvent() {
+        // --- Arrange ---
+        setupPddaHearingProgressEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Entered processHearingProgressEvent(...)
+        List<XhbCourtDao> xhbCourtDao = List.of(DummyCourtUtil.getXhbCourtDao(1, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCourtNameValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(xhbCourtDao);
+        
+        List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCourtSiteDao);
+        
+        Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCaseDao);
+        
+        Optional<XhbHearingDao> xhbHearingDao = Optional.of(DummyHearingUtil.getXhbHearingDao());
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbHearingDao);
+        
+        List<XhbCourtRoomDao> xhbCourtRoomDao = List.of(DummyCourtUtil.getXhbCourtRoomDao());
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdAndCourtRoomNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
+                .andStubReturn(xhbCourtRoomDao);
+        
+        List<XhbSittingDao> xhbSittingDao = List.of(DummyHearingUtil.getXhbSittingDao());
+        EasyMock.expect(mockXhbSittingRepository.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbSittingDao);
+        
+        EasyMock.expect(mockXhbScheduledHearingRepository.findBySittingIdAndHearingIdSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(Optional.empty());
+        
+        Optional<XhbConfigPropDao> xhbConfigPropDao = 
+            Optional.of(DummyServicesUtil.getXhbConfigPropDao("delay", "0"));
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(EasyMock.isA(String.class)))
+                .andStubReturn(List.of(xhbConfigPropDao.get()));
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("PddaHearingProgress"))
+                .andReturn(pddaRefMessageTypeDao);
+
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+
+        // Run
+        classUnderTest.setupSftpClientAndProcessBaisData(sftpConfig, sftpConfig.getSshClient(), false);
+        
+        // Verify
+        EasyMock.verify(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+    }
+    
+    @Test
+    void testProcessBaisEmptyDelayTimePddaHearingProgressEvent() {
+        // --- Arrange ---
+        setupPddaHearingProgressEventFile();
+
+        // EM guard
+        EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
+        
+        // Entered processHearingProgressEvent(...)
+        List<XhbCourtDao> xhbCourtDao = List.of(DummyCourtUtil.getXhbCourtDao(1, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCourtNameValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(xhbCourtDao);
+        
+        List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCourtSiteDao);
+        
+        Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbCaseDao);
+        
+        Optional<XhbHearingDao> xhbHearingDao = Optional.of(DummyHearingUtil.getXhbHearingDao());
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbHearingDao);
+        
+        List<XhbCourtRoomDao> xhbCourtRoomDao = List.of(DummyCourtUtil.getXhbCourtRoomDao());
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdAndCourtRoomNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
+                .andStubReturn(xhbCourtRoomDao);
+        
+        List<XhbSittingDao> xhbSittingDao = List.of(DummyHearingUtil.getXhbSittingDao());
+        EasyMock.expect(mockXhbSittingRepository.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+                .andStubReturn(xhbSittingDao);
+        
+        Optional<XhbScheduledHearingDao> xhbScheduledHearingDao = 
+            Optional.of(DummyHearingUtil.getXhbScheduledHearingDao());
+        EasyMock.expect(mockXhbScheduledHearingRepository.findBySittingIdAndHearingIdSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+                .andStubReturn(xhbScheduledHearingDao);
+        
+        EasyMock.expect(mockXhbConfigPropRepository.findByPropertyNameSafe(EasyMock.isA(String.class)))
+                .andStubReturn(new ArrayList<>());
+        
+        // Court lookups
+        List<XhbCourtDao> byCrest = List.of(DummyCourtUtil.getXhbCourtDao(-453, COURT1));
+        EasyMock.expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andStubReturn(byCrest);
+        
+        // Message type lookup
+        Optional<XhbRefPddaMessageTypeDao> pddaRefMessageTypeDao =
+            Optional.of(DummyPdNotifierUtil.getXhbPddaMessageTypeDao());
+        EasyMock.expect(mockPddaMessageHelper.findByMessageType("PddaHearingProgress"))
+                .andReturn(pddaRefMessageTypeDao);
+
+        // Duplicate check inside createBaisMessage(...)
+        EasyMock.expect(mockPddaMessageHelper.findByCpDocumentName(EasyMock.isA(String.class)))
+                .andReturn(Optional.empty());
+        
+        // CLOB update
+        XhbClobDao clob = DummyFormattingUtil.getXhbClobDao(0L, "<clob>");
+        EasyMock.expect(mockXhbClobRepository.update(EasyMock.isA(XhbClobDao.class)))
+                .andStubReturn(Optional.of(clob));
+
+        // Save call
+        mockPddaMessageHelper.savePddaMessage(EasyMock.isA(XhbPddaMessageDao.class));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+
+        // Run
+        classUnderTest.setupSftpClientAndProcessBaisData(sftpConfig, sftpConfig.getSshClient(), false);
+        
+        // Verify
+        EasyMock.verify(
+            mockXhbCourtRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCaseRepository,
+            mockXhbHearingRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbSittingRepository,
+            mockXhbScheduledHearingRepository,
+            mockXhbConfigPropRepository,
+            mockPddaMessageHelper,
+            mockXhbClobRepository,
+            mockEntityManager
+        );
+    }
+    
+    @Test
     void testProcessBaisEmptyPddaHearingProgressEvent() {
         // --- Arrange ---
         setupEmptyPddaHearingProgressEventFile();
