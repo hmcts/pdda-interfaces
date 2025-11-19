@@ -459,16 +459,17 @@ public class SftpService extends XhibitPddaHelper {
                         scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
                         LOG.debug("ScheduledHearing hearingProgress set to: {}",
                             hearingProgressIndicator);
+                    
+                        // Update isCaseActive if its present
+                        if (caseActive != null) {
+                            scheduledHearingDao.setIsCaseActive(caseActive);
+                            LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                                caseActive);
+                        }
+                        getScheduledHearingRepository().update(scheduledHearingDao);
+                        LOG.debug("ScheduledHearing with ID: {} updated", 
+                            scheduledHearingDao.getScheduledHearingId());
                     }
-                    // Update isCaseActive if its present
-                    if (caseActive != null) {
-                        scheduledHearingDao.setIsCaseActive(caseActive);
-                        LOG.debug("ScheduledHearing isCaseActive set to: {}",
-                            caseActive);
-                    }
-                    getScheduledHearingRepository().update(scheduledHearingDao);
-                    LOG.debug("ScheduledHearing with ID: {} updated", 
-                        scheduledHearingDao.getScheduledHearingId());
                 }
             }
         }
