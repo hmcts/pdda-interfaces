@@ -20,6 +20,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
@@ -75,6 +76,7 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String FIRM_LIST_DOCUMENT_TYPE = "FirmList";
     protected static final String WARNED_LIST_DOCUMENT_TYPE = "WarnedList";
     protected static final String WEB_PAGE_DOCUMENT_TYPE = "WebPage";
+    protected static final String HEARING_PROGRESS_DELAY_MINUTES = "HEARING_PROGRESS_DELAY_MINUTES";
 
     public static final String NEWLINE = "\n";
 
@@ -436,27 +438,39 @@ public class SftpService extends XhibitPddaHelper {
             XhbScheduledHearingDao scheduledHearingDao = hearingProgressDrillDown(courtId, 
                 caseType, caseNumber, courtRoomName);
             
-            if (scheduledHearingDao != null) {
-                LOG.debug("ScheduledHearing found with ID: {}",
-                    scheduledHearingDao.getScheduledHearingId());
-                Integer hearingProgressIndicator = event.getHearingProgressIndicator();
-                String caseActive = event.getIsCaseActive();
-                
-                // Update hearingProgressIndicator if its present
-                if (hearingProgressIndicator != null && hearingProgressIndicator != 0) {
-                    scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
-                    LOG.debug("ScheduledHearing hearingProgress set to: {}",
-                        hearingProgressIndicator);
+            // Get the delay period from xhb_config_prop
+            List<XhbConfigPropDao> xhbConfigPropDao = getXhbConfigPropRepository()
+                .findByPropertyNameSafe(HEARING_PROGRESS_DELAY_MINUTES);
+            
+            if (!xhbConfigPropDao.isEmpty()) {
+                Integer delay =  Integer.parseInt(xhbConfigPropDao.get(0).getPropertyValue());
+                // Ensure last update date is outside of the delay period to prevent processing a duplicate
+                if (scheduledHearingDao != null 
+                    && scheduledHearingDao.getLastUpdateDate().plusMinutes(delay)
+                    .isBefore(LocalDateTime.now())) {
+                    LOG.debug("ScheduledHearing found with ID: {}",
+                        scheduledHearingDao.getScheduledHearingId());
+                    Integer hearingProgressIndicator = event.getHearingProgressIndicator();
+                    String caseActive = event.getIsCaseActive();
+                    
+                    // Update hearingProgressIndicator if its present and not the same as current value
+                    if (hearingProgressIndicator != null 
+                        && !hearingProgressIndicator.equals(scheduledHearingDao.getHearingProgress())) {
+                        scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
+                        LOG.debug("ScheduledHearing hearingProgress set to: {}",
+                            hearingProgressIndicator);
+                    
+                        // Update isCaseActive if its present
+                        if (caseActive != null) {
+                            scheduledHearingDao.setIsCaseActive(caseActive);
+                            LOG.debug("ScheduledHearing isCaseActive set to: {}",
+                                caseActive);
+                        }
+                        getScheduledHearingRepository().update(scheduledHearingDao);
+                        LOG.debug("ScheduledHearing with ID: {} updated", 
+                            scheduledHearingDao.getScheduledHearingId());
+                    }
                 }
-                // Update isCaseActive if its present
-                if (caseActive != null) {
-                    scheduledHearingDao.setIsCaseActive(caseActive);
-                    LOG.debug("ScheduledHearing isCaseActive set to: {}",
-                        caseActive);
-                }
-                getScheduledHearingRepository().update(scheduledHearingDao);
-                LOG.debug("ScheduledHearing with ID: {} updated", 
-                    scheduledHearingDao.getScheduledHearingId());
             }
         }
     }

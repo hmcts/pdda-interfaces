@@ -1,0 +1,4 @@
+INSERT INTO XHB_CONFIG_PROP (CONFIG_PROP_ID, PROPERTY_NAME, PROPERTY_VALUE)
+VALUES (((select max(config_prop_id) from pdda.xhb_config_prop)+1), 'HEARING_PROGRESS_DELAY_MINUTES', '1');
+
+COMMIT;
