@@ -455,6 +455,7 @@ public class SftpService extends XhibitPddaHelper {
                     
                     // Update hearingProgressIndicator if its present and not the same as current value
                     if (hearingProgressIndicator != null 
+                        && hearingProgressIndicator != 0
                         && !hearingProgressIndicator.equals(scheduledHearingDao.getHearingProgress())) {
                         scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
                         LOG.debug("ScheduledHearing hearingProgress set to: {}",
