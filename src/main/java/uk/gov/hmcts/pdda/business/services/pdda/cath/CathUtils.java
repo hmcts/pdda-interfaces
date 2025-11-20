@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.pdda.cath;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,7 +44,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
-    "PMD.ExcessiveImports"})
+    "PMD.ExcessiveImports", "PMD.CognitiveComplexity"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -57,6 +59,14 @@ public final class CathUtils {
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
     private static final String PROVENANCE = "PDDA";
+    
+    private static final Map<String, String> ARRAY_KEYS = Map.of(
+        "CourtLists", "CourtList",
+        "Sittings", "Sitting",
+        "Hearings", "Hearing",
+        "Charges", "Charge",
+        "Defendants", "Defendant"
+        );
 
     private CathUtils() {
         // Private constructor
@@ -72,13 +82,10 @@ public final class CathUtils {
         String fileName = courtelJson.getDocumentName();
         String fieldName = "file";
         // Build multipart/form-data body
-        String body = 
-            "--" + boundary + "\r\n"
-            + "Content-Disposition: form-data; name=\""
-            + fieldName + "\"; filename=\"" + fileName + "\"\r\n" 
-            + "Content-Type: text/plain\r\n\r\n" 
-            + courtelJson.getJson() + "\r\n" 
-            + "--" + boundary + "--\r\n";
+        String body =
+            "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\"" + fieldName
+                + "\"; filename=\"" + fileName + "\"\r\n" + "Content-Type: text/plain\r\n\r\n"
+                + courtelJson.getJson() + "\r\n" + "--" + boundary + "--\r\n";
         // Get the times
         String now = getDateTimeAsString(courtelJson.getContentDate());
         String endDate = getDateTimeAsString(courtelJson.getEndDate());
@@ -94,35 +101,32 @@ public final class CathUtils {
             .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
             .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
             .header(PublicationConfiguration.CONTENT_DATE, now)
-            .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName())
+            .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER,
+                courtelJson.getDocumentName())
             .header(AUTHORIZATION, bearerToken)
             .header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + boundary)
-            .POST(BodyPublishers.ofString(body))
-            .build();
-        
+            .POST(BodyPublishers.ofString(body)).build();
+
         // If the courtelJson is a ListJson, copy the existing request and add the list type header
         if (courtelJson instanceof ListJson) {
             LOG.debug("ListJson detected, rebuilding request and adding list type header");
-            return HttpRequest.newBuilder()
-                .uri(result.uri())
+            return HttpRequest.newBuilder().uri(result.uri())
                 // Copy existing headers
                 .headers(copyExistingHeaders(result.headers()))
                 // Add list type header
                 .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
                 // Re-create the body
-                .POST(BodyPublishers.ofString(body))
-                .build();
+                .POST(BodyPublishers.ofString(body)).build();
         }
-        
+
         LOG.debug("getHttpPostRequest() - built POST");
         return result;
     }
-    
+
     private static String[] copyExistingHeaders(HttpHeaders headers) {
-        return headers.map().entrySet().stream()
-            .flatMap(entry -> entry.getValue().stream().map(value -> new String[]{entry.getKey(), value}))
-            .flatMap(Stream::of)
-            .toArray(String[]::new);
+        return headers.map().entrySet().stream().flatMap(
+            entry -> entry.getValue().stream().map(value -> new String[] {entry.getKey(), value}))
+            .flatMap(Stream::of).toArray(String[]::new);
     }
 
     public static boolean isApimEnabled() {
@@ -269,7 +273,8 @@ public final class CathUtils {
         XhbCathDocumentLinkDao xhbCathDocumentLinkDao, XhbXmlDocumentDao xhbXmlDocumentDaoJson) {
         // Fetch the existing cath_document_link record
         Optional<XhbCathDocumentLinkDao> xhbCathDocumentLinkDaoNoJsonId =
-            xhbCathDcoumentLlinkRepository.findByIdSafe(xhbCathDocumentLinkDao.getCathDocumentLinkId());
+            xhbCathDcoumentLlinkRepository
+                .findByIdSafe(xhbCathDocumentLinkDao.getCathDocumentLinkId());
 
         if (xhbCathDocumentLinkDaoNoJsonId.isPresent()) {
             // Update the existing record with the cathJsonId
@@ -280,7 +285,29 @@ public final class CathUtils {
     }
 
     private static JSONObject generateJsonFromString(String stringToConvert) {
-        return XML.toJSONObject(stringToConvert);
+        JSONObject json = XML.toJSONObject(stringToConvert);
+        flattenListArrays(json);
+        return json;
     }
 
+    private static void flattenListArrays(Object node) {
+        if (node instanceof JSONObject json) {
+            ARRAY_KEYS.forEach((parent, child) -> {
+                if (json.has(parent)) {
+                    Object value = json.get(parent);
+                    if (value instanceof JSONObject parentObj && parentObj.has(child)) {
+                        Object childValue = parentObj.get(child);
+                        JSONArray array = childValue instanceof JSONArray ? (JSONArray) childValue
+                            : new JSONArray().put(childValue);
+                        json.put(parent, array);
+                    }
+                }
+            });
+            json.keySet().forEach(key -> flattenListArrays(json.get(key)));
+        } else if (node instanceof JSONArray array) {
+            for (int i = 0; i < array.length(); i++) {
+                flattenListArrays(array.get(i));
+            }
+        }
+    }
 }
