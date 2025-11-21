@@ -129,20 +129,47 @@ public class AllCourtStatusValue extends PublicDisplayValue {
 
     @Override
     public int compareTo(PublicDisplayValue other) {
-        if (!this.getCourtSiteCode().equals(other.getCourtSiteCode())) {
-            // Different court sites, alphabetic court site code comparison
-            return this.getCourtSiteCode().compareTo(other.getCourtSiteCode());
+        int result;
+
+        // Court site code (alphabetic)
+        result = compareNullable(
+            this.getCourtSiteCode(),
+            other.getCourtSiteCode(),
+            String::compareTo
+        );
+        if (result != 0) {
+            return result;
         }
-        if (!this.getCrestCourtRoomNo().equals(other.getCrestCourtRoomNo())) {
-            // Different court room no, numeric court room number comparison
-            return this.getCrestCourtRoomNo() - other.getCrestCourtRoomNo();
+
+        // Court room number (numeric)
+        result = compareNullable(
+            this.getCrestCourtRoomNo(),
+            other.getCrestCourtRoomNo(),
+            Integer::compare
+        );
+        if (result != 0) {
+            return result;
         }
-        if (!this.getEventTime().equals(other.getEventTime())) {
-            // Different event time, sort by timestamp (descending so most recent first)
-            return other.getEventTime().compareTo(this.getEventTime());
-        }
-        return 0;
+
+        // Event time (descending)
+        result = compareNullable(
+            this.getEventTime(),
+            other.getEventTime(),
+            (a, b) -> b.compareTo(a) // reverse order
+        );
+        return result;
     }
+
+    private static <T> int compareNullable(T first, T second, java.util.Comparator<T> comparator) {
+        if (first == null || second == null) {
+            return 0;
+        }
+        if (first.equals(second)) {
+            return 0;
+        }
+        return comparator.compare(first, second);
+    }
+
 
     @Override
     public boolean equals(Object object) {

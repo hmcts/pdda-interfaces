@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -36,7 +37,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 public class CourtListQuery extends PublicDisplayQuery {
 
     /**
@@ -111,25 +112,26 @@ public class CourtListQuery extends PublicDisplayQuery {
         return results;
     }
 
-    private List<CourtListValue> getScheduledHearingData(XhbSittingDao sittingDao,
-        List<XhbScheduledHearingDao> scheduledHearingDaos, int... courtRoomIds) {
+    private List<CourtListValue> getScheduledHearingData(
+        XhbSittingDao sittingDao,
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        int... courtRoomIds) {
+
         log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
-        List<CourtListValue> results = new ArrayList<>();
-        for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
 
-            // Check if this courtroom has been selected
-            if (!isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                scheduledHearingDao.getMovedFromCourtRoomId())) {
-                continue;
-            }
+        // Choose one scheduled hearing per hearingId, preferring those with hearingProgress,
+        // and respecting the courtroom filter (helper already does this).
+        Map<Integer, XhbScheduledHearingDao> bestByHearing =
+            pickBestScheduledPerHearing(scheduledHearingDaos, sittingDao.getCourtRoomId(), courtRoomIds);
 
-            CourtListValue result =
-                getCourtListValue(sittingDao, scheduledHearingDao);
-            results.add(result);
-
+        List<CourtListValue> results = new ArrayList<>(bestByHearing.size());
+        for (XhbScheduledHearingDao sh : bestByHearing.values()) {
+            CourtListValue row = getCourtListValue(sittingDao, sh);
+            results.add(row);
         }
         return results;
     }
+
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
         log.debug("Entering getDefendantName(String, String, String, boolean)");
@@ -173,12 +175,12 @@ public class CourtListQuery extends PublicDisplayQuery {
         // Loop the schedHearingDefendants
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos =
             getSchedHearingDefendantDaos(scheduledHearingDao.getScheduledHearingId());
-
+        
         populateResultWithDefendants(result, scheduledHearingDao, schedHearingDefDaos, isHidden);
-
+                
         return result;
     }
-
+    
     /**
      * Reducing the complexity of getCourtListValue by moving defendant population to its own method.
      * @param result The CourtListValue being populated
@@ -190,31 +192,28 @@ public class CourtListQuery extends PublicDisplayQuery {
     private CourtListValue populateResultWithDefendants(CourtListValue result,
         XhbScheduledHearingDao scheduledHearingDao,
         List<XhbSchedHearingDefendantDao> schedHearingDefDaos, boolean isHidden) {
-
+        
         if (!schedHearingDefDaos.isEmpty()) {
             for (XhbSchedHearingDefendantDao schedHearingDefendantDao : schedHearingDefDaos) {
-
+        
                 // Get the defendant on case
                 Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
                     getXhbDefendantOnCaseRepository()
                         .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
                 if (defendantOnCaseDao.isPresent() && !YES.equals(defendantOnCaseDao.get().getObsInd())) {
-
-                    // Populate the single defendant and accumulate hidden state
+        
                     populateResultWithDefendant(result, defendantOnCaseDao, isHidden);
-
-                    // Ensure hearing progress is set (null-safe)
+                    
                     result.setHearingProgress(
-                        scheduledHearingDao.getHearingProgress() != null
-                            ? scheduledHearingDao.getHearingProgress()
-                            : 0);
+                        scheduledHearingDao.getHearingProgress() != null 
+                            ? scheduledHearingDao.getHearingProgress() : 0);
                 }
             }
         }
-
+        
         return result;
     }
-
+    
     /**
      * Populates a CourtListValue with a defendant.
      * @param result The CourtListValue being populated
@@ -224,7 +223,7 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     private CourtListValue populateResultWithDefendant(CourtListValue result,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isHidden) {
-
+        
         // Get the defendant
         if (!defendantOnCaseDao.isPresent()) {
             return result;
@@ -232,14 +231,11 @@ public class CourtListQuery extends PublicDisplayQuery {
         Optional<XhbDefendantDao> defendantDao =
             getXhbDefendantRepository().findByIdSafe(defendantOnCaseDao.get().getDefendantId());
         if (defendantDao.isPresent()) {
-            boolean tmpIsHidden = isHidden
-                || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
-                || YES.contentEquals(defendantDao.get().getPublicDisplayHide());
-
+            boolean tmpIsHidden = isHidden || YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
+                || YES.equals(defendantDao.get().getPublicDisplayHide());
             DefendantName defendantName = getDefendantName(defendantDao.get().getFirstName(),
                 defendantDao.get().getMiddleName(), defendantDao.get().getSurname(), tmpIsHidden);
-
-            result.setReportingRestricted(tmpIsHidden);
+            result.setReportingRestricted(result.isReportingRestricted() || tmpIsHidden);
             result.addDefendantName(defendantName);
         }
         return result;
@@ -256,4 +252,6 @@ public class CourtListQuery extends PublicDisplayQuery {
         }
         return null;
     }
+
+
 }
