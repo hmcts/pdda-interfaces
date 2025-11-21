@@ -121,30 +121,42 @@ public final class CppDataSourceFactory {
 
         // Remove Duplicates
         List<CourtDetailValue> newList = new ArrayList<>();
+
+        // Track which (site, room) pairs we've already handled to avoid processing the same
+        // courtroom multiple times (this localised guard addresses the observed 'first court'
+        // duplicate symptom).
+        final java.util.Set<String> processedKeys = new java.util.HashSet<>();
+
         int previousRoomNo = -1;
         String previousCourtSiteCode = "";
-        for (CourtDetailValue value : data) {
-            // First check we're not processing the same court room at the same court site
-            // multiple
-            // times
-            if (previousRoomNo != value.getCrestCourtRoomNo() || previousRoomNo == value.getCrestCourtRoomNo()
-                && !previousCourtSiteCode.equals(value.getCourtSiteCode())) {
 
-                // Get all matching elements
-                List<CourtDetailValue> matchingList =
-                    findAllObjects(value, data);
+        for (CourtDetailValue value : data) {
+            // Build a stable key for this room + site pair
+            String site = value.getCourtSiteCode() == null ? "" : value.getCourtSiteCode();
+            Integer roomNoObj = value.getCrestCourtRoomNo();
+            String roomKey = roomNoObj == null ? "null" : String.valueOf(roomNoObj);
+            String pairKey = site + ":" + roomKey;
+
+            // If we've already processed this site+room, skip it.
+            if (processedKeys.contains(pairKey)) {
+                continue;
+            }
+
+            // First check we're not processing the same court room at the same court site multiple times
+            if (previousRoomNo != value.getCrestCourtRoomNo()
+                || previousRoomNo == value.getCrestCourtRoomNo()
+                    && !previousCourtSiteCode.equals(value.getCourtSiteCode())) {
+
+                // Get all matching elements (existing helper)
+                List<CourtDetailValue> matchingList = findAllObjects(value, data);
                 if (matchingList.size() == ONE) {
                     newList.add(value);
                 } else if (matchingList.size() > ONE) {
-                    // Multiple matching courtroom records found. The collection is sorted to
-                    // have the most
-                    // recent first
+                    // Multiple matching courtroom records found. The collection is sorted to have the most recent first
                     // Find the most recent record with information to display
                     CourtDetailValue matchingValue = getMatchedCourtDetailValue(matchingList);
 
-                    // If no matching record with information to display, then just use the
-                    // first in the
-                    // list
+                    // If no matching record with information to display, then just use the first in the list
                     if (matchingValue == null) {
                         newList.add(matchingList.get(0));
                     } else {
@@ -155,10 +167,14 @@ public final class CppDataSourceFactory {
                 // Update the previous room number and court site code
                 previousRoomNo = value.getCrestCourtRoomNo();
                 previousCourtSiteCode = value.getCourtSiteCode();
+
+                // Mark this site+room as processed to avoid reprocessing later (fixes the "first court" duplicate)
+                processedKeys.add(pairKey);
             }
         }
         return newList;
     }
+
     
     private static List<AllCourtStatusValue> getSortedAllCourtStatusValueList(List<AllCourtStatusValue> data) {
         // Sort the collection by court site, court room and then event time descending
