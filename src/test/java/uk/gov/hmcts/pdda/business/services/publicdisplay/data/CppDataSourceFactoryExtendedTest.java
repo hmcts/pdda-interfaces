@@ -1005,5 +1005,94 @@ class CppDataSourceFactoryExtendedTest {
         boolean hasInfo = (Boolean) hasInfoMethod.invoke(chosenForRoom1);
         assertTrue(hasInfo, "Expected the surviving room-1 entry to report hasInformationForDisplay() == true");
     }
+    
+    
+    /**
+     * Ensures that when two CourtDetailValue objects have the same courtSiteCode
+     * and crestCourtRoomNo the second one is skipped via the processedKeys.contains(pairKey) path.
+     */
+    @Test
+    void getSortedCourtDetailValueList_skipsAlreadyProcessedRoomPair() throws Exception {
+        CourtDetailValue first = new CourtDetailValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                return true;
+            }
+        };
+        CourtDetailValue second = new CourtDetailValue();
+
+        // same site & room for both
+        setPropertyBestEffort(first, "courtSiteCode", "SITE-PROCESSED", "courtSiteCode");
+        setPropertyBestEffort(second, "courtSiteCode", "SITE-PROCESSED", "courtSiteCode");
+
+        setPropertyBestEffort(first, "crestCourtRoomNo", 42, "crestCourtRoomNo");
+        setPropertyBestEffort(second, "crestCourtRoomNo", 42, "crestCourtRoomNo");
+
+        // different event times so sorting is deterministic (first is "more recent")
+        setPropertyBestEffort(first, "eventTimeAsString", "2025-11-21T12:00", "eventTimeAsString");
+        setPropertyBestEffort(second, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        // Add both entries in list and invoke
+        List<CourtDetailValue> input = new ArrayList<>();
+        input.add(first);
+        input.add(second);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // We expect only one entry (duplicate pair should be deduplicated / second skipped)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(1, output.size(), "Expected duplicate room pair to be processed only once");
+
+        // Confirm the surviving entry is for room 42
+        Integer roomNum = tryReadIntegerField(output.get(0), "crestCourtRoomNo", "crestRoomNo", "courtRoomNo");
+        assertNotNull(roomNum);
+        assertEquals(42, roomNum.intValue());
+    }
+
+    /**
+     * Ensures getSortedCourtDetailValueList handles null courtSiteCode while crestCourtRoomNo is present.
+     * Avoids creating a null crestCourtRoomNo (which causes unboxing NPE in the method).
+     */
+    @Test
+    void getSortedCourtDetailValueList_handlesNullSite_pairKeyWithNullSite() throws Exception {
+        CourtDetailValue nullSiteEntry = new CourtDetailValue();
+        
+        // First entry: null site but non-null room (use 99 as default-like value)
+        setPropertyBestEffort(nullSiteEntry, "courtSiteCode", null, "courtSiteCode");
+        setPropertyBestEffort(nullSiteEntry, "crestCourtRoomNo", 99, "crestCourtRoomNo");
+        setPropertyBestEffort(nullSiteEntry, "eventTimeAsString", "2025-11-21T08:00", "eventTimeAsString");
+
+        // Second entry: normal other room so we will get at least one entry back in result
+        CourtDetailValue other = new CourtDetailValue();
+        setPropertyBestEffort(other, "courtSiteCode", "SITE-NULL", "courtSiteCode");
+        setPropertyBestEffort(other, "crestCourtRoomNo", 7, "crestCourtRoomNo");
+        setPropertyBestEffort(other, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        List<CourtDetailValue> input = new ArrayList<>();
+        input.add(nullSiteEntry);
+        input.add(other);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // Expect method to return two entries (one for the null-site pairKey and one for the other room)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(2, output.size(), "Expected two entries: one for null-site pair and one for the other room");
+
+        // Ensure one of the returned items has crestCourtRoomNo == 99 (our sentinel)
+        boolean foundSentinelRoom = output.stream().anyMatch(x -> {
+            Integer rn = tryReadIntegerField(x, "crestCourtRoomNo", "crestRoomNo", "courtRoomNo");
+            return rn != null && rn == 99;
+        });
+        assertTrue(foundSentinelRoom, "Expected an entry corresponding to the null-site with room 99");
+    }
+
 
 }
