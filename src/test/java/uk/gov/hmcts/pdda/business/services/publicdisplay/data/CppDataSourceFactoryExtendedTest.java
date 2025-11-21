@@ -650,4 +650,180 @@ class CppDataSourceFactoryExtendedTest {
         assertEquals(1, chosenList.size());
         assertEquals("Alice M Brown", chosenList.get(0).getName(), "Defendant name should be Alice M Brown");
     }
+    
+    
+    /**
+     * Covers the branch in dedupeByCoreIdentity where sameFloating is evaluated.
+     * Two JuryStatusDailyListValue objects with identical floating values ("0")
+     * should be considered duplicates and only one should survive deduplication.
+     */
+    @Test
+    void dedupeByCoreIdentity_comparesFloatingValues() throws Exception {
+        JuryStatusDailyListValue firstEntry = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue secondEntry = new JuryStatusDailyListValue();
+
+        // Same court identity
+        setPropertyBestEffort(firstEntry, "courtSiteCode", "SITE-F", "courtSiteCode");
+        setPropertyBestEffort(secondEntry, "courtSiteCode", "SITE-F", "courtSiteCode");
+
+        setPropertyBestEffort(firstEntry, "crestCourtRoomNo", 4, "crestCourtRoomNo");
+        setPropertyBestEffort(secondEntry, "crestCourtRoomNo", 4, "crestCourtRoomNo");
+
+        // KEY: identical floating values → should trigger sameFloating == true
+        setPropertyBestEffort(firstEntry, "floating", "0", "floating");
+        setPropertyBestEffort(secondEntry, "floating", "0", "floating");
+
+        // Case numbers also identical
+        setPropertyBestEffort(firstEntry, "caseNumber", "CASENUM-123", "caseNumber", "caseNo");
+        setPropertyBestEffort(secondEntry, "caseNumber", "CASENUM-123", "caseNumber", "caseNo");
+
+        // No judge for either entry (irrelevant for this test)
+        setPropertyBestEffort(firstEntry, "judgeName", null, "judgeName");
+        setPropertyBestEffort(secondEntry, "judgeName", null, "judgeName");
+
+        // Add both entries → should dedupe into 1 result
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        input.add(firstEntry);
+        input.add(secondEntry);
+
+        Method dedupe =
+            CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> out =
+            (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        assertNotNull(out, "Output should not be null");
+        assertEquals(1, out.size(), "Expected deduplication when floating values match");
+
+        JuryStatusDailyListValue chosen = out.get(0);
+
+        // Confirm floating value actually carried through
+        Object chosenFloating = tryReadReflectiveField(chosen, "floating");
+        assertEquals("0", chosenFloating, "Floating value should remain '0'");
+    }
+    
+    /**
+     * Cover the reflection-exception path when getCaseNumber invocation fails.
+     * We override getCaseNumber() to throw, ensuring the reflection call is caught
+     * and treated as nulls, then dedupe falls back to comparing defendantNames.
+     */
+    @Test
+    void dedupeByCoreIdentity_handlesExceptionFromGetCaseNumber_and_usesDefendantNames()
+        throws Exception {
+
+        // Create two JuryStatusDailyListValue instances that throw from getCaseNumber()
+        JuryStatusDailyListValue entryA = new JuryStatusDailyListValue() {
+            @Override
+            public String getCaseNumber() {
+                throw new RuntimeException("simulated reflection failure");
+            }
+        };
+        JuryStatusDailyListValue entryB = new JuryStatusDailyListValue() {
+            @Override
+            public String getCaseNumber() {
+                throw new RuntimeException("simulated reflection failure");
+            }
+        };
+
+        // Core identity: same court site and crest room number
+        setPropertyBestEffort(entryA, "courtSiteCode", "SITE-EXC", "courtSiteCode");
+        setPropertyBestEffort(entryB, "courtSiteCode", "SITE-EXC", "courtSiteCode");
+
+        setPropertyBestEffort(entryA, "crestCourtRoomNo", 21, "crestCourtRoomNo");
+        setPropertyBestEffort(entryB, "crestCourtRoomNo", 21, "crestCourtRoomNo");
+
+        // Same floating value
+        setPropertyBestEffort(entryA, "floating", "0", "floating");
+        setPropertyBestEffort(entryB, "floating", "0", "floating");
+
+        // Both case numbers will throw when invoked -> reflection catches and treats as nulls.
+        // Provide identical defendantNames lists (different instances) so fallback equality is true.
+        List<DefendantName> listA = new ArrayList<>();
+        listA.add(new DefendantName("Tom", null, "Jones", false));
+        List<DefendantName> listB = new ArrayList<>();
+        listB.add(new DefendantName("Tom", null, "Jones", false));
+
+        setPropertyBestEffort(entryA, "defendantNames", listA, "defendantNames");
+        setPropertyBestEffort(entryB, "defendantNames", listB, "defendantNames");
+
+        // Add both entries and invoke dedupe
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        input.add(entryA);
+        input.add(entryB);
+
+        Method dedupe = CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> out = (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        // Expect deduplication to treat them as the same (because caseA/caseB treated as null,
+        // and defendantNames lists are equal), so only one remains.
+        assertNotNull(out, "Output should not be null");
+        assertEquals(1, out.size(), "Expected a single item after deduplication when getCaseNumber"
+            + "reflection fails and defendantNames match");
+
+        // Confirm the surviving entry has the expected defendant surname
+        Object chosenDefs = tryReadReflectiveField(out.get(0), "defendantNames");
+        assertNotNull(chosenDefs);
+        @SuppressWarnings("unchecked")
+        List<DefendantName> chosenList = (List<DefendantName>) chosenDefs;
+        assertEquals(1, chosenList.size());
+        assertEquals("Tom Jones", chosenList.get(0).getName());
+    }
+
+    /**
+     * Cover the path where sameSite && sameRoom && sameFloating && sameCase is true
+     * and the candidate is added to the matching list. We create two values with:
+     *  - identical site/room/floating
+     *  - both have non-null case numbers that are equal
+     * Expect dedupe to reduce to a single element.
+     */
+    @Test
+    void dedupeByCoreIdentity_addsCandidateWhenAllIdentityPartsMatch() throws Exception {
+        JuryStatusDailyListValue entry1 = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue entry2 = new JuryStatusDailyListValue();
+
+        // Core identity: same court site and crest room number
+        setPropertyBestEffort(entry1, "courtSiteCode", "SITE-MATCH", "courtSiteCode");
+        setPropertyBestEffort(entry2, "courtSiteCode", "SITE-MATCH", "courtSiteCode");
+
+        setPropertyBestEffort(entry1, "crestCourtRoomNo", 99, "crestCourtRoomNo");
+        setPropertyBestEffort(entry2, "crestCourtRoomNo", 99, "crestCourtRoomNo");
+
+        // Same floating values
+        setPropertyBestEffort(entry1, "floating", "1", "floating");
+        setPropertyBestEffort(entry2, "floating", "1", "floating");
+
+        // Both have identical non-null case numbers -> caseA != null && caseA.equals(caseB) branch used
+        setPropertyBestEffort(entry1, "caseNumber", "CASE-XYZ", "caseNumber", "caseNo");
+        setPropertyBestEffort(entry2, "caseNumber", "CASE-XYZ", "caseNumber", "caseNo");
+
+        // Give entry2 a judge so we can assert that the richer entry is preserved if logic chooses it
+        JudgeName judge = new JudgeName("Judge Title", "Morgan");
+        setPropertyBestEffort(entry2, "judgeName", judge, "judgeName");
+
+        // Add both entries (entry1 first to simulate duplication order)
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        input.add(entry1);
+        input.add(entry2);
+
+        Method dedupe = CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> result = (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        // Expect deduplication to yield a single element
+        assertNotNull(result);
+        assertEquals(1, result.size(), "Expected one entry after deduplication when all identity parts match");
+
+        // Ensure the surviving entry contains the judge (so the richer candidate was preferred)
+        Object judgeObj = tryReadReflectiveField(result.get(0), "judgeName");
+        assertNotNull(judgeObj, "Surviving entry should have a judge when one candidate had a judge");
+    }
+
+
 }
