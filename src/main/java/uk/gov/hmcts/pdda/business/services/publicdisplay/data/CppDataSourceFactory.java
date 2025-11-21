@@ -94,7 +94,8 @@ public final class CppDataSourceFactory {
         } else if (CppDataType.COURTLIST_TYPE == CppDataType.fromString(shortName)) {
             return getSortedList((List<CourtListValue>) data);
         } else if (CppDataType.DAILYLIST_TYPE == CppDataType.fromString(shortName)) {
-            return getSortedList((List<JuryStatusDailyListValue>) data);
+            List<JuryStatusDailyListValue> sorted = getSortedList((List<JuryStatusDailyListValue>) data);
+            return dedupeByCoreIdentity(sorted);
         } else if (CppDataType.ALLCOURTSTATUS_TYPE == CppDataType.fromString(shortName)) {
             return getSortedAllCourtStatusValueList((List<AllCourtStatusValue>) data);
         } else if (CppDataType.SUMMARYBYNAME_TYPE == CppDataType.fromString(shortName)) {
@@ -102,7 +103,8 @@ public final class CppDataSourceFactory {
         } else if (CppDataType.ALLCASETSTATUS_TYPE == CppDataType.fromString(shortName)) {
             return getSortedList((List<AllCaseStatusValue>) data);
         } else if (CppDataType.JURYCURRENTSTATUS_TYPE == CppDataType.fromString(shortName)) {
-            return getSortedList((List<JuryStatusDailyListValue>) data);
+            List<JuryStatusDailyListValue> sorted = getSortedList((List<JuryStatusDailyListValue>) data);
+            return dedupeByCoreIdentity(sorted);
         } else {
             // document type is either null or not known
             log.error("AbstractCppToPublicDisplay.getDataSource - {}" + " - not known as a document type.", shortName);
@@ -257,4 +259,86 @@ public final class CppDataSourceFactory {
         }
         return null;
     }
+    
+    private static <T extends PublicDisplayValue> List<T> dedupeByCoreIdentity(List<T> data) {
+        List<T> result = new ArrayList<>();
+        
+        for (T value : data) {
+            // find group matches using core identity criteria
+            List<T> matching = new ArrayList<>();
+            for (T candidate : data) {
+                boolean sameSite = Objects.equals(value.getCourtSiteCode(), candidate.getCourtSiteCode());
+                boolean sameRoom = Objects.equals(value.getCrestCourtRoomNo(), candidate.getCrestCourtRoomNo());
+                boolean sameFloating = Objects.equals(
+                    (value instanceof JuryStatusDailyListValue ? ((JuryStatusDailyListValue) value).getFloating()
+                        : null),
+                    (candidate instanceof JuryStatusDailyListValue
+                        ? ((JuryStatusDailyListValue) candidate).getFloating() : null)
+                );
+                // compare caseNumber if present (via reflection/known getters) - assume T has getCaseNumber()
+                String caseA = null;
+                String caseB = null;
+                try {
+                    caseA = (String) value.getClass().getMethod("getCaseNumber").invoke(value);
+                    caseB = (String) candidate.getClass().getMethod("getCaseNumber").invoke(candidate);
+                } catch (Exception ignored) {
+                    // ignore - treat as nulls
+                }
+
+                boolean sameCase = (caseA != null && caseA.equals(caseB))
+                    || (caseA == null && caseB == null && Objects.equals(
+                           // fall back to defendant names if case numbers absent
+                           invokeGetter(value, "getDefendantNames"),
+                           invokeGetter(candidate, "getDefendantNames")
+                       ));
+
+                if (sameSite && sameRoom && sameFloating && sameCase) {
+                    matching.add(candidate);
+                }
+            }
+
+            if (!matching.isEmpty()) {
+                // pick the best one
+                T chosen = matching.get(0);
+                for (T m : matching) {
+                    // prefer one that has information for display
+                    try {
+                        java.lang.reflect.Method mth = m.getClass().getMethod("hasInformationForDisplay");
+                        Boolean hasInfo = (Boolean) mth.invoke(m);
+                        Boolean chosenHasInfo = (Boolean) chosen.getClass().getMethod("hasInformationForDisplay")
+                            .invoke(chosen);
+                        if (hasInfo != null && hasInfo && (chosenHasInfo == null || !chosenHasInfo)) {
+                            chosen = m;
+                        }
+                    } catch (Exception ignored) {
+                        // ignore
+                    }
+                    // prefer non-null judge if available
+                    try {
+                        Object judge = m.getClass().getMethod("getJudgeName").invoke(m);
+                        Object chosenJudge = chosen.getClass().getMethod("getJudgeName").invoke(chosen);
+                        if (judge != null && chosenJudge == null) {
+                            chosen = m;
+                        }
+                    } catch (Exception ignored) {
+                        // ignore
+                    }
+                }
+
+                if (!result.contains(chosen)) {
+                    result.add(chosen);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static Object invokeGetter(Object target, String method) {
+        try {
+            return target.getClass().getMethod(method).invoke(target);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
