@@ -24,8 +24,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings("PMD")
 public final class CppDataSourceFactory {
 
     private static final String EMPTY_STRING = "";
@@ -164,14 +165,25 @@ public final class CppDataSourceFactory {
         String previousCourtSiteCode = EMPTY_STRING;
         for (AllCourtStatusValue value : data) {
             // First check we're not processing the same court room at the same court site
-            // multiple
-            // times
-            if (previousRoomNo != value.getCrestCourtRoomNo() || previousRoomNo == value.getCrestCourtRoomNo()
-                && !previousCourtSiteCode.equals(value.getCourtSiteCode())) {
+            // multiple times
+            Integer roomNo;
+            if (value.getCrestCourtRoomNo() == null) {
+                // Try and get the court room number from the court room name
+                if (value.getCourtRoomName() == null) {
+                    roomNo = 1; // Default to 1 if no court room name
+                } else {
+                    roomNo = getCourtRoomNumberFromName(value.getCourtRoomName());
+                }
+            } else {
+                roomNo = value.getCrestCourtRoomNo();
+            }
+            String siteCode = value.getCourtSiteCode();
+
+            if (!Objects.equals(previousRoomNo, roomNo)
+                || !Objects.equals(previousCourtSiteCode, siteCode)) {
 
                 // Get all matching elements
-                List<AllCourtStatusValue> matchingList =
-                    findAllObjects(value, data);
+                List<AllCourtStatusValue> matchingList = findAllObjects(value, data);
                 if (matchingList.size() == ONE) {
                     newList.add(value);
                 } else if (matchingList.size() > ONE) {
@@ -192,11 +204,23 @@ public final class CppDataSourceFactory {
                 }
 
                 // Update the previous room number and court site code
-                previousRoomNo = value.getCrestCourtRoomNo();
-                previousCourtSiteCode = value.getCourtSiteCode();
+                previousRoomNo = roomNo;
+                previousCourtSiteCode = siteCode;
             }
         }
         return newList;   
+    }
+    
+    private static int getCourtRoomNumberFromName(String courtRoomName) {
+        String[] parts = courtRoomName.trim().split(" ");
+        for (String part : parts) {
+            try {
+                return Integer.parseInt(part);
+            } catch (NumberFormatException e) {
+                // Not a number, continue
+            }
+        }
+        return 1; // Default to 1 if no number found
     }
     
     private static <T extends PublicDisplayValue> List<T> getSortedList(List<T> data) {

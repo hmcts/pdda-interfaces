@@ -7,6 +7,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNod
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 /**
  * Common superclass for public display data classes.
@@ -327,27 +328,60 @@ public class PublicDisplayValue extends AbstractValue implements Comparable<Publ
 
     @Override
     public int compareTo(PublicDisplayValue other) {
-        if (!this.courtSiteCode.equals(other.getCourtSiteCode())) {
-            return this.courtSiteCode.compareTo(other.getCourtSiteCode());
+        int result = compareNullableStrings(this.courtSiteCode, other.getCourtSiteCode());
+        if (result != 0) {
+            return result;
         }
-        if (!this.crestCourtRoomNo.equals(other.getCrestCourtRoomNo())) {
-            return this.crestCourtRoomNo - other.getCrestCourtRoomNo();
-        }
-        return 0;
+
+        result = compareNullableIntegers(this.crestCourtRoomNo, other.getCrestCourtRoomNo());
+        return result;
     }
+
+    private static int compareNullableStrings(String first, String second) {
+        if (first == null && second == null) {
+            return 0;
+        }
+        if (first == null) {
+            return -1;
+        }
+        if (second == null) {
+            return 1;
+        }
+        return first.compareTo(second);
+    }
+
+    private static int compareNullableIntegers(Integer first, Integer second) {
+        if (first == null && second == null) {
+            return 0;
+        }
+        if (first == null) {
+            return -1;
+        }
+        if (second == null) {
+            return 1;
+        }
+        return Integer.compare(first, second);
+    }
+
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof AllCourtStatusValue
-            && this.getCourtSiteCode().equals(((AllCourtStatusValue) object).getCourtSiteCode())
-            && this.getCrestCourtRoomNo().equals(((AllCourtStatusValue) object).getCrestCourtRoomNo());
+        if (this == object) {
+            return true;
+        }
+        if (object == null || this.getClass() != object.getClass()) {
+            return false;
+        }
+        PublicDisplayValue other = (PublicDisplayValue) object;
+        return Objects.equals(this.getCourtSiteCode(), other.getCourtSiteCode())
+            && Objects.equals(this.getCrestCourtRoomNo(), other.getCrestCourtRoomNo());
     }
 
     @Override
     public int hashCode() {
-        String hash = this.getCourtSiteCode() + this.getCrestCourtRoomNo();
-        return hash.hashCode();
+        return Objects.hash(getCourtSiteCode(), getCrestCourtRoomNo());
     }
+
 
     /**
      * Method used to compare two timestamps which could potentially be null.

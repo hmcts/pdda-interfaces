@@ -1,18 +1,17 @@
 package uk.gov.hmcts.pdda.common.publicdisplay.renderdata;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 /**
  * This class provides the data for daily list and jury status document.
 
  * @author pznwc5
  */
+@SuppressWarnings("PMD")
 public class JuryStatusDailyListValue extends CourtListValue {
 
     static final long serialVersionUID = 4966427551623410138L;
 
-    private static final Logger LOG = LoggerFactory.getLogger(JuryStatusDailyListValue.class);
     /**
      * Judge name.
      */
@@ -84,13 +83,39 @@ public class JuryStatusDailyListValue extends CourtListValue {
 
     @Override
     public boolean equals(Object object) {
-        LOG.debug("equals()");
-        return super.equals(object);
+        if (this == object) {
+            return true;
+        }
+        if (object == null || this.getClass() != object.getClass()) {
+            return false;
+        }
+
+        JuryStatusDailyListValue other = (JuryStatusDailyListValue) object;
+
+        if (!Objects.equals(this.getCourtSiteCode(), other.getCourtSiteCode())) {
+            return false;
+        }
+        if (!Objects.equals(this.getCrestCourtRoomNo(), other.getCrestCourtRoomNo())) {
+            return false;
+        }
+        if (!Objects.equals(this.getCaseNumber(), other.getCaseNumber())) {
+            return false;
+        }
+        if (!Objects.equals(this.getFloating(), other.getFloating())) {
+            return false;
+        }
+        return (!Objects.equals(this.getDefendantNames(), other.getDefendantNames()));
     }
 
     @Override
     public int hashCode() {
-        LOG.debug("hashCode()");
-        return super.hashCode();
+        return Objects.hash(
+            getCourtSiteCode(),
+            getCrestCourtRoomNo(),
+            getCaseNumber(),
+            getFloating(),
+            getDefendantNames()
+        );
     }
+
 }
