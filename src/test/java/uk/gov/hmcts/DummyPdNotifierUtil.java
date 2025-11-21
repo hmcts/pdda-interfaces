@@ -189,9 +189,9 @@ public final class DummyPdNotifierUtil {
         result.setPriority(2);
         result.setDesc(result.getDesc());
         result.setPriority(result.getPriority());
-        result.setIsActive(result.isActive());
+        result.setIsActive(result.getIsActive());
         result.setDefinitivePublicNotice(result.getDefinitivePublicNotice());
-        result.setDirty(result.isDirtyFlagged());
+        result.setDirty(result.getDirty());
         DisplayablePublicNoticeValue compareTo = new DisplayablePublicNoticeValue();
         compareTo.setPriority(3);
         assertNotEquals(0, result.compareTo(compareTo), NOTEQUALS);

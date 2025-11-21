@@ -52,7 +52,7 @@ public final class PublicNoticeMaintainer {
 
     public static XhbConfiguredPublicNoticeDao updateIsActive(DisplayablePublicNoticeValue value,
         XhbConfiguredPublicNoticeDao basicValue) {
-        basicValue.setIsActive(value.isActive() ? PN_ACTIVE : PN_INACTIVE);
+        basicValue.setIsActive(value.getIsActive() ? PN_ACTIVE : PN_INACTIVE);
 
         // Set the version for optimistic lock checking.
         basicValue.setVersion(value.getVersion());

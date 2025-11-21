@@ -71,7 +71,7 @@ public final class PublicNoticeSelectionValidator {
         // walk through and see if number selected is greater the
         for (int i = displayablePublicNoticeValues.length - 1; i >= 0; i--) {
 
-            if (displayablePublicNoticeValues[i].isActive()) {
+            if (displayablePublicNoticeValues[i].getIsActive()) {
                 numberSelectedAsAcive++;
             }
         }

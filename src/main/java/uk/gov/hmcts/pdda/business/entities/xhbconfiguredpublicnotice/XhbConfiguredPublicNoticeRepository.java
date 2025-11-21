@@ -93,5 +93,20 @@ public class XhbConfiguredPublicNoticeRepository
             return List.of(); // Safe fallback
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbConfiguredPublicNoticeDao> findByCourtRoomIdSafe(Integer courtRoomId) {
+        LOG.debug("findByCourtRoomIdSafe(courtRoomId: {})", courtRoomId);
 
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query =
+                em.createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByCourtRoomId");
+            query.setParameter("courtRoomId", courtRoomId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomIdSafe({}): {}", courtRoomId,
+                e.getMessage(), e);
+            return List.of(); // Safe fallback
+        }
+    }
 }

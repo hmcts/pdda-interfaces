@@ -629,40 +629,60 @@ public class SftpService extends XhibitPddaHelper {
         // Get Court Room Identifier from the event
         CourtRoomIdentifier courtRoomIdentifier = event.getCourtRoomIdentifier();
         
-        // TODO If all public notices for that court room are present in the event then reset them here.
-        
         if (courtRoomIdentifier != null) {
+            // Get all existing public notices for that court room
+            List<XhbConfiguredPublicNoticeDao> xhbConfiguredPublicNoticeDaos =
+                getConfiguredPublicNoticeRepository()
+                .findByCourtRoomIdSafe(courtRoomIdentifier.getCourtRoomId());
+            
+            if (!xhbConfiguredPublicNoticeDaos.isEmpty()) {
+                LOG.debug("No. of XhbConfiguredPublicNoticeDao's to be set to inactive: {}",
+                    xhbConfiguredPublicNoticeDaos.size());
+                
+                // Loop through all public notices for that court room and set to inactive
+                for (XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao : xhbConfiguredPublicNoticeDaos) {
+                    xhbConfiguredPublicNoticeDao.setIsActive("0");
+                    getConfiguredPublicNoticeRepository().update(xhbConfiguredPublicNoticeDao);
+                    LOG.debug("XhbConfiguredPublicNoticeDao's with ID: {} reset to inactive",
+                        xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
+                }
+            }
+            // Get the public notices from the event
             DisplayablePublicNoticeValue[] publicNotices = courtRoomIdentifier.getPublicNotices();
             
             if (publicNotices.length > 0) {
-                LOG.debug("No. of DisplayablePublicNoticeValue's: {}", publicNotices.length);
+                LOG.debug("No. of DisplayablePublicNoticeValue's to be processed: {}", publicNotices.length);
+                setActivePublicNotices(publicNotices, courtRoomIdentifier);
+            }
+        }
+    }
+    
+    private void setActivePublicNotices(DisplayablePublicNoticeValue[] publicNotices,
+        CourtRoomIdentifier courtRoomIdentifier) {
+        for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
+            // Get the XhbPublicNoticeDao
+            Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = getPublicNoticeRepository()
+                .findByCourtIdAndDefPublicNoticeId(courtRoomIdentifier.getCourtId(),
+                    publicNotice.getDefinitivePublicNotice());
+            
+            if (xhbPublicNoticeDao.isPresent()) {
+                LOG.debug("XhbPublicNoticeDao found with ID: {}",
+                    xhbPublicNoticeDao.get().getPublicNoticeId());
                 
-                for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
-                    // Get the XhbPublicNoticeDao
-                    Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = getPublicNoticeRepository()
-                        .findByCourtIdAndDefPublicNoticeId(courtRoomIdentifier.getCourtId(),
-                            publicNotice.getDefinitivePublicNotice());
-                    
-                    if (xhbPublicNoticeDao.isPresent()) {
-                        LOG.debug("XhbPublicNoticeDao found with ID: {}",
-                            xhbPublicNoticeDao.get().getPublicNoticeId());
-                        
-                        // Get the XhbConfiguredPublicNoticeDao
-                        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao =
-                            getConfiguredPublicNoticeRepository().findByDefinitivePnCourtRoomValueSafe(
-                                courtRoomIdentifier.getCourtRoomId(), xhbPublicNoticeDao.get()
-                                .getPublicNoticeId()).get(0);
-                        
-                        if (xhbConfiguredPublicNoticeDao != null) {
-                            LOG.debug("XhbConfiguredPublicNoticeDao found with ID: {}",
-                                xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
-                            if (publicNotice.isActive()) {
-                                // TODO Check if we need to update the inactive displays too 
-                                // or if the isActive var is populated
-                                xhbConfiguredPublicNoticeDao.setIsActive("1");
-                                getConfiguredPublicNoticeRepository().update(xhbConfiguredPublicNoticeDao);
-                            }
-                        }
+                // Get the XhbConfiguredPublicNoticeDao
+                XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao =
+                    getConfiguredPublicNoticeRepository().findByDefinitivePnCourtRoomValueSafe(
+                        courtRoomIdentifier.getCourtRoomId(), xhbPublicNoticeDao.get()
+                        .getPublicNoticeId()).get(0);
+                
+                if (xhbConfiguredPublicNoticeDao != null) {
+                    LOG.debug("XhbConfiguredPublicNoticeDao found with ID: {}",
+                        xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
+                    if (publicNotice.getIsActive()) {
+                        xhbConfiguredPublicNoticeDao.setIsActive("1");
+                        getConfiguredPublicNoticeRepository().update(xhbConfiguredPublicNoticeDao);
+                        LOG.debug("XhbConfiguredPublicNoticeDao with ID: {}, set to active",
+                            xhbConfiguredPublicNoticeDao.getConfiguredPublicNoticeId());
                     }
                 }
             }
