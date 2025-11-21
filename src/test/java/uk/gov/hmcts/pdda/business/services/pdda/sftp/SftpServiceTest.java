@@ -851,14 +851,18 @@ class SftpServiceTest {
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         
         // Entered processPublicNoticeEvent(...)
+        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao = 
+            DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("1");
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+            .findByCourtRoomIdSafe(EasyMock.isA(Integer.class)))
+                .andStubReturn(List.of(xhbConfiguredPublicNoticeDao));
+        
         Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = 
             Optional.of(DummyPublicDisplayUtil.getXhbPublicNoticeDao());
         EasyMock.expect(mockXhbPublicNoticeRepository
             .findByCourtIdAndDefPublicNoticeId(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(xhbPublicNoticeDao);
         
-        XhbConfiguredPublicNoticeDao xhbConfiguredPublicNoticeDao = 
-            DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("1");
         EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
             .findByDefinitivePnCourtRoomValueSafe(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(List.of(xhbConfiguredPublicNoticeDao));

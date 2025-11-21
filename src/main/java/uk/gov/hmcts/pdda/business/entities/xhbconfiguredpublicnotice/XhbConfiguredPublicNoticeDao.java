@@ -21,6 +21,8 @@ import java.time.LocalDateTime;
         + "AND o.publicNoticeId = :publicNoticeId ")
 @NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findActiveCourtRoomNotices",
     query = "SELECT o from XHB_CONFIGURED_PUBLIC_NOTICE o WHERE o.courtRoomId = :courtRoomId AND o.isActive = '1'")
+@NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findByCourtRoomId",
+    query = "SELECT o from XHB_CONFIGURED_PUBLIC_NOTICE o WHERE o.courtRoomId = :courtRoomId")
 public class XhbConfiguredPublicNoticeDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;

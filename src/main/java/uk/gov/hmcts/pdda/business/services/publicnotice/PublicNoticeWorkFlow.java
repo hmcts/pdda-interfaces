@@ -105,7 +105,7 @@ public class PublicNoticeWorkFlow {
         for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
 
             // update if marked as dirty( IsActive/status change)
-            if (publicNotice.isDirtyFlagged()) {
+            if (publicNotice.getDirty()) {
                 updateConfiguredPublicNoticeActivationState(publicNotice);
                 // if any of the ActivationStates are updated need to send a
                 // notification to Public displays.

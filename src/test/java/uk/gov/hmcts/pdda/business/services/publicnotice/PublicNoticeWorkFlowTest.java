@@ -67,10 +67,16 @@ class PublicNoticeWorkFlowTest {
     @SuppressWarnings("static-access")
     @Test
     void testSetAllPublicNoticesForCourtRoom() {
+        DisplayablePublicNoticeValue displayablePublicNoticeValue = new DisplayablePublicNoticeValue();
+        displayablePublicNoticeValue.setDirty(true);
+        displayablePublicNoticeValue.setDefinitivePublicNotice(-1);
+        
+        DisplayablePublicNoticeValue[] displayablePublicNoticeValues =
+            new DisplayablePublicNoticeValue[] {displayablePublicNoticeValue};
+        
         boolean result = false;
         try {
-            classUnderTest.setAllPublicNoticesForCourtRoom(new DisplayablePublicNoticeValue[] {},
-                COURT_ID);
+            classUnderTest.setAllPublicNoticesForCourtRoom(displayablePublicNoticeValues, COURT_ID);
             result = true;
         } catch (Exception exception) {
             fail(exception);

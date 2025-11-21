@@ -1,7 +1,5 @@
 package uk.gov.courtservice.xhibit.business.vos.services.publicnotice;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
 
 /**
@@ -21,18 +19,17 @@ import uk.gov.hmcts.framework.business.vos.CsAbstractValue;
  * @version 1.0
  */
 
+@SuppressWarnings("PMD.BooleanGetMethodName") // Suppressing to maintain an exact class match to xhibit
 public class DisplayablePublicNoticeValue extends CsAbstractValue implements Comparable<Object> {
     private static final long serialVersionUID = 4470489343477594601L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(DisplayablePublicNoticeValue.class);
     
     private String desc;
 
-    private boolean active;
+    private boolean isActive;
 
     private int priority;
 
-    private Integer definitivePublicNoticeId;
+    private Integer definitivePublicNoticeID;
 
     private boolean dirty;
 
@@ -57,8 +54,8 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
         Integer versionNumber, Integer definitivePublicNoticeId) {
         super(configuredPnId, versionNumber);
         this.desc = desc;
-        this.active = active;
-        this.definitivePublicNoticeId = definitivePublicNoticeId;
+        this.isActive = active;
+        this.definitivePublicNoticeID = definitivePublicNoticeId;
         this.dirty = false;
     }
 
@@ -86,25 +83,7 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
     public String getDesc() {
         return desc;
     }
-
-    /**
-     * Gets the isActive attribute of the DisplayablePublicNoticeValue object.
-
-     * @return The isActive value
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Gets the priority attribute of the DisplayablePublicNoticeValue object.
-
-     * @return The priority value
-     */
-    public int getPriority() {
-        return priority;
-    }
-
+    
     /**
      * Sets the desc attribute of the DisplayablePublicNoticeValue object.
 
@@ -115,14 +94,33 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
     }
 
     /**
+     * Gets the isActive attribute of the DisplayablePublicNoticeValue object.
+
+     * @return The isActive value
+     */
+    public boolean getIsActive() {
+        return isActive;
+    }
+    
+    /**
      * Sets the isActive attribute of the DisplayablePublicNoticeValue object.
 
      * @param isActive The new isActive value
      */
     public void setIsActive(boolean isActive) {
-        this.active = isActive;
+        this.isActive = isActive;
     }
 
+
+    /**
+     * Gets the priority attribute of the DisplayablePublicNoticeValue object.
+
+     * @return The priority value
+     */
+    public int getPriority() {
+        return priority;
+    }
+    
     /**
      * Sets the priority attribute of the DisplayablePublicNoticeValue object.
 
@@ -138,7 +136,7 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
      * @param definitivePublicNotice The new definitivePublicNotice value
      */
     public void setDefinitivePublicNotice(Integer definitivePublicNotice) {
-        this.definitivePublicNoticeId = definitivePublicNotice;
+        this.definitivePublicNoticeID = definitivePublicNotice;
     }
 
     /**
@@ -147,7 +145,7 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
      * @return The definitivePublicNotice value
      */
     public Integer getDefinitivePublicNotice() {
-        return this.definitivePublicNoticeId;
+        return this.definitivePublicNoticeID;
     }
 
     /**
@@ -155,7 +153,7 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
 
      * @return The dirty value
      */
-    public boolean isDirtyFlagged() {
+    public boolean getDirty() {
         return dirty;
     }
 
@@ -188,17 +186,5 @@ public class DisplayablePublicNoticeValue extends CsAbstractValue implements Com
         }
 
         return 1;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        LOG.debug("equals()");
-        return super.equals(obj);
-    }
-
-    @Override
-    public int hashCode() {
-        LOG.debug("hashCode()");
-        return super.hashCode();
     }
 }
