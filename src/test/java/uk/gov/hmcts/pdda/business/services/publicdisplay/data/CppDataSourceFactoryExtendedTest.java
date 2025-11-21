@@ -6,6 +6,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.CourtDetailValue;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.JudgeName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.JuryStatusDailyListValue;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -555,5 +557,97 @@ class CppDataSourceFactoryExtendedTest {
             }
         }
         return null;
+    }
+    
+    
+    /**
+     * Verify that invokeGetter returns the expected value for an existing getter
+     * and returns null for a non-existent getter.
+     */
+    @Test
+    void private_invokeGetter_returnsValueOrNull() throws Exception {
+        // Prepare an object with defendantNames set
+        JuryStatusDailyListValue subject = new JuryStatusDailyListValue();
+        List<DefendantName> defendants = new ArrayList<>();
+        defendants.add(new DefendantName("Jane", null, "Doe", false));
+        setPropertyBestEffort(subject, "defendantNames", defendants, "defendantNames");
+
+        // Reflectively call invokeGetter(target, "getDefendantNames")
+        Method invokeGetter = CppDataSourceFactory.class.getDeclaredMethod("invokeGetter", Object.class, String.class);
+        invokeGetter.setAccessible(true);
+
+        Object returned = invokeGetter.invoke(null, subject, "getDefendantNames");
+        assertNotNull(returned, "invokeGetter should return the defendantNames list");
+        assertTrue(returned instanceof List, "Returned object should be a List");
+        @SuppressWarnings("unchecked")
+        List<DefendantName> returnedList = (List<DefendantName>) returned;
+        assertEquals(1, returnedList.size());
+        assertEquals("Jane Doe", returnedList.get(0).getName(), "Defendant name should match");
+
+        // Non-existing getter should return null
+        Object noMethod = invokeGetter.invoke(null, subject, "nonExistingGetterXYZ");
+        assertNull(noMethod, "invokeGetter should return null for missing method");
+    }
+    
+    /**
+     * Verify dedupeByCoreIdentity falls back to comparing defendant names when caseNumber is null
+     * for both entries and that duplicate entries are deduplicated (one remains).
+     */
+    @Test
+    void dedupeByCoreIdentity_fallsBackToDefendantNames_whenCaseNumbersNull() throws Exception {
+        // Two values with same core identity but null caseNumber; they each have identical defendantNames
+        JuryStatusDailyListValue entryA = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue entryB = new JuryStatusDailyListValue();
+
+        // Core identity: same court site and crest room number
+        setPropertyBestEffort(entryA, "courtSiteCode", "SITE-Z", "courtSiteCode");
+        setPropertyBestEffort(entryB, "courtSiteCode", "SITE-Z", "courtSiteCode");
+
+        setPropertyBestEffort(entryA, "crestCourtRoomNo", 11, "crestCourtRoomNo");
+        setPropertyBestEffort(entryB, "crestCourtRoomNo", 11, "crestCourtRoomNo");
+
+        // Same floating flag (string)
+        setPropertyBestEffort(entryA, "floating", "0", "floating");
+        setPropertyBestEffort(entryB, "floating", "0", "floating");
+
+        // Explicitly set caseNumber to null for both (best-effort)
+        setPropertyBestEffort(entryA, "caseNumber", null, "caseNumber", "caseNo");
+        setPropertyBestEffort(entryB, "caseNumber", null, "caseNumber", "caseNo");
+
+        // Both entries get identical defendant names lists
+        List<DefendantName> defendants = new ArrayList<>();
+        defendants.add(new DefendantName("Alice", "M", "Brown", false));
+        setPropertyBestEffort(entryA, "defendantNames", defendants, "defendantNames");
+        // create a separate List instance but with equivalent content to ensure equality path is tested
+        List<DefendantName> defendantsCopy = new ArrayList<>();
+        defendantsCopy.add(new DefendantName("Alice", "M", "Brown", false));
+        setPropertyBestEffort(entryB, "defendantNames", defendantsCopy, "defendantNames");
+
+        // Build input list (both entries)
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        input.add(entryA);
+        input.add(entryB);
+
+        // Invoke private dedupeByCoreIdentity
+        Method dedupe = CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> out = (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        // Expect only one element (deduplicated)
+        assertNotNull(out, "Output should not be null");
+        assertEquals(1, out.size(), "Expected one entry after deduplication when case numbers are"
+            + "null and defendantNames match");
+
+        // Verify the remaining entry contains our defendant name
+        JuryStatusDailyListValue chosen = out.get(0);
+        Object chosenDefendants = tryReadReflectiveField(chosen, "defendantNames");
+        assertNotNull(chosenDefendants, "Chosen entry should contain defendantNames");
+        assertTrue(chosenDefendants instanceof List, "defendantNames should be a List");
+        @SuppressWarnings("unchecked")
+        List<DefendantName> chosenList = (List<DefendantName>) chosenDefendants;
+        assertEquals(1, chosenList.size());
+        assertEquals("Alice M Brown", chosenList.get(0).getName(), "Defendant name should be Alice M Brown");
     }
 }
