@@ -92,7 +92,10 @@ public final class CppDataSourceFactory {
         if (CppDataType.COURTDETAIL_TYPE == CppDataType.fromString(shortName)) {
             return getSortedCourtDetailValueList((List<CourtDetailValue>) data);
         } else if (CppDataType.COURTLIST_TYPE == CppDataType.fromString(shortName)) {
-            return getSortedList((List<CourtListValue>) data);
+            List<CourtListValue> sorted = getSortedList((List<CourtListValue>) data);
+            @SuppressWarnings("unchecked")
+            List<CourtListValue> deduped = (List<CourtListValue>) (List<?>) dedupeByCoreIdentity(sorted);
+            return deduped;
         } else if (CppDataType.DAILYLIST_TYPE == CppDataType.fromString(shortName)) {
             List<JuryStatusDailyListValue> sorted = getSortedList((List<JuryStatusDailyListValue>) data);
             return dedupeByCoreIdentity(sorted);
