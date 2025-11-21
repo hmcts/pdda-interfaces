@@ -59,7 +59,16 @@ public class JuryStatusDailyListValue extends CourtListValue {
      * @return true if the cases is unassigned
      */
     public boolean isFloating() {
-        return IS_FLOATING.equals(floating);
+        if (floating == null) {
+            return false;
+        }
+        if (IS_FLOATING.equals(floating)) {
+            return true;
+        }
+        if ("Y".equalsIgnoreCase(floating)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -104,7 +113,9 @@ public class JuryStatusDailyListValue extends CourtListValue {
         if (!Objects.equals(this.getFloating(), other.getFloating())) {
             return false;
         }
-        return (!Objects.equals(this.getDefendantNames(), other.getDefendantNames()));
+
+        // Correct behaviour: return true when defendantNames are equal (not negate)
+        return Objects.equals(this.getDefendantNames(), other.getDefendantNames());
     }
 
     @Override

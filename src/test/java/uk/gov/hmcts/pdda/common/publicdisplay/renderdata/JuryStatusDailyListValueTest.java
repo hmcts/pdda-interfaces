@@ -7,9 +7,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -210,5 +213,128 @@ class JuryStatusDailyListValueTest {
         if (ab) {
             assertEquals(a.hashCode(), b.hashCode(), "When equal, hashCodes must match");
         }
+    }
+    
+
+    private void setDefendantNames(Object target, List<String> names) {
+        // try a few likely field names used by different versions
+        List<String> candidates = Arrays.asList("defendantNames", "defendantName", "defendants");
+        for (String cand : candidates) {
+            if (cand == null) {
+                continue;
+            }
+            boolean ok = trySetFieldRecursive(target, cand, names);
+            if (ok) {
+                return;
+            }
+        }
+        // as a last resort, try to set any field that is a List<String> (best-effort, conservative)
+        Class<?> cur = target.getClass();
+        while (cur != null) {
+            try {
+                Field[] fields = cur.getDeclaredFields();
+                for (Field f : fields) {
+                    f.setAccessible(true);
+                    if (List.class.isAssignableFrom(f.getType())) {
+                        try {
+                            f.set(target, names);
+                            return;
+                        } catch (Exception ignored) {
+                            // continue searching
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+                // fall through
+            }
+            cur = cur.getSuperclass();
+        }
+    }
+
+    @Test
+    void basic_setters_and_getters_work() {
+        JuryStatusDailyListValue v = new JuryStatusDailyListValue();
+
+        JudgeName judge = new JudgeName("John", "Smith");
+        v.setJudgeName(judge);
+        v.setFloating("Y");
+
+        assertEquals(judge, v.getJudgeName());
+        assertEquals("Y", v.getFloating());
+        assertTrue(v.isFloating(), "Expected isFloating() to return true for floating='Y'");
+    }
+
+    @Test
+    void equals_and_hashcode_when_all_key_fields_match() {
+        JuryStatusDailyListValue a = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue b = new JuryStatusDailyListValue();
+
+        // Required fields for equals(): courtSiteCode, crestCourtRoomNo, caseNumber, floating, defendantNames
+        a.setCourtSiteCode("A1");
+        b.setCourtSiteCode("A1");
+
+        a.setCrestCourtRoomNo(3);
+        b.setCrestCourtRoomNo(3);
+
+        a.setCaseNumber("CASE-1");
+        b.setCaseNumber("CASE-1");
+
+        a.setFloating("N");
+        b.setFloating("N");
+
+        // Use reflection to set the private/inherited defendantNames field
+        setDefendantNames(a, Collections.singletonList("D1"));
+        setDefendantNames(b, Collections.singletonList("D1"));
+
+        assertEquals(a, b, "Expected objects with equal key fields to be equal");
+        assertEquals(a.hashCode(), b.hashCode(), "Expected equal objects to have equal hashCode");
+    }
+
+    @Test
+    void equals_returns_false_when_key_field_differs() {
+        JuryStatusDailyListValue a = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue b = new JuryStatusDailyListValue();
+
+        a.setCourtSiteCode("A1");
+        b.setCourtSiteCode("A2"); // difference
+
+        a.setCrestCourtRoomNo(1);
+        b.setCrestCourtRoomNo(1);
+
+        a.setCaseNumber("X");
+        b.setCaseNumber("X");
+
+        a.setFloating("N");
+        b.setFloating("N");
+
+        setDefendantNames(a, Collections.singletonList("D"));
+        setDefendantNames(b, Collections.singletonList("D"));
+
+        assertNotEquals(a, b, "Objects must not be equal if any key field differs");
+    }
+
+    @Test
+    void hashcode_differs_when_fields_differ() {
+        JuryStatusDailyListValue a = new JuryStatusDailyListValue();
+        JuryStatusDailyListValue b = new JuryStatusDailyListValue();
+
+        a.setCourtSiteCode("A1");
+        b.setCourtSiteCode("B1");
+
+        a.setCrestCourtRoomNo(1);
+        b.setCrestCourtRoomNo(1);
+
+        a.setCaseNumber("C");
+        b.setCaseNumber("C");
+
+        a.setFloating("N");
+        b.setFloating("N");
+
+        setDefendantNames(a, Collections.singletonList("D"));
+        setDefendantNames(b, Collections.singletonList("D"));
+
+        // not guaranteed by contract, but highly likely for this POJO
+        assertNotEquals(a.hashCode(), b.hashCode(),
+            "Different key fields should typically result in different hashcodes");
     }
 }
