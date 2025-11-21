@@ -825,5 +825,118 @@ class CppDataSourceFactoryExtendedTest {
         assertNotNull(judgeObj, "Surviving entry should have a judge when one candidate had a judge");
     }
 
+    /**
+     * Ensure dedupeByCoreIdentity prefers an entry where hasInformationForDisplay() == true,
+     * and that an exception thrown from invoking hasInformationForDisplay() on a candidate
+     * is ignored (does not break processing).
+     */
+    @Test
+    void dedupeByCoreIdentity_prefersCandidateWithHasInformationAnd_ignoresExceptions() throws Exception {
+        // Create a base entry that will be the initial chosen candidate (hasInformationForDisplay == false)
+        JuryStatusDailyListValue baseEntry = new JuryStatusDailyListValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                return false;
+            }
+        };
+
+        // Candidate 1: hasInformationForDisplay == true -> should become chosen
+        JuryStatusDailyListValue candidateWithInfo = new JuryStatusDailyListValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                return true;
+            }
+        };
+
+        // Candidate 2: throws when hasInformationForDisplay is invoked -> should be ignored (caught)
+        JuryStatusDailyListValue candidateThrowing = new JuryStatusDailyListValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                throw new RuntimeException("simulated failure during hasInformationForDisplay");
+            }
+        };
+
+        // Make sure they all appear to be the "same" core identity so they are considered matching:
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        for (JuryStatusDailyListValue v : Arrays.asList(baseEntry, candidateWithInfo, candidateThrowing)) {
+            setPropertyBestEffort(v, "courtSiteCode", "SITE-INFO", "courtSiteCode");
+            setPropertyBestEffort(v, "crestCourtRoomNo", 77, "crestCourtRoomNo");
+            setPropertyBestEffort(v, "floating", "0", "floating");
+            // ensure caseNumber is identical to group them; use same case number
+            setPropertyBestEffort(v, "caseNumber", "CASE-INFO-1", "caseNumber", "caseNo");
+            input.add(v);
+        }
+
+        // Call the private dedupe helper
+        Method dedupe = CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> out = (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        // Expect deduplication to yield single element and that it is the candidateWithInfo
+        assertNotNull(out, "Output should not be null");
+        assertEquals(1, out.size(), "Expected one item after deduplication");
+
+        Object surviving = out.get(0);
+        // Confirm surviving has hasInformationForDisplay()==true via reflective invocation
+        Method hasInfoMethod = surviving.getClass().getMethod("hasInformationForDisplay");
+        boolean survivingHasInfo = (Boolean) hasInfoMethod.invoke(surviving);
+        assertTrue(survivingHasInfo, "Surviving entry should be the one with hasInformationForDisplay()==true");
+    }
+
+    @Test
+    void dedupeByCoreIdentity_prefersNonNullJudge_and_handlesGetJudgeNameExceptions() throws Exception {
+        // initial chosen: no judge (overrides getter to return null)
+        JuryStatusDailyListValue entryNoJudge = new JuryStatusDailyListValue() {
+            @Override
+            public JudgeName getJudgeName() {
+                return null;
+            }
+        };
+
+        // candidateWithJudge: supplies a non-null judge -> should be preferred
+        JuryStatusDailyListValue candidateWithJudge = new JuryStatusDailyListValue() {
+            @Override
+            public JudgeName getJudgeName() {
+                return new JudgeName("Preferred Judge", "Adams");
+            }
+        };
+
+        // candidateThrowing: throws when getJudgeName() invoked (should be ignored)
+        JuryStatusDailyListValue candidateThrowingJudge = new JuryStatusDailyListValue() {
+            @Override
+            public JudgeName getJudgeName() {
+                throw new RuntimeException("simulated getJudgeName failure");
+            }
+        };
+
+        // Place them into the same identity group
+        List<JuryStatusDailyListValue> input = new ArrayList<>();
+        for (JuryStatusDailyListValue v : Arrays.asList(entryNoJudge, candidateWithJudge, candidateThrowingJudge)) {
+            setPropertyBestEffort(v, "courtSiteCode", "SITE-JUDGE", "courtSiteCode");
+            setPropertyBestEffort(v, "crestCourtRoomNo", 88, "crestCourtRoomNo");
+            setPropertyBestEffort(v, "floating", "0", "floating");
+            setPropertyBestEffort(v, "caseNumber", "CASE-JUDGE-1", "caseNumber", "caseNo");
+            input.add(v);
+        }
+
+        Method dedupe = CppDataSourceFactory.class.getDeclaredMethod("dedupeByCoreIdentity", List.class);
+        dedupe.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<JuryStatusDailyListValue> out = (List<JuryStatusDailyListValue>) dedupe.invoke(null, input);
+
+        // Expect only one entry and it should be the one containing the non-null judge
+        assertNotNull(out);
+        assertEquals(1, out.size(), "Expected only one survivor after dedupe");
+
+        JuryStatusDailyListValue chosen = out.get(0);
+
+        // **Corrected assertion:** invoke the getter rather than reading the backing field.
+        Method getJudgeMethod = chosen.getClass().getMethod("getJudgeName");
+        Object chosenJudge = getJudgeMethod.invoke(chosen);
+        assertNotNull(chosenJudge, "Expected the surviving entry to have a non-null judgeName");
+    }
+
+
 
 }
