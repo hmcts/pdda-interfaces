@@ -938,5 +938,222 @@ class CppDataSourceFactoryExtendedTest {
     }
 
 
+    /**
+     * Verifies the updated getSortedCourtDetailValueList deduplicates the same
+     * (courtSiteCode, crestCourtRoomNo) pair and prefers the entry whose
+     * hasInformationForDisplay() returns true.
+     */
+    @Test
+    void getSortedCourtDetailValueList_skipsDuplicateRoomAndPrefersMatchingInfo_v2() throws Exception {
+        // Create two CourtDetailValue objects for the same site/room:
+        // - poorerEntry: default hasInformationForDisplay() (likely false for CourtDetailValue)
+        // - richerEntry: override hasInformationForDisplay() to return true (preferred)
+        CourtDetailValue poorerEntry = new CourtDetailValue();
+
+        CourtDetailValue richerEntry = new CourtDetailValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                return true; // explicitly mark as richer so matcher prefers this one
+            }
+        };
+
+        // Same site and room for the first two
+        setPropertyBestEffort(poorerEntry, "courtSiteCode", "SITE-DETAIL", "courtSiteCode");
+        setPropertyBestEffort(richerEntry, "courtSiteCode", "SITE-DETAIL", "courtSiteCode");
+        setPropertyBestEffort(poorerEntry, "crestCourtRoomNo", 1, "crestCourtRoomNo");
+        setPropertyBestEffort(richerEntry, "crestCourtRoomNo", 1, "crestCourtRoomNo");
+
+        // Different (other) room
+        CourtDetailValue otherRoom = new CourtDetailValue();
+        setPropertyBestEffort(otherRoom, "courtSiteCode", "SITE-DETAIL", "courtSiteCode");
+        setPropertyBestEffort(otherRoom, "crestCourtRoomNo", 2, "crestCourtRoomNo");
+
+        // Different event time strings so sorting order is deterministic
+        setPropertyBestEffort(poorerEntry, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+        setPropertyBestEffort(richerEntry, "eventTimeAsString", "2025-11-21T12:00", "eventTimeAsString");
+        setPropertyBestEffort(otherRoom, "eventTimeAsString", "2025-11-21T10:00", "eventTimeAsString");
+
+        // Prepare input list (order matters - simulate "poorer" first)
+        List<CourtDetailValue> input = new ArrayList<>();
+        input.add(poorerEntry);
+        input.add(richerEntry);
+        input.add(otherRoom);
+
+        // Invoke private method
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // We expect one entry for room 1 (deduplicated) and one for room 2
+        assertNotNull(output, "Output should not be null");
+        assertEquals(2, output.size(), "Expected two entries after deduplication (one per room)");
+
+        // Find the surviving entry for room 1
+        CourtDetailValue chosenForRoom1 = output.stream()
+            .filter(x -> {
+                Integer rn = tryReadIntegerField(x, "crestCourtRoomNo", "crestRoomNo", "courtRoomNo");
+                return rn != null && rn == 1;
+            })
+            .findFirst()
+            .orElse(null);
+
+        assertNotNull(chosenForRoom1, "Expected an entry for room 1");
+
+        // Ensure the chosen entry reports hasInformationForDisplay() == true
+        Method hasInfoMethod = chosenForRoom1.getClass().getMethod("hasInformationForDisplay");
+        boolean hasInfo = (Boolean) hasInfoMethod.invoke(chosenForRoom1);
+        assertTrue(hasInfo, "Expected the surviving room-1 entry to report hasInformationForDisplay() == true");
+    }
+    
+    
+    /**
+     * Ensures that when two CourtDetailValue objects have the same courtSiteCode
+     * and crestCourtRoomNo the second one is skipped via the processedKeys.contains(pairKey) path.
+     */
+    @Test
+    void getSortedCourtDetailValueList_skipsAlreadyProcessedRoomPair() throws Exception {
+        CourtDetailValue first = new CourtDetailValue() {
+            @Override
+            public boolean hasInformationForDisplay() {
+                return true;
+            }
+        };
+        CourtDetailValue second = new CourtDetailValue();
+
+        // same site & room for both
+        setPropertyBestEffort(first, "courtSiteCode", "SITE-PROCESSED", "courtSiteCode");
+        setPropertyBestEffort(second, "courtSiteCode", "SITE-PROCESSED", "courtSiteCode");
+
+        setPropertyBestEffort(first, "crestCourtRoomNo", 42, "crestCourtRoomNo");
+        setPropertyBestEffort(second, "crestCourtRoomNo", 42, "crestCourtRoomNo");
+
+        // different event times so sorting is deterministic (first is "more recent")
+        setPropertyBestEffort(first, "eventTimeAsString", "2025-11-21T12:00", "eventTimeAsString");
+        setPropertyBestEffort(second, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        // Add both entries in list and invoke
+        List<CourtDetailValue> input = new ArrayList<>();
+        input.add(first);
+        input.add(second);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // We expect only one entry (duplicate pair should be deduplicated / second skipped)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(1, output.size(), "Expected duplicate room pair to be processed only once");
+
+        // Confirm the surviving entry is for room 42
+        Integer roomNum = tryReadIntegerField(output.get(0), "crestCourtRoomNo", "crestRoomNo", "courtRoomNo");
+        assertNotNull(roomNum);
+        assertEquals(42, roomNum.intValue());
+    }
+
+    /**
+     * Ensures getSortedCourtDetailValueList handles null courtSiteCode while crestCourtRoomNo is present.
+     * Avoids creating a null crestCourtRoomNo (which causes unboxing NPE in the method).
+     */
+    @Test
+    void getSortedCourtDetailValueList_handlesNullSite_pairKeyWithNullSite() throws Exception {
+        CourtDetailValue nullSiteEntry = new CourtDetailValue();
+        
+        // First entry: null site but non-null room (use 99 as default-like value)
+        setPropertyBestEffort(nullSiteEntry, "courtSiteCode", null, "courtSiteCode");
+        setPropertyBestEffort(nullSiteEntry, "crestCourtRoomNo", 99, "crestCourtRoomNo");
+        setPropertyBestEffort(nullSiteEntry, "eventTimeAsString", "2025-11-21T08:00", "eventTimeAsString");
+
+        // Second entry: normal other room so we will get at least one entry back in result
+        CourtDetailValue other = new CourtDetailValue();
+        setPropertyBestEffort(other, "courtSiteCode", "SITE-NULL", "courtSiteCode");
+        setPropertyBestEffort(other, "crestCourtRoomNo", 7, "crestCourtRoomNo");
+        setPropertyBestEffort(other, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        List<CourtDetailValue> input = new ArrayList<>();
+        input.add(nullSiteEntry);
+        input.add(other);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // Expect method to return two entries (one for the null-site pairKey and one for the other room)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(2, output.size(), "Expected two entries: one for null-site pair and one for the other room");
+
+        // Ensure one of the returned items has crestCourtRoomNo == 99 (our sentinel)
+        boolean foundSentinelRoom = output.stream().anyMatch(x -> {
+            Integer rn = tryReadIntegerField(x, "crestCourtRoomNo", "crestRoomNo", "courtRoomNo");
+            return rn != null && rn == 99;
+        });
+        assertTrue(foundSentinelRoom, "Expected an entry corresponding to the null-site with room 99");
+    }
+
+    /**
+     * Cover the branch where previousRoomNo == currentRoomNo but previousCourtSiteCode
+     * != currentCourtSiteCode (i.e. same room number across different sites).
+     * Also include a third record that duplicates the first (same site+room) to ensure
+     * the processedKeys skip path is exercised.
+     */
+    @Test
+    void getSortedCourtDetailValueList_sameRoomDifferentSite_and_skipDuplicatePair() throws Exception {
+        CourtDetailValue first = new CourtDetailValue();
+        
+        // first -> SITE-A room 5
+        setPropertyBestEffort(first, "courtSiteCode", "SITE-A", "courtSiteCode");
+        setPropertyBestEffort(first, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(first, "eventTimeAsString", "2025-11-21T12:00", "eventTimeAsString");
+
+        // second -> SITE-B room 5 (same room number, different site) -> should be processed
+        CourtDetailValue secondSameRoomDiffSite = new CourtDetailValue();
+        setPropertyBestEffort(secondSameRoomDiffSite, "courtSiteCode", "SITE-B", "courtSiteCode");
+        setPropertyBestEffort(secondSameRoomDiffSite, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(secondSameRoomDiffSite, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        // third -> same as first (SITE-A room 5), should be skipped because pairKey SITE-A:5 already processed
+        CourtDetailValue thirdDuplicateOfFirst = new CourtDetailValue();
+        setPropertyBestEffort(thirdDuplicateOfFirst, "courtSiteCode", "SITE-A", "courtSiteCode");
+        setPropertyBestEffort(thirdDuplicateOfFirst, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(thirdDuplicateOfFirst, "eventTimeAsString", "2025-11-21T08:00", "eventTimeAsString");
+
+        List<CourtDetailValue> input = new ArrayList<>();
+        // Order is important: first (A:5), second (B:5), third (A:5 duplicate)
+        input.add(first);
+        input.add(secondSameRoomDiffSite);
+        input.add(thirdDuplicateOfFirst);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // We expect two entries: one for SITE-A:5 and one for SITE-B:5 (third is duplicate of SITE-A:5 and skipped)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(2, output.size(), "Expected two entries: one per distinct site+room pair");
+
+        // Ensure both site codes are present in the returned list
+        List<String> returnedSites = new ArrayList<>();
+        for (CourtDetailValue cv : output) {
+            String site = tryReadStringField(cv, "courtSiteCode", "siteCode");
+            returnedSites.add(site);
+        }
+
+        assertTrue(returnedSites.contains("SITE-A"), "Expected SITE-A result present");
+        assertTrue(returnedSites.contains("SITE-B"), "Expected SITE-B result present");
+
+        // Also verify that no duplicate SITE-A:5 appears (only one entry per site+room pair)
+        long siteACount = output.stream()
+            .filter(x -> "SITE-A".equals(tryReadStringField(x, "courtSiteCode", "siteCode"))
+                && Integer.valueOf(5).equals(tryReadIntegerField(x, "crestCourtRoomNo", "crestRoomNo", "courtRoomNo")))
+            .count();
+        assertEquals(1L, siteACount, "Expected only one entry for SITE-A room 5 (duplicate skipped)");
+    }
+
 
 }
