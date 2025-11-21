@@ -1094,5 +1094,66 @@ class CppDataSourceFactoryExtendedTest {
         assertTrue(foundSentinelRoom, "Expected an entry corresponding to the null-site with room 99");
     }
 
+    /**
+     * Cover the branch where previousRoomNo == currentRoomNo but previousCourtSiteCode
+     * != currentCourtSiteCode (i.e. same room number across different sites).
+     * Also include a third record that duplicates the first (same site+room) to ensure
+     * the processedKeys skip path is exercised.
+     */
+    @Test
+    void getSortedCourtDetailValueList_sameRoomDifferentSite_and_skipDuplicatePair() throws Exception {
+        CourtDetailValue first = new CourtDetailValue();
+        
+        // first -> SITE-A room 5
+        setPropertyBestEffort(first, "courtSiteCode", "SITE-A", "courtSiteCode");
+        setPropertyBestEffort(first, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(first, "eventTimeAsString", "2025-11-21T12:00", "eventTimeAsString");
+
+        // second -> SITE-B room 5 (same room number, different site) -> should be processed
+        CourtDetailValue secondSameRoomDiffSite = new CourtDetailValue();
+        setPropertyBestEffort(secondSameRoomDiffSite, "courtSiteCode", "SITE-B", "courtSiteCode");
+        setPropertyBestEffort(secondSameRoomDiffSite, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(secondSameRoomDiffSite, "eventTimeAsString", "2025-11-21T09:00", "eventTimeAsString");
+
+        // third -> same as first (SITE-A room 5), should be skipped because pairKey SITE-A:5 already processed
+        CourtDetailValue thirdDuplicateOfFirst = new CourtDetailValue();
+        setPropertyBestEffort(thirdDuplicateOfFirst, "courtSiteCode", "SITE-A", "courtSiteCode");
+        setPropertyBestEffort(thirdDuplicateOfFirst, "crestCourtRoomNo", 5, "crestCourtRoomNo");
+        setPropertyBestEffort(thirdDuplicateOfFirst, "eventTimeAsString", "2025-11-21T08:00", "eventTimeAsString");
+
+        List<CourtDetailValue> input = new ArrayList<>();
+        // Order is important: first (A:5), second (B:5), third (A:5 duplicate)
+        input.add(first);
+        input.add(secondSameRoomDiffSite);
+        input.add(thirdDuplicateOfFirst);
+
+        Method m = CppDataSourceFactory.class.getDeclaredMethod("getSortedCourtDetailValueList", List.class);
+        m.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<CourtDetailValue> output = (List<CourtDetailValue>) m.invoke(null, input);
+
+        // We expect two entries: one for SITE-A:5 and one for SITE-B:5 (third is duplicate of SITE-A:5 and skipped)
+        assertNotNull(output, "Output should not be null");
+        assertEquals(2, output.size(), "Expected two entries: one per distinct site+room pair");
+
+        // Ensure both site codes are present in the returned list
+        List<String> returnedSites = new ArrayList<>();
+        for (CourtDetailValue cv : output) {
+            String site = tryReadStringField(cv, "courtSiteCode", "siteCode");
+            returnedSites.add(site);
+        }
+
+        assertTrue(returnedSites.contains("SITE-A"), "Expected SITE-A result present");
+        assertTrue(returnedSites.contains("SITE-B"), "Expected SITE-B result present");
+
+        // Also verify that no duplicate SITE-A:5 appears (only one entry per site+room pair)
+        long siteACount = output.stream()
+            .filter(x -> "SITE-A".equals(tryReadStringField(x, "courtSiteCode", "siteCode"))
+                && Integer.valueOf(5).equals(tryReadIntegerField(x, "crestCourtRoomNo", "crestRoomNo", "courtRoomNo")))
+            .count();
+        assertEquals(1L, siteACount, "Expected only one entry for SITE-A room 5 (duplicate skipped)");
+    }
+
 
 }
