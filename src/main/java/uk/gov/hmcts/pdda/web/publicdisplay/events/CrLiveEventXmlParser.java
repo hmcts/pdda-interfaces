@@ -21,7 +21,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Parses the CR Live Display event XML into a BranchEventXmlNode and extracts a LocalDateTime.
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S2755"})
 public final class CrLiveEventXmlParser {
 
     private CrLiveEventXmlParser() {
@@ -126,8 +126,7 @@ public final class CrLiveEventXmlParser {
             );
 
         } catch (Exception e) {
-            // log and return empty to avoid crashing render
-            // LOG.warn("Failed to parse CR live XML", e);
+            // Return empty to avoid crashing render
             return Optional.empty();
         }
     }

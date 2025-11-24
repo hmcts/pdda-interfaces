@@ -25,11 +25,13 @@ class AllCaseStatusValueNewFieldsTest {
         // isListedInThisCourtRoom depends on listCourtRoomId and courtRoomId
         v.setListCourtRoomId(Integer.valueOf(10));
         // ensure courtRoomId different -> should be false
-        v.setCourtRoomId(Integer.valueOf(20));
+        Integer courtRoomIdTwenty = 20;
+        v.setCourtRoomId(courtRoomIdTwenty);
         assertFalse(v.isListedInThisCourtRoom(), "Different list vs room id -> not listed in this room");
 
         // make them equal -> should be true
-        v.setCourtRoomId(Integer.valueOf(10));
+        Integer courtRoomIdTen = 10;
+        v.setCourtRoomId(courtRoomIdTen);
         assertTrue(v.isListedInThisCourtRoom(), "Equal list vs room id -> listed in this room");
     }
 }

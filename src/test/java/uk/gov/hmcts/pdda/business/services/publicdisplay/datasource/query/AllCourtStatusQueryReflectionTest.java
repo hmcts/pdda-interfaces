@@ -40,7 +40,8 @@ class AllCourtStatusQueryReflectionTest {
 
         AllCourtStatusValue v3 = new AllCourtStatusValue();
         // no name, no crest -> fallback to courtRoomId
-        v3.setCourtRoomId(Integer.valueOf(123));
+        Integer courtRoomId = 123;
+        v3.setCourtRoomId(courtRoomId);
         Integer r3 = (Integer) m.invoke(null, v3);
         assertNotNull(r3);
         assertEquals(123, r3.intValue(), "Should fall back to courtRoomId when crest/name absent");
