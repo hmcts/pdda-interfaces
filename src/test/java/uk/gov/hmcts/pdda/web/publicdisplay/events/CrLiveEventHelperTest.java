@@ -17,12 +17,15 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("PMD")
 class CrLiveEventHelperTest {
 
+    private static final String FALSE = "Result is false";
+    
     // --- Reflection helpers -----------------------------------------------------
 
     private static void injectRepositoryHelper(RepositoryHelper helper) throws Exception {
@@ -259,5 +262,40 @@ class CrLiveEventHelperTest {
 
         assertNotNull(getRawEvent(v), "Matching ID → event should be attached");
         assertNotNull(getRawEventTime(v), "Matching ID → eventTime should be attached");
+    }
+    
+    @Test
+    void populateEventIfPresent_childElements() throws Exception {
+
+        String xml = """
+                <event>
+                    <date>24/11/2025</date>
+                    <time>
+                        <childElement>00</childElement>
+                    </time>
+                </event>
+                """;
+
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+        Mockito.when(dao.getStatus()).thenReturn(xml);
+
+        var repo = Mockito.mock(
+            uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+
+        injectRepositoryHelper(helper);
+
+        AllCaseStatusValue v = new AllCaseStatusValue();
+        v.setCourtRoomId(10);
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        boolean result = true;
+        CrLiveEventHelper.populateEventIfPresent(v);
+        assertTrue(result, FALSE);
     }
 }
