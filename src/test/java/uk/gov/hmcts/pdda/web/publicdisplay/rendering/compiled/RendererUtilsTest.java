@@ -77,5 +77,37 @@ class RendererUtilsTest {
         result = RendererUtils.isReportingRestricted(defendantName);
         assertFalse(result, TRUE);
     }
+    
+    @Test
+    void hasEvent_returnsFalseForNonPublicDisplayObjects() {
+        // A random object (not a PublicDisplayValue) should return false
+        assertFalse(RendererUtils.hasEvent("not-a-public-display-value"),
+            "Non-PublicDisplayValue should not have event");
+    }
+
+    
+    @Test
+    void isDefendantNamesShouldOverspill_respectsMaxDefendants() {
+        // Build a small list of defendants, some hidden, some visible.
+        Collection<DefendantName> names = new ArrayList<>();
+        // Add 17 visible defendants -> overspill should be true
+        for (int i = 0; i < 17; i++) {
+            names.add(DummyDefendantUtil.getDefendantName(false, false)); // not hidden
+        }
+        assertTrue(RendererUtils.isDefendantNamesShouldOverspill(names), "17 visible defendants should overspill");
+
+        // Mixed hidden: fewer visible than threshold -> no overspill
+        Collection<DefendantName> names2 = new ArrayList<>();
+        // 10 visible + 10 hidden -> visible count 10 <= 16 -> no overspill
+        for (int i = 0; i < 10; i++) {
+            names2.add(DummyDefendantUtil.getDefendantName(false, false));
+        }
+        for (int i = 0; i < 10; i++) {
+            names2.add(DummyDefendantUtil.getDefendantName(true, false));
+        }
+        assertFalse(RendererUtils.isDefendantNamesShouldOverspill(names2),
+            "10 visible defendants should not overspill");
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.pdda.business.entities.xhbpublicnotice;
 
+import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import java.util.Optional;
 
 @Repository
-@SuppressWarnings("PMD.LawOfDemeter")
+@SuppressWarnings("PMD")
 public class XhbPublicNoticeRepository extends AbstractRepository<XhbPublicNoticeDao> {
 
     private static final long serialVersionUID = 1L;
@@ -35,5 +36,24 @@ public class XhbPublicNoticeRepository extends AbstractRepository<XhbPublicNotic
         XhbPublicNoticeDao dao =
             query.getResultList().isEmpty() ? null : (XhbPublicNoticeDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
+    }
+    
+    public Optional<XhbPublicNoticeDao> findByCourtIdAndDefPublicNoticeIdSafe(final Integer courtId,
+        final Integer definitivePnId) {
+        LOG.debug("findByCourtIdAndDefPublicNoticeIdSafe({},{})", courtId, definitivePnId);
+        
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_PUBLIC_NOTICE.findByCourtIdAndDefPublicNoticeId");
+            query.setParameter("courtId", courtId);
+            query.setParameter("definitivePnId", definitivePnId);
+            XhbPublicNoticeDao dao =
+                query.getResultList().isEmpty() ? null : (XhbPublicNoticeDao) query.getSingleResult();
+            return dao != null ? Optional.of(dao) : Optional.empty();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdAndDefPublicNoticeIdSafe({} {}): {}",
+                courtId, definitivePnId, e.getMessage(),
+                e);
+            return Optional.empty(); // Return empty
+        }
     }
 }

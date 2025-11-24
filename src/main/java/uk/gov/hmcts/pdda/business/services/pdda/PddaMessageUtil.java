@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.services.pdda;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ActivateCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.AddCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
@@ -139,7 +140,19 @@ public final class PddaMessageUtil {
         Integer newCourtId = getRealCourtId(courtName, courtRepository);
         Integer newCourtRoomId =
             getRealCourtRoomId(newCourtId, courtRoomNo, courtRoomRepository, courtSiteRepository);
-        return new CourtRoomIdentifier(newCourtId, newCourtRoomId, courtName, courtRoomNo);
+
+        CourtRoomIdentifier updated = new CourtRoomIdentifier(newCourtId, newCourtRoomId, courtName, courtRoomNo);
+
+        // ---- Preserve publicNotices (if present) ----
+        DisplayablePublicNoticeValue[] notices = current.getPublicNotices();
+        if (notices != null) {
+            // defensive copy so we don't share mutable array instance
+            DisplayablePublicNoticeValue[] copy = new DisplayablePublicNoticeValue[notices.length];
+            System.arraycopy(notices, 0, copy, 0, notices.length);
+            updated.setPublicNotices(copy);
+        }
+
+        return updated;
     }
 
     /** Generic utility that uses method references to avoid casts/interfaces. */
@@ -237,7 +250,7 @@ public final class PddaMessageUtil {
         XhbCourtRoomRepository courtRoomRepository, XhbCourtSiteRepository courtSiteRepository) {
 
         // Get the correct court room id, but first need the court site id
-        List<XhbCourtSiteDao> courtSites = courtSiteRepository.findByCourtId(newCourtId);
+        List<XhbCourtSiteDao> courtSites = courtSiteRepository.findByCourtIdSafe(newCourtId);
         if (!courtSites.isEmpty()) {
             XhbCourtSiteDao courtSite = courtSites.get(0);
             Integer courtSiteId = courtSite.getCourtSiteId();

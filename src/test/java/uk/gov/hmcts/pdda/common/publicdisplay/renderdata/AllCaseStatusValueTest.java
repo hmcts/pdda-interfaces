@@ -238,4 +238,50 @@ class AllCaseStatusValueTest {
             assertNotNull(Integer.valueOf(h2));
         }
     }
+    
+    @Test
+    void new_id_fields_and_hearingDescription_aliasing() {
+        AllCaseStatusValue v = new AllCaseStatusValue();
+
+        // New integer id fields
+        v.setScheduledHearingId(Integer.valueOf(1234));
+        v.setDefendantOnCaseId(Integer.valueOf(2222));
+        v.setHearingId(Integer.valueOf(3333));
+
+        assertEquals(Integer.valueOf(1234), v.getScheduledHearingId(), "scheduledHearingId round-trip");
+        assertEquals(Integer.valueOf(2222), v.getDefendantOnCaseId(), "defendantOnCaseId round-trip");
+        assertEquals(Integer.valueOf(3333), v.getHearingId(), "hearingId round-trip");
+
+        // Hearing description: exercise both spellings to show they map to same backing field
+        v.setHearingDescription("Formal hearing");
+        // spelled getter should return same text
+        assertEquals("Formal hearing", v.getHearingDescription(), "hearingDescription via normal getter");
+
+        // Now use the misspelled setter (present on the class) and ensure both getters see the change
+        v.setHearingDecsription("Misspelled setter text");
+        assertEquals("Misspelled setter text", v.getHearingDescription(),
+            "misspelled setter reflected in normal getter");
+        assertEquals("Misspelled setter text", v.getHearingDecsription(),
+            "misspelled getter returns same backing field");
+    }
+
+    @Test
+    void isListedInThisCourtRoom_trueWhenListCourtRoomIdEqualsCourtRoomId() {
+        AllCaseStatusValue v = new AllCaseStatusValue();
+
+        // Set the listCourtRoomId using public API
+        v.setListCourtRoomId(Integer.valueOf(42));
+
+        // Set the object's courtRoomId so isListedInThisCourtRoom() returns true.
+        // the PublicDisplayValue hierarchy exposes courtRoomId; set via reflection helper
+        // to avoid depending on its visibility
+        setPropertyBestEffort(v, "courtRoomId", Integer.valueOf(42), "courtRoomId");
+
+        assertTrue(v.isListedInThisCourtRoom(), "Should be listed in this court room when ids match");
+
+        // Change the object's courtRoomId to a different value: should now be false
+        setPropertyBestEffort(v, "courtRoomId", Integer.valueOf(99), "courtRoomId");
+        assertTrue(!v.isListedInThisCourtRoom(), "Should not be listed in this court room when ids differ");
+    }
+
 }

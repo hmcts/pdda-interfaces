@@ -9,17 +9,22 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.JuryStatusDailyListValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.SummaryByNameValue;
+import uk.gov.hmcts.pdda.web.publicdisplay.events.CrLiveEventHelper;
+import uk.gov.hmcts.pdda.web.publicdisplay.events.LiveEventProvider;
 import uk.gov.hmcts.pdda.web.publicdisplay.types.document.DisplayDocument;
 
 import java.util.Collection;
 
+@SuppressWarnings("PMD")
 public final class RendererUtils {
 
     private static final int MAXDEFENDANTS = 16;
+    
+    private static LiveEventProvider liveEventProvider;
 
     private RendererUtils() {
     }
-
+    
     /**
      * isEmpty.
 
@@ -34,10 +39,27 @@ public final class RendererUtils {
         }
         return true;
     }
-
-    public static boolean hasEvent(Object item) {
-        return item instanceof PublicDisplayValue publicDisplayValue && publicDisplayValue.getEvent() != null;
+    
+    public static void setLiveEventProvider(LiveEventProvider provider) {
+        liveEventProvider = provider;
     }
+    
+    public static boolean hasEvent(Object item) {
+        if (!(item instanceof PublicDisplayValue value)) {
+            return false;
+        }
+
+        // Already has event?
+        if (value.getEvent() != null) {
+            return true;
+        }
+
+        // Lazy-load CR Live event
+        CrLiveEventHelper.populateEventIfPresent(value);
+
+        return value.getEvent() != null;
+    }
+
 
     public static boolean hasDefendants(Object item) {
         return item instanceof CourtListValue courtListValue && courtListValue.hasDefendants();

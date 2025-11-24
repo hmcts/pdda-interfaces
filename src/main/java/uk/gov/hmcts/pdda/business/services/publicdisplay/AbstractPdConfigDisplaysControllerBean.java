@@ -109,7 +109,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
      */
     public XhbRotationSetsDao[] getRotationSetsForCourt(final Integer courtId) {
         LOG.debug("getRotationSetsForCourt({})", courtId);
-        return getXhbRotationSetsRepository().findByCourtId(courtId).toArray(new XhbRotationSetsDao[0]);
+        return getXhbRotationSetsRepository().findByCourtIdSafe(courtId).toArray(new XhbRotationSetsDao[0]);
     }
 
     /**

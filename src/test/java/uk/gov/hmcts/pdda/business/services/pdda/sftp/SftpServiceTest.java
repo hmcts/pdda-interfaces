@@ -81,6 +81,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -860,7 +861,7 @@ class SftpServiceTest {
         Optional<XhbPublicNoticeDao> xhbPublicNoticeDao = 
             Optional.of(DummyPublicDisplayUtil.getXhbPublicNoticeDao());
         EasyMock.expect(mockXhbPublicNoticeRepository
-            .findByCourtIdAndDefPublicNoticeId(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
+            .findByCourtIdAndDefPublicNoticeIdSafe(EasyMock.isA(Integer.class), EasyMock.isA(Integer.class)))
                 .andStubReturn(xhbPublicNoticeDao);
         
         EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
@@ -1892,6 +1893,168 @@ class SftpServiceTest {
         assertNull(bcv.getPublicDisplayEvent("anything", "<ignored/>"));
     }
 
+    
+    @Test
+    void testFindConfiguredPublicNotice_multipleResults_returnsFirst() throws Exception {
+        // Arrange
+        XhbConfiguredPublicNoticeDao first = DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("1");
+        XhbConfiguredPublicNoticeDao second = DummyPdNotifierUtil.getXhbConfiguredPublicNoticeDao("2");
+        List<XhbConfiguredPublicNoticeDao> results = List.of(first, second);
+
+        // repo will return two results (should warn and return first)
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+                .findByDefinitivePnCourtRoomValueSafe(EasyMock.anyInt(), EasyMock.anyInt()))
+            .andReturn(results);
+        EasyMock.replay(mockXhbConfiguredPublicNoticeRepository);
+
+        // Prepare inputs
+        CourtRoomIdentifier cri = new CourtRoomIdentifier(10, 100, "C", 1);
+        XhbPublicNoticeDao pubNotice = DummyPublicDisplayUtil.getXhbPublicNoticeDao();
+        pubNotice.setPublicNoticeId(77); // ensure id present
+
+        Optional<XhbPublicNoticeDao> pubOpt = Optional.of(pubNotice);
+
+        // Act
+        Optional<XhbConfiguredPublicNoticeDao> out = classUnderTest.findConfiguredPublicNotice(
+            mockXhbConfiguredPublicNoticeRepository, cri, pubOpt, LoggerFactory.getLogger(SftpService.class));
+
+        // Assert
+        assertTrue(out.isPresent(), "Expected optional present");
+        assertEquals(first.getConfiguredPublicNoticeId(), out.get().getConfiguredPublicNoticeId(),
+            "Should return the first element when multiple are present");
+
+        EasyMock.verify(mockXhbConfiguredPublicNoticeRepository);
+    }
+
+    @Test
+    void testFindConfiguredPublicNotice_invalidInputs_returnEmpty() {
+        // Arrange: missing courtRoomIdentifier
+        Optional<XhbPublicNoticeDao> missing = Optional.empty();
+
+        // Act: null courtRoomIdentifier
+        Optional<XhbConfiguredPublicNoticeDao> out1 = classUnderTest.findConfiguredPublicNotice(
+            mockXhbConfiguredPublicNoticeRepository, null, missing, LoggerFactory.getLogger(SftpService.class));
+        // Act: empty public notice optional
+        CourtRoomIdentifier cri = new CourtRoomIdentifier(10, 100, "C", 1);
+        Optional<XhbConfiguredPublicNoticeDao> out2 = classUnderTest.findConfiguredPublicNotice(
+            mockXhbConfiguredPublicNoticeRepository, cri, Optional.empty(),
+            LoggerFactory.getLogger(SftpService.class));
+
+        // Assert
+        assertTrue(out1.isEmpty(), "Expected empty when courtRoomIdentifier is null");
+        assertTrue(out2.isEmpty(), "Expected empty when xhbPublicNoticeDaoOpt is empty");
+    }
+
+    @Test
+    void testSetActivePublicNotices_activatesConfiguredNotice_isolatedService() throws Exception {
+        // Arrange - create the displayable PN to process
+        DisplayablePublicNoticeValue dpnv = new DisplayablePublicNoticeValue();
+        dpnv.setDefinitivePublicNotice(1);
+        dpnv.setIsActive(true);
+        
+        // Build objects returned by repositories (ensure ids match)
+        XhbPublicNoticeDao pubDao = new XhbPublicNoticeDao();
+        pubDao.setPublicNoticeId(100); // must match configured lookup expectation
+
+        XhbConfiguredPublicNoticeDao configured = new XhbConfiguredPublicNoticeDao();
+        configured.setConfiguredPublicNoticeId(999);
+
+        // Expectations on the mocks
+        EasyMock.reset(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+
+        // CourtRoomIdentifier used by the method (courtId=81, courtRoomId=8112)
+        CourtRoomIdentifier cri = new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
+        
+        // Expect public notice lookup with courtId=81 and definitivePublicNotice=1
+        EasyMock.expect(mockXhbPublicNoticeRepository
+            .findByCourtIdAndDefPublicNoticeIdSafe(EasyMock.eq(cri.getCourtId()),
+                EasyMock.eq(dpnv.getDefinitivePublicNotice())))
+            .andReturn(Optional.of(pubDao)).once();
+
+        // Expect configured public notice lookup with courtRoomId=8112 and publicNoticeId=100
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+            .findByDefinitivePnCourtRoomValueSafe(EasyMock.eq(cri.getCourtRoomId()),
+                EasyMock.eq(pubDao.getPublicNoticeId())))
+            .andReturn(List.of(configured)).once();
+
+        // Expect update(...) to be invoked to mark it active
+        EasyMock.expect(mockXhbConfiguredPublicNoticeRepository
+            .update(EasyMock.isA(XhbConfiguredPublicNoticeDao.class)))
+            .andReturn(Optional.of(configured)).once();
+
+        EasyMock.replay(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+
+        // Create an isolated SftpService that returns our mocks directly from the getters
+        SftpService svc = new SftpService(
+                mockEntityManager,
+                mockXhbConfigPropRepository,
+                mockEnvironment,
+                mockPddaMessageHelper,
+                mockXhbClobRepository,
+                mockXhbCourtRepository,
+                mockXhbCourtRoomRepository,
+                mockXhbCourtSiteRepository,
+                mockXhbCaseRepository,
+                mockXhbHearingRepository,
+                mockXhbSittingRepository,
+                mockXhbScheduledHearingRepository,
+                mockXhbPublicNoticeRepository,
+                mockXhbConfiguredPublicNoticeRepository) {
+            
+            @Override
+            protected XhbPublicNoticeRepository getPublicNoticeRepository() {
+                return mockXhbPublicNoticeRepository;
+            }
+            
+            @Override
+            protected XhbConfiguredPublicNoticeRepository getConfiguredPublicNoticeRepository() {
+                return mockXhbConfiguredPublicNoticeRepository;
+            }
+        };
+        
+        DisplayablePublicNoticeValue[] arr = new DisplayablePublicNoticeValue[] {
+            dpnv
+        };
+
+        // Invoke private method via reflection
+        var m = SftpService.class.getDeclaredMethod("setActivePublicNotices",
+                DisplayablePublicNoticeValue[].class, CourtRoomIdentifier.class);
+        m.setAccessible(true);
+        m.invoke(svc, arr, cri);
+
+        // Verify expectations
+        EasyMock.verify(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+    }
+
+
+
+    @Test
+    void testSetActivePublicNotices_skipsWhenNullsOrMissingIds() throws Exception {
+        // Reset mocks so previous state won't interfere
+        EasyMock.reset(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+
+        // Arrange: no expectations — this test ensures no repository calls are required when inputs are null/invalid
+        EasyMock.replay(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+
+        // Act + Assert: null array should return quickly (no interactions, no exceptions)
+        CourtRoomIdentifier cri = new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
+        var m = SftpService.class.getDeclaredMethod("setActivePublicNotices",
+            DisplayablePublicNoticeValue[].class, CourtRoomIdentifier.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, new Object[] { null, cri });
+
+        // Now test when courtRoomIdentifier missing ids
+        DisplayablePublicNoticeValue dpnv = new DisplayablePublicNoticeValue();
+        dpnv.setDefinitivePublicNotice(1);
+        dpnv.setIsActive(true);
+        DisplayablePublicNoticeValue[] arr = new DisplayablePublicNoticeValue[] { dpnv };
+
+        // CourtRoomIdentifier with null courtRoomId -> method should log/warn and return without calling repos
+        CourtRoomIdentifier badCri = new CourtRoomIdentifier(null, null, null, 0);
+        m.invoke(classUnderTest, arr, badCri);
+
+        EasyMock.verify(mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
+    }
 
 
 }

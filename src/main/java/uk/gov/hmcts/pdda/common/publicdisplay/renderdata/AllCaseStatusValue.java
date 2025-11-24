@@ -49,6 +49,42 @@ public class AllCaseStatusValue extends SummaryByNameValue {
      * The id of the court room that the list entry is for.
      */
     private Integer listCourtRoomId;
+    
+    private Integer scheduledHearingId;
+    private Integer defendantOnCaseId;
+    private Integer hearingId;
+
+    public String getHearingDecsription() {
+        return hearingDecsription;
+    }
+
+    public void setHearingDecsription(String hearingDecsription) {
+        this.hearingDecsription = hearingDecsription;
+    }
+
+    public Integer getScheduledHearingId() {
+        return scheduledHearingId;
+    }
+
+    public void setScheduledHearingId(Integer scheduledHearingId) {
+        this.scheduledHearingId = scheduledHearingId;
+    }
+
+    public Integer getDefendantOnCaseId() {
+        return defendantOnCaseId;
+    }
+
+    public void setDefendantOnCaseId(Integer defendantOnCaseId) {
+        this.defendantOnCaseId = defendantOnCaseId;
+    }
+
+    public Integer getHearingId() {
+        return hearingId;
+    }
+
+    public void setHearingId(Integer hearingId) {
+        this.hearingId = hearingId;
+    }
 
     /**
      * Sets the case title.

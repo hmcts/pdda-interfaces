@@ -36,7 +36,7 @@ public class XhbConfiguredPublicNoticeRepository
         Integer publicNoticeId) {
         LOG.debug("findByDefinitivePnCourtRoomValue({},{})", courtRoomId, publicNoticeId);
         Query query = getEntityManager()
-            .createNamedQuery("XHB_CONFIGURED_PUBLIC.findByDefinitivePnCourtRoomValue");
+            .createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePnCourtRoomValue");
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("publicNoticeId", publicNoticeId);
         return query.getResultList();
@@ -51,7 +51,7 @@ public class XhbConfiguredPublicNoticeRepository
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query =
-                em.createNamedQuery("XHB_CONFIGURED_PUBLIC.findByDefinitivePnCourtRoomValue");
+                em.createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePnCourtRoomValue");
             query.setParameter("courtRoomId", courtRoomId);
             query.setParameter("publicNoticeId", publicNoticeId);
 

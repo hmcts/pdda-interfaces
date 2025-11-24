@@ -52,7 +52,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected static final String NOT_FLOATING = "0";
 
     /** Logger object. */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQuery.class);
 
     protected PublicDisplayQuery(EntityManager entityManager) {
         super(entityManager);
@@ -115,7 +115,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
         List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
         if (hearingListDaos.isEmpty()) {
-            log.debug("{} - No Hearing Lists found for {}", getClass().getSimpleName(), startDate);
+            LOG.debug("{} - No Hearing Lists found for {}", getClass().getSimpleName(), startDate);
             return results;
         }
 
@@ -175,11 +175,11 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
 
     protected void populateData(PublicDisplayValue result, Integer courtSiteId, Integer courtRoomId,
         Integer movedFromCourtRoomId, LocalDateTime notBeforeTime) {
-        log.debug("populateData({},{},{},{},{})", result, courtSiteId, courtRoomId,
+        LOG.debug("populateData({},{},{},{},{})", result, courtSiteId, courtRoomId,
             movedFromCourtRoomId, notBeforeTime);
         // Set not before time
         result.setNotBeforeTime(notBeforeTime);
-        log.debug("Not before time set to: {}", notBeforeTime);
+        LOG.debug("Not before time set to: {}", notBeforeTime);
 
         // Get the court site
         Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findByIdSafe(courtSiteId);
@@ -193,7 +193,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCourtSiteShortName("");
         }
         
-        log.debug("Court site set to: {}, {}, {}",
+        LOG.debug("Court site set to: {}, {}, {}",
             result.getCourtSiteCode(), result.getCourtSiteName(), result.getCourtSiteShortName());
 
         // Get courtRoom
@@ -208,7 +208,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCrestCourtRoomNo(99);
         }
         
-        log.debug("Court room set to: {}, {}, {}",
+        LOG.debug("Court room set to: {}, {}, {}",
             result.getCourtRoomId(), result.getCourtRoomName(), result.getCrestCourtRoomNo());
 
         // Moved from courtroom
@@ -229,7 +229,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             }
         }
         
-        log.debug("Moved from court room set to: {}, {}, {}",
+        LOG.debug("Moved from court room set to: {}, {}, {}",
             result.getMovedFromCourtRoomId(), result.getMovedFromCourtRoomName(),
             result.getMovedFromCourtSiteShortName());
     }
@@ -257,20 +257,20 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected Optional<XhbRefJudgeDao> getXhbRefJudgeDao(Integer scheduledHearingId) {
-        log.debug("getXhbRefJudgeDao({})", scheduledHearingId);
+        LOG.debug("getXhbRefJudgeDao({})", scheduledHearingId);
         // Get the judge from the scheduled hearing attendees
         Optional<XhbRefJudgeDao> xhbRefJudgeDao =
             getXhbRefJudgeRepository().findScheduledAttendeeJudgeSafe(scheduledHearingId);
         if (xhbRefJudgeDao.isPresent()) {
-            log.debug("Found Judge {} in scheduledHearingAttendees",
+            LOG.debug("Found Judge {} in scheduledHearingAttendees",
                 xhbRefJudgeDao.get().getRefJudgeId());
         } else {
             xhbRefJudgeDao =
                 getXhbRefJudgeRepository().findScheduledSittingJudgeSafe(scheduledHearingId);
             if (xhbRefJudgeDao.isPresent()) {
-                log.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
+                LOG.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
             } else {
-                log.debug("No Judge found");
+                LOG.debug("No Judge found");
             }
         }
         return xhbRefJudgeDao;
@@ -300,7 +300,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
                 }
             }
         }
-        log.debug("isReportingRestricted({}) = {}", caseId, result ? "True" : "False");
+        LOG.debug("isReportingRestricted({}) = {}", caseId, result ? "True" : "False");
         return result;
     }
 

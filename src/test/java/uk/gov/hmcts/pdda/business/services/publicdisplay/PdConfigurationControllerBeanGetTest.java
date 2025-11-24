@@ -283,7 +283,7 @@ class PdConfigurationControllerBeanGetTest {
         Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Long.valueOf(ROTATION_SET_ID)))
             .thenReturn(rotationSetOpt);
         Mockito.when(mockXhbCourtRepository.findByIdSafe(COURT_ID)).thenReturn(courtOpt);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.eq(ROTATION_SET_ID)))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(Mockito.eq(ROTATION_SET_ID)))
             .thenReturn(xdList);
 
         Mockito
