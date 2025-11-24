@@ -40,7 +40,7 @@ import java.util.Optional;
 @SuppressWarnings("PMD")
 public class AllCaseStatusQuery extends PublicDisplayQuery {
 
-    private Logger log = LoggerFactory.getLogger(AllCaseStatusQuery.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AllCaseStatusQuery.class);
 
     /**
      * Constructor compiles the query (originally called
@@ -48,7 +48,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
      */
     public AllCaseStatusQuery(EntityManager entityManager) {
         super(entityManager);
-        log.debug("Query object created");
+        LOG.debug("Query object created");
     }
 
     public AllCaseStatusQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
@@ -193,7 +193,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
             result.setDefendantOnCaseId(chosen.getDefendantOnCaseId());
             result.setDefendantName(getDefendantName(chosen, isHidden));
         } else {
-            log.debug("No defendant found for scheduledHearingId: {}", scheduledHearingDao.getScheduledHearingId());
+            LOG.debug("No defendant found for scheduledHearingId: {}", scheduledHearingDao.getScheduledHearingId());
             result.setDefendantName(
                 new DefendantName(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, true));
         }

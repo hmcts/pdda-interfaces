@@ -36,6 +36,7 @@ public final class CppDataSourceFactory {
     private static final String GET_JUDGE_NAME = "getJudgeName";
     private static final String GET_DEFENDANT_NAMES = "getDefendantNames";
     private static final String HAS_INFORMATION_FOR_DISPLAY = "hasInformationForDisplay";
+    private static final String GET_CASE_NUMBER = "getCaseNumber";
     
     private static final Integer ONE = 1;
 
@@ -378,9 +379,9 @@ public final class CppDataSourceFactory {
                 String caseA = null;
                 String caseB = null;
                 try {
-                    caseA = (String) value.getClass().getMethod("getCaseNumber").invoke(value);
+                    caseA = (String) value.getClass().getMethod(GET_CASE_NUMBER).invoke(value);
                     caseB =
-                        (String) candidate.getClass().getMethod("getCaseNumber").invoke(candidate);
+                        (String) candidate.getClass().getMethod(GET_CASE_NUMBER).invoke(candidate);
                 } catch (Exception ignored) {
                     // ignore - treat as nulls
                 }
@@ -509,7 +510,7 @@ public final class CppDataSourceFactory {
             }
 
             // gather identity components
-            String caseNumber = (String) invokeGetter(v, "getCaseNumber");
+            String caseNumber = (String) invokeGetter(v, GET_CASE_NUMBER);
             Object listCourtRoomIdObj = invokeGetter(v, GET_LIST_COURT_ROOM_ID);
             String listCourtRoomId =
                 listCourtRoomIdObj == null ? "null" : String.valueOf(listCourtRoomIdObj);
