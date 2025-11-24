@@ -45,8 +45,8 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     public CourtListQuery(EntityManager entityManager) {
         super(entityManager);
-        log.debug("Entering CourtListQuery(EntityManager)");
-        log.debug("Query object created");
+        LOG.debug("Entering CourtListQuery(EntityManager)");
+        LOG.debug("Query object created");
     }
 
     public CourtListQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
@@ -60,7 +60,7 @@ public class CourtListQuery extends PublicDisplayQuery {
             xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
             xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
             xhbDefendantRepository, null, null, null);
-        log.debug("Entering CourtListQuery(EntityManager, ...repositories)");
+        LOG.debug("Entering CourtListQuery(EntityManager, ...repositories)");
     }
 
     /**
@@ -74,7 +74,7 @@ public class CourtListQuery extends PublicDisplayQuery {
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
-        log.debug("Entering getData(LocalDateTime, int, int...)");
+        LOG.debug("Entering getData(LocalDateTime, int, int...)");
 
         LocalDateTime startDate = DateTimeUtilities.stripTime(date);
 
@@ -83,7 +83,7 @@ public class CourtListQuery extends PublicDisplayQuery {
         // Loop the hearing lists
         List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
         if (hearingListDaos.isEmpty()) {
-            log.debug("CourtListQuery - No Hearing Lists found for today");
+            LOG.debug("CourtListQuery - No Hearing Lists found for today");
         } else {
             results.addAll(getHearingData(hearingListDaos, courtRoomIds));
         }
@@ -92,7 +92,7 @@ public class CourtListQuery extends PublicDisplayQuery {
     }
 
     private List<CourtListValue> getHearingData(List<XhbHearingListDao> hearingListDaos, int... courtRoomIds) {
-        log.debug("Entering getHearingData(List<XhbHearingListDao>, int...)");
+        LOG.debug("Entering getHearingData(List<XhbHearingListDao>, int...)");
         List<CourtListValue> results = new ArrayList<>();
         for (XhbHearingListDao hearingListDao : hearingListDaos) {
             // Loop the sittings
@@ -117,7 +117,7 @@ public class CourtListQuery extends PublicDisplayQuery {
         List<XhbScheduledHearingDao> scheduledHearingDaos,
         int... courtRoomIds) {
 
-        log.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
+        LOG.debug("Entering getScheduledHearingData(XhbSittingDao, List<XhbScheduledHearingDao>, int...)");
 
         // Choose one scheduled hearing per hearingId, preferring those with hearingProgress,
         // and respecting the courtroom filter (helper already does this).
@@ -134,7 +134,7 @@ public class CourtListQuery extends PublicDisplayQuery {
 
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
-        log.debug("Entering getDefendantName(String, String, String, boolean)");
+        LOG.debug("Entering getDefendantName(String, String, String, boolean)");
         return new DefendantName(firstName, middleName, surname, hide);
     }
 

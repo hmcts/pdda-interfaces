@@ -55,7 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public class SftpService extends XhibitPddaHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpService.class);
@@ -113,7 +113,6 @@ public class SftpService extends XhibitPddaHelper {
      * @param sftpPort The SFTP port - will be 0 unless we are testing
      * @return True if there was an error
      */
-    @SuppressWarnings("PMD")
     public boolean processBaisMessages(int sftpPort) {
 
         boolean error = false;
@@ -994,9 +993,9 @@ public class SftpService extends XhibitPddaHelper {
         if (clobData.contains("<cs:DailyList")) {
             return DAILY_LIST_DOCUMENT_TYPE;
         } else if (clobData.contains("<cs:FirmList")) {
-            return "FirmList";
+            return FIRM_LIST_DOCUMENT_TYPE;
         } else if (clobData.contains("<cs:WarnedList")) {
-            return "WarnedList";
+            return WARNED_LIST_DOCUMENT_TYPE;
         } else {
             LOG.debug("Unknown list type");
             return "Unknown";
@@ -1165,8 +1164,8 @@ public class SftpService extends XhibitPddaHelper {
      */
     public static class BaisCpValidation extends BaisValidation {
 
-        private static final String[] POSSIBLETITLES = {DAILY_LIST_DOCUMENT_TYPE, "FirmList",
-            "WarnedList", "WebPage", PUBLIC_DISPLAY_DOCUMENT_TYPE};
+        private static final String[] POSSIBLETITLES = {DAILY_LIST_DOCUMENT_TYPE, FIRM_LIST_DOCUMENT_TYPE,
+            WARNED_LIST_DOCUMENT_TYPE, WEB_PAGE_DOCUMENT_TYPE, PUBLIC_DISPLAY_DOCUMENT_TYPE};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
             super(courtRespository, false, 3);

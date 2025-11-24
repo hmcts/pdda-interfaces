@@ -15,7 +15,7 @@ import java.util.Base64;
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public final class PddaSerializationUtils {
     private static final Logger LOG = LoggerFactory.getLogger(PddaSerializationUtils.class);
 

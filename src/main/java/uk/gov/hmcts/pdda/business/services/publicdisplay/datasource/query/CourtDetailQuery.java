@@ -94,7 +94,7 @@ public class CourtDetailQuery extends PublicDisplayQuery {
         // Loop the hearing lists
         List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
         if (hearingListDaos.isEmpty()) {
-            log.debug("CourtDetailQuery - No Hearing Lists found for today");
+            LOG.debug("CourtDetailQuery - No Hearing Lists found for today");
         } else {
             results.addAll(getHearingData(hearingListDaos, courtRoomIds));
         }

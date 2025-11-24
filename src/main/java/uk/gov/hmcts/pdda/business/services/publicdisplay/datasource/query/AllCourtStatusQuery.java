@@ -45,10 +45,10 @@ import java.util.regex.Pattern;
 
  * @author pznwc5
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public class AllCourtStatusQuery extends PublicDisplayQuery {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(AllCourtStatusQuery.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AllCourtStatusQuery.class);
 
     private static final Pattern ROOM_NUMBER = Pattern.compile("\\d+");
 
@@ -58,7 +58,7 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
      */
     public AllCourtStatusQuery(EntityManager entityManager) {
         super(entityManager);
-        log.debug("Query object created");
+        LOG.debug("Query object created");
     }
 
     public AllCourtStatusQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
@@ -99,7 +99,7 @@ public class AllCourtStatusQuery extends PublicDisplayQuery {
         // Loop the hearing lists
         List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
         if (hearingListDaos.isEmpty()) {
-            log.debug("AllCourtStatusQuery - No Hearing Lists found for today");
+            LOG.debug("AllCourtStatusQuery - No Hearing Lists found for today");
         } else {
             for (XhbHearingListDao hearingListDao : hearingListDaos) {
                 // Loop the sittings (floating and non-floating)

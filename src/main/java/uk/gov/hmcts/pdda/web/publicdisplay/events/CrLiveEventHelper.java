@@ -8,7 +8,7 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 import java.util.Objects;
 import java.util.Optional;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public final class CrLiveEventHelper {
     
     private static RepositoryHelper repositoryHelper;

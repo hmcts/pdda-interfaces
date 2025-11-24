@@ -47,7 +47,7 @@ public class SummaryByNameQuery extends PublicDisplayQuery {
      */
     public SummaryByNameQuery(EntityManager entityManager) {
         super(entityManager);
-        log.debug("Query object created");
+        LOG.debug("Query object created");
     }
 
     public SummaryByNameQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,

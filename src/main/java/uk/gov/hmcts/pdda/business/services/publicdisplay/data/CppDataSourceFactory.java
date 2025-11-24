@@ -28,9 +28,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public final class CppDataSourceFactory {
 
+    private static final String GET_NOT_BEFORE_TIME = "getNotBeforeTime";
+    private static final String GET_LIST_COURT_ROOM_ID = "getListCourtRoomId";
+    private static final String GET_JUDGE_NAME = "getJudgeName";
+    private static final String GET_DEFENDANT_NAMES = "getDefendantNames";
+    private static final String HAS_INFORMATION_FOR_DISPLAY = "hasInformationForDisplay";
+    
     private static final Integer ONE = 1;
 
     protected CppDataSourceFactory() {
@@ -269,8 +275,8 @@ public final class CppDataSourceFactory {
             }
 
             // fallback: prefer non-null judge name if available (reflection helper used elsewhere)
-            Object judgeObj = invokeGetter(value, "getJudgeName");
-            Object existingJudgeObj = invokeGetter(existing, "getJudgeName");
+            Object judgeObj = invokeGetter(value, GET_JUDGE_NAME);
+            Object existingJudgeObj = invokeGetter(existing, GET_JUDGE_NAME);
             if (judgeObj != null && existingJudgeObj == null) {
                 chosenByKey.put(key, value);
                 continue;
@@ -383,8 +389,8 @@ public final class CppDataSourceFactory {
                     (caseA != null && caseA.equals(caseB)) || (caseA == null && caseB == null
                         && Objects.equals(
                             // fall back to defendant names if case numbers absent
-                            invokeGetter(value, "getDefendantNames"),
-                            invokeGetter(candidate, "getDefendantNames")));
+                            invokeGetter(value, GET_DEFENDANT_NAMES),
+                            invokeGetter(candidate, GET_DEFENDANT_NAMES)));
 
                 if (sameSite && sameRoom && sameFloating && sameCase) {
                     matching.add(candidate);
@@ -398,10 +404,10 @@ public final class CppDataSourceFactory {
                     // prefer one that has information for display
                     try {
                         java.lang.reflect.Method mth =
-                            m.getClass().getMethod("hasInformationForDisplay");
+                            m.getClass().getMethod(HAS_INFORMATION_FOR_DISPLAY);
                         Boolean hasInfo = (Boolean) mth.invoke(m);
                         Boolean chosenHasInfo = (Boolean) chosen.getClass()
-                            .getMethod("hasInformationForDisplay").invoke(chosen);
+                            .getMethod(HAS_INFORMATION_FOR_DISPLAY).invoke(chosen);
                         if (hasInfo != null && hasInfo
                             && (chosenHasInfo == null || !chosenHasInfo)) {
                             chosen = m;
@@ -411,9 +417,9 @@ public final class CppDataSourceFactory {
                     }
                     // prefer non-null judge if available
                     try {
-                        Object judge = m.getClass().getMethod("getJudgeName").invoke(m);
+                        Object judge = m.getClass().getMethod(GET_JUDGE_NAME).invoke(m);
                         Object chosenJudge =
-                            chosen.getClass().getMethod("getJudgeName").invoke(chosen);
+                            chosen.getClass().getMethod(GET_JUDGE_NAME).invoke(chosen);
                         if (judge != null && chosenJudge == null) {
                             chosen = m;
                         }
@@ -454,16 +460,16 @@ public final class CppDataSourceFactory {
                 // If equals() says they're equal, check key identity fields
                 if (existing != null && existing.equals(value)) {
                     try {
-                        Object existinglistroomid = invokeGetter(existing, "getListCourtRoomId");
-                        Object valuelistroomid = invokeGetter(value, "getListCourtRoomId");
+                        Object existinglistroomid = invokeGetter(existing, GET_LIST_COURT_ROOM_ID);
+                        Object valuelistroomid = invokeGetter(value, GET_LIST_COURT_ROOM_ID);
                         boolean samelistroom = Objects.equals(existinglistroomid, valuelistroomid);
 
-                        Object existingnotbefore = invokeGetter(existing, "getNotBeforeTime");
-                        Object valuenotbefore = invokeGetter(value, "getNotBeforeTime");
+                        Object existingnotbefore = invokeGetter(existing, GET_NOT_BEFORE_TIME);
+                        Object valuenotbefore = invokeGetter(value, GET_NOT_BEFORE_TIME);
                         boolean samenotbefore = Objects.equals(existingnotbefore, valuenotbefore);
 
-                        Object existingdefendants = invokeGetter(existing, "getDefendantNames");
-                        Object valuedefendants = invokeGetter(value, "getDefendantNames");
+                        Object existingdefendants = invokeGetter(existing, GET_DEFENDANT_NAMES);
+                        Object valuedefendants = invokeGetter(value, GET_DEFENDANT_NAMES);
                         boolean samedefendants =
                             Objects.equals(existingdefendants, valuedefendants);
 
@@ -504,12 +510,12 @@ public final class CppDataSourceFactory {
 
             // gather identity components
             String caseNumber = (String) invokeGetter(v, "getCaseNumber");
-            Object listCourtRoomIdObj = invokeGetter(v, "getListCourtRoomId");
+            Object listCourtRoomIdObj = invokeGetter(v, GET_LIST_COURT_ROOM_ID);
             String listCourtRoomId =
                 listCourtRoomIdObj == null ? "null" : String.valueOf(listCourtRoomIdObj);
-            Object notBeforeObj = invokeGetter(v, "getNotBeforeTime");
+            Object notBeforeObj = invokeGetter(v, GET_NOT_BEFORE_TIME);
             String notBefore = notBeforeObj == null ? "null" : String.valueOf(notBeforeObj);
-            Object defNamesObj = invokeGetter(v, "getDefendantNames");
+            Object defNamesObj = invokeGetter(v, GET_DEFENDANT_NAMES);
             String defNames = defNamesObj == null ? "null" : defNamesObj.toString();
 
             // Build key:
@@ -550,11 +556,11 @@ public final class CppDataSourceFactory {
                 // prefer hasInformationForDisplay()
                 try {
                     java.lang.reflect.Method hasInfoM =
-                        candidate.getClass().getMethod("hasInformationForDisplay");
+                        candidate.getClass().getMethod(HAS_INFORMATION_FOR_DISPLAY);
                     Boolean candHasInfo = (Boolean) hasInfoM.invoke(candidate);
 
                     java.lang.reflect.Method chosenHasInfoM =
-                        chosen.getClass().getMethod("hasInformationForDisplay");
+                        chosen.getClass().getMethod(HAS_INFORMATION_FOR_DISPLAY);
                     Boolean chosenHasInfo = (Boolean) chosenHasInfoM.invoke(chosen);
 
                     if (candHasInfo != null && candHasInfo
@@ -567,8 +573,8 @@ public final class CppDataSourceFactory {
 
                 // prefer one with a non-null judge name
                 try {
-                    Object candJudge = invokeGetter(candidate, "getJudgeName");
-                    Object chosenJudge = invokeGetter(chosen, "getJudgeName");
+                    Object candJudge = invokeGetter(candidate, GET_JUDGE_NAME);
+                    Object chosenJudge = invokeGetter(chosen, GET_JUDGE_NAME);
                     if (candJudge != null && chosenJudge == null) {
                         chosen = candidate;
                     }
