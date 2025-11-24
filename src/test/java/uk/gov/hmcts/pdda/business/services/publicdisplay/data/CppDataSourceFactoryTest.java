@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.data;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.cpptoxhibit.AbstractCppToPublicDisplay;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -44,6 +45,12 @@ class CppDataSourceFactoryTest {
         Collection<?> result = CppDataSourceFactory.postProcessing("THIS_IS_NOT_A_VALID_TYPE", input);
         assertNotNull(result);
         assertTrue(result.isEmpty(), "Expected empty collection for unknown shortName");
+    }
+    
+    @Test
+    void getDataSource_InvalidShortName() {
+        AbstractCppToPublicDisplay result = CppDataSourceFactory.getDataSource("INVALID", new Date(), 1);
+        assertNull(result);
     }
 
     @Test
