@@ -187,6 +187,10 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         );
 
         if (chosen != null) {
+            result.setScheduledHearingId(scheduledHearingDao.getScheduledHearingId());
+            result.setHearingId(scheduledHearingDao.getHearingId()); // if available on scheduledHearingDao
+            // if getSchedHearingDefendantDao has defendantOnCaseId:
+            result.setDefendantOnCaseId(chosen.getDefendantOnCaseId());
             result.setDefendantName(getDefendantName(chosen, isHidden));
         } else {
             log.debug("No defendant found for scheduledHearingId: {}", scheduledHearingDao.getScheduledHearingId());

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings({"PMD.LinguisticNaming", "PMD.ConstructorCallsOverridableMethod"})
 @Entity(name = "XHB_CONFIGURED_PUBLIC_NOTICE")
-@NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePNCourtRoomValue",
+@NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePnCourtRoomValue",
     query = "SELECT o from XHB_CONFIGURED_PUBLIC_NOTICE o WHERE o.courtRoomId = :courtRoomId "
         + "AND o.publicNoticeId = :publicNoticeId ")
 @NamedQuery(name = "XHB_CONFIGURED_PUBLIC_NOTICE.findActiveCourtRoomNotices",
@@ -89,7 +89,7 @@ public class XhbConfiguredPublicNoticeDao extends AbstractVersionedDao implement
         return configuredPublicNoticeId;
     }
 
-    private void setConfiguredPublicNoticeId(Integer configuredPublicNoticeId) {
+    public void setConfiguredPublicNoticeId(Integer configuredPublicNoticeId) {
         this.configuredPublicNoticeId = configuredPublicNoticeId;
     }
 

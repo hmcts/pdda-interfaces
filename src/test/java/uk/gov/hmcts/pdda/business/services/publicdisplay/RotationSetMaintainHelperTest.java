@@ -173,7 +173,7 @@ class RotationSetMaintainHelperTest {
             // Expects
             Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
                 .thenReturn(Optional.of(xhbRotationSetDao));
-            Mockito.when(mockXhbDisplayRepository.findByRotationSetId(rotationSetComplexValue.getRotationSetId()))
+            Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(rotationSetComplexValue.getRotationSetId()))
                 .thenReturn(xhbDisplayDaos);
             // Run
             classUnderTest.deleteRotationSet(rotationSetComplexValue, mockXhbRotationSetsRepository,

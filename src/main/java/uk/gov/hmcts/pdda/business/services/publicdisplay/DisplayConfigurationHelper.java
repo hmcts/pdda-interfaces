@@ -131,7 +131,7 @@ public class DisplayConfigurationHelper {
         Optional<XhbCourtDao> dao = xhbCourtRepository.findByIdSafe(courtId);
         boolean result = false;
         if (dao.isPresent()) {
-            List<XhbCourtSiteDao> xhbCourtSites = xhbCourtSiteRepository.findByCourtId(courtId);
+            List<XhbCourtSiteDao> xhbCourtSites = xhbCourtSiteRepository.findByCourtIdSafe(courtId);
             result = xhbCourtSites.size() > 1;
         }
         return result;

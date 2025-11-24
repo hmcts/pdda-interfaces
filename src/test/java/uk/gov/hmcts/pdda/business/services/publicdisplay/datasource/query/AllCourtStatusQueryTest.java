@@ -40,7 +40,9 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +51,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -635,6 +638,144 @@ class AllCourtStatusQueryTest extends AbstractQueryTest {
         // e.g., count rows with courtRoomId == 501 vs 601
 
         verifyReplayArray(List.of(mockXhbCourtSiteRepository, mockXhbCourtRoomRepository));
+    }
+
+    /**
+     * Verifies integerFromCourtRoomName extracts the first numeric token from courtRoomName,
+     * otherwise falls back to crestCourtRoomNo then courtRoomId.
+     */
+    @Test
+    void integerFromCourtRoomName_extractsFromName_thenCrest_thenId() throws Exception {
+        // case 1: name contains digits -> should extract first found number
+        AllCourtStatusValue v1 = new AllCourtStatusValue();
+        v1.setCourtRoomName("Courtroom 12A - Annex 7");
+        Method m = AllCourtStatusQuery.class.getDeclaredMethod("integerFromCourtRoomName", AllCourtStatusValue.class);
+        m.setAccessible(true);
+        Integer out1 = (Integer) m.invoke(null, v1);
+        assertEquals(Integer.valueOf(12), out1, "Should extract first number token (12)");
+
+        // case 2: name null, crest present -> crest used
+        AllCourtStatusValue v2 = new AllCourtStatusValue();
+        v2.setCourtRoomName(null);
+        v2.setCrestCourtRoomNo(99);
+        Integer out2 = (Integer) m.invoke(null, v2);
+        assertEquals(Integer.valueOf(99), out2, "Should fall back to crestCourtRoomNo when name has no digits");
+
+        // case 3: name and crest null, use courtRoomId
+        AllCourtStatusValue v3 = new AllCourtStatusValue();
+        v3.setCrestCourtRoomNo(null);
+        v3.setCourtRoomId(777);
+        Integer out3 = (Integer) m.invoke(null, v3);
+        assertEquals(Integer.valueOf(777), out3, "Should fall back to courtRoomId when crest/name absent");
+
+        // case 4: nothing present -> null
+        AllCourtStatusValue v4 = new AllCourtStatusValue();
+        v4.setCourtRoomName(null);
+        v4.setCrestCourtRoomNo(null);
+        setIntegerFieldToNull(v4, "courtRoomId");
+        Integer out4 = (Integer) m.invoke(null, v4);
+        assertEquals(null, out4, "Should return null when no numeric info available");
+    }
+
+    /**
+     * Verifies addEmptyCourtroomsIfMissing will add placeholder rows for rooms not present in the rows list.
+     * - adds by room id when provided by room DAO
+     * - adds by room name when room id is null
+     * - avoids adding duplicates
+     */
+    @Test
+    void addEmptyCourtroomsIfMissing_addsMissingRooms_byIdAndName_andAvoidsDuplicates() throws Exception {
+        // prepare an input rows list that already has a single present room 501
+        List<AllCourtStatusValue> rows = new ArrayList<>();
+        AllCourtStatusValue existing = new AllCourtStatusValue();
+        existing.setCourtRoomId(501);
+        rows.add(existing);
+
+        // prepare site + room DAOs to be returned by repository mocks
+        XhbCourtSiteDao site = DummyCourtUtil.getXhbCourtSiteDao();
+        site.setCourtSiteId(100);
+        XhbCourtRoomDao roomWithId = DummyCourtUtil.getXhbCourtRoomDao();
+        roomWithId.setCourtRoomId(502);
+        roomWithId.setCourtRoomName("Room 502");
+
+        XhbCourtRoomDao roomNoId = DummyCourtUtil.getXhbCourtRoomDao();
+        roomNoId.setCourtRoomId(null);
+        roomNoId.setCourtRoomName("Mystery Room");
+
+        // stub repository calls: findByCourtIdSafe -> site; findByCourtSiteIdSafe -> [roomWithId, roomNoId]
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(81))
+            .andReturn(List.of(site)).anyTimes();
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdSafe(site.getCourtSiteId()))
+            .andReturn(List.of(roomWithId, roomNoId)).anyTimes();
+
+        // replay the two mocks (entityManager already replayed in @BeforeEach)
+        doReplayArray(List.of(mockXhbCourtSiteRepository, mockXhbCourtRoomRepository));
+
+        // invoke private method
+        Method m = AllCourtStatusQuery.class.getDeclaredMethod("addEmptyCourtroomsIfMissing", List.class, int.class);
+        m.setAccessible(true);
+        @SuppressWarnings("unchecked")
+        List<AllCourtStatusValue> out = (List<AllCourtStatusValue>) m.invoke(classUnderTest, rows, 81);
+
+        // Check that placeholder for roomWithId (502) was added and that the room name entry was added
+        boolean found502 = out.stream().anyMatch(x -> Integer.valueOf(502).equals(x.getCourtRoomId()));
+        boolean foundMystery = out.stream().anyMatch(x -> "Mystery Room".equals(x.getCourtRoomName()));
+        assertTrue(found502, "Expected placeholder for room id 502 to be added");
+        assertTrue(foundMystery, "Expected placeholder for room with no id but with name 'Mystery Room'");
+
+        // calling again should not add duplicates (since addedRoomIds/addedRoomNames should avoid duplicates)
+        @SuppressWarnings("unchecked")
+        List<AllCourtStatusValue> out2 = (List<AllCourtStatusValue>) m.invoke(classUnderTest, out, 81);
+        long countMystery = out2.stream().filter(x -> "Mystery Room".equals(x.getCourtRoomName())).count();
+        long count502 = out2.stream().filter(x -> Integer.valueOf(502).equals(x.getCourtRoomId())).count();
+        assertEquals(1L, countMystery, "Should not duplicate Mystery Room on repeated invocation");
+        assertEquals(1L, count502, "Should not duplicate room 502 on repeated invocation");
+
+        // verify mocks
+        EasyMock.verify(mockXhbCourtSiteRepository, mockXhbCourtRoomRepository);
+    }
+
+    /**
+     * Ensures addEmptyCourtroomsIfMissing can be called with courtId==43 (special-case logging)
+     * and behaves sensibly (no exception, returns rows).
+     */
+    @Test
+    void addEmptyCourtroomsIfMissing_skipsSpecialCaseCourt43_withoutError() throws Exception {
+
+        // make repositories return empty site lists for courtId 43
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(43))
+            .andReturn(List.of()).anyTimes();
+        doReplayArray(List.of(mockXhbCourtSiteRepository));
+
+        Method m = AllCourtStatusQuery.class.getDeclaredMethod("addEmptyCourtroomsIfMissing", List.class, int.class);
+        m.setAccessible(true);
+        
+        // prepare empty rows
+        List<AllCourtStatusValue> rows = new ArrayList<>();
+
+        @SuppressWarnings("unchecked")
+        List<AllCourtStatusValue> out = (List<AllCourtStatusValue>) m.invoke(classUnderTest, rows, 43);
+
+        // should return list (possibly empty) and not throw
+        assertTrue(out != null, "Method should return a non-null collection even for courtId 43");
+
+        EasyMock.verify(mockXhbCourtSiteRepository);
+    }
+    
+    // helper in the test class
+    private void setIntegerFieldToNull(Object target, String fieldName) throws Exception {
+        Class<?> cur = target.getClass();
+        while (cur != null) {
+            try {
+                java.lang.reflect.Field f = cur.getDeclaredField(fieldName);
+                f.setAccessible(true);
+                f.set(target, null); // set reference field to null
+                return;
+            } catch (NoSuchFieldException e) {
+                cur = cur.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException("Field " + fieldName + " not found on " + target.getClass());
     }
 
 

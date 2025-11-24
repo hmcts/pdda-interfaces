@@ -176,7 +176,7 @@ public class RotationSetMaintainHelper extends AbstractControllerBean {
 
         // Check the rotation set is not assigned to any displays.
         List<XhbDisplayDao> xhbDisplays =
-            xhbDisplayRepository.findByRotationSetId(rotationSetLocal.get().getRotationSetId());
+            xhbDisplayRepository.findByRotationSetIdSafe(rotationSetLocal.get().getRotationSetId());
         if (!xhbDisplays.isEmpty()) {
             throw new PublicDisplayCheckedException("pubdisp.rotationset.assigned",
                 new String[] {rotationSetLocal.get().getDescription()}, "Can not delete a that is currently in use");
@@ -228,7 +228,7 @@ public class RotationSetMaintainHelper extends AbstractControllerBean {
         boolean hasUpdatedOrDeleted = false;
 
         // get the local references of existing rotation set DD's
-        List<XhbRotationSetDdDao> tmp = repo.findByRotationSetId(rotationSet.getRotationSetId());
+        List<XhbRotationSetDdDao> tmp = repo.findByRotationSetIdSafe(rotationSet.getRotationSetId());
         XhbRotationSetDdDao[] rotationSetDdLocals = tmp.toArray(new XhbRotationSetDdDao[0]);
 
         // Now iterate through the locals.
