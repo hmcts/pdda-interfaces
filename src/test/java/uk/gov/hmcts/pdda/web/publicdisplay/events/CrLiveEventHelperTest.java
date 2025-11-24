@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import uk.gov.hmcts.pdda.business.services.pdda.data.RepositoryHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCourtStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.lang.reflect.Field;
@@ -217,6 +218,40 @@ class CrLiveEventHelperTest {
         AllCaseStatusValue v = new AllCaseStatusValue();
         v.setCourtRoomId(10);
         v.setHearingId(555); // MATCHES xml
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        CrLiveEventHelper.populateEventIfPresent(v);
+
+        assertNotNull(getRawEvent(v), "Matching ID → event should be attached");
+        assertNotNull(getRawEventTime(v), "Matching ID → eventTime should be attached");
+    }
+    
+    @Test
+    void populateEventIfPresent_differentEvent() throws Exception {
+
+        String xml = """
+                <event>
+                    <date>24/11/2025</date>
+                    <time>00:01</time>
+                </event>
+                """;
+
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+        Mockito.when(dao.getStatus()).thenReturn(xml);
+
+        var repo = Mockito.mock(
+            uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+
+        injectRepositoryHelper(helper);
+
+        AllCourtStatusValue v = new AllCourtStatusValue();
+        v.setCourtRoomId(10);
         v.setEvent(null);
         v.setEventTime(null);
 
