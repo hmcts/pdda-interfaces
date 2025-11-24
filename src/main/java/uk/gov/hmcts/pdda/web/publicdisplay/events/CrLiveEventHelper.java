@@ -63,7 +63,6 @@ public final class CrLiveEventHelper {
             String eventDefendant = pr.defendantName;
             if (eventDefendant != null && eventDefendant.equalsIgnoreCase(acsv.getDefendantName().getName())) {
                 attach(pr, acsv);
-                return;
             }
             // no match -> do not attach
             return;

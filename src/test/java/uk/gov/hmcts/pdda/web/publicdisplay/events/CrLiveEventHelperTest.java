@@ -153,4 +153,76 @@ class CrLiveEventHelperTest {
         assertNotNull(getRawEvent(v), "Matching ID → event should be attached");
         assertNotNull(getRawEventTime(v), "Matching ID → eventTime should be attached");
     }
+    
+    @Test
+    void populateEventIfPresent_matchingDefendantOnCase_attaches() throws Exception {
+
+        String xml = """
+                <event>
+                    <date>24/11/2025</date>
+                    <time>00:01</time>
+                    <defendant_on_case_id>555</defendant_on_case_id>
+                </event>
+                """;
+
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+        Mockito.when(dao.getStatus()).thenReturn(xml);
+
+        var repo = Mockito.mock(
+            uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+
+        injectRepositoryHelper(helper);
+
+        AllCaseStatusValue v = new AllCaseStatusValue();
+        v.setCourtRoomId(10);
+        v.setDefendantOnCaseId(555); // MATCHES xml
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        CrLiveEventHelper.populateEventIfPresent(v);
+
+        assertNotNull(getRawEvent(v), "Matching ID → event should be attached");
+        assertNotNull(getRawEventTime(v), "Matching ID → eventTime should be attached");
+    }
+    
+    @Test
+    void populateEventIfPresent_matchingHearingId_attaches() throws Exception {
+
+        String xml = """
+                <event>
+                    <date>24/11/2025</date>
+                    <time>00:01</time>
+                    <hearing_id>555</hearing_id>
+                </event>
+                """;
+
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+        Mockito.when(dao.getStatus()).thenReturn(xml);
+
+        var repo = Mockito.mock(
+            uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+
+        injectRepositoryHelper(helper);
+
+        AllCaseStatusValue v = new AllCaseStatusValue();
+        v.setCourtRoomId(10);
+        v.setHearingId(555); // MATCHES xml
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        CrLiveEventHelper.populateEventIfPresent(v);
+
+        assertNotNull(getRawEvent(v), "Matching ID → event should be attached");
+        assertNotNull(getRawEventTime(v), "Matching ID → eventTime should be attached");
+    }
 }
