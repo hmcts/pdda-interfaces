@@ -410,9 +410,6 @@ class AllCaseStatusQueryTest extends AbstractQueryTest {
 
         AllCaseStatusValue val = out.get(0);
 
-        // The ScheduledHearingDao from DummyHearingUtil should have scheduledHearingId/hearingId;
-        // the chosen scheduled hearing defendant (DummyHearingUtil.getXhbSchedHearingDefendantDao())
-        // should provide defendantOnCaseId. Verify they were copied to the result.
         org.junit.jupiter.api.Assertions.assertEquals(
             sh.getScheduledHearingId(),
             val.getScheduledHearingId(),

@@ -708,11 +708,11 @@ public class SftpService extends XhibitPddaHelper {
             // Get the public notices from the event
             Class<?> cls = courtRoomIdentifier.getClass();
             LOG.debug("== CourtRoomIdentifier loaded from ==");
-            LOG.debug("Class: " + cls.getName());
-            LOG.debug("ClassLoader: " + cls.getClassLoader());
+            LOG.debug("Class: {}", cls.getName());
+            LOG.debug("ClassLoader: {}", cls.getClassLoader());
             LOG.debug("Declared fields:");
             for (java.lang.reflect.Field f : cls.getDeclaredFields()) {
-                LOG.debug(" - " + f.getName() + " : " + f.getType());
+                LOG.debug(" - {}{}{}", f.getName(), " : ", f.getType());
             }
 
             DisplayablePublicNoticeValue[] publicNotices = courtRoomIdentifier.getPublicNotices();

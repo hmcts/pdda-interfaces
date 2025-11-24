@@ -6,4 +6,3 @@ import java.util.Optional;
 public interface LiveEventProvider {
     Optional<CrLiveEventXmlParser.ParseResult> loadForCourtRoom(Integer courtRoomId);
 }
-//         }

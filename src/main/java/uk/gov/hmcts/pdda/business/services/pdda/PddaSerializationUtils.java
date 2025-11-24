@@ -33,26 +33,6 @@ public final class PddaSerializationUtils {
             return null;
         }
 
-        /*try {
-            // --- Hash & temp file for byte verification ---
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] digest = md.digest(eventBytes);
-            StringBuilder sb = new StringBuilder();
-            for (byte b : digest) {
-                sb.append(String.format("%02x", b));
-            }
-            LOG.debug("Deserializing event: bytes.length={}, sha256={}", eventBytes.length,
-                sb.toString());
-
-            File tmp = File.createTempFile("publicnotice-", ".ser");
-            try (FileOutputStream fos = new FileOutputStream(tmp)) {
-                fos.write(eventBytes);
-            }
-            LOG.debug("Wrote decoded bytes to temporary file: {}", tmp.getAbsolutePath());
-        } catch (Throwable t) {
-            LOG.warn("Could not compute hash / write temp file for event bytes", t);
-        }*/
-
         // --- Actual deserialization ---
         PublicDisplayEvent evt = null;
         try {

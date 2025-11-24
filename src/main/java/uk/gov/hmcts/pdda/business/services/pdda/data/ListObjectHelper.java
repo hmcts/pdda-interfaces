@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
  * @author HarrisM
  * @version 1.0
  */
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S3776"})
 public class ListObjectHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
