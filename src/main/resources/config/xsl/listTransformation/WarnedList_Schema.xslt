@@ -38,6 +38,7 @@
 
   	<!-- Going straight from cs:Fixture as cs:WithFixedDate and cs:WithoutFixedDate use the same structure -->
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseArrivedFrom/cs:OriginatingCourt/cs:CourtHouseCodeType"/>
+	  <xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseArrivedFrom/cs:OriginatingCourt/cs:CourtHouseCode/@CourtHouseShortName"/>
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseArrivedFrom/cs:OriginatingCourt/cs:CourtHouseAddress"/>
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseArrivedFrom/cs:OriginatingCourt/cs:CourtHouseDX"/>
   	<xsl:template match="cs:Fixture/cs:Cases/cs:Case/cs:CaseArrivedFrom/cs:OriginatingCourt/cs:CourtHouseTelephone"/>

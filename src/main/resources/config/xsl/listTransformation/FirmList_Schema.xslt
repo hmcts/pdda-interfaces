@@ -67,6 +67,7 @@
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:Prosecution/cs:ProsecutingOrganisation/cs:ContactDetails"/>
 
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CommittingCourt/cs:CourtHouseCodeType"/>
+    <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CommittingCourt/cs:CourtHouseCode/@CourtHouseShortName"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CommittingCourt/cs:CourtHouseAddress"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CommittingCourt/cs:CourtHouseDX"/>
     <xsl:template match="cs:CourtLists/cs:CourtList/cs:Sittings/cs:Sitting/cs:Hearings/cs:Hearing/cs:CommittingCourt/cs:CourtHouseTelephone"/>
