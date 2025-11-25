@@ -65,7 +65,8 @@ public final class CathUtils {
         "Sittings", "Sitting",
         "Hearings", "Hearing",
         "Charges", "Charge",
-        "Defendants", "Defendant"
+        "Defendants", "Defendant",
+        "Cases", "Case"
         );
 
     private CathUtils() {
