@@ -30,14 +30,6 @@ public final class CrLiveEventHelper {
             return;
         }
 
-        /*String xml = daoOpt.get().getStatus();
-        CrLiveEventXmlParser.parse(xml).ifPresent(pr -> {
-            value.setEvent(pr.node);       // BranchEventXmlNode
-            if (pr.eventTime != null) {
-                value.setEventTime(pr.eventTime); // LocalDateTime
-            }
-        });*/
-        
         Optional<CrLiveEventXmlParser.ParseResult> opt = CrLiveEventXmlParser.parse(daoOpt.get().getStatus());
         if (opt.isEmpty()) {
             return;

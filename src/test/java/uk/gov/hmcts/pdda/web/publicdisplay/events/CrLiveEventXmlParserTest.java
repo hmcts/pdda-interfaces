@@ -51,9 +51,6 @@ class CrLiveEventXmlParserTest {
 
         // node should be non-null (parser returns a BranchEventXmlNode)
         assertNotNull(pr.node);
-        // node name is expected to be "event" because parser creates root with that tag
-        // This uses only a safe accessor (if available) by reflection would be overkill;
-        // at minimum the node is non-null which indicates successful parsing.
     }
 
     @Test

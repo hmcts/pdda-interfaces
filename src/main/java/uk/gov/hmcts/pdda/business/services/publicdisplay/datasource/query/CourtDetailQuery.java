@@ -44,7 +44,7 @@ import java.util.Optional;
 
  * @author
  */
-@SuppressWarnings({"PMD"})
+@SuppressWarnings({"PMD", "squid:S3776"})
 public class CourtDetailQuery extends PublicDisplayQuery {
 
     private PublicNoticeQuery mockPublicNoticeQuery;

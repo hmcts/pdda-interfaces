@@ -120,7 +120,7 @@ class AllCaseStatusValueTest {
     }
 
     private String capitalize(String s) {
-        if (s == null || s.length() == 0) {
+        if (s == null || s.isEmpty()) {
             return s;
         }
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
@@ -145,7 +145,7 @@ class AllCaseStatusValueTest {
     }
 
     @Test
-    void compareTo_room_site_and_notBefore_behaviour() throws Exception {
+    void compareTo_room_site_and_notBefore_behaviour() {
         AllCaseStatusValue a = new AllCaseStatusValue();
         AllCaseStatusValue b = new AllCaseStatusValue();
 
@@ -187,7 +187,7 @@ class AllCaseStatusValueTest {
     }
 
     @Test
-    void equals_reflexive_symmetric_and_hashcode_minimal() throws Exception {
+    void equals_reflexive_symmetric_and_hashcode_minimal() {
         AllCaseStatusValue a = new AllCaseStatusValue();
         AllCaseStatusValue b = new AllCaseStatusValue();
 

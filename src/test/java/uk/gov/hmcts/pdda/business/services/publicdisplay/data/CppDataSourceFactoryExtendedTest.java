@@ -171,7 +171,7 @@ class CppDataSourceFactoryExtendedTest {
     }
 
     private String capitalize(String s) {
-        if (s == null || s.length() == 0) {
+        if (s == null || s.isEmpty()) {
             return s;
         }
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
