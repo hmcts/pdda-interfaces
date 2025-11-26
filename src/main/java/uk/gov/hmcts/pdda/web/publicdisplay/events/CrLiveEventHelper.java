@@ -5,6 +5,7 @@ import uk.gov.hmcts.pdda.business.services.pdda.data.RepositoryHelper;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,6 +29,12 @@ public final class CrLiveEventHelper {
 
         if (daoOpt.isEmpty()) {
             return;
+        } else {
+            // Check that timeStatusSet is from today, otherwise ignore
+            XhbCrLiveDisplayDao dao = daoOpt.get();
+            if (!isStatusFromToday(dao.getTimeStatusSet())) {
+                return;
+            }
         }
 
         Optional<CrLiveEventXmlParser.ParseResult> opt = CrLiveEventXmlParser.parse(daoOpt.get().getStatus());
@@ -67,6 +74,17 @@ public final class CrLiveEventHelper {
         }
     }
     
+    /*
+     * Returns true if the timeStatusSet is from today.
+     */
+    private static boolean isStatusFromToday(LocalDateTime timeStatusSet) {
+        if (timeStatusSet != null) {
+            LocalDateTime now = LocalDateTime.now();
+            return timeStatusSet.toLocalDate().isEqual(now.toLocalDate());
+        }
+        return false;
+    }
+
     private static void attach(CrLiveEventXmlParser.ParseResult pr, PublicDisplayValue v) {
         v.setEvent(pr.node);
         if (pr.eventTime != null) {
