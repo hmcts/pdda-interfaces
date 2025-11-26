@@ -13,6 +13,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.CourtLogXslHelper;
 import uk.gov.hmcts.pdda.courtlog.helpers.xsl.TranslationType;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -138,12 +139,20 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
                         getNonStaticCrLiveDisplay(xhbCourtRoomDao.get());
                     
                     if (xhbCrLiveDisplayDao.isPresent()) {
-                        LOG.debug("XhbCrLiveDisplayDao found with ID: {}", xhbCrLiveDisplayDao.get()
-                            .getCrLiveDisplayId());
-                        if (!xhbCrLiveDisplayDao.get().getTimeStatusSet().isAfter(entryDateTime)) {
-                            xhbCrLiveDisplayDao.get().setTimeStatusSet(entryDateTime);
-                            xhbCrLiveDisplayDao.get().setStatus(getPublicDisplayStatus(courtLogViewValue));
-                            getXhbCrLiveDisplayRepository().update(xhbCrLiveDisplayDao.get());
+                        XhbCrLiveDisplayDao displayDao = xhbCrLiveDisplayDao.get();
+                        LOG.debug("XhbCrLiveDisplayDao found with ID: {}", displayDao.getCrLiveDisplayId());
+
+                        LocalDate timeStatusSetDate = displayDao.getTimeStatusSet().toLocalDate();
+                        LocalDate today = LocalDate.now();
+
+                        boolean isTimeNotAfter = !displayDao.getTimeStatusSet().isAfter(entryDateTime);
+                        boolean isTimeFromToday = timeStatusSetDate.isEqual(today);
+                        if (isTimeNotAfter && isTimeFromToday) {
+                            LOG.debug("CRLive - Updating existing XhbCrLiveDisplayDao with ID: {}",
+                                displayDao.getCrLiveDisplayId());
+                            displayDao.setTimeStatusSet(entryDateTime);
+                            displayDao.setStatus(getPublicDisplayStatus(courtLogViewValue));
+                            getXhbCrLiveDisplayRepository().update(displayDao);
                             LOG.debug("Updated CrLiveDisplay status - returning true");
                             return true;
                         }
