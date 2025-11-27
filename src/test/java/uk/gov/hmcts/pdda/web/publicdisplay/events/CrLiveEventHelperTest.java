@@ -103,6 +103,9 @@ class CrLiveEventHelperTest {
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
         Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
@@ -140,6 +143,9 @@ class CrLiveEventHelperTest {
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
         Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
@@ -176,6 +182,9 @@ class CrLiveEventHelperTest {
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
         Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
@@ -212,6 +221,9 @@ class CrLiveEventHelperTest {
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
         Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
@@ -247,6 +259,9 @@ class CrLiveEventHelperTest {
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
         Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
@@ -281,6 +296,9 @@ class CrLiveEventHelperTest {
 
         var repo = Mockito.mock(
             uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+        
+        // make the DAO look like it was set today so the helper will not ignore it
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(LocalDateTime.now());
 
         Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
 
@@ -298,4 +316,59 @@ class CrLiveEventHelperTest {
         CrLiveEventHelper.populateEventIfPresent(v);
         assertTrue(result, FALSE);
     }
+    
+    @Test
+    void populateEventIfPresent_timeStatusSetNotToday_ignores() throws Exception {
+        // note: we do NOT stub dao.getStatus() — it must not be called
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+
+        var repo = Mockito.mock(
+            uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        // set timestamp to yesterday -> should be ignored
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        Mockito.when(dao.getTimeStatusSet()).thenReturn(yesterday);
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+        injectRepositoryHelper(helper);
+
+        AllCaseStatusValue v = new AllCaseStatusValue();
+        v.setCourtRoomId(10);
+        v.setScheduledHearingId(555);
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        CrLiveEventHelper.populateEventIfPresent(v);
+
+        assertNull(getRawEvent(v), "Non-today timestamp → event must NOT be attached");
+        assertNull(getRawEventTime(v), "Non-today timestamp → eventTime must remain null");
+    }
+
+    
+    @Test
+    void populateEventIfPresent_nullTimeStatusSet_ignores() throws Exception {
+        XhbCrLiveDisplayDao dao = Mockito.mock(XhbCrLiveDisplayDao.class);
+        // DO NOT stub dao.getStatus() because it should not be called
+        var repo = Mockito.mock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+        Mockito.when(repo.findByCourtRoomSafe(anyInt())).thenReturn(Optional.of(dao));
+
+        RepositoryHelper helper = Mockito.mock(RepositoryHelper.class);
+        Mockito.when(helper.getXhbCrLiveDisplayRepository()).thenReturn(repo);
+        injectRepositoryHelper(helper);
+
+        AllCaseStatusValue v = new AllCaseStatusValue();
+        v.setCourtRoomId(10);
+        v.setScheduledHearingId(555);
+        v.setEvent(null);
+        v.setEventTime(null);
+
+        CrLiveEventHelper.populateEventIfPresent(v);
+
+        assertNull(getRawEvent(v), "Null timestamp → event must NOT be attached");
+        assertNull(getRawEventTime(v), "Null timestamp → eventTime must remain null");
+    }
+
+
 }
