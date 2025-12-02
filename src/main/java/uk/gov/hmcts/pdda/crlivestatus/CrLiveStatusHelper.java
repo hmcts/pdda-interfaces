@@ -142,12 +142,10 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
                         XhbCrLiveDisplayDao displayDao = xhbCrLiveDisplayDao.get();
                         LOG.debug("XhbCrLiveDisplayDao found with ID: {}", displayDao.getCrLiveDisplayId());
 
-                        LocalDate timeStatusSetDate = displayDao.getTimeStatusSet().toLocalDate();
-                        LocalDate today = LocalDate.now();
-
-                        boolean isTimeNotAfter = !displayDao.getTimeStatusSet().isAfter(entryDateTime);
-                        boolean isTimeFromToday = timeStatusSetDate.isEqual(today);
-                        if (isTimeNotAfter && isTimeFromToday) {
+                        boolean isEventTimeAfterLastUpdate = entryDateTime.isAfter(displayDao.getTimeStatusSet());
+                        boolean isEventTimeFromToday = entryDateTime.toLocalDate().isEqual(LocalDate.now());
+                        
+                        if (isEventTimeAfterLastUpdate && isEventTimeFromToday) {
                             LOG.debug("CRLive - Updating existing XhbCrLiveDisplayDao with ID: {}",
                                 displayDao.getCrLiveDisplayId());
                             displayDao.setTimeStatusSet(entryDateTime);
