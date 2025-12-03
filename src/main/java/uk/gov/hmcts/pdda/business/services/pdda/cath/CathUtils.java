@@ -32,8 +32,10 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
@@ -59,15 +61,6 @@ public final class CathUtils {
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
     private static final String PROVENANCE = "PDDA";
-    
-    private static final Map<String, String> ARRAY_KEYS = Map.of(
-        "CourtLists", "CourtList",
-        "Sittings", "Sitting",
-        "Hearings", "Hearing",
-        "Charges", "Charge",
-        "Defendants", "Defendant",
-        "Cases", "Case"
-        );
 
     private CathUtils() {
         // Private constructor
@@ -285,29 +278,203 @@ public final class CathUtils {
         }
     }
 
+    // Mapping of container names to their singular child element
+    private static final Map<String, String> ARRAY_KEYS = Map.of(
+            "CourtLists", "CourtList",
+            "Sittings", "Sitting",
+            "Hearings", "Hearing",
+            "Charges", "Charge",
+            "Defendants", "Defendant"
+    );
+    // Keys that should always be represented as JSON arrays
+    private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
+            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing"
+    );
+    // Keys that should always be represented as JSON strings
+    private static final Set<String> FORCE_STRING_KEYS = Set.of(
+            "SittingSequenceNumber"
+    );
+
     private static JSONObject generateJsonFromString(String stringToConvert) {
         JSONObject json = XML.toJSONObject(stringToConvert);
+        // Apply JSON transformation steps to flatten list arrays
         flattenListArrays(json);
+        enforceArrayValues(json);
+        coerceValuesToStrings(json);
+        removeEmptyStringFields(json);
         return json;
     }
 
     private static void flattenListArrays(Object node) {
         if (node instanceof JSONObject json) {
-            ARRAY_KEYS.forEach((parent, child) -> {
-                if (json.has(parent)) {
-                    Object value = json.get(parent);
-                    if (value instanceof JSONObject parentObj && parentObj.has(child)) {
-                        Object childValue = parentObj.get(child);
-                        JSONArray array = childValue instanceof JSONArray ? (JSONArray) childValue
-                            : new JSONArray().put(childValue);
-                        json.put(parent, array);
-                    }
-                }
-            });
+            // Flatten each configured array-like structure
+            ARRAY_KEYS.forEach((parent, child) -> normalizeArrayField(json, parent, child));
+            // Recursively flatten nested arrays
             json.keySet().forEach(key -> flattenListArrays(json.get(key)));
         } else if (node instanceof JSONArray array) {
             for (int i = 0; i < array.length(); i++) {
                 flattenListArrays(array.get(i));
+            }
+        }
+    }
+
+    private static void normalizeArrayField(JSONObject json, String parentKey, String childKey) {
+        // Skip if the parent key is not present
+        if (!json.has(parentKey)) {
+            return;
+        }
+        // Get the value of the parent key
+        Object value = json.get(parentKey);
+        if (value instanceof JSONObject parentObj && parentObj.has(childKey)) {
+            json.put(parentKey, toNormalizedArray(parentObj.get(childKey), childKey));
+            // Skip if the child key is not present
+        } else if (value instanceof JSONArray arrayValue) {
+            json.put(parentKey, normalizeArray(arrayValue, childKey));
+        }
+    }
+
+    private static JSONArray toNormalizedArray(Object value, String childKey) {
+        // Convert the value to a JSONArray if it is not already one
+        JSONArray array = value instanceof JSONArray ? (JSONArray) value : new JSONArray().put(value);
+        // Normalize the array
+        return normalizeArray(array, childKey);
+    }
+
+    private static JSONArray normalizeArray(JSONArray originalArray, String childKey) {
+        JSONArray normalized = new JSONArray();
+        for (int i = 0; i < originalArray.length(); i++) {
+            // Remove wrapper objects that only contain the singular key
+            Object element = unwrapElement(originalArray.get(i), childKey);
+            if (element instanceof JSONArray nestedArray) {
+                for (int j = 0; j < nestedArray.length(); j++) {
+                    normalized.put(nestedArray.get(j));
+                }
+            } else {
+                normalized.put(element);
+            }
+        }
+        return normalized;
+    }
+
+    private static Object unwrapElement(Object element, String childKey) {
+        if (element instanceof JSONObject obj && obj.length() == 1 && obj.has(childKey)) {
+            return obj.get(childKey);
+        }
+        return element;
+    }
+
+    private static void enforceArrayValues(Object node) {
+        if (node instanceof JSONObject json) {
+            for (String key : new HashSet<>(json.keySet())) {
+                Object value = json.get(key);
+                if (FORCE_ARRAY_KEYS.contains(key)) {
+                    // Force the value to be an array, even if it's a single object or string
+                    JSONArray arrayValue = toJSONArray(value);
+                    json.put(key, arrayValue);
+                    // Recursively process the array contents
+                    enforceArrayValues(arrayValue);
+                } else {
+                    // Recursively process nested structures
+                    enforceArrayValues(value);
+                }
+            }
+        } else if (node instanceof JSONArray array) {
+            for (int i = 0; i < array.length(); i++) {
+                Object element = array.get(i);
+                // Check if any element in the array is a JSONObject that might contain keys we need to enforce
+                if (element instanceof JSONObject nestedJson) {
+                    enforceArrayValues(nestedJson);
+                } else {
+                    enforceArrayValues(element);
+                }
+            }
+        }
+    }
+
+    private static JSONArray toJSONArray(Object value) {
+        // If already an array, return it
+        if (value instanceof JSONArray array) {
+            return array;
+        }
+        // If null, return empty array
+        if (value == null) {
+            return new JSONArray();
+        }
+        // Otherwise, wrap the value (object, string, number, etc.) in an array
+        JSONArray array = new JSONArray();
+        array.put(value);
+        return array;
+    }
+
+    private static void coerceValuesToStrings(Object node) {
+        if (node instanceof JSONObject json) {
+            for (String key : new HashSet<>(json.keySet())) {
+                Object value = json.get(key);
+                if (FORCE_STRING_KEYS.contains(key) && value != null) {
+                    // Force the value to be a string, even if it's a number
+                    json.put(key, value.toString());
+                } else {
+                    // Recursively process nested structures
+                    coerceValuesToStrings(value);
+                }
+            }
+        } else if (node instanceof JSONArray array) {
+            for (int i = 0; i < array.length(); i++) {
+                Object element = array.get(i);
+                // Recursively process each element in the array
+                coerceValuesToStrings(element);
+            }
+        }
+    }
+
+    private static void removeEmptyStringFields(Object node) {
+        if (node instanceof JSONObject json) {
+            for (String key : new HashSet<>(json.keySet())) {
+                Object value = json.get(key);
+                if (value instanceof String stringValue && stringValue.trim().isEmpty()) {
+                    // Remove empty strings
+                    json.remove(key);
+                } else if (value instanceof JSONArray arrayValue) {
+                    //noinspection SizeReplaceableByIsEmpty
+                    if (arrayValue.length() == 0) {
+                        // Remove empty arrays
+                        json.remove(key);
+                    } else {
+                        // Clean up empty strings and objects within the array
+                        JSONArray cleanedArray = new JSONArray();
+                        for (int i = 0; i < arrayValue.length(); i++) {
+                            Object element = arrayValue.get(i);
+                            if (element instanceof String str && str.trim().isEmpty()) {
+                                // Skip empty strings
+                            } else
+                                //noinspection SizeReplaceableByIsEmpty
+                                if (element instanceof JSONObject obj && obj.length() == 0) {
+                                // Skip empty objects
+                                } else {
+                                cleanedArray.put(element);
+                                removeEmptyStringFields(element);
+                            }
+                        }
+                        // If the array becomes empty after cleaning, remove it
+                        //noinspection SizeReplaceableByIsEmpty
+                        if (cleanedArray.length() == 0) {
+                            json.remove(key);
+                        } else {
+                            json.put(key, cleanedArray);
+                        }
+                    }
+                } else
+                    //noinspection SizeReplaceableByIsEmpty
+                    if (value instanceof JSONObject objValue && objValue.length() == 0) {
+                    // Remove empty objects
+                    json.remove(key);
+                } else {
+                    removeEmptyStringFields(value);
+                }
+            }
+        } else if (node instanceof JSONArray array) {
+            for (int i = 0; i < array.length(); i++) {
+                removeEmptyStringFields(array.get(i));
             }
         }
     }

@@ -245,7 +245,7 @@ class CathUtilsTest {
         throws TransformerException, ParserConfigurationException, SAXException, IOException {
         // Setup using the example transformed xml
         final String exampleXmlPath =
-            "src/main/resources/database/test-data/example_list_xml_docs/DailyList_999_200108141220_Transformed.xml";
+            "src/main/resources/database/test-data/example_list_xml_docs/WL_Portsmouth_04102024 2 3.xml";
 
         XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
         xhbCathDocumentLinkDao.setCathXmlId(1);
