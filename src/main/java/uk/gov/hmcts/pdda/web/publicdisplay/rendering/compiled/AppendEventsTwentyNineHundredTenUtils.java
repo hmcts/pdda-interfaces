@@ -17,7 +17,6 @@ public final class AppendEventsTwentyNineHundredTenUtils {
 
     private static final String SPACE = " ";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String DEFENCE = "Defence";
     private static final String LEGAL_SUBMISSIONS = "Legal_Submissions";
 
@@ -30,20 +29,7 @@ public final class AppendEventsTwentyNineHundredTenUtils {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, DEFENCE));
         AppendUtils.append(buffer, SPACE);
 
-        Integer defOnCaseId = null;
-        Object maybeNode = node.get(DEFENDANT_ON_CASE_ID);
-
-        if (maybeNode instanceof LeafEventXmlNode) {
-            String val = ((LeafEventXmlNode) maybeNode).getValue();
-            if (val != null && !val.isBlank()) {
-                try {
-                    defOnCaseId = Integer.valueOf(val.trim());
-                } catch (NumberFormatException e) {
-                    // log number format problem, leave defOnCaseId null or handle as needed
-                    LOG.warn("Invalid integer value for DEFENDANT_ON_CASE_ID: '{}'", val, e);
-                }
-            }
-        }
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
 
         if (defOnCaseId == null) {
             LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
