@@ -29,9 +29,17 @@ version = '1.0'
 description = 'PDDA'
 
 java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
-  }
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+    // also set compatibility explicitly
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// make javac emit classes compatible with 17 (safer if toolchain isn't used at runtime)
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
 }
 
 sourceSets {

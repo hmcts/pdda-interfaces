@@ -1,6 +1,8 @@
 
 package uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundle;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
@@ -9,6 +11,9 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.LeafEventXmlNode;
 import java.util.Collection;
 
 public final class AppendEventsTwentyNineHundredTenUtils {
+    
+    private static final Logger LOG =
+        LoggerFactory.getLogger(AppendEventsTwentyNineHundredTenUtils.class);
 
     private static final String SPACE = " ";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
@@ -25,14 +30,31 @@ public final class AppendEventsTwentyNineHundredTenUtils {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, DEFENCE));
         AppendUtils.append(buffer, SPACE);
 
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer,
-                ((LeafEventXmlNode) node.get("E20910_Defence_CC_Name")).getValue());
-            AppendUtils.append(buffer, SPACE);
+        Integer defOnCaseId = null;
+        Object maybeNode = node.get(DEFENDANT_ON_CASE_ID);
+
+        if (maybeNode instanceof LeafEventXmlNode) {
+            String val = ((LeafEventXmlNode) maybeNode).getValue();
+            if (val != null && !val.isBlank()) {
+                try {
+                    defOnCaseId = Integer.valueOf(val.trim());
+                } catch (NumberFormatException e) {
+                    // log number format problem, leave defOnCaseId null or handle as needed
+                    LOG.warn("Invalid integer value for DEFENDANT_ON_CASE_ID: '{}'", val, e);
+                }
+            }
         }
 
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer,
+                    ((LeafEventXmlNode) node.get("E20910_Defence_CC_Name")).getValue());
+                AppendUtils.append(buffer, SPACE);
+            }
+        }
+        
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Case_Closed"));
     }
 

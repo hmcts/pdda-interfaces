@@ -126,14 +126,31 @@ public final class AppendEventsTwentyNineHundredUtils {
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, DEFENCE));
         AppendUtils.append(buffer, SPACE);
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer,
-                ((LeafEventXmlNode) node.get("E20906_Defence_CO_Name")).getValue());
-            AppendUtils.append(buffer, SPACE);
+        
+        Integer defOnCaseId = null;
+        Object maybeNode = node.get(DEFENDANT_ON_CASE_ID);
+
+        if (maybeNode instanceof LeafEventXmlNode) {
+            String val = ((LeafEventXmlNode) maybeNode).getValue();
+            if (val != null && !val.isBlank()) {
+                try {
+                    defOnCaseId = Integer.valueOf(val.trim());
+                } catch (NumberFormatException e) {
+                    // log number format problem, leave defOnCaseId null or handle as needed
+                    LOG.warn("Invalid integer value for DEFENDANT_ON_CASE_ID: '{}'", val, e);
+                }
+            }
         }
 
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer,
+                    ((LeafEventXmlNode) node.get("E20906_Defence_CO_Name")).getValue());
+                AppendUtils.append(buffer, SPACE);
+            }
+        }
         AppendUtils.append(buffer,
             TranslationUtils.translate(documentI18n, "Case_Opened", DEFENCE));
     }
@@ -153,13 +170,30 @@ public final class AppendEventsTwentyNineHundredUtils {
     // OK
     public static void appendEvent20909(StringBuilder buffer, BranchEventXmlNode node,
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
+        
+        Integer defOnCaseId = null;
+        Object maybeNode = node.get(DEFENDANT_ON_CASE_ID);
 
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
-            AppendUtils.append(buffer, SEMI_COLON);
-            AppendUtils.append(buffer, SPACE);
+        if (maybeNode instanceof LeafEventXmlNode) {
+            String val = ((LeafEventXmlNode) maybeNode).getValue();
+            if (val != null && !val.isBlank()) {
+                try {
+                    defOnCaseId = Integer.valueOf(val.trim());
+                } catch (NumberFormatException e) {
+                    // log number format problem, leave defOnCaseId null or handle as needed
+                    LOG.warn("Invalid integer value for DEFENDANT_ON_CASE_ID: '{}'", val, e);
+                }
+            }
+        }
+
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
+                AppendUtils.append(buffer, SEMI_COLON);
+                AppendUtils.append(buffer, SPACE);
+            }
         }
         AppendUtils.append(buffer,
             TranslationUtils.translate(documentI18n, "Defence_Closing_Speech"));
