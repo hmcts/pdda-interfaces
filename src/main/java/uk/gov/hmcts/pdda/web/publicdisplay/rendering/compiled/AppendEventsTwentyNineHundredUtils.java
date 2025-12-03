@@ -20,7 +20,6 @@ public final class AppendEventsTwentyNineHundredUtils {
     private static final String SEMI_COLON = ";";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
     private static final String WITNESS_NUMBER = "Witness_Number";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String E20901_TEO_TIME = "E20901_TEO_time";
     private static final String TRIAL_TIME_ESTIMATE = "Trial_Time_Estimate:";
     private static final String DEFENCE = "Defence";
