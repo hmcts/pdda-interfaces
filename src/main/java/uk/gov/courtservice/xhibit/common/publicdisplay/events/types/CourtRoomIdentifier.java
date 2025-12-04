@@ -1,5 +1,7 @@
 package uk.gov.courtservice.xhibit.common.publicdisplay.events.types;
 
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+
 import java.io.Serializable;
 
 /**
@@ -18,10 +20,12 @@ public class CourtRoomIdentifier implements Serializable {
     private Integer courtId;
 
     private Integer courtRoomId;
-    
+
     private String courtName;
-    
+
     private Integer courtRoomNo;
+
+    private DisplayablePublicNoticeValue[] publicNotices;
 
     /**
      * Create the object using the court id and court room id.
@@ -66,23 +70,30 @@ public class CourtRoomIdentifier implements Serializable {
     public Integer getCourtRoomId() {
         return courtRoomId;
     }
-    
+
     public void setCourtName(String courtName) {
         this.courtName = courtName;
     }
-    
+
     public String getCourtName() {
         return courtName;
     }
-    
+
     public void setCourtRoomNo(Integer courtRoomNo) {
         this.courtRoomNo = courtRoomNo;
     }
-    
+
     public Integer getCourtRoomNo() {
         return courtRoomNo;
     }
-    
+
+    public DisplayablePublicNoticeValue[] getPublicNotices() {
+        return publicNotices;
+    }
+
+    public void setPublicNotices(DisplayablePublicNoticeValue[] publicNotices) {
+        this.publicNotices = publicNotices;
+    }
 
     @Override
     public String toString() {
@@ -93,5 +104,5 @@ public class CourtRoomIdentifier implements Serializable {
             + ", courtRoomNo=" + courtRoomNo
             + '}';
     }
-    
+
 }

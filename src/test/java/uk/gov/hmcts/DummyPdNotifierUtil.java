@@ -1,12 +1,12 @@
 package uk.gov.hmcts;
 
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddadlnotifier.XhbPddaDlNotifierDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefpddamessagetype.XhbRefPddaMessageTypeDao;
 import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DefinitivePublicNoticeStatusValue;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicNoticeValue;
 
 import java.time.LocalDateTime;
@@ -189,9 +189,9 @@ public final class DummyPdNotifierUtil {
         result.setPriority(2);
         result.setDesc(result.getDesc());
         result.setPriority(result.getPriority());
-        result.setIsActive(result.isActive());
+        result.setIsActive(result.getIsActive());
         result.setDefinitivePublicNotice(result.getDefinitivePublicNotice());
-        result.setDirty(result.isDirtyFlagged());
+        result.setDirty(result.getDirty());
         DisplayablePublicNoticeValue compareTo = new DisplayablePublicNoticeValue();
         compareTo.setPriority(3);
         assertNotEquals(0, result.compareTo(compareTo), NOTEQUALS);

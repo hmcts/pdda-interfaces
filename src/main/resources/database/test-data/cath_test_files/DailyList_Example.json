@@ -1,0 +1,5467 @@
+{
+	"DailyList": {
+		"CrownCourt": {
+			"CourtHouseCode": 404,
+			"CourtHouseType": "Crown Court",
+			"CourtHouseName": "BIRMINGHAM",
+			"CourtHouseAddress": {
+				"Line": [
+					"QUEEN ELIZABETH IL LAW COURTS",
+					"1 NEWTON STREET",
+					"-",
+					"-",
+					"BIRMINGHAM"
+				],
+				"PostCode": "B4 7NA"
+			},
+			"CourtHouseTelephone": "0121 6813300"
+		},
+		"DocumentID": {
+			"UniqueID": "CSDDL000000013098136",
+			"DocumentType": "DL",
+			"SellByDate": "2024-10-30"
+		},
+		"ListHeader": {
+			"StartDate": "2020-01-21",
+			"Version": "DRAFT 1",
+			"PublishedTime": "2020-01-07T18:45:03.000",
+			"EndDate": "2020-01-21"
+		},
+		"CourtLists": {
+			"CourtList": [
+				{
+					"Sittings": {
+						"Sitting": [
+							{
+								"CourtRoomNumber": 1,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "HER HONOUR JUDGE H KUBIK KC",
+										"CitizenNameSuffix": "RN",
+										"CitizenNameForename": "RANDOM",
+										"CitizenNameTitle": "HER HONOUR JUDGE"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"PrisonLocation": {
+														"PrisonID": 45356,
+														"Location": "SOMEWHERE"
+													},
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													},
+													"PrisonerID": 1234567
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TPH",
+												"HearingDescription": "Trial (Part Heard)"
+											},
+											"TimeMarkingNote": "SITTING AT  10:00 am",
+											"Respondent": "BLUE PERSON",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "T20227496",
+											"ListNote": "DCS LIVE LINK SCREENS ABE in chief",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "RANDOM SURNAME"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "APN",
+												"HearingDescription": "For Application"
+											},
+											"TimeMarkingNote": "SITTING AT  02:15 pm",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "U20240519",
+											"ListNote": "te 1 HOUR"
+										}
+									]
+								},
+								"SittingNote": "CVP 301"
+							},
+							{
+								"CourtRoomNumber": 1,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:15:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "RT88026",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Drive a motor vehicle dangerously"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "TH68007C",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Conspire to steal from a motor vehicle"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BVA",
+												"HearingDescription": "For Application to Vary Bail Conditions"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															},
+															{
+																"CJSoffenceCode": "SC15005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Intentional strangulation"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "10:45 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"ListNote": "DEFT BY CVP CONF 10:30 - COURT 10:45",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 2,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM",
+										"CitizenNameTitle": "MR"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": {
+														"CJSoffenceCode": "SX03007",
+														"IndictmentCountNumber": 1,
+														"OffenceStatement": "Sexual assault on a female"
+													}
+												},
+												"PersonalDetails": {
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "no",
+													"Address": {
+														"Line": [
+															"-",
+															"-",
+															"-",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Nationality": "NOR",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": [
+															"RANDOM",
+															"NAME"
+														]
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "MEN",
+											"HearingDescription": "For Mention"
+										},
+										"TimeMarkingNote": "",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "T20200718",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "WLONM",
+												"content": 2652
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "WEST LONDON MAGISTRATES'  COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "BRITISH TRANSPORT POLICE"
+											},
+											"ProsecutingReference": "BRITISH TRANSPORT POLICE",
+											"ProsecutingAuthority": "Other Prosecutor"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 2,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:15:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a girl aged 13 / 14 / 15 - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a girl aged 13 / 14 / 15 - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "CH84006",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Detain a child so as to keep him / her from a person having lawful control"
+															},
+															{
+																"CJSoffenceCode": "SX03001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a girl aged 13 / 14 / 15 - SOA 2003"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MEN",
+												"HearingDescription": "For Mention"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, Order made under Section 4 of the Contempt of Court Act 1981, CJ",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "TH68023",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Robbery"
+															},
+															{
+																"CJSoffenceCode": "COML017",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "False imprisonment"
+															},
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "TH68023",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Robbery"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, Section 49 of the Children and Young Persons Act 1933 applies, PH Trial - TE 5-6 days",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "TH68023",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Robbery"
+															},
+															{
+																"CJSoffenceCode": "COML017",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "False imprisonment"
+															},
+															{
+																"CJSoffenceCode": "TH68023",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Robbery"
+															},
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"MaskedName": "******",
+														"IsMasked": "yes",
+														"Name": {
+															"CitizenNameSurname": "******",
+															"CitizenNameRequestedName": "******",
+															"CitizenNameForename": "******"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, Direction made under Section 45 of the Youth Justice and Criminal Evidence Act 1999, Section 49 of the Children and Young Persons Act 1933 applies, PH Trial - TE 5-6 days",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 3,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Justice": {
+										"CitizenNameSurname": "LAST",
+										"CitizenNameRequestedName": "MY NAME",
+										"CitizenNameSuffix": "SUFFIX",
+										"CitizenNameForename": "FIRST",
+										"CitizenNameTitle": "Mr"
+									},
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": "",
+								"SittingNote": "READING DAY"
+							},
+							{
+								"CourtRoomNumber": 4,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameSuffix": "RN",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "TH68036",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Burglary dwelling and theft - no violence"
+														},
+														{
+															"CJSoffenceCode": "TH68013",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Theft of motor vehicle"
+														},
+														{
+															"CJSoffenceCode": "TH68013",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Theft of motor vehicle"
+														},
+														{
+															"CJSoffenceCode": "FA06001",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Dishonestly make false representation to make gain for self/another or cause loss to other/expose other to risk"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"MaskedName": "*****",
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "yes",
+													"Address": {
+														"Line": [
+															"*****",
+															"*****",
+															"*****",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Name": {
+														"CitizenNameSurname": "*****",
+														"CitizenNameForename": "*****"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "DIR",
+											"HearingDescription": "For Directions"
+										},
+										"TimeMarkingNote": "SITTING AT  10:15 am",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "S20240199",
+										"ListNote": "RANDOM NOTE",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 4,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03131",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Voyeurism - recording a private act - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "CJ15013",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Disclose / threaten to disclose private sexual photographs and films with intent to cause distress"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, PH Trial -TE 2 DAYS - Court 4",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71530",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess a controlled drug of Class B - Cannabis / Cannabis Resin"
+															},
+															{
+																"CJSoffenceCode": "TH68036",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary dwelling and theft  - no violence"
+															},
+															{
+																"CJSoffenceCode": "RT88334",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Drive a motor vehicle otherwise than in accordance with a licence - endorsable offence"
+															},
+															{
+																"CJSoffenceCode": "TH68026A",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Attempt burglary dwelling with intent to steal"
+															},
+															{
+																"CJSoffenceCode": "RA88001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Use a motor vehicle on a road / public place without third party insurance"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "DIR",
+												"HearingDescription": "For Directions"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "RANDOM LIST NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "COML016",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Escape from lawful custody"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "DIR",
+												"HearingDescription": "For Directions"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"ListNote": "RANDOM NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "TH68013",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Theft of motor vehicle"
+															},
+															{
+																"CJSoffenceCode": "TH68036",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary dwelling and theft  - no violence"
+															},
+															{
+																"CJSoffenceCode": "TH68036",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary dwelling and theft  - no violence"
+															},
+															{
+																"CJSoffenceCode": "TH68073",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Handle stolen goods"
+															},
+															{
+																"CJSoffenceCode": "TH68013",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Theft of motor vehicle"
+															},
+															{
+																"CJSoffenceCode": "TH68026",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary dwelling - with intent to steal"
+															},
+															{
+																"CJSoffenceCode": "BA76001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Fail to surrender to police / court bail at the appointed time"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "DIR",
+												"HearingDescription": "For Directions"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 4,
+											"CaseNumber": "CPP",
+											"ListNote": "RANDOM LIST NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "COML025A",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Attempt murder - victim aged 1 year or over"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 5,
+											"CaseNumber": "CPP",
+											"ListNote": "LIST ON GROUND PH Trial  TE 5 days (Romanian interpreter)",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 5,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "PC02020C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "PC02020C",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+															},
+															{
+																"CJSoffenceCode": "PC02006",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+															},
+															{
+																"CJSoffenceCode": "RP00005",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Fail to disclose key to protected information"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "T20217281",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "CRIMINAL LITIGATION TEAM  BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "PC02020C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "COML011",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to defraud"
+															},
+															{
+																"CJSoffenceCode": "PC02020C",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+															},
+															{
+																"CJSoffenceCode": "PC02006",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+															},
+															{
+																"CJSoffenceCode": "RP00005",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Fail to disclose key to protected information"
+															},
+															{
+																"CJSoffenceCode": "RP00005",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Fail to disclose key to protected information"
+															},
+															{
+																"CJSoffenceCode": "RP00005",
+																"IndictmentCountNumber": 2,
+																"OffenceStatement": "Fail to disclose key to protected information"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "T20217326",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "WLONM",
+													"content": 2652
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "WEST LONDON MAGISTRATES'  COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "CRIMINAL LITIGATION TEAM  BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "T20227154",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "WYMC",
+													"content": 7410
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "WEST YORKSHIRE MAGISTRATES COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": [
+																	"RANDOM",
+																	"NAME"
+																]
+															}
+														}
+													},
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 2,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																},
+																{
+																	"CJSoffenceCode": "BA76001",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Fail to surrender to police / court bail at the appointed time"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": [
+																	"RANDOM",
+																	"NAME"
+																]
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 4,
+											"CaseNumber": "T20217368",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "CRIMINAL LITIGATION TEAM  BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																},
+																{
+																	"CJSoffenceCode": "RP00005",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Fail to disclose key to protected information"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																]
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																},
+																{
+																	"CJSoffenceCode": "RP00005",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Fail to disclose key to protected information"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": [
+																	"RANDOM",
+																	"NAME"
+																]
+															}
+														}
+													},
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "COML011",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to defraud"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+																},
+																{
+																	"CJSoffenceCode": "RP00005",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Fail to disclose key to protected information"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 5,
+											"CaseNumber": "T20227501",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "CRIMINAL LITIGATION TEAM  BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "FA06001C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to dishonestly make false representation to make gain for self / another / cause loss / expose other to risk"
+																},
+																{
+																	"CJSoffenceCode": "FA06001C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to dishonestly make false representation to make gain for self / another / cause loss / expose other to risk"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to enter into / be concerned in the acquisition / retention / use or control of criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "FA06001C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to dishonestly make false representation to make gain for self / another / cause loss / expose other to risk"
+																},
+																{
+																	"CJSoffenceCode": "FA06001C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to dishonestly make false representation to make gain for self / another / cause loss / expose other to risk"
+																},
+																{
+																	"CJSoffenceCode": "PC02020C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+																},
+																{
+																	"CJSoffenceCode": "PC02006C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to enter into / be concerned in the acquisition / retention / use or control of criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "MEF",
+												"HearingDescription": "For Mention and to Fix"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 6,
+											"CaseNumber": "T20237061",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "BIRMINGHAM CITY COUNCIL"
+												},
+												"ProsecutingReference": "BIRMINGHAM CITY COUNCIL",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															},
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "female",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TPH",
+												"HearingDescription": "Trial (Part Heard)"
+											},
+											"TimeMarkingNote": "SITTING AT  10:30 am",
+											"HearingSequenceNumber": 7,
+											"CaseNumber": "T20227331",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71131C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+																},
+																{
+																	"CJSoffenceCode": "MD71134C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to supply a class A controlled drug - crack cocaine"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71131C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+																},
+																{
+																	"CJSoffenceCode": "MD71134C",
+																	"IndictmentCountNumber": 1,
+																	"OffenceStatement": "Conspire to supply a class A controlled drug - crack cocaine"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"DateOfBirth": {
+																"VerifiedBy": "not verified",
+																"BirthDate": "2000-01-01"
+															},
+															"IsMasked": "no",
+															"Address": {
+																"Line": [
+																	"-",
+																	"-",
+																	"-",
+																	"-",
+																	"-"
+																],
+																"PostCode": "ABC 1DE"
+															},
+															"Sex": "male",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "TPH",
+												"HearingDescription": "Trial (Part Heard)"
+											},
+											"TimeMarkingNote": "SITTING AT  10:30 am",
+											"HearingSequenceNumber": 8,
+											"CaseNumber": "T20227292",
+											"ListNote": "RANDOM NOTE",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "RANDOM ORGANISATION"
+												},
+												"ProsecutingReference": "Crown Prosecution Service COMPLEX CASEWORK UNIT",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								},
+								"SittingNote": "CVP 2012"
+							},
+							{
+								"CourtRoomNumber": 6,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "CE79158",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Fraudulently evade any duty / prohibition / restriction / provision"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": [
+																"RANDOM",
+																"NAME"
+															]
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "T20240024",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "NWLNM",
+													"content": 2571
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "NORTH WEST LONDON MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "MD71131C",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Nationality": "GBR",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": [
+																"RANDOM",
+																"NAME"
+															]
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "SITTING AT  10:15 am",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "T20237068",
+											"ListNote": "CPOM DEFT BY CVP",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "NATIONAL CRIME AGENCY"
+												},
+												"ProsecutingReference": "NATIONAL CRIME AGENCY",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "PU86003",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Affray"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BOO",
+												"HearingDescription": "Breach of Order"
+											},
+											"TimeMarkingNote": "SITTING AT  10:30 am",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "S20240260",
+											"ListNote": "BB",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "PROBATION SERVICE"
+												},
+												"ProsecutingReference": "PROBATION SERVICE",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71231",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Heroin"
+															},
+															{
+																"CJSoffenceCode": "MD71234",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Crack Cocaine"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BSS",
+												"HearingDescription": "Breach of Suspended Sentence"
+											},
+											"TimeMarkingNote": "SITTING AT  11:00 am",
+											"HearingSequenceNumber": 4,
+											"CaseNumber": "S20240297",
+											"ListNote": "RANDOM NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "ORGANISATION NAME"
+												},
+												"ProsecutingReference": "PROBATION SERVICE",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "TH68047",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Aggravated burglary with intent - dwelling"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": [
+																"RANDOM",
+																"NAME"
+															]
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BSS",
+												"HearingDescription": "Breach of Suspended Sentence"
+											},
+											"TimeMarkingNote": "SITTING AT  11:30 am",
+											"HearingSequenceNumber": 5,
+											"CaseNumber": "S20240279",
+											"ListNote": "RANDOM NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "RANDOM ORGANISATION"
+												},
+												"ProsecutingReference": "PROBATION SERVICE",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "TH68144",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Aggravated vehicle taking - (initial taker) and property damage under �5000"
+															},
+															{
+																"CJSoffenceCode": "RA88001",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Use a motor vehicle on a road / public place without third party insurance"
+															},
+															{
+																"CJSoffenceCode": "RT88334",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Drive a motor vehicle otherwise than in accordance with a licence - endorsable offence"
+															},
+															{
+																"CJSoffenceCode": "RT88026",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Drive a motor vehicle dangerously"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BSS",
+												"HearingDescription": "Breach of Suspended Sentence"
+											},
+											"TimeMarkingNote": "SITTING AT  12:00 pm",
+											"HearingSequenceNumber": 6,
+											"CaseNumber": "S20240259",
+											"ListNote": "BB",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "PROBATION SERVICE"
+												},
+												"ProsecutingReference": "PROBATION SERVICE",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "CJ88144",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+															},
+															{
+																"CJSoffenceCode": "CJ88144",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+															},
+															{
+																"CJSoffenceCode": "CJ88144",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "CSE",
+												"HearingDescription": "Committal for Sentence"
+											},
+											"TimeMarkingNote": "SITTING AT  12:30 pm",
+											"HearingSequenceNumber": 7,
+											"CaseNumber": "S20240282",
+											"CommittingCourt": {
+												"CourtHouseCode": {
+													"CourtHouseShortName": "BSOLM",
+													"content": 2922
+												},
+												"CourtHouseType": "Magistrates Court",
+												"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+											},
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "BRITISH TRANSPORT POLICE"
+												},
+												"ProsecutingReference": "BRITISH TRANSPORT POLICE",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 6,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "14:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "CD71039",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Criminal damage to property valued under �5000"
+															},
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "CSE",
+												"HearingDescription": "Committal for Sentence"
+											},
+											"TimeMarkingNote": "2:00 PM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "TH68036",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary dwelling and theft  - no violence"
+															},
+															{
+																"CJSoffenceCode": "MD71210",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess a controlled drug of Class A - Cocaine"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "2:30 PM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 7,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "RANDOM",
+										"CitizenNameRequestedName": "RANDOM NAME"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": "",
+								"SittingNote": "CVP 175"
+							},
+							{
+								"CourtRoomNumber": 7,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71230",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Cocaine"
+															},
+															{
+																"CJSoffenceCode": "PC02021",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Acquire / use / possess criminal property"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "CSE",
+												"HearingDescription": "Committal for Sentence"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "RANDOM NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71230",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Cocaine"
+																},
+																{
+																	"CJSoffenceCode": "PC02021",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Acquire / use / possess criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"IsMasked": "no",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameRequestedName": "RANDOM NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71230",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Cocaine"
+																},
+																{
+																	"CJSoffenceCode": "PC02021",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Acquire / use / possess criminal property"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"IsMasked": "no",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameRequestedName": "RANDOM NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "RESERVED",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": [
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71533",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Concerned in the supply of a controlled drug of Class B - cannabis"
+																},
+																{
+																	"CJSoffenceCode": "MD71170",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Concerned in supply of cocaine"
+																},
+																{
+																	"CJSoffenceCode": "MD71230",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Cocaine"
+																},
+																{
+																	"CJSoffenceCode": "MD71526",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess with intent to supply a controlled drug of Class B - Cannabis"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"IsMasked": "no",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameRequestedName": "RANDOM NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													},
+													{
+														"URN": "12SW3456789",
+														"Charges": {
+															"Charge": [
+																{
+																	"CJSoffenceCode": "MD71210",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess a controlled drug of Class A - Cocaine"
+																},
+																{
+																	"CJSoffenceCode": "MD71225",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess a controlled drug of Class B - Other"
+																},
+																{
+																	"CJSoffenceCode": "MD71210",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Possess a controlled drug of Class A - Cocaine"
+																},
+																{
+																	"CJSoffenceCode": "MD71170",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Concerned in supply of cocaine"
+																},
+																{
+																	"CJSoffenceCode": "MD71533",
+																	"IndictmentCountNumber": 0,
+																	"OffenceStatement": "Concerned in the supply of a controlled drug of Class B - cannabis"
+																}
+															]
+														},
+														"PersonalDetails": {
+															"IsMasked": "no",
+															"Name": {
+																"CitizenNameSurname": "NAME",
+																"CitizenNameRequestedName": "RANDOM NAME",
+																"CitizenNameForename": "RANDOM"
+															}
+														}
+													}
+												]
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"ListNote": "RESERVED",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71170",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Concerned in supply of cocaine"
+															},
+															{
+																"CJSoffenceCode": "PC02021",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Acquire / use / possess criminal property"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 4,
+											"CaseNumber": "CPP",
+											"ListNote": "RESERVED",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71230",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71170",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Concerned in supply of cocaine"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "SEN",
+												"HearingDescription": "For Sentence"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 5,
+											"CaseNumber": "CPP",
+											"ListNote": "RESERVED",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "CJ88159",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Common assault of an emergency worker"
+															},
+															{
+																"CJSoffenceCode": "CD71015",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Arson"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "12:00 PM",
+											"HearingSequenceNumber": 6,
+											"CaseNumber": "CPP",
+											"ListNote": "Wheelchair accessible court required. New Trial TE 3 days (CJ)",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 8,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameSuffix": "RN",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:30:00",
+								"Hearings": ""
+							},
+							{
+								"CourtRoomNumber": 8,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:30:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "SX03002",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+														},
+														{
+															"CJSoffenceCode": "SX03002",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+														},
+														{
+															"CJSoffenceCode": "SX03005",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+														},
+														{
+															"CJSoffenceCode": "SX03005",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Assault a female 13 and over by penetration with part of body / a thing - SOA 2003"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "TRL",
+											"HearingDescription": "For Trial"
+										},
+										"TimeMarkingNote": "10:30 AM",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "CPP",
+										"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, PH Trial -  TE 3 days - No witnesses on Day 1",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 9,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": "",
+								"SittingNote": "CVP 262"
+							},
+							{
+								"CourtRoomNumber": 9,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03118C",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Conspiracy to cause / incite prostitution for gain"
+															},
+															{
+																"CJSoffenceCode": "MS15003C",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Conspire to arrange or facilitate travel of another person with a view to exploitation"
+															},
+															{
+																"CJSoffenceCode": "PC02020C",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Conspire to conceal / disguise / convert / transfer / remove criminal property"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BVA",
+												"HearingDescription": "For Application to Vary Bail Conditions"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71214",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess a controlled drug of Class A - Crack Cocaine"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BLA",
+												"HearingDescription": "For Application for Bail"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences (Amendment) Act 1992, Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "CD71039",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Criminal damage to property valued under �5000"
+															},
+															{
+																"CJSoffenceCode": "CD71039",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Criminal damage to property valued under �5000"
+															},
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "BVA",
+												"HearingDescription": "For Application to Vary Bail Conditions"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SC15006",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Intentional suffocation"
+															},
+															{
+																"CJSoffenceCode": "SX03002A",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Attempt to rape a woman 16 or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "10:45 AM",
+											"HearingSequenceNumber": 4,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, CJ only",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "COML020A",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Attempt kidnap - common law"
+															},
+															{
+																"CJSoffenceCode": "SC15005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Intentional strangulation"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "11:00 AM",
+											"HearingSequenceNumber": 5,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "OF61017",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Section 18 - grievous bodily harm with intent"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "11:15 AM",
+											"HearingSequenceNumber": 6,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "SX03224A",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Adult attempt to engage in sexual communication with a child"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "FCM",
+												"HearingDescription": "Further Case Management"
+											},
+											"TimeMarkingNote": "11:30 AM",
+											"HearingSequenceNumber": 7,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, CPS request - Ref Required witnesses - Release with RJ",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "SX03007",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Sexual assault on a female"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "11:45 AM",
+											"HearingSequenceNumber": 8,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, CJ or STR",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "PC02006",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Enter into / concerned in acquisition / retention / use or control criminal property"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "APN",
+												"HearingDescription": "For Application"
+											},
+											"TimeMarkingNote": "12:00 PM",
+											"HearingSequenceNumber": 9,
+											"CaseNumber": "CPP",
+											"ListNote": "S8 APPLICATION",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "TH68037",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Burglary other than dwelling - theft"
+															},
+															{
+																"CJSoffenceCode": "OF61016",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Section 18 - wounding with intent"
+															},
+															{
+																"CJSoffenceCode": "PC53001",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess an offensive weapon in a public place"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "APN",
+												"HearingDescription": "For Application"
+											},
+											"TimeMarkingNote": "2:00 PM",
+											"HearingSequenceNumber": 10,
+											"CaseNumber": "CPP",
+											"ListNote": "DEFENDANT TO BE PRODUCED - S8 APPLICATION",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 10,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": [
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "MD71526",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Possess with intent to supply a controlled drug of Class B - cannabis"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "female",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "MD71526",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Possess with intent to supply a controlled drug of Class B - cannabis"
+														}
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											]
+										},
+										"HearingDetails": {
+											"HearingType": "TPH",
+											"HearingDescription": "Trial (Part Heard)"
+										},
+										"TimeMarkingNote": "SITTING AT  10:30 am",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "T20220276",
+										"ListNote": "RANDOM NOTE",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 10,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": {
+														"CJSoffenceCode": "TH68023",
+														"IndictmentCountNumber": 0,
+														"OffenceStatement": "Robbery"
+													}
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "PTR",
+											"HearingDescription": "For Pre-Trial Review"
+										},
+										"TimeMarkingNote": "10:00 AM",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "CPP",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 11,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "12:30:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														},
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														},
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														},
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														},
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														},
+														{
+															"CJSoffenceCode": "PK78008",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Make indecent photograph / pseudo-photograph of a child"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "no",
+													"Address": {
+														"Line": [
+															"-",
+															"-",
+															"-",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "TPH",
+											"HearingDescription": "Trial (Part Heard)"
+										},
+										"TimeMarkingNote": "SITTING AT  02:00 pm",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "T20190110",
+										"ListNote": "DCS**SCREENS**",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								},
+								"SittingNote": "CVP 2013"
+							},
+							{
+								"CourtRoomNumber": 11,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "12:30:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MT88007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Send letter / communication / article conveying a threatening message"
+															},
+															{
+																"CJSoffenceCode": "CJ88144",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "FCM",
+												"HearingDescription": "Further Case Management"
+											},
+											"TimeMarkingNote": "12:30 PM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71174",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Concerned in the supply of crack cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71234",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Crack Cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71231",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Possess with intent to supply a controlled drug of Class A - Heroin"
+															},
+															{
+																"CJSoffenceCode": "MD71171",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Concerned in supply of heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTR",
+												"HearingDescription": "For Pre-Trial Review"
+											},
+											"TimeMarkingNote": "12:45 PM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 12,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": [
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Nationality": "GBR",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": [
+																"RANDOM",
+																"NAME"
+															]
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"MaskedName": "*****",
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "yes",
+														"Address": {
+															"Line": [
+																"*****",
+																"-",
+																"-",
+																"*****",
+																"*****"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "*****",
+															"CitizenNameForename": "*****"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Nationality": "GBR",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": [
+																"RANDOM",
+																"NAME"
+															]
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												},
+												{
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "MD71130C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - cocaine"
+															},
+															{
+																"CJSoffenceCode": "MD71131C",
+																"IndictmentCountNumber": 1,
+																"OffenceStatement": "Conspire to supply a class A controlled drug - heroin"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"DateOfBirth": {
+															"VerifiedBy": "not verified",
+															"BirthDate": "2000-01-01"
+														},
+														"IsMasked": "no",
+														"Address": {
+															"Line": [
+																"-",
+																"-",
+																"-",
+																"-",
+																"-"
+															],
+															"PostCode": "ABC 1DE"
+														},
+														"Sex": "male",
+														"Nationality": "GBR",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											]
+										},
+										"HearingDetails": {
+											"HearingType": "TPH",
+											"HearingDescription": "Trial (Part Heard)"
+										},
+										"TimeMarkingNote": "SITTING AT  10:30 am",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "T20217564",
+										"ListNote": "RANDOM NOTE",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "RANDOM ORGANISATION"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 12,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															},
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															},
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															},
+															{
+																"CJSoffenceCode": "SC15004",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Engage in controlling / coercive behaviour in an intimate / family relationship"
+															},
+															{
+																"CJSoffenceCode": "OF61017",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Section 18 - grievous bodily harm with intent"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "RANDOM NOTE",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "OF61073",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Throw / cast corrosive fluid with intent to burn / maim / disfigure / disable / do grievous bodily harm"
+															},
+															{
+																"CJSoffenceCode": "OF61073",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Throw / cast corrosive fluid with intent to burn / maim / disfigure / disable / do grievous bodily harm"
+															},
+															{
+																"CJSoffenceCode": "CD71049",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Arson with intent to endanger life"
+															},
+															{
+																"CJSoffenceCode": "OF61073",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Throw / cast corrosive fluid with intent to burn / maim / disfigure / disable / do grievous bodily harm"
+															},
+															{
+																"CJSoffenceCode": "OF61073",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Throw / cast corrosive fluid with intent to burn / maim / disfigure / disable / do grievous bodily harm"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "CJ",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							}
+						]
+					},
+					"CourtHouse": {
+						"CourtHouseCode": 404,
+						"CourtHouseType": "Crown Court",
+						"CourtHouseName": "BIRMINGHAM"
+					}
+				},
+				{
+					"Sittings": {
+						"Sitting": [
+							{
+								"CourtRoomNumber": 14,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "RANDOM",
+										"CitizenNameRequestedName": "RANDOM NAME"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": {
+														"CJSoffenceCode": "FI68010",
+														"IndictmentCountNumber": 1,
+														"OffenceStatement": "Posses ammunition without a certificate"
+													}
+												},
+												"PersonalDetails": {
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "no",
+													"Address": {
+														"Line": [
+															"-D",
+															"-",
+															"-",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "BSS",
+											"HearingDescription": "Breach of Suspended Sentence"
+										},
+										"TimeMarkingNote": "",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "S20240309",
+										"ListNote": "RANDOM NOTE",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "RANDOM ORGANISATION"
+											},
+											"ProsecutingReference": "PROBATION SERVICE",
+											"ProsecutingAuthority": "Other Prosecutor"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 15,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "TPH",
+											"HearingDescription": "Trial (Part Heard)"
+										},
+										"TimeMarkingNote": "SITTING AT  10:30 am",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "U20240543",
+										"ListNote": "New Trial - TE 2-3 days  (Sec 28)"
+									}
+								},
+								"SittingNote": "CVP 2015"
+							},
+							{
+								"CourtRoomNumber": 16,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "RANDOM",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameSuffix": "RN"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": {
+														"CJSoffenceCode": "CA03006",
+														"IndictmentCountNumber": 1,
+														"OffenceStatement": "Cause to be sent by public communication network an offensive / indecent / obscene / menacing message / matter"
+													}
+												},
+												"PersonalDetails": {
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "no",
+													"Address": {
+														"Line": [
+															"-",
+															"-",
+															"-",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "MDA",
+											"HearingDescription": "For Mention (Defendant to Attend)"
+										},
+										"TimeMarkingNote": "",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "A20240107",
+										"ListNote": "PAPER FILE",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "RANDOM ORGANISATION"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 17,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "CJ88149",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Assault by beating of an emergency worker"
+														},
+														{
+															"CJSoffenceCode": "CJ88149",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Assault by beating of an emergency worker"
+														},
+														{
+															"CJSoffenceCode": "CJ88149",
+															"IndictmentCountNumber": 1,
+															"OffenceStatement": "Assault by beating of an emergency worker"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"DateOfBirth": {
+														"VerifiedBy": "not verified",
+														"BirthDate": "2000-01-01"
+													},
+													"IsMasked": "no",
+													"Address": {
+														"Line": [
+															"-",
+															"-",
+															"-",
+															"-",
+															"-"
+														],
+														"PostCode": "ABC 1DE"
+													},
+													"Sex": "male",
+													"Nationality": "GBR",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameForename": [
+															"RANDOM",
+															"NAME"
+														]
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "PTR",
+											"HearingDescription": "For Pre-Trial Review"
+										},
+										"TimeMarkingNote": "SITTING AT  10:00 am",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "T20200707",
+										"ListNote": "DCS Defence counsel u/a for TRL date",
+										"CommittingCourt": {
+											"CourtHouseCode": {
+												"CourtHouseShortName": "BSOLM",
+												"content": 2922
+											},
+											"CourtHouseType": "Magistrates Court",
+											"CourtHouseName": "BIRMINGHAM AND SOLIHULL MAGISTRATES' COURT"
+										},
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 99,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "N/A",
+										"CitizenNameRequestedName": "N/A"
+									}
+								},
+								"Hearings": "",
+								"SittingNote": "WORK TO BE PLACED"
+							},
+							{
+								"CourtRoomNumber": 99,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 2,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "N/A",
+										"CitizenNameRequestedName": "N/A"
+									}
+								},
+								"Hearings": "",
+								"SittingNote": "PLEASE SEE THE FOLLOWING CHANGES"
+							}
+						]
+					},
+					"CourtHouse": {
+						"CourtHouseCode": 404,
+						"CourtHouseType": "Crown Court",
+						"CourtHouseName": "4 NEWTON STREET"
+					}
+				},
+				{
+					"Sittings": {
+						"Sitting": [
+							{
+								"CourtRoomNumber": 14,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:30:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "MT88005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Send communication / article of an indecent / offensive nature"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "PH97011",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Stalking involving serious alarm / distress"
+															},
+															{
+																"CJSoffenceCode": "SX03002",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Rape a woman 16 years of age or over - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "PH97011",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Stalking involving serious alarm / distress"
+															},
+															{
+																"CJSoffenceCode": "SX03128",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Exposure - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "MT88005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Send communication / article of an indecent / offensive nature"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03128",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Exposure - SOA 2003"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, PH Trial - TE 8 days",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															},
+															{
+																"CJSoffenceCode": "SX03007",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Sexual assault on a female"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992, PH Trial - TE 8 days",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Other Prosecutor"
+												},
+												"ProsecutingReference": "Other Prosecutor",
+												"ProsecutingAuthority": "Other Prosecutor"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 15,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:00:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "SC15005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Intentional strangulation"
+															},
+															{
+																"CJSoffenceCode": "CD71039",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Criminal damage to property valued under �5000"
+															},
+															{
+																"CJSoffenceCode": "CJ88116",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault by beating"
+															},
+															{
+																"CJSoffenceCode": "CJ88116",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault by beating"
+															},
+															{
+																"CJSoffenceCode": "CJ88116",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault by beating"
+															},
+															{
+																"CJSoffenceCode": "CJ88116",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault by beating"
+															},
+															{
+																"CJSoffenceCode": "CJ88116",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault by beating"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "10:00 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"ListNote": "CJ ONLY",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": [
+															{
+																"CJSoffenceCode": "OF61102",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Assault a person thereby occasioning them actual bodily harm"
+															},
+															{
+																"CJSoffenceCode": "SC15005",
+																"IndictmentCountNumber": 0,
+																"OffenceStatement": "Intentional strangulation"
+															}
+														]
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "RE DEFT REP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "OF61017",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Section 18 - grievous bodily harm with intent"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "MDA",
+												"HearingDescription": "For Mention (Defendant to Attend)"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 3,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							},
+							{
+								"CourtRoomNumber": 16,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:30:00",
+								"Hearings": {
+									"Hearing": {
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "FI68320",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess a firearm with intent to cause fear of violence"
+														},
+														{
+															"CJSoffenceCode": "FI68421",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess a firearm of length less than 30cm / 60cm - prohibited weapon"
+														},
+														{
+															"CJSoffenceCode": "FI68059",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess a firearm with intent to endanger life / enable an other to do so"
+														},
+														{
+															"CJSoffenceCode": "MD71210",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess a controlled drug of Class A - Cocaine"
+														},
+														{
+															"CJSoffenceCode": "FI68010",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess ammunition for a firearm without a certificate"
+														},
+														{
+															"CJSoffenceCode": "MD71530",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess a controlled drug of Class B - Cannabis / Cannabis Resin"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "TRL",
+											"HearingDescription": "For Trial"
+										},
+										"TimeMarkingNote": "10:30 AM",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "CPP",
+										"ListNote": "New Trial -TE 2 days -CJ only",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								}
+							},
+							{
+								"CourtRoomNumber": 17,
+								"SittingPriority": "T",
+								"SittingSequenceNo": 1,
+								"Judiciary": {
+									"Judge": {
+										"CitizenNameSurname": "NAME",
+										"CitizenNameRequestedName": "RANDOM NAME",
+										"CitizenNameForename": "RANDOM"
+									}
+								},
+								"SittingAt": "10:15:00",
+								"Hearings": {
+									"Hearing": [
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "MD71531",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Produce controlled drug of Class B - cannabis"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "PTP",
+												"HearingDescription": "Plea and Trial Preparation"
+											},
+											"TimeMarkingNote": "10:15 AM",
+											"HearingSequenceNumber": 1,
+											"CaseNumber": "CPP",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										},
+										{
+											"Defendants": {
+												"Defendant": {
+													"URN": "12SW3456789",
+													"Charges": {
+														"Charge": {
+															"CJSoffenceCode": "TH68023",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Robbery"
+														}
+													},
+													"PersonalDetails": {
+														"IsMasked": "no",
+														"Name": {
+															"CitizenNameSurname": "NAME",
+															"CitizenNameRequestedName": "RANDOM NAME",
+															"CitizenNameForename": "RANDOM"
+														}
+													}
+												}
+											},
+											"HearingDetails": {
+												"HearingType": "TRL",
+												"HearingDescription": "For Trial"
+											},
+											"TimeMarkingNote": "10:30 AM",
+											"HearingSequenceNumber": 2,
+											"CaseNumber": "CPP",
+											"ListNote": "PH Trial - TE 2 days",
+											"Prosecution": {
+												"ProsecutingOrganisation": {
+													"OrganisationName": "Crown Prosecution Service"
+												},
+												"ProsecutingReference": "Crown Prosecution Service",
+												"ProsecutingAuthority": "Crown Prosecution Service"
+											}
+										}
+									]
+								}
+							}
+						]
+					},
+					"CourtHouse": {
+						"CourtHouseCode": 485,
+						"CourtHouseType": "Crown Court",
+						"CourtHouseName": "4 NEWTON STREET"
+					}
+				},
+				{
+					"Sittings": {
+						"Sitting": {
+							"CourtRoomNumber": 18,
+							"SittingPriority": "T",
+							"SittingSequenceNo": 1,
+							"Judiciary": {
+								"Judge": {
+									"CitizenNameSurname": "NONE",
+									"CitizenNameRequestedName": "NONE",
+									"CitizenNameForename": "NONE"
+								}
+							},
+							"SittingAt": "10:15:00",
+							"Hearings": {
+								"Hearing": [
+									{
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": {
+														"CJSoffenceCode": "CJ88144",
+														"IndictmentCountNumber": 0,
+														"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+													}
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "PTR",
+											"HearingDescription": "For Pre-Trial Review"
+										},
+										"TimeMarkingNote": "10:15 AM",
+										"HearingSequenceNumber": 1,
+										"CaseNumber": "CPP",
+										"ListNote": "work to be placed",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									},
+									{
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "CA03005",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Send by public communication network an offensive / indecent / obscene / menacing message / matter"
+														},
+														{
+															"CJSoffenceCode": "FL96001",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Breach a non-molestation order - Family Law Act 1996"
+														},
+														{
+															"CJSoffenceCode": "PH97006",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Stalking without fear / alarm / distress"
+														},
+														{
+															"CJSoffenceCode": "SX03252",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Threaten to share photograph or film of person in intimate state"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "CSE",
+											"HearingDescription": "Committal for Sentence"
+										},
+										"TimeMarkingNote": "10:30 AM",
+										"HearingSequenceNumber": 2,
+										"CaseNumber": "CPP",
+										"ListNote": "work to be placed",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Other Prosecutor"
+											},
+											"ProsecutingReference": "Other Prosecutor",
+											"ProsecutingAuthority": "Other Prosecutor"
+										}
+									},
+									{
+										"Defendants": {
+											"Defendant": {
+												"URN": "12SW3456789",
+												"Charges": {
+													"Charge": [
+														{
+															"CJSoffenceCode": "CJ88144",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess knife blade / sharp pointed article in a public place - Criminal Justice Act 1988"
+														},
+														{
+															"CJSoffenceCode": "PC53001",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Possess an offensive weapon in a public place"
+														},
+														{
+															"CJSoffenceCode": "TH68027",
+															"IndictmentCountNumber": 0,
+															"OffenceStatement": "Burglary other than dwelling with intent to steal"
+														}
+													]
+												},
+												"PersonalDetails": {
+													"IsMasked": "no",
+													"Name": {
+														"CitizenNameSurname": "NAME",
+														"CitizenNameRequestedName": "RANDOM NAME",
+														"CitizenNameForename": "RANDOM"
+													}
+												}
+											}
+										},
+										"HearingDetails": {
+											"HearingType": "CSE",
+											"HearingDescription": "Committal for Sentence"
+										},
+										"TimeMarkingNote": "10:30 AM",
+										"HearingSequenceNumber": 3,
+										"CaseNumber": "CPP",
+										"ListNote": "PSR - work to be placed",
+										"Prosecution": {
+											"ProsecutingOrganisation": {
+												"OrganisationName": "Crown Prosecution Service"
+											},
+											"ProsecutingReference": "Crown Prosecution Service",
+											"ProsecutingAuthority": "Crown Prosecution Service"
+										}
+									}
+								]
+							}
+						}
+					},
+					"CourtHouse": {
+						"CourtHouseCode": 6405,
+						"CourtHouseType": "Crown Court",
+						"CourtHouseName": "RANDOM COURT HOUSE NAME"
+					}
+				}
+			]
+		}
+	}
+}

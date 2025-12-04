@@ -47,7 +47,7 @@ public class AbstractControllerBean {
         this.xhbConfigPropRepository = xhbConfigPropRepository;
         this.xhbCppFormattingRepository = xhbCppFormattingRepository;
     }
-    
+
     protected void clearRepositories() {
         LOG.info("clearRepositories()");
         xhbClobRepository = null;
@@ -83,7 +83,7 @@ public class AbstractControllerBean {
         }
         return xhbClobRepository;
     }
-    
+
     protected XhbBlobRepository getXhbBlobRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbBlobRepository)) {
             xhbBlobRepository = new XhbBlobRepository(getEntityManager());
@@ -114,7 +114,7 @@ public class AbstractControllerBean {
     }
 
     protected XhbConfigPropRepository getXhbConfigPropRepository() {
-        if (!RepositoryUtil.isRepositoryActive(xhbConfigPropRepository)) {
+        if (xhbConfigPropRepository == null || !isEntityManagerActive()) {
             xhbConfigPropRepository = new XhbConfigPropRepository(getEntityManager());
         }
         return xhbConfigPropRepository;
@@ -148,7 +148,7 @@ public class AbstractControllerBean {
         }
         return xhbFormattingRepository;
     }
-    
+
     /**
      * Retrieves a reference to the xhbCppStagingInboundRepository.
      * @return XhbCppStagingInboundRepository
@@ -159,8 +159,8 @@ public class AbstractControllerBean {
         }
         return xhbCppStagingInboundRepository;
     }
-    
-    
+
+
     public XhbInternetHtmlRepository getXhbInternetHtmlRepository() {
         if (xhbInternetHtmlRepository == null || !isEntityManagerActive()) {
             xhbInternetHtmlRepository = new XhbInternetHtmlRepository(getEntityManager());

@@ -6,9 +6,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.env.Environment;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.jms.PublicDisplayNotifier;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,6 +30,12 @@ class XhibitPddaHelperTest {
     private XhbConfigPropRepository mockConfigPropRepo;
     private XhbClobRepository mockClobRepo;
     private XhbCourtRepository mockCourtRepo;
+    private XhbCaseRepository mockCaseRepo;
+    private XhbHearingRepository mockHearingRepo;
+    private XhbSittingRepository mockSittingRepo;
+    private XhbScheduledHearingRepository mockScheduledHearingRepo;
+    private XhbPublicNoticeRepository mockPublicNoticeRepo;
+    private XhbConfiguredPublicNoticeRepository mockConfiguredPublicNoticeRepo;
     private PddaMessageHelper mockPddaMessageHelper;
     private PddaSftpHelper mockPddaSftpHelper;
     private PublicDisplayNotifier mockPublicDisplayNotifier;
@@ -46,7 +58,9 @@ class XhibitPddaHelperTest {
 
         helper =
             new TestableXhibitPddaHelper(mockEntityManager, mockConfigPropRepo, mockEnvironment,
-                mockPddaSftpHelper, mockPddaMessageHelper, mockClobRepo, mockCourtRepo);
+                mockPddaSftpHelper, mockPddaMessageHelper, mockClobRepo, mockCourtRepo, mockCaseRepo,
+                mockHearingRepo,  mockSittingRepo, mockScheduledHearingRepo, mockPublicNoticeRepo,
+                mockConfiguredPublicNoticeRepo);
 
         helper.setPublicDisplayNotifier(mockPublicDisplayNotifier);
 
@@ -117,8 +131,12 @@ class XhibitPddaHelperTest {
     private static class TestableXhibitPddaHelper extends XhibitPddaHelper {
         public TestableXhibitPddaHelper(EntityManager em, XhbConfigPropRepository configRepo,
             Environment env, PddaSftpHelper sftpHelper, PddaMessageHelper msgHelper,
-            XhbClobRepository clobRepo, XhbCourtRepository courtRepo) {
-            super(em, configRepo, env, sftpHelper, msgHelper, clobRepo, courtRepo);
+            XhbClobRepository clobRepo, XhbCourtRepository courtRepo, XhbCaseRepository caseRepo,
+            XhbHearingRepository hearingRepo, XhbSittingRepository sittingRepo,
+            XhbScheduledHearingRepository scheduledHearingRepo, XhbPublicNoticeRepository publicNoticeRepo,
+            XhbConfiguredPublicNoticeRepository configuredPublicNoticeRepo) {
+            super(em, configRepo, env, sftpHelper, msgHelper, clobRepo, courtRepo, caseRepo,
+                hearingRepo, sittingRepo, scheduledHearingRepo, publicNoticeRepo, configuredPublicNoticeRepo);
         }
 
         // Allow test injection for notifier

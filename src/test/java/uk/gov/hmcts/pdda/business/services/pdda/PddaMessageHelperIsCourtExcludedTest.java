@@ -55,4 +55,28 @@ class PddaMessageHelperIsCourtExcludedTest {
         assertTrue(PddaMessageHelper.isCourtExcluded("PublicDisplay_321__doubleunderscores", "321"),
             "Extra underscores after code shouldn't affect parsing");
     }
+    
+    @Test
+    void testDailyListFormat() {
+        assertTrue(PddaMessageHelper.isCourtExcluded("DailyList_456_20251203101501", "456"),
+            "DailyList format should be handled");
+    }
+    
+    @Test
+    void testFirmListFormat() {
+        assertTrue(PddaMessageHelper.isCourtExcluded("FirmList_456_20251203101501", "456"),
+            "FirmList format should be handled");
+    }
+    
+    @Test
+    void testWarnedListFormat() {
+        assertTrue(PddaMessageHelper.isCourtExcluded("WarnedList_456_20251203101501", "456"),
+            "WarningList format should be handled");
+    }
+    
+    @Test
+    void testWebPageFormat() {
+        assertTrue(PddaMessageHelper.isCourtExcluded("WebPage_456_20251203101501", "456"),
+            "WebPage format should be handled");
+    }
 }

@@ -20,7 +20,6 @@ public final class AppendEventsTwentyNineHundredUtils {
     private static final String SEMI_COLON = ";";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
     private static final String WITNESS_NUMBER = "Witness_Number";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String E20901_TEO_TIME = "E20901_TEO_time";
     private static final String TRIAL_TIME_ESTIMATE = "Trial_Time_Estimate:";
     private static final String DEFENCE = "Defence";
@@ -126,14 +125,18 @@ public final class AppendEventsTwentyNineHundredUtils {
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, DEFENCE));
         AppendUtils.append(buffer, SPACE);
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer,
-                ((LeafEventXmlNode) node.get("E20906_Defence_CO_Name")).getValue());
-            AppendUtils.append(buffer, SPACE);
-        }
+        
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
 
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer,
+                    ((LeafEventXmlNode) node.get("E20906_Defence_CO_Name")).getValue());
+                AppendUtils.append(buffer, SPACE);
+            }
+        }
         AppendUtils.append(buffer,
             TranslationUtils.translate(documentI18n, "Case_Opened", DEFENCE));
     }
@@ -153,13 +156,17 @@ public final class AppendEventsTwentyNineHundredUtils {
     // OK
     public static void appendEvent20909(StringBuilder buffer, BranchEventXmlNode node,
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
+        
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
 
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
-            AppendUtils.append(buffer, SEMI_COLON);
-            AppendUtils.append(buffer, SPACE);
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
+                AppendUtils.append(buffer, SEMI_COLON);
+                AppendUtils.append(buffer, SPACE);
+            }
         }
         AppendUtils.append(buffer,
             TranslationUtils.translate(documentI18n, "Defence_Closing_Speech"));

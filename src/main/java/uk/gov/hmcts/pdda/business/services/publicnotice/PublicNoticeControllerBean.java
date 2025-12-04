@@ -10,9 +10,9 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.framework.business.services.CsSessionBean;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 
 /**

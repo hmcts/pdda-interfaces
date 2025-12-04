@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Transient;
 import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
@@ -15,6 +16,9 @@ import java.time.LocalDateTime;
 
 
 @Entity(name = "XHB_PUBLIC_NOTICE")
+@NamedQuery(name = "XHB_PUBLIC_NOTICE.findByCourtIdAndDefPublicNoticeId",
+    query = "SELECT o from XHB_PUBLIC_NOTICE o WHERE o.courtId = :courtId AND o.definitivePnId = :definitivePnId")
+@SuppressWarnings("PMD")
 public class XhbPublicNoticeDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;
@@ -80,7 +84,7 @@ public class XhbPublicNoticeDao extends AbstractVersionedDao implements Serializ
         return publicNoticeId;
     }
 
-    private void setPublicNoticeId(Integer publicNoticeId) {
+    public void setPublicNoticeId(Integer publicNoticeId) {
         this.publicNoticeId = publicNoticeId;
     }
 

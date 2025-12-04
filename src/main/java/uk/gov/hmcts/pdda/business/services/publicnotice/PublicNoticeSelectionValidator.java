@@ -3,9 +3,9 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 import jakarta.ejb.EJBException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.framework.exception.CsConfigurationException;
 import uk.gov.hmcts.framework.services.CsServices;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 
 import java.util.Properties;
 
@@ -71,7 +71,7 @@ public final class PublicNoticeSelectionValidator {
         // walk through and see if number selected is greater the
         for (int i = displayablePublicNoticeValues.length - 1; i >= 0; i--) {
 
-            if (displayablePublicNoticeValues[i].isActive()) {
+            if (displayablePublicNoticeValues[i].getIsActive()) {
                 numberSelectedAsAcive++;
             }
         }

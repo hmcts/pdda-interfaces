@@ -71,12 +71,13 @@ class AbstractControllerBeanTest {
         assertInstanceOf(XhbFormattingRepository.class, classUnderTest.getXhbFormattingRepository(),
             NOT_INSTANCE);
     }
-    
+
+
     private void expectEntityManagerIsOpen() {
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
         EasyMock.replay(mockEntityManager);
     }
-    
+
     @Test
     void testGetXhbInternetHtmlRepository() {
         expectEntityManagerIsOpen();

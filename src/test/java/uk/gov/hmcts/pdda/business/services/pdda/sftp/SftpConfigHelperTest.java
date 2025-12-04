@@ -12,11 +12,17 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSftpHelper;
 
@@ -69,12 +75,30 @@ class SftpConfigHelperTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
+
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
-    
+
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
+
+    @Mock
+    private XhbCaseRepository mockXhbCaseRepository;
+
+    @Mock
+    private XhbHearingRepository mockXhbHearingRepository;
+
+    @Mock
+    private XhbSittingRepository mockXhbSittingRepository;
+
+    @Mock
+    private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
+
+    @Mock
+    private XhbPublicNoticeRepository mockXhbPublicNoticeRepository;
+
+    @Mock
+    private XhbConfiguredPublicNoticeRepository mockXhbConfiguredPublicNoticeRepository;
 
     @Mock
     private Session mockSession;
@@ -91,6 +115,8 @@ class SftpConfigHelperTest {
     private final SftpConfigHelper classUnderTest =
         new SftpConfigHelper(EasyMock.createMock(EntityManager.class), mockXhbConfigPropRepository,
             mockEnvironment, mockPddaMessageHelper, mockXhbClobRepository, mockXhbCourtRepository,
-            mockXhbCourtRoomRepository, mockXhbCourtSiteRepository);
+            mockXhbCourtRoomRepository, mockXhbCourtSiteRepository, mockXhbCaseRepository,
+            mockXhbHearingRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
+            mockXhbPublicNoticeRepository, mockXhbConfiguredPublicNoticeRepository);
 
 }

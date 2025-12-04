@@ -178,8 +178,8 @@ public class PddaMessageHelper {
             return false;
         }
         
-        // Match and extract the 3-digit number after "PublicDisplay_"
-        String regex = "PublicDisplay_(\\d{3})_.*";
+        // Match and extract the 3-digit number
+        String regex = "(PublicDisplay|DailyList|FirmList|WarnedList|WebPage)_(\\d{3})_.*";
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
         java.util.regex.Matcher matcher = pattern.matcher(inDocument);
 
@@ -187,7 +187,7 @@ public class PddaMessageHelper {
             return false; // Doesn't match the expected format
         }
 
-        String courtCode = matcher.group(1);
+        String courtCode = matcher.group(2);
 
         if (courtsExcluded == null || courtsExcluded.isEmpty()) {
             return false; // empty list can't contain anything

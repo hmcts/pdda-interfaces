@@ -36,7 +36,7 @@ public class XhbConfiguredPublicNoticeRepository
         Integer publicNoticeId) {
         LOG.debug("findByDefinitivePnCourtRoomValue({},{})", courtRoomId, publicNoticeId);
         Query query = getEntityManager()
-            .createNamedQuery("XHB_CONFIGURED_PUBLIC.findByDefinitivePnCourtRoomValue");
+            .createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePnCourtRoomValue");
         query.setParameter("courtRoomId", courtRoomId);
         query.setParameter("publicNoticeId", publicNoticeId);
         return query.getResultList();
@@ -51,7 +51,7 @@ public class XhbConfiguredPublicNoticeRepository
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query =
-                em.createNamedQuery("XHB_CONFIGURED_PUBLIC.findByDefinitivePnCourtRoomValue");
+                em.createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByDefinitivePnCourtRoomValue");
             query.setParameter("courtRoomId", courtRoomId);
             query.setParameter("publicNoticeId", publicNoticeId);
 
@@ -93,5 +93,20 @@ public class XhbConfiguredPublicNoticeRepository
             return List.of(); // Safe fallback
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbConfiguredPublicNoticeDao> findByCourtRoomIdSafe(Integer courtRoomId) {
+        LOG.debug("findByCourtRoomIdSafe(courtRoomId: {})", courtRoomId);
 
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query =
+                em.createNamedQuery("XHB_CONFIGURED_PUBLIC_NOTICE.findByCourtRoomId");
+            query.setParameter("courtRoomId", courtRoomId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtRoomIdSafe({}): {}", courtRoomId,
+                e.getMessage(), e);
+            return List.of(); // Safe fallback
+        }
+    }
 }

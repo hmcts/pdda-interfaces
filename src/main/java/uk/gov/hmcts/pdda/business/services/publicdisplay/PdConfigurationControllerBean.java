@@ -165,7 +165,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
                 throw new CourtNotFoundException(courtId);
             }
             List<XhbDisplayDao> xhbDisplays =
-                getXhbDisplayRepository().findByRotationSetId(rotationSetId);
+                getXhbDisplayRepository().findByRotationSetIdSafe(rotationSetId);
 
             returnArray = getDisplayRotationSetDataHelper().getDataForDisplayRotationSets(
                 court.get(), rotationSet.get(), xhbDisplays, getXhbRotationSetDdRepository(),
@@ -241,7 +241,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         returnValue.setRotationSetDao(rotationSetLocal.get());
 
         List<XhbRotationSetDdDao> rotationSetDdCol =
-            getXhbRotationSetDdRepository().findByRotationSetId(rotationSetId);
+            getXhbRotationSetDdRepository().findByRotationSetIdSafe(rotationSetId);
         List<RotationSetDdComplexValue> results = new ArrayList<>();
         RotationSetDdComplexValue ddComplex;
         Iterator<XhbRotationSetDdDao> rotationSetDdIter = rotationSetDdCol.iterator();

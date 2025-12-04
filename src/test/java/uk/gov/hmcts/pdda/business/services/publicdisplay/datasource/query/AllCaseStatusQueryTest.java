@@ -39,6 +39,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
+import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -350,5 +351,91 @@ class AllCaseStatusQueryTest extends AbstractQueryTest {
             addReplayArray(replayArray, mockXhbRefHearingTypeRepository);
         }
     }
+    
+    @Test
+    void testGetSchedHearingDefendantData_setsIdsAndDefendantName() throws Exception {
+        // Arrange - build dummy sitting, scheduled hearing and scheduled hearing defendant(s)
+        List<XhbSchedHearingDefendantDao> shdList = DummyServicesUtil.getNewArrayList();
+        shdList.add(DummyHearingUtil.getXhbSchedHearingDefendantDao());
+
+        // Expect repository calls used by getDefendantName(...) and chooseOneDefendant(...)
+        EasyMock.expect(mockXhbDefendantOnCaseRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyDefendantUtil.getXhbDefendantOnCaseDao()))
+            .anyTimes();
+        EasyMock.expect(mockXhbDefendantRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()))
+            .anyTimes();
+
+        // populateData() will call the courtSite and courtRoom repositories - ensure they return Optionals
+        EasyMock.expect(mockXhbCourtSiteRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyCourtUtil.getXhbCourtSiteDao()))
+            .anyTimes();
+        EasyMock.expect(mockXhbCourtRoomRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.of(DummyCourtUtil.getXhbCourtRoomDao()))
+            .anyTimes();
+
+        // Return no hearing info so we avoid the more complex hearing/case population branches
+        EasyMock.expect(mockXhbHearingRepository.findByIdSafe(EasyMock.isA(Integer.class)))
+            .andReturn(Optional.empty())
+            .anyTimes();
+
+        // Replay only the mocks we've touched (entityManager already replayed by setup)
+        EasyMock.replay(
+            mockXhbDefendantOnCaseRepository,
+            mockXhbDefendantRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbHearingRepository
+        );
+
+        // Act - call private method via reflection
+        java.lang.reflect.Method m = AllCaseStatusQuery.class.getDeclaredMethod(
+            "getSchedHearingDefendantData",
+            XhbSittingDao.class,
+            XhbScheduledHearingDao.class,
+            List.class,
+            String.class
+        );
+        m.setAccessible(true);
+
+        XhbSittingDao sitting = DummyHearingUtil.getXhbSittingDao();
+        XhbScheduledHearingDao sh = DummyHearingUtil.getXhbScheduledHearingDao();
+        
+        @SuppressWarnings("unchecked")
+        List<AllCaseStatusValue> out = (List<AllCaseStatusValue>) m.invoke(classUnderTest, sitting, sh, shdList, "0");
+
+        // Assert
+        org.junit.jupiter.api.Assertions.assertNotNull(out, "Result list must not be null");
+        org.junit.jupiter.api.Assertions.assertEquals(1, out.size(), "Expected single AllCaseStatusValue result");
+
+        AllCaseStatusValue val = out.get(0);
+
+        org.junit.jupiter.api.Assertions.assertEquals(
+            sh.getScheduledHearingId(),
+            val.getScheduledHearingId(),
+            "scheduledHearingId should be copied from scheduledHearingDao"
+        );
+        org.junit.jupiter.api.Assertions.assertEquals(
+            sh.getHearingId(),
+            val.getHearingId(),
+            "hearingId should be copied from scheduledHearingDao"
+        );
+        org.junit.jupiter.api.Assertions.assertEquals(
+            shdList.get(0).getDefendantOnCaseId(),
+            val.getDefendantOnCaseId(),
+            "defendantOnCaseId should be copied from chosen scheduled hearing defendant"
+        );
+
+        // Verify mocks
+        EasyMock.verify(
+            mockXhbDefendantOnCaseRepository,
+            mockXhbDefendantRepository,
+            mockXhbCourtSiteRepository,
+            mockXhbCourtRoomRepository,
+            mockXhbHearingRepository
+        );
+    }
+
+
 
 }

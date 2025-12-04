@@ -281,7 +281,7 @@ class PdConfigurationControllerBeanDisplayTest {
             Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(mockData);
 
 
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(ROTATION_SET_ID))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(ROTATION_SET_ID))
             .thenReturn(List.of(xhbDisplayDao));
 
         LOG.debug("Display rotationSetId: " + xhbDisplayDao.getRotationSetId());

@@ -2,10 +2,10 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DefinitivePublicNoticeStatusValue;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +52,7 @@ public final class PublicNoticeMaintainer {
 
     public static XhbConfiguredPublicNoticeDao updateIsActive(DisplayablePublicNoticeValue value,
         XhbConfiguredPublicNoticeDao basicValue) {
-        basicValue.setIsActive(value.isActive() ? PN_ACTIVE : PN_INACTIVE);
+        basicValue.setIsActive(value.getIsActive() ? PN_ACTIVE : PN_INACTIVE);
 
         // Set the version for optimistic lock checking.
         basicValue.setVersion(value.getVersion());

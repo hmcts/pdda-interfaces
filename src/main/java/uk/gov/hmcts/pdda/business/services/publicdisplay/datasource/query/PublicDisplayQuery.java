@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -29,9 +30,13 @@ import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.PublicDisplayValue;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 /**
  * Abstract query class used by public display.
@@ -47,7 +52,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     protected static final String NOT_FLOATING = "0";
 
     /** Logger object. */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected static final Logger LOG = LoggerFactory.getLogger(PublicDisplayQuery.class);
 
     protected PublicDisplayQuery(EntityManager entityManager) {
         super(entityManager);
@@ -93,14 +98,88 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
      * @return Summary by name data for the specified court rooms
      */
     public abstract Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds);
+    
+    
+    /**
+     * Template to collect results for a day across hearing lists and sittings.
+     * Subclasses provide how to turn a list of sittings into their specific result rows.
+     */
+    protected final <T> List<T> getDataTemplate(
+            LocalDateTime date,
+            int courtId,
+            BiFunction<List<XhbSittingDao>, int[], List<T>> sittingProcessor,
+            int... courtRoomIds) {
+
+        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
+        List<T> results = new ArrayList<>();
+
+        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
+        if (hearingListDaos.isEmpty()) {
+            LOG.debug("{} - No Hearing Lists found for {}", getClass().getSimpleName(), startDate);
+            return results;
+        }
+
+        for (XhbHearingListDao hearingListDao : hearingListDaos) {
+            List<XhbSittingDao> sittingDaos = loadSittingsForList(hearingListDao.getListId());
+            if (!sittingDaos.isEmpty()) {
+                results.addAll(sittingProcessor.apply(sittingDaos, courtRoomIds));
+            }
+        }
+
+
+        return results;
+    }
+    
+    protected final List<XhbSittingDao> loadSittingsForList(int hearingListId) {
+        return isFloatingIncluded()
+                ? getSittingListDaos(hearingListId)
+                : getNonFloatingSittingListDaos(hearingListId);
+    }
+
+    
+    protected boolean isFloatingIncluded() {
+        // default; subclasses can override
+        return false;
+    }
+    
+    protected final Map<Integer, XhbScheduledHearingDao> pickBestScheduledPerHearing(
+        List<XhbScheduledHearingDao> scheduledHearingDaos,
+        int sittingCourtRoomId,
+        int... selectedCourtRoomIds) {
+
+        Map<Integer, XhbScheduledHearingDao> bestByHearing = new LinkedHashMap<>();
+        if (scheduledHearingDaos == null || scheduledHearingDaos.isEmpty()) {
+            return bestByHearing;
+        }
+    
+        for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+            // respect courtroom selection
+            if (!isSelectedCourtRoom(selectedCourtRoomIds, sittingCourtRoomId, sh.getMovedFromCourtRoomId())) {
+                continue;
+            }
+    
+            XhbScheduledHearingDao current = bestByHearing.get(sh.getHearingId());
+            if (current == null) {
+                bestByHearing.put(sh.getHearingId(), sh);
+            } else {
+                boolean currHasProg = current.getHearingProgress() != null;
+                boolean candHasProg = sh.getHearingProgress() != null;
+                if (!currHasProg && candHasProg) {
+                    bestByHearing.put(sh.getHearingId(), sh); // prefer the one with progress
+                }
+            }
+        }
+    
+        return bestByHearing;
+    }
 
     protected void populateData(PublicDisplayValue result, Integer courtSiteId, Integer courtRoomId,
         Integer movedFromCourtRoomId, LocalDateTime notBeforeTime) {
-        log.debug("populateData({},{},{},{},{})", result, courtSiteId, courtRoomId,
+        LOG.debug("populateData({},{},{},{},{})", result, courtSiteId, courtRoomId,
             movedFromCourtRoomId, notBeforeTime);
         // Set not before time
         result.setNotBeforeTime(notBeforeTime);
-        log.debug("Not before time set to: {}", notBeforeTime);
+        LOG.debug("Not before time set to: {}", notBeforeTime);
 
         // Get the court site
         Optional<XhbCourtSiteDao> courtSite = getXhbCourtSiteRepository().findByIdSafe(courtSiteId);
@@ -114,7 +193,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCourtSiteShortName("");
         }
         
-        log.debug("Court site set to: {}, {}, {}",
+        LOG.debug("Court site set to: {}, {}, {}",
             result.getCourtSiteCode(), result.getCourtSiteName(), result.getCourtSiteShortName());
 
         // Get courtRoom
@@ -129,7 +208,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             result.setCrestCourtRoomNo(99);
         }
         
-        log.debug("Court room set to: {}, {}, {}",
+        LOG.debug("Court room set to: {}, {}, {}",
             result.getCourtRoomId(), result.getCourtRoomName(), result.getCrestCourtRoomNo());
 
         // Moved from courtroom
@@ -150,7 +229,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
             }
         }
         
-        log.debug("Moved from court room set to: {}, {}, {}",
+        LOG.debug("Moved from court room set to: {}, {}, {}",
             result.getMovedFromCourtRoomId(), result.getMovedFromCourtRoomName(),
             result.getMovedFromCourtSiteShortName());
     }
@@ -178,20 +257,20 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
     }
 
     protected Optional<XhbRefJudgeDao> getXhbRefJudgeDao(Integer scheduledHearingId) {
-        log.debug("getXhbRefJudgeDao({})", scheduledHearingId);
+        LOG.debug("getXhbRefJudgeDao({})", scheduledHearingId);
         // Get the judge from the scheduled hearing attendees
         Optional<XhbRefJudgeDao> xhbRefJudgeDao =
             getXhbRefJudgeRepository().findScheduledAttendeeJudgeSafe(scheduledHearingId);
         if (xhbRefJudgeDao.isPresent()) {
-            log.debug("Found Judge {} in scheduledHearingAttendees",
+            LOG.debug("Found Judge {} in scheduledHearingAttendees",
                 xhbRefJudgeDao.get().getRefJudgeId());
         } else {
             xhbRefJudgeDao =
                 getXhbRefJudgeRepository().findScheduledSittingJudgeSafe(scheduledHearingId);
             if (xhbRefJudgeDao.isPresent()) {
-                log.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
+                LOG.debug("Found Judge {} in sitting", xhbRefJudgeDao.get().getRefJudgeId());
             } else {
-                log.debug("No Judge found");
+                LOG.debug("No Judge found");
             }
         }
         return xhbRefJudgeDao;
@@ -221,7 +300,7 @@ public abstract class PublicDisplayQuery extends PublicDisplayQueryRepo {
                 }
             }
         }
-        log.debug("isReportingRestricted({}) = {}", caseId, result ? "True" : "False");
+        LOG.debug("isReportingRestricted({}) = {}", caseId, result ? "True" : "False");
         return result;
     }
 

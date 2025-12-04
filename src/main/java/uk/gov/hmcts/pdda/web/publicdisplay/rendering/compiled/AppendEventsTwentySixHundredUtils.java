@@ -1,6 +1,8 @@
 
 package uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundle;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
@@ -9,12 +11,13 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.LeafEventXmlNode;
 import java.util.Collection;
 
 public final class AppendEventsTwentySixHundredUtils {
+    private static final Logger LOG =
+        LoggerFactory.getLogger(AppendEventsTwentySixHundredUtils.class);
 
     private static final String EMPTY_STRING = "";
     private static final String SPACE = " ";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
     private static final String WITNESS_NUMBER = "Witness_Number";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String E20603_INTERPRETER_SWORN = "E20603_Interpreter_Sworn";
     private static final String E20603_APPELLANT_SWORN = "E20603_Appellant_Sworn";
 
@@ -68,11 +71,15 @@ public final class AppendEventsTwentySixHundredUtils {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Appellant"));
         AppendUtils.append(buffer, SPACE);
 
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer,
-                ((LeafEventXmlNode) node.get("E20606_Appellant_CO_Name")).getValue());
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
+
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer,
+                    ((LeafEventXmlNode) node.get("E20606_Appellant_CO_Name")).getValue());
+            }
         }
         AppendUtils.append(buffer, SPACE);
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Case_Opened"));

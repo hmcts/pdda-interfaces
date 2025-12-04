@@ -10,6 +10,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ActivateCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.AddCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.CaseStatusEvent;
@@ -19,6 +20,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.UpdateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
@@ -41,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -134,6 +137,26 @@ class PddaMessageUtilTest {
         assertEquals("02/01/2025 03:04:05", dao.getPddaMessageDescription());
     }
 
+    @Test
+    void translate_handlesPddaHearingProgressEvent_setsCourtId() {
+        // Arrange
+        PddaHearingProgressEvent evt = mock(PddaHearingProgressEvent.class);
+        when(evt.getCourtName()).thenReturn("Alpha Court");
+
+        XhbCourtDao courtDao = mock(XhbCourtDao.class);
+        when(courtDao.getCourtId()).thenReturn(321);
+
+        when(courtRepository.findByCourtNameValueSafe("Alpha Court"))
+            .thenReturn(List.of(courtDao));
+
+        // Act
+        PddaMessageUtil.translatePublicDisplayEvent(evt, courtRepository, courtRoomRepository, courtSiteRepository);
+
+        // Assert - method called to set the resolved court id
+        verify(evt).setCourtId(321);
+    }
+
+
     // ---------- createClob ----------
     @Test
     void createClob_savesWhenDataNotNull() {
@@ -219,7 +242,7 @@ class PddaMessageUtilTest {
             // Court Site
             XhbCourtSiteDao siteDao = mock(XhbCourtSiteDao.class);
             when(siteDao.getCourtSiteId()).thenReturn(resolvedCourtSiteId);
-            when(courtSiteRepository.findByCourtId(resolvedCourtId))
+            when(courtSiteRepository.findByCourtIdSafe(resolvedCourtId))
                 .thenReturn(List.of(siteDao));
 
             // Court Room
@@ -359,7 +382,7 @@ class PddaMessageUtilTest {
             when(courtDao.getCourtId()).thenReturn(resolvedCourtId);
             when(courtRepository.findByCourtNameValueSafe(courtName))
                 .thenReturn(List.of(courtDao));
-            when(courtSiteRepository.findByCourtId(resolvedCourtId))
+            when(courtSiteRepository.findByCourtIdSafe(resolvedCourtId))
                 .thenReturn(List.of()); // no sites
 
             MoveCaseEvent evt = mock(MoveCaseEvent.class);
@@ -419,6 +442,34 @@ class PddaMessageUtilTest {
             assertNull(cri.getCourtRoomId());
             assertEquals(courtName, cri.getCourtName());
             assertEquals(courtRoomNo, cri.getCourtRoomNo());
+        }
+
+        @Test
+        void translate_preservesPublicNotices_defensiveCopy() {
+            // Use the normal wiring so court/site/room resolve
+            wireRepositoriesForHappyPath();
+
+            AddCaseEvent evt = mock(AddCaseEvent.class);
+
+            CourtRoomIdentifier original = new CourtRoomIdentifier(null, null, courtName, courtRoomNo);
+            DisplayablePublicNoticeValue notice = mock(DisplayablePublicNoticeValue.class);
+            DisplayablePublicNoticeValue[] notices = new DisplayablePublicNoticeValue[] { notice };
+            original.setPublicNotices(notices);
+
+            when(evt.getCourtRoomIdentifier()).thenReturn(original);
+
+            PddaMessageUtil.translatePublicDisplayEvent(evt, courtRepository, courtRoomRepository, courtSiteRepository);
+
+            verify(evt).setCourtRoomIdentifier(criCaptor.capture());
+            CourtRoomIdentifier updated = criCaptor.getValue();
+
+            // content preserved
+            assertNotNull(updated.getPublicNotices());
+            assertEquals(1, updated.getPublicNotices().length);
+            assertEquals(notice, updated.getPublicNotices()[0]);
+
+            // but it's a defensive copy (different array instance)
+            assertTrue(updated.getPublicNotices() != notices, "Expected a different array instance (defensive copy)");
         }
     }
 

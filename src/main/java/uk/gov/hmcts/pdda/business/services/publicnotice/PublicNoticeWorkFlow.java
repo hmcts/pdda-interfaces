@@ -2,13 +2,13 @@ package uk.gov.hmcts.pdda.business.services.publicnotice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.courtservice.xhibit.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
 import uk.gov.hmcts.pdda.business.entities.PddaEntityHelper;
 import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
 import uk.gov.hmcts.pdda.business.entities.xhbdefinitivepublicnotice.XhbDefinitivePublicNoticeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeDao;
-import uk.gov.hmcts.pdda.business.vos.services.publicnotice.DisplayablePublicNoticeValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,7 +105,7 @@ public class PublicNoticeWorkFlow {
         for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
 
             // update if marked as dirty( IsActive/status change)
-            if (publicNotice.isDirtyFlagged()) {
+            if (publicNotice.getDirty()) {
                 updateConfiguredPublicNoticeActivationState(publicNotice);
                 // if any of the ActivationStates are updated need to send a
                 // notification to Public displays.

@@ -58,7 +58,7 @@ class CppFormattingControllerBeanTest {
 
     @Mock
     private ConfigurationChangeEvent mockConfigurationChangeEvent;
-    
+
     @Mock
     private EntityTransaction mockTx;
 
@@ -96,10 +96,10 @@ class CppFormattingControllerBeanTest {
         cppFormattingList.add(xhbCppFormattingDao);
         expectGetEntityManager(mockCppFormattingRepo);
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        
+
         EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTx).anyTimes();
         EasyMock.expect(mockTx.isActive()).andReturn(true).anyTimes();
-        
+
         EasyMock.expect(mockCppFormattingRepo.findAllNewByDocTypeSafe(EasyMock.isA(String.class),
             EasyMock.isA(LocalDateTime.class))).andReturn(cppFormattingList);
         for (XhbCppFormattingDao cppFormattingDao : cppFormattingList) {
@@ -133,7 +133,7 @@ class CppFormattingControllerBeanTest {
         cppFormattingList.add(xhbCppFormattingDao);
         expectGetEntityManager(mockCppFormattingRepo);
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
-        
+
         EasyMock.expect(mockEntityManager.getTransaction()).andReturn(mockTx).anyTimes();
         EasyMock.expect(mockTx.isActive()).andReturn(true).anyTimes();
 
@@ -314,7 +314,7 @@ class CppFormattingControllerBeanTest {
         result.setVersion(version);
         return new XhbCppFormattingDao(result);
     }
-    
+
     @SuppressWarnings("rawtypes")
     private void expectGetEntityManager(AbstractRepository mockRepository) {
         EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();

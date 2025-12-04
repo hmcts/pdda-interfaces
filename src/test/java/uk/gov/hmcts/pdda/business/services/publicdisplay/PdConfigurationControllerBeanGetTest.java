@@ -261,12 +261,12 @@ class PdConfigurationControllerBeanGetTest {
         List<XhbCourtRoomDao> roomList = new ArrayList<>();
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
         roomList.add(DummyCourtUtil.getXhbCourtRoomDao());
-        
+
         XhbDisplayDao displayDao = DummyPublicDisplayUtil.getXhbDisplayDao();
         displayDao.setDisplayId(DISPLAY_ID);
         displayDao.setRotationSetId(ROTATION_SET_ID);
 
-        
+
         XhbRotationSetsDao rotationSetDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         rotationSetDao.setRotationSetId(ROTATION_SET_ID);
         rotationSetDao.setCourtId(COURT_ID);
@@ -274,7 +274,7 @@ class PdConfigurationControllerBeanGetTest {
         List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
         xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
-        
+
         XhbDisplayDocumentDao xhbDisplayDocumentDao =
             DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
         xhbDisplayDocumentDao.setDisplayDocumentId(DISPLAY_DOCUMENT_ID);
@@ -292,7 +292,7 @@ class PdConfigurationControllerBeanGetTest {
 
         // Mocks for repositories
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
-        
+
         Optional<XhbRotationSetsDao> rotationSetOpt = Optional.of(rotationSetDao);
         Optional<XhbCourtDao> courtOpt =
             Optional.of(DummyCourtUtil.getXhbCourtDao(COURT_ID, "Test Court"));
@@ -300,7 +300,7 @@ class PdConfigurationControllerBeanGetTest {
             .thenReturn(rotationSetOpt);
         Mockito.when(mockXhbCourtRepository.findByIdSafe(COURT_ID)).thenReturn(courtOpt);
         List<XhbDisplayDao> xdList = List.of(displayDao);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.eq(ROTATION_SET_ID)))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(Mockito.eq(ROTATION_SET_ID)))
             .thenReturn(xdList);
         Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);

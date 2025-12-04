@@ -3,11 +3,14 @@ package uk.gov.hmcts.pdda.common.publicdisplay.renderdata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 /**
  *  CourtDetailValue.
 
  * @author pznwc5 Value object for court detail.
  */
+@SuppressWarnings("PMD")
 public class CourtDetailValue extends AllCourtStatusValue {
 
     static final long serialVersionUID = 754560959152416644L;
@@ -89,13 +92,39 @@ public class CourtDetailValue extends AllCourtStatusValue {
 
     @Override
     public boolean equals(Object object) {
-        LOG.debug("equals()");
-        return super.equals(object);
+        if (this == object) {
+            return true;
+        }
+        if (!(object instanceof PublicDisplayValue)) {
+            return false;
+        }
+
+        PublicDisplayValue other = (PublicDisplayValue) object;
+
+        // court site code
+        if (!Objects.equals(this.getCourtSiteCode(), other.getCourtSiteCode())) {
+            return false;
+        }
+
+        // crest court room number
+        if (!Objects.equals(this.getCrestCourtRoomNo(), other.getCrestCourtRoomNo())) {
+            return false;
+        }
+
+        // prefer comparing the actual LocalDateTime if available
+        if (Objects.equals(this.getEventTime(), other.getEventTime())) {
+            return true;
+        }
+
+        // fallback: compare string representations (handles formatting/precision differences)
+        return Objects.equals(this.getEventTimeAsString(), other.getEventTimeAsString());
     }
 
     @Override
     public int hashCode() {
-        LOG.debug("hashCode()");
-        return super.hashCode();
+        // include eventTimeAsString as a stable hash component (covers cases where eventTime equals may vary)
+        return Objects.hash(getCourtSiteCode(), getCrestCourtRoomNo(), getEventTimeAsString());
     }
+
+
 }

@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay.datasource.query;
 
 import jakarta.persistence.EntityManager;
-import uk.gov.hmcts.framework.util.DateTimeUtilities;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcasereference.XhbCaseReferenceRepository;
@@ -14,9 +13,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCase
 import uk.gov.hmcts.pdda.business.entities.xhbdefendantoncase.XhbDefendantOnCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository;
-import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefhearingtype.XhbRefHearingTypeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeDao;
 import uk.gov.hmcts.pdda.business.entities.xhbrefjudge.XhbRefJudgeRepository;
@@ -34,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -42,7 +40,7 @@ import java.util.Optional;
 
  * @author pznwc5
  */
-@SuppressWarnings({"PMD.ExcessiveParameterList", "PMD.CouplingBetweenObjects"})
+@SuppressWarnings({"PMD"})
 public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     /**
@@ -51,8 +49,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      */
     public JuryStatusDailyListQuery(EntityManager entityManager) {
         super(entityManager);
-        log.debug("Entering JuryStatusDailyListQuery(EntityManager)");
-        log.debug("Query object created");
+        LOG.debug("Entering JuryStatusDailyListQuery(EntityManager)");
+        LOG.debug("Query object created");
     }
 
     public JuryStatusDailyListQuery(EntityManager entityManager, XhbCaseRepository xhbCaseRepository,
@@ -67,7 +65,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             xhbSittingRepository, xhbScheduledHearingRepository, xhbCourtSiteRepository, xhbCourtRoomRepository,
             xhbSchedHearingDefendantRepository, xhbHearingRepository, xhbDefendantOnCaseRepository,
             xhbDefendantRepository, xhbCourtLogEntryRepository, xhbRefHearingTypeRepository, xhbRefJudgeRepository);
-        log.debug("Entering JuryStatusDailyListQuery(EntityManager, ...repositories)");
+        LOG.debug("Entering JuryStatusDailyListQuery(EntityManager, ...repositories)");
     }
 
     /**
@@ -77,79 +75,67 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
      * @param courtId room ids for which the data is required
      * @param courtRoomIds Court room ids
 
-     * @return Suumary by name data for the specified court rooms
+     * @return Summary by name data for the specified court rooms
      */
     @Override
     public Collection<?> getData(LocalDateTime date, int courtId, int... courtRoomIds) {
-        log.debug("Entering getData(LocalDateTime, int, int...)");
-
-        LocalDateTime startDate = DateTimeUtilities.stripTime(date);
-        log.debug("Start date: {}", startDate);
-
-        List<JuryStatusDailyListValue> results = new ArrayList<>();
-
-        // Loop the hearing lists
-        List<XhbHearingListDao> hearingListDaos = getHearingListDaos(courtId, startDate);
-        if (hearingListDaos.isEmpty()) {
-            log.debug("JuryStatusDailyListQuery - No Hearing Lists found for today");
-        } else {
-            for (XhbHearingListDao hearingListDao : hearingListDaos) {
-                // Loop the sittings
-                List<XhbSittingDao> sittingDaos;
-                if (isFloatingIncluded()) {
-                    sittingDaos = getSittingListDaos(hearingListDao.getListId());
-                } else {
-                    sittingDaos = getNonFloatingSittingListDaos(hearingListDao.getListId());
-                }
-                if (!sittingDaos.isEmpty()) {
-                    results.addAll(getSittingData(sittingDaos, courtRoomIds));
-                }
-            }
-        }
-
-        return results;
+        LOG.debug("Entering getData(LocalDateTime, int, int...)");
+        return getDataTemplate(date, courtId, this::getSittingData, courtRoomIds);
     }
 
     protected boolean isFloatingIncluded() {
-        log.debug("Entering isFloatingIncluded()");
+        LOG.debug("Entering isFloatingIncluded()");
         // Only show isFloating = '0'
         return false;
     }
 
     private List<JuryStatusDailyListValue> getSittingData(List<XhbSittingDao> sittingDaos, int... courtRoomIds) {
-        log.debug("Entering getSittingData(List<XhbSittingDao>, int...)");
+        LOG.debug("Entering getSittingData(List<XhbSittingDao>, int...)");
         List<JuryStatusDailyListValue> results = new ArrayList<>();
+
         for (XhbSittingDao sittingDao : sittingDaos) {
+            
+            // Gather scheduled hearings for this sitting
+            List<XhbScheduledHearingDao> scheduledHearingDaos = getScheduledHearingDaos(sittingDao.getSittingId());
+            if (scheduledHearingDaos.isEmpty()) {
+                continue;
+            }
+
+            // Filter by selection/floating rules first, then deduplicate by hearingId preferring
+            // the row with non-null hearingProgress (preserves insertion order).
+            List<XhbScheduledHearingDao> filtered = new ArrayList<>();
+            for (XhbScheduledHearingDao sh : scheduledHearingDaos) {
+                // If we are including all floating then include all court rooms; otherwise filter by selection.
+                if (!isFloatingIncluded() && !isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
+                        sh.getMovedFromCourtRoomId())) {
+                    continue;
+                }
+                filtered.add(sh);
+            }
+
+            if (filtered.isEmpty()) {
+                continue;
+            }
+
+            Map<Integer, XhbScheduledHearingDao> bestByHearing = 
+                PublicDisplayQueryHelpers.pickBestByHearing(filtered);
 
             // Is this a floating sitting
             String floating = getIsFloating(sittingDao.getIsFloating());
-
-            // Loop the scheduledHearings
-            List<XhbScheduledHearingDao> scheduledHearingDaos = getScheduledHearingDaos(sittingDao.getSittingId());
-            if (!scheduledHearingDaos.isEmpty()) {
-                for (XhbScheduledHearingDao scheduledHearingDao : scheduledHearingDaos) {
-
-                    // If we are including all floating then include all court rooms
-                    // otherwise...
-                    // Check if this courtroom has been selected
-                    if (!isFloatingIncluded() && !isSelectedCourtRoom(courtRoomIds, sittingDao.getCourtRoomId(),
-                        scheduledHearingDao.getMovedFromCourtRoomId())) {
-                        continue;
-                    }
-
-                    JuryStatusDailyListValue result =
-                        getJuryStatusDailyListValue(sittingDao, scheduledHearingDao, floating);
-
-                    results.add(result);
-                }
+            
+            // Render only the chosen scheduled hearing per hearingId
+            for (XhbScheduledHearingDao sh : bestByHearing.values()) {
+                JuryStatusDailyListValue result = getJuryStatusDailyListValue(sittingDao, sh, floating);
+                results.add(result);
             }
         }
         return results;
     }
 
+
     private JuryStatusDailyListValue getJuryStatusDailyListValue(XhbSittingDao sittingDao,
         XhbScheduledHearingDao scheduledHearingDao, String floating) {
-        log.debug("Entering getJuryStatusDailyListValue(XhbSittingDao, XhbScheduledHearingDao, String)");
+        LOG.debug("Entering getJuryStatusDailyListValue(XhbSittingDao, XhbScheduledHearingDao, String)");
         JuryStatusDailyListValue result = new JuryStatusDailyListValue();
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
             scheduledHearingDao.getMovedFromCourtRoomId(), scheduledHearingDao.getNotBeforeTime());
@@ -178,7 +164,8 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
             }
 
             // Get the ref hearing type
-            result.setHearingDescription(getHearingTypeDesc(hearingDao));
+            result.setHearingDescription(PublicDisplayQueryHelpers.resolveHearingTypeDesc(hearingDao,
+                id -> getXhbRefHearingTypeRepository().findByIdSafe(id)));
         }
 
         // Loop the schedHearingDefendants
@@ -198,7 +185,7 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     private DefendantName getDefendantNameFromSchedule(XhbSchedHearingDefendantDao schedHearingDefendantDao,
         boolean isCaseHidden) {
-        log.debug("Entering getDefendantNameFromSchedule(XhbSchedHearingDefendantDao, boolean)");
+        LOG.debug("Entering getDefendantNameFromSchedule(XhbSchedHearingDefendantDao, boolean)");
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao =
             getXhbDefendantOnCaseRepository()
                 .findByIdSafe(schedHearingDefendantDao.getDefendantOnCaseId());
@@ -217,19 +204,19 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
 
     private boolean isDefendantHidden(Optional<XhbDefendantDao> defendantDao,
         Optional<XhbDefendantOnCaseDao> defendantOnCaseDao, boolean isCaseHidden) {
-        log.debug("Entering isDefendantHidden(Optional<XhbDefendantDao>, Optional<XhbDefendantOnCaseDao>, boolean)");
+        LOG.debug("Entering isDefendantHidden(Optional<XhbDefendantDao>, Optional<XhbDefendantOnCaseDao>, boolean)");
         return isCaseHidden
             || defendantOnCaseDao.isPresent() && YES.equals(defendantOnCaseDao.get().getPublicDisplayHide())
             || defendantDao.isPresent() && YES.contentEquals(defendantDao.get().getPublicDisplayHide());
     }
 
     private DefendantName getDefendantName(String firstName, String middleName, String surname, boolean hide) {
-        log.debug("Entering getDefendantName(String, String, String, boolean)");
+        LOG.debug("Entering getDefendantName(String, String, String, boolean)");
         return new DefendantName(firstName, middleName, surname, hide);
     }
 
     private JudgeName getJudgeName(XhbScheduledHearingDao scheduledHearingDao) {
-        log.debug("Entering getJudgeName(XhbScheduledHearingDao)");
+        LOG.debug("Entering getJudgeName(XhbScheduledHearingDao)");
         Optional<XhbRefJudgeDao> refJudgeDao = getXhbRefJudgeDao(scheduledHearingDao.getScheduledHearingId());
         if (refJudgeDao.isPresent()) {
             return new JudgeName(refJudgeDao.get().getFullListTitle1(), refJudgeDao.get().getSurname());
@@ -237,16 +224,4 @@ public class JuryStatusDailyListQuery extends PublicDisplayQuery {
         return null;
     }
 
-    private String getHearingTypeDesc(Optional<XhbHearingDao> hearingDao) {
-        log.debug("Entering getHearingTypeDesc(Optional<XhbHearingDao>)");
-        if (hearingDao.isPresent()) {
-            Optional<XhbRefHearingTypeDao> refHearingTypeDao =
-                getXhbRefHearingTypeRepository()
-                    .findByIdSafe(hearingDao.get().getRefHearingTypeId());
-            if (refHearingTypeDao.isPresent()) {
-                return refHearingTypeDao.get().getHearingTypeDesc();
-            }
-        }
-        return null;
-    }
 }

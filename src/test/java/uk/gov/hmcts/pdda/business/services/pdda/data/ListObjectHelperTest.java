@@ -228,7 +228,7 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, true, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
-    
+
     private void expectScheduledHearing(Map<String, String> nodesMap) {
         // Setup
         nodesMap.put(classUnderTest.NOTBEFORETIME, "SITTING AT  10:30 pm");
@@ -257,7 +257,7 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, true, ListObjectHelper.DEFENDANT_NODE);
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testDefendantInvalidData() {
         // Setup
@@ -342,7 +342,7 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false, ListObjectHelper.HEARING_NODE);
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testJudge() {
         // Setup
@@ -354,20 +354,20 @@ class ListObjectHelperTest {
         result = testNodeMap(nodesMap, false, ListObjectHelper.JUDGE_NODE);
         assertTrue(result, TRUE);
     }
-    
+
     private void expectJudge(Map<String, String> nodesMap) {
         // Setup
         final XhbSchedHearingAttendeeDao xhbSchedHearingAttendeeDao = new XhbSchedHearingAttendeeDao();
         nodesMap.put(classUnderTest.TITLE, "TEST_TITLE");
         nodesMap.put(classUnderTest.FIRSTNAME + ".1", "TEST_FIRSTNAME");
         nodesMap.put(classUnderTest.SURNAME, "TEST_SURNAME");
-        
+
         // Set
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
             Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
             Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
-        
+
         // Expects
         Mockito
             .when(mockDataHelper.validateJudge(Mockito.isA(Integer.class),
@@ -383,23 +383,23 @@ class ListObjectHelperTest {
     void testProcessJudgeRecords() {
         // Setup
         final XhbSchedHearingAttendeeDao xhbSchedHearingAttendeeDao = new XhbSchedHearingAttendeeDao();
-        
+
         // Set
         ReflectionTestUtils.setField(classUnderTest, "xhbScheduledHearingDao",
             Optional.of(DummyHearingUtil.getXhbScheduledHearingDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbRefJudgeDao",
             Optional.of(DummyJudgeUtil.getXhbRefJudgeDao()));
-        
+
         // Expects
         Mockito.when(mockDataHelper.createSchedHearingAttendee(Mockito.isA(String.class),
             Mockito.isA(Integer.class), Mockito.isA(Integer.class))).thenReturn(
                 Optional.of(xhbSchedHearingAttendeeDao));
-        
+
         boolean result = true;
         classUnderTest.processJudgeRecords();
         assertTrue(result, TRUE);
     }
-    
+
     @Test
     void testIsNumberedNode() {
         boolean result = classUnderTest.isNumberedNode(classUnderTest.FIRSTNAME);
@@ -407,7 +407,7 @@ class ListObjectHelperTest {
         result = classUnderTest.isNumberedNode(EMPTY_STRING);
         assertFalse(result, FALSE);
     }
-    
+
     @Test
     void testValidateSittingWhenSittingTimeIsValid() {
         // Setup
@@ -425,7 +425,7 @@ class ListObjectHelperTest {
 
         classUnderTest.validateNodeMap(nodesMap, classUnderTest.SITTING_NODE);
     }
-    
+
     @Test
     void testValidateDefendantWithMaskedValue() {
         Map<String, String> nodesMap = new LinkedHashMap<>();
@@ -446,7 +446,7 @@ class ListObjectHelperTest {
 
         classUnderTest.validateNodeMap(nodesMap, classUnderTest.DEFENDANT_NODE);
     }
-    
+
     @Test
     void testUpdateCaseTitleExceptionHandling() {
         XhbCaseDao brokenDao = Mockito.mock(XhbCaseDao.class);
@@ -463,7 +463,7 @@ class ListObjectHelperTest {
         Optional<XhbCaseDao> result = ReflectionTestUtils.invokeMethod(classUnderTest, "updateCaseTitle", nodesMap);
         assertTrue(result.isEmpty(), "Expected empty optional due to exception");
     }
-    
+
     @Test
     void testValidateScheduledHearingWhenNotBeforeTimeIsValid() {
         Map<String, String> nodesMap = new LinkedHashMap<>();
@@ -478,8 +478,8 @@ class ListObjectHelperTest {
 
         classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.HEARING_NODE);
     }
-    
-    
+
+
     @Test
     void testValidateSittingParsesWhitespaceAndSeconds() {
         // Setup
@@ -573,7 +573,7 @@ class ListObjectHelperTest {
     @Test
     void testValidateScheduledHearing_UsesSittingTime_WhenNoOverrideKeyPresent_reflect() {
         // Arrange
-        
+
         // no NOTBEFORETIME key → getTime(...) returns null
 
         // Reuse the SAME sitting DAO instance for both setup and expectation
@@ -631,8 +631,8 @@ class ListObjectHelperTest {
         LocalDateTime expected = sittingDao.getSittingTime(); // same instance
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
     }
-    
-    
+
+
     @Test
     void testValidateScheduledHearing_ElseBranch_TryPath_24h() {
         // Arrange
@@ -641,7 +641,7 @@ class ListObjectHelperTest {
 
         // Use ONE sitting dao instance to avoid time drift
         var sittingDao = DummyHearingUtil.getXhbSittingDao();
-        
+
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
@@ -665,16 +665,16 @@ class ListObjectHelperTest {
         LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(14, 5));
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
     }
-    
+
     @Test
     void testValidateScheduledHearing_ElseBranch_CatchPath_12h() {
         // Arrange
         Map<String, String> nodesMap = new LinkedHashMap<>();
         // not ISO -> throws, falls into catch with 12h formatter
         nodesMap.put(ListObjectHelper.NOTBEFORETIME, "11:00 pm");
-        
+
         var sittingDao = DummyHearingUtil.getXhbSittingDao();
-        
+
         ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
             Optional.of(DummyCaseUtil.getXhbCaseDao()));
         ReflectionTestUtils.setField(classUnderTest, "xhbHearingDao",
@@ -697,6 +697,39 @@ class ListObjectHelperTest {
         LocalDate sittingDate = sittingDao.getSittingTime().toLocalDate();
         LocalDateTime expected = LocalDateTime.of(sittingDate, LocalTime.of(23, 0));
         org.junit.jupiter.api.Assertions.assertEquals(expected, timeCaptor.getValue());
+    }
+
+    @Test
+    void testGetTime() {
+        // These values need to be parsed correctly
+        //
+        String notBeforeTime1 = "14:30"; // 24h
+        String notBeforeTime2 = "02:15 PM"; // 12h with space
+        String notBeforeTime3 = "11:45am"; // 12h no space
+        String notBeforeTime4 = "10:00 AM"; // 12h hour only
+        String notBeforeTime5 = "09:45 AM"; // 12h hour only
+        String notBeforeTime6 = "9:45 AM"; // 12h hour only
+        String notBeforeTime7 = "12:00 PM"; // 12h hour only
+        String notBeforeTime8 = "9:30 AM"; // 12h hour only
+
+        // Act & Assert
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime1));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime2));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime3));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime4));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime5));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime6));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime7));
+        org.junit.jupiter.api.Assertions.assertNotNull(
+            ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime8));
+
     }
 
 }

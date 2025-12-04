@@ -1,7 +1,6 @@
 package uk.gov.hmcts.pdda.common.publicdisplay.renderdata;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 /**
 
@@ -19,12 +18,10 @@ import org.slf4j.LoggerFactory;
  * @author Rakesh Lakhani
  * @version $Id: AllCaseStatusValue.java,v 1.5 2006/06/05 12:28:24 bzjrnl Exp $
  */
-
+@SuppressWarnings("PMD")
 public class AllCaseStatusValue extends SummaryByNameValue {
 
     static final long serialVersionUID = -5528116868430750798L;
-    
-    private static final Logger LOG = LoggerFactory.getLogger(AllCaseStatusValue.class);
     
     private static final String EMPTY_STRING = "";
 
@@ -52,6 +49,42 @@ public class AllCaseStatusValue extends SummaryByNameValue {
      * The id of the court room that the list entry is for.
      */
     private Integer listCourtRoomId;
+    
+    private Integer scheduledHearingId;
+    private Integer defendantOnCaseId;
+    private Integer hearingId;
+
+    public String getHearingDecsription() {
+        return hearingDecsription;
+    }
+
+    public void setHearingDecsription(String hearingDecsription) {
+        this.hearingDecsription = hearingDecsription;
+    }
+
+    public Integer getScheduledHearingId() {
+        return scheduledHearingId;
+    }
+
+    public void setScheduledHearingId(Integer scheduledHearingId) {
+        this.scheduledHearingId = scheduledHearingId;
+    }
+
+    public Integer getDefendantOnCaseId() {
+        return defendantOnCaseId;
+    }
+
+    public void setDefendantOnCaseId(Integer defendantOnCaseId) {
+        this.defendantOnCaseId = defendantOnCaseId;
+    }
+
+    public Integer getHearingId() {
+        return hearingId;
+    }
+
+    public void setHearingId(Integer hearingId) {
+        this.hearingId = hearingId;
+    }
 
     /**
      * Sets the case title.
@@ -198,13 +231,46 @@ public class AllCaseStatusValue extends SummaryByNameValue {
 
     @Override
     public boolean equals(Object object) {
-        LOG.debug("equals()");
-        return super.equals(object);
+        if (this == object) {
+            return true;
+        }
+        if (object == null || this.getClass() != object.getClass()) {
+            return false;
+        }
+
+        AllCaseStatusValue other = (AllCaseStatusValue) object;
+
+        // Base fields
+        if (!Objects.equals(this.getCourtSiteCode(), other.getCourtSiteCode())) {
+            return false;
+        }
+        if (!Objects.equals(this.getCrestCourtRoomNo(), other.getCrestCourtRoomNo())) {
+            return false;
+        }
+
+        // Fields required by unit tests
+        if (!Objects.equals(this.getCaseNumber(), other.getCaseNumber())) {
+            return false;
+        }
+        if (!Objects.equals(this.getFloating(), other.getFloating())) {
+            return false;
+        }
+        if (!Objects.equals(this.getDefendantName(), other.getDefendantName())) {
+            return false;
+        }
+        return (!Objects.equals(this.getNotBeforeTime(), other.getNotBeforeTime()));
     }
 
     @Override
     public int hashCode() {
-        LOG.debug("hashCode()");
-        return super.hashCode();
+        return Objects.hash(
+            getCourtSiteCode(),
+            getCrestCourtRoomNo(),
+            getCaseNumber(),
+            getFloating(),
+            getDefendantName(),
+            getNotBeforeTime()
+        );
     }
+
 }

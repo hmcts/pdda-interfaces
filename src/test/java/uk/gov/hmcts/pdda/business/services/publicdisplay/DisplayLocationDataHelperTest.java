@@ -102,7 +102,7 @@ class DisplayLocationDataHelperTest {
         xhbCourtSiteDao.setXhbDisplayLocations(xhbDisplayLocationDaoList);
         xhbCourtSiteDaoList.add(xhbCourtSiteDao);
         // Expects
-        Mockito.when(mockXhbCourtSiteRepository.findByCourtId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbCourtSiteRepository.findByCourtIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbCourtSiteDaoList);
         // Run
         boolean result = false;
@@ -125,13 +125,13 @@ class DisplayLocationDataHelperTest {
         Optional<XhbDisplayDocumentDao> xhbDisplayDocumentDao =
             Optional.of(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
         // Expects
-        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetsDaoList);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDaoList);
         Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class)))
             .thenReturn("TranslatedText");
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(new ArrayList<>());
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDocumentDao);
@@ -164,9 +164,9 @@ class DisplayLocationDataHelperTest {
             Optional.of(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
 
         // Expects
-        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbRotationSetsDaoList);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xhbDisplayDaoList);
         Mockito.when(mockResourceBundle.getString(Mockito.isA(String.class)))
             .thenThrow(new MissingResourceException(null, null, null));
@@ -230,11 +230,11 @@ class DisplayLocationDataHelperTest {
         List<XhbDisplayDao> displayList = List.of(display);
 
         // Mock behaviour
-        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.any()))
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtIdSafe(Mockito.any()))
             .thenReturn(rotationSetList);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(rotationSet.getRotationSetId()))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(rotationSet.getRotationSetId()))
             .thenReturn(displayList);
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.any()))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.any()))
             .thenReturn(new ArrayList<>());
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe((Integer) Mockito.any()))
             .thenReturn(Optional.empty());
@@ -274,11 +274,11 @@ class DisplayLocationDataHelperTest {
         List<XhbDisplayDao> displayDaoList = List.of(displayDao);
 
         // Expectations
-        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(Mockito.any()))
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtIdSafe(Mockito.any()))
             .thenReturn(rotationSetList);
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.any()))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.any()))
             .thenReturn(rotationSetDdList);
-        Mockito.when(mockXhbDisplayRepository.findByRotationSetId(Mockito.any()))
+        Mockito.when(mockXhbDisplayRepository.findByRotationSetIdSafe(Mockito.any()))
             .thenReturn(displayDaoList);
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe((Integer) Mockito.any()))
             .thenReturn(Optional.empty()); // <=== THIS is the fix for ambiguity

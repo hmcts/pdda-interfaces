@@ -13,9 +13,9 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeIn
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLogInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
 import uk.gov.courtservice.xhibit.common.publicdisplay.types.configuration.CourtConfigurationChange;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogSubscriptionValue;
+import uk.gov.courtservice.xhibit.courtlog.vos.CourtLogViewValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogSubscriptionValue;
-import uk.gov.hmcts.pdda.courtlog.vos.CourtLogViewValue;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

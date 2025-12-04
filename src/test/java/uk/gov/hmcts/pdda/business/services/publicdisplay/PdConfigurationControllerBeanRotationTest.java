@@ -138,13 +138,13 @@ class PdConfigurationControllerBeanRotationTest {
         // Stub named query: ROTATION_SETS.findById
         jakarta.persistence.Query mockRotationSetQuery =
             Mockito.mock(jakarta.persistence.Query.class);
-        Mockito.when(mockEntityManager.createNamedQuery("XHB_ROTATION_SETS.findById"))
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_ROTATION_SETS.findByIdSafe"))
             .thenReturn(mockRotationSetQuery);
         Mockito.when(mockRotationSetQuery.setParameter("rotationSetId", ROTATION_SET_ID))
             .thenReturn(mockRotationSetQuery);
         Mockito.when(mockRotationSetQuery.getResultList()).thenReturn(List.of(rotationSet)); 
         // Stub named query: ROTATION_SET_DD.findByRotationSetId
-        Mockito.when(mockEntityManager.createNamedQuery("XHB_ROTATION_SET_DD.findByRotationSetId"))
+        Mockito.when(mockEntityManager.createNamedQuery("XHB_ROTATION_SET_DD.findByRotationSetIdSafe"))
             .thenReturn(mockRotationSetDdQuery);
         Mockito.when(mockRotationSetDdQuery.setParameter("rotationSetId", ROTATION_SET_ID))
             .thenReturn(mockRotationSetDdQuery);
@@ -218,10 +218,10 @@ class PdConfigurationControllerBeanRotationTest {
         jakarta.persistence.Query queryMock = Mockito.mock(jakarta.persistence.Query.class);
         Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(queryMock);
         Mockito.when(queryMock.getResultList()).thenReturn(dummyList);
-        Mockito.when(mockXhbRotationSetsRepository.findByCourtId(COURT_ID)).thenReturn(dummyList);
+        Mockito.when(mockXhbRotationSetsRepository.findByCourtIdSafe(COURT_ID)).thenReturn(dummyList);
 
         // Also stub any follow-up logic, if needed
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.anyInt()))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.anyInt()))
             .thenReturn(List.of(DummyPublicDisplayUtil.getXhbRotationSetDdDao(),
                 DummyPublicDisplayUtil.getXhbRotationSetDdDao()));
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.anyInt()))
@@ -340,7 +340,7 @@ class PdConfigurationControllerBeanRotationTest {
         List<XhbRotationSetDdDao> rsddList = List.of(rsdd1, rsdd2);
         Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Long.valueOf(ROTATION_SET_ID)))
             .thenReturn(rotationSetOpt);
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(ROTATION_SET_ID))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(ROTATION_SET_ID))
             .thenReturn(rsddList);
 
         // Create display documents with correct IDs
@@ -423,7 +423,7 @@ class PdConfigurationControllerBeanRotationTest {
 
         Mockito.when(mockXhbRotationSetsRepository.update(Mockito.isA(XhbRotationSetsDao.class)))
             .thenReturn(Optional.of(xhbRotationSetsDao));
-        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+        Mockito.when(mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(xrsddList);
         Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbDisplayDocumentDao));
@@ -484,7 +484,7 @@ class PdConfigurationControllerBeanRotationTest {
                 .thenReturn(rotationSetsDao);
             Mockito
                 .when(
-                    mockXhbRotationSetDdRepository.findByRotationSetId(Mockito.isA(Integer.class)))
+                    mockXhbRotationSetDdRepository.findByRotationSetIdSafe(Mockito.isA(Integer.class)))
                 .thenReturn(xrsddList);
             Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
                 .thenReturn(Optional.of(xhbDisplayDocumentDao));

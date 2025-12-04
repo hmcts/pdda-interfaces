@@ -7,15 +7,22 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import uk.gov.hmcts.pdda.business.entities.xhbcase.XhbCaseRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfiguredpublicnotice.XhbConfiguredPublicNoticeRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbhearing.XhbHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbpublicnotice.XhbPublicNoticeRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 
 import java.io.IOException;
 
+@SuppressWarnings("PMD.ExcessiveParameterList")
 public class SftpHelperUtil extends SftpService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SftpHelperUtil.class);
@@ -32,9 +39,15 @@ public class SftpHelperUtil extends SftpService {
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
         PddaMessageHelper pddaMessageHelper, XhbClobRepository clobRepository,
         XhbCourtRepository courtRepository, XhbCourtRoomRepository courtRoomRepository,
-        XhbCourtSiteRepository courtSiteRepository) {
+        XhbCourtSiteRepository courtSiteRepository, XhbCaseRepository xhbCaseRepository,
+        XhbHearingRepository hearingRepository, XhbSittingRepository sittingRepository,
+        XhbScheduledHearingRepository scheduledHearingRepository,
+        XhbPublicNoticeRepository xhbPublicNoticeRepository,
+        XhbConfiguredPublicNoticeRepository xhbConfiguredPublicNoticeRepository) {
         super(entityManager, xhbConfigPropRepository, environment, pddaMessageHelper,
-            clobRepository, courtRepository, courtRoomRepository, courtSiteRepository);
+            clobRepository, courtRepository, courtRoomRepository, courtSiteRepository,
+            xhbCaseRepository, hearingRepository, sittingRepository, scheduledHearingRepository,
+            xhbPublicNoticeRepository, xhbConfiguredPublicNoticeRepository);
     }
 
     public SftpHelperUtil(EntityManager entityManager) {
@@ -61,7 +74,7 @@ public class SftpHelperUtil extends SftpService {
             // Are we using Database or Key Vault to lookup credentials?
             // This will be a database lookup. If it is indeterminate, we will use the Database.
             sftpConfig.setUseKeyVault(checkWhetherToUseKeyVault());
-            
+
             // Get excluded court IDs for CP messages
             try {
                 sftpConfig

@@ -1,6 +1,8 @@
 
 package uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.pdda.business.vos.translation.TranslationBundle;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.DefendantName;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
@@ -9,10 +11,12 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.LeafEventXmlNode;
 import java.util.Collection;
 
 public final class AppendEventsTwentyNineHundredTenUtils {
+    
+    private static final Logger LOG =
+        LoggerFactory.getLogger(AppendEventsTwentyNineHundredTenUtils.class);
 
     private static final String SPACE = " ";
     private static final String INTERPRETER_SWORN = "Interpreter_Sworn";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String DEFENCE = "Defence";
     private static final String LEGAL_SUBMISSIONS = "Legal_Submissions";
 
@@ -25,14 +29,18 @@ public final class AppendEventsTwentyNineHundredTenUtils {
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, DEFENCE));
         AppendUtils.append(buffer, SPACE);
 
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            AppendUtils.append(buffer,
-                ((LeafEventXmlNode) node.get("E20910_Defence_CC_Name")).getValue());
-            AppendUtils.append(buffer, SPACE);
-        }
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
 
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                AppendUtils.append(buffer,
+                    ((LeafEventXmlNode) node.get("E20910_Defence_CC_Name")).getValue());
+                AppendUtils.append(buffer, SPACE);
+            }
+        }
+        
         AppendUtils.append(buffer, TranslationUtils.translate(documentI18n, "Case_Closed"));
     }
 

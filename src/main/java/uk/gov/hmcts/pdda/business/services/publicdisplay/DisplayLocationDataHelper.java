@@ -128,7 +128,7 @@ public class DisplayLocationDataHelper {
         RotationSetComplexValue complex;
 
         // Get all the rotation sets for the court
-        List<XhbRotationSetsDao> rotationSetCol = xhbRotationSetsRepository.findByCourtId(courtId);
+        List<XhbRotationSetsDao> rotationSetCol = xhbRotationSetsRepository.findByCourtIdSafe(courtId);
         Iterator<XhbRotationSetsDao> rotationSetIter = rotationSetCol.iterator();
         while (rotationSetIter.hasNext()) {
             complex = getRotationSetComplexValue();
@@ -162,7 +162,8 @@ public class DisplayLocationDataHelper {
         // Wrap the XhbDisplays in the sort adapter. getting the display text
         // from the resource bundle.
         XhbDisplayDao[] displays =
-            xhbDisplayRepository.findByRotationSetId(rotationSetLocal.getRotationSetId()).toArray(new XhbDisplayDao[0]);
+            xhbDisplayRepository.findByRotationSetIdSafe(rotationSetLocal
+                .getRotationSetId()).toArray(new XhbDisplayDao[0]);
 
         List<DisplayBasicValueSortAdapter> displayAdapterArray = new ArrayList<>();
         for (XhbDisplayDao display : displays) {
@@ -231,7 +232,7 @@ public class DisplayLocationDataHelper {
 
         // Get the rotation set dds for the current rotation set
         List<XhbRotationSetDdDao> xhbRotationSetDds =
-            xhbRotationSetDdRepository.findByRotationSetId(complex.getRotationSetId());
+            xhbRotationSetDdRepository.findByRotationSetIdSafe(complex.getRotationSetId());
 
         for (XhbRotationSetDdDao rotationSetDdLocal : xhbRotationSetDds) {
             // for every rotation set DD, get the display document and

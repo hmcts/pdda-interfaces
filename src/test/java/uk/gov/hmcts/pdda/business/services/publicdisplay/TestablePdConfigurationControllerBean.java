@@ -35,6 +35,7 @@ class TestablePdConfigurationControllerBean extends PdConfigurationControllerBea
     private static final long serialVersionUID = 6593690695126813388L;
     private final EntityManager em;
     private final XhbRotationSetsRepository rotationSetsRepo;
+    private final XhbRotationSetDdRepository rotationSetDdRepo;
 
     private final XhbDisplayDocumentRepository displayDocumentRepository;
 
@@ -52,12 +53,18 @@ class TestablePdConfigurationControllerBean extends PdConfigurationControllerBea
             displayRepo, locationRepo, siteRepo, roomRepo, notifier, docQuery, roomQuery, displayRotationSetDataHelper);
         this.em = em;
         this.rotationSetsRepo = rotationSetsRepo;
+        this.rotationSetDdRepo = rotationSetDdRepo;
         this.displayDocumentRepository = displayDocumentRepository;
     }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @Override
+    protected XhbRotationSetDdRepository getXhbRotationSetDdRepository() {
+        return rotationSetDdRepo;
     }
 
     @Override
