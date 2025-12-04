@@ -46,7 +46,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
-    "PMD.ExcessiveImports", "PMD.CognitiveComplexity"})
+    "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -61,222 +61,6 @@ public final class CathUtils {
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
     private static final String PROVENANCE = "PDDA";
-
-    private CathUtils() {
-        // Private constructor
-    }
-
-    public static String getDateTimeAsString(ZonedDateTime dateTime) {
-        return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
-    }
-
-    public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
-        // Build the multipart/form-data boundary
-        String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
-        String fileName = courtelJson.getDocumentName();
-        String fieldName = "file";
-        // Build multipart/form-data body
-        String body =
-            "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\"" + fieldName
-                + "\"; filename=\"" + fileName + "\"\r\n" + "Content-Type: text/plain\r\n\r\n"
-                + courtelJson.getJson() + "\r\n" + "--" + boundary + "--\r\n";
-        // Get the times
-        String now = getDateTimeAsString(courtelJson.getContentDate());
-        String endDate = getDateTimeAsString(courtelJson.getEndDate());
-        // Get the bearer token
-        String bearerToken = String.format(BEARER, courtelJson.getToken());
-        // Return the HttpRequest for the post
-        HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
-            .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
-            .header(PublicationConfiguration.SENSITIVITY_HEADER, courtelJson.getSensitivity())
-            .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
-            .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
-            .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
-            .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
-            .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
-            .header(PublicationConfiguration.CONTENT_DATE, now)
-            .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER,
-                courtelJson.getDocumentName())
-            .header(AUTHORIZATION, bearerToken)
-            .header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + boundary)
-            .POST(BodyPublishers.ofString(body)).build();
-
-        // If the courtelJson is a ListJson, copy the existing request and add the list type header
-        if (courtelJson instanceof ListJson) {
-            LOG.debug("ListJson detected, rebuilding request and adding list type header");
-            return HttpRequest.newBuilder().uri(result.uri())
-                // Copy existing headers
-                .headers(copyExistingHeaders(result.headers()))
-                // Add list type header
-                .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
-                // Re-create the body
-                .POST(BodyPublishers.ofString(body)).build();
-        }
-
-        LOG.debug("getHttpPostRequest() - built POST");
-        return result;
-    }
-
-    private static String[] copyExistingHeaders(HttpHeaders headers) {
-        return headers.map().entrySet().stream().flatMap(
-            entry -> entry.getValue().stream().map(value -> new String[] {entry.getKey(), value}))
-            .flatMap(Stream::of).toArray(String[]::new);
-    }
-
-    public static boolean isApimEnabled() {
-        return !FALSE.equalsIgnoreCase(
-            InitializationService.getInstance().getEnvironment().getProperty(APIM_ENABLED));
-    }
-
-    public static String getApimUri() {
-        String apimUri = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
-        return String.format(POST_URL, apimUri);
-    }
-
-    public static XhbCathDocumentLinkDao transformXmlUsingSchema(Long clobId,
-        XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository,
-        XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
-        throws TransformerException {
-        String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        // Get the predefined xslt schema
-        Source xsltSource =
-            new StreamSource(new File(classLoader.getResource(xsltSchemaPath).getFile()));
-        Templates templates = transformerFactory.newTemplates(xsltSource);
-        Transformer cutDowntransformer = templates.newTransformer();
-
-        // Get the predefined namespace xslt schema
-        Source xsltNameSpaceSource =
-            new StreamSource(new File(classLoader.getResource(xsltNamespaceSchemaPath).getFile()));
-        Templates nameSpaceTemplates = transformerFactory.newTemplates(xsltNameSpaceSource);
-        Transformer nameSpaceTransformer = nameSpaceTemplates.newTransformer();
-
-        // Check if there is an entry in the courtel_list table with the documentClobId
-        Optional<XhbCourtelListDao> xhbCourtelListDao =
-            xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
-
-        if (xhbCourtelListDao.isPresent()) {
-            // Fetch the original xml clob and xml document records
-            Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findByIdSafe(clobId);
-            Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
-                xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
-            if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
-                // Transform the xml, removing the unneeded elements and attributes
-                Source xmlSource =
-                    new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
-                StringWriter outWriter =
-                    TransformerUtils.transformList(cutDowntransformer, xmlSource);
-
-                // Transform the xml, removing the namespaces
-                Source xmlCutDownSource = new StreamSource(new StringReader(outWriter.toString()));
-                StringWriter outWriterWithRemovedNameSpaces =
-                    TransformerUtils.transformList(nameSpaceTransformer, xmlCutDownSource);
-
-                // Save the transformed Xml to the clob table
-                XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
-                xhbClobDaoTransformedXml.setClobData(outWriterWithRemovedNameSpaces.toString());
-                xhbClobRepository.savePersist(xhbClobDaoTransformedXml);
-
-                // Save the transformed xml to xml_document table
-                XhbXmlDocumentDao xhbXmlDocumentDaoTransformedXml = new XhbXmlDocumentDao();
-                xhbXmlDocumentDaoTransformedXml
-                    .setDateCreated(xhbXmlDocumentDaoOriginalXml.get().getDateCreated());
-                xhbXmlDocumentDaoTransformedXml
-                    .setDocumentTitle(xhbXmlDocumentDaoOriginalXml.get().getDocumentTitle());
-                xhbXmlDocumentDaoTransformedXml
-                    .setXmlDocumentClobId(xhbClobDaoTransformedXml.getClobId());
-                xhbXmlDocumentDaoTransformedXml.setStatus("IO");
-                xhbXmlDocumentDaoTransformedXml
-                    .setDocumentType(xhbXmlDocumentDaoOriginalXml.get().getDocumentType());
-                xhbXmlDocumentDaoTransformedXml
-                    .setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
-                xhbXmlDocumentDaoTransformedXml
-                    .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
-                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoTransformedXml);
-
-                // Save to the cath_document_link table with the original and transformed xml
-                // id's
-                XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
-                xhbCathDocumentLinkDao
-                    .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
-                xhbCathDocumentLinkDao
-                    .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
-                xhbCathDocumentLinkRepository.savePersist(xhbCathDocumentLinkDao);
-
-                // Return the cath_document_link record
-                return xhbCathDocumentLinkDao;
-            }
-        }
-        return null;
-    }
-
-    public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
-        XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
-        XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
-        XhbCourtelListRepository xhbCourtelListRepository,
-        XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
-        throws ParserConfigurationException, SAXException, IOException {
-
-        // Fetch the xml_document record
-        Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
-            xhbXmlDocumentRepository.findByIdSafe(xhbCathDocumentLinkDao.getCathXmlId());
-
-        if (xhbXmlDocumentDaoTransformedXml.isPresent()) {
-            // Fetch the clob record
-            Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository
-                .findByIdSafe(xhbXmlDocumentDaoTransformedXml.get().getXmlDocumentClobId());
-
-            if (xhbClobDaoTransformedXml.isPresent()) {
-                // Generate the Json and save it to the clob_table
-                XhbClobDao xhbClobDaoJson = new XhbClobDao();
-                xhbClobDaoJson.setClobData(
-                    generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData())
-                        .toString());
-                xhbClobRepository.savePersist(xhbClobDaoJson);
-
-                // Save the json record to the xml_document table
-                XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
-                xhbXmlDocumentDaoJson.setDateCreated(LocalDate.parse(CathDocumentTitleUtils
-                    .generateCathDocumentTitleBuilderFromClob(xhbClobDaoTransformedXml.get())
-                    .getStartDate()).atStartOfDay());
-                xhbXmlDocumentDaoJson.setDocumentTitle(
-                    CathDocumentTitleUtils.generateDocumentTitle(xhbCathDocumentLinkDao,
-                        xhbClobDaoTransformedXml.get(), xhbCourtelListRepository,
-                        xhbCppStagingInboundRepository, xhbXmlDocumentRepository));
-                xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
-                xhbXmlDocumentDaoJson.setStatus("ND");
-                xhbXmlDocumentDaoJson.setDocumentType("JSN");
-                xhbXmlDocumentDaoJson
-                    .setExpiryDate(xhbXmlDocumentDaoTransformedXml.get().getExpiryDate());
-                xhbXmlDocumentDaoJson
-                    .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
-                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoJson);
-
-                // Update the cath_document_link record with the cathJsonId
-                updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
-                    xhbCathDocumentLinkDao, xhbXmlDocumentDaoJson);
-            }
-        }
-    }
-
-    private static void updateCathDocumentlinkWithJsonId(
-        XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
-        XhbCathDocumentLinkDao xhbCathDocumentLinkDao, XhbXmlDocumentDao xhbXmlDocumentDaoJson) {
-        // Fetch the existing cath_document_link record
-        Optional<XhbCathDocumentLinkDao> xhbCathDocumentLinkDaoNoJsonId =
-            xhbCathDcoumentLlinkRepository
-                .findByIdSafe(xhbCathDocumentLinkDao.getCathDocumentLinkId());
-
-        if (xhbCathDocumentLinkDaoNoJsonId.isPresent()) {
-            // Update the existing record with the cathJsonId
-            xhbCathDocumentLinkDaoNoJsonId.get()
-                .setCathJsonId(xhbXmlDocumentDaoJson.getXmlDocumentId());
-            xhbCathDcoumentLlinkRepository.update(xhbCathDocumentLinkDaoNoJsonId.get());
-        }
-    }
 
     // Mapping of container names to their singular child element
     private static final Map<String, String> ARRAY_KEYS = Map.of(
@@ -294,6 +78,222 @@ public final class CathUtils {
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
             "SittingSequenceNumber"
     );
+
+    private CathUtils() {
+        // Private constructor
+    }
+
+    public static String getDateTimeAsString(ZonedDateTime dateTime) {
+        return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
+    }
+
+    public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
+        // Build the multipart/form-data boundary
+        String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
+        String fileName = courtelJson.getDocumentName();
+        String fieldName = "file";
+        // Build multipart/form-data body
+        String body =
+                "--" + boundary + "\r\n" + "Content-Disposition: form-data; name=\"" + fieldName
+                        + "\"; filename=\"" + fileName + "\"\r\n" + "Content-Type: text/plain\r\n\r\n"
+                        + courtelJson.getJson() + "\r\n" + "--" + boundary + "--\r\n";
+        // Get the times
+        String now = getDateTimeAsString(courtelJson.getContentDate());
+        String endDate = getDateTimeAsString(courtelJson.getEndDate());
+        // Get the bearer token
+        String bearerToken = String.format(BEARER, courtelJson.getToken());
+        // Return the HttpRequest for the post
+        HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
+                .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
+                .header(PublicationConfiguration.SENSITIVITY_HEADER, courtelJson.getSensitivity())
+                .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
+                .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
+                .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
+                .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
+                .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
+                .header(PublicationConfiguration.CONTENT_DATE, now)
+                .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER,
+                        courtelJson.getDocumentName())
+                .header(AUTHORIZATION, bearerToken)
+                .header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + boundary)
+                .POST(BodyPublishers.ofString(body)).build();
+
+        // If the courtelJson is a ListJson, copy the existing request and add the list type header
+        if (courtelJson instanceof ListJson) {
+            LOG.debug("ListJson detected, rebuilding request and adding list type header");
+            return HttpRequest.newBuilder().uri(result.uri())
+                    // Copy existing headers
+                    .headers(copyExistingHeaders(result.headers()))
+                    // Add list type header
+                    .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
+                    // Re-create the body
+                    .POST(BodyPublishers.ofString(body)).build();
+        }
+
+        LOG.debug("getHttpPostRequest() - built POST");
+        return result;
+    }
+
+    private static String[] copyExistingHeaders(HttpHeaders headers) {
+        return headers.map().entrySet().stream().flatMap(
+                        entry -> entry.getValue().stream().map(value -> new String[]{entry.getKey(), value}))
+                .flatMap(Stream::of).toArray(String[]::new);
+    }
+
+    public static boolean isApimEnabled() {
+        return !FALSE.equalsIgnoreCase(
+                InitializationService.getInstance().getEnvironment().getProperty(APIM_ENABLED));
+    }
+
+    public static String getApimUri() {
+        String apimUri = InitializationService.getInstance().getEnvironment().getProperty(APIM_URL);
+        return String.format(POST_URL, apimUri);
+    }
+
+    public static XhbCathDocumentLinkDao transformXmlUsingSchema(Long clobId,
+               XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
+               XhbXmlDocumentRepository xhbXmlDocumentRepository,
+               XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
+            throws TransformerException {
+        String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        // Get the predefined xslt schema
+        Source xsltSource =
+                new StreamSource(new File(classLoader.getResource(xsltSchemaPath).getFile()));
+        Templates templates = transformerFactory.newTemplates(xsltSource);
+        Transformer cutDowntransformer = templates.newTransformer();
+
+        // Get the predefined namespace xslt schema
+        Source xsltNameSpaceSource =
+                new StreamSource(new File(classLoader.getResource(xsltNamespaceSchemaPath).getFile()));
+        Templates nameSpaceTemplates = transformerFactory.newTemplates(xsltNameSpaceSource);
+        Transformer nameSpaceTransformer = nameSpaceTemplates.newTransformer();
+
+        // Check if there is an entry in the courtel_list table with the documentClobId
+        Optional<XhbCourtelListDao> xhbCourtelListDao =
+                xhbCourtelListRepository.findByXmlDocumentClobId(clobId);
+
+        if (xhbCourtelListDao.isPresent()) {
+            // Fetch the original xml clob and xml document records
+            Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findByIdSafe(clobId);
+            Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
+                    xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
+            if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
+                // Transform the xml, removing the unneeded elements and attributes
+                Source xmlSource =
+                        new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
+                StringWriter outWriter =
+                        TransformerUtils.transformList(cutDowntransformer, xmlSource);
+
+                // Transform the xml, removing the namespaces
+                Source xmlCutDownSource = new StreamSource(new StringReader(outWriter.toString()));
+                StringWriter outWriterWithRemovedNameSpaces =
+                        TransformerUtils.transformList(nameSpaceTransformer, xmlCutDownSource);
+
+                // Save the transformed Xml to the clob table
+                XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
+                xhbClobDaoTransformedXml.setClobData(outWriterWithRemovedNameSpaces.toString());
+                xhbClobRepository.savePersist(xhbClobDaoTransformedXml);
+
+                // Save the transformed xml to xml_document table
+                XhbXmlDocumentDao xhbXmlDocumentDaoTransformedXml = new XhbXmlDocumentDao();
+                xhbXmlDocumentDaoTransformedXml
+                        .setDateCreated(xhbXmlDocumentDaoOriginalXml.get().getDateCreated());
+                xhbXmlDocumentDaoTransformedXml
+                        .setDocumentTitle(xhbXmlDocumentDaoOriginalXml.get().getDocumentTitle());
+                xhbXmlDocumentDaoTransformedXml
+                        .setXmlDocumentClobId(xhbClobDaoTransformedXml.getClobId());
+                xhbXmlDocumentDaoTransformedXml.setStatus("IO");
+                xhbXmlDocumentDaoTransformedXml
+                        .setDocumentType(xhbXmlDocumentDaoOriginalXml.get().getDocumentType());
+                xhbXmlDocumentDaoTransformedXml
+                        .setExpiryDate(xhbXmlDocumentDaoOriginalXml.get().getExpiryDate());
+                xhbXmlDocumentDaoTransformedXml
+                        .setCourtId(xhbXmlDocumentDaoOriginalXml.get().getCourtId());
+                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoTransformedXml);
+
+                // Save to the cath_document_link table with the original and transformed xml
+                // id's
+                XhbCathDocumentLinkDao xhbCathDocumentLinkDao = new XhbCathDocumentLinkDao();
+                xhbCathDocumentLinkDao
+                        .setOrigCourtelListDocId(xhbCourtelListDao.get().getCourtelListId());
+                xhbCathDocumentLinkDao
+                        .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
+                xhbCathDocumentLinkRepository.savePersist(xhbCathDocumentLinkDao);
+
+                // Return the cath_document_link record
+                return xhbCathDocumentLinkDao;
+            }
+        }
+        return null;
+    }
+
+    public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
+            XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+            XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
+            XhbCourtelListRepository xhbCourtelListRepository,
+             XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
+            throws ParserConfigurationException, SAXException, IOException {
+
+        // Fetch the xml_document record
+        Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
+                xhbXmlDocumentRepository.findByIdSafe(xhbCathDocumentLinkDao.getCathXmlId());
+
+        if (xhbXmlDocumentDaoTransformedXml.isPresent()) {
+            // Fetch the clob record
+            Optional<XhbClobDao> xhbClobDaoTransformedXml = xhbClobRepository
+                    .findByIdSafe(xhbXmlDocumentDaoTransformedXml.get().getXmlDocumentClobId());
+
+            if (xhbClobDaoTransformedXml.isPresent()) {
+                // Generate the Json and save it to the clob_table
+                XhbClobDao xhbClobDaoJson = new XhbClobDao();
+                xhbClobDaoJson.setClobData(
+                        generateJsonFromString(xhbClobDaoTransformedXml.get().getClobData())
+                                .toString());
+                xhbClobRepository.savePersist(xhbClobDaoJson);
+
+                // Save the json record to the xml_document table
+                XhbXmlDocumentDao xhbXmlDocumentDaoJson = new XhbXmlDocumentDao();
+                xhbXmlDocumentDaoJson.setDateCreated(LocalDate.parse(CathDocumentTitleUtils
+                        .generateCathDocumentTitleBuilderFromClob(xhbClobDaoTransformedXml.get())
+                        .getStartDate()).atStartOfDay());
+                xhbXmlDocumentDaoJson.setDocumentTitle(
+                        CathDocumentTitleUtils.generateDocumentTitle(xhbCathDocumentLinkDao,
+                                xhbClobDaoTransformedXml.get(), xhbCourtelListRepository,
+                                xhbCppStagingInboundRepository, xhbXmlDocumentRepository));
+                xhbXmlDocumentDaoJson.setXmlDocumentClobId(xhbClobDaoJson.getClobId());
+                xhbXmlDocumentDaoJson.setStatus("ND");
+                xhbXmlDocumentDaoJson.setDocumentType("JSN");
+                xhbXmlDocumentDaoJson
+                        .setExpiryDate(xhbXmlDocumentDaoTransformedXml.get().getExpiryDate());
+                xhbXmlDocumentDaoJson
+                        .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
+                xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoJson);
+
+                // Update the cath_document_link record with the cathJsonId
+                updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
+                        xhbCathDocumentLinkDao, xhbXmlDocumentDaoJson);
+            }
+        }
+    }
+
+    private static void updateCathDocumentlinkWithJsonId(
+            XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+            XhbCathDocumentLinkDao xhbCathDocumentLinkDao, XhbXmlDocumentDao xhbXmlDocumentDaoJson) {
+        // Fetch the existing cath_document_link record
+        Optional<XhbCathDocumentLinkDao> xhbCathDocumentLinkDaoNoJsonId =
+                xhbCathDcoumentLlinkRepository
+                        .findByIdSafe(xhbCathDocumentLinkDao.getCathDocumentLinkId());
+
+        if (xhbCathDocumentLinkDaoNoJsonId.isPresent()) {
+            // Update the existing record with the cathJsonId
+            xhbCathDocumentLinkDaoNoJsonId.get()
+                    .setCathJsonId(xhbXmlDocumentDaoJson.getXmlDocumentId());
+            xhbCathDcoumentLlinkRepository.update(xhbCathDocumentLinkDaoNoJsonId.get());
+        }
+    }
 
     private static JSONObject generateJsonFromString(String stringToConvert) {
         JSONObject json = XML.toJSONObject(stringToConvert);
@@ -369,7 +369,7 @@ public final class CathUtils {
                 Object value = json.get(key);
                 if (FORCE_ARRAY_KEYS.contains(key)) {
                     // Force the value to be an array, even if it's a single object or string
-                    JSONArray arrayValue = toJSONArray(value);
+                    JSONArray arrayValue = toJsonArray(value);
                     json.put(key, arrayValue);
                     // Recursively process the array contents
                     enforceArrayValues(arrayValue);
@@ -391,7 +391,7 @@ public final class CathUtils {
         }
     }
 
-    private static JSONArray toJSONArray(Object value) {
+    private static JSONArray toJsonArray(Object value) {
         // If already an array, return it
         if (value instanceof JSONArray array) {
             return array;
@@ -429,53 +429,87 @@ public final class CathUtils {
 
     private static void removeEmptyStringFields(Object node) {
         if (node instanceof JSONObject json) {
-            for (String key : new HashSet<>(json.keySet())) {
-                Object value = json.get(key);
-                if (value instanceof String stringValue && stringValue.trim().isEmpty()) {
-                    // Remove empty strings
-                    json.remove(key);
-                } else if (value instanceof JSONArray arrayValue) {
-                    //noinspection SizeReplaceableByIsEmpty
-                    if (arrayValue.length() == 0) {
-                        // Remove empty arrays
-                        json.remove(key);
-                    } else {
-                        // Clean up empty strings and objects within the array
-                        JSONArray cleanedArray = new JSONArray();
-                        for (int i = 0; i < arrayValue.length(); i++) {
-                            Object element = arrayValue.get(i);
-                            if (element instanceof String str && str.trim().isEmpty()) {
-                                // Skip empty strings
-                            } else
-                                //noinspection SizeReplaceableByIsEmpty
-                                if (element instanceof JSONObject obj && obj.length() == 0) {
-                                // Skip empty objects
-                                } else {
-                                cleanedArray.put(element);
-                                removeEmptyStringFields(element);
-                            }
-                        }
-                        // If the array becomes empty after cleaning, remove it
-                        //noinspection SizeReplaceableByIsEmpty
-                        if (cleanedArray.length() == 0) {
-                            json.remove(key);
-                        } else {
-                            json.put(key, cleanedArray);
-                        }
-                    }
-                } else
-                    //noinspection SizeReplaceableByIsEmpty
-                    if (value instanceof JSONObject objValue && objValue.length() == 0) {
-                    // Remove empty objects
+            cleanObject(json);
+        } else if (node instanceof JSONArray array) {
+            cleanTopLevelArray(array);
+        }
+    }
+
+    private static void cleanObject(JSONObject json) {
+        // iterate a copy of the keys so we can remove while iterating
+        for (String key : new HashSet<>(json.keySet())) {
+            Object value = json.get(key);
+
+            if (isBlankString(value)) {
+                json.remove(key);
+                continue;
+            }
+
+            if (value instanceof JSONArray arrayValue) {
+                if (arrayValue.isEmpty()) {
                     json.remove(key);
                 } else {
-                    removeEmptyStringFields(value);
+                    JSONArray cleaned = cleanArrayPreserveThenClean(arrayValue);
+                    if (cleaned.isEmpty()) {
+                        json.remove(key);
+                    } else {
+                        json.put(key, cleaned);
+                    }
                 }
+                continue;
             }
-        } else if (node instanceof JSONArray array) {
-            for (int i = 0; i < array.length(); i++) {
-                removeEmptyStringFields(array.get(i));
+
+            if (isEmptyJsonObject(value)) {
+                json.remove(key);
+                continue;
+            }
+
+            // For any other object types (including non-empty JSONObject or nested JSONArray),
+            // recurse to clean their children.
+            removeEmptyStringFields(value);
+        }
+    }
+
+    private static JSONArray cleanArrayPreserveThenClean(JSONArray arrayValue) {
+        final JSONArray cleaned = new JSONArray();
+
+        for (int i = 0; i < arrayValue.length(); i++) {
+            Object element = arrayValue.get(i);
+
+            // skip blank strings
+            if (element instanceof String str && str.isBlank()) {
+                continue;
+            }
+
+            // skip empty JSON objects (as-is, before recursive cleaning)
+            if (element instanceof JSONObject obj && obj.isEmpty()) {
+                continue;
+            }
+
+            // preserve the element (same order as original), then clean it in-place
+            cleaned.put(element);
+            removeEmptyStringFields(element);
+        }
+
+        return cleaned;
+    }
+
+    private static void cleanTopLevelArray(JSONArray array) {
+        // Original behaviour only recursed into nested objects/arrays for top-level arrays,
+        // without removing top-level blank strings/empty objects.
+        for (int i = 0; i < array.length(); i++) {
+            Object element = array.get(i);
+            if (element instanceof JSONObject || element instanceof JSONArray) {
+                removeEmptyStringFields(element);
             }
         }
+    }
+
+    private static boolean isBlankString(Object obj) {
+        return obj instanceof String str && str.isBlank();
+    }
+
+    private static boolean isEmptyJsonObject(Object obj) {
+        return obj instanceof JSONObject object && object.isEmpty();
     }
 }
