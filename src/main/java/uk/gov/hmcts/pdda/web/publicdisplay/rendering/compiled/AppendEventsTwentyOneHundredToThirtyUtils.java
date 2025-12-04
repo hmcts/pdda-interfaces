@@ -20,7 +20,6 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
     private static final String EMPTY_STRING = "";
     private static final String LEGAL_SUBMISSIONS = "Legal_Submissions";
     private static final String DEFENDANT_NAME = "defendant_name";
-    private static final String DEFENDANT_ON_CASE_ID = "defendant_on_case_id";
     private static final String E30200_LAO_JUDGE_NAME = "E30200_LAO_Reserved_To_Judge_Name";
     private static final String E30100_CASE_RELEASED_UNTIL = "E30100_Case_released_until";
     private static final String E30100_CASE_ADJOURNED_UNTIL = "E30100_Case_adjourned_until";
@@ -75,15 +74,20 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
     // OK
     public static void appendEvent30200(StringBuilder buffer, BranchEventXmlNode node,
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            // Add Defendant name
-            AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
-            AppendUtils.append(buffer, SEMI_COLON);
-            AppendUtils.append(buffer, SPACE);
-        }
+        
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
 
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
+        } else {
+            if (!RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                // Add Defendant name
+                AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
+                AppendUtils.append(buffer, SEMI_COLON);
+                AppendUtils.append(buffer, SPACE);
+            }
+        }
+        
         BranchEventXmlNode laoOptions =
             (BranchEventXmlNode) node.get("E30200_Long_Adjourn_Options");
         String laoType = ((LeafEventXmlNode) laoOptions.get("E30200_LAO_Type")).getValue();
@@ -140,20 +144,26 @@ public final class AppendEventsTwentyOneHundredToThirtyUtils {
 
     public static void appendEvent30600(StringBuilder buffer, BranchEventXmlNode node,
         TranslationBundle documentI18n, Collection<DefendantName> nameCollection) {
-        Integer defOnCaseId =
-            Integer.valueOf(((LeafEventXmlNode) node.get(DEFENDANT_ON_CASE_ID)).getValue());
-        if (RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
-            // don't add defendant name
+        
+        Integer defOnCaseId = RendererUtils.getDefendantOnCaseId(node);
+
+        if (defOnCaseId == null) {
+            LOG.warn("DEFENDANT_ON_CASE_ID is missing or invalid in event node.");
             AppendUtils.append(buffer,
                 TranslationUtils.translate(documentI18n, "Hearing_finished"));
         } else {
-            // Add Defendant name
-            AppendUtils.append(buffer,
-                TranslationUtils.translate(documentI18n, "Hearing_finished_for"));
-            AppendUtils.append(buffer, SPACE);
-            AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
+            if (RendererUtils.isHideInPublicDisplay(defOnCaseId, nameCollection)) {
+                // don't add defendant name
+                AppendUtils.append(buffer,
+                    TranslationUtils.translate(documentI18n, "Hearing_finished"));
+            } else {
+                // Add Defendant name
+                AppendUtils.append(buffer,
+                    TranslationUtils.translate(documentI18n, "Hearing_finished_for"));
+                AppendUtils.append(buffer, SPACE);
+                AppendUtils.append(buffer, ((LeafEventXmlNode) node.get(DEFENDANT_NAME)).getValue());
+            }
         }
-
     }
 
 }

@@ -551,28 +551,28 @@ Insert into XHB_CR_LIVE_DISPLAY
    (490, 329, TO_DATE('2/28/2007 10:27:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('5/31/2006 8:45:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('2/28/2007 10:27:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), 851);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (519, 361, 387024, TO_DATE('6/1/2006 6:10:59 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>18:10</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (519, 361, TO_DATE('6/1/2006 6:10:59 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>18:10</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 6:08:20 PM', 'MM/DD/YYYY HH:MI:SS AM'), 146);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (520, 362, 387062, TO_DATE('6/1/2006 3:22:28 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:22</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (520, 362, TO_DATE('6/1/2006 3:22:28 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:22</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:19:49 PM', 'MM/DD/YYYY HH:MI:SS AM'), 26);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (521, 363, 387074, TO_DATE('6/1/2006 5:38:48 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:38</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (521, 363, TO_DATE('6/1/2006 5:38:48 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:38</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 5:36:09 PM', 'MM/DD/YYYY HH:MI:SS AM'), 74);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (522, 364, 387078, TO_DATE('6/1/2006 5:21:30 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:21</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (522, 364, TO_DATE('6/1/2006 5:21:30 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:21</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 5:18:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 26);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -599,16 +599,16 @@ Insert into XHB_CR_LIVE_DISPLAY
    (840, 7158, TO_DATE('6/11/2007 10:12:37 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('10/21/2006 10:16:01 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('6/11/2007 10:12:37 PM', 'MM/DD/YYYY HH:MI:SS AM'), 93);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, CREATED_BY, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, 
     CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (550, 326, 601363, TO_DATE('11/17/2006 6:14:05 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
+   (550, 326, TO_DATE('11/17/2006 6:14:05 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
     TO_DATE('5/31/2006 8:52:52 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('11/17/2006 6:02:51 PM', 'MM/DD/YYYY HH:MI:SS AM'), 79);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, CREATED_BY, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, 
     CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (552, 2636, 601383, TO_DATE('11/17/2006 6:14:02 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
+   (552, 2636,, TO_DATE('11/17/2006 6:14:02 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
     TO_DATE('5/31/2006 8:52:52 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('11/17/2006 6:02:48 PM', 'MM/DD/YYYY HH:MI:SS AM'), 78);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -1343,40 +1343,40 @@ Insert into XHB_CR_LIVE_DISPLAY
    (792, 570, TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('8/22/2006 9:36:17 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 170);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (523, 365, 387081, TO_DATE('6/1/2006 5:08:37 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:08</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (523, 365, TO_DATE('6/1/2006 5:08:37 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:08</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 5:05:56 PM', 'MM/DD/YYYY HH:MI:SS AM'), 66);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (524, 366, 387091, TO_DATE('6/1/2006 5:04:35 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:04</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (524, 366, TO_DATE('6/1/2006 5:04:35 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>17:04</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 5:01:54 PM', 'MM/DD/YYYY HH:MI:SS AM'), 26);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (525, 1399, 387092, TO_DATE('6/1/2006 4:59:54 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:59</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (525, 1399, TO_DATE('6/1/2006 4:59:54 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:59</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:57:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), 26);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (526, 2613, 387095, TO_DATE('6/1/2006 4:46:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:46</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (526, 2613, TO_DATE('6/1/2006 4:46:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:46</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:44:16 PM', 'MM/DD/YYYY HH:MI:SS AM'), 33);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (527, 2614, 387099, TO_DATE('6/1/2006 4:29:46 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:29</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (527, 2614, TO_DATE('6/1/2006 4:29:46 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:29</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:27:05 PM', 'MM/DD/YYYY HH:MI:SS AM'), 25);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (528, 2615, 387102, TO_DATE('6/1/2006 4:17:16 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:17</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (528, 2615, TO_DATE('6/1/2006 4:17:16 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:17</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:46:15 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:14:35 PM', 'MM/DD/YYYY HH:MI:SS AM'), 25);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -2771,64 +2771,64 @@ Insert into XHB_CR_LIVE_DISPLAY
    (135, 1603, TO_DATE('6/11/2007 10:38:48 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('3/23/2006 11:00:34 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('6/11/2007 10:38:48 PM', 'MM/DD/YYYY HH:MI:SS AM'), 320);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (463, 183, 386196, TO_DATE('6/1/2006 4:50:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:50</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (463, 183, TO_DATE('6/1/2006 4:50:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:50</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:47:34 PM', 'MM/DD/YYYY HH:MI:SS AM'), 92);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (464, 184, 386213, TO_DATE('6/1/2006 4:28:13 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:28</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (464, 184, TO_DATE('6/1/2006 4:28:13 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:28</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:25:33 PM', 'MM/DD/YYYY HH:MI:SS AM'), 17);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (465, 2579, 386216, TO_DATE('6/1/2006 4:20:21 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (465, 2579, TO_DATE('6/1/2006 4:20:21 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:17:42 PM', 'MM/DD/YYYY HH:MI:SS AM'), 46);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (466, 2580, 386225, TO_DATE('6/1/2006 2:20:31 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (466, 2580, TO_DATE('6/1/2006 2:20:31 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:17:50 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (467, 2581, 386229, TO_DATE('6/1/2006 3:41:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:41</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (467, 2581, TO_DATE('6/1/2006 3:41:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:41</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:38:55 PM', 'MM/DD/YYYY HH:MI:SS AM'), 41);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (468, 2582, 386236, TO_DATE('6/1/2006 3:20:20 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (468, 2582, TO_DATE('6/1/2006 3:20:20 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:20</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:17:39 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (469, 2583, 386239, TO_DATE('6/1/2006 2:52:55 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:52</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (469, 2583, TO_DATE('6/1/2006 2:52:55 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:52</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:50:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (470, 2584, 386242, TO_DATE('6/1/2006 2:44:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:44</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (470, 2584, TO_DATE('6/1/2006 2:44:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:44</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:42:02 PM', 'MM/DD/YYYY HH:MI:SS AM'), 21);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (471, 2585, 386246, TO_DATE('6/1/2006 3:17:39 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:17</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (471, 2585, TO_DATE('6/1/2006 3:17:39 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:17</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:14:58 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (472, 2586, 386249, TO_DATE('6/1/2006 3:08:34 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:08</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (472, 2586, TO_DATE('6/1/2006 3:08:34 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:08</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:05:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -2993,22 +2993,22 @@ Insert into XHB_CR_LIVE_DISPLAY
    (901, 8568, TO_DATE('8/1/2024 9:00:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('9/2/2022 9:00:35 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('8/1/2024 9:00:14 PM', 'MM/DD/YYYY HH:MI:SS AM'), 509);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (480, 2588, 386356, TO_DATE('6/1/2006 3:02:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:02</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (480, 2588, TO_DATE('6/1/2006 3:02:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:02</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:00:12 PM', 'MM/DD/YYYY HH:MI:SS AM'), 21);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (481, 2589, 386360, TO_DATE('6/1/2006 2:51:18 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:51</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (481, 2589, TO_DATE('6/1/2006 2:51:18 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:51</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:48:37 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (482, 2590, 386363, TO_DATE('6/1/2006 2:43:08 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:43</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (482, 2590, TO_DATE('6/1/2006 2:43:08 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:43</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:40:27 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -3551,10 +3551,10 @@ Insert into XHB_CR_LIVE_DISPLAY
    (786, 564, TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('8/22/2006 9:36:17 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 170);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, CREATED_BY, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, 
     CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (551, 327, 601373, TO_DATE('11/17/2006 6:14:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
+   (551, 327, TO_DATE('11/17/2006 6:14:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
     TO_DATE('5/31/2006 8:52:52 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('11/17/2006 6:03:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), 79);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -4019,46 +4019,46 @@ Insert into XHB_CR_LIVE_DISPLAY
    (432, 410, TO_DATE('10/22/2009 12:44:27 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('5/11/2006 8:38:08 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('10/22/2009 12:44:27 PM', 'MM/DD/YYYY HH:MI:SS AM'), 191);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (473, 139, 386310, TO_DATE('6/1/2006 4:47:11 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:47</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (473, 139, TO_DATE('6/1/2006 4:47:11 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:47</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:44:30 PM', 'MM/DD/YYYY HH:MI:SS AM'), 92);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (474, 140, 386327, TO_DATE('6/1/2006 4:24:21 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:24</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (474, 140, TO_DATE('6/1/2006 4:24:21 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:24</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:21:42 PM', 'MM/DD/YYYY HH:MI:SS AM'), 17);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (475, 141, 386330, TO_DATE('6/1/2006 4:16:42 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:16</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (475, 141, TO_DATE('6/1/2006 4:16:42 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>16:16</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 4:14:03 PM', 'MM/DD/YYYY HH:MI:SS AM'), 47);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (476, 142, 386339, TO_DATE('6/1/2006 3:26:07 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:26</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (476, 142, TO_DATE('6/1/2006 3:26:07 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:26</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:23:26 PM', 'MM/DD/YYYY HH:MI:SS AM'), 17);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (477, 143, 386342, TO_DATE('6/1/2006 2:34:25 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:34</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (477, 143, TO_DATE('6/1/2006 2:34:25 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>14:34</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 2:31:44 PM', 'MM/DD/YYYY HH:MI:SS AM'), 42);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (478, 144, 386351, TO_DATE('6/1/2006 3:16:27 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:16</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (478, 144, TO_DATE('6/1/2006 3:16:27 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:16</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:13:46 PM', 'MM/DD/YYYY HH:MI:SS AM'), 17);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (479, 2587, 386353, TO_DATE('6/1/2006 3:10:59 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:10</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
+   (479, 2587, TO_DATE('6/1/2006 3:10:59 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?>'||CHR(10)||'<event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="30600.xsd"><time>15:10</time><date>01/06/06</date><type>30600</type><defendant_name>BRIST TEST BRIST T BRISTOL1</defendant_name><defendant_on_case_id>42879</defendant_on_case_id><defendant_masked_flag>N</defendant_masked_flag><defendant_masked_name/><free_text/></event>', 
     'XHIBIT', TO_DATE('5/31/2006 8:10:53 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/1/2006 3:08:19 PM', 'MM/DD/YYYY HH:MI:SS AM'), 16);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -4955,16 +4955,16 @@ Insert into XHB_CR_LIVE_DISPLAY
    (549, 2635, TO_DATE('5/31/2006 8:52:36 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('5/31/2006 8:49:55 PM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('5/31/2006 8:49:55 PM', 'MM/DD/YYYY HH:MI:SS AM'), 1);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, CREATED_BY, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, 
     CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (553, 2637, 601393, TO_DATE('11/17/2006 6:14:11 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
+   (553, 2637, TO_DATE('11/17/2006 6:14:11 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
     TO_DATE('5/31/2006 8:52:52 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('11/17/2006 6:02:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), 78);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, CREATED_BY, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, 
     CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (554, 2638, 601403, TO_DATE('11/17/2006 6:14:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
+   (554, 2638, TO_DATE('11/17/2006 6:14:57 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', 
     TO_DATE('5/31/2006 8:52:52 PM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('11/17/2006 6:03:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), 77);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
@@ -5093,10 +5093,10 @@ Insert into XHB_CR_LIVE_DISPLAY
    (809, 586, TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('8/22/2006 9:36:17 AM', 'MM/DD/YYYY HH:MI:SS AM'), 
     'XHIBIT', TO_DATE('6/11/2007 11:15:10 AM', 'MM/DD/YYYY HH:MI:SS AM'), 169);
 Insert into XHB_CR_LIVE_DISPLAY
-   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, SCHEDULED_HEARING_ID, TIME_STATUS_SET, STATUS, 
+   (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, STATUS, 
     CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, VERSION)
  Values
-   (811, 589, 767765, TO_DATE('6/12/2007 4:34:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?><event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="10100.xsd"><time>16:34</time><date>12/06/07</date><free_text/><Listed_Def_On_Case_Ids><Def_On_Case_Id><doc_id>951137</doc_id></Def_On_Case_Id></Listed_Def_On_Case_Ids><type>10100</type></event>', 
+   (811, 589, TO_DATE('6/12/2007 4:34:43 PM', 'MM/DD/YYYY HH:MI:SS AM'), '<?xml version="1.0" encoding="UTF-8"?><event xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="10100.xsd"><time>16:34</time><date>12/06/07</date><free_text/><Listed_Def_On_Case_Ids><Def_On_Case_Id><doc_id>951137</doc_id></Def_On_Case_Id></Listed_Def_On_Case_Ids><type>10100</type></event>', 
     'XHIBIT', TO_DATE('8/22/2006 9:36:17 AM', 'MM/DD/YYYY HH:MI:SS AM'), 'XHIBIT', TO_DATE('6/12/2007 4:34:40 PM', 'MM/DD/YYYY HH:MI:SS AM'), 1551);
 Insert into XHB_CR_LIVE_DISPLAY
    (CR_LIVE_DISPLAY_ID, COURT_ROOM_ID, TIME_STATUS_SET, CREATED_BY, CREATION_DATE, 
