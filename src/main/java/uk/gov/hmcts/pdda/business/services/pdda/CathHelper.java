@@ -36,8 +36,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
@@ -74,7 +74,12 @@ public class CathHelper {
     private static final String FAILED_STATUS_ONE = "F1";
     private static final String FAILED_STATUS_TWO = "F2";
     private static final String FAILED_STATUS_THREE = "F3";
-    protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
+    private static final String EMPTY = "";
+    private static final Map<String, String> VALID_LISTS = Map.of(
+        "Daily List", "DL",
+        "Firm List", "FL",
+        "Warned List", "WL"
+    );
     
     private final EntityManager entityManager;
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
@@ -144,6 +149,7 @@ public class CathHelper {
         LOG.debug("postJsonToCath()");
         String cathUri = CathUtils.getApimUri();
         LOG.debug("cathUri - {}", cathUri);
+        // TODO Call a specific getHttpPostRequest method depending on webpage or list type
         HttpRequest httpRequest = CathUtils.getHttpPostRequest(cathUri, courtelJson);
 
         try {
@@ -242,19 +248,29 @@ public class CathHelper {
         }
         
         // Check Document Type and create appropriate object
-        if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.getDocumentType())) {
-            return populateJsonObject(new ListJson(), xhbXmlDocumentDao, xhbCourtDao.get());
-        } else {
+        String listType = checkForListDocument(xhbXmlDocumentDao);
+        if (EMPTY.equals(listType)) {
             return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao,
-                xhbCourtDao.get());
+                xhbCourtDao.get(), listType);
+        } else {
+            return populateJsonObject(new ListJson(), xhbXmlDocumentDao, xhbCourtDao.get(), listType);
         }
     }
 
+    private String checkForListDocument(XhbXmlDocumentDao xhbXmlDocumentDao) {
+        for (Map.Entry<String, String> listName : VALID_LISTS.entrySet()) {
+            if (xhbXmlDocumentDao.getDocumentTitle().contains(listName.getKey())) {
+                return listName.getValue();
+            }
+        }
+        return "";
+    }
+    
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
-        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao) {
+        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao, String listType) {
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
-            listJson.setListType(ListType.fromString(xhbXmlDocumentDao.getDocumentType()));
+            listJson.setListType(ListType.fromString(listType));
         }
         // Populate shared fields
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
