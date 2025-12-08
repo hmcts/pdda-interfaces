@@ -134,7 +134,7 @@ class CathHelperTest {
             Mockito.when(mockCathOAuth2Helper.getAccessToken()).thenReturn("accessToken");
             Mockito.when(CathUtils.isApimEnabled()).thenReturn(true);
             Mockito.when(CathUtils.getApimUri()).thenReturn(uri);
-            Mockito.when(CathUtils.getHttpPostRequest(uri, json)).thenReturn(mockHttpRequest);
+            Mockito.when(CathUtils.getWebPageHttpPostRequest(uri, json)).thenReturn(mockHttpRequest);
 
             // Expects - HttpClient.newHttpClient()
             Mockito.when(HttpClient.newHttpClient()).thenReturn(mockHttpClient);
@@ -205,13 +205,57 @@ class CathHelperTest {
     }
 
     @Test
-    void testUpdateAndSendSuccess() {
+    void testUpdateAndSendWebPageSuccess() {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L,
             "<cs:ListHeader><cs:EndDate>2020-01-21</cs:EndDate></cs:ListHeader>");
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbClobRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbCourtRepository.getEntityManager()).thenReturn(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Update status
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
+            .thenReturn(Optional.of(xhbClobDao));
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
+            .thenReturn(Optional.of(xhbCourtDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testUpdateAndSendListSuccess() {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("JSN");
+        xhbXmlDocumentDao.setDocumentTitle("Daily List DRAFT v1");
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        String jsonString = 
+            """
+            {
+                "DailyList": {
+                    "ListHeader": {
+                        "EndDate": "2025-12-06"
+                    }
+                }
+            }
+            """;
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, jsonString);
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
         
         // Ensure the entity managers are set

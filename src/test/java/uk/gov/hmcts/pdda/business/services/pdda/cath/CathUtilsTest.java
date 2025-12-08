@@ -81,7 +81,6 @@ class CathUtilsTest {
     private static final String TYPE_LIST = "LIST";
     private static final String TYPE_NON_LIST = "LCSU";
     
-
     @Mock
     private Environment mockEnvironment;
 
@@ -118,20 +117,18 @@ class CathUtilsTest {
     }
 
     @Test
-    void testGetHttpPostRequest() {
+    void testGetWebPageHttpPostRequest() {
         // Setup
-        CourtelJson courtelJson = DummyCourtelUtil.getListJson();
+        CourtelJson courtelJson = DummyCourtelUtil.getWebPageJson();
         String url = "https://dummy.com/url";
         // Run
-        HttpRequest result = CathUtils.getHttpPostRequest(url, courtelJson);
+        HttpRequest result = CathUtils.getWebPageHttpPostRequest(url, courtelJson);
         assertNotNull(result, NOTNULL);
         HttpHeaders headers = result.headers();
         assertNotNull(headers, NOTNULL);
         validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
-        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_LIST);
-        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_CLASSIFIED);
-        validateHeaderValue(headers, PublicationConfiguration.LIST_TYPE,
-            courtelJson.getListType().toString());
+        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_NON_LIST);
+        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_PUBLIC);
         validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
             courtelJson.getCrestCourtId());
         String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
@@ -146,18 +143,18 @@ class CathUtilsTest {
     }
     
     @Test
-    void testGetHttpPostRequestNonListJson() {
+    void testGetListPageHttpPostRequest() {
         // Setup
-        CourtelJson courtelJson = DummyCourtelUtil.getWebPageJson();
+        CourtelJson courtelJson = DummyCourtelUtil.getListJson();
         String url = "https://dummy.com/url";
         // Run
-        HttpRequest result = CathUtils.getHttpPostRequest(url, courtelJson);
+        HttpRequest result = CathUtils.getListHttpPostRequest(url, courtelJson);
         assertNotNull(result, NOTNULL);
         HttpHeaders headers = result.headers();
         assertNotNull(headers, NOTNULL);
         validateHeaderValue(headers, PublicationConfiguration.PROVENANCE_HEADER, GOVERNANCE);
-        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_NON_LIST);
-        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_PUBLIC);
+        validateHeaderValue(headers, PublicationConfiguration.TYPE_HEADER, TYPE_LIST);
+        validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_CLASSIFIED);
         validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
             courtelJson.getCrestCourtId());
         String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
