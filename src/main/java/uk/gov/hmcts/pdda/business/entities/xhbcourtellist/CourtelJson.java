@@ -96,4 +96,6 @@ public abstract class CourtelJson {
     }
     
     public abstract ListType getListType();
+    
+    public abstract String getContentType();
 }

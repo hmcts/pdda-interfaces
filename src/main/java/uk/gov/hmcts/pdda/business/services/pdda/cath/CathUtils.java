@@ -11,7 +11,6 @@ import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLi
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
-import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.ListJson;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.PublicationConfiguration;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.XhbCourtelListRepository;
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDate;
@@ -36,7 +34,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -56,7 +53,6 @@ public final class CathUtils {
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer %s";
     private static final String CONTENT_TYPE = "Content-Type";
-    private static final String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
     private static final String DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.nnn'Z'";
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
@@ -88,7 +84,8 @@ public final class CathUtils {
         return DateTimeFormatter.ofPattern(DATETIME_FORMAT).format(dateTime);
     }
 
-    public static HttpRequest getHttpPostRequest(String url, CourtelJson courtelJson) {
+    public static HttpRequest getWebPageHttpPostRequest(String url, CourtelJson courtelJson) {
+        LOG.debug("Building WebPage HTTP Request - getWebPageHttpPostRequest()");
         // Build the multipart/form-data boundary
         String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
         String fileName = courtelJson.getDocumentName();
@@ -113,32 +110,42 @@ public final class CathUtils {
                 .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
                 .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
                 .header(PublicationConfiguration.CONTENT_DATE, now)
-                .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER,
-                        courtelJson.getDocumentName())
+                .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName())
                 .header(AUTHORIZATION, bearerToken)
-                .header(CONTENT_TYPE, CONTENT_TYPE_MULTIPART_FORM_DATA + "; boundary=" + boundary)
-                .POST(BodyPublishers.ofString(body)).build();
-
-        // If the courtelJson is a ListJson, copy the existing request and add the list type header
-        if (courtelJson instanceof ListJson) {
-            LOG.debug("ListJson detected, rebuilding request and adding list type header");
-            return HttpRequest.newBuilder().uri(result.uri())
-                    // Copy existing headers
-                    .headers(copyExistingHeaders(result.headers()))
-                    // Add list type header
-                    .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
-                    // Re-create the body
-                    .POST(BodyPublishers.ofString(body)).build();
-        }
-
-        LOG.debug("getHttpPostRequest() - built POST");
+                .header(CONTENT_TYPE, courtelJson.getContentType() + "; boundary=" + boundary)
+                .POST(BodyPublishers.ofString(body))
+                .build();
+        
+        LOG.debug("getWebPageHttpPostRequest() - built POST");
         return result;
     }
-
-    private static String[] copyExistingHeaders(HttpHeaders headers) {
-        return headers.map().entrySet().stream().flatMap(
-                        entry -> entry.getValue().stream().map(value -> new String[]{entry.getKey(), value}))
-                .flatMap(Stream::of).toArray(String[]::new);
+    
+    public static HttpRequest getListHttpPostRequest(String url, CourtelJson courtelJson) {
+        LOG.debug("Building List HTTP Request - getListHttpPostRequest()");
+        // Get the times
+        String now = getDateTimeAsString(courtelJson.getContentDate());
+        String endDate = getDateTimeAsString(courtelJson.getEndDate());
+        // Get the bearer token
+        String bearerToken = String.format(BEARER, courtelJson.getToken());
+        // Return the HttpRequest for the post
+        HttpRequest result = HttpRequest.newBuilder().uri(URI.create(url))
+                .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
+                .header(PublicationConfiguration.SENSITIVITY_HEADER, courtelJson.getSensitivity())
+                .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
+                .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
+                .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
+                .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
+                .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
+                .header(PublicationConfiguration.CONTENT_DATE, now)
+                .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName())
+                .header(AUTHORIZATION, bearerToken)
+                .header(CONTENT_TYPE, courtelJson.getContentType())
+                .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
+                .POST(BodyPublishers.ofString(courtelJson.getJson()))
+                .build();
+        
+        LOG.debug("getListHttpPostRequest() - built POST");
+        return result;
     }
 
     public static boolean isApimEnabled() {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pdda.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -36,8 +37,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
@@ -60,8 +61,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * @author Luke Gittins
  * @version 1.0
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.CouplingBetweenObjects", "PMD.ExcessiveImports",
-    "PMD.CognitiveComplexity", "PMD.GodClass"})
+@SuppressWarnings("PMD")
 public class CathHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathHelper.class);
@@ -74,7 +74,12 @@ public class CathHelper {
     private static final String FAILED_STATUS_ONE = "F1";
     private static final String FAILED_STATUS_TWO = "F2";
     private static final String FAILED_STATUS_THREE = "F3";
-    protected static final String[] VALID_LISTS = {"DL", "DLP", "FL", "WL"};
+    private static final String EMPTY = "";
+    private static final Map<String, String> VALID_LISTS = Map.of(
+        "Daily List", "DL",
+        "Firm List", "FL",
+        "Warned List", "WL"
+    );
     
     private final EntityManager entityManager;
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
@@ -144,8 +149,15 @@ public class CathHelper {
         LOG.debug("postJsonToCath()");
         String cathUri = CathUtils.getApimUri();
         LOG.debug("cathUri - {}", cathUri);
-        HttpRequest httpRequest = CathUtils.getHttpPostRequest(cathUri, courtelJson);
-
+        
+        // Generate the HttpRequest based on the type of Document
+        HttpRequest httpRequest;
+        if (courtelJson instanceof ListJson) {
+            httpRequest = CathUtils.getListHttpPostRequest(cathUri, courtelJson);
+        } else {
+            httpRequest = CathUtils.getWebPageHttpPostRequest(cathUri, courtelJson);
+        }
+        
         try {
             HttpResponse<?> httpResponse =
                 HttpClient.newHttpClient().send(httpRequest, BodyHandlers.ofString());
@@ -242,19 +254,39 @@ public class CathHelper {
         }
         
         // Check Document Type and create appropriate object
-        if (Arrays.asList(VALID_LISTS).contains(xhbXmlDocumentDao.getDocumentType())) {
-            return populateJsonObject(new ListJson(), xhbXmlDocumentDao, xhbCourtDao.get());
-        } else {
+        String listType = checkForListDocument(xhbXmlDocumentDao);
+        
+        if (EMPTY.equals(listType)) {
             return populateJsonObject(new WebPageJson(), xhbXmlDocumentDao,
-                xhbCourtDao.get());
+                xhbCourtDao.get(), listType);
+        } else {
+            return populateJsonObject(new ListJson(), xhbXmlDocumentDao, xhbCourtDao.get(), listType);
         }
     }
 
+    private String checkForListDocument(XhbXmlDocumentDao xhbXmlDocumentDao) {
+        for (Map.Entry<String, String> listName : VALID_LISTS.entrySet()) {
+            if (xhbXmlDocumentDao.getDocumentTitle().contains(listName.getKey())) {
+                return listName.getValue();
+            }
+        }
+        return "";
+    }
+    
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
-        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao) {
+        XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao, String listType) {
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
-            listJson.setListType(ListType.fromString(xhbXmlDocumentDao.getDocumentType()));
+            listJson.setListType(ListType.fromString(listType));
+            // Get end date from json clob for lists
+            jsonObject.setEndDate(getListEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType));
+        } else {
+            try {
+                // Get end date from html clob for web pages
+                jsonObject.setEndDate(getWebPageEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId()));
+            } catch (ParserConfigurationException | SAXException | IOException e) {
+                LOG.debug("Error getting endDate from Clob: {}", e.getMessage());
+            }
         }
         // Populate shared fields
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
@@ -262,16 +294,10 @@ public class CathHelper {
         jsonObject.setLanguage(Language.ENGLISH);
         jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
         
-        // Fetch and populate the end date from the clob
-        try {
-            jsonObject.setEndDate(getEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId()));
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            LOG.debug("Error getting endDate from Clob: {}", e.getMessage());
-        }
         return jsonObject;
     }
     
-    private ZonedDateTime getEndDateFromClob(Long clobId) 
+    private ZonedDateTime getWebPageEndDateFromClob(Long clobId) 
         throws ParserConfigurationException, SAXException, IOException {
         // Get the clob data
         Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
@@ -305,6 +331,29 @@ public class CathHelper {
                     }
                 }
             }
+        }
+        // Default to todays date if any above conditions are not met
+        return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
+    }
+    
+    private ZonedDateTime getListEndDateFromClob(Long clobId, String listType) {
+        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
+        
+        // Get the list type root node for JSON parsing
+        String jsonListRootNode = "";
+        switch (listType) {
+            case "DL" -> jsonListRootNode = "DailyList";
+            case "FL" -> jsonListRootNode = "FirmList";
+            case "WL" -> jsonListRootNode = "WarnedList";
+            default -> LOG.debug("Unknown List Type detected");
+        }
+        
+        if (!xhbClobDao.isEmpty()) {
+            JSONObject obj = new JSONObject(xhbClobDao.get().getClobData());
+            String endDate = obj.getJSONObject(jsonListRootNode)
+                                .getJSONObject("ListHeader")
+                                .getString("EndDate");
+            return LocalDate.parse(endDate).atTime(23, 59).atZone(ZoneOffset.UTC);
         }
         // Default to todays date if any above conditions are not met
         return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
