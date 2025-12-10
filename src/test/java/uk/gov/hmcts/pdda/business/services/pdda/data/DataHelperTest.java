@@ -353,7 +353,7 @@ class DataHelperTest {
          */
         @Override
         public Optional<XhbSittingDao> findSitting(final Integer courtSiteId,
-            final Integer courtRoomId, final LocalDateTime sittingTime) {
+            final Integer courtRoomId, final LocalDateTime sittingTime, final Integer listId) {
             return this.isPresent ? Optional.of(new XhbSittingDao()) : Optional.empty();
         }
 

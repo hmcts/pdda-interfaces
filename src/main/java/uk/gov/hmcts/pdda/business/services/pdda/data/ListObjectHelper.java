@@ -246,16 +246,24 @@ public class ListObjectHelper implements Serializable {
             String sittingTimeString = nodesMap.get(SITTINGTIME);
             //LocalDateTime sittingTime =
             //    parseDateTime(sittingTimeString, DateTimeFormatter.ISO_TIME);
-            LocalTime sittingTimeAsTime = LocalTime.parse(sittingTimeString.trim(), DateTimeFormatter.ISO_LOCAL_TIME);
-            LocalDateTime sittingTime = LocalDateTime.of(listDate.toLocalDate(), sittingTimeAsTime);
-            LOG.debug("Court site ID: {}, Court room ID: {}, Floating: {}, List ID: {}, Sitting time: {}",
-                courtSiteId, courtRoomId, floating, listId, sittingTime);
-            if (sittingTime != null) {
-                LOG.debug("Validating sitting for court site ID: {}, court room ID: {}, time: {}",
-                    courtSiteId, courtRoomId, sittingTime);
-                return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime,
-                    listId);
+            LocalDateTime sittingTime = null;
+            if (sittingTimeString != null) {
+                LocalTime sittingTimeAsTime = LocalTime.parse(sittingTimeString.trim(),
+                    DateTimeFormatter.ISO_LOCAL_TIME);
+                sittingTime = LocalDateTime.of(listDate.toLocalDate(), sittingTimeAsTime);
+                LOG.debug("Court site ID: {}, Court room ID: {}, Floating: {}, List ID: {}, Sitting time: {}",
+                    courtSiteId, courtRoomId, floating, listId, sittingTime);
             }
+            
+            // We can have a null sitting time, but only add it if there is any hearings against it
+            if (nodesMap.get("cs:Hearings") == null || nodesMap.get("cs:Hearings").isEmpty()) {
+                LOG.debug("No hearings found for sitting, skipping sitting validation.");
+                return Optional.empty();
+            }
+            LOG.debug("Validating sitting for court site ID: {}, court room ID: {}, time: {}",
+                courtSiteId, courtRoomId, sittingTime);
+            return dataHelper.validateSitting(courtSiteId, courtRoomId, floating, sittingTime,
+                listId);
         }
         return Optional.empty();
     }
@@ -346,6 +354,15 @@ public class ListObjectHelper implements Serializable {
             }
             LOG.debug("Gender: {}", genderAsString);
             String dateOfBirthAsString = nodesMap.get(DATEOFBIRTH);
+            if (dateOfBirthAsString == null || dateOfBirthAsString.isEmpty()) {
+                // try and get it from the DateOfBirth node
+                if (nodesMap.get("cs:DateOfBirth") == null
+                    || nodesMap.get("cs:DateOfBirth").isEmpty()) {
+                    dateOfBirthAsString = null;
+                } else {
+                    dateOfBirthAsString = nodesMap.get("cs:DateOfBirth").substring(0, 10);
+                }
+            }
             LocalDateTime dateOfBirth =
                 parseDateTime(dateOfBirthAsString, DateTimeFormatter.ISO_DATE);
             LOG.debug("Date of birth: {}", dateOfBirthAsString);
@@ -491,7 +508,12 @@ public class ListObjectHelper implements Serializable {
                     nbTime = LocalTime.parse(s, twelveHour);
                 }
 
-                notBeforeTime = sittingDateTime.toLocalDate().atTime(nbTime);
+                if (sittingDateTime == null) {
+                    // Use notBeforeTimeString date if sittingDateTime is null
+                    notBeforeTime = LocalDateTime.of(LocalDate.now(), nbTime);
+                } else {
+                    notBeforeTime = sittingDateTime.toLocalDate().atTime(nbTime);
+                }
             }
             
             LOG.debug("Sitting ID: {}, Hearing ID: {}, Not Before Time: {}",

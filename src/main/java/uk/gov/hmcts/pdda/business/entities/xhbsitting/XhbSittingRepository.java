@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
-
 @Repository
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.AvoidDuplicateLiterals"})
 public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
@@ -96,7 +94,6 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
     /**
      * findByCourtRoomAndSittingTime.
-
      * @param courtSiteId Integer
      * @param courtRoomId Integer
      * @param sittingTime LocalDateTime
@@ -115,7 +112,6 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<XhbSittingDao> findByCourtRoomAndSittingTimeSafe(Integer courtSiteId,
         Integer courtRoomId, LocalDateTime sittingTime) {
         LOG.debug(
@@ -156,6 +152,51 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
                 courtRoomId, sittingTime, e.getMessage(), e);
             return Optional.empty();
         }
+    }
+    
+    public Optional<XhbSittingDao> findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafe(Integer courtSiteId,
+        Integer courtRoomId, LocalDateTime sittingTime, final Integer listId) {
+        LOG.debug(
+            "findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafeSafe("
+            + "courtSiteId: {}, courtRoomId: {}, sittingTime: {}, listId: {})",
+            courtSiteId, courtRoomId, sittingTime, listId);
+
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query;
+            if (sittingTime == null) {
+                query = em.createNamedQuery(
+                    "XHB_SITTING.findByCourtRoomIdCourtSiteIdListIdAndSittingTimeIsNull");
+                query.setParameter("courtSiteId", courtSiteId);
+                query.setParameter("courtRoomId", courtRoomId);
+                query.setParameter("listId", listId);
+            } else {
+                query = em.createNamedQuery(
+                    "XHB_SITTING.findByCourtRoomIdCourtSiteIdListIdAndSittingTime");
+                query.setParameter("courtSiteId", courtSiteId);
+                query.setParameter("courtRoomId", courtRoomId);
+                query.setParameter("listId", listId);
+                query.setParameter("sittingTime", sittingTime);
+            }
+
+            List<?> resultList = query.getResultList();
+
+            if (resultList == null || resultList.isEmpty()) {
+                LOG.debug("... - No results found ...");
+                return Optional.empty();
+            }
+
+            Object result = resultList.get(0);
+            if (result instanceof XhbSittingDao) {
+                return Optional.of((XhbSittingDao) result);
+            } else {
+                LOG.warn("... - Unexpected result type: {}", result.getClass().getName());
+                return Optional.empty();
+            }
+        } catch (Exception e) {
+            LOG.error("Error ...: {}", e.getMessage(), e);
+            return Optional.empty();
+        }
+
     }
     
     
