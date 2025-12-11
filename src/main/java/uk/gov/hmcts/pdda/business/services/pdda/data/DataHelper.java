@@ -89,7 +89,7 @@ public class DataHelper extends FinderHelper {
         final Integer listId) {
         LOG.debug("validateSitting(), courtSiteId:{}, courtRoomId:{}, isFloating:{}, sittingTime:{}, listId:{}",
             courtSiteId, courtRoomId, isFloating, sittingTime, listId);
-        Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime);
+        Optional<XhbSittingDao> result = findSitting(courtSiteId, courtRoomId, sittingTime, listId);
         if (result.isEmpty()) {
             LOG.debug("Creating new XhbSitting for courtSiteId:{}, courtRoomId:{}, isFloating:{},"
                 + "sittingTime:{}, listId:{}",
