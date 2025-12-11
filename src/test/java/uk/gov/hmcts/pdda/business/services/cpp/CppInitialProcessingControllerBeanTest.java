@@ -186,6 +186,7 @@ class CppInitialProcessingControllerBeanTest
             EasyMock.expectLastCall().anyTimes();
             expectGetEntityManager(mockXhbCppFormattingRepository);
             expectGetEntityManager(mockXhbFormattingRepository);
+            expectGetEntityManager(mockXhbXmlDocumentRepository);
             EasyMock.expect(mockCppStagingInboundControllerBean.getLatestUnprocessedDocument())
                 .andReturn(unprocessedDocList);
             EasyMock.expect(mockCppStagingInboundControllerBean
@@ -234,6 +235,8 @@ class CppInitialProcessingControllerBeanTest
                 EasyMock.isA(LocalDateTime.class))).andReturn(xcf);
             EasyMock.expect(mockXhbCppFormattingRepository.update(xcf)).andReturn(null);
 
+            mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
+            
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
 

@@ -441,6 +441,13 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     LOG.debug("{} - Creating doc in XHB_CPP_FORMATTING", methodName);
                     getXhbCppFormattingRepository().save(docToCreate);
                     LOG.debug("{} - Created doc in XHB_CPP_FORMATTING", methodName);
+                    
+                    // Create the xhbXmlDocument record
+                    if (IWP.equals(documentType)) {
+                        XhbXmlDocumentDao xhbXmlDocumentDao =
+                            CppFormattingHelper.createWebPageXhbXmlDDocumentRecord(docToCreate, thisDoc);
+                        getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+                    }
                 }
 
                 if (IWP.equalsIgnoreCase(documentType)) {

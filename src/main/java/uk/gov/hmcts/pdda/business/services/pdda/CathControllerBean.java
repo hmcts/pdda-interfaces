@@ -59,6 +59,9 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         getCathHelper().processDocuments();
         getCathHelper().processFailedDocuments();
+        
+        // TODO Process internet webpage documents here
+        // getCathHelper().processInternetWebPages();
     }
 
     /**

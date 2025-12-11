@@ -20,6 +20,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInb
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,9 @@ class LighthousePddaControllerBeanTest {
     
     @Mock
     private XhbInternetHtmlRepository mockXhbInternetHtmlRepository;
+    
+    @Mock
+    private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -378,6 +383,7 @@ class LighthousePddaControllerBeanTest {
         Mockito.doReturn(mockXhbCppStagingInboundRepository).when(controller).getXhbCppStagingInboundRepository();
         Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
         Mockito.doReturn(mockXhbInternetHtmlRepository).when(controller).getXhbInternetHtmlRepository();
+        Mockito.doReturn(mockXhbXmlDocumentRepository).when(controller).getXhbXmlDocumentRepository();
 
         XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
         dao.setCpDocumentName("PDDA_XWP_34_1_453_20241014090000"); // triggers XWP branch
@@ -408,7 +414,10 @@ class LighthousePddaControllerBeanTest {
         returned.setInternetHtmlId(1234);
         Mockito.when(mockXhbInternetHtmlRepository.update(htmlCaptor.capture()))
                .thenReturn(Optional.of(returned));
-
+        
+        // Save the xhb_xml_document record
+        mockXhbXmlDocumentRepository.save(Mockito.isA(XhbXmlDocumentDao.class));
+        
         controller.processFile(dao);
 
         // Check status on message

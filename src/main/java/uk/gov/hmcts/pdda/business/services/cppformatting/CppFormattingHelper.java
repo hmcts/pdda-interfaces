@@ -89,4 +89,17 @@ public class CppFormattingHelper {
         xhbXmlDocumentDao.setCourtId(xhbFormattingDao.getCourtId());
         return xhbXmlDocumentDao;
     }
+    
+    public static XhbXmlDocumentDao createWebPageXhbXmlDDocumentRecord(XhbCppFormattingDao xhbCppFormattingDao,
+        XhbCppStagingInboundDao xhbCppStagingInboundDao) {
+        XhbXmlDocumentDao xhbXmlDocumentDao = new XhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDateCreated(xhbCppFormattingDao.getDateIn());
+        xhbXmlDocumentDao.setDocumentTitle(xhbCppStagingInboundDao.getDocumentName());
+        xhbXmlDocumentDao.setXmlDocumentClobId(xhbCppFormattingDao.getXmlDocumentClobId());
+        xhbXmlDocumentDao.setStatus(xhbCppFormattingDao.getFormatStatus());
+        xhbXmlDocumentDao.setDocumentType(xhbCppFormattingDao.getDocumentType());
+        xhbXmlDocumentDao.setExpiryDate(null);
+        xhbXmlDocumentDao.setCourtId(xhbCppFormattingDao.getCourtId());
+        return xhbXmlDocumentDao;
+    }
 }
