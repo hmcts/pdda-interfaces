@@ -68,7 +68,8 @@ public class ListObjectHelper implements Serializable {
     protected static final String COURTHOUSECODE = "cs:CourtHouseCode";
     protected static final String COURTHOUSENAME = "cs:CourtHouseName";
     protected static final String COURTROOMNO = "cs:CourtRoomNumber";
-    protected static final String DATEOFBIRTH = "apd:BirthDate";
+    protected static final String DATEOFBIRTH1 = "apd:BirthDate";
+    protected static final String DATEOFBIRTH2 = "cs:DateOfBirth";
     protected static final String FEMALE = "FEMALE";
     protected static final String FIRSTNAME = "apd:CitizenNameForename";
     protected static final String GENDER = "cs:Sex";
@@ -353,14 +354,14 @@ public class ListObjectHelper implements Serializable {
                 gender = 2;
             }
             LOG.debug("Gender: {}", genderAsString);
-            String dateOfBirthAsString = nodesMap.get(DATEOFBIRTH);
+            String dateOfBirthAsString = nodesMap.get(DATEOFBIRTH1);
             if (dateOfBirthAsString == null || dateOfBirthAsString.isEmpty()) {
                 // try and get it from the DateOfBirth node
-                if (nodesMap.get("cs:DateOfBirth") == null
-                    || nodesMap.get("cs:DateOfBirth").isEmpty()) {
+                if (nodesMap.get(DATEOFBIRTH2) == null
+                    || nodesMap.get(DATEOFBIRTH2).isEmpty()) {
                     dateOfBirthAsString = null;
                 } else {
-                    dateOfBirthAsString = nodesMap.get("cs:DateOfBirth").substring(0, 10);
+                    dateOfBirthAsString = nodesMap.get(DATEOFBIRTH2).substring(0, 10);
                 }
             }
             LocalDateTime dateOfBirth =
