@@ -288,7 +288,8 @@ class ListObjectHelperTest {
         nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
         nodesMap.put(classUnderTest.FIRSTNAME + ".2", "Fitzgerald");
         nodesMap.put(classUnderTest.SURNAME, "Kennedy");
-        nodesMap.put(classUnderTest.DATEOFBIRTH, "1917-05-29");
+        nodesMap.put(classUnderTest.DATEOFBIRTH1, "1917-05-29");
+        nodesMap.put(classUnderTest.DATEOFBIRTH2, "1917-05-29");
         nodesMap.put(classUnderTest.GENDER, "male");
         // Set
         ReflectionTestUtils.setField(classUnderTest, XHBCOURTSITEDAO,
@@ -431,7 +432,8 @@ class ListObjectHelperTest {
         Map<String, String> nodesMap = new LinkedHashMap<>();
         nodesMap.put(classUnderTest.FIRSTNAME + ".1", "Jane");
         nodesMap.put(classUnderTest.SURNAME, "Doe");
-        nodesMap.put(classUnderTest.DATEOFBIRTH, "1990-01-01");
+        nodesMap.put(classUnderTest.DATEOFBIRTH1, "1990-01-01");
+        nodesMap.put(classUnderTest.DATEOFBIRTH2, "1990-01-01");
         nodesMap.put(classUnderTest.GENDER, "MALE");
         nodesMap.put(classUnderTest.ISMASKED, "yes");
 
@@ -731,5 +733,162 @@ class ListObjectHelperTest {
             ReflectionTestUtils.invokeMethod(classUnderTest, "getTime", notBeforeTime8));
 
     }
+    
+    
+    @Test
+    void testValidateDefendant_SurnameContainsComma_SplitsIntoFirstAndSurname() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        // first name absent, surname contains comma + firstname
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", null);
+        nodesMap.put(classUnderTest.SURNAME, "Kennedy, John F");
+        nodesMap.put(classUnderTest.DATEOFBIRTH1, "1917-05-29");
+        nodesMap.put(classUnderTest.GENDER, "male");
+
+        // Precondition DAOs
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+
+        // Stub validator to return a dao so method proceeds
+        Mockito.when(mockDataHelper.validateDefendant(
+            Mockito.anyInt(),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(Integer.class),
+            Mockito.nullable(LocalDateTime.class),
+            Mockito.nullable(String.class)))
+            .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+
+        // Run
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.DEFENDANT_NODE);
+
+        // Verify validateDefendant called with surname="Kennedy", firstName="John F"
+        ArgumentCaptor<String> firstNameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> surnameCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(mockDataHelper).validateDefendant(
+            Mockito.anyInt(),
+            firstNameCaptor.capture(),
+            Mockito.nullable(String.class),
+            surnameCaptor.capture(),
+            Mockito.any(), Mockito.any(), Mockito.anyString());
+
+        // after split firstName should be "John F" and surname "Kennedy"
+        org.junit.jupiter.api.Assertions.assertEquals("John F", firstNameCaptor.getValue());
+        org.junit.jupiter.api.Assertions.assertEquals("Kennedy", surnameCaptor.getValue());
+    }
+
+
+    @Test
+    void testValidateDefendant_OnlySurname_SetsEmptyFirstName() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", null);
+        nodesMap.put(classUnderTest.SURNAME, "Smith");
+        nodesMap.put(classUnderTest.DATEOFBIRTH1, "1980-01-01");
+        nodesMap.put(classUnderTest.GENDER, "female");
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+
+        Mockito.when(mockDataHelper.validateDefendant(
+            Mockito.anyInt(),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(Integer.class),
+            Mockito.nullable(LocalDateTime.class),
+            Mockito.nullable(String.class)))
+            .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+
+        // Run
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.DEFENDANT_NODE);
+
+        // Verify firstName passed as empty string
+        ArgumentCaptor<String> firstNameCaptor = ArgumentCaptor.forClass(String.class);
+        Mockito.verify(mockDataHelper).validateDefendant(
+            Mockito.anyInt(),
+            firstNameCaptor.capture(),
+            Mockito.nullable(String.class),
+            Mockito.anyString(),
+            Mockito.any(), Mockito.any(), Mockito.anyString());
+
+        org.junit.jupiter.api.Assertions.assertEquals("", firstNameCaptor.getValue());
+    }
+
+
+    @Test
+    void testValidateDefendant_UsesDateOfBirthFromDateOfBirth2_WhenDate1Missing() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.FIRSTNAME + ".1", "John");
+        nodesMap.put(classUnderTest.SURNAME, "Doe");
+        nodesMap.put(classUnderTest.DATEOFBIRTH1, ""); // empty
+        // Date2 contains date-time; code uses substring(0,10)
+        nodesMap.put(classUnderTest.DATEOFBIRTH2, "1917-05-29T00:00:00Z");
+        nodesMap.put(classUnderTest.GENDER, "male");
+
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtSiteDao",
+            Optional.of(DummyCourtUtil.getXhbCourtSiteDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbCaseDao",
+            Optional.of(DummyCaseUtil.getXhbCaseDao()));
+
+        Mockito.when(mockDataHelper.validateDefendant(
+            Mockito.anyInt(),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(String.class),
+            Mockito.nullable(Integer.class),
+            Mockito.nullable(LocalDateTime.class),
+            Mockito.nullable(String.class)))
+            .thenReturn(Optional.of(DummyDefendantUtil.getXhbDefendantDao()));
+
+        // Run
+        classUnderTest.validateNodeMap(nodesMap, ListObjectHelper.DEFENDANT_NODE);
+
+        // Capture date argument passed
+        ArgumentCaptor<LocalDateTime> dateCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateDefendant(
+            Mockito.anyInt(), Mockito.anyString(), Mockito.nullable(String.class), Mockito.anyString(),
+            Mockito.any(), dateCaptor.capture(), Mockito.anyString());
+
+        // Expect 1917-05-29 at start of day
+        org.junit.jupiter.api.Assertions.assertEquals(
+            LocalDateTime.of(1917, 5, 29, 0, 0), dateCaptor.getValue());
+    }
+
+
+    @Test
+    void testValidateSitting_NullSittingTime_ButHearingsPresent_CallsWithNullTime() {
+        Map<String, String> nodesMap = new LinkedHashMap<>();
+        nodesMap.put(classUnderTest.COURTROOMNO, "1");
+        // No SITTINGTIME key -> sittingTime remains null
+        nodesMap.put("cs:Hearings", "some hearings content"); // ensure it proceeds
+
+        // Precondition DAOs (set court room & hearing list so private method proceeds)
+        ReflectionTestUtils.setField(classUnderTest, "xhbCourtRoomDao",
+            Optional.of(DummyCourtUtil.getXhbCourtRoomDao()));
+        ReflectionTestUtils.setField(classUnderTest, "xhbHearingListDao",
+            Optional.of(DummyHearingUtil.getXhbHearingListDao()));
+
+        Mockito.when(mockDataHelper.validateSitting(
+            Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(),
+            Mockito.isNull(), Mockito.anyInt()))
+            .thenReturn(Optional.of(DummyHearingUtil.getXhbSittingDao()));
+
+        // Call private method directly to avoid validateCourtRoom(...) overwriting the pre-set field
+        ReflectionTestUtils.invokeMethod(classUnderTest, "validateSitting", nodesMap);
+
+        // Capture the LocalDateTime argument and assert it was null
+        ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        Mockito.verify(mockDataHelper).validateSitting(
+            Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), timeCaptor.capture(), Mockito.anyInt());
+
+        org.junit.jupiter.api.Assertions.assertNull(timeCaptor.getValue(),
+            "Expected sitting time to be null when no SITTINGTIME provided");
+    }
+
+
 
 }

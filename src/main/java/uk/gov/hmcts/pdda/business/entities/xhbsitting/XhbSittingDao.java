@@ -14,8 +14,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.TooManyFields", "PMD.LinguisticNaming",
-    "PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings("PMD")
 @Entity(name = "XHB_SITTING")
 @NamedQuery(name = "XHB_SITTING.findBySittingSequenceNo",
     query = "SELECT o from XHB_SITTING o WHERE o.sittingSequenceNo = :sittingSequenceNo ")
@@ -32,6 +31,14 @@ import java.time.LocalDateTime;
     query = "SELECT o from XHB_SITTING o WHERE o.courtSiteId = :courtSiteId "
         + "AND o.courtRoomId = :courtRoomId AND o.sittingTime >= :sittingTimeToday "
         + "AND o.sittingTime < :sittingTimeTomorrow")
+@NamedQuery(name = "XHB_SITTING.findByCourtRoomIdCourtSiteIdListIdAndSittingTime",
+    query = "SELECT o from XHB_SITTING o WHERE o.courtSiteId = :courtSiteId "
+        + "AND o.courtRoomId = :courtRoomId AND o.listId = :listId "
+        + "AND o.sittingTime = :sittingTime")
+@NamedQuery(name = "XHB_SITTING.findByCourtRoomIdCourtSiteIdListIdAndSittingTimeIsNull",
+    query = "SELECT o from XHB_SITTING o WHERE o.courtSiteId = :courtSiteId "
+        + "AND o.courtRoomId = :courtRoomId AND o.listId = :listId "
+        + "AND o.sittingTime IS NULL")
 public class XhbSittingDao extends AbstractVersionedDao implements Serializable {
 
 

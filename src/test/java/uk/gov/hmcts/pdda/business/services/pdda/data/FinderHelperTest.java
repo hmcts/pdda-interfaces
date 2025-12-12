@@ -102,7 +102,7 @@ class FinderHelperTest {
 
         XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
         Optional<XhbSittingDao> result = classUnderTest.findSitting(dao.getCourtSiteId(),
-            dao.getCourtRoomId(), dao.getSittingTime());
+            dao.getCourtRoomId(), dao.getSittingTime(), dao.getListId());
         assertNotNull(result, NOTNULL);
     }
 
