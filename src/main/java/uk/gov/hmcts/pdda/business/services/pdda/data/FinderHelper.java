@@ -67,9 +67,9 @@ public class FinderHelper extends CreationHelper {
     }
 
     public Optional<XhbSittingDao> findSitting(final Integer courtSiteId, final Integer courtRoomId,
-        final LocalDateTime sittingTime) {
+        final LocalDateTime sittingTime, final Integer listId) {
         return getRepositoryHelper().getXhbSittingRepository()
-            .findByCourtRoomAndSittingTimeSafe(courtSiteId, courtRoomId, sittingTime);
+            .findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafe(courtSiteId, courtRoomId, sittingTime, listId);
     }
 
     public Optional<XhbCaseDao> findCase(final Integer courtId, final String caseType,
