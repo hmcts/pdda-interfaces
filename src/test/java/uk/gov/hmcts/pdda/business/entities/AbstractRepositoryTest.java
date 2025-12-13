@@ -120,7 +120,7 @@ public abstract class AbstractRepositoryTest<T extends AbstractDao> {
         }
         Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
         Mockito.when(mockQuery.getResultList()).thenReturn(list);
-        List<T> result = getClassUnderTest().findAll();
+        List<T> result = getClassUnderTest().findAllSafe();
         assertNotNull(result, NULLRESULT);
         if (dao != null) {
             assertSame(dao, result.get(0), NOTSAMERESULT);

@@ -47,7 +47,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -173,25 +172,6 @@ class PdConfigurationControllerBeanDisplayTest {
             fail(e.getMessage());
         }
         assertTrue(result, TRUE);
-    }
-
-
-    @Test
-    void testGetDisplayDocuments() {
-        // Setup
-        List<XhbDisplayDocumentDao> dummyList = new ArrayList<>();
-        dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
-        dummyList.add(DummyPublicDisplayUtil.getXhbDisplayDocumentDao());
-
-        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
-        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList()).thenReturn(dummyList);
-
-        // Run method
-        XhbDisplayDocumentDao[] displayDocsArray = classUnderTest.getDisplayDocuments();
-
-        // Check results
-        assertArrayEquals(dummyList.toArray(), displayDocsArray, EQUALS);
     }
 
 

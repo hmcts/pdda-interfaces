@@ -201,7 +201,7 @@ class CppStagingInboundHelperTest {
             .thenReturn(null);
         XhbConfigPropDao configDao = new XhbConfigPropDao();
         configDao.setPropertyValue("2");
-        Mockito.when(mockConfigRepo.findByPropertyName("STAGING_DOCS_TO_PROCESS"))
+        Mockito.when(mockConfigRepo.findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS"))
             .thenReturn(List.of(configDao));
 
         // DAO data
