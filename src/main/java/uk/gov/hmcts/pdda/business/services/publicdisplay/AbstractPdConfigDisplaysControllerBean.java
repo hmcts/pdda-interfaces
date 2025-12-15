@@ -61,7 +61,7 @@ public abstract class AbstractPdConfigDisplaysControllerBean extends AbstractPdC
      */
     public XhbDisplayDocumentDao[] getDisplayDocuments() {
         LOG.debug("getDisplayDocuments()");
-        return getXhbDisplayDocumentRepository().findAll().toArray(new XhbDisplayDocumentDao[0]);
+        return getXhbDisplayDocumentRepository().findAllSafe().toArray(new XhbDisplayDocumentDao[0]);
     }
 
     /**

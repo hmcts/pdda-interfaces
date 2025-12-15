@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.LawOfDemeter"})
+@SuppressWarnings("PMD")
 public abstract class AbstractRepository<T extends AbstractDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRepository.class);
