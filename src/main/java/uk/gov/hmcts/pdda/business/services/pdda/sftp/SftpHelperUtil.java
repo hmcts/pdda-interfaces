@@ -130,7 +130,7 @@ public class SftpHelperUtil extends SftpService {
 
      * @return True if using Key Vault, false otherwise
      */
-    private boolean checkWhetherToUseKeyVault() {
+    boolean checkWhetherToUseKeyVault() {
 
         methodName = "checkWhetherToUseKeyVault()";
         LOG.debug(methodName, LOG_CALLED);
