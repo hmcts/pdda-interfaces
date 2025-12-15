@@ -32,6 +32,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -163,7 +164,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessDocuments() {
+    void testProcessDocuments() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -183,7 +184,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessFailedDocuments() {
+    void testProcessFailedDocuments() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -205,7 +206,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testUpdateAndSendWebPageSuccess() {
+    void testUpdateAndSendWebPageSuccess() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -238,7 +239,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendListSuccess() {
+    void testUpdateAndSendListSuccess() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -282,7 +283,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendFail() {
+    void testUpdateAndSendFail() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();

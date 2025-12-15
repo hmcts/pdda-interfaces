@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 
+import javax.xml.transform.TransformerException;
+
 /**
 
  * Title: Cath Controller Bean.
@@ -57,11 +59,12 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     public void doTask() {
         String methodName = "doTask()";
         LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
-        getCathHelper().processDocuments();
-        getCathHelper().processFailedDocuments();
-        
-        // TODO Process internet webpage documents here
-        // getCathHelper().processInternetWebPages();
+        try {
+            getCathHelper().processDocuments();
+            getCathHelper().processFailedDocuments();
+        } catch (TransformerException e) {
+            LOG.error(e.getMessage());
+        }
     }
 
     /**

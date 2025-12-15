@@ -344,8 +344,6 @@ public class SftpService extends XhibitPddaHelper {
                 isList = false;
                 // We don't want to send a message for XWP (XHIBIT Web Page) files
             } else if (filename.startsWith("WebPage_")) {
-                // TODO Convert CP Webpage xml to html
-                
                 isList = false;
             } else {
                 // What type of list is this?
