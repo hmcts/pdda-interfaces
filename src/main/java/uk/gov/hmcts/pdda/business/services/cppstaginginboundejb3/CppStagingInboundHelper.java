@@ -101,15 +101,6 @@ public class CppStagingInboundHelper implements Serializable {
             LOG.debug("Error...{}", e.getMessage());
         }
 
-        try {
-            if (properties == null) {
-                properties = xhbConfigPropRepository
-                    .findByPropertyNameSafe("STAGING_DOCS_TO_PROCESS");
-            }
-        } catch (Exception e) {
-            LOG.debug("Error2...{}", e.getMessage());
-        }
-
         if (properties != null && !properties.isEmpty()) {
             numberOfDocsToProcess = Integer.parseInt(properties.get(0).getPropertyValue());
         } else {
