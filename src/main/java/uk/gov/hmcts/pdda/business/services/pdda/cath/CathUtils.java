@@ -43,7 +43,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
-    "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
+        "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -69,11 +69,12 @@ public final class CathUtils {
     );
     // Keys that should always be represented as JSON arrays
     private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
-            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing"
+            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing", "Fixture"
     );
     // Keys that should always be represented as JSON strings
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
-            "SittingSequenceNumber"
+            "SittingSequenceNumber",
+            "ListNote"
     );
 
     private CathUtils() {
@@ -115,11 +116,11 @@ public final class CathUtils {
                 .header(CONTENT_TYPE, courtelJson.getContentType() + "; boundary=" + boundary)
                 .POST(BodyPublishers.ofString(body))
                 .build();
-        
+
         LOG.debug("getWebPageHttpPostRequest() - built POST");
         return result;
     }
-    
+
     public static HttpRequest getListHttpPostRequest(String url, CourtelJson courtelJson) {
         LOG.debug("Building List HTTP Request - getListHttpPostRequest()");
         // Get the times
@@ -143,7 +144,7 @@ public final class CathUtils {
                 .header(PublicationConfiguration.LIST_TYPE, courtelJson.getListType().toString())
                 .POST(BodyPublishers.ofString(courtelJson.getJson()))
                 .build();
-        
+
         LOG.debug("getListHttpPostRequest() - built POST");
         return result;
     }
@@ -159,9 +160,9 @@ public final class CathUtils {
     }
 
     public static XhbCathDocumentLinkDao transformXmlUsingSchema(Long clobId,
-               XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
-               XhbXmlDocumentRepository xhbXmlDocumentRepository,
-               XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
+                                                                 XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
+                                                                 XhbXmlDocumentRepository xhbXmlDocumentRepository,
+                                                                 XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
             throws TransformerException {
         String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -181,7 +182,7 @@ public final class CathUtils {
 
         // Check if there is an entry in the courtel_list table with the documentClobId
         Optional<XhbCourtelListDao> xhbCourtelListDao =
-            xhbCourtelListRepository.findByXmlDocumentClobIdSafe(clobId);
+                xhbCourtelListRepository.findByXmlDocumentClobIdSafe(clobId);
 
         if (xhbCourtelListDao.isPresent()) {
             // Fetch the original xml clob and xml document records
@@ -239,10 +240,10 @@ public final class CathUtils {
     }
 
     public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
-            XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
-            XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
-            XhbCourtelListRepository xhbCourtelListRepository,
-             XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
+                                               XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+                                               XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
+                                               XhbCourtelListRepository xhbCourtelListRepository,
+                                               XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
             throws ParserConfigurationException, SAXException, IOException {
 
         // Fetch the xml_document record
