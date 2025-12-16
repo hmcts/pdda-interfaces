@@ -91,10 +91,13 @@ public class CppFormattingHelper {
     }
     
     public static XhbXmlDocumentDao createWebPageXhbXmlDDocumentRecord(XhbCppFormattingDao xhbCppFormattingDao,
-        XhbCppStagingInboundDao xhbCppStagingInboundDao) {
+        XhbCppStagingInboundDao xhbCppStagingInboundDao, String language) {
+        // Create title
+        String documentTitle = xhbCppStagingInboundDao.getDocumentName().replace(".xml", "");
+        // Create the XhbXmlDocument record
         XhbXmlDocumentDao xhbXmlDocumentDao = new XhbXmlDocumentDao();
         xhbXmlDocumentDao.setDateCreated(xhbCppFormattingDao.getDateIn());
-        xhbXmlDocumentDao.setDocumentTitle(xhbCppStagingInboundDao.getDocumentName());
+        xhbXmlDocumentDao.setDocumentTitle(documentTitle + language);
         xhbXmlDocumentDao.setXmlDocumentClobId(xhbCppFormattingDao.getXmlDocumentClobId());
         xhbXmlDocumentDao.setStatus(xhbCppFormattingDao.getFormatStatus());
         xhbXmlDocumentDao.setDocumentType(xhbCppFormattingDao.getDocumentType());

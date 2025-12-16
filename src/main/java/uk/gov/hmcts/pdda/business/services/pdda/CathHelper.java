@@ -373,7 +373,15 @@ public class CathHelper {
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) throws TransformerException {
         StringBuilder iwpSchemaPath = new StringBuilder(100);
-        iwpSchemaPath.append("config/xml/internet/InternetWebPageTemplate.xsl");
+        iwpSchemaPath.append("config/xml/internet/");
+        // Check what language the transformation should be done in
+        if (xhbXmlDocumentDao.getDocumentTitle().contains("_cy")) {
+            // Welsh transformation
+            iwpSchemaPath.append("InternetWebPageTemplate_cy.xsl");
+        } else {
+            // English transformation
+            iwpSchemaPath.append("InternetWebPageTemplate.xsl");
+        }
         
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -381,7 +389,7 @@ public class CathHelper {
         Source xsltSource =
             new StreamSource(new File(classLoader.getResource(iwpSchemaPath.toString()).getFile()));
         Templates templates = transformerFactory.newTemplates(xsltSource);
-        Transformer cutDowntransformer = templates.newTransformer();
+        Transformer transformer = templates.newTransformer();
         
         // Get the XML clob data
         Optional<XhbClobDao> xhbClobDao =
@@ -390,7 +398,7 @@ public class CathHelper {
         if (xhbClobDao.isPresent()) {
             Source xmlSource = new StreamSource(new StringReader(xhbClobDao.get().getClobData()));
             // Transform the XML to HTML
-            StringWriter outWriter = TransformerUtils.transformList(cutDowntransformer, xmlSource);
+            StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
             
             // Save the new HTML clob data
             XhbClobDao htmlClobDao = new XhbClobDao();

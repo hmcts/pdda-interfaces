@@ -444,9 +444,15 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                     
                     // Create the xhbXmlDocument record
                     if (IWP.equals(documentType)) {
-                        XhbXmlDocumentDao xhbXmlDocumentDao =
-                            CppFormattingHelper.createWebPageXhbXmlDDocumentRecord(docToCreate, thisDoc);
-                        getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+                        // Create the "en" version
+                        XhbXmlDocumentDao xhbXmlDocumentDaoEn =
+                            CppFormattingHelper.createWebPageXhbXmlDDocumentRecord(docToCreate, thisDoc, "_en");
+                        getXhbXmlDocumentRepository().save(xhbXmlDocumentDaoEn);
+                        
+                        // Create the "cy" version
+                        XhbXmlDocumentDao xhbXmlDocumentDaoCy =
+                            CppFormattingHelper.createWebPageXhbXmlDDocumentRecord(docToCreate, thisDoc, "_cy");
+                        getXhbXmlDocumentRepository().save(xhbXmlDocumentDaoCy);
                     }
                 }
 

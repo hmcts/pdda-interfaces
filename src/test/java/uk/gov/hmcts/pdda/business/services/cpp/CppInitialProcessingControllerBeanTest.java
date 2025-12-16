@@ -236,6 +236,7 @@ class CppInitialProcessingControllerBeanTest
             EasyMock.expect(mockXhbCppFormattingRepository.update(xcf)).andReturn(null);
 
             mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
+            mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
             
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
