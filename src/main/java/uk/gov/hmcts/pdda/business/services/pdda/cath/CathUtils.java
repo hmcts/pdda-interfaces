@@ -43,7 +43,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
-        "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
+    "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -160,9 +160,9 @@ public final class CathUtils {
     }
 
     public static XhbCathDocumentLinkDao transformXmlUsingSchema(Long clobId,
-                                                                 XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
-                                                                 XhbXmlDocumentRepository xhbXmlDocumentRepository,
-                                                                 XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
+        XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository,
+        XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
             throws TransformerException {
         String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -240,11 +240,11 @@ public final class CathUtils {
     }
 
     public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
-                                               XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
-                                               XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
-                                               XhbCourtelListRepository xhbCourtelListRepository,
-                                               XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
-            throws ParserConfigurationException, SAXException, IOException {
+        XhbCathDocumentLinkRepository xhbCathDcoumentLlinkRepository,
+        XhbXmlDocumentRepository xhbXmlDocumentRepository, XhbClobRepository xhbClobRepository,
+        XhbCourtelListRepository xhbCourtelListRepository,
+        XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
+        throws ParserConfigurationException, SAXException, IOException {
 
         // Fetch the xml_document record
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
