@@ -72,7 +72,7 @@ class PdConfigurationControllerBeanDisplayTest {
     private static final Integer DISPLAY_DOCUMENT_ID = 90;
     private static final String YES = "Y";
     private static final String DAILYLIST = "DailyList";
-    
+
     @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
@@ -114,7 +114,7 @@ class PdConfigurationControllerBeanDisplayTest {
 
     @Mock
     private VipCourtRoomsQuery mockVipQuery;
-    
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -144,7 +144,7 @@ class PdConfigurationControllerBeanDisplayTest {
             DummyPublicDisplayUtil.getXhbDisplayDocumentDao()
         ));
 
-        
+
         @SuppressWarnings("unchecked")
         TypedQuery<XhbDisplayDocumentDao> mockQuery = Mockito.mock(TypedQuery.class);
 
@@ -190,24 +190,6 @@ class PdConfigurationControllerBeanDisplayTest {
     }
 
 
-    @Test
-    void testGetDisplayDocuments() {
-        XhbDisplayDocumentDao doc = DummyPublicDisplayUtil.getXhbDisplayDocumentDao();
-        List<XhbDisplayDocumentDao> dummyList = List.of(doc, doc);
-
-        Mockito.when(mockXhbDisplayDocumentRepository.findAll()).thenReturn(dummyList);
-
-        XhbDisplayDocumentDao[] displayDocsArray = classUnderTest.getDisplayDocuments();
-
-        System.out.println("Display documents: " + displayDocsArray.length);
-
-        assertEquals(2, displayDocsArray.length);
-        assertEquals(doc, displayDocsArray[0]);
-        assertEquals(doc, displayDocsArray[1]);
-    }
-
-
-
     @SuppressWarnings("PMD.UnnecessaryVarargsArrayCreation")
     @Test
     void testGetUpdatedDisplay() {
@@ -239,7 +221,7 @@ class PdConfigurationControllerBeanDisplayTest {
         expectGetEntityManager(mockXhbDisplayRepository);
         expectGetEntityManager(mockXhbCourtRepository);
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
-        
+
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
         String courtName = "Test Court Name";

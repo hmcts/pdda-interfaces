@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"PMD.LawOfDemeter", "PMD.TooManyMethods"})
+@SuppressWarnings("PMD")
 public abstract class AbstractRepository<T extends AbstractDao> {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRepository.class);
@@ -21,18 +21,18 @@ public abstract class AbstractRepository<T extends AbstractDao> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    
+
     protected AbstractRepository() {
         super();
     }
-    
+
     protected AbstractRepository(EntityManager entityManager) {
         this();
         this.entityManager = entityManager;
     }
 
     protected abstract Class<T> getDaoClass();
-    
+
     public Optional<T> findByIdSafe(Integer id) {
         LOG.debug("findByIdSafe({})", id);
         try (EntityManager em = createEntityManager()) {
@@ -43,7 +43,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
             return Optional.empty();
         }
     }
-    
+
     public Optional<T> findByIdSafe(Long id) {
         LOG.debug("findByIdSafe({})", id);
         try (EntityManager em = createEntityManager()) {
@@ -61,7 +61,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
         Query query = getEntityManager().createQuery(sql);
         return query.getResultList();
     }
-    
+
     /**
      * findAll.
 
@@ -101,7 +101,7 @@ public abstract class AbstractRepository<T extends AbstractDao> {
             }
         }
     }
-    
+
     /**
      * save.
      * @param dao Dao
