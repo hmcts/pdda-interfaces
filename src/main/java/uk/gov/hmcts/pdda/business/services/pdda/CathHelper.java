@@ -372,43 +372,73 @@ public class CathHelper {
     }
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) throws TransformerException {
-        StringBuilder iwpSchemaPath = new StringBuilder(100);
-        iwpSchemaPath.append("config/xml/internet/");
-        // Check what language the transformation should be done in
-        if (xhbXmlDocumentDao.getDocumentTitle().contains("_cy")) {
-            // Welsh transformation
-            iwpSchemaPath.append("InternetWebPageTemplate_cy.xsl");
-        } else {
-            // English transformation
-            iwpSchemaPath.append("InternetWebPageTemplate.xsl");
-        }
-        
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        
-        Source xsltSource =
-            new StreamSource(new File(classLoader.getResource(iwpSchemaPath.toString()).getFile()));
-        Templates templates = transformerFactory.newTemplates(xsltSource);
-        Transformer transformer = templates.newTransformer();
-        
+        // Check if the document is Welsh
+        boolean isWelsh = xhbXmlDocumentDao.getDocumentTitle().contains("_cy");
         // Get the XML clob data
         Optional<XhbClobDao> xhbClobDao =
             getXhbClobRepository().findByIdSafe(xhbXmlDocumentDao.getXmlDocumentClobId());
         
         if (xhbClobDao.isPresent()) {
-            Source xmlSource = new StreamSource(new StringReader(xhbClobDao.get().getClobData()));
+            // Initialize the transformer & classloader
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            
+            // Get the schema for the HTML transformation
+            StringBuilder iwpSchemaPath = new StringBuilder(100);
+            iwpSchemaPath.append("config/xml/internet/");
+            if (isWelsh) {
+                // Welsh transformation
+                iwpSchemaPath.append("InternetWebPageTemplate_cy.xsl");
+            } else {
+                // English transformation
+                iwpSchemaPath.append("InternetWebPageTemplate.xsl");
+            }
+            
+            // Set the xsl source
+            Source xsltSource =
+                new StreamSource(new File(classLoader.getResource(iwpSchemaPath.toString()).getFile()));
+            Templates templates = transformerFactory.newTemplates(xsltSource);
+            Transformer transformer = templates.newTransformer();
+            
             // Transform the XML to HTML
+            Source xmlSource = new StreamSource(new StringReader(xhbClobDao.get().getClobData()));
             StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
             
-            // Save the new HTML clob data
+            // Create the new HTML clob
             XhbClobDao htmlClobDao = new XhbClobDao();
-            htmlClobDao.setClobData(outWriter.toString());
-            getXhbClobRepository().savePersist(htmlClobDao);
+            
+            if (isWelsh) {
+                // Translate the HTML into Welsh
+                String welshTranslatedHtml =
+                    translateHtmlToWelsh(outWriter.toString(), transformerFactory, classLoader);
+                // Save the welsh translated HTML clob data
+                htmlClobDao.setClobData(welshTranslatedHtml);
+                getXhbClobRepository().savePersist(htmlClobDao);
+            } else {
+                // Save the english HTML clob data
+                htmlClobDao.setClobData(outWriter.toString());
+                getXhbClobRepository().savePersist(htmlClobDao);
+            }
             
             // Re-point the xhb_xml_document to the new HTML clob
             xhbXmlDocumentDao.setXmlDocumentClobId(htmlClobDao.getClobId());
             getXhbXmlDocumentRepository().update(xhbXmlDocumentDao);
         }
+    }
+    
+    private String translateHtmlToWelsh(String htmlData,
+        TransformerFactory transformerFactory, ClassLoader classLoader) throws TransformerException {
+        String cyTranslatorXslPath = "config/xml/internet/cy_translator.xsl";
+        // Set the xsl source
+        Source translatorXslSource =
+            new StreamSource(new File(classLoader.getResource(cyTranslatorXslPath).getFile()));
+        Templates templates = transformerFactory.newTemplates(translatorXslSource);
+        Transformer transformer = templates.newTransformer();
+        // Translate the HTML text nodes to Welsh using the keys in the translations.xml
+        Source htmlSource = new StreamSource(new StringReader(htmlData));
+        StringWriter outWriter = TransformerUtils.transformList(transformer, htmlSource);
+        
+        return outWriter.toString();
     }
     
     private CathOAuth2Helper getCathOAuth2Helper() {
