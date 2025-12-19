@@ -32,6 +32,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.xml.transform.TransformerException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -163,7 +164,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessDocuments() {
+    void testProcessDocuments() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -183,7 +184,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessFailedDocuments() {
+    void testProcessFailedDocuments() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -205,7 +206,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testUpdateAndSendWebPageSuccess() {
+    void testUpdateAndSendWebPageSuccess() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -238,7 +239,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendListSuccess() {
+    void testUpdateAndSendListSuccess() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -282,7 +283,42 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendFail() {
+    void testUpdateAndSendWebPageWelsh() throws TransformerException {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("IWP");
+        xhbXmlDocumentDao.setDocumentTitle("WebPage_457_20251219101501_cy");
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L,
+            "<courtname>Bristol Crown Court</courtname>");
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbClobRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbCourtRepository.getEntityManager()).thenReturn(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Update status
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
+            .thenReturn(Optional.of(xhbClobDao));
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
+            .thenReturn(Optional.of(xhbCourtDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testUpdateAndSendFail() throws TransformerException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="https://www.w3.org/1999/XSL/Transform">
-    <xsl:output method="xml" omit-xml-declaration="yes" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="https://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" />
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="xml" omit-xml-declaration="yes" doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" indent="yes" />
     <xsl:include href="currentCourtStatus.xsl"/>
-    <xsl:template match="/" xmlns="https://www.w3.org/1999/xhtml">
+    <xsl:template match="/" xmlns="http://www.w3.org/1999/xhtml">
         <html xmlns="https://www.w3.org/1999/xhtml">
             <head>
 				<xsl:variable name="crtName2">
@@ -165,7 +165,7 @@
 	</xsl:template>
     
     <!-- Template to display current date time info -->
-    <xsl:template match="currentcourtstatus/datetimestamp" xmlns="https://www.w3.org/1999/xhtml">
+    <xsl:template match="currentcourtstatus/datetimestamp" xmlns="http://www.w3.org/1999/xhtml">
         <xsl:param name="datePublished">today</xsl:param>
         <meta name="DC.title" content="XHIBIT Daily Court Status" /> 
 		<meta name="revisit-after" content="1 days" /> 

@@ -98,7 +98,7 @@ public class AbstractControllerBean {
         return xhbCourtelListRepository;
     }
 
-    protected XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
+    public XhbXmlDocumentRepository getXhbXmlDocumentRepository() {
         if (!RepositoryUtil.isRepositoryActive(xhbXmlDocumentRepository)) {
             xhbXmlDocumentRepository = new XhbXmlDocumentRepository(getEntityManager());
         }

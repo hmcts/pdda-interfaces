@@ -29,7 +29,8 @@ import java.time.LocalDateTime;
         + "AND (cast(:timeDelay as timestamp) IS NULL OR o.creationDate <= :timeDelay) "
         + "ORDER BY o.xmlDocumentId DESC")
 @NamedQuery(name = "XHB_XML_DOCUMENT.findJsonDocuments",
-    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType = 'JSN' AND o.status = :status")
+    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType IN ('JSN', 'IWP') "
+        + "AND o.status = :status")
 public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;
