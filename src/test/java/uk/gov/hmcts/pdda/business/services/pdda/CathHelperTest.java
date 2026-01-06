@@ -210,6 +210,7 @@ class CathHelperTest {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("IWP");
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
         
         String htmlString = 

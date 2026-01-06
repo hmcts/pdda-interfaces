@@ -325,11 +325,11 @@ public class CathHelper {
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
         
-        // Populate the language based on document title, this will only be welsh for cy webpages
-        if (xhbXmlDocumentDao.getDocumentType().equals("IWP") 
-            && xhbXmlDocumentDao.getDocumentTitle().contains("_cy")) {
-            jsonObject.setLanguage(Language.WELSH);
+        // Populate the language based on web page contents, therefore cp and xhibit web pages are handled the same
+        if (xhbXmlDocumentDao.getDocumentType().equals("IWP")) {
+            jsonObject.setLanguage(getLanguageFromWebPageContent(xhbXmlDocumentDao.getXmlDocumentClobId()));
         } else {
+            // Lists are always in English
             jsonObject.setLanguage(Language.ENGLISH);
         }
         
@@ -395,6 +395,25 @@ public class CathHelper {
         }
         // Default to todays date if any above conditions are not met
         return LocalDate.now();
+    }
+    
+    private Language getLanguageFromWebPageContent(Long clobId) {
+        Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
+        
+        if (!xhbClobDao.isEmpty()) {
+            Document doc = Jsoup.parse(xhbClobDao.get().getClobData());
+            Element dateElement = doc.selectFirst("#content-column h1");
+            String dateContent = dateElement.text();
+            
+            // Checking the language of the "Daily Court Status" header as this is on all web pages
+            if (dateContent.contains("Daily Court Status")) {
+                return Language.ENGLISH;
+            } else {
+                return Language.WELSH;
+            }
+        }
+        // Return English by default if the conditions are not met
+        return Language.ENGLISH;
     }
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) throws TransformerException {
