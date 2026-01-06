@@ -6,13 +6,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.pdda.hb.jpa.RepositoryUtil;
 import jakarta.persistence.EntityManager;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
@@ -39,14 +37,10 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -88,6 +82,29 @@ public class CathHelper {
         "Daily List", "DL",
         "Firm List", "FL",
         "Warned List", "WL"
+    );
+    private static final Map<String, String> WELSH_DAYS_OF_WEEK = Map.of(
+        "Dydd Llun", "Monday",
+        "Dydd Mawrth", "Tuesday",
+        "Dydd Mercher", "Wednesday",
+        "Dydd Iau", "Thursday",
+        "Dydd Gwener", "Friday",
+        "Dydd Sadwrn", "Saturday",
+        "Dydd Sul", "Sunday"
+    );
+    private static final Map<String, String> WELSH_MONTHS = Map.ofEntries(
+        Map.entry("Ionawr", "January"),
+        Map.entry("Chwefror", "February"),
+        Map.entry("Mawrth", "March"),
+        Map.entry("Ebrill", "April"),
+        Map.entry("Mai", "May"),
+        Map.entry("Mehefin", "June"),
+        Map.entry("Gorffennaf", "July"),
+        Map.entry("Awst", "August"),
+        Map.entry("Medi", "September"),
+        Map.entry("Hydref", "October"),
+        Map.entry("Tachwedd", "November"),
+        Map.entry("Rhagfyr", "December")
     );
     
     private final EntityManager entityManager;
@@ -287,68 +304,77 @@ public class CathHelper {
     
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
         XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao, String listType) {
+        
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
             listJson.setListType(ListType.fromString(listType));
-            // Get end date from json clob for lists
-            jsonObject.setEndDate(getListEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType));
+            // Get date from json clob for lists
+            LocalDate dateTime = getListDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType);
+            jsonObject.setContentDate(dateTime.atStartOfDay(ZoneOffset.UTC));
+            jsonObject.setEndDate(dateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
+            
         } else {
-            try {
-                // Get end date from html clob for web pages
-                jsonObject.setEndDate(getWebPageEndDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId()));
-            } catch (ParserConfigurationException | SAXException | IOException e) {
-                LOG.debug("Error getting endDate from Clob: {}", e.getMessage());
-            }
+            // Get end date from html clob for web pages
+            LocalDate dateTime = getHtmlWebPageDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(),
+                xhbXmlDocumentDao.getDocumentTitle());
+            jsonObject.setContentDate(dateTime.atStartOfDay(ZoneOffset.UTC));
+            jsonObject.setEndDate(dateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
         }
+        
         // Populate shared fields
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
-        jsonObject.setContentDate(LocalDate.now().atStartOfDay(ZoneOffset.UTC));
-        jsonObject.setLanguage(Language.ENGLISH);
         jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
+        
+        // Populate the language based on document title, this will only be welsh for cy webpages
+        if (xhbXmlDocumentDao.getDocumentType().equals("IWP") 
+            && xhbXmlDocumentDao.getDocumentTitle().contains("_cy")) {
+            jsonObject.setLanguage(Language.WELSH);
+        } else {
+            jsonObject.setLanguage(Language.ENGLISH);
+        }
         
         return jsonObject;
     }
     
-    private ZonedDateTime getWebPageEndDateFromClob(Long clobId) 
-        throws ParserConfigurationException, SAXException, IOException {
-        // Get the clob data
+    private LocalDate getHtmlWebPageDateFromClob(Long clobId, String documentTitle) {
+        // Get the html clob
         Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
+        
         if (!xhbClobDao.isEmpty()) {
-            // Perform a node search across the clob data and find the end date field
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            InputSource inputSource = new InputSource(new StringReader(xhbClobDao.get().getClobData()));
-            Document document = documentBuilder.parse(inputSource);
-
-            // Get the cs:ListHeader nodes. This is the clob before transformation, so it uses the cs namespace
-            Node listHeaderNode = document.getElementsByTagName("cs:ListHeader").item(0);
+            Document doc = Jsoup.parse(xhbClobDao.get().getClobData());
+            Element dateElement = doc.selectFirst("#content-column p");
+            String dateContent = dateElement.text(); // i.e: "Monday 1 January 2026 10:15"
+           
+            DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:mm");
             
-            if (listHeaderNode != null) {
-                NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
-                for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
-                    Node node = listHeaderChildNodes.item(i);
-                    if (node.getNodeType() == Node.ELEMENT_NODE
-                        && Objects.equals("cs:EndDate", node.getNodeName())) {
-                        String endDate = node.getTextContent();
-                        if (endDate != null) {
-                            try {
-                                // Convert the end date to LocalDateTime and return it
-                                return LocalDate.parse(endDate).atTime(23, 59).atZone(ZoneOffset.UTC);
-                            } catch (Exception e) {
-                                // If there is an error parsing the date, log it and return current date
-                                LOG.debug("Error parsing endDate: {}", e.getMessage());
-                                return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
-                            }
-                        }
+            if (documentTitle.contains("_cy")) {
+                // Translate the day to english
+                for (Map.Entry<String, String> dayEntry : WELSH_DAYS_OF_WEEK.entrySet()) {
+                    if (dateContent.contains(dayEntry.getKey())) {
+                        dateContent = dateContent.replace(dayEntry.getKey(), dayEntry.getValue());
+                        break;
                     }
                 }
+                // Translate the month to english
+                for (Map.Entry<String, String> monthEntry : WELSH_MONTHS.entrySet()) {
+                    if (dateContent.contains(monthEntry.getKey())) {
+                        dateContent = dateContent.replace(monthEntry.getKey(), monthEntry.getValue());
+                        break;
+                    }
+                }
+                // Return the parsed date in UTC
+                return LocalDate.parse(dateContent, formatter);
+            } else {
+                // Return the parsed date in UTC
+                return LocalDate.parse(dateContent, formatter);
             }
         }
         // Default to todays date if any above conditions are not met
-        return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
+        return LocalDate.now();
     }
     
-    private ZonedDateTime getListEndDateFromClob(Long clobId, String listType) {
+    private LocalDate getListDateFromClob(Long clobId, String listType) {
         Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
         
         // Get the list type root node for JSON parsing
@@ -365,10 +391,10 @@ public class CathHelper {
             String endDate = obj.getJSONObject(jsonListRootNode)
                                 .getJSONObject("ListHeader")
                                 .getString("EndDate");
-            return LocalDate.parse(endDate).atTime(23, 59).atZone(ZoneOffset.UTC);
+            return LocalDate.parse(endDate);
         }
         // Default to todays date if any above conditions are not met
-        return LocalDate.now().atTime(23, 59).atZone(ZoneOffset.UTC);
+        return LocalDate.now();
     }
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) throws TransformerException {
