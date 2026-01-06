@@ -211,8 +211,17 @@ class CathHelperTest {
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
-        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L,
-            "<cs:ListHeader><cs:EndDate>2020-01-21</cs:EndDate></cs:ListHeader>");
+        
+        String htmlString = 
+            """
+            <div id="content-column">
+            <h1>Daily Court Status</h1>
+            <h2>Bristol Crown Court</h2>
+            <p>Friday 12 December 2025 10:52</p>
+            </div>
+            """;
+        
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, htmlString);
         XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
         
         // Ensure the entity managers are set
