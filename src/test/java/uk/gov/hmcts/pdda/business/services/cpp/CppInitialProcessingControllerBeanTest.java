@@ -115,8 +115,11 @@ class CppInitialProcessingControllerBeanTest
                 .expect(
                     mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
                 .andReturn(xhbCourtDaoList);
+            EasyMock.expectLastCall().anyTimes();
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
+            EasyMock.expectLastCall().anyTimes();
             mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
+            EasyMock.expectLastCall().anyTimes();
 
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(unprocessedXcsi,
                 BATCH_USERNAME);
