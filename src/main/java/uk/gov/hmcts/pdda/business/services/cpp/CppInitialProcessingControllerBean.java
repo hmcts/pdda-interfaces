@@ -517,6 +517,9 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 docToUpdate.setMergedClobId(thisDoc.getClobId());
                 docToUpdate.setLastUpdatedBy(BATCH_USERNAME);
                 getCppListControllerBean().updateCppList(docToUpdate);
+                
+                // Create the records for the updated list
+                createRecordsForProcessing(thisDoc, documentType, docToUpdate);
 
             } else { // Insert
                 // Create a record to insert
@@ -531,18 +534,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
                 docToCreate.setObsInd("N");
                 getXhbCppListRepository().save(docToCreate);
 
-                // Create the xhbFormatting record
-                List<XhbCourtDao> xhbCourtDaoList =
-                    getXhbCourtRepository().findByCrestCourtIdValueSafe(thisDoc.getCourtCode());
-                Integer courtId = xhbCourtDaoList.get(0).getCourtId();
-                XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-                    thisDoc, documentType, "en");
-                getXhbFormattingRepository().save(xfbv);
-
-                // Create the xhbXmlDocument record
-                XhbXmlDocumentDao xhbXmlDocumentDao =
-                    CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, docToCreate, thisDoc);
-                getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+                // Create the records for the new list
+                createRecordsForProcessing(thisDoc, documentType, docToCreate);
             }
 
             // If all successful then we need to set record in XHB_STAGING_INBOUND to
@@ -561,6 +554,23 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         }
         
         LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+    
+    private void createRecordsForProcessing(XhbCppStagingInboundDao cppStagingInboundDao, String documentType, 
+        XhbCppListDao cppListDao) {
+        // Get the court id
+        List<XhbCourtDao> xhbCourtDaoList =
+            getXhbCourtRepository().findByCrestCourtIdValueSafe(cppStagingInboundDao.getCourtCode());
+        Integer courtId = xhbCourtDaoList.get(0).getCourtId();
+        // Create the xhbFormatting record
+        XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
+            cppStagingInboundDao, documentType, "en");
+        getXhbFormattingRepository().save(xfbv);
+
+        // Create the xhbXmlDocument record
+        XhbXmlDocumentDao xhbXmlDocumentDao =
+            CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, cppListDao, cppStagingInboundDao);
+        getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
     }
     
     private ListNodesHelper getListNodesHelper() {
