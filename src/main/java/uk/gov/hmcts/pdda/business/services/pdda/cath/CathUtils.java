@@ -89,7 +89,7 @@ public final class CathUtils {
         LOG.debug("Building WebPage HTTP Request - getWebPageHttpPostRequest()");
         // Build the multipart/form-data boundary
         String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
-        String fileName = courtelJson.getDocumentName();
+        String fileName = courtelJson.getDocumentName() + ".html";
         String fieldName = "file";
         // Build multipart/form-data body
         String body =
