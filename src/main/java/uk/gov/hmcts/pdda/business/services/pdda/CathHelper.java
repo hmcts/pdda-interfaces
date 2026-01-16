@@ -417,6 +417,7 @@ public class CathHelper {
     }
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) throws TransformerException {
+        LOG.info("Transforming CP Webpage into HTML: {} ", xhbXmlDocumentDao.getDocumentTitle());
         // Check if the document is Welsh
         boolean isWelsh = xhbXmlDocumentDao.getDocumentTitle().contains("_cy");
         // Get the XML clob data
@@ -468,6 +469,8 @@ public class CathHelper {
             // Re-point the xhb_xml_document to the new HTML clob
             xhbXmlDocumentDao.setXmlDocumentClobId(htmlClobDao.getClobId());
             getXhbXmlDocumentRepository().update(xhbXmlDocumentDao);
+            LOG.info("CP Webpage Transformed: {} with clobId: {}", 
+                xhbXmlDocumentDao.getDocumentTitle(), htmlClobDao.getClobId());
         }
     }
     
