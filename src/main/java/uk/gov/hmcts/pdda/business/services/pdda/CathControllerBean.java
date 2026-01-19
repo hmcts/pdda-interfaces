@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.pdda.business.AbstractControllerBean;
 
+import java.io.IOException;
 import javax.xml.transform.TransformerException;
 
 /**
@@ -62,7 +63,7 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
         try {
             getCathHelper().processDocuments();
             getCathHelper().processFailedDocuments();
-        } catch (TransformerException e) {
+        } catch (TransformerException | IOException e) {
             LOG.error(e.getMessage());
         }
     }

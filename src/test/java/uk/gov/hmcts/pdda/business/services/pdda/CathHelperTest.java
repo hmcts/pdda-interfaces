@@ -25,6 +25,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentReposito
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathOAuth2Helper;
 import uk.gov.hmcts.pdda.business.services.pdda.cath.CathUtils;
 
+import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -164,7 +165,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessDocuments() throws TransformerException {
+    void testProcessDocuments() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -176,6 +177,9 @@ class CathHelperTest {
         Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("ND"))
             .thenReturn(xhbXmlDocumentDaoList);
         
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         boolean result = true;
         // Run
         classUnderTest.processDocuments();
@@ -184,7 +188,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testProcessFailedDocuments() throws TransformerException {
+    void testProcessFailedDocuments() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -198,6 +202,9 @@ class CathHelperTest {
         Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("F2"))
             .thenReturn(xhbXmlDocumentDaoList);
         
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         boolean result = true;
         // Run
         classUnderTest.processFailedDocuments();
@@ -206,7 +213,7 @@ class CathHelperTest {
     }
 
     @Test
-    void testUpdateAndSendWebPageSuccess() throws TransformerException {
+    void testUpdateAndSendWebPageSuccess() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -241,6 +248,9 @@ class CathHelperTest {
         Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
             .thenReturn(Optional.of(xhbCourtDao));
         
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         boolean result = true;
         // Run
         classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
@@ -249,7 +259,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendListSuccess() throws TransformerException {
+    void testUpdateAndSendListSuccess() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -285,6 +295,9 @@ class CathHelperTest {
         Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
             .thenReturn(Optional.of(xhbCourtDao));
         
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         boolean result = true;
         // Run
         classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
@@ -293,7 +306,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendWebPageWelsh() throws TransformerException {
+    void testUpdateAndSendWebPageWelsh() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -320,6 +333,9 @@ class CathHelperTest {
         Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
             .thenReturn(Optional.of(xhbCourtDao));
         
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
         boolean result = true;
         // Run
         classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
@@ -328,7 +344,7 @@ class CathHelperTest {
     }
     
     @Test
-    void testUpdateAndSendFail() throws TransformerException {
+    void testUpdateAndSendFail() throws TransformerException, IOException {
         // Setup
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
@@ -345,6 +361,9 @@ class CathHelperTest {
         
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.anyLong()))
             .thenReturn(Optional.empty());
+        
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
         
         boolean result = true;
         // Run
