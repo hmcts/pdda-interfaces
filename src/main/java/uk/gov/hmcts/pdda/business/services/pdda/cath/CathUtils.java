@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.xml.sax.SAXException;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcathdocumentlink.XhbCathDocumentLinkRepository;
@@ -20,8 +22,8 @@ import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentReposito
 import uk.gov.hmcts.pdda.business.services.formatting.TransformerUtils;
 import uk.gov.hmcts.pdda.web.publicdisplay.initialization.servlet.InitializationService;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URI;
@@ -163,23 +165,9 @@ public final class CathUtils {
         XhbCourtelListRepository xhbCourtelListRepository, XhbClobRepository xhbClobRepository,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
-            throws TransformerException {
+            throws TransformerException, IOException {
         String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        // Get the predefined xslt schema
-        Source xsltSource =
-                new StreamSource(new File(classLoader.getResource(xsltSchemaPath).getFile()));
-        Templates templates = transformerFactory.newTemplates(xsltSource);
-        Transformer cutDowntransformer = templates.newTransformer();
-
-        // Get the predefined namespace xslt schema
-        Source xsltNameSpaceSource =
-                new StreamSource(new File(classLoader.getResource(xsltNamespaceSchemaPath).getFile()));
-        Templates nameSpaceTemplates = transformerFactory.newTemplates(xsltNameSpaceSource);
-        Transformer nameSpaceTransformer = nameSpaceTemplates.newTransformer();
-
+        
         // Check if there is an entry in the courtel_list table with the documentClobId
         Optional<XhbCourtelListDao> xhbCourtelListDao =
                 xhbCourtelListRepository.findByXmlDocumentClobIdSafe(clobId);
@@ -190,20 +178,18 @@ public final class CathUtils {
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
                     xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
             if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
+                
                 // Transform the xml, removing the unneeded elements and attributes
-                Source xmlSource =
-                        new StreamSource(new StringReader(xhbClobDaoOriginalXml.get().getClobData()));
-                StringWriter outWriter =
-                        TransformerUtils.transformList(cutDowntransformer, xmlSource);
-
+                String transformedXml = 
+                    transformList(xsltSchemaPath, xhbClobDaoOriginalXml.get().getClobData());
+                
                 // Transform the xml, removing the namespaces
-                Source xmlCutDownSource = new StreamSource(new StringReader(outWriter.toString()));
-                StringWriter outWriterWithRemovedNameSpaces =
-                        TransformerUtils.transformList(nameSpaceTransformer, xmlCutDownSource);
+                String transformedWithoutNamespacesXml = 
+                    transformList(xsltNamespaceSchemaPath, transformedXml);
 
                 // Save the transformed Xml to the clob table
                 XhbClobDao xhbClobDaoTransformedXml = new XhbClobDao();
-                xhbClobDaoTransformedXml.setClobData(outWriterWithRemovedNameSpaces.toString());
+                xhbClobDaoTransformedXml.setClobData(transformedWithoutNamespacesXml);
                 xhbClobRepository.savePersist(xhbClobDaoTransformedXml);
 
                 // Save the transformed xml to xml_document table
@@ -237,6 +223,25 @@ public final class CathUtils {
             }
         }
         return null;
+    }
+    
+    private static String transformList(String xslSchemaPath, String xmlToTransform)
+        throws TransformerException, IOException {
+        // Get the XSLT schema from the classpath
+        Resource resource = new ClassPathResource(xslSchemaPath);
+        
+        try (InputStream inputStream = resource.getInputStream()) {
+            StreamSource xslSource = new StreamSource(inputStream);
+            xslSource.setSystemId(resource.getURL().toExternalForm());
+            Templates templates = TransformerFactory.newInstance().newTemplates(xslSource);
+            Transformer transformer = templates.newTransformer();
+            
+            // Transform the XML
+            Source xmlSource = new StreamSource(new StringReader(xmlToTransform));
+            StringWriter outWriter = TransformerUtils.transformList(transformer, xmlSource);
+            
+            return outWriter.toString();
+        }
     }
 
     public static void fetchXmlAndGenerateJson(XhbCathDocumentLinkDao xhbCathDocumentLinkDao,
