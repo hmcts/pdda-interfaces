@@ -49,7 +49,7 @@ public final class CathUtils {
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
 
     private static final String APIM_ENABLED = "apim.enabled";
-    private static final String APIM_URL = "apim.uri";
+    private static final String APIM_URL = "cath.azure.oauth2.health-endpoint-url";
     private static final String AUTHORIZATION = "Authorization";
     private static final String BEARER = "Bearer %s";
     private static final String CONTENT_TYPE = "Content-Type";
