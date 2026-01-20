@@ -357,7 +357,7 @@ public class CathHelper {
             String dateContent = dateElement.text(); // i.e: "Monday 1 January 2026 10:15"
            
             DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:mm");
+                DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:m");
             
             if (documentTitle.contains("_cy")) {
                 // Translate the day to english
