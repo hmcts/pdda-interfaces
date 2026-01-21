@@ -40,7 +40,11 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import javax.xml.transform.Source;
@@ -365,8 +369,13 @@ public class CathHelper {
             Element dateElement = doc.selectFirst("#content-column p");
             String dateContent = dateElement.text(); // i.e: "Monday 1 January 2026 10:15"
            
-            DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:m");
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("EEEE d MMMM yyyy ")
+                .appendValue(ChronoField.HOUR_OF_DAY, 1, 2, SignStyle.NOT_NEGATIVE)
+                .appendLiteral(':')
+                .appendValue(ChronoField.MINUTE_OF_HOUR, 1, 2, SignStyle.NOT_NEGATIVE)
+                .toFormatter(Locale.ENGLISH);
             
             boolean isEnglishDoc = false;
             // Check if the date matches any english days of the week
