@@ -85,6 +85,15 @@ public class CathHelper {
         "Firm List", "FL",
         "Warned List", "WL"
     );
+    private static final String[] ENGLISH_DAYS_OF_WEEK = {
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    };
     private static final Map<String, String> WELSH_DAYS_OF_WEEK = Map.of(
         "Dydd Llun", "Monday",
         "Dydd Mawrth", "Tuesday",
@@ -359,7 +368,15 @@ public class CathHelper {
             DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("EEEE d MMMM yyyy HH:m");
             
-            if (documentTitle.contains("_cy")) {
+            boolean isEnglishDoc = false;
+            // Check if the date matches any english days of the week
+            for (String day : ENGLISH_DAYS_OF_WEEK) {
+                if (dateContent.contains(day)) {
+                    isEnglishDoc = true;
+                }
+            }
+            
+            if (!isEnglishDoc) {
                 // Translate the day to english
                 for (Map.Entry<String, String> dayEntry : WELSH_DAYS_OF_WEEK.entrySet()) {
                     if (dateContent.contains(dayEntry.getKey())) {
