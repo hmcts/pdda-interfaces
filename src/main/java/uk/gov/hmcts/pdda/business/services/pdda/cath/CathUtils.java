@@ -71,12 +71,13 @@ public final class CathUtils {
     );
     // Keys that should always be represented as JSON arrays
     private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
-            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing", "Fixture"
+            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing", "Fixture", "Location"
     );
     // Keys that should always be represented as JSON strings
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
             "SittingSequenceNumber",
-            "ListNote"
+            "ListNote",
+            "PrisonerID"
     );
 
     private CathUtils() {
