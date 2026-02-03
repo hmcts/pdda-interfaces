@@ -70,7 +70,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     protected XhibitPddaHelper(EntityManager entityManager,
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
         PddaSftpHelper pddaSftpHelper, PddaMessageHelper pddaMessageHelper,
-        XhbClobRepository clobRepository, XhbCourtRepository courtRepository, 
+        XhbClobRepository clobRepository, XhbCourtRepository courtRepository,
         XhbCaseRepository caseRepository, XhbHearingRepository hearingRepository,
         XhbSittingRepository sittingRepository, XhbScheduledHearingRepository scheduledHearingRepository,
         XhbPublicNoticeRepository publicNoticeRepository,
@@ -142,7 +142,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return caseRepository;
     }
-    
+
     protected XhbClobRepository getClobRepository() {
         if (clobRepository == null || !isEntityManagerActive()) {
             clobRepository = new XhbClobRepository(entityManager);
@@ -156,49 +156,49 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return courtRepository;
     }
-    
+
     protected XhbCourtRoomRepository getCourtRoomRepository() {
         if (courtRoomRepository == null || !isEntityManagerActive()) {
             courtRoomRepository = new XhbCourtRoomRepository(getEntityManager());
         }
         return courtRoomRepository;
     }
-    
+
     protected XhbCourtSiteRepository getCourtSiteRepository() {
         if (courtSiteRepository == null || !isEntityManagerActive()) {
             courtSiteRepository = new XhbCourtSiteRepository(getEntityManager());
         }
         return courtSiteRepository;
     }
-    
+
     protected XhbHearingRepository getHearingRepository() {
         if (hearingRepository == null || !isEntityManagerActive()) {
             hearingRepository = new XhbHearingRepository(getEntityManager());
         }
         return hearingRepository;
     }
-    
+
     protected XhbScheduledHearingRepository getScheduledHearingRepository() {
         if (scheduledHearingRepository == null || !isEntityManagerActive()) {
             scheduledHearingRepository = new XhbScheduledHearingRepository(getEntityManager());
         }
         return scheduledHearingRepository;
     }
-    
+
     protected XhbPublicNoticeRepository getPublicNoticeRepository() {
         if (publicNoticeRepository == null || !isEntityManagerActive()) {
             publicNoticeRepository = new XhbPublicNoticeRepository(getEntityManager());
         }
         return publicNoticeRepository;
     }
-    
+
     protected XhbConfiguredPublicNoticeRepository getConfiguredPublicNoticeRepository() {
         if (configuredPublicNoticeRepository == null || !isEntityManagerActive()) {
             configuredPublicNoticeRepository = new XhbConfiguredPublicNoticeRepository(getEntityManager());
         }
         return configuredPublicNoticeRepository;
     }
-    
+
     protected XhbSittingRepository getSittingRepository() {
         if (sittingRepository == null || !isEntityManagerActive()) {
             sittingRepository = new XhbSittingRepository(getEntityManager());
@@ -247,7 +247,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
         }
         return pddaSftpHelperSshj;
     }
-    
+
     protected CrLiveStatusHelper getCrLiveStatusHelper() {
         if (crLiveStatusHelper == null) {
             crLiveStatusHelper = new CrLiveStatusHelper(entityManager);
@@ -258,7 +258,7 @@ public abstract class XhibitPddaHelper extends PddaConfigHelper {
     public void setPublicDisplayNotifier(PublicDisplayNotifier publicDisplayNotifier) {
         this.publicDisplayNotifier = publicDisplayNotifier;
     }
-    
+
     /**
      * The data in the PublicDisplayEvent needs to be altered when passed from XHIBIT,
      * as the case numbers, court IDs and courtroom IDs could be different in PDDA.

@@ -20,11 +20,11 @@ public class CourtRoomIdentifier implements Serializable {
     private Integer courtId;
 
     private Integer courtRoomId;
-    
+
     private String courtName;
-    
+
     private Integer courtRoomNo;
-    
+
     private DisplayablePublicNoticeValue[] publicNotices;
 
     /**
@@ -70,23 +70,23 @@ public class CourtRoomIdentifier implements Serializable {
     public Integer getCourtRoomId() {
         return courtRoomId;
     }
-    
+
     public void setCourtName(String courtName) {
         this.courtName = courtName;
     }
-    
+
     public String getCourtName() {
         return courtName;
     }
-    
+
     public void setCourtRoomNo(Integer courtRoomNo) {
         this.courtRoomNo = courtRoomNo;
     }
-    
+
     public Integer getCourtRoomNo() {
         return courtRoomNo;
     }
-    
+
     public DisplayablePublicNoticeValue[] getPublicNotices() {
         return publicNotices;
     }
@@ -104,5 +104,5 @@ public class CourtRoomIdentifier implements Serializable {
             + ", courtRoomNo=" + courtRoomNo
             + '}';
     }
-    
+
 }

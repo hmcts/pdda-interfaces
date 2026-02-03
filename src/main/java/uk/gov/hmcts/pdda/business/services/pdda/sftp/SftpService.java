@@ -343,6 +343,8 @@ public class SftpService extends XhibitPddaHelper {
             } else if (filename.startsWith(PDDA_FILENAME_PREFIX + "_XWP_")) {
                 isList = false;
                 // We don't want to send a message for XWP (XHIBIT Web Page) files
+            } else if (filename.startsWith("WebPage_")) {
+                isList = false;
             } else {
                 // What type of list is this?
                 LOG.debug("Getting the list type.");
@@ -1212,8 +1214,8 @@ public class SftpService extends XhibitPddaHelper {
                 errorMessages.append("Invalid filename - DateTime\n");
             }
 
-            String debugErrorPrefix = filename + " error: {}";
             if (errorMessages.length() > 0) {
+                String debugErrorPrefix = filename + " error: {}";
                 LOG.debug(debugErrorPrefix, errorMessages.toString());
                 return errorMessages.toString();
             }

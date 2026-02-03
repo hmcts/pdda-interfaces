@@ -25,13 +25,13 @@ public class CathServlet extends HttpServlet {
         super(); // Explicit call to HttpServlet constructor
         throw new UnsupportedOperationException("CathOAuth2Helper must be injected");
     }
-    
+
     // JUnit constructor
     public CathServlet(CathOAuth2Helper cathOAuth2Helper) {
         super();
         this.cathOAuth2Helper = cathOAuth2Helper;
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -40,19 +40,18 @@ public class CathServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
 
         String token = getToken();
-        
+
         String healthEndpointStatus = getHealthEndpointStatus(token);
 
         LOG.debug("Output Stats");
         try (ServletOutputStream output = response.getOutputStream()) {
 
             output.print(documentWrapper(
-                bold("CaTH Access Token: ") + token + eol() + linebreak() + linebreak()
-                + bold("CaTH Health Endpoint Status: ") + healthEndpointStatus + eol() + linebreak() + linebreak()
+                bold("CaTH Health Endpoint Status: ") + healthEndpointStatus + eol() + linebreak() + linebreak()
                 + bold("Date/Time: ") + now()
                     + eol() + linebreak() + hrefLink("Home", "\\DisplaySelectorServlet") + eol()));
         } catch (IOException ex) {
-            LOG.error("Error: {}", ex.getMessage()); 
+            LOG.error("Error: {}", ex.getMessage());
         }
     }
 
@@ -64,7 +63,7 @@ public class CathServlet extends HttpServlet {
             return "ERROR: " + ex.getMessage();
         }
     }
-    
+
     private String getHealthEndpointStatus(String accessToken) {
         LOG.debug("getHealthEndpointCheck()");
         try {

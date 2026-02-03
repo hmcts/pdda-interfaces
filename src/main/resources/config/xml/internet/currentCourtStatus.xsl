@@ -3,7 +3,7 @@
     <!-- Import data file which hold the hard coded text in the different languages -->
     <xsl:variable name="data" select="document('translation.xml')"/>
     <!-- Include the Transform Template -->
-    <xsl:include href="..\documentdistribution\translation.xsl"/>
+    <xsl:include href="translation.xsl"/>
     <!-- Default Language -->
     <xsl:variable name="DefaultLang">en</xsl:variable>
     <xsl:template match="currentcourtstatus" xmlns="https://www.w3.org/1999/xhtml">

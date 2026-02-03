@@ -39,7 +39,7 @@ public class SftpHelperUtil extends SftpService {
         XhbConfigPropRepository xhbConfigPropRepository, Environment environment,
         PddaMessageHelper pddaMessageHelper, XhbClobRepository clobRepository,
         XhbCourtRepository courtRepository, XhbCourtRoomRepository courtRoomRepository,
-        XhbCourtSiteRepository courtSiteRepository, XhbCaseRepository xhbCaseRepository, 
+        XhbCourtSiteRepository courtSiteRepository, XhbCaseRepository xhbCaseRepository,
         XhbHearingRepository hearingRepository, XhbSittingRepository sittingRepository,
         XhbScheduledHearingRepository scheduledHearingRepository,
         XhbPublicNoticeRepository xhbPublicNoticeRepository,
@@ -74,7 +74,7 @@ public class SftpHelperUtil extends SftpService {
             // Are we using Database or Key Vault to lookup credentials?
             // This will be a database lookup. If it is indeterminate, we will use the Database.
             sftpConfig.setUseKeyVault(checkWhetherToUseKeyVault());
-            
+
             // Get excluded court IDs for CP messages
             try {
                 sftpConfig

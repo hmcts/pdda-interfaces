@@ -90,7 +90,7 @@ public class PublicNoticeWorkFlow {
      */
     public static void setAllPublicNoticesForCourtRoom(DisplayablePublicNoticeValue[] publicNotices,
         int xhbCourtRoomId) {
-        
+
         LOG.debug(" 01 Enter the setAllPublicNoticesForCourtRoom method");
 
         // need to check the PublicNoticeInvalidSelection does not encroach on
@@ -99,9 +99,9 @@ public class PublicNoticeWorkFlow {
 
         LOG.debug("02 public notices are validated");
 
+        // iterate through the array of displayable are validated public Notices
         boolean isNotificationReqd = false;
         boolean reportingRestrictionsChanged = false;
-        // iterate through the array of displayable are validated public Notices
         for (DisplayablePublicNoticeValue publicNotice : publicNotices) {
 
             // update if marked as dirty( IsActive/status change)
@@ -109,7 +109,6 @@ public class PublicNoticeWorkFlow {
                 updateConfiguredPublicNoticeActivationState(publicNotice);
                 // if any of the ActivationStates are updated need to send a
                 // notification to Public displays.
-                
                 isNotificationReqd = true;
                 Integer definitiveNotice = publicNotice.getDefinitivePublicNotice();
 

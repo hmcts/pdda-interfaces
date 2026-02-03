@@ -85,6 +85,9 @@ class PdConfigurationControllerBeanTest {
     private static final String DAILYLIST = "DailyList";
 
     @Mock
+    private EntityManager mockEntityManager;
+    
+    @Mock
     private PublicDisplayNotifier mockPublicDisplayNotifier;
 
     @Mock
@@ -114,6 +117,7 @@ class PdConfigurationControllerBeanTest {
     @Mock
     private XhbDisplayTypeRepository mockXhbDisplayTypeRepository;
 
+
     @Mock
     private XhbDisplayRepository mockXhbDisplayRepository;
 
@@ -135,9 +139,6 @@ class PdConfigurationControllerBeanTest {
     private final XhbRotationSetsDao sharedRotationSet =
         DummyPublicDisplayUtil.getXhbRotationSetsDao();
     private final XhbDisplayDao sharedDisplay = DummyPublicDisplayUtil.getXhbDisplayDao();
-
-    @Mock
-    private EntityManager mockEntityManager;
 
     private PdConfigurationControllerBean classUnderTest;
 
@@ -185,28 +186,6 @@ class PdConfigurationControllerBeanTest {
     }
 
 
-
-    @BeforeEach
-    void setupEntityManagerAndQuery() {
-        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
-        Mockito.when(mockQuery.setParameter(Mockito.anyString(), Mockito.any()))
-            .thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList())
-            .thenReturn(List.of(DummyCourtUtil.getXhbCourtSiteDao()));
-
-        Mockito.when(mockEntityManager.createNamedQuery(Mockito.anyString())).thenReturn(mockQuery);
-
-
-        classUnderTest = new PdConfigurationControllerBean(mockEntityManager,
-            mockXhbCourtRepository, mockXhbRotationSetsRepository, mockXhbRotationSetDdRepository,
-            mockXhbDisplayTypeRepository, mockXhbDisplayRepository,
-            mockXhbDisplayLocationRepository, mockXhbCourtSiteRepository,
-            mockXhbCourtRoomRepository, mockPublicDisplayNotifier, mockVipDisplayDocumentQuery,
-            mockVipDisplayCourtRoomQuery, mockDisplayRotationSetDataHelper);
-    }
-
-
-
     @AfterAll
     public static void tearDown() {
         Mockito.clearAllCaches();
@@ -222,9 +201,20 @@ class PdConfigurationControllerBeanTest {
         // Rotation Set DD to update
         XhbRotationSetDdDao rsddDao = DummyPublicDisplayUtil.getXhbRotationSetDdDao();
         rsddDao.setRotationSetDdId(ROTATION_SET_DD_ID);
-        RotationSetDdComplexValue rsddComplex = new RotationSetDdComplexValue(rsddDao, displayDoc);
+        
+        List<XhbRotationSetDdDao> xrsddList = new ArrayList<>();
+        xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
+        xrsddList.add(DummyPublicDisplayUtil.getXhbRotationSetDdDao());
+        
+        XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
+        xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
+        xhbRotationSetsDao.setCourtId(COURT_ID);
+        
+        Optional<XhbRotationSetsDao> rotationSetsDao =
+            Optional.of(xhbRotationSetsDao);
 
         // Complex value with sharedRotationSet wired properly
+        RotationSetDdComplexValue rsddComplex = new RotationSetDdComplexValue(rsddDao, displayDoc);
         RotationSetComplexValue rsComplex = new RotationSetComplexValue();
         rsComplex.setRotationSetDao(sharedRotationSet);
         rsComplex.addRotationSetDdComplexValue(rsddComplex);
@@ -240,6 +230,19 @@ class PdConfigurationControllerBeanTest {
         // Act
         boolean result = false;
         try {
+            Mockito.when(mockXhbRotationSetsRepository.findByIdSafe(Mockito.isA(Long.class)))
+                .thenReturn(rotationSetsDao);
+            Mockito.when(mockXhbDisplayDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+                .thenReturn(Optional.of(displayDoc));
+
+            mockXhbRotationSetDdRepository.delete(Optional.of(xrsddList.get(1)));
+            Mockito
+                .when(mockXhbRotationSetDdRepository.update(Mockito.isA(XhbRotationSetDdDao.class)))
+                .thenReturn(Optional.of(rsddComplex.getRotationSetDdDao()));
+            mockPublicDisplayNotifier.sendMessage(Mockito.isA(ConfigurationChangeEvent.class));
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+
+            // Run Method
             classUnderTest.setDisplayDocumentsForRotationSet(rsComplex);
             result = true;
         } catch (Exception e) {
@@ -250,9 +253,8 @@ class PdConfigurationControllerBeanTest {
         // assertTrue(result, TRUE);
     }
 
-
     @Test
-    void testUpdateDisplayConfiguration() {
+    void testUpdateDisplayConfiguration3() {
         // Court rooms
         XhbCourtRoomDao[] roomArray =
             {DummyCourtUtil.getXhbCourtRoomDao(), DummyCourtUtil.getXhbCourtRoomDao()};
@@ -293,7 +295,6 @@ class PdConfigurationControllerBeanTest {
 
         // assertTrue(result, TRUE);
     }
-
 
 
     @Test
@@ -384,6 +385,7 @@ class PdConfigurationControllerBeanTest {
                 Mockito.mock(XhbScheduledHearingRepository.class);
             Mockito.when(mockRepo.findByIdSafe(SCHEDULED_HEARING_ID))
                 .thenReturn(Optional.of(scheduledHearing));
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
             // Run Method
             classUnderTest.isPublicDisplayActive(SCHEDULED_HEARING_ID);
@@ -401,6 +403,7 @@ class PdConfigurationControllerBeanTest {
         schedHearingIdList.add(SCHEDULED_HEARING_ID);
 
         try {
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             // Run Method
             classUnderTest.activatePublicDisplay(SCHEDULED_HEARING_ID, activationDate);
 
@@ -421,6 +424,7 @@ class PdConfigurationControllerBeanTest {
         schedHearingIdList.add(SCHEDULED_HEARING_ID);
 
         try {
+            Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
             // Run Method
             classUnderTest.deActivatePublicDisplay(SCHEDULED_HEARING_ID, deactivationDate);
 

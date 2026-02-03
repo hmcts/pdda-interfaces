@@ -136,7 +136,7 @@ class PddaMessageUtilTest {
         assertEquals("ABC", dao.getPddaMessageType());
         assertEquals("02/01/2025 03:04:05", dao.getPddaMessageDescription());
     }
-    
+
     @Test
     void translate_handlesPddaHearingProgressEvent_setsCourtId() {
         // Arrange
@@ -443,7 +443,7 @@ class PddaMessageUtilTest {
             assertEquals(courtName, cri.getCourtName());
             assertEquals(courtRoomNo, cri.getCourtRoomNo());
         }
-        
+
         @Test
         void translate_preservesPublicNotices_defensiveCopy() {
             // Use the normal wiring so court/site/room resolve

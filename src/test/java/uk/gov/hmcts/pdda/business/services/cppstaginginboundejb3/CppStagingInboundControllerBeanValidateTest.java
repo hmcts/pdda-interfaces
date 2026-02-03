@@ -294,6 +294,8 @@ class CppStagingInboundControllerBeanValidateTest {
     private void testingClobRepository(XhbCppStagingInboundDao dao) {
         XhbClobDao clobObj = new XhbClobDao();
         clobObj.setClobData("Demo Data");
+        EasyMock.expect(mockXhbClobRepository.getEntityManager())
+            .andReturn(mockEntityManager).anyTimes();
         EasyMock.expect(mockXhbClobRepository.findByIdSafe(dao.getClobId()))
             .andReturn(Optional.of(clobObj));
     }

@@ -7,9 +7,12 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.EventType;
 /**
 
  * Title: Activate Case Event.
+
  * Description: This event is generated when the public display for a case in a court room is either
  * turned on or off.
+
  * Copyright: Copyright (c) 2003
+
  * Company: EDS
 
  * @author Rakesh Lakhani

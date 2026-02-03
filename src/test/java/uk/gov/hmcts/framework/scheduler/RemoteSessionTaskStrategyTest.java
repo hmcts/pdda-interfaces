@@ -245,8 +245,8 @@ class RemoteSessionTaskStrategyTest {
     /**
      * Creates a Properties object for the purposes of testing.
 
-     * @param remoteHomeClass Value to use for the remoteHome property.
-     * @return Properties object.
+     * @param remoteHomeClass Value to use for the remoteHome property
+     * @return Properties object
      */
     private Properties createTestProperties(String remoteHomeClass, String onceADay) {
         Properties testProperties = new Properties();

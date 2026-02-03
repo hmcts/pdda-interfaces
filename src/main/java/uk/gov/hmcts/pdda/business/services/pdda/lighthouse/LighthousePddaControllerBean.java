@@ -15,6 +15,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao;
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -47,6 +48,8 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_VALID_NOT_PROCESSED = "VN"; // PddaMessage status valid not processed
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
     private static final String IWP_STATUS_CREATED = "C"; // Created
+    private static final String ND_STATUS_XML_DOC = "ND";
+    private static final String IWP = "IWP";
 
     @Autowired
     public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
@@ -158,6 +161,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                     // Update XHB_PDDA_MESSAGE record to indicate success
                     updatePddaMessage(stagingInboundId, dao);
 
+                    // Insert record into xhb_internet_html if this is a web page
+                    if (documentName.contains("WebPage_")) {
+                        // Now publish the web page to XHB_INTERNET_HTML
+                        insertWebPage(IWP_STATUS_CREATED, dao.getCourtId(), dao.getPddaMessageDataId());
+                    }
+                    
                     writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
                 } else {
                     LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
@@ -174,9 +183,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 // All we need to do is to set the message as processed already
                 updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSED,
                     "Web page XHIBIT HTML document - no staging record created");
-                
                 // Now publish the web page to XHB_INTERNET_HTML
-                insertXhibitWebPage(IWP_STATUS_CREATED, dao.getCourtId(), dao.getPddaMessageDataId());
+                insertWebPage(IWP_STATUS_CREATED, dao.getCourtId(), dao.getPddaMessageDataId());
+                // Now create a record in xhb_xml_document so it can be picked up and sent to cath
+                insertXmlDocument(dao);
             } else {
                 // This is an unknown document type so just log it and set the status to invalid
                 LOG.debug("This is an unknown document type - no staging record created for file: {}",
@@ -260,7 +270,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * @return the internet html id for debugging/logging purposes
      * @throws SQLException Exception
      */
-    private Integer insertXhibitWebPage(final String status, final Integer courtId, final Long blobId) {
+    private Integer insertWebPage(final String status, final Integer courtId, final Long blobId) {
 
         writeToLog("status " + status + " courtId: " + courtId + " blobId :" + blobId);
         
@@ -272,6 +282,19 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         return opt.isPresent() ? opt.get().getInternetHtmlId() : null;
     }
 
+    private void insertXmlDocument(final XhbPddaMessageDao xhbPddaMessageDao) {
+
+        XhbXmlDocumentDao xhbXmlDocumentDao = new XhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentTitle(xhbPddaMessageDao.getCpDocumentName());
+        xhbXmlDocumentDao.setXmlDocumentClobId(xhbPddaMessageDao.getPddaMessageDataId());
+        xhbXmlDocumentDao.setStatus(ND_STATUS_XML_DOC);
+        xhbXmlDocumentDao.setDocumentType(IWP);
+        xhbXmlDocumentDao.setExpiryDate(null);
+        xhbXmlDocumentDao.setCourtId(xhbPddaMessageDao.getCourtId());
+        
+        getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+    }
+    
     /**
      * Update the XHB_PDA_MESSAGE record.
 

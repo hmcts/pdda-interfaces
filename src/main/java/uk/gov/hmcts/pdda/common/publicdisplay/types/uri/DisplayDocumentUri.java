@@ -127,7 +127,7 @@ public final class DisplayDocumentUri extends AbstractUri {
         
         // Court Ids
         List<Integer> courtIdList = new ArrayList<>();
-
+        
         while (length > 0) {
             // Court Ids - Process Entry
             Integer courtRoomId = parseCourtRoomId(chars, start, length);

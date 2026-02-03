@@ -75,31 +75,31 @@ class SftpConfigHelperTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
+
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
-    
+
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
 
     @Mock
     private XhbCaseRepository mockXhbCaseRepository;
-    
+
     @Mock
     private XhbHearingRepository mockXhbHearingRepository;
-    
+
     @Mock
     private XhbSittingRepository mockXhbSittingRepository;
-    
+
     @Mock
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
-    
+
     @Mock
     private XhbPublicNoticeRepository mockXhbPublicNoticeRepository;
-    
+
     @Mock
     private XhbConfiguredPublicNoticeRepository mockXhbConfiguredPublicNoticeRepository;
-    
+
     @Mock
     private Session mockSession;
 

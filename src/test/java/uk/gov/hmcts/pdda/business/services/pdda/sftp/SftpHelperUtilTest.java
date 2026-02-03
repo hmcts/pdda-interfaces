@@ -97,28 +97,28 @@ class SftpHelperUtilTest {
 
     @Mock
     private XhbClobRepository mockXhbClobRepository;
-    
+
     @Mock
     private XhbCourtRoomRepository mockXhbCourtRoomRepository;
-    
+
     @Mock
     private XhbCourtSiteRepository mockXhbCourtSiteRepository;
-    
+
     @Mock
     private XhbCaseRepository mockXhbCaseRepository;
-    
+
     @Mock
     private XhbHearingRepository mockXhbHearingRepository;
-    
+
     @Mock
     private XhbSittingRepository mockXhbSittingRepository;
-    
+
     @Mock
     private XhbScheduledHearingRepository mockXhbScheduledHearingRepository;
-    
+
     @Mock
     private XhbPublicNoticeRepository mockXhbPublicNoticeRepository;
-    
+
     @Mock
     private XhbConfiguredPublicNoticeRepository mockXhbConfiguredPublicNoticeRepository;
 
@@ -132,9 +132,9 @@ class SftpHelperUtilTest {
     private Environment mockEnvironment;
 
     private final SftpConfig sftpConfig = new SftpConfig();
-    
+
     private SftpHelperUtil classUnderTest;
-    
+
     @BeforeEach
     void setup() {
         classUnderTest = new SftpHelperUtil(
@@ -154,7 +154,7 @@ class SftpHelperUtilTest {
             mockXhbConfiguredPublicNoticeRepository
         );
     }
-    
+
     private void mockAllRequiredConfigProperties() {
         mockProperty("PDDA_CP_EXCLUDED_COURT_IDS");
         mockProperty("PDDA_BAIS_CP_SFTP_USERNAME");
@@ -191,10 +191,10 @@ class SftpHelperUtilTest {
     @Test
     void testPopulateSftpConfig() {
         mockAllRequiredConfigProperties();
-        
+
         when(mockXhbConfigPropRepository.findByPropertyNameSafe(USE_KEY_VAULT_PROPERTIES))
             .thenReturn(getXhbConfigPropDaoList(USE_KEY_VAULT_PROPERTIES));
-        
+
         sftpConfig.setHost(LOCALHOST_STRING);
         sftpConfig.setPort(22);
 
@@ -225,7 +225,7 @@ class SftpHelperUtilTest {
     @Test
     void testGetConfigParams() throws JSchException {
         mockAllRequiredConfigProperties();
-        
+
         when(mockEnvironment.getProperty("PDDA_BAIS_SFTP_USERNAME")).thenReturn("this_user");
         when(mockEnvironment.getProperty("PDDA_BAIS_SFTP_PASSWORD")).thenReturn("this_pass");
         when(mockSftpConfigHelper.getJschSession(any(SftpConfig.class))).thenReturn(mockSftpConfig);
@@ -285,7 +285,7 @@ class SftpHelperUtilTest {
             propertyName.toLowerCase(Locale.getDefault())));
         return result;
     }
-    
+
     private List<XhbConfigPropDao> getXhbConfigPropDaoListWithValue(String propertyName, String value) {
         List<XhbConfigPropDao> result = new ArrayList<>();
         result.add(DummyServicesUtil.getXhbConfigPropDao(propertyName, value));

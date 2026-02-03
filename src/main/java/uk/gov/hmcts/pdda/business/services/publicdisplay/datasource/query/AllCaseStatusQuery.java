@@ -150,7 +150,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         // Choose exactly ONE defendant to display:
         // Prefer the first non-observed (OBS_IND != 'Y') defendant-on-case; otherwise the first
         // item.
-        
+
         // Build ONE row using the chosen defendant
         AllCaseStatusValue result = getAllCaseStatusValue();
         populateData(result, sittingDao.getCourtSiteId(), sittingDao.getCourtRoomId(),
@@ -201,7 +201,7 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
         results.add(result);
         return results;
     }
-    
+
     /**
      * Returns the DefendantName for the chosen scheduled hearing defendant.
      */
@@ -216,10 +216,10 @@ public class AllCaseStatusQuery extends PublicDisplayQuery {
                     def.get().getSurname(), isDefendantHidden(def, doc, isHidden));
             }
         }
-        
+
         return new DefendantName(EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, true);
     }
-    
+
     private DefendantName getDefendantName(String firstName, String middleName, String surname,
         boolean hide) {
         return new DefendantName(firstName, middleName, surname, hide);

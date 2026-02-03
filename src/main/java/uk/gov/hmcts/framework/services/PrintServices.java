@@ -7,20 +7,12 @@ import uk.gov.hmcts.framework.services.printing.PrintServiceException;
 import java.util.Locale;
 
 /**
-
  * Title: PrintServices.
-
-
  * Description: Provides functionality for printing a graph of objects (jb - xml - fop) using castor
  * and fop
-
  * This is a replacement for the PrintController.</p>
-
  * Copyright: Copyright (c) 2002
-
-
  * Company: EDS
-
  * @author Kevin buckthorpe
  * @version 1.0
  */

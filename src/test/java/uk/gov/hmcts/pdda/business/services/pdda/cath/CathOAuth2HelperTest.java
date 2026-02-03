@@ -37,10 +37,10 @@ class CathOAuth2HelperTest {
 
     private Environment mockEnv;
     private CathOAuth2Helper helper;
-    
+
     @Mock
     private Builder mockBuilder;
-    
+
     @Mock
     private HttpRequest mockHttpRequest;
 
@@ -93,7 +93,7 @@ class CathOAuth2HelperTest {
         String result = helper.getClientSecret();
         assertTrue(result.isEmpty());
     }
-    
+
     @Test
     void shouldReturnCathAuthScopeWhenPropertyExists() {
         Mockito.when(mockEnv.getProperty("cath.azure.active-directory.credential.auth-scope"))
@@ -108,7 +108,7 @@ class CathOAuth2HelperTest {
         String result = helper.getAuthScope();
         assertTrue(result.isEmpty());
     }
-    
+
     @Test
     void shouldReturnCathHealthEndpointUrlWhenPropertyExists() {
         Mockito.when(mockEnv.getProperty("cath.azure.oauth2.health-endpoint-url"))
@@ -123,7 +123,7 @@ class CathOAuth2HelperTest {
         String result = helper.getHealthEndpointUrl();
         assertTrue(result.isEmpty());
     }
-    
+
     @Test
     void testGetAuthenticationRequest() throws Exception {
         try (MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class)) {
@@ -151,7 +151,7 @@ class CathOAuth2HelperTest {
             assertTrue(request.uri().toString().equals("https://dummy.token.url"), "URI mismatch");
         }
     }
-    
+
     @Test
     void testGetClientCredentialsForm() throws Exception {
         // Act
@@ -163,7 +163,7 @@ class CathOAuth2HelperTest {
         assertNotNull(result, NOTNULL);
         assertTrue(result.contains("grant_type=client_credentials"), "Form should contain grant_type");
     }
-    
+
     @Test
     void testGetHealthEndpointStatus() {
         String accessToken = "test-token";
@@ -181,7 +181,7 @@ class CathOAuth2HelperTest {
         assertEquals(expectedResponse, result);
         Mockito.verify(helper).sendRequest(Mockito.any());
     }
-    
+
     @Test
     void testGetHealthEndpointRequest() throws Exception {
         try (MockedStatic<HttpRequest> staticHttpRequest = Mockito.mockStatic(HttpRequest.class)) {
@@ -209,6 +209,4 @@ class CathOAuth2HelperTest {
             assertTrue(request.uri().toString().equals("https://dummy.endpoint.url"), "URI mismatch");
         }
     }
-    
 }
-

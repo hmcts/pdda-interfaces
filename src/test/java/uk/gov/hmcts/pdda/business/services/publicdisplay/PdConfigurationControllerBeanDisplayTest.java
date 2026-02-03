@@ -1,6 +1,7 @@
 package uk.gov.hmcts.pdda.business.services.publicdisplay;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.ConfigurationChangeEvent;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyPublicDisplayUtil;
+import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtroom.XhbCourtRoomDao;
@@ -112,7 +114,7 @@ class PdConfigurationControllerBeanDisplayTest {
 
     @Mock
     private VipCourtRoomsQuery mockVipQuery;
-    
+
     @Mock
     private EntityManager mockEntityManager;
 
@@ -132,8 +134,31 @@ class PdConfigurationControllerBeanDisplayTest {
         // Force override of the helper with your mock
         Mockito.doReturn(mockDisplayRotationSetDataHelper).when(classUnderTest)
             .getDisplayRotationSetDataHelper();
-    }
+        Mockito.doReturn(mockXhbDisplayDocumentRepository)
+            .when(classUnderTest)
+            .getXhbDisplayDocumentRepository();
+        Mockito.when(mockXhbDisplayDocumentRepository.getEntityManager())
+            .thenReturn(mockEntityManager);
+        Mockito.when(mockXhbDisplayDocumentRepository.findAll()).thenReturn(List.of(
+            DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
+            DummyPublicDisplayUtil.getXhbDisplayDocumentDao()
+        ));
 
+
+        @SuppressWarnings("unchecked")
+        TypedQuery<XhbDisplayDocumentDao> mockQuery = Mockito.mock(TypedQuery.class);
+
+        List<XhbDisplayDocumentDao> dummyList = List.of(
+            DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
+            DummyPublicDisplayUtil.getXhbDisplayDocumentDao()
+        );
+
+        Mockito.when(mockXhbDisplayDocumentRepository.getEntityManager())
+               .thenReturn(mockEntityManager);
+        Mockito.when(mockEntityManager.createQuery(Mockito.anyString(), Mockito.eq(XhbDisplayDocumentDao.class)))
+               .thenReturn(mockQuery);
+        Mockito.when(mockQuery.getResultList()).thenReturn(dummyList);
+    }
 
     @BeforeAll
     public static void setUp() {
@@ -141,16 +166,6 @@ class PdConfigurationControllerBeanDisplayTest {
         Mockito.mockStatic(RotationSetMaintainHelper.class);
         Mockito.mockStatic(DisplayConfigurationHelper.class);
         Mockito.mockStatic(PublicDisplayActivationHelper.class);
-    }
-
-    @BeforeEach
-    public void stubCreateQuery() {
-        jakarta.persistence.Query mockQuery = Mockito.mock(jakarta.persistence.Query.class);
-        Mockito.when(mockEntityManager.createQuery(Mockito.anyString())).thenReturn(mockQuery);
-        Mockito.when(mockQuery.getResultList())
-            .thenReturn(List.of(DummyPublicDisplayUtil.getXhbDisplayDocumentDao(),
-                DummyPublicDisplayUtil.getXhbDisplayDocumentDao()));
-
     }
 
     @AfterAll
@@ -202,6 +217,10 @@ class PdConfigurationControllerBeanDisplayTest {
         XhbRotationSetsDao xhbRotationSetsDao = DummyPublicDisplayUtil.getXhbRotationSetsDao();
         xhbRotationSetsDao.setRotationSetId(ROTATION_SET_ID);
         xhbRotationSetsDao.setCourtId(COURT_ID);
+
+        expectGetEntityManager(mockXhbDisplayRepository);
+        expectGetEntityManager(mockXhbCourtRepository);
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
 
         Optional<XhbRotationSetsDao> xrs = Optional.of(xhbRotationSetsDao);
         Optional<XhbDisplayDao> xd = Optional.of(xhbDisplayDao);
@@ -268,5 +287,9 @@ class PdConfigurationControllerBeanDisplayTest {
         assertEquals(DISPLAY_ID, result[0].getDisplayId(), EQUALS);
     }
 
+    @SuppressWarnings("rawtypes")
+    private void expectGetEntityManager(AbstractRepository mockRepository) {
+        Mockito.when(mockRepository.getEntityManager()).thenReturn(mockEntityManager);
+    }
 
 }
