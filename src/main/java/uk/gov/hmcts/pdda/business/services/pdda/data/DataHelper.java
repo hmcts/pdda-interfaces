@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -45,7 +46,7 @@ public class DataHelper extends FinderHelper {
         final String courtHouseCode) {
         LOG.debug("validateCourtSite(), courtHouseName:{}, courtHouseCode:{}",
             courtHouseName, courtHouseCode);
-        Optional<XhbCourtSiteDao> result = findCourtSite(courtHouseName, courtHouseCode);
+        Optional<XhbCourtSiteDao> result = findCourtSite(courtHouseName.toUpperCase(Locale.UK), courtHouseCode);
         if (result.isEmpty()) {
             LOG.error("No XhbCourtSite found for name:{},  code:{}", courtHouseName, courtHouseCode);
         }
