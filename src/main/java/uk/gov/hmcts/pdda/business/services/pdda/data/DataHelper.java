@@ -95,7 +95,19 @@ public class DataHelper extends FinderHelper {
             LOG.debug("Creating new XhbSitting for courtSiteId:{}, courtRoomId:{}, isFloating:{},"
                 + "sittingTime:{}, listId:{}",
                 courtSiteId, courtRoomId, isFloating, sittingTime, listId);
-            result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime, listId);
+            try {
+                result = createSitting(courtSiteId, courtRoomId, isFloating, sittingTime, listId);
+            } catch (Exception e) {
+                LOG.debug("Sitting for: {}, in court room: {}, in courtSite: {},"
+                        + " could not be created. Does this sitting already exist? {}",
+                          sittingTime, courtRoomId, courtSiteId, e.getMessage());
+                
+                LOG.debug("Attempting to fetch the sitting which may have been previously "
+                        + "created by another thread...");
+                result = findSitting(courtSiteId, courtRoomId, sittingTime, listId);
+                
+                LOG.debug("Continuing processing...");
+            }
         }
         return result;
     }

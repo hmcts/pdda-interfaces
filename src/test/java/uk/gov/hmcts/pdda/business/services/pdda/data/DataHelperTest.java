@@ -3,6 +3,7 @@ package uk.gov.hmcts.pdda.business.services.pdda.data;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -133,6 +134,48 @@ class DataHelperTest {
             dao.getCourtRoomId(), dao.getIsFloating(), dao.getSittingTime(), dao.getListId());
         return result.isPresent();
     }
+    
+    @Test
+    void validateSittingCreateThrowsException() {
+        DataHelper spyDataHelper = Mockito.spy(classUnderTest);
+        XhbSittingDao dao = DummyHearingUtil.getXhbSittingDao();
+
+        // Mock finding empty sitting to force a create
+        // Second find present which simulates another thread created it
+        Mockito.doReturn(Optional.empty())
+            .doReturn(Optional.of(dao))
+            .when(spyDataHelper)
+            .findSitting(
+                dao.getCourtSiteId(),
+                dao.getCourtRoomId(),
+                dao.getSittingTime(),
+                dao.getListId()
+            );
+
+        // Mock createSitting throwing exception
+        Mockito.doThrow(new RuntimeException("Duplicate sitting"))
+            .when(spyDataHelper)
+            .createSitting(
+                dao.getCourtSiteId(),
+                dao.getCourtRoomId(),
+                dao.getIsFloating(),
+                dao.getSittingTime(),
+                dao.getListId()
+            );
+
+        // Run
+        Optional<XhbSittingDao> result = spyDataHelper.validateSitting(
+            dao.getCourtSiteId(),
+            dao.getCourtRoomId(),
+            dao.getIsFloating(),
+            dao.getSittingTime(),
+            dao.getListId()
+        );
+
+        // Verify
+        assertTrue(result.isPresent());
+    }
+
 
     /**
      * validateCase.
