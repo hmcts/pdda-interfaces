@@ -144,11 +144,11 @@ public class CourtelHelper {
         try {
             String propertyValue = getConfigPropMaintainer().getPropertyValue(value);
             if (propertyValue != null) {
-                Integer maxRetry = Integer.parseInt(propertyValue);
-                LOG.error("{} = {}", value, propertyValue);
-                return maxRetry;
+                Integer propertyValueInt = Integer.parseInt(propertyValue);
+                LOG.debug("{} = {}", value, propertyValue);
+                return propertyValueInt;
             } else {
-                LOG.error("{} is null", value);
+                LOG.debug("{} is null", value);
             }
         } catch (Exception ex) {
             LOG.error("{} contains non-numeric data", value);

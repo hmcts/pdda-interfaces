@@ -90,7 +90,7 @@ class PddaMessageUtilTest {
         doNothing().when(pddaMessageHelper).savePddaMessage(any());
 
         PddaMessageUtil.createMessage(
-            pddaMessageHelper, 1, 2, 3, 4L, 5, "doc.xml", "N", null);
+            pddaMessageHelper, 1, 2, 3, 4L, 5, "doc.xml", "N", null, "VN");
 
         verify(pddaMessageHelper).savePddaMessage(pddaMessageDaoCaptor.capture());
         XhbPddaMessageDao dao = pddaMessageDaoCaptor.getValue();
@@ -111,7 +111,7 @@ class PddaMessageUtilTest {
         doNothing().when(pddaMessageHelper).savePddaMessage(any());
 
         PddaMessageUtil.createMessage(
-            pddaMessageHelper, 10, 20, 30, 40L, 50, "bad.xml", "N", "boom");
+            pddaMessageHelper, 10, 20, 30, 40L, 50, "bad.xml", "N", "boom", "INV");
 
         verify(pddaMessageHelper).savePddaMessage(pddaMessageDaoCaptor.capture());
         XhbPddaMessageDao dao = pddaMessageDaoCaptor.getValue();
