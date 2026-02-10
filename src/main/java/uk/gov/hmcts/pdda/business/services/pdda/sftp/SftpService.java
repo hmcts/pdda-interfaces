@@ -77,7 +77,6 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String WEB_PAGE_DOCUMENT_TYPE = "WebPage";
     protected static final String HEARING_PROGRESS_DELAY_MINUTES = "HEARING_PROGRESS_DELAY_MINUTES";
     protected static final String XHIBIT_LIST_PREFIX = "PDDA_XDL";
-    protected static final String CPP_CASE = "CPP";
     
     public static final String NEWLINE = "\n";
     
@@ -961,8 +960,9 @@ public class SftpService extends XhibitPddaHelper {
         // Set the default valid not processed status
         String status = CpDocumentStatus.VALID_NOT_PROCESSED.status;
         
-        // Check if we need to set this document to On Hold if its an XHIBIT list without CPP cases
-        if (filename.contains(XHIBIT_LIST_PREFIX) && !clobData.contains(CPP_CASE)) {
+        // Check if we need to set this document to On Hold if its an XHIBIT list
+        if (filename.contains(XHIBIT_LIST_PREFIX)) {
+            LOG.debug("Setting document status to On Hold for: {} as it is a list recieved from XHIBIT", filename);
             status = CpDocumentStatus.ON_HOLD.status;
         }
         

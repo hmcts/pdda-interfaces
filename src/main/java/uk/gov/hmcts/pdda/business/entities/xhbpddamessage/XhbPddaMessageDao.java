@@ -12,7 +12,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractVersionedDao;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod", "PMD.AvoidDuplicateLiterals"})
 @Entity(name = "XHB_PDDA_MESSAGE")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByLighthouse",
     query = "SELECT o from XHB_PDDA_MESSAGE o"
@@ -20,6 +20,24 @@ import java.time.LocalDateTime;
         + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
         + " AND FUNCTION('date', o.creationDate) = CURRENT_DATE"
         + " ORDER BY o.creationDate ASC LIMIT 5")
+@NamedQuery(name = "XHB_PDDA_MESSAGE.findByLighthouseOnHold",
+    query = "SELECT o from XHB_PDDA_MESSAGE o"
+        + " WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'OH'"
+        + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
+        + " AND FUNCTION('date', o.creationDate) = CURRENT_DATE"
+        + " ORDER BY o.creationDate ASC LIMIT 5")
+@NamedQuery(name = "XHB_PDDA_MESSAGE.findLatestListsByCourtIdAndTimeframe",
+    query = "SELECT o from XHB_PDDA_MESSAGE o"
+        + " WHERE o.cpDocumentStatus = 'OH' AND o.courtId = :courtId"
+        + " AND o.creationDate >= :timeToCheckFrom"
+        + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
+        + " ORDER BY o.creationDate ASC")
+@NamedQuery(name = "XHB_PDDA_MESSAGE.findListsExceedingOnHoldTimeframe",
+    query = "SELECT o from XHB_PDDA_MESSAGE o"
+        + " WHERE o.cpDocumentStatus = 'OH'"
+        + " AND o.creationDate < :timeToCheckFrom"
+        + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
+        + " ORDER BY o.creationDate ASC")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findByCpDocumentName",
     query = "SELECT o from XHB_PDDA_MESSAGE o WHERE o.cpDocumentName = :cpDocumentName AND (o.obsInd is null OR "
         + "o.obsInd = 'N' OR o.obsInd = ' ') ORDER BY o.pddaMessageId")

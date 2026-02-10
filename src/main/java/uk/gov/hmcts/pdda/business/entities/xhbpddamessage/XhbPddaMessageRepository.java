@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.framework.jdbc.core.Parameter;
 import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -77,7 +78,42 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
             return List.of(); // Defensive: avoids nulls or crashes
         }
     }
-
+    
+    public List<XhbPddaMessageDao> findByLighthouseOnHoldSafe() {
+        LOG.debug("findByLighthouseOnHoldSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            return em.createNamedQuery("XHB_PDDA_MESSAGE.findByLighthouseOnHold").getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByLighthouseOnHoldSafe(): {}", e.getMessage(), e);
+            return List.of(); // Defensive: avoids nulls or crashes
+        }
+    }
+    
+    public List<XhbPddaMessageDao> findLatestListsByCourtIdAndTimeframeSafe(Integer courtId,
+        LocalDateTime timeToCheckFrom) {
+        LOG.debug("findLatestListsByCourtIdAndTimeframeSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_PDDA_MESSAGE.findLatestListsByCourtIdAndTimeframe");
+            query.setParameter("courtId", courtId);
+            query.setParameter("timeToCheckFrom", timeToCheckFrom);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findLatestListsByCourtIdAndTimeframeSafe(): {}", e.getMessage(), e);
+            return List.of(); // Defensive: avoids nulls or crashes
+        }
+    }
+    
+    public List<XhbPddaMessageDao> findListsExceedingOnHoldTimeframeSafe(LocalDateTime timeToCheckFrom) {
+        LOG.debug("findListsExceedingOnHoldTimeframeSafe()");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_PDDA_MESSAGE.findListsExceedingOnHoldTimeframe");
+            query.setParameter("timeToCheckfrom", timeToCheckFrom);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findListsExceedingOnHoldTimeframeSafe(): {}", e.getMessage(), e);
+            return List.of(); // Defensive: avoids nulls or crashes
+        }
+    }
 
     /**
      * findUnrespondedCPMessages.
