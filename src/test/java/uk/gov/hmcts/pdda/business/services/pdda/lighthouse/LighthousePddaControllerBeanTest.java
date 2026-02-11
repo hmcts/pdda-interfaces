@@ -15,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
@@ -23,6 +25,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +71,9 @@ class LighthousePddaControllerBeanTest {
     
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock
+    private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -205,6 +211,20 @@ class LighthousePddaControllerBeanTest {
                 continue;
             }
         }
+        
+        // Mock the calls to the On Hold code to return empty for this test block
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouseOnHoldSafe())
+            .thenReturn(new ArrayList<>());
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("10");
+        xhbConfigPropDaoList.add(xhbConfigPropDao);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoList);
+        Mockito.when(mockXhbPddaMessageRepository
+            .findListsExceedingOnHoldTimeframeSafe(Mockito.isA(LocalDateTime.class)))
+            .thenReturn(new ArrayList<>());
+        
         // Run
         classUnderTest.doTask();
         // Checks
@@ -250,7 +270,7 @@ class LighthousePddaControllerBeanTest {
                 .thenReturn(Optional.of(stagingInboundDao));
         }
     }
-
+    
     @Test
     void testIsDocumentNameValid() {
         assertTrue(classUnderTest.isDocumentNameValid(DAILY_LIST_EXAMPLE), TRUE);
