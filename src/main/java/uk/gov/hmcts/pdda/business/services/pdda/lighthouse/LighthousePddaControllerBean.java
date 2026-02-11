@@ -248,6 +248,18 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         
         writeToLog("About to process on hold file " + dao.getCpDocumentName());
         
+        // Check this is a file thats not previously been set to PU (Processing Unnecessary)
+        Optional<XhbPddaMessageDao> latestPddaMessageDao = getXhbPddaMessageRepository()
+            .findByIdSafe(dao.getPrimaryKey());
+        
+        if (latestPddaMessageDao.isPresent() 
+            && !latestPddaMessageDao.get().getCpDocumentStatus().equals(CpDocumentStatus.ON_HOLD.status)) {
+            LOG.debug("This file: {} has previously been set to Processing Unnecessary, skipping processing",
+                dao.getCpDocumentName());
+            return;
+            
+        }
+        
         // First get the recent lists lookup timeframe
         Integer recentListsLookUpTimeframe = Integer.parseInt(getXhbConfigPropRepository()
             .findByPropertyNameSafe(RECENT_LISTS_LOOKUP_TIMEFRAME).get(0).getPropertyValue());
@@ -321,12 +333,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             Node node = documentIdChildNodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE
                 && Objects.equals("cs:DocumentName", node.getNodeName())) {
-                listData.setVersion(node.getTextContent());
+                listData.setDocumentType(node.getTextContent());
             }
         }
         
-        LOG.debug("Returning list data; version: {}, publishedDateTime: {} and documentName: {}", 
-            listData.getVersion(), listData.getPublishedDateTime(), listData.getDocumentName());
+        LOG.debug("Returning list data; version: {}, publishedDateTime: {} and documentType: {}", 
+            listData.getVersion(), listData.getPublishedDateTime(), listData.getDocumentType());
         
         return listData;
     }
@@ -336,10 +348,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             throws ParserConfigurationException, SAXException, IOException {
         
         LOG.debug("Checking recent lists against merged XHIBIT CPP list for version: {},"
-            + " publishedDateTime: {} and documentName: {}", 
+            + " publishedDateTime: {} and documentType: {}", 
             currentListData.getVersion(),
             currentListData.getPublishedDateTime(),
-            currentListData.getDocumentName());
+            currentListData.getDocumentType());
         
         // Loop through the recent lists and check if any match the version, type and date of the current list
         for (XhbPddaMessageDao recentList : recentLists) {
@@ -354,7 +366,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 // Check recentListData with currentListData 
                 if (recentListData.getVersion().equals(currentListData.getVersion())
                     && recentListData.getPublishedDateTime().equals(currentListData.getPublishedDateTime())
-                    && recentListData.getDocumentName().equals(currentListData.getDocumentName())) {
+                    && recentListData.getDocumentType().equals(currentListData.getDocumentType())) {
                     
                     // This is a duplicate list, with or without cpp cases then set to PU
                     LOG.warn("The file: {}{}{}", recentList.getCpDocumentName(), 
@@ -373,10 +385,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             throws ParserConfigurationException, SAXException, IOException {
         
         LOG.debug("Checking recent lists against XHIBIT list for version: {},"
-            + " publishedDateTime: {} and documentName: {}", 
+            + " publishedDateTime: {} and documentType: {}", 
             currentListData.getVersion(),
             currentListData.getPublishedDateTime(),
-            currentListData.getDocumentName());
+            currentListData.getDocumentType());
         
         // Loop through the recent lists and check if any match the version, type and date of the current list
         for (XhbPddaMessageDao recentList : recentLists) {
@@ -391,7 +403,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 // Check recentListData with currentListData 
                 if (recentListData.getVersion().equals(currentListData.getVersion())
                     && recentListData.getPublishedDateTime().equals(currentListData.getPublishedDateTime())
-                    && recentListData.getDocumentName().equals(currentListData.getDocumentName())) {
+                    && recentListData.getDocumentType().equals(currentListData.getDocumentType())) {
                     
                     if (recentListClob.get().getClobData().contains(CPP_CASE)) {
                         LOG.debug("The duplicate list: {} contains CPP cases."
@@ -652,12 +664,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     class ListData {
         private String version;
         private String publishedDateTime;
-        private String type;
+        private String documentType;
 
         public ListData(String version, String publishedDateTime, String type) {
             this.version = version;
             this.publishedDateTime = publishedDateTime;
-            this.type = type;
+            this.documentType = type;
         }
 
         public String getVersion() {
@@ -676,12 +688,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             this.publishedDateTime = publishedDateTime;
         }
 
-        public String getDocumentName() {
-            return type;
+        public String getDocumentType() {
+            return documentType;
         }
         
-        public void setDocumentName(String type) {
-            this.type = type;
+        public void setDocumentType(String type) {
+            this.documentType = type;
         }
     }
 }

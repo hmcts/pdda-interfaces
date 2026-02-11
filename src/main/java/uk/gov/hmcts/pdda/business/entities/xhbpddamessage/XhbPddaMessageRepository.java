@@ -107,7 +107,7 @@ public class XhbPddaMessageRepository extends AbstractRepository<XhbPddaMessageD
         LOG.debug("findListsExceedingOnHoldTimeframeSafe()");
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_PDDA_MESSAGE.findListsExceedingOnHoldTimeframe");
-            query.setParameter("timeToCheckfrom", timeToCheckFrom);
+            query.setParameter("timeToCheckFrom", timeToCheckFrom);
             return query.getResultList();
         } catch (Exception e) {
             LOG.error("Error in findListsExceedingOnHoldTimeframeSafe(): {}", e.getMessage(), e);
