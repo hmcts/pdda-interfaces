@@ -100,7 +100,6 @@ public class XhbDisplayStoreRepository extends AbstractRepository<XhbDisplayStor
 
                 LOG.debug("Merging detached update with version {}", updated.getVersion());
 
-                em.merge(updated); // Hibernate will increment version if dirty
                 XhbDisplayStoreDao merged = em.merge(updated);
                 LOG.info("Merged DAO ID {} now has version {}", merged.getDisplayStoreId(),
                     merged.getVersion());
