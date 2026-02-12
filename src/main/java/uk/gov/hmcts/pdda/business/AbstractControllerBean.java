@@ -78,7 +78,7 @@ public class AbstractControllerBean {
     }
 
     protected XhbClobRepository getXhbClobRepository() {
-        if (!RepositoryUtil.isRepositoryActive(xhbClobRepository)) {
+        if (xhbClobRepository == null || !isEntityManagerActive()) {
             xhbClobRepository = new XhbClobRepository(getEntityManager());
         }
         return xhbClobRepository;
