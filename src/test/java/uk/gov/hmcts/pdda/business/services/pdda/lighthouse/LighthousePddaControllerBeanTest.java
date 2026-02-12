@@ -280,7 +280,7 @@ class LighthousePddaControllerBeanTest {
     }
     
     @Test
-    void testProcessOnHold() {
+    void testProcessExceededOnHold() {
         // Setup
         List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
         xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(1));
@@ -295,17 +295,24 @@ class LighthousePddaControllerBeanTest {
         Mockito.when(mockXhbPddaMessageRepository.findByLighthouseOnHoldSafe())
             .thenReturn(xhbPddaMessageDaoList);
         
-        // Mock the calls for lists that exceed the On Hold timeframe to return empty for this test block
+        // Mock the calls for lists that exceed the On Hold timeframe
         List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
         XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
         xhbConfigPropDao.setPropertyValue("10");
         xhbConfigPropDaoList.add(xhbConfigPropDao);
         Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
             .thenReturn(xhbConfigPropDaoList);
-        List<XhbPddaMessageDao> onHoldList = xhbPddaMessageDaoList;
         Mockito.when(mockXhbPddaMessageRepository
-            .findListsExceedingOnHoldTimeframeSafe(LocalDateTime.now().minusMinutes(10)))
-            .thenReturn(onHoldList);
+            .findListsExceedingOnHoldTimeframeSafe(Mockito.isA(LocalDateTime.class)))
+            .thenReturn(xhbPddaMessageDaoList);
+        
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDaoList.get(0).getPrimaryKey()))
+            .thenReturn(Optional.of(xhbPddaMessageDaoList.get(0)));
+        XhbPddaMessageDao updatedDao = xhbPddaMessageDaoList.get(0);
+        updatedDao.setCpDocumentStatus("VN");
+        updatedDao.setErrorMessage("On hold time exceeded, set to VN");
+        Mockito.when(mockXhbPddaMessageRepository.update(Mockito.isA(XhbPddaMessageDao.class)))
+            .thenReturn(Optional.of(updatedDao));
         
         boolean result = true;
         // Run
@@ -330,17 +337,23 @@ class LighthousePddaControllerBeanTest {
     }
     
     @Test
-    void testProcessOnHoldFile() throws ParserConfigurationException, SAXException, IOException {
+    void testProcessOnHoldFiles() throws ParserConfigurationException, SAXException, IOException {
+        processOnHoldFile(getDummyClobDataNonCppList());
+        processOnHoldFile(getDummyClobDataCppList());
+    }
+    
+    private void processOnHoldFile(XhbClobDao xhbClobDao) 
+        throws ParserConfigurationException, SAXException, IOException {
         // Setup
         XhbPddaMessageDao currentDao = getDummyOnHoldXhbPddaMessageDao(1);
         
-        List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>(); 
+        List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
         xhbPddaMessageDaoList.add(currentDao);
-        xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(2)); 
+        xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(2));
         
-        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>(); 
-        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao(); 
-        xhbConfigPropDao.setPropertyValue("5"); 
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("5");
         xhbConfigPropDaoList.add(xhbConfigPropDao);
         
         mockTheEntityManager();
@@ -355,7 +368,7 @@ class LighthousePddaControllerBeanTest {
             Mockito.any(LocalDateTime.class))).thenReturn(xhbPddaMessageDaoList);
         
         Mockito.when(mockXhbClobRepository.findByIdSafe(currentDao.getPddaMessageDataId()))
-            .thenReturn(Optional.of(getDummyClobDataNonCppList()));
+            .thenReturn(Optional.of(xhbClobDao));
         
         // Update
         Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDaoList.get(1).getPrimaryKey()))
@@ -634,6 +647,20 @@ class LighthousePddaControllerBeanTest {
             + "<cs:Version>FINAL 1</cs:Version>"
             + "<cs:PublishedTime>2026-01-22T10:50:43.000</cs:PublishedTime>"
             + "</cs:ListHeader></cs:DailyList>";
+        
+        XhbClobDao xhbClobDao = new XhbClobDao();
+        xhbClobDao.setClobData(clobData);
+        return xhbClobDao;
+    }
+    
+    private XhbClobDao getDummyClobDataCppList() {
+        String clobData = "<cs:DailyList><cs:DocumentID>"
+            + "<cs:DocumentName>Daily List FINAL v1 22-JAN-26</cs:DocumentName>"
+            + "<cs:Version>1.0</cs:Version></cs:DocumentID>"
+            + "<cs:ListHeader>"
+            + "<cs:Version>FINAL 1</cs:Version>"
+            + "<cs:PublishedTime>2026-01-22T10:50:43.000</cs:PublishedTime>"
+            + "</cs:ListHeader><cs:CaseNumber>CPP</cs:CaseNumber></cs:DailyList>";
         
         XhbClobDao xhbClobDao = new XhbClobDao();
         xhbClobDao.setClobData(clobData);

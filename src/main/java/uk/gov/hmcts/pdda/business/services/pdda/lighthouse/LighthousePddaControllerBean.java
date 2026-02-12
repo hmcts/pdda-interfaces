@@ -443,7 +443,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         // Loop through the lists exceeding the on hold timeframe and set their status so they can be processed
         for (XhbPddaMessageDao exceededList : listsExceedingOnHoldTimeframe) {
             String status = CpDocumentStatus.VALID_NOT_PROCESSED.status;
-            if (exceededList.getErrorMessage() != null || !exceededList.getErrorMessage().isBlank()) { 
+            if (exceededList.getErrorMessage() != null) { 
                 status = CpDocumentStatus.INVALID.status;
             }
             // Update the status of the list
