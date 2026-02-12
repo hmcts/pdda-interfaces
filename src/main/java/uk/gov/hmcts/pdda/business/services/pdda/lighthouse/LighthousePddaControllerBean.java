@@ -8,7 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.framework.scheduler.RemoteTask;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlDao;
@@ -16,13 +22,20 @@ import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlReposi
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageDao;
 import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
+import uk.gov.hmcts.pdda.business.services.pdda.CpDocumentStatus;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * This class is the controller bean for dealing with inserting CPP data into XHB_CPP_STAGING_INBOUND and
@@ -46,10 +59,15 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String MESSAGE_STATUS_PROCESSED = "VP"; // Validated and Processed
     private static final String MESSAGE_STATUS_INVALID = "INV"; // Invalid
     private static final String MESSAGE_STATUS_VALID_NOT_PROCESSED = "VN"; // PddaMessage status valid not processed
+    private static final String MESSAGE_STATUS_PROCESSING_UNNECESSARY = "PU"; // Processing Unnecessary
     private static final Logger LOG = LoggerFactory.getLogger(LighthousePddaControllerBean.class);
     private static final String IWP_STATUS_CREATED = "C"; // Created
     private static final String ND_STATUS_XML_DOC = "ND";
     private static final String IWP = "IWP";
+    private static final String CPP_CASE = "CPP";
+    private static final String RECENT_LISTS_LOOKUP_TIMEFRAME = "RECENT_LISTS_LOOKUP_TIMEFRAME";
+    private static final String MAX_ON_HOLD_TIMEFRAME = "MAX_ON_HOLD_TIMEFRAME";
+    private static final String DUPLICATE_DOCUMENT_ERROR_MESSAGE = "Duplicate document";
 
     @Autowired
     public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
@@ -75,17 +93,38 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     @Override
     public void doTask() {
         LOG.debug("Lighthouse -- doTask() - entered");
-        List<XhbPddaMessageDao> xhbPddaMessageDaos =
+        List<XhbPddaMessageDao> standardXhbPddaMessageDaos =
             getXhbPddaMessageRepository().findByLighthouseSafe();
-        LOG.debug("Messages to process: {}", xhbPddaMessageDaos.size());
+        LOG.debug("Standard Messages to process: {}", standardXhbPddaMessageDaos.size());
         
-        AtomicInteger docNumber = new AtomicInteger(1);
-        xhbPddaMessageDaos.forEach(dao -> {
+        // Process standard documents
+        AtomicInteger standardDocNumber = new AtomicInteger(1);
+        standardXhbPddaMessageDaos.forEach(dao -> {
             LOG.debug("Lighthouse Processing file number: {}: {}, on thread: {}",
-                docNumber, dao.getCpDocumentName(), Thread.currentThread().getName());
+                standardDocNumber, dao.getCpDocumentName(), Thread.currentThread().getName());
             processFile(dao);
-            docNumber.incrementAndGet();
+            standardDocNumber.incrementAndGet();
         });
+        
+        List<XhbPddaMessageDao> onHoldXhbPddaMessageDaos =
+            getXhbPddaMessageRepository().findByLighthouseOnHoldSafe();
+        LOG.debug("On Hold Messages to process: {}", onHoldXhbPddaMessageDaos.size());
+        
+        // Process On Hold documents
+        AtomicInteger onHoldDocNumber = new AtomicInteger(1);
+        onHoldXhbPddaMessageDaos.forEach(dao -> {
+            LOG.debug("Lighthouse Processing file number: {}: {}, on thread: {}",
+                onHoldDocNumber, dao.getCpDocumentName(), Thread.currentThread().getName());
+            try {
+                processOnHoldFile(dao);
+            } catch (ParserConfigurationException | SAXException | IOException e) {
+                LOG.error(e.getMessage());
+            }
+            onHoldDocNumber.incrementAndGet();
+        });
+        
+        // Final check to see if theres any lists still on hold which have exceeded the on hold timeframe
+        checkForListsExceedingOnHoldTimeframe();
         
         LOG.debug("Lighthouse -- doTask() - completed");
     }
@@ -204,6 +243,216 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         }
     }
 
+    public void processOnHoldFile(XhbPddaMessageDao dao) 
+        throws ParserConfigurationException, SAXException, IOException {
+        
+        writeToLog("About to process on hold file " + dao.getCpDocumentName());
+        
+        // Check this is a file thats not previously been set to PU (Processing Unnecessary)
+        Optional<XhbPddaMessageDao> latestPddaMessageDao = getXhbPddaMessageRepository()
+            .findByIdSafe(dao.getPrimaryKey());
+        
+        if (latestPddaMessageDao.isPresent() 
+            && !latestPddaMessageDao.get().getCpDocumentStatus().equals(CpDocumentStatus.ON_HOLD.status)) {
+            LOG.debug("This file: {} has previously been set to Processing Unnecessary, skipping processing",
+                dao.getCpDocumentName());
+            return;
+            
+        }
+        
+        // First get the recent lists lookup timeframe
+        Integer recentListsLookUpTimeframe = Integer.parseInt(getXhbConfigPropRepository()
+            .findByPropertyNameSafe(RECENT_LISTS_LOOKUP_TIMEFRAME).get(0).getPropertyValue());
+        
+        // Fetch the latest xhb_pdda_message list records for this court, within the timeframe and On Hold
+        List<XhbPddaMessageDao> recentLists = getXhbPddaMessageRepository()
+            .findLatestListsByCourtIdAndTimeframeSafe(dao.getCourtId(),
+                LocalDateTime.now().minusMinutes(recentListsLookUpTimeframe));
+        
+        // Remove the current list from the recent lists to check against, we dont want to compare the list to itself
+        recentLists.removeIf(recentList -> recentList.getPddaMessageId().equals(dao.getPddaMessageId()));
+        
+        LOG.debug("Found {} recent lists for court id: {} to check against", recentLists.size(), dao.getCourtId());
+        
+        // Get the clob data for the current list
+        Optional<XhbClobDao> xhbClobDao =
+            getXhbClobRepository().findByIdSafe(dao.getPddaMessageDataId());
+        
+        if (xhbClobDao.isPresent()) {
+            if (xhbClobDao.get().getClobData().contains(CPP_CASE)) {
+                // ------------------
+                // List with CPP Case
+                // ------------------
+                
+                // Check to see if any match the version, type and date of the current list
+                checkRecentCourtListsAgainstMergedXhibitCppList(recentLists, getListData(xhbClobDao.get()));
+            } else {
+                // ---------------------
+                // List without CPP Case
+                // ---------------------
+                
+                // Check to see if there is a duplicate list which has CPP cases on it, if so
+                // this list will be set to PU otherwise if a duplicate list is found without CPP cases
+                // then that list will be set to PU
+                checkRecentCourtListsAgainstXhibitList(recentLists, getListData(xhbClobDao.get()), dao);
+            }
+        }
+    }
+    
+    private ListData getListData(XhbClobDao listClobDao) 
+        throws ParserConfigurationException, SAXException, IOException {
+        LOG.debug("Getting list data from clob for clob id: {}", listClobDao.getClobId());
+        // Get the list data from the clob and return the data as an object
+        ListData listData = new ListData(null, null, null);
+        
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newDefaultInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        InputSource inputSource = new InputSource(new StringReader(listClobDao.getClobData()));
+        Document document = documentBuilder.parse(inputSource);
+
+        // Get the ListHeader nodes
+        Node listHeaderNode = document.getElementsByTagName("cs:ListHeader").item(0);
+        NodeList listHeaderChildNodes = listHeaderNode.getChildNodes();
+        
+        for (int i = 0; i < listHeaderChildNodes.getLength(); i++) {
+            Node node = listHeaderChildNodes.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE
+                && Objects.equals("cs:Version", node.getNodeName())) {
+                listData.setVersion(node.getTextContent());
+            } else if (node.getNodeType() == Node.ELEMENT_NODE
+                && Objects.equals("cs:PublishedTime", node.getNodeName())) {
+                listData.setPublishedDateTime(node.getTextContent());
+            }
+        }
+        
+        // Get the Document Id nodes
+        Node documentIdNode = document.getElementsByTagName("cs:DocumentID").item(0);
+        NodeList documentIdChildNodes = documentIdNode.getChildNodes();
+        
+        for (int i = 0; i < documentIdChildNodes.getLength(); i++) {
+            Node node = documentIdChildNodes.item(i);
+            if (node.getNodeType() == Node.ELEMENT_NODE
+                && Objects.equals("cs:DocumentName", node.getNodeName())) {
+                listData.setDocumentType(node.getTextContent());
+            }
+        }
+        
+        LOG.debug("Returning list data; version: {}, publishedDateTime: {} and documentType: {}", 
+            listData.getVersion(), listData.getPublishedDateTime(), listData.getDocumentType());
+        
+        return listData;
+    }
+    
+    private void checkRecentCourtListsAgainstMergedXhibitCppList(List<XhbPddaMessageDao> recentLists,
+        ListData currentListData) 
+            throws ParserConfigurationException, SAXException, IOException {
+        
+        LOG.debug("Checking recent lists against merged XHIBIT CPP list for version: {},"
+            + " publishedDateTime: {} and documentType: {}", 
+            currentListData.getVersion(),
+            currentListData.getPublishedDateTime(),
+            currentListData.getDocumentType());
+        
+        // Loop through the recent lists and check if any match the version, type and date of the current list
+        for (XhbPddaMessageDao recentList : recentLists) {
+            
+            // Get the clob data for the recent list
+            Optional<XhbClobDao> recentListClob =
+                getXhbClobRepository().findByIdSafe(recentList.getPddaMessageDataId());
+           
+            if (recentListClob.isPresent()) {
+                ListData recentListData = getListData(recentListClob.get());
+                
+                // Check recentListData with currentListData 
+                if (recentListData.getVersion().equals(currentListData.getVersion())
+                    && recentListData.getPublishedDateTime().equals(currentListData.getPublishedDateTime())
+                    && recentListData.getDocumentType().equals(currentListData.getDocumentType())) {
+                    
+                    // This is a duplicate list, with or without cpp cases then set to PU
+                    LOG.warn("The file: {}{}{}", recentList.getCpDocumentName(), 
+                        " is a duplicate, setting it to: ", MESSAGE_STATUS_PROCESSING_UNNECESSARY);
+                    
+                    // Set the status to PU (Processing Unnecessary) to prevent further processing
+                    updatePddaMessageStatus(recentList, MESSAGE_STATUS_PROCESSING_UNNECESSARY, 
+                        DUPLICATE_DOCUMENT_ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+    
+    private void checkRecentCourtListsAgainstXhibitList(List<XhbPddaMessageDao> recentLists,
+        ListData currentListData, XhbPddaMessageDao currentList) 
+            throws ParserConfigurationException, SAXException, IOException {
+        
+        LOG.debug("Checking recent lists against XHIBIT list for version: {},"
+            + " publishedDateTime: {} and documentType: {}", 
+            currentListData.getVersion(),
+            currentListData.getPublishedDateTime(),
+            currentListData.getDocumentType());
+        
+        // Loop through the recent lists and check if any match the version, type and date of the current list
+        for (XhbPddaMessageDao recentList : recentLists) {
+            
+            // Get the clob data for the recent list
+            Optional<XhbClobDao> recentListClob =
+                getXhbClobRepository().findByIdSafe(recentList.getPddaMessageDataId());
+           
+            if (recentListClob.isPresent()) {
+                ListData recentListData = getListData(recentListClob.get());
+                
+                // Check recentListData with currentListData 
+                if (recentListData.getVersion().equals(currentListData.getVersion())
+                    && recentListData.getPublishedDateTime().equals(currentListData.getPublishedDateTime())
+                    && recentListData.getDocumentType().equals(currentListData.getDocumentType())) {
+                    
+                    if (recentListClob.get().getClobData().contains(CPP_CASE)) {
+                        LOG.debug("The duplicate list: {} contains CPP cases."
+                            + " Setting the current list to Prosessing Unnecessary",
+                            recentList.getCpDocumentName());
+                        // If the recent duplicate list contains CPP cases then set the current list to PU
+                        updatePddaMessageStatus(currentList, MESSAGE_STATUS_PROCESSING_UNNECESSARY, 
+                            DUPLICATE_DOCUMENT_ERROR_MESSAGE);
+                    } else {
+                        LOG.debug("The duplicate list: {} does not contain CPP cases."
+                            + " Setting this recent list to Prosessing Unnecessary",
+                            recentList.getCpDocumentName());
+                        // If the recent duplicate list contains no CPP cases then set the recent list to PU
+                        updatePddaMessageStatus(recentList, MESSAGE_STATUS_PROCESSING_UNNECESSARY, 
+                            DUPLICATE_DOCUMENT_ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
+    } 
+    
+    private void checkForListsExceedingOnHoldTimeframe() {
+        
+        LOG.debug("Processing On Hold files that have exceeded the maximum on hold time");
+        
+        // Get the max on hold timeframe
+        Integer maxOnHoldTimeframe = Integer.parseInt(getXhbConfigPropRepository()
+            .findByPropertyNameSafe(MAX_ON_HOLD_TIMEFRAME).get(0).getPropertyValue());
+        
+        // Fetch any pdda_message list which is still On Hold and has been created before the max on hold timeframe
+        List<XhbPddaMessageDao> listsExceedingOnHoldTimeframe = getXhbPddaMessageRepository()
+            .findListsExceedingOnHoldTimeframeSafe(LocalDateTime.now().minusMinutes(maxOnHoldTimeframe));
+        
+        LOG.debug("Found {} lists which have been on hold for over {} minutes", 
+            listsExceedingOnHoldTimeframe.size(), maxOnHoldTimeframe);
+        
+        // Loop through the lists exceeding the on hold timeframe and set their status so they can be processed
+        for (XhbPddaMessageDao exceededList : listsExceedingOnHoldTimeframe) {
+            String status = CpDocumentStatus.VALID_NOT_PROCESSED.status;
+            if (exceededList.getErrorMessage() != null) { 
+                status = CpDocumentStatus.INVALID.status;
+            }
+            // Update the status of the list
+            LOG.warn("The file: {} has been on hold for over {} minutes, setting it to: {}",
+                exceededList.getCpDocumentName(), maxOnHoldTimeframe, status);
+            updatePddaMessageStatus(exceededList, status, "On hold time exceeded, set to " + status);
+        }
+    }
+    
     /**
      * Write to the debug log if debug is enabled.
 
@@ -415,5 +664,40 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         return documentName.matches(regexPdda) || documentName.matches(regexPddaXpd)
             || documentName.matches(regexPddaXwp) || documentName.matches(regexOther);
     }
+    
+    class ListData {
+        private String version;
+        private String publishedDateTime;
+        private String documentType;
 
+        public ListData(String version, String publishedDateTime, String type) {
+            this.version = version;
+            this.publishedDateTime = publishedDateTime;
+            this.documentType = type;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+        
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getPublishedDateTime() {
+            return publishedDateTime;
+        }
+        
+        public void setPublishedDateTime(String publishedDateTime) {
+            this.publishedDateTime = publishedDateTime;
+        }
+
+        public String getDocumentType() {
+            return documentType;
+        }
+        
+        public void setDocumentType(String type) {
+            this.documentType = type;
+        }
+    }
 }

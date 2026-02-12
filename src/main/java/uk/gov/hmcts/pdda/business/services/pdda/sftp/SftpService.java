@@ -40,6 +40,7 @@ import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHeari
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository;
 import uk.gov.hmcts.pdda.business.services.pdda.BaisValidation;
+import uk.gov.hmcts.pdda.business.services.pdda.CpDocumentStatus;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageHelper;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaMessageUtil;
 import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
@@ -75,10 +76,10 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String WARNED_LIST_DOCUMENT_TYPE = "WarnedList";
     protected static final String WEB_PAGE_DOCUMENT_TYPE = "WebPage";
     protected static final String HEARING_PROGRESS_DELAY_MINUTES = "HEARING_PROGRESS_DELAY_MINUTES";
-
+    protected static final String XHIBIT_LIST_PREFIX = "PDDA_XDL";
+    
     public static final String NEWLINE = "\n";
-
-
+    
     /**
      * JUnit constructor.
 
@@ -955,10 +956,20 @@ public class SftpService extends XhibitPddaHelper {
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
+        
+        // Set the default valid not processed status
+        String status = CpDocumentStatus.VALID_NOT_PROCESSED.status;
+        
+        // Check if we need to set this document to On Hold if its an XHIBIT list
+        if (filename.contains(XHIBIT_LIST_PREFIX)) {
+            LOG.debug("Setting document status to On Hold for: {} as it is a list recieved from XHIBIT", filename);
+            status = CpDocumentStatus.ON_HOLD.status;
+        }
+        
         // Call createMessage
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
             messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
-            NO, errorMessage);
+            NO, errorMessage, status);
     }
 
     /**

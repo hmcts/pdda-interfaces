@@ -14,7 +14,12 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.xml.sax.SAXException;
 import uk.gov.hmcts.DummyPdNotifierUtil;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
+import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbinternethtml.XhbInternetHtmlRepository;
@@ -23,9 +28,12 @@ import uk.gov.hmcts.pdda.business.entities.xhbpddamessage.XhbPddaMessageReposito
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentRepository;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -68,6 +76,12 @@ class LighthousePddaControllerBeanTest {
     
     @Mock
     private XhbXmlDocumentRepository mockXhbXmlDocumentRepository;
+    
+    @Mock
+    private XhbConfigPropRepository mockXhbConfigPropRepository;
+    
+    @Mock
+    private XhbClobRepository mockXhbClobRepository;
 
     @Mock
     private EntityManager mockEntityManager;
@@ -103,7 +117,7 @@ class LighthousePddaControllerBeanTest {
         boolean result = testProcessFiles(MESSAGE_STATUS_INVALID);
         assertTrue(result, TRUE);
     }
-
+    
     @Test
     void testGetXhbPddaMessageRepository() {
         assertInstanceOf(XhbPddaMessageRepository.class,
@@ -205,6 +219,20 @@ class LighthousePddaControllerBeanTest {
                 continue;
             }
         }
+        
+        // Mock the calls to the On Hold code to return empty for this test block
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouseOnHoldSafe())
+            .thenReturn(new ArrayList<>());
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("10");
+        xhbConfigPropDaoList.add(xhbConfigPropDao);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoList);
+        Mockito.when(mockXhbPddaMessageRepository
+            .findListsExceedingOnHoldTimeframeSafe(Mockito.isA(LocalDateTime.class)))
+            .thenReturn(new ArrayList<>());
+        
         // Run
         classUnderTest.doTask();
         // Checks
@@ -250,7 +278,115 @@ class LighthousePddaControllerBeanTest {
                 .thenReturn(Optional.of(stagingInboundDao));
         }
     }
-
+    
+    @Test
+    void testProcessExceededOnHold() {
+        // Setup
+        List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
+        xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(1));
+        
+        // Set the entity manager
+        mockTheEntityManager();
+        // Initially mock the standard findByLighthouseSafe to return empty so we can test the On Hold code
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouseSafe())
+            .thenReturn(new ArrayList<>());
+        
+        // Return a list for the On Hold checks
+        Mockito.when(mockXhbPddaMessageRepository.findByLighthouseOnHoldSafe())
+            .thenReturn(xhbPddaMessageDaoList);
+        
+        // Mock the calls for lists that exceed the On Hold timeframe
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("10");
+        xhbConfigPropDaoList.add(xhbConfigPropDao);
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoList);
+        Mockito.when(mockXhbPddaMessageRepository
+            .findListsExceedingOnHoldTimeframeSafe(Mockito.isA(LocalDateTime.class)))
+            .thenReturn(xhbPddaMessageDaoList);
+        
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDaoList.get(0).getPrimaryKey()))
+            .thenReturn(Optional.of(xhbPddaMessageDaoList.get(0)));
+        XhbPddaMessageDao updatedDao = xhbPddaMessageDaoList.get(0);
+        updatedDao.setCpDocumentStatus("VN");
+        updatedDao.setErrorMessage("On hold time exceeded, set to VN");
+        Mockito.when(mockXhbPddaMessageRepository.update(Mockito.isA(XhbPddaMessageDao.class)))
+            .thenReturn(Optional.of(updatedDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.doTask();
+        // Assert
+        assertTrue(result, FALSE);
+    }
+    
+    @Test
+    void testProcessOnHoldFileAlreadyProcessed() throws ParserConfigurationException, SAXException, IOException {
+        // Setup
+        XhbPddaMessageDao currentDao = getDummyOnHoldXhbPddaMessageDao(1);
+        currentDao.setCpDocumentStatus("PU");
+        mockTheEntityManager();
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(currentDao.getPrimaryKey()))
+            .thenReturn(Optional.of(currentDao));
+        // Run
+        boolean result = true;
+        classUnderTest.processOnHoldFile(currentDao);
+        // Assert
+        assertTrue(result, FALSE);
+    }
+    
+    @Test
+    void testProcessOnHoldFiles() throws ParserConfigurationException, SAXException, IOException {
+        processOnHoldFile(getDummyClobDataNonCppList());
+        processOnHoldFile(getDummyClobDataCppList());
+    }
+    
+    private void processOnHoldFile(XhbClobDao xhbClobDao) 
+        throws ParserConfigurationException, SAXException, IOException {
+        // Setup
+        XhbPddaMessageDao currentDao = getDummyOnHoldXhbPddaMessageDao(1);
+        
+        List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
+        xhbPddaMessageDaoList.add(currentDao);
+        xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(2));
+        
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("5");
+        xhbConfigPropDaoList.add(xhbConfigPropDao);
+        
+        mockTheEntityManager();
+        
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(currentDao.getPrimaryKey()))
+            .thenReturn(Optional.of(currentDao));
+        
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoList);
+        
+        Mockito.when(mockXhbPddaMessageRepository.findLatestListsByCourtIdAndTimeframeSafe(Mockito.anyInt(),
+            Mockito.any(LocalDateTime.class))).thenReturn(xhbPddaMessageDaoList);
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(currentDao.getPddaMessageDataId()))
+            .thenReturn(Optional.of(xhbClobDao));
+        
+        // Update
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDaoList.get(1).getPrimaryKey()))
+            .thenReturn(Optional.of(xhbPddaMessageDaoList.get(1)));
+        
+        XhbPddaMessageDao updatedDao = xhbPddaMessageDaoList.get(1);
+        updatedDao.setCpDocumentStatus("PU");
+        updatedDao.setErrorMessage("Duplicate document");
+        Mockito.when(mockXhbPddaMessageRepository.update(Mockito.isA(XhbPddaMessageDao.class)))
+            .thenReturn(Optional.of(updatedDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.processOnHoldFile(currentDao);
+        // Assert
+        assertTrue(result, FALSE);
+    }
+    
     @Test
     void testIsDocumentNameValid() {
         assertTrue(classUnderTest.isDocumentNameValid(DAILY_LIST_EXAMPLE), TRUE);
@@ -479,9 +615,6 @@ class LighthousePddaControllerBeanTest {
             "Exception message includes helpful detail");
     }
 
-
-
-
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
         List<XhbPddaMessageDao> result = new ArrayList<>();
         String[] cpDocumentNames = {DAILY_LIST_EXAMPLE, "WarnedList_111_20220810010433.xml",
@@ -494,6 +627,44 @@ class LighthousePddaControllerBeanTest {
             result.add(xhbPddaMessageDao);
         }
         return result;
+    }
+    
+    private XhbPddaMessageDao getDummyOnHoldXhbPddaMessageDao(Integer pddaMessageId) {
+        XhbPddaMessageDao xhbPddaMessageDao = new XhbPddaMessageDao();
+        xhbPddaMessageDao.setPddaMessageId(pddaMessageId);
+        xhbPddaMessageDao.setCpDocumentName("PDDA_XDL_171911_1_475_20260211101501");
+        xhbPddaMessageDao.setCpDocumentStatus("OH");
+        xhbPddaMessageDao.setCourtId(81);
+        xhbPddaMessageDao.setPddaMessageDataId(123L);
+        return xhbPddaMessageDao;
+    }
+    
+    private XhbClobDao getDummyClobDataNonCppList() {
+        String clobData = "<cs:DailyList><cs:DocumentID>"
+            + "<cs:DocumentName>Daily List FINAL v1 22-JAN-26</cs:DocumentName>"
+            + "<cs:Version>1.0</cs:Version></cs:DocumentID>"
+            + "<cs:ListHeader>"
+            + "<cs:Version>FINAL 1</cs:Version>"
+            + "<cs:PublishedTime>2026-01-22T10:50:43.000</cs:PublishedTime>"
+            + "</cs:ListHeader></cs:DailyList>";
+        
+        XhbClobDao xhbClobDao = new XhbClobDao();
+        xhbClobDao.setClobData(clobData);
+        return xhbClobDao;
+    }
+    
+    private XhbClobDao getDummyClobDataCppList() {
+        String clobData = "<cs:DailyList><cs:DocumentID>"
+            + "<cs:DocumentName>Daily List FINAL v1 22-JAN-26</cs:DocumentName>"
+            + "<cs:Version>1.0</cs:Version></cs:DocumentID>"
+            + "<cs:ListHeader>"
+            + "<cs:Version>FINAL 1</cs:Version>"
+            + "<cs:PublishedTime>2026-01-22T10:50:43.000</cs:PublishedTime>"
+            + "</cs:ListHeader><cs:CaseNumber>CPP</cs:CaseNumber></cs:DailyList>";
+        
+        XhbClobDao xhbClobDao = new XhbClobDao();
+        xhbClobDao.setClobData(clobData);
+        return xhbClobDao;
     }
 
     private RuntimeException getRuntimeException() {

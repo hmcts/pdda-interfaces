@@ -55,7 +55,7 @@ public final class PddaMessageUtil {
     public static void createMessage(final PddaMessageHelper pddaMessageHelper,
         final Integer courtId, final Integer courtRoomId, final Integer pddaMessageTypeId,
         final Long pddaMessageDataId, final Integer pddaBatchId, final String cpDocumentName,
-        final String cpResponseGenerated, final String errorMessage) {
+        final String cpResponseGenerated, final String errorMessage, String status) {
         LOG.debug("createMessage({},{},{},{},{},{},{},{},{})", pddaMessageHelper, courtId,
             courtRoomId, pddaMessageTypeId, pddaMessageDataId, pddaBatchId, cpDocumentName,
             cpResponseGenerated, errorMessage);
@@ -70,7 +70,7 @@ public final class PddaMessageUtil {
         dao.setTimeSent(null);
         dao.setCpDocumentName(cpDocumentName);
         dao.setCpDocumentStatus(errorMessage != null ? CpDocumentStatus.INVALID.status
-            : CpDocumentStatus.VALID_NOT_PROCESSED.status);
+            : status);
         dao.setCpResponseGenerated(cpResponseGenerated);
         dao.setErrorMessage(errorMessage);
 
