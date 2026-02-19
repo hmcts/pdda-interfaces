@@ -49,7 +49,7 @@ import javax.xml.parsers.ParserConfigurationException;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S5843"})
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -653,9 +653,10 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     boolean isDocumentNameValid(String documentName) {
         writeToLog("METHOD ENTRY: checkDocumentNameIsValid");
 
-        String regexPdda =
-            "^PDDA_(XDL|CPD|XWP)_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14} "
-                + "(list_filename = DailyList_\\d{3}_\\d{14}.xml|pd_filename = PublicDisplay_\\d{3}_\\d{14}.xml)$";
+        String regexPdda = "^PDDA_(XDL|CPD|XWP)_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}\\s+"
+            + "(?:list_filename\\s*=\\s*(?:DailyList|WarnedList|FirmList)_\\d{3}_\\d{14}\\.xml"
+            + "|pd_filename\\s*=\\s*PublicDisplay_\\d{3}_\\d{14}\\.xml)$";
+        
         String regexPddaXpd = "^PDDA_XPD_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}$";
         String regexPddaXwp = "^PDDA_XWP_\\d{1,8}_\\d{1,6}_\\d{3}_\\d{14}$";
         String regexOther =
