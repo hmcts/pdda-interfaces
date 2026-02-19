@@ -30,6 +30,8 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -127,7 +129,8 @@ public final class CathUtils {
     public static HttpRequest getListHttpPostRequest(String url, CourtelJson courtelJson) {
         LOG.debug("Building List HTTP Request - getListHttpPostRequest()");
         // Get the times
-        String now = getDateTimeAsString(courtelJson.getContentDate());
+        String currentDateTime = getDateTimeAsString(LocalDateTime.now().atZone(ZoneOffset.UTC));
+        String startDate = getDateTimeAsString(courtelJson.getContentDate());
         String endDate = getDateTimeAsString(courtelJson.getEndDate());
         // Get the bearer token
         String bearerToken = String.format(BEARER, courtelJson.getToken());
@@ -136,11 +139,11 @@ public final class CathUtils {
                 .header(PublicationConfiguration.TYPE_HEADER, courtelJson.getArtefactType().toString())
                 .header(PublicationConfiguration.SENSITIVITY_HEADER, courtelJson.getSensitivity())
                 .header(PublicationConfiguration.PROVENANCE_HEADER, PROVENANCE)
-                .header(PublicationConfiguration.DISPLAY_FROM_HEADER, now)
+                .header(PublicationConfiguration.DISPLAY_FROM_HEADER, currentDateTime)
                 .header(PublicationConfiguration.DISPLAY_TO_HEADER, endDate)
                 .header(PublicationConfiguration.COURT_ID, courtelJson.getCrestCourtId())
                 .header(PublicationConfiguration.LANGUAGE_HEADER, courtelJson.getLanguage().toString())
-                .header(PublicationConfiguration.CONTENT_DATE, now)
+                .header(PublicationConfiguration.CONTENT_DATE, startDate)
                 .header(PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName())
                 .header(AUTHORIZATION, bearerToken)
                 .header(CONTENT_TYPE, courtelJson.getContentType())

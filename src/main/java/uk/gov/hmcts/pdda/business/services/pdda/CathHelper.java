@@ -333,9 +333,12 @@ public class CathHelper {
         if (jsonObject instanceof ListJson listJson) {
             listJson.setListType(ListType.fromString(listType));
             // Get date from json clob for lists
-            LocalDate dateTime = getListDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType);
-            jsonObject.setContentDate(dateTime.atStartOfDay(ZoneOffset.UTC));
-            jsonObject.setEndDate(dateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
+            LocalDate startDateTime = 
+                getListDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType, "StartDate");
+            jsonObject.setContentDate(startDateTime.atStartOfDay(ZoneOffset.UTC));
+            LocalDate endDateTime = 
+                getListDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType, "EndDate");
+            jsonObject.setEndDate(endDateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
             
         } else {
             // Get end date from html clob for web pages
@@ -411,7 +414,7 @@ public class CathHelper {
         return LocalDate.now();
     }
     
-    private LocalDate getListDateFromClob(Long clobId, String listType) {
+    private LocalDate getListDateFromClob(Long clobId, String listType, String dateType) {
         Optional<XhbClobDao> xhbClobDao = getXhbClobRepository().findByIdSafe(clobId);
         
         // Get the list type root node for JSON parsing
@@ -427,7 +430,7 @@ public class CathHelper {
             JSONObject obj = new JSONObject(xhbClobDao.get().getClobData());
             String endDate = obj.getJSONObject(jsonListRootNode)
                                 .getJSONObject("ListHeader")
-                                .getString("EndDate");
+                                .getString(dateType);
             return LocalDate.parse(endDate);
         }
         // Default to todays date if any above conditions are not met

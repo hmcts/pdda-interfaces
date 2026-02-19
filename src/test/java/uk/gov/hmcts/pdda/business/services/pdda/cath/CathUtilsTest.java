@@ -157,15 +157,15 @@ class CathUtilsTest {
         validateHeaderValue(headers, PublicationConfiguration.SENSITIVITY_HEADER, SENSITIVITY_CLASSIFIED);
         validateHeaderValue(headers, PublicationConfiguration.COURT_ID,
             courtelJson.getCrestCourtId());
-        String now = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
-        validateHeaderValue(headers, PublicationConfiguration.CONTENT_DATE, now);
+        String startDate = CathUtils.getDateTimeAsString(courtelJson.getContentDate());
+        validateHeaderValue(headers, PublicationConfiguration.CONTENT_DATE, startDate);
         validateHeaderValue(headers, PublicationConfiguration.LANGUAGE_HEADER,
             courtelJson.getLanguage().toString());
-        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_FROM_HEADER, now);
-        String nextMonth =
+        String nextDay =
             CathUtils.getDateTimeAsString(courtelJson.getEndDate());
-        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_TO_HEADER, nextMonth);
+        validateHeaderValue(headers, PublicationConfiguration.DISPLAY_TO_HEADER, nextDay);
         validateHeaderValue(headers, PublicationConfiguration.SOURCE_ARTEFACT_ID_HEADER, courtelJson.getDocumentName());
+        // Note - not checking x-display-from as that is taken from LocalDateTime.now()
     }
 
     private void validateHeaderValue(HttpHeaders headers, Object key, Object expectedValue) {

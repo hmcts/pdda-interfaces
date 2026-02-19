@@ -271,7 +271,8 @@ class CathHelperTest {
             {
                 "DailyList": {
                     "ListHeader": {
-                        "EndDate": "2025-12-06"
+                        "EndDate": "2025-12-06",
+                        "StartDate": "2025-12-05"
                     }
                 }
             }
