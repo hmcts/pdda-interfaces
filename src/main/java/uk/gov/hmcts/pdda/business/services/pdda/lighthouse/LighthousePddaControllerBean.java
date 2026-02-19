@@ -49,7 +49,7 @@ import javax.xml.parsers.ParserConfigurationException;
 @Service
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings("PMD")
+@SuppressWarnings({"PMD", "squid:S5843"})
 public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHelper implements RemoteTask {
 
     private static final DateTimeFormatter DATETIMEFORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
