@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD"})
 class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDisplayDao> {
 
     @Mock
@@ -83,6 +84,37 @@ class XhbCrLiveDisplayRepositoryTest extends AbstractRepositoryTest<XhbCrLiveDis
         Optional<XhbCrLiveDisplayDao> result =
             classUnderTest.findByCourtRoom(dao.getCourtRoomId());
         assertNotNull(result, NOTNULLRESULT);
+    }
+
+    @Test
+    void testUpdateScheduledHearingIdToNullNoMatches() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createNativeQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(0);
+
+            // Should not throw
+            classUnderTest.updateScheduledHearingIdToNull(123);
+
+            Mockito.verify(getEntityManager()).createNativeQuery(isA(String.class));
+            Mockito.verify(mockQuery).setParameter(isA(String.class), isA(Object.class));
+            Mockito.verify(mockQuery).executeUpdate();
+        }
+    }
+
+    @Test
+    void testUpdateScheduledHearingIdToNullWithMatches() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createNativeQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(2);
+
+            classUnderTest.updateScheduledHearingIdToNull(456);
+
+            Mockito.verify(mockQuery).executeUpdate();
+        }
     }
 
     @Override

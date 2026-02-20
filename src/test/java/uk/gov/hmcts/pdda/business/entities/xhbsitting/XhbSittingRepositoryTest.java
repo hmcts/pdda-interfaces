@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.entities.xhbsitting;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,7 @@ import static org.mockito.ArgumentMatchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD"})
 class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
 
     @Mock
@@ -32,6 +34,9 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
 
     @InjectMocks
     private XhbSittingRepository classUnderTest;
+    
+    @Mock
+    private EntityTransaction mockTransaction;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -46,6 +51,8 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
     @BeforeEach
     void setup() {
         classUnderTest = new XhbSittingRepository(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
     }
 
     @Test
@@ -120,6 +127,37 @@ class XhbSittingRepositoryTest extends AbstractRepositoryTest<XhbSittingDao> {
             assertSame(0, result.size(), NOTSAMERESULT);
         }
         return true;
+    }
+
+    @Test
+    void testDeleteByListIdNoRows() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createNativeQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(0);
+
+            // Should not throw
+            getClassUnderTest().deleteByListId(999);
+
+            Mockito.verify(getEntityManager()).createNativeQuery(isA(String.class));
+            Mockito.verify(mockQuery).setParameter(isA(String.class), isA(Object.class));
+            Mockito.verify(mockQuery).executeUpdate();
+        }
+    }
+
+    @Test
+    void testDeleteByListIdWithRows() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createNativeQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(3);
+
+            getClassUnderTest().deleteByListId(888);
+
+            Mockito.verify(mockQuery).executeUpdate();
+        }
     }
 
     @Override

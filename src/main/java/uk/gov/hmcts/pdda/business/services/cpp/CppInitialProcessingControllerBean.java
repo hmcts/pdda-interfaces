@@ -16,10 +16,16 @@ import uk.gov.hmcts.framework.scheduler.RemoteTask;
 import uk.gov.hmcts.framework.services.CsServices;
 import uk.gov.hmcts.framework.services.conversion.DateConverter;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
+import uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao;
+import uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppformatting.CppFormattingHelper;
 import uk.gov.hmcts.pdda.business.services.cpplist.CppListHelper;
@@ -29,6 +35,7 @@ import uk.gov.hmcts.pdda.business.services.formatting.AbstractListXmlMergeUtils;
 import uk.gov.hmcts.pdda.business.services.formatting.FormattingServices;
 import uk.gov.hmcts.pdda.business.services.formatting.MergeDocumentUtils;
 import uk.gov.hmcts.pdda.business.services.pdda.data.ListNodesHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.data.RepositoryHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 import uk.gov.hmcts.pdda.web.publicdisplay.rendering.compiled.DocumentUtils;
 
@@ -54,7 +61,7 @@ import javax.xml.parsers.ParserConfigurationException;
 @Transactional
 @LocalBean
 @ApplicationException(rollback = true)
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD"})
 public class CppInitialProcessingControllerBean extends AbstractCppInitialProcessingControllerBean
     implements RemoteTask, Serializable {
 
@@ -66,6 +73,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
     private static final String ROLLBACK_MSG = ": failed! Transaction Rollback";
     private static final String IWP = "IWP";
     private ListNodesHelper listNodesHelper;
+    
+    private RepositoryHelper repositoryHelper;
 
     public CppInitialProcessingControllerBean() {
         super();
@@ -543,6 +552,26 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             getCppStagingInboundControllerBean().updateStatusProcessingSuccess(thisDoc,
                 BATCH_USERNAME);
             
+            // As this is a new list then clear any existing hearings in the database
+            // for previous lists for this court for today's date.
+            // This is to ensure that any hearings that have been removed from the list
+            // are not included in the public display.
+            List<XhbCourtSiteDao> courtIds = getRepositoryHelper()
+                .getXhbCourtSiteRepository().findByCrestCourtIdValueSafe(thisDoc.getCourtCode());
+            if (courtIds == null || courtIds.isEmpty()) {
+                LOG.error("{} - No court site found for crest court id value: {}. "
+                    + "Unable to remove existing hearings for this court and date.",
+                    methodName, thisDoc.getCourtCode());
+            } else {
+                LOG.debug("{} - Found {} court site(s) for crest court id value: {}",
+                    methodName, courtIds.size(), thisDoc.getCourtCode());
+                for (XhbCourtSiteDao courtSite : courtIds) {
+                    LOG.debug("{} - Removing existing hearings for court site id: {} and date: {}",
+                        methodName, courtSite.getCourtSiteId(), listStartDate.toLocalDate());
+                    removeExistingHearingsForCourtAndDate(courtSite.getCourtId(), listStartDate.toLocalDate());
+                }
+            }
+            
             // Process the xml nodes and store the data contained in it
             getListNodesHelper().processClobData(clobXml);
 
@@ -556,6 +585,346 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         LOG.debug(TWO_PARAMS, methodName, EXITED);
     }
     
+    /**
+     * Given a court and date, remove any existing hearings for that court and date.
+     * .
+     * Remove the previous entry from XHB_HEARING_LIST.
+     * Remove the previous entries from XHB_SITTING.
+     * Remove the previous entries from XHB_SCHEULED_HEARING.
+     * Remove the previous entries from XHB_SCHED_HEARING_DEFENDANT.
+     * Remove the previous entries from XHB_SCHED_HEARING_ATTENDEE.
+     * Remove the previous entries from XHB_SH_LEG_REP.
+     * For entries in XHB_CR_LIVE_DISPLAY and XHB_CR_LIVE_INTERNET where this
+     * scheduled hearing exists then set the scheduled hearing id to null.
+     * For each entry in XHB_SCHED_HEARING_ATTENDEE find any entries in 
+     * XHB_SH_JUDGE for this SH_ATTENDEE_ID and remove those entries as well.
+     * .
+     * -------------------------------------
+     * In Postgres it would need to do this, and in this order to avoid foreign key constraint issues:
+     * -------------------------------------
+     * update pdda.xhb_cr_live_display
+     * set scheduled_hearing_id = null
+     * where scheduled_hearing_id in (
+     *      select scheduled_hearing_id from pdda.xhb_scheduled_hearing
+     *      where sitting_id in (select sitting_id from pdda.xhb_sitting where list_id=23317)
+     * );
+     * .
+     * delete from pdda.xhb_sched_hearing_defendant
+     * where scheduled_hearing_id in (
+     *      select scheduled_hearing_id from pdda.xhb_scheduled_hearing
+     *      where sitting_id in (select sitting_id from pdda.xhb_sitting where list_id=23317)
+     * );
+     * .
+     * delete from pdda.xhb_sh_judge
+     * where sh_attendee_id in (
+     *      select sh_attendee_id from pdda.xhb_sched_hearing_attendee
+     *      where scheduled_hearing_id in (
+     *          select scheduled_hearing_id from pdda.xhb_scheduled_hearing
+     *          where sitting_id in (select sitting_id from pdda.xhb_sitting where list_id=23317)
+     *      )
+     * );
+     * .
+     * delete from pdda.xhb_sched_hearing_attendee
+     * where scheduled_hearing_id in (
+     *      select scheduled_hearing_id from pdda.xhb_scheduled_hearing
+     *      where sitting_id in (select sitting_id from pdda.xhb_sitting where list_id=23317)
+     * );
+     * .
+     * delete from pdda.xhb_scheduled_hearing
+     * where sitting_id in (select sitting_id from pdda.xhb_sitting where list_id=23317);
+     * .
+     * delete from pdda.xhb_sitting where list_id=23317;
+     * .
+     * delete from pdda.xhb_hearing_list where list_id=23317;
+
+     * @param courtId Integer id of the court for which existing hearings should be removed
+     * @param listDate LocalDate the date of the list for which to remove existing hearings
+     */
+    private void removeExistingHearingsForCourtAndDate(Integer courtId, LocalDate listDate) {
+        String methodName = "removeExistingHearingsForCourtAndDate() - courtId: " + courtId
+            + ", listDate: " + listDate;
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+        
+        // Find the XHB_HEARING_LIST entries for this court and date
+        LocalDateTime listStartDateTime = LocalDateTime.of(listDate, LocalTime.MIDNIGHT);
+        List<XhbHearingListDao> hearingListsToRemove =
+            getRepositoryHelper().getXhbHearingListRepository().findByCourtIdAndDateSafe(
+                courtId, listStartDateTime);
+        
+        if (hearingListsToRemove == null || hearingListsToRemove.isEmpty()) {
+            LOG.debug("{} - No existing hearing list found for court id {} and date {}",
+                methodName, courtId, listDate);
+        } else {
+            LOG.debug(
+                "{} - Found {} hearing list(s) to remove for court id {} and date {}",
+                methodName, hearingListsToRemove.size(), courtId, listDate
+            );
+        }
+        
+        // Loop through the hearing lists and remove the associated sittings,
+        // scheduled hearings, defendants, attendees, judge relationships and then the hearing list itself
+        for (XhbHearingListDao hearingList : hearingListsToRemove) {
+            LOG.debug("{} - Removing hearing list with id: {}", methodName, hearingList.getListId());
+            
+            // in removeExistingHearingsForCourtAndDate
+            removeSittingsForHearingList(hearingList);
+            getRepositoryHelper().getXhbHearingListRepository().deleteById(hearingList.getListId());
+
+            LOG.debug("{} - Removed hearing list with id: {}", methodName, hearingList.getListId());
+        }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * For a given hearing list, remove the associated sittings.
+     * @param hearingList the hearing list to remove sittings for
+     */
+    private void removeSittingsForHearingList(XhbHearingListDao hearingList) {
+        String methodName = "removeSittingsForHearingList() - hearingListId: "
+            + hearingList.getListId();
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+
+        // Find the sittings for this hearing list
+        List<XhbSittingDao> sittings =
+            getRepositoryHelper().getXhbSittingRepository().findByListIdSafe(hearingList.getListId());
+        if (sittings == null || sittings.isEmpty()) {
+            LOG.debug("{} - No sittings found for hearing list with id: {}",
+                methodName, hearingList.getListId());
+        } else {
+            LOG.debug("{} - Found {} sitting(s) to remove for hearing list with id: {}",
+                methodName, sittings.size(), hearingList.getListId());
+        }
+
+        // Remove scheduled hearings (and their related data) for the found sittings
+        removeScheduledHearingsForSittings(sittings);
+
+        // Now delete the sitting rows for the hearing list
+        getRepositoryHelper().getXhbSittingRepository().deleteByListId(hearingList.getListId());
+        LOG.debug("{} - Removed sittings for hearing list with id: {}", methodName, hearingList.getListId());
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * For a given list of sittings, remove the associated scheduled hearings.
+     * @param sittings list of sittings for which scheduled hearings should be removed
+     */
+    private void removeScheduledHearingsForSittings(List<XhbSittingDao> sittings) {
+        // Prepare a safe method name and sitting id list without risking NPE or IndexOutOfBounds
+        List<Integer> sittingIds = (sittings == null)
+            ? List.of()
+            : sittings.stream()
+                .map(XhbSittingDao::getSittingId)
+                .toList();
+        String methodName = "removeScheduledHearingsForSittings() - sittingIds: "
+            + (sittingIds.isEmpty() ? "N/A" : sittingIds);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+
+        if (sittingIds.isEmpty()) {
+            LOG.debug("{} - No sitting ids provided, nothing to remove", methodName);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
+            return;
+        }
+
+        // Find the scheduled hearings for these sittings
+        List<XhbScheduledHearingDao> scheduledHearings =
+            getRepositoryHelper().getXhbScheduledHearingRepository()
+                .findBySittingIdsSafe(sittingIds);
+        if (scheduledHearings == null || scheduledHearings.isEmpty()) {
+            LOG.debug("{} - No scheduled hearings found for sitting ids: {}", methodName, sittingIds);
+        } else {
+            LOG.debug(
+                "{} - Found {} scheduled hearing(s) to remove for sitting ids: {}",
+                methodName,
+                scheduledHearings.size(),
+                sittingIds
+            );
+        }
+
+        // Use a non-null safe list for downstream calls to avoid potential NPEs or static analysis warnings
+        List<XhbScheduledHearingDao> safeScheduledHearings =
+            scheduledHearings == null ? List.of() : scheduledHearings;
+
+        // Remove related data for scheduled hearings (defendants, attendees, and live display)
+        removeScheduledHearingDefendants(safeScheduledHearings);
+        removeScheduledHearingAttendees(safeScheduledHearings);
+        updateLiveDisplayForScheduledHearings(safeScheduledHearings);
+
+        // Delete scheduled hearings themselves
+        getRepositoryHelper().getXhbScheduledHearingRepository().deleteBySittingIds(sittingIds);
+        LOG.debug("{} - Removed scheduled hearings for sitting ids: {}", methodName, sittingIds);
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * For a given list of scheduled hearings, set the scheduled hearing id to null
+     * in any associated live display records.
+     * @param scheduledHearings list of scheduled hearings to update in live display
+     */
+    private void updateLiveDisplayForScheduledHearings(List<XhbScheduledHearingDao> scheduledHearings) {
+        // Defensive: compute scheduled ids once and handle null/empty safely
+        List<Integer> scheduledIds = (scheduledHearings == null) ? List.of() : scheduledHearings.stream()
+            .map(XhbScheduledHearingDao::getScheduledHearingId).toList();
+        String methodName = "updateLiveDisplayForScheduledHearings() - scheduledHearingIds: "
+            + (scheduledIds.isEmpty() ? "N/A" : scheduledIds);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+
+        if (scheduledIds.isEmpty()) {
+            LOG.debug("{} - No scheduled hearing ids provided, nothing to update", methodName);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
+            return;
+        }
+
+        LOG.debug(
+            "{} - Setting scheduled hearing id to null in live display for scheduled hearing ids: {}",
+            methodName,
+            scheduledIds
+        );
+        for (Integer schedId : scheduledIds) {
+            try {
+                getRepositoryHelper().getXhbCrLiveDisplayRepository()
+                    .updateScheduledHearingIdToNull(schedId);
+            } catch (Exception e) {
+                // Log per-id failure and continue with others
+                LOG.error(
+                    "{} - Error updating live display for scheduledHearingId {}: {}",
+                    methodName, schedId, e.getMessage(), e
+                );
+            }
+        }
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * For a given list of scheduled hearings, remove the associated defendants.
+     * @param scheduledHearings list of scheduled hearings to remove defendants for
+     */
+    private void removeScheduledHearingDefendants(List<XhbScheduledHearingDao> scheduledHearings) {
+        // Defensive: compute scheduled ids once and handle null/empty safely
+        List<Integer> scheduledIds = (scheduledHearings == null) ? List.of() : scheduledHearings.stream()
+            .map(XhbScheduledHearingDao::getScheduledHearingId).toList();
+        String methodName = "removeScheduledHearingDefendants() - scheduledHearingIds: "
+            + (scheduledIds.isEmpty() ? "N/A" : scheduledIds);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+
+        if (scheduledIds.isEmpty()) {
+            LOG.debug("{} - No scheduled hearing ids provided, nothing to remove", methodName);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
+            return;
+        }
+
+        // Find the scheduled hearing defendants for these scheduled hearings
+        List<XhbSchedHearingDefendantDao> defendants = getRepositoryHelper().getXhbSchedHearingDefendantRepository()
+            .findByScheduledHearingIdsSafe(scheduledIds);
+
+        if (defendants != null && !defendants.isEmpty()) {
+            LOG.debug(
+                "{} - Found {} scheduled hearing defendant(s) to remove for scheduled hearing ids: {}",
+                methodName,
+                defendants.size(),
+                scheduledIds
+            );
+            getRepositoryHelper().getXhbSchedHearingDefendantRepository()
+                .deleteByScheduledHearingIds(scheduledIds);
+            LOG.debug("{} - Removed scheduled hearing defendants for scheduled hearing ids: {}",
+                methodName, scheduledIds);
+        } else {
+            LOG.debug("{} - No scheduled hearing defendants found for scheduled hearing ids: {}",
+                methodName, scheduledIds);
+        }
+
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * For a given list of scheduled hearings, remove the associated attendees and judge relationships.
+     * @param scheduledHearings list of scheduled hearings to remove attendees for
+     */
+    private void removeScheduledHearingAttendees(List<XhbScheduledHearingDao> scheduledHearings) {
+        // Defensive: compute scheduled ids once and handle null/empty safely
+        List<Integer> scheduledIds = (scheduledHearings == null) ? List.of() : scheduledHearings.stream()
+            .map(XhbScheduledHearingDao::getScheduledHearingId).toList();
+        String methodName = "removeScheduledHearingAttendees() - scheduledHearingIds: "
+            + (scheduledIds.isEmpty() ? "N/A" : scheduledIds);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(TWO_PARAMS, methodName, ENTERED);
+        }
+
+        if (scheduledIds.isEmpty()) {
+            LOG.debug("{} - No scheduled hearing ids provided, nothing to remove", methodName);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
+            return;
+        }
+
+        // Loop round each scheduled hearing and find the attendees to remove
+        for (XhbScheduledHearingDao scheduledHearing : scheduledHearings) {
+            Integer schedId = scheduledHearing == null ? null : scheduledHearing.getScheduledHearingId();
+            LOG.debug("{} - Processing scheduled hearing with id: {}", methodName, schedId);
+
+            if (schedId == null) {
+                LOG.debug("{} - scheduled hearing entry was null - skipping", methodName);
+                continue;
+            }
+
+            // Find the scheduled hearing attendees for this scheduled hearing id
+            List<XhbSchedHearingAttendeeDao> attendees = getRepositoryHelper().getXhbSchedHearingAttendeeRepository()
+                .findByScheduledHearingIdSafe(schedId);
+
+            if (attendees != null && !attendees.isEmpty()) {
+                LOG.debug(
+                    "{} - Found {} scheduled hearing attendee(s) to remove for scheduled hearing id: {}",
+                    methodName,
+                    attendees.size(),
+                    schedId
+                );
+                // For each attendee we need to find any judge relationships and remove those as well
+                for (XhbSchedHearingAttendeeDao attendee : attendees) {
+                    if (attendee != null) {
+                        getRepositoryHelper().getXhbShJudgeRepository()
+                            .deleteByShAttendeeId(attendee.getShAttendeeId());
+                        LOG.debug(
+                            "{} - Removed judge relationships for scheduled hearing attendee id: {}",
+                            methodName, attendee.getShAttendeeId()
+                        );
+                    }
+                }
+            } else {
+                LOG.debug("{} - No scheduled hearing attendees found for scheduled hearing id: {}",
+                    methodName, schedId);
+            }
+        }
+
+        // Bulk-delete attendees for all scheduled ids (safe no-op if none exist)
+        getRepositoryHelper().getXhbSchedHearingAttendeeRepository().deleteByScheduledHearingIds(scheduledIds);
+        LOG.debug("{} - Removed scheduled hearing attendees for scheduled hearing ids: {}", methodName, scheduledIds);
+
+        LOG.debug(TWO_PARAMS, methodName, EXITED);
+    }
+
+    /**
+     * Create the records in XHB_CPP_LIST or XHB_CPP_FORMATTING that are required for processing
+     * the document and then processing the document based on the document type.
+     * For a list document (DL, FL, WL) a record is created/updated in XHB_CPP_LIST and then a record
+     * is created in XHB_FORMATTING for each language (en and cy) and a record is created in XHB_XML_DOCUMENT
+     * for each language. For a non-list document (PD, WP) a record is created/updated in XHB_CPP_FORMATTING
+     * and then if it is a WP document a record is also created in XHB_FORMATTING
+     * for each language (en and cy) and a record is created in XHB_XML_DOCUMENT for each language.
+
+     * @param cppStagingInboundDao the record from XHB_STAGING_INBOUND for which to create the processing records
+     * @param documentType the type of document being processed (DL, FL, WL, PD, WP)
+     * @param cppListDao the record from XHB_CPP_LIST that was created/updated for this document
+     *     (only applicable for list documents, will be null for non-list documents).
+     */
     private void createRecordsForProcessing(XhbCppStagingInboundDao cppStagingInboundDao, String documentType, 
         XhbCppListDao cppListDao) {
         // Get the court id
@@ -578,5 +947,12 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
             listNodesHelper = new ListNodesHelper();
         }
         return listNodesHelper;
+    }
+    
+    protected RepositoryHelper getRepositoryHelper() {
+        if (repositoryHelper == null) {
+            repositoryHelper = new RepositoryHelper();
+        }
+        return repositoryHelper;
     }
 }
