@@ -2,10 +2,10 @@
 <currentcourtstatus
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<court>
-		<courtname>Swansea Crown Court</courtname>
+		<courtname>Cardiff Crown Court</courtname>
 		<courtsites>
 			<courtsite>
-				<courtsitename>SWANSEA</courtsitename>
+				<courtsitename>CARDIFF</courtsitename>
 				<courtrooms>
 					<courtroom>
 						<cases>
@@ -416,12 +416,12 @@
 		</courtsites>
 	</court>
 	<datetimestamp>
-		<dayofweek>Wednesday</dayofweek>
-		<date>07</date>
-		<month>May</month>
-		<year>2025</year>
-		<hour>09</hour>
+		<dayofweek>Friday</dayofweek>
+		<date>20</date>
+		<month>February</month>
+		<year>2026</year>
+		<hour>16</hour>
 		<min>30</min>
 	</datetimestamp>
-	<pagename>swansea crown court</pagename>
+	<pagename>cardiff crown court</pagename>
 </currentcourtstatus>
