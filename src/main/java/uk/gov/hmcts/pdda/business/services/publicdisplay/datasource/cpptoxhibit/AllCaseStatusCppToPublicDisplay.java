@@ -17,7 +17,6 @@ import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.AllCaseStatusValue;
 import uk.gov.hmcts.pdda.common.publicdisplay.renderdata.nodes.BranchEventXmlNode;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -203,17 +202,20 @@ public class AllCaseStatusCppToPublicDisplay extends SummaryByNameCppToPublicDis
         String eventDate = getXPath().evaluate(XPATH_EVENTDATE, caseNode);
         String eventTime = getXPath().evaluate(XPATH_EVENTTIME, caseNode);
         String eventDateTime;
-        if (EMPTY_STRING.equals(eventDate) && !EMPTY_STRING.equals(eventTime)) {
+
+        if (EMPTY_STRING.equals(eventDate) || EMPTY_STRING.equals(eventTime)) {
             // No event date/time so use the timestatusset node
             String timeStatusSet = getXPath().evaluate(XPATH_TIMESTATUSSET, caseNode);
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.getDefault());
             String dateString = dateFormat.format(this.date);
-            // Combine the time with the date to complete the timestamp otherwise uses 1970
+
             eventDateTime = dateString + " " + timeStatusSet;
-            value.setEventTime(convertStringToTimestamp(eventDateTime));
         } else {
-            value.setEventTime(LocalDateTime.now());
+            eventDateTime = eventDate + " " + eventTime;
         }
+
+        value.setEventTime(convertStringToTimestamp(eventDateTime));
+
 
         String hearingDesc = getXPath().evaluate(XPATH_HEARINGTYPE, caseNode);
         value.setHearingDescription(hearingDesc);
