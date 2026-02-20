@@ -656,6 +656,8 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         if (hearingListsToRemove == null || hearingListsToRemove.isEmpty()) {
             LOG.debug("{} - No existing hearing list found for court id {} and date {}",
                 methodName, courtId, listDate);
+            LOG.debug(TWO_PARAMS, methodName, EXITED);
+            return;
         } else {
             LOG.debug(
                 "{} - Found {} hearing list(s) to remove for court id {} and date {}",
