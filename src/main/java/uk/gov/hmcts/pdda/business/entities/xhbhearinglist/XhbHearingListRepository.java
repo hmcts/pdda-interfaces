@@ -10,6 +10,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepository;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,14 +49,17 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
             query.getResultList().isEmpty() ? null : (XhbHearingListDao) query.getSingleResult();
         return dao != null ? Optional.of(dao) : Optional.empty();
     }
-
+    
+    
     @SuppressWarnings("unchecked")
-    public Optional<XhbHearingListDao> findByCourtIdStatusAndDateSafe(Integer courtId,
-        String status, LocalDateTime startDate) {
-        LOG.debug("findByCourtIdStatusAndDateSafe(courtId: {}, status: {}, startDate: {})", courtId,
-            status, startDate);
+    private List<XhbHearingListDao> findByCourtIdStatusAndDateSharedLogic(Integer courtId,
+            String status, LocalDateTime startDate) {
+
+        LOG.debug("findByCourtIdStatusAndDate(courtId: {}, status: {}, startDate: {})",
+                courtId, status, startDate);
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+
             Query query = em.createNamedQuery("XHB_HEARING_LIST.findByCourtIdStatusAndDate");
             query.setParameter("courtId", courtId);
             query.setParameter("status", status);
@@ -64,29 +68,41 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
             List<?> resultList = query.getResultList();
 
             if (resultList == null || resultList.isEmpty()) {
-                LOG.debug(
-                    "findByCourtIdStatusAndDateSafe - No results for courtId: {}, status: {}, startDate: {}",
-                    courtId, status, startDate);
-                return Optional.empty();
+                LOG.debug("No results for courtId: {}, status: {}, startDate: {}",
+                        courtId, status, startDate);
+                return Collections.emptyList();
             }
 
-            Object result = resultList.get(0);
-            if (result instanceof XhbHearingListDao) {
-                LOG.debug(
-                    "findByCourtIdStatusAndDateSafe - Returning result for courtId: {}, status: {}, startDate: {}",
-                    courtId, status, startDate);
-                return Optional.of((XhbHearingListDao) result);
-            } else {
-                LOG.warn("findByCourtIdStatusAndDateSafe - Unexpected result type: {}",
-                    result.getClass().getName());
-                return Optional.empty();
-            }
+            return resultList.stream()
+                    .filter(XhbHearingListDao.class::isInstance)
+                    .map(XhbHearingListDao.class::cast)
+                    .toList();
 
         } catch (Exception e) {
-            LOG.error("Error in findByCourtIdStatusAndDateSafe({}, {}, {}): {}", courtId, status,
-                startDate, e.getMessage(), e);
+            LOG.error("Error in findByCourtIdStatusAndDate({}, {}, {}): {}",
+                    courtId, status, startDate, e.getMessage(), e);
+            return Collections.emptyList();
+        }
+    }
+
+    
+    public List<XhbHearingListDao> findAllByCourtIdStatusAndDate(Integer courtId,
+        String status, LocalDateTime startDate) {
+
+        return findByCourtIdStatusAndDateSharedLogic(courtId, status, startDate);
+    }
+    
+    public Optional<XhbHearingListDao> findByCourtIdStatusAndDateSafe(Integer courtId,
+        String status, LocalDateTime startDate) {
+
+        List<XhbHearingListDao> results =
+                findByCourtIdStatusAndDateSharedLogic(courtId, status, startDate);
+    
+        if (results.isEmpty()) {
             return Optional.empty();
         }
+    
+        return Optional.of(results.get(0));
     }
 
 
@@ -104,5 +120,24 @@ public class XhbHearingListRepository extends AbstractRepository<XhbHearingListD
             return List.of();
         }
     }
+    
+    // XhbHearingListRepository.java
+    public void deleteById(Integer listId) {
+        if (listId == null) {
+            return;
+        }
+        String sql = "DELETE FROM PDDA.XHB_HEARING_LIST WHERE LIST_ID = :listId";
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery(sql);
+            query.setParameter("listId", listId);
+            query.executeUpdate();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            LOG.error("Error deleting hearing list id {}: {}", listId, e.getMessage(), e);
+            throw e;
+        }
+    }
+
 
 }

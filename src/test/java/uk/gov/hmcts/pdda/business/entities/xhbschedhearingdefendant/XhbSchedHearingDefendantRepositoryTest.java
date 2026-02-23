@@ -2,6 +2,7 @@ package uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant;
 
 import com.pdda.hb.jpa.EntityManagerUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import static org.mockito.ArgumentMatchers.isA;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
+@SuppressWarnings({"PMD"})
 class XhbSchedHearingDefendantRepositoryTest
     extends AbstractRepositoryTest<XhbSchedHearingDefendantDao> {
 
@@ -34,6 +36,9 @@ class XhbSchedHearingDefendantRepositoryTest
 
     @InjectMocks
     private XhbSchedHearingDefendantRepository classUnderTest;
+    
+    @Mock
+    private EntityTransaction mockTransaction;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -48,6 +53,8 @@ class XhbSchedHearingDefendantRepositoryTest
     @BeforeEach
     void setup() {
         classUnderTest = new XhbSchedHearingDefendantRepository(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.getTransaction()).thenReturn(mockTransaction);
     }
 
     @Test
@@ -105,6 +112,49 @@ class XhbSchedHearingDefendantRepositoryTest
         Optional<XhbSchedHearingDefendantDao> result = classUnderTest
             .findByHearingAndDefendant(dao.getScheduledHearingId(), dao.getDefendantOnCaseId());
         assertNotNull(result, NOTNULLRESULT);
+    }
+
+    @Test
+    void testFindByScheduledHearingIdsSafeEmpty() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(new ArrayList<>());
+
+            List<XhbSchedHearingDefendantDao> result =
+                getClassUnderTest().findByScheduledHearingIdsSafe(new ArrayList<>());
+            assertNotNull(result, "Result is Null");
+        }
+    }
+
+    @Test
+    void testDeleteByScheduledHearingIdsNoRows() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(0);
+
+            getClassUnderTest().deleteByScheduledHearingIds(List.of(4,5,6));
+
+            Mockito.verify(getEntityManager()).createQuery(isA(String.class));
+            Mockito.verify(mockQuery).executeUpdate();
+        }
+    }
+
+    @Test
+    void testDeleteByScheduledHearingIdsWithRows() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic = Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+
+            Mockito.when(getEntityManager().createQuery(isA(String.class))).thenReturn(mockQuery);
+            Mockito.when(mockQuery.executeUpdate()).thenReturn(2);
+
+            getClassUnderTest().deleteByScheduledHearingIds(List.of(7,8));
+
+            Mockito.verify(mockQuery).executeUpdate();
+        }
     }
 
     @Override

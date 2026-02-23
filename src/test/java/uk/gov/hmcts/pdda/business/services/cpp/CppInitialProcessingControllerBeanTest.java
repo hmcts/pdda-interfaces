@@ -13,11 +13,14 @@ import uk.gov.hmcts.pdda.business.entities.xhbcppformatting.XhbCppFormattingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcpplist.XhbCppListDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcppstaginginbound.XhbCppStagingInboundDao;
 import uk.gov.hmcts.pdda.business.entities.xhbformatting.XhbFormattingDao;
+import uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao;
 import uk.gov.hmcts.pdda.business.entities.xhbxmldocument.XhbXmlDocumentDao;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundControllerException;
 import uk.gov.hmcts.pdda.business.services.cppstaginginboundejb3.CppStagingInboundHelper;
+import uk.gov.hmcts.pdda.business.services.pdda.data.RepositoryHelper;
 import uk.gov.hmcts.pdda.business.services.validation.ValidationException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +30,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
-
  * Title: CPPInitialProcessingControllerBean Test.
-
-
+ * .
  * Description:
-
-
+ * .
  * Copyright: Copyright (c) 2022
-
-
+ * .
  * Company: CGI
-
  * @author Chris Vincent
  */
 @ExtendWith(EasyMockExtension.class)
@@ -51,7 +49,7 @@ class CppInitialProcessingControllerBeanTest
      * class following the Daily List route.
      */
     @Test
-    void testDoTask() {
+    void testDoTask() throws Exception {
         // Setup
         XhbCppStagingInboundDao unprocessedXcsi = DummyPdNotifierUtil.getXhbCppStagingInboundDao();
         unprocessedXcsi.setDocumentName(DAILY_LIST_DOCNAME);
@@ -143,11 +141,41 @@ class CppInitialProcessingControllerBeanTest
             mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(validatedXcsi,
                 BATCH_USERNAME);
 
+            // Prevent removeExistingHearingsForCourtAndDate from using real RepositoryHelper
+            // (which would call EntityManagerUtil)
+            RepositoryHelper mockRepoHelperForTest = EasyMock.createMock(RepositoryHelper.class);
+            uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepoForTest =
+                EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+            EasyMock.expect(mockRepoHelperForTest.getXhbHearingListRepository())
+                .andReturn(mockHearingListRepoForTest).anyTimes();
+            EasyMock.expect(mockHearingListRepoForTest
+                .findByCourtIdAndDateSafe(EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(new ArrayList<>()).anyTimes();
+
+            // ---- NEW: Provide mock for XhbCourtSiteRepository and expectation ----
+            uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository mockCourtSiteRepoForDoTask =
+                EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository.class);
+            EasyMock.expect(mockRepoHelperForTest.getXhbCourtSiteRepository())
+                .andReturn(mockCourtSiteRepoForDoTask).anyTimes();
+
+            uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao courtSiteDaoDoTask =
+                new uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao();
+            courtSiteDaoDoTask.setCourtSiteId(123);
+            courtSiteDaoDoTask.setCourtId(1);
+
+            EasyMock.expect(mockCourtSiteRepoForDoTask.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+                .andReturn(java.util.List.of(courtSiteDaoDoTask)).anyTimes();
+            // ---- END NEW ----
+
+            EasyMock.replay(mockRepoHelperForTest, mockHearingListRepoForTest, mockCourtSiteRepoForDoTask);
+            java.lang.reflect.Field repoFieldForDoTask = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+            repoFieldForDoTask.setAccessible(true);
+            repoFieldForDoTask.set(classUnderTest, mockRepoHelperForTest);
+
+            replayMocks();
         } catch (CppStagingInboundControllerException | ValidationException exception) {
             fail(exception);
         }
-
-        replayMocks();
 
         // Run method
         classUnderTest.doTask();
@@ -473,6 +501,41 @@ class CppInitialProcessingControllerBeanTest
         mockListNodesHelper.processClobData(EasyMock.isA(String.class));
         EasyMock.expectLastCall().anyTimes();
 
+        // Prevent removeExistingHearingsForCourtAndDate from using real RepositoryHelper
+        RepositoryHelper mockRepoHelperForCreateTest = EasyMock.createMock(RepositoryHelper.class);
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepoForCreateTest =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+        EasyMock.expect(mockRepoHelperForCreateTest.getXhbHearingListRepository())
+        .andReturn(mockHearingListRepoForCreateTest).anyTimes();
+        EasyMock.expect(mockHearingListRepoForCreateTest
+            .findByCourtIdAndDateSafe(EasyMock.isA(Integer.class), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(new ArrayList<>()).anyTimes();
+
+        // ---- NEW: Provide mock for XhbCourtSiteRepository and expectation ----
+        uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository mockCourtSiteRepoForCreateTest =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteRepository.class);
+        EasyMock.expect(mockRepoHelperForCreateTest.getXhbCourtSiteRepository())
+            .andReturn(mockCourtSiteRepoForCreateTest).anyTimes();
+
+        uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao courtSiteDaoCreateTest =
+            new uk.gov.hmcts.pdda.business.entities.xhbcourtsite.XhbCourtSiteDao();
+        courtSiteDaoCreateTest.setCourtSiteId(456);
+        courtSiteDaoCreateTest.setCourtId(1);
+
+        EasyMock.expect(mockCourtSiteRepoForCreateTest.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
+            .andReturn(java.util.List.of(courtSiteDaoCreateTest)).anyTimes();
+        // ---- END NEW ----
+
+        EasyMock.replay(mockRepoHelperForCreateTest, mockHearingListRepoForCreateTest, mockCourtSiteRepoForCreateTest);
+        try {
+            java.lang.reflect.Field repoFieldForCreateTest = classUnderTest.getClass()
+                .getDeclaredField("repositoryHelper");
+            repoFieldForCreateTest.setAccessible(true);
+            repoFieldForCreateTest.set(classUnderTest, mockRepoHelperForCreateTest);
+        } catch (Exception e) {
+            fail(e);
+        }
+
         replayMocks();
 
         // Run
@@ -490,5 +553,350 @@ class CppInitialProcessingControllerBeanTest
     private void expectGetEntityManager(AbstractRepository mockRepository) {
         EasyMock.expect(mockRepository.getEntityManager()).andReturn(mockEntityManager).anyTimes();
     }
+
+    @Test
+    void testRemoveExistingHearingsForCourtAndDateFlow() throws Exception {
+        // Prepare mocks for repositories and repository helper
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository mockSittingRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository mockScheduledRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing
+                .XhbScheduledHearingRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository mockDefRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant
+                .XhbSchedHearingDefendantRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository mockAttRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee
+                .XhbSchedHearingAttendeeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository mockShJudgeRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository mockCrLiveRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        // Wire repository helper getters
+        EasyMock.expect(mockRepoHelper.getXhbHearingListRepository()).andReturn(mockHearingListRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSittingRepository()).andReturn(mockSittingRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbScheduledHearingRepository()).andReturn(mockScheduledRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingDefendantRepository()).andReturn(mockDefRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingAttendeeRepository()).andReturn(mockAttRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbShJudgeRepository()).andReturn(mockShJudgeRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbCrLiveDisplayRepository()).andReturn(mockCrLiveRepo).anyTimes();
+
+        // Prepare DAO objects
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao hearingList =
+            new uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao();
+        hearingList.setListId(1000);
+        List<uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao> hearingLists = List.of(hearingList);
+
+        // Expect hearing list lookup
+        EasyMock.expect(mockHearingListRepo.findByCourtIdAndDateSafe(EasyMock.eq(1), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(hearingLists);
+
+        // Sitting
+        uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao sitting =
+            new uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao();
+        sitting.setSittingId(2000);
+        sitting.setListId(1000);
+        List<uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao> sittings = List.of(sitting);
+        EasyMock.expect(mockSittingRepo.findByListIdSafe(EasyMock.eq(1000))).andReturn(sittings);
+
+        // Scheduled hearings
+        uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao sch =
+            new uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao();
+        sch.setScheduledHearingId(3000);
+        sch.setSittingId(2000);
+        List<uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingDao> schs = List.of(sch);
+        EasyMock.expect(mockScheduledRepo.findBySittingIdsSafe(EasyMock.eq(List.of(2000)))).andReturn(schs);
+
+        // Defendants: return one then expect delete
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao def =
+            new uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao();
+        def.setSchedHearingDefendantId(4000);
+        List<uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantDao> defs =
+            List.of(def);
+        EasyMock.expect(mockDefRepo.findByScheduledHearingIdsSafe(EasyMock.eq(List.of(3000)))).andReturn(defs);
+        mockDefRepo.deleteByScheduledHearingIds(EasyMock.eq(List.of(3000)));
+        EasyMock.expectLastCall();
+
+        // Attendees: return one then expect sh judge delete and bulk delete
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao att =
+            new uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao();
+        att.setShAttendeeId(5000);
+        List<uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeDao> atts =
+            List.of(att);
+        EasyMock.expect(mockAttRepo.findByScheduledHearingIdSafe(EasyMock.eq(3000))).andReturn(atts);
+        mockShJudgeRepo.deleteByShAttendeeId(EasyMock.eq(5000));
+        EasyMock.expectLastCall();
+        mockAttRepo.deleteByScheduledHearingIds(EasyMock.eq(List.of(3000)));
+        EasyMock.expectLastCall();
+
+        // Live display update
+        mockCrLiveRepo.updateScheduledHearingIdToNull(EasyMock.eq(3000));
+        EasyMock.expectLastCall();
+
+        // Delete scheduled hearings by sitting ids
+        mockScheduledRepo.deleteBySittingIds(EasyMock.eq(List.of(2000)));
+        EasyMock.expectLastCall();
+
+        // Delete sittings by list id
+        mockSittingRepo.deleteByListId(EasyMock.eq(1000));
+        EasyMock.expectLastCall();
+
+        // Delete hearing list
+        mockHearingListRepo.deleteById(EasyMock.anyInt());
+        EasyMock.expectLastCall();
+
+        // Replay all mocks
+        EasyMock.replay(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+
+        // Inject mockRepoHelper into classUnderTest via reflection
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        // Call private method via reflection
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("removeExistingHearingsForCourtAndDate",
+            Integer.class, LocalDate.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, 1, LocalDate.of(2020, 1, 21));
+
+        // Verify
+        EasyMock.verify(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+    }
+    
+    @Test
+    void testRemoveExistingHearingsForCourtAndDate_noHearingLists_null() throws Exception {
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+
+        EasyMock.expect(mockRepoHelper.getXhbHearingListRepository())
+            .andReturn(mockHearingListRepo).anyTimes();
+
+        EasyMock.expect(mockHearingListRepo.findByCourtIdAndDateSafe(
+                EasyMock.eq(1),
+                EasyMock.isA(LocalDateTime.class)))
+            .andReturn(null);
+
+        EasyMock.replay(mockRepoHelper, mockHearingListRepo);
+
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("removeExistingHearingsForCourtAndDate", Integer.class, LocalDate.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, 1, LocalDate.of(2020, 1, 21));
+
+        EasyMock.verify(mockRepoHelper, mockHearingListRepo);
+    }
+
+    
+    @Test
+    void testRemoveExistingHearingsForCourtAndDate_sittingsEmpty() throws Exception {
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository mockSittingRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository.class);
+
+        // These are needed because the production code calls the getters, even though no ops happen later
+        uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository mockScheduledRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing
+                .XhbScheduledHearingRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository mockDefRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant
+                .XhbSchedHearingDefendantRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository mockAttRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee
+                .XhbSchedHearingAttendeeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository mockShJudgeRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository mockCrLiveRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        EasyMock.expect(mockRepoHelper.getXhbHearingListRepository()).andReturn(mockHearingListRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSittingRepository()).andReturn(mockSittingRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbScheduledHearingRepository()).andReturn(mockScheduledRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingDefendantRepository()).andReturn(mockDefRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingAttendeeRepository()).andReturn(mockAttRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbShJudgeRepository()).andReturn(mockShJudgeRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbCrLiveDisplayRepository()).andReturn(mockCrLiveRepo).anyTimes();
+
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao hearingList =
+            new uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao();
+        hearingList.setListId(1000);
+
+        EasyMock.expect(mockHearingListRepo.findByCourtIdAndDateSafe(EasyMock.eq(1), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(List.of(hearingList));
+
+        // sittings empty -> will trigger early return in removeScheduledHearingsForSittings
+        EasyMock.expect(mockSittingRepo.findByListIdSafe(EasyMock.eq(1000))).andReturn(List.of());
+
+        // still deletes sittings + hearing list
+        mockSittingRepo.deleteByListId(EasyMock.eq(1000));
+        EasyMock.expectLastCall();
+
+        mockHearingListRepo.deleteById(EasyMock.eq(1000));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("removeExistingHearingsForCourtAndDate", Integer.class, LocalDate.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, 1, LocalDate.of(2020, 1, 21));
+
+        EasyMock.verify(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+    }
+
+    
+    @Test
+    void testRemoveExistingHearingsForCourtAndDate_scheduledHearingsNull() throws Exception {
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository mockHearingListRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository mockSittingRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing.XhbScheduledHearingRepository mockScheduledRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbscheduledhearing
+                .XhbScheduledHearingRepository.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant.XhbSchedHearingDefendantRepository mockDefRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingdefendant
+                .XhbSchedHearingDefendantRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee.XhbSchedHearingAttendeeRepository mockAttRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbschedhearingattendee
+                .XhbSchedHearingAttendeeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository mockShJudgeRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbshjudge.XhbShJudgeRepository.class);
+        uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository mockCrLiveRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        EasyMock.expect(mockRepoHelper.getXhbHearingListRepository()).andReturn(mockHearingListRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSittingRepository()).andReturn(mockSittingRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbScheduledHearingRepository()).andReturn(mockScheduledRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingDefendantRepository()).andReturn(mockDefRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbSchedHearingAttendeeRepository()).andReturn(mockAttRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbShJudgeRepository()).andReturn(mockShJudgeRepo).anyTimes();
+        EasyMock.expect(mockRepoHelper.getXhbCrLiveDisplayRepository()).andReturn(mockCrLiveRepo).anyTimes();
+
+        uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao hearingList =
+            new uk.gov.hmcts.pdda.business.entities.xhbhearinglist.XhbHearingListDao();
+        hearingList.setListId(1000);
+
+        EasyMock.expect(mockHearingListRepo.findByCourtIdAndDateSafe(EasyMock.eq(1), EasyMock.isA(LocalDateTime.class)))
+            .andReturn(List.of(hearingList));
+
+        uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao sitting =
+            new uk.gov.hmcts.pdda.business.entities.xhbsitting.XhbSittingDao();
+        sitting.setSittingId(2000);
+        sitting.setListId(1000);
+
+        EasyMock.expect(mockSittingRepo.findByListIdSafe(EasyMock.eq(1000))).andReturn(List.of(sitting));
+
+        // scheduled hearings null -> downstream removals early-return, but deleteBySittingIds still called
+        EasyMock.expect(mockScheduledRepo.findBySittingIdsSafe(EasyMock.eq(List.of(2000)))).andReturn(null);
+
+        mockScheduledRepo.deleteBySittingIds(EasyMock.eq(List.of(2000)));
+        EasyMock.expectLastCall();
+
+        mockSittingRepo.deleteByListId(EasyMock.eq(1000));
+        EasyMock.expectLastCall();
+
+        mockHearingListRepo.deleteById(EasyMock.eq(1000));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("removeExistingHearingsForCourtAndDate", Integer.class, LocalDate.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, 1, LocalDate.of(2020, 1, 21));
+
+        EasyMock.verify(mockRepoHelper, mockHearingListRepo, mockSittingRepo, mockScheduledRepo,
+            mockDefRepo, mockAttRepo, mockShJudgeRepo, mockCrLiveRepo);
+    }
+
+
+    @Test
+    void testUpdateLiveDisplayForScheduledHearings_emptyList_returnsEarly() throws Exception {
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository mockCrLiveRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        EasyMock.expect(mockRepoHelper.getXhbCrLiveDisplayRepository()).andReturn(mockCrLiveRepo).anyTimes();
+
+        EasyMock.replay(mockRepoHelper, mockCrLiveRepo);
+
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("updateLiveDisplayForScheduledHearings", List.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, List.of());
+
+        EasyMock.verify(mockRepoHelper, mockCrLiveRepo);
+    }
+
+
+    @Test
+    void testUpdateLiveDisplayForScheduledHearings_exceptionIsCaught() throws Exception {
+        RepositoryHelper mockRepoHelper = EasyMock.createMock(RepositoryHelper.class);
+
+        uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository mockCrLiveRepo =
+            EasyMock.createMock(uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayRepository.class);
+
+        EasyMock.expect(mockRepoHelper.getXhbCrLiveDisplayRepository()).andReturn(mockCrLiveRepo).anyTimes();
+
+        XhbScheduledHearingDao sch1 = new XhbScheduledHearingDao();
+        sch1.setScheduledHearingId(3000);
+        XhbScheduledHearingDao sch2 = new XhbScheduledHearingDao();
+        sch2.setScheduledHearingId(3001);
+
+        mockCrLiveRepo.updateScheduledHearingIdToNull(EasyMock.eq(3000));
+        EasyMock.expectLastCall().andThrow(new RuntimeException("boom"));
+
+        mockCrLiveRepo.updateScheduledHearingIdToNull(EasyMock.eq(3001));
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(mockRepoHelper, mockCrLiveRepo);
+
+        java.lang.reflect.Field repoField = classUnderTest.getClass().getDeclaredField("repositoryHelper");
+        repoField.setAccessible(true);
+        repoField.set(classUnderTest, mockRepoHelper);
+
+        java.lang.reflect.Method m = classUnderTest.getClass()
+            .getDeclaredMethod("updateLiveDisplayForScheduledHearings", List.class);
+        m.setAccessible(true);
+        m.invoke(classUnderTest, List.of(sch1, sch2));
+
+        EasyMock.verify(mockRepoHelper, mockCrLiveRepo);
+    }
+
 
 }

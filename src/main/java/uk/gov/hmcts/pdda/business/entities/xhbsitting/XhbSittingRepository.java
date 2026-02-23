@@ -94,6 +94,7 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
     /**
      * findByCourtRoomAndSittingTime.
+
      * @param courtSiteId Integer
      * @param courtRoomId Integer
      * @param sittingTime LocalDateTime
@@ -153,12 +154,12 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
             return Optional.empty();
         }
     }
-    
-    public Optional<XhbSittingDao> findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafe(Integer courtSiteId,
-        Integer courtRoomId, LocalDateTime sittingTime, final Integer listId) {
+
+    public Optional<XhbSittingDao> findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafe(
+        Integer courtSiteId, Integer courtRoomId, LocalDateTime sittingTime, final Integer listId) {
         LOG.debug(
             "findByCourtRoomIdCourtSiteIdListIdAndSittingTimeSafeSafe("
-            + "courtSiteId: {}, courtRoomId: {}, sittingTime: {}, listId: {})",
+                + "courtSiteId: {}, courtRoomId: {}, sittingTime: {}, listId: {})",
             courtSiteId, courtRoomId, sittingTime, listId);
 
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
@@ -198,8 +199,8 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
         }
 
     }
-    
-    
+
+
     /**
      * findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe.
 
@@ -208,15 +209,16 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
      * @return XhbSittingDao
      */
     @SuppressWarnings("unchecked")
-    public List<XhbSittingDao> findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(Integer courtRoomId, 
-        Integer courtSiteId, LocalDateTime sittingTimeToday) {
+    public List<XhbSittingDao> findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(
+        Integer courtRoomId, Integer courtSiteId, LocalDateTime sittingTimeToday) {
         LOG.debug("findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe({}, {}, {})",
             courtRoomId, courtSiteId, sittingTimeToday);
         // Get tomorrow's date by adding one day to today's date
         LocalDateTime sittingTimeTomorrow = sittingTimeToday.plusDays(1);
         // This will call the same query as above but will return a list of sittings
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
-            Query query = em.createNamedQuery("XHB_SITTING.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDate");
+            Query query = em.createNamedQuery(
+                "XHB_SITTING.findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDate");
             query.setParameter("courtRoomId", courtRoomId);
             query.setParameter("courtSiteId", courtSiteId);
             query.setParameter("sittingTimeToday", sittingTimeToday);
@@ -224,9 +226,44 @@ public class XhbSittingRepository extends AbstractRepository<XhbSittingDao>
 
             return query.getResultList();
         } catch (Exception e) {
-            LOG.error("Error in findByCourtRoomIdAndCourtSiteIdSafe({},{}, {}): {}",
-                courtRoomId, courtSiteId, sittingTimeToday, e.getMessage(), e);
+            LOG.error("Error in findByCourtRoomIdAndCourtSiteIdSafe({},{}, {}): {}", courtRoomId,
+                courtSiteId, sittingTimeToday, e.getMessage(), e);
             return List.of(); // Safe fallback to avoid nulls
+        }
+    }
+
+    /**
+     * Given a listId, delete the sitting records associated with that listId.
+
+     * @param listId Integer
+     */
+    public void deleteByListId(Integer listId) {
+        // Guard against null input - nothing to delete
+        if (listId == null) {
+            LOG.debug("deleteByListId called with null listId - no action taken");
+            return;
+        }
+
+        String sql = "DELETE FROM PDDA.XHB_SITTING WHERE LIST_ID = :listId";
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery(sql);
+            query.setParameter("listId", listId);
+            int deletedCount = query.executeUpdate();
+            em.getTransaction().commit();
+
+            if (deletedCount == 0) {
+                // No rows matched; log as debug only - not an error
+                LOG.debug("deleteByListId - No rows deleted for listId {}", listId);
+            } else {
+                LOG.debug("Deleted {} records from XHB_SITTING with listId {}", deletedCount,
+                    listId);
+            }
+        } catch (Exception e) {
+            // Only surface real exceptions; log and rethrow so callers can react if needed
+            LOG.error("Error deleting records from XHB_SITTING with listId {}: {}", listId,
+                e.getMessage(), e);
+            throw e;
         }
     }
 
