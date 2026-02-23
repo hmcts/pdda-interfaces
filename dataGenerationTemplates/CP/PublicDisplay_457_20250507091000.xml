@@ -1,1 +1,427 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><currentcourtstatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><court><courtname>Swansea Crown Court</courtname><courtsites><courtsite><courtsitename>SWANSEA</courtsitename><courtrooms><courtroom><cases><caseDetails><cppurn>63AC1133723</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>1</activecase><hearingtype>For Sentence</hearingtype><defendants><defendant><firstname>BLUE</firstname><middlename>SQUARE </middlename><lastname>LLDCU</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>10:00</notbeforetime><currentstatus/><timestatusset>10:22</timestatusset><hearingprogress>8</hearingprogress></caseDetails><caseDetails><cppurn>CPP1</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Trial</hearingtype><defendants><defendant><firstname>ORANGE</firstname><lastname>UJHGDL</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>11:00</notbeforetime><timestatusset>11:00</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0413524</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Sentence</hearingtype><defendants><defendant><firstname>PURPLE</firstname><middlename>TRIANGLE </middlename><lastname>SBODJC</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0215122</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Application under the Proceeds of Crime Act 2002</hearingtype><defendants><defendant><firstname>TURQOISE</firstname><middlename>RHOMBUS </middlename><lastname>KLNKIBG</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>14:00</notbeforetime><timestatusset>14:00</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0674923</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Mention</hearingtype><defendants><defendant><firstname>WHITE</firstname><lastname>YUIBUIVYFU</lastname></defendant></defendants><publicnotices><publicnotice>Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992</publicnotice></publicnotices><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>09:45</notbeforetime><currentstatus/><timestatusset>09:55</timestatusset><hearingprogress>8</hearingprogress></caseDetails><caseDetails><cppurn>62WN0200825</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Application for Bail</hearingtype><defendants><defendant><firstname>PINK</firstname><middlename>CIRCLE </middlename><lastname>RTDFYTS</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails></cases><courtroomname>Court 4</courtroomname></courtroom><courtroom><cases><caseDetails><cppurn>63AC0053625</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Plea and Trial Preparation</hearingtype><defendants><defendant><firstname>RED</firstname><lastname>jklNL</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC0044525</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Plea and Trial Preparation</hearingtype><defendants><defendant><firstname>GREY</firstname><lastname>HJKBUIB</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC0067423</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Mention</hearingtype><defendants><defendant><firstname>YELLOW</firstname><middlename>ROUGH OCTAGON</middlename><lastname>HUGSD</lastname></defendant></defendants><publicnotices><publicnotice>Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992</publicnotice></publicnotices><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>10:45</notbeforetime><timestatusset>10:45</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC0255824</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Application under the Proceeds of Crime Act 2002</hearingtype><defendants><defendant/></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>15:00</notbeforetime><timestatusset>15:00</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63BA0033023</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Application under the Proceeds of Crime Act 2002</hearingtype><defendants><defendant><firstname>GREEN</firstname><lastname>HUIBUI-hhn</lastname></defendant><defendant><firstname>CREAM</firstname><lastname>ZVGSVYUD</lastname></defendant><defendant><firstname>BROWN</firstname><lastname>UIHOIJ</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>14:45</notbeforetime><timestatusset>14:45</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0806024</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Sentence</hearingtype><defendants><defendant><firstname>BEIGE</firstname><lastname>ANJNID</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>14:15</notbeforetime><timestatusset>14:15</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0334923</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Committal for Sentence</hearingtype><defendants><defendant><firstname>CRIMSON</firstname><lastname>NKNIBUI</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>12:30</notbeforetime><timestatusset>12:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63CH0154124</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>1</activecase><hearingtype>For Sentence</hearingtype><defendants><defendant><firstname>CYAN</firstname><lastname>FGVYUDD</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>10:00</notbeforetime><currentstatus><event><time>10:21</time><date>07/05/25</date><free_text></free_text><type>30500</type></event></currentstatus><timestatusset>10:21</timestatusset><hearingprogress>9</hearingprogress></caseDetails><caseDetails><cppurn>63DP0077524</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Application to Vary Bail Conditions</hearingtype><defendants><defendant><firstname>AQUA</firstname><middlename>CYLINDER </middlename><lastname>UOJIOP</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>11:45</notbeforetime><timestatusset>11:45</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC0061224</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Plea and Trial Preparation</hearingtype><defendants><defendant><firstname>MAGENTA</firstname><middlename>RECTANGLE </middlename><lastname>OPKHID</lastname></defendant><defendant><firstname>MINT</firstname><lastname>NKNXHDC</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>11:30</notbeforetime><timestatusset>11:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC1079823</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Plea and Trial Preparation</hearingtype><defendants><defendant><firstname>LILAC</firstname><middlename>CONE </middlename><lastname>LPHDDSZ</lastname></defendant><defendant><firstname>APRICOT</firstname><lastname>GHBYCC</lastname></defendant></defendants><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>11:15</notbeforetime><timestatusset>11:15</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>63AC0090824</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>Plea and Trial Preparation</hearingtype><defendants><defendant><firstname>BIAQUE</firstname><middlename>PENTAGON </middlename><lastname>SJBDDN</lastname></defendant></defendants><publicnotices><publicnotice>Complainant's anonymity protected by virtue of Section 1 of the Sexual Offences Amendment Act 1992</publicnotice></publicnotices><judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename><notbeforetime>11:00</notbeforetime><timestatusset>11:00</timestatusset><hearingprogress>0</hearingprogress></caseDetails></cases><courtroomname>Court 2</courtroomname></courtroom><courtroom><cases><caseDetails><cppurn>63AC0089324</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Trial</hearingtype><defendants><defendant><firstname>CAMEL</firstname><middlename>CUBE </middlename><lastname>KLJLDD</lastname></defendant></defendants><judgename></judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails><caseDetails><cppurn>62WN0739424</cppurn><casenumber>1</casenumber><casetype>CROWN</casetype><activecase>0</activecase><hearingtype>For Trial</hearingtype><defendants><defendant><firstname>CHARCOAL</firstname><lastname>YUGDHD</lastname></defendant></defendants><judgename></judgename><notbeforetime>10:30</notbeforetime><timestatusset>10:30</timestatusset><hearingprogress>0</hearingprogress></caseDetails></cases><courtroomname>Court 1</courtroomname></courtroom></courtrooms><floating/></courtsite></courtsites></court><datetimestamp><dayofweek>Wednesday</dayofweek><date>07</date><month>May</month><year>2025</year><hour>09</hour><min>30</min></datetimestamp><pagename>swansea crown court</pagename></currentcourtstatus>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<currentcourtstatus
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<court>
+		<courtname>Swansea Crown Court</courtname>
+		<courtsites>
+			<courtsite>
+				<courtsitename>SWANSEA</courtsitename>
+				<courtrooms>
+					<courtroom>
+						<cases>
+							<caseDetails>
+								<cppurn>63AC1133723</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>1</activecase>
+								<hearingtype>For Sentence</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>BLUE</firstname>
+										<middlename>SQUARE </middlename>
+										<lastname>LLDCU</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>10:00</notbeforetime>
+								<currentstatus />
+								<timestatusset>10:22</timestatusset>
+								<hearingprogress>8</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>CPP1</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Trial</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>ORANGE</firstname>
+										<lastname>UJHGDL</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>11:00</notbeforetime>
+								<timestatusset>11:00</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0413524</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Sentence</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>PURPLE</firstname>
+										<middlename>TRIANGLE </middlename>
+										<lastname>SBODJC</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0215122</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Application under the Proceeds of Crime Act
+									2002</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>TURQOISE</firstname>
+										<middlename>RHOMBUS </middlename>
+										<lastname>KLNKIBG</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>14:00</notbeforetime>
+								<timestatusset>14:00</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0674923</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Mention</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>WHITE</firstname>
+										<lastname>YUIBUIVYFU</lastname>
+									</defendant>
+								</defendants>
+								<publicnotices>
+									<publicnotice>Complainant's anonymity protected by virtue of
+										Section 1 of the Sexual Offences Amendment Act 1992</publicnotice>
+								</publicnotices>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>09:45</notbeforetime>
+								<currentstatus />
+								<timestatusset>09:55</timestatusset>
+								<hearingprogress>8</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0200825</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Application for Bail</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>PINK</firstname>
+										<middlename>CIRCLE </middlename>
+										<lastname>RTDFYTS</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE JKUJDV DTYHG KC</judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+						</cases>
+						<courtroomname>Court 4</courtroomname>
+					</courtroom>
+					<courtroom>
+						<cases>
+							<caseDetails>
+								<cppurn>63AC0053625</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Plea and Trial Preparation</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>RED</firstname>
+										<lastname>jklNL</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC0044525</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Plea and Trial Preparation</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>GREY</firstname>
+										<lastname>HJKBUIB</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC0067423</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Mention</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>YELLOW</firstname>
+										<middlename>ROUGH OCTAGON</middlename>
+										<lastname>HUGSD</lastname>
+									</defendant>
+								</defendants>
+								<publicnotices>
+									<publicnotice>Complainant's anonymity protected by virtue of
+										Section 1 of the Sexual Offences Amendment Act 1992</publicnotice>
+								</publicnotices>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>10:45</notbeforetime>
+								<timestatusset>10:45</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC0255824</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Application under the Proceeds of Crime Act
+									2002</hearingtype>
+								<defendants>
+									<defendant />
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>15:00</notbeforetime>
+								<timestatusset>15:00</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63BA0033023</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Application under the Proceeds of Crime Act
+									2002</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>GREEN</firstname>
+										<lastname>HUIBUI-hhn</lastname>
+									</defendant>
+									<defendant>
+										<firstname>CREAM</firstname>
+										<lastname>ZVGSVYUD</lastname>
+									</defendant>
+									<defendant>
+										<firstname>BROWN</firstname>
+										<lastname>UIHOIJ</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>14:45</notbeforetime>
+								<timestatusset>14:45</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0806024</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Sentence</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>BEIGE</firstname>
+										<lastname>ANJNID</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>14:15</notbeforetime>
+								<timestatusset>14:15</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0334923</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Committal for Sentence</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>CRIMSON</firstname>
+										<lastname>NKNIBUI</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>12:30</notbeforetime>
+								<timestatusset>12:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63CH0154124</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>1</activecase>
+								<hearingtype>For Sentence</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>CYAN</firstname>
+										<lastname>FGVYUDD</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>10:00</notbeforetime>
+								<currentstatus>
+									<event>
+										<time>10:21</time>
+										<date>07/05/25</date>
+										<free_text></free_text>
+										<type>30500</type>
+									</event>
+								</currentstatus>
+								<timestatusset>10:21</timestatusset>
+								<hearingprogress>9</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63DP0077524</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Application to Vary Bail Conditions</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>AQUA</firstname>
+										<middlename>CYLINDER </middlename>
+										<lastname>UOJIOP</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>11:45</notbeforetime>
+								<timestatusset>11:45</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC0061224</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Plea and Trial Preparation</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>MAGENTA</firstname>
+										<middlename>RECTANGLE </middlename>
+										<lastname>OPKHID</lastname>
+									</defendant>
+									<defendant>
+										<firstname>MINT</firstname>
+										<lastname>NKNXHDC</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>11:30</notbeforetime>
+								<timestatusset>11:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC1079823</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Plea and Trial Preparation</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>LILAC</firstname>
+										<middlename>CONE </middlename>
+										<lastname>LPHDDSZ</lastname>
+									</defendant>
+									<defendant>
+										<firstname>APRICOT</firstname>
+										<lastname>GHBYCC</lastname>
+									</defendant>
+								</defendants>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>11:15</notbeforetime>
+								<timestatusset>11:15</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>63AC0090824</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>Plea and Trial Preparation</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>BIAQUE</firstname>
+										<middlename>PENTAGON </middlename>
+										<lastname>SJBDDN</lastname>
+									</defendant>
+								</defendants>
+								<publicnotices>
+									<publicnotice>Complainant's anonymity protected by virtue of
+										Section 1 of the Sexual Offences Amendment Act 1992</publicnotice>
+								</publicnotices>
+								<judgename>HIS HONOUR JUDGE SWKPON GTRVX</judgename>
+								<notbeforetime>11:00</notbeforetime>
+								<timestatusset>11:00</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+						</cases>
+						<courtroomname>Court 2</courtroomname>
+					</courtroom>
+					<courtroom>
+						<cases>
+							<caseDetails>
+								<cppurn>63AC0089324</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Trial</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>CAMEL</firstname>
+										<middlename>CUBE </middlename>
+										<lastname>KLJLDD</lastname>
+									</defendant>
+								</defendants>
+								<judgename></judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+							<caseDetails>
+								<cppurn>62WN0739424</cppurn>
+								<casenumber>1</casenumber>
+								<casetype>CROWN</casetype>
+								<activecase>0</activecase>
+								<hearingtype>For Trial</hearingtype>
+								<defendants>
+									<defendant>
+										<firstname>CHARCOAL</firstname>
+										<lastname>YUGDHD</lastname>
+									</defendant>
+								</defendants>
+								<judgename></judgename>
+								<notbeforetime>10:30</notbeforetime>
+								<timestatusset>10:30</timestatusset>
+								<hearingprogress>0</hearingprogress>
+							</caseDetails>
+						</cases>
+						<courtroomname>Court 1</courtroomname>
+					</courtroom>
+				</courtrooms>
+				<floating />
+			</courtsite>
+		</courtsites>
+	</court>
+	<datetimestamp>
+		<dayofweek>Wednesday</dayofweek>
+		<date>07</date>
+		<month>May</month>
+		<year>2025</year>
+		<hour>09</hour>
+		<min>30</min>
+	</datetimestamp>
+	<pagename>swansea crown court</pagename>
+</currentcourtstatus>

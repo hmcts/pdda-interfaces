@@ -1,0 +1,3096 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cs:DailyList xmlns:cs="http://www.courtservice.gov.uk/schemas/courtservice" xmlns="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns:p2="http://www.govtalk.gov.uk/people/bs7666" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.courtservice.gov.uk/schemas/courtservice DailyList-v1-0.xsd">
+	<cs:DocumentID>
+		<cs:DocumentName>Daily List DRAFT v1 24-FEB-26</cs:DocumentName>
+		<cs:UniqueID>CSDDL000000013520055</cs:UniqueID>
+		<cs:DocumentType>DL</cs:DocumentType>
+		<cs:TimeStamp>2026-02-20T16:28:34.995</cs:TimeStamp>
+		<cs:Version>1.0</cs:Version>
+		<cs:SecurityClassification>NPM</cs:SecurityClassification>
+		<cs:SellByDate>2026-03-22</cs:SellByDate>
+		<cs:XSLstylesheetURL>http://www.courtservice.gov.uk/transforms/courtservice/dailyListHtml-v2-2.xsl</cs:XSLstylesheetURL>
+	</cs:DocumentID>
+	<cs:ListHeader>
+		<cs:ListCategory>Criminal</cs:ListCategory>
+		<cs:StartDate>2026-02-24</cs:StartDate>
+		<cs:EndDate>2026-02-24</cs:EndDate>
+		<cs:Version>DRAFT 1</cs:Version>
+		<cs:PublishedTime>2026-02-20T16:28:34.000</cs:PublishedTime>
+		<cs:CRESTlistID>836136</cs:CRESTlistID>
+	</cs:ListHeader>
+	<cs:CrownCourt>
+		<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+		<cs:CourtHouseCode CourtHouseShortName="CARDI">411
+		</cs:CourtHouseCode>
+		<cs:CourtHouseName>CARDIFF</cs:CourtHouseName>
+		<cs:CourtHouseAddress>
+			<apd:Line>LAW COURTS</apd:Line>
+			<apd:Line>CATHAYS PARK</apd:Line>
+			<apd:Line>-</apd:Line>
+			<apd:Line>-</apd:Line>
+			<apd:Line>CARDIFF</apd:Line>
+			<apd:PostCode>CF10 4PB</apd:PostCode>
+		</cs:CourtHouseAddress>
+		<cs:CourtHouseDX>DX 99450 CARDIFF 5</cs:CourtHouseDX>
+		<cs:CourtHouseTelephone>029 20414400</cs:CourtHouseTelephone>
+		<cs:CourtHouseFax>029 20414441</cs:CourtHouseFax>
+		<cs:Description>CROWN COURT</cs:Description>
+	</cs:CrownCourt>
+	<cs:CourtLists>
+		<cs:CourtList>
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>411</cs:CourtHouseCode>
+				<cs:CourtHouseName>CARDIFF</cs:CourtHouseName>
+				<cs:Description>CROWN COURT</cs:Description>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>VYWPWMN</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>HTXMFSY</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>VYWPWMN HTXMFSY</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>670</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>2</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>DFSPRLO</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>YPWRERY</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>DFSPRLO YPWRERY</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>FTPWGWZ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>MLESZD</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>FTPWGWZ MLESZD</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0597223</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03012" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SX03008" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>NBAZTE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>UWYMTLO</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>NBAZTE UWYMTLO</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>RCYGXMS</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>MORVHQE</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>RCYGXMS MORVHQE</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0607325</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61016A" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CJ88144" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameSurname>SKZKCRP</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>RCYGXMS SKZKCRP</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>61950</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>TTESVJH</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>KAYXAAW</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>TTESVJH KAYXAAW</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>UQIUNHF</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>WYZCFJ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>UQIUNHF WYZCFJ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0630025</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CD71040" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="COML025" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61014" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>3</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>WASLCA</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>TZXPTS</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>WASLCA TZXPTS</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>61424</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>GPCYKZ</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>YHIPTN</apd:CitizenNameSurname>
+							<apd:CitizenNameSuffix>HIS HONOUR JUDGE</apd:CitizenNameSuffix>
+							<apd:CitizenNameRequestedName>GPCYKZ YHIPTN</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>736</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>2</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>BLJHJF</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>OQTBHY</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>BLJHJF OQTBHY</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DHAJPK</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>EAEXFB</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>DHAJPK EAEXFB</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0322325</cs:URN>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>4</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>IDODRG</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>MNFZMW</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>IDODRG MNFZMW</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>QYIDJH</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>XHROTD</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>QYIDJH XHROTD</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL1118325</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71230" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71530" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC02021" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>YYMQBAS</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>ESAQZSX</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>YYMQBAS ESAQZSX</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL1051925</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71174" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC02021" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71171" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>5</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>JDCLXN</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>KJPTKQ</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>JDCLXN KJPTKQ</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>57675</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>5</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>PXPHMO</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>WGFEUIM</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>PXPHMO WGFEUIM</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>LGHNST</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>PAMXATK</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>LGHNST PAMXATK</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0394625</cs:URN>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>6</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>VVWQFI</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>FKVWHG</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>VVWQFI FKVWHG</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>57003</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>7</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>CEBBHS</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>EYNAZLJ</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>CEBBHS EYNAZLJ</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>56508</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CBR">
+								<cs:HearingDescription>Committal for Breaches
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>10266739</cs:CRESThearingID>
+							<cs:TimeMarkingNote>
+							</cs:TimeMarkingNote>
+							<cs:CaseNumber>S20260051</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>CARDIFF AND VALE LDU
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>WALES PROBATION CARDIFF AND VALE LDU
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>CCKQOLD</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>IAJHIC</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2000-01-01</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>FLAT 12</apd:Line>
+											<apd:Line>CWRT FFORD NOWELL</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>PENYLAN,CARDIFF</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2300000000000311706K</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1677895</cs:CRESTdefendantID>
+									<cs:URN>62EN0249523</cs:URN>
+									<cs:CustodyStatus>Not applicable</cs:CustodyStatus>
+									<cs:Counsel/>
+									<cs:Charges NumberOfCharges="1">
+										<cs:Charge CJSoffenceCode="PU86003" IndictmentCountNumber="1">
+											<cs:CRN>2300000000000311706K001</cs:CRN>
+											<cs:CRESTchargeID>411S07585607</cs:CRESTchargeID>
+											<cs:CaseNumber>S20260051</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-02-15T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7585607</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CBR">
+								<cs:HearingDescription>Committal for Breaches
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>10266738</cs:CRESThearingID>
+							<cs:TimeMarkingNote>
+							</cs:TimeMarkingNote>
+							<cs:CaseNumber>S20260050</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>CARDIFF AND VALE LDU
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>WALES PROBATION CARDIFF AND VALE LDU
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>JALDTCU</apd:CitizenNameForename>
+											<apd:CitizenNameForename>NXPBMUC</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>CYUOBA</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2000-01-01</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>6 HEOL POYSTON</apd:Line>
+											<apd:Line>CAERAU</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>CARDIFF</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2400000000001372030K</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>51042</cs:CRESTdefendantID>
+									<cs:URN>62EN0736724</cs:URN>
+									<cs:CustodyStatus>Not applicable</cs:CustodyStatus>
+									<cs:Counsel/>
+									<cs:Charges NumberOfCharges="1">
+										<cs:Charge CJSoffenceCode="CJ88160" IndictmentCountNumber="1">
+											<cs:CRN>2400000000001372030K001</cs:CRN>
+											<cs:CRESTchargeID>411S07585597</cs:CRESTchargeID>
+											<cs:CaseNumber>S20260050</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-05-18T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7585597</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>3</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>10266742</cs:CRESThearingID>
+							<cs:TimeMarkingNote>
+							</cs:TimeMarkingNote>
+							<cs:CaseNumber>T20250035</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>VALE OF GLAMORGAN
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>COUNTY BOROUGH COUNCIL VALE OF GLAMORGAN
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:CommittingCourt>
+								<cs:CourtHouseType>Magistrates Court</cs:CourtHouseType>
+								<cs:CourtHouseCode CourtHouseShortName="CVALM">3251
+								</cs:CourtHouseCode>
+								<cs:CourtHouseName>CARDIFF AND THE VALE OF GLAMORGAN
+									MAGISTRATES' COURT</cs:CourtHouseName>
+								<cs:CourtHouseAddress>
+									<apd:Line>FITZALAN PLACE</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:PostCode>CF10 4PB</apd:PostCode>
+								</cs:CourtHouseAddress>
+								<cs:CourtHouseTelephone>029 2046 3040</cs:CourtHouseTelephone>
+							</cs:CommittingCourt>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>YPMVQID</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>XAASMBL</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2000-01-01</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>9 WALNUT GROVE</apd:Line>
+											<apd:Line>ST ATHANS</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>BARRY,VALE OF GLAMORGAN</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2500NP0004111003501N</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1657289</cs:CRESTdefendantID>
+									<cs:CustodyStatus>On bail</cs:CustodyStatus>
+									<cs:Counsel>
+										<cs:Solicitor>
+											<cs:Party>
+												<cs:Organisation>
+													<cs:OrganisationName>Malloy &amp; Barry
+													</cs:OrganisationName>
+													<cs:OrganisationAddress>
+														<apd:Line>194 COWBRIDGE ROAD EAST</apd:Line>
+														<apd:Line>CANTON</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>CARDIFF,SOUTH GLAM</apd:Line>
+													</cs:OrganisationAddress>
+													<cs:OrganisationDX>DX 95415 CANTON</cs:OrganisationDX>
+													<cs:ContactDetails>
+														<Telephone>
+															<TelNationalNumber>02920343434</TelNationalNumber>
+														</Telephone>
+													</cs:ContactDetails>
+												</cs:Organisation>
+											</cs:Party>
+											<cs:StartDate>2025-07-17</cs:StartDate>
+										</cs:Solicitor>
+									</cs:Counsel>
+									<cs:Charges NumberOfCharges="3">
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N007</cs:CRN>
+											<cs:CRESTchargeID>411S07551503</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-19T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551503</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N004</cs:CRN>
+											<cs:CRESTchargeID>411S07551500</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-12-05T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551500</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N006</cs:CRN>
+											<cs:CRESTchargeID>411S07551486</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-03-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551486</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N005</cs:CRN>
+											<cs:CRESTchargeID>411S07551485</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-27T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551485</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N003</cs:CRN>
+											<cs:CRESTchargeID>411S07551484</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-02-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551484</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N002</cs:CRN>
+											<cs:CRESTchargeID>411S07551483</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2022-06-04T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551483</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111003501N001</cs:CRN>
+											<cs:CRESTchargeID>411S07551482</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-19T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551482</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N010</cs:CRN>
+											<cs:CRESTchargeID>411S07575657</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-26T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-12-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575657</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N011</cs:CRN>
+											<cs:CRESTchargeID>411S07575658</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-06-26T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-11-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575658</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N012</cs:CRN>
+											<cs:CRESTchargeID>411S07575659</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-09-29T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-11-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575659</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001A" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N013</cs:CRN>
+											<cs:CRESTchargeID>411S07575660</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-12-05T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575660</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N014</cs:CRN>
+											<cs:CRESTchargeID>411S07575661</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-12-09T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575661</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N015</cs:CRN>
+											<cs:CRESTchargeID>411S07575662</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-06-16T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-12-10T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575662</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111003501N016</cs:CRN>
+											<cs:CRESTchargeID>411S07575663</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-19T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-12-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575663</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="FA06006" IndictmentCountNumber="3">
+											<cs:CRN>2500NP0004111003501N002</cs:CRN>
+											<cs:CRESTchargeID>411S07575718</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250035</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2025-07-06T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575718</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>10266741</cs:CRESThearingID>
+							<cs:TimeMarkingNote>
+							</cs:TimeMarkingNote>
+							<cs:CaseNumber>T20240069</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>VALE OF GLAMORGAN
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>COUNTY BOROUGH COUNCIL VALE OF GLAMORGAN
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:CommittingCourt>
+								<cs:CourtHouseType>Magistrates Court</cs:CourtHouseType>
+								<cs:CourtHouseCode CourtHouseShortName="CVALM">3251
+								</cs:CourtHouseCode>
+								<cs:CourtHouseName>CARDIFF AND THE VALE OF GLAMORGAN
+									MAGISTRATES' COURT</cs:CourtHouseName>
+								<cs:CourtHouseAddress>
+									<apd:Line>FITZALAN PLACE</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:PostCode>CF10 4PB</apd:PostCode>
+								</cs:CourtHouseAddress>
+								<cs:CourtHouseTelephone>029 2046 3040</cs:CourtHouseTelephone>
+							</cs:CommittingCourt>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:NumberOfDefendants>1</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>ULJJQTT</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>GGLLQB</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2000-01-01</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>male</cs:Sex>
+										<cs:Address>
+											<apd:Line>9 WALNUT GROVE</apd:Line>
+											<apd:Line>ST ATHANS</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>BARRY,VALE OF GLAMORGAN</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2400NP0004111006901K</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1657289</cs:CRESTdefendantID>
+									<cs:CustodyStatus>On bail</cs:CustodyStatus>
+									<cs:Counsel/>
+									<cs:Charges NumberOfCharges="3">
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K002</cs:CRN>
+											<cs:CRESTchargeID>411S07506572</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2022-06-04T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506572</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K003</cs:CRN>
+											<cs:CRESTchargeID>411S07506574</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-02-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506574</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K004</cs:CRN>
+											<cs:CRESTchargeID>411S07506578</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-27T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506578</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K005</cs:CRN>
+											<cs:CRESTchargeID>411S07506588</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-03-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-11-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506588</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K006</cs:CRN>
+											<cs:CRESTchargeID>411S07506589</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-03-10T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506589</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K007</cs:CRN>
+											<cs:CRESTchargeID>411S07506592</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-04-11T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506592</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K008</cs:CRN>
+											<cs:CRESTchargeID>411S07506596</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-04-20T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-05-31T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506596</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K009</cs:CRN>
+											<cs:CRESTchargeID>411S07510945</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-05-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-10-31T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7510945</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="1">
+											<cs:CRN>2400NP0004111006901K001</cs:CRN>
+											<cs:CRESTchargeID>411S07506570</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-19T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-06-20T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7506570</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K001</cs:CRN>
+											<cs:CRESTchargeID>411S07575603</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-19T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-06-20T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575603</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K002</cs:CRN>
+											<cs:CRESTchargeID>411S07575604</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2022-06-04T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575604</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K003</cs:CRN>
+											<cs:CRESTchargeID>411S07575605</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-02-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575605</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K004</cs:CRN>
+											<cs:CRESTchargeID>411S07575606</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-27T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575606</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K005</cs:CRN>
+											<cs:CRESTchargeID>411S07575607</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-03-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-11-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575607</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K006</cs:CRN>
+											<cs:CRESTchargeID>411S07575609</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-03-10T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575609</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K007</cs:CRN>
+											<cs:CRESTchargeID>411S07575610</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-04-11T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-09-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575610</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K008</cs:CRN>
+											<cs:CRESTchargeID>411S07575611</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-04-20T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-05-31T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575611</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="2">
+											<cs:CRN>2400NP0004111006901K009</cs:CRN>
+											<cs:CRESTchargeID>411S07575612</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2024-05-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-10-31T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575612</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="FA06006" IndictmentCountNumber="3">
+											<cs:CRN>2400NP0004111006901K001</cs:CRN>
+											<cs:CRESTchargeID>411S07575701</cs:CRESTchargeID>
+											<cs:CaseNumber>T20240069</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2021-08-01T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575701</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>5</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:CRESThearingID>10266740</cs:CRESThearingID>
+							<cs:TimeMarkingNote>
+							</cs:TimeMarkingNote>
+							<cs:CaseNumber>T20250023</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>VALE OF GLAMORGAN
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>COUNTY BOROUGH COUNCIL VALE OF GLAMORGAN
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:CommittingCourt>
+								<cs:CourtHouseType>Magistrates Court</cs:CourtHouseType>
+								<cs:CourtHouseCode CourtHouseShortName="CVALM">3251
+								</cs:CourtHouseCode>
+								<cs:CourtHouseName>CARDIFF AND THE VALE OF GLAMORGAN
+									MAGISTRATES' COURT</cs:CourtHouseName>
+								<cs:CourtHouseAddress>
+									<apd:Line>FITZALAN PLACE</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>-</apd:Line>
+									<apd:Line>CARDIFF</apd:Line>
+									<apd:PostCode>CF10 4PB</apd:PostCode>
+								</cs:CourtHouseAddress>
+								<cs:CourtHouseTelephone>029 2046 3040</cs:CourtHouseTelephone>
+							</cs:CommittingCourt>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:NumberOfDefendants>2</cs:NumberOfDefendants>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>WRJEZZ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>TMNXIO</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:DateOfBirth>
+											<apd:BirthDate>2000-01-01</apd:BirthDate>
+											<apd:VerifiedBy>not verified</apd:VerifiedBy>
+										</cs:DateOfBirth>
+										<cs:Sex>female</cs:Sex>
+										<cs:Address>
+											<apd:Line>9 WALNUT GROVE</apd:Line>
+											<apd:Line>ST ATHANS</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>BARRY</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2500NP0004111002301J</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1657243</cs:CRESTdefendantID>
+									<cs:CustodyStatus>On bail</cs:CustodyStatus>
+									<cs:Counsel>
+										<cs:Solicitor>
+											<cs:Party>
+												<cs:Organisation>
+													<cs:OrganisationName>Malloy &amp; Barry
+													</cs:OrganisationName>
+													<cs:OrganisationAddress>
+														<apd:Line>194 COWBRIDGE ROAD EAST</apd:Line>
+														<apd:Line>CANTON</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>CARDIFF,SOUTH GLAM</apd:Line>
+													</cs:OrganisationAddress>
+													<cs:OrganisationDX>DX 95415 CANTON</cs:OrganisationDX>
+													<cs:ContactDetails>
+														<Telephone>
+															<TelNationalNumber>02920343434</TelNationalNumber>
+														</Telephone>
+													</cs:ContactDetails>
+												</cs:Organisation>
+											</cs:Party>
+											<cs:StartDate>2025-07-03</cs:StartDate>
+										</cs:Solicitor>
+									</cs:Counsel>
+									<cs:Charges NumberOfCharges="2">
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111002301J009</cs:CRN>
+											<cs:CRESTchargeID>411S07551480</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250023</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551480</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111002301J018</cs:CRN>
+											<cs:CRESTchargeID>411S07575683</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250023</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-12-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575683</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>1</cs:DefendantNumber>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameSurname>MJJWCXZ</apd:CitizenNameSurname>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+										<cs:Sex>unknown</cs:Sex>
+										<cs:Address>
+											<apd:Line>BUILDING SERVICES LIMITED</apd:Line>
+											<apd:Line>9 WALNUT GROVE</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>-</apd:Line>
+											<apd:Line>ST ATHAN,VALE OF GLAMORGAN</apd:Line>
+											<apd:PostCode>CF10 4PB</apd:PostCode>
+										</cs:Address>
+									</cs:PersonalDetails>
+									<cs:ContactDetails/>
+									<cs:ASNs>
+										<cs:ASN>2500NP0004111002302K</cs:ASN>
+									</cs:ASNs>
+									<cs:CRESTdefendantID>1667670</cs:CRESTdefendantID>
+									<cs:CustodyStatus>Not applicable</cs:CustodyStatus>
+									<cs:Counsel>
+										<cs:Solicitor>
+											<cs:Party>
+												<cs:Organisation>
+													<cs:OrganisationName>Malloy &amp; Barry
+													</cs:OrganisationName>
+													<cs:OrganisationAddress>
+														<apd:Line>194 COWBRIDGE ROAD EAST</apd:Line>
+														<apd:Line>CANTON</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>-</apd:Line>
+														<apd:Line>CARDIFF,SOUTH GLAM</apd:Line>
+													</cs:OrganisationAddress>
+													<cs:OrganisationDX>DX 95415 CANTON</cs:OrganisationDX>
+													<cs:ContactDetails>
+														<Telephone>
+															<TelNationalNumber>02920343434</TelNationalNumber>
+														</Telephone>
+													</cs:ContactDetails>
+												</cs:Organisation>
+											</cs:Party>
+											<cs:StartDate>2025-07-03</cs:StartDate>
+										</cs:Solicitor>
+									</cs:Counsel>
+									<cs:Charges NumberOfCharges="2">
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="1">
+											<cs:CRN>2500NP0004111002302K008</cs:CRN>
+											<cs:CRESTchargeID>411S07551479</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250023</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7551479</cs:CRESToffenceNumber>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CP08005" IndictmentCountNumber="2">
+											<cs:CRN>2500NP0004111002302K017</cs:CRN>
+											<cs:CRESTchargeID>411S07575682</cs:CRESTchargeID>
+											<cs:CaseNumber>T20250023</cs:CaseNumber>
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+											<cs:ArrestingPoliceForceCode>62</cs:ArrestingPoliceForceCode>
+											<cs:OffenceStartDateTime>2023-01-24T00:00:00.000
+											</cs:OffenceStartDateTime>
+											<cs:OffenceEndDateTime>2024-12-30T00:00:00.000
+											</cs:OffenceEndDateTime>
+											<cs:OffenceParticulars>tba</cs:OffenceParticulars>
+											<cs:CRESToffenceNumber>7575682</cs:CRESToffenceNumber>
+										</cs:Charge>
+									</cs:Charges>
+									<cs:DefendantNumber>2</cs:DefendantNumber>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>7</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>YYJDKYB</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>OLEEMS</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>YYJDKYB OLEEMS</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>YKLIHH</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>NYGELC</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>YKLIHH NYGELC</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0457224</cs:URN>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>AFRDBH</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>FYIHYV</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>AFRDBH FYIHYV</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62WN0642324</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>UAOZTPT</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>SPZQGQ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>UAOZTPT SPZQGQ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62WN0642324</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>3</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="BLA">
+								<cs:HearingDescription>For Application for Bail
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>JLMDLJ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>TNGNPTR</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>JLMDLJ TNGNPTR</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0072326</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71530" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71526" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>PHUKHQO</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>JAOGNY</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>PHUKHQO JAOGNY</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0439123</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15006" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61127" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61016" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61016" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61102" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="BA76001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>5</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>WYKIKHL</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>VHOBIII</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>WYKIKHL VHOBIII</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1116024</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>6</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>EACRXH</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>EKOQTR</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>EACRXH EKOQTR</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0276924</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61102" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="BA76001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>7</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>QIQKEI</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>BLNDPJ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>QIQKEI BLNDPJ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61NC0104924</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="PH97011" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>8</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>GYVCZA</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>FKFIKXF</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>GYVCZA FKFIKXF</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0313724</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="PC02021" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC02020" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC02020" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>9</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>GZJSCJ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>XUVJHI</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>GZJSCJ XUVJHI</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0180024</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CJ88116" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CD71039" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PH97011" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CD98070" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CJ88116" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="BA76005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>10</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>AQUUQW</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>RQKXZN</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>AQUUQW RQKXZN</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1183625</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="PK78008" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>11</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>FXSEDL</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>IXMPKMT</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>FXSEDL IXMPKMT</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61NC0090624</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71530" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC02020" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CJ88160" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71526" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>12</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>HVFBIL</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>RIJUKC</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>HVFBIL RIJUKC</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61NC0314924</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CJ88116" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="OF61102" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>13</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="HRG">
+								<cs:HearingDescription>For Hearing</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DWZMBM</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>EMRDZMV</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>DWZMBM EMRDZMV</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0022124</cs:URN>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>14</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>CWZDZG</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>MLPLOWP</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>CWZDZG MLPLOWP</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0426025</cs:URN>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>15</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>FDFKEJ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>QYSSIKL</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>FDFKEJ QYSSIKL</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0962124</cs:URN>
+									<cs:Counsel>
+										<cs:Solicitor>
+											<cs:Party>
+												<cs:Organisation>
+													<cs:OrganisationName>Blackfords LLP</cs:OrganisationName>
+												</cs:Organisation>
+											</cs:Party>
+										</cs:Solicitor>
+									</cs:Counsel>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71145C" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>16</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>SVIPEX</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>TQEXLE</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>SVIPEX TQEXLE</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0627425</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="PC53001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PC53001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71230" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CJ88144" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71234" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71231" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71530" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>17</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>VVUAGN</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>RMNRAL</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>VVUAGN RMNRAL</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0994024</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03002" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15004" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>18</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>YOTRAGB</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>LTSXOWQ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>YOTRAGB LTSXOWQ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0724925</cs:URN>
+									<cs:Counsel>
+										<cs:Solicitor>
+											<cs:Party>
+												<cs:Organisation>
+													<cs:OrganisationName>M and M SOLICITORS
+													</cs:OrganisationName>
+												</cs:Organisation>
+											</cs:Party>
+										</cs:Solicitor>
+									</cs:Counsel>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03002" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15004" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>19</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="BLA">
+								<cs:HearingDescription>For Application for Bail
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>INELNKA</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>IMNAWY</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>INELNKA IMNAWY</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1271425</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>20</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="PTR">
+								<cs:HearingDescription>For Pre-Trial Review
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>VJGEMA</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>MVEYUX</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>VJGEMA MVEYUX</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0665024</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SX03131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SX03131" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>21</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>CYESHQ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>XKQIKU</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>CYESHQ XKQIKU</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0022124</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71174" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71170" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71533" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>22</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="FCM">
+								<cs:HearingDescription>Further Case Management
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>12:15 PM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>RAJMJM</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>PVILSV</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>RAJMJM PVILSV</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1089125</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="PS22001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PS22001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>23</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MDA">
+								<cs:HearingDescription>For Mention (Defendant to Attend)
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>2:00 PM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>WZRHZSW</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>HQEOFJ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>WZRHZSW HQEOFJ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0477725</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CJ88116" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>OYOQBTU</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>DDJXIX</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>OYOQBTU DDJXIX</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0477725</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CJ88116" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>24</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>2:00 PM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>WQDBPC</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>EZJKBT</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>WQDBPC EZJKBT</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0876924</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CJ88001" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15004" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>8</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>MEBEBG</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>AMBXFLE</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>MEBEBG AMBXFLE</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>59786</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>8</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>SAQEHU</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>ZWZVMHC</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>SAQEHU ZWZVMHC</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:00 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>BCWATU</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>DHWSNO</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>BCWATU DHWSNO</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0984025</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SE20002" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SE20002" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="PH97010" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CSE">
+								<cs:HearingDescription>Committal for Sentence
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:45 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>LHXTQQ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>LXRYLQ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>LHXTQQ LXRYLQ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61US0305825</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="RT88026" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>3</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="SEN">
+								<cs:HearingDescription>For Sentence</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>11:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>BFEBUU</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>YNPPRU</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>BFEBUU YNPPRU</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1218624</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03224A" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CSE">
+								<cs:HearingDescription>Committal for Sentence
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>12:15 PM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DCIEVS</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>HYYKDGW</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>DCIEVS HYYKDGW</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0069325</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="MD71239" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71597" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71530" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="MD71022" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>5</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="CSE">
+								<cs:HearingDescription>Committal for Sentence
+								</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>3:00 PM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>KEKQNQT</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>VPDDQS</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>KEKQNQT VPDDQS</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN1151725</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SE20012" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>9</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameSurname>XURDRV</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>KEKQNQT XURDRV</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>56566</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>9</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>SZSSILD</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>TDXJYBA</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>SZSSILD TDXJYBA</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>XWJICH</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>IASATSW</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>XWJICH IASATSW</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0811822</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030C" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>JJUAKGB</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>TANEPKF</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>JJUAKGB TANEPKF</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0811822</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030C" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>DWAMLGP</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>XWNEZWI</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>DWAMLGP XWNEZWI</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0811822</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030C" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>WISXGNT</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>YRJUFZ</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>WISXGNT YRJUFZ</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0811822</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="COML030C" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>2</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>TKQEXG</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>SIENRB</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>TKQEXG SIENRB</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0013624</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61102" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>3</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>CNBYEFG</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>PTBXUXH</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>CNBYEFG PTBXUXH</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62EN0720425</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="OF61102" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="TH68045" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>4</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>YLVNZC</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>DCNQIY</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>YLVNZC DCNQIY</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0738225</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CD71043" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="CD71039" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15004" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+										<cs:Charge CJSoffenceCode="SC15005" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+		<cs:CourtList>
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>441</cs:CourtHouseCode>
+				<cs:CourtHouseName>NEWPORT CROWN COURT</cs:CourtHouseName>
+				<cs:Description>SATELLITE</cs:Description>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>1</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameTitle>MR RECORDER</apd:CitizenNameTitle>
+							<apd:CitizenNameForename>PHBPWJ</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>NTHFUU</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>PHBPWJ NTHFUU</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>54339</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>WGMVTGE</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>PKOQND</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>WGMVTGE PKOQND</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>58896</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>3</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:00:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>RENIEMM</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>MNIFFE</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>RENIEMM MNIFFE</apd:CitizenNameRequestedName>
+							<cs:CRESTjudgeID>791</cs:CRESTjudgeID>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings/>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+		<cs:CourtList>
+			<cs:CourtHouse>
+				<cs:CourtHouseType>Crown Court</cs:CourtHouseType>
+				<cs:CourtHouseCode>460</cs:CourtHouseCode>
+				<cs:CourtHouseName>NEWPORT CROWN COURT</cs:CourtHouseName>
+			</cs:CourtHouse>
+			<cs:Sittings>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>2</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>TIQYIV</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>GYGCQSI</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>TIQYIV GYGCQSI</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="MEN">
+								<cs:HearingDescription>For Mention</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Crown Prosecution Service">
+								<cs:ProsecutingReference>Crown Prosecution Service
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Crown Prosecution Service
+									</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>GEUWNTQ</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>ITZVTT</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>GEUWNTQ ITZVTT</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>62CL0738225</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="CD71039" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+				<cs:Sitting>
+					<cs:CourtRoomNumber>3</cs:CourtRoomNumber>
+					<cs:SittingSequenceNo>1</cs:SittingSequenceNo>
+					<cs:SittingAt>10:30:00</cs:SittingAt>
+					<cs:SittingPriority>T</cs:SittingPriority>
+					<cs:Judiciary>
+						<cs:Judge>
+							<apd:CitizenNameForename>NPXWOH</apd:CitizenNameForename>
+							<apd:CitizenNameSurname>PYADXU</apd:CitizenNameSurname>
+							<apd:CitizenNameRequestedName>NPXWOH PYADXU</apd:CitizenNameRequestedName>
+						</cs:Judge>
+					</cs:Judiciary>
+					<cs:Hearings>
+						<cs:Hearing>
+							<cs:HearingSequenceNumber>1</cs:HearingSequenceNumber>
+							<cs:HearingDetails HearingType="TRL">
+								<cs:HearingDescription>For Trial</cs:HearingDescription>
+								<cs:HearingDate>2026-02-24</cs:HearingDate>
+								<cs:ListNote>List Note</cs:ListNote>
+							</cs:HearingDetails>
+							<cs:TimeMarkingNote>10:30 AM</cs:TimeMarkingNote>
+							<cs:CaseNumber>CPP</cs:CaseNumber>
+							<cs:Prosecution ProsecutingAuthority="Other Prosecutor">
+								<cs:ProsecutingReference>Other Prosecutor
+								</cs:ProsecutingReference>
+								<cs:ProsecutingOrganisation>
+									<cs:OrganisationName>Other Prosecutor</cs:OrganisationName>
+								</cs:ProsecutingOrganisation>
+							</cs:Prosecution>
+							<cs:ListNote>List Note</cs:ListNote>
+							<cs:Defendants>
+								<cs:Defendant>
+									<cs:PersonalDetails>
+										<cs:Name>
+											<apd:CitizenNameForename>FPCOIG</apd:CitizenNameForename>
+											<apd:CitizenNameSurname>DXLGEO</apd:CitizenNameSurname>
+											<apd:CitizenNameRequestedName>FPCOIG DXLGEO</apd:CitizenNameRequestedName>
+										</cs:Name>
+										<cs:IsMasked>no</cs:IsMasked>
+									</cs:PersonalDetails>
+									<cs:URN>61CY0329621</cs:URN>
+									<cs:Charges>
+										<cs:Charge CJSoffenceCode="SX03002" IndictmentCountNumber="0">
+											<cs:OffenceStatement>An offence</cs:OffenceStatement>
+										</cs:Charge>
+									</cs:Charges>
+								</cs:Defendant>
+							</cs:Defendants>
+						</cs:Hearing>
+					</cs:Hearings>
+				</cs:Sitting>
+			</cs:Sittings>
+		</cs:CourtList>
+	</cs:CourtLists>
+</cs:DailyList>
