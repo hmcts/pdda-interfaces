@@ -1,16 +1,31 @@
 package uk.gov.hmcts.datagenerator;
 
-import org.w3c.dom.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.SecureRandom;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.*;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.security.SecureRandom;
 
+@SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity", "PMD.AvoidDeeplyNestedIfStmts"})
 public final class XmlObfuscator {
 
+    private static final Logger LOG =
+        LoggerFactory.getLogger(XmlObfuscator.class);
+    
     private static final SecureRandom RNG = new SecureRandom();
     private static final char[] ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
@@ -18,12 +33,15 @@ public final class XmlObfuscator {
     private static final String DEFAULT_POSTCODE = "CF10 4PB";
     private static final String DEFAULT_OFFENCE_STATEMENT = "An offence";
     private static final String DEFAULT_LIST_NOTE = "List Note";
+    private static final Integer TWO = 2;
 
-    private XmlObfuscator() {}
+    private XmlObfuscator() {
+        
+    }
 
     public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("Usage: java XmlObfuscator <input.xml> <output.xml>");
+        if (args.length < TWO) {
+            LOG.error("Usage: java XmlObfuscator <input.xml> <output.xml>");
             System.exit(2);
         }
 
@@ -34,21 +52,32 @@ public final class XmlObfuscator {
             Document doc = parseXml(input);
             obfuscate(doc);
             writeXml(doc, output);
-            System.out.println("Obfuscated XML written to: " + output.getAbsolutePath());
+            LOG.error("Obfuscated XML written to: {}",  output.getAbsolutePath());
         } catch (Exception e) {
-            System.err.println("Failed to obfuscate XML: " + e.getMessage());
-            e.printStackTrace(System.err);
+            LOG.error("Failed to obfuscate XML: {}", e.getMessage());
             System.exit(1);
         }
     }
 
-    private static Document parseXml(File input) throws Exception {
+    private static Document parseXml(File input) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
 
-        try { dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true); } catch (Exception ignored) {}
-        try { dbf.setFeature("http://xml.org/sax/features/external-general-entities", false); } catch (Exception ignored) {}
-        try { dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false); } catch (Exception ignored) {}
+        try { 
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (Exception ignored) {
+            LOG.error(ignored.getMessage());
+        }
+        try { 
+            dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+        } catch (Exception ignored) {
+            LOG.error(ignored.getMessage());
+        }
+        try { 
+            dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+        } catch (Exception ignored) {
+            LOG.error(ignored.getMessage());
+        }
 
         DocumentBuilder db = dbf.newDocumentBuilder();
         return db.parse(input);
@@ -71,7 +100,9 @@ public final class XmlObfuscator {
             if (local == null) {
                 local = el.getNodeName();
                 int colon = local.indexOf(':');
-                if (colon >= 0) local = local.substring(colon + 1);
+                if (colon >= 0) {
+                    local = local.substring(colon + 1);
+                }
             }
 
             switch (local) {
@@ -89,9 +120,9 @@ public final class XmlObfuscator {
                     break;
 
                 case "CitizenNameRequestedName":
-                    String f = state.lastForename != null ? state.lastForename : randomUpperAlpha(6, 7);
-                    String s = state.lastSurname != null ? state.lastSurname : randomUpperAlpha(6, 7);
-                    setText(el, f + " " + s);
+                    String forename = state.lastForename != null ? state.lastForename : randomUpperAlpha(6, 7);
+                    String surname = state.lastSurname != null ? state.lastSurname : randomUpperAlpha(6, 7);
+                    setText(el, forename + " " + surname);
                     break;
 
                 case "BirthDate":
@@ -131,7 +162,7 @@ public final class XmlObfuscator {
     }
 
     private static String randomUpperAlpha(int minLen, int maxLen) {
-        int len = minLen + RNG.nextInt((maxLen - minLen) + 1);
+        int len = minLen + RNG.nextInt(maxLen - minLen + 1);
         char[] buf = new char[len];
         for (int i = 0; i < len; i++) {
             buf[i] = ALPHA[RNG.nextInt(ALPHA.length)];
@@ -139,7 +170,7 @@ public final class XmlObfuscator {
         return new String(buf);
     }
 
-    private static void writeXml(Document doc, File output) throws Exception {
+    private static void writeXml(Document doc, File output) throws TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
 
