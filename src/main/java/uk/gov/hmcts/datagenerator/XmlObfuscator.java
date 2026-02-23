@@ -20,7 +20,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-@SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity", "PMD.AvoidDeeplyNestedIfStmts"})
+@SuppressWarnings({"PMD.CognitiveComplexity", "PMD.CyclomaticComplexity",
+    "PMD.AvoidDeeplyNestedIfStmts", "squid:S2755"})
 public final class XmlObfuscator {
 
     private static final Logger LOG =
