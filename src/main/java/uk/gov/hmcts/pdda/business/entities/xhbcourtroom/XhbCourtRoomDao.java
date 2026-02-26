@@ -14,14 +14,16 @@ import uk.gov.hmcts.pdda.business.entities.xhbcrlivedisplay.XhbCrLiveDisplayDao;
 import java.io.Serializable;
 import java.util.Collection;
 
-@SuppressWarnings({"PMD.ConstructorCallsOverridableMethod"})
+@SuppressWarnings({"PMD"})
 @Entity(name = "XHB_COURT_ROOM")
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteId",
     query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId ")
 
-@NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteIdAndCourtRoomName",
-    query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId "
-    + "AND o.courtRoomName = :courtRoomName ")
+@NamedQuery(
+    name = "XHB_COURT_ROOM.findByCourtSiteIdAndCourtRoomName",
+    query = "SELECT o FROM XHB_COURT_ROOM o "
+            + "WHERE o.courtSiteId = :courtSiteId "
+            + "AND UPPER(TRIM(o.courtRoomName)) = UPPER(TRIM(:courtRoomName))")
 
 @NamedQuery(name = "XHB_COURT_ROOM.findByDisplayId", query = "SELECT o FROM XHB_COURT_ROOM o "
     + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
