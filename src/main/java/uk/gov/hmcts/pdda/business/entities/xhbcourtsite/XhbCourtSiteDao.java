@@ -18,7 +18,8 @@ import java.util.List;
 @SuppressWarnings({"PMD"})
 @Entity(name = "XHB_COURT_SITE")
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtId",
-    query = "SELECT o from XHB_COURT_SITE o WHERE o.courtId = :courtId ")
+    query = "SELECT o from XHB_COURT_SITE o WHERE o.courtId = :courtId "
+        + "AND (o.obsInd IS NULL or o.obsInd='N')")
 @NamedQuery(name = "XHB_COURT_SITE.findByCrestCourtIdValue",
     query = "SELECT o from XHB_COURT_SITE o WHERE o.crestCourtId = :crestCourtId AND "
         + "o.courtSiteCode='A' AND (o.obsInd IS NULL or o.obsInd='N' or o.obsInd='') ORDER BY o.courtSiteName")
