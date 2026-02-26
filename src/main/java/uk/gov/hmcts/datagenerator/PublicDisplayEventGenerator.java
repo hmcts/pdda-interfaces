@@ -193,29 +193,10 @@ public class PublicDisplayEventGenerator {
                 String caseType = pddaHearingProgressEvent.getCaseType();
                 Integer caseNumber = pddaHearingProgressEvent.getCaseNumber();
                 Integer hearingStatus = pddaHearingProgressEvent.getHearingProgressIndicator();
-                String hearingStatusStr = "";
-                
-                // Convert the hearing status code to a string for easier analysis
-                switch (hearingStatus) {
-                    case 0:
-                        hearingStatusStr = "TO BE HEARD";
-                        break;
-                    case 5:
-                        hearingStatusStr = "IN PROGRESS";
-                        break;
-                    case 8:
-                        hearingStatusStr = "ADJOURNED";
-                        break;
-                    case 9:
-                        hearingStatusStr = "FINISHED";
-                        break;
-                    default:
-                        hearingStatusStr = "UNKNOWN STATUS";
-                }
                 
                 // Append the case number and hearing status to the output file
-                String outputLine = String.format("%s, %s - Case Number: %s%s, Set Hearing Status to: %s - %s%n",
-                    courtName, courtRoomName, caseType, caseNumber, hearingStatus, hearingStatusStr);
+                String outputLine = String.format("%s, %s - Case Number: %s%s, Set Hearing Status to: %s%n",
+                    courtName, courtRoomName, caseType, caseNumber, hearingStatus);
                 
                 // Only create the output file if debugging
                 if (createOutput) {
