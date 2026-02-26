@@ -17,23 +17,27 @@ import java.util.Collection;
 @SuppressWarnings({"PMD"})
 @Entity(name = "XHB_COURT_ROOM")
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtSiteId",
-    query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId ")
+    query = "SELECT o from XHB_COURT_ROOM o WHERE o.courtSiteId = :courtSiteId "
+        + "AND (o.obsInd IS NULL or o.obsInd='N')")
 
 @NamedQuery(
     name = "XHB_COURT_ROOM.findByCourtSiteIdAndCourtRoomName",
     query = "SELECT o FROM XHB_COURT_ROOM o "
             + "WHERE o.courtSiteId = :courtSiteId "
-            + "AND UPPER(TRIM(o.courtRoomName)) = UPPER(TRIM(:courtRoomName))")
+            + "AND UPPER(TRIM(o.courtRoomName)) = UPPER(TRIM(:courtRoomName)) "
+            + "AND (o.obsInd IS NULL or o.obsInd='N')")
 
 @NamedQuery(name = "XHB_COURT_ROOM.findByDisplayId", query = "SELECT o FROM XHB_COURT_ROOM o "
     + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
-    + "XHB_DISPLAY_COURT_ROOM dcr WHERE dcr.displayId = :displayId)")
+    + "XHB_DISPLAY_COURT_ROOM dcr WHERE dcr.displayId = :displayId) "
+    + "AND (o.obsInd IS NULL or o.obsInd='N')")
 
 @NamedQuery(name = "XHB_COURT_ROOM.findVIPMultiSite", query = "SELECT o FROM XHB_COURT_ROOM o "
     + "WHERE o.courtRoomId IN (SELECT dcr.courtRoomId FROM "
     + "XHB_DISPLAY_LOCATION dl, XHB_COURT_SITE cs, " + "XHB_DISPLAY d, XHB_DISPLAY_COURT_ROOM dcr "
     + "WHERE dcr.displayId = d.displayId " + "AND d.displayLocationId = dl.displayLocationId "
     + "AND dl.courtSiteId = cs.courtSiteId AND cs.courtId = :courtId "
+    + "AND (o.obsInd IS NULL or o.obsInd='N')"
     + "AND d.descriptionCode = 'v_i_p') ORDER BY o.crestCourtRoomNo")
 
 @NamedQuery(name = "XHB_COURT_ROOM.findVIPMNoSite", query = "SELECT o FROM XHB_COURT_ROOM o "
@@ -41,11 +45,13 @@ import java.util.Collection;
     + "XHB_DISPLAY_LOCATION dl, XHB_COURT_SITE cs, " + "XHB_DISPLAY d, XHB_DISPLAY_COURT_ROOM dcr "
     + "WHERE dcr.displayId = d.displayId " + "AND d.displayLocationId = dl.displayLocationId "
     + "AND dl.courtSiteId = cs.courtSiteId AND cs.courtId = :courtId "
+    + "AND (o.obsInd IS NULL or o.obsInd='N')"
     + "AND d.descriptionCode = 'v_i_p') ORDER BY o.crestCourtRoomNo")
 
 @NamedQuery(name = "XHB_COURT_ROOM.findByCourtRoomNo",
     query = "SELECT o from XHB_COURT_ROOM o WHERE o.crestCourtRoomNo = :crestCourtRoomNo "
-    + "AND o.courtSiteId = :courtSiteId")
+    + "AND o.courtSiteId = :courtSiteId "
+    + "AND (o.obsInd IS NULL or o.obsInd='N')")
 
 public class XhbCourtRoomDao extends AbstractVersionedDao implements Serializable {
 
