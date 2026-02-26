@@ -675,10 +675,6 @@ public class SftpService extends XhibitPddaHelper {
                     // Find scheduled hearing record
                     return findScheduledHearing(courtRoomIdentifier.getCourtRoomId(),
                         site, xhbHearingDao.get());
-                } else {
-                    LOG.warn("No hearing found for caseId {} on {}", xhbCaseDao.get().getCaseId(),
-                        LocalDate.now());
-                    return null;
                 }
             }
         }
