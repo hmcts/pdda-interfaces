@@ -678,6 +678,7 @@ public class SftpService extends XhibitPddaHelper {
                 } else {
                     LOG.warn("No hearing found for caseId {} on {}", xhbCaseDao.get().getCaseId(),
                         LocalDate.now());
+                    return null;
                 }
             }
         }
