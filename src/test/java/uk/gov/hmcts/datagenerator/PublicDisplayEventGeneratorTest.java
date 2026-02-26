@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -59,5 +60,12 @@ class PublicDisplayEventGeneratorTest {
         File[] files = tempDir.toFile().listFiles((dir, name) -> name.startsWith("PDDA_XPD_"));
         assertNotNull(files);
         assertEquals(0, files.length);
+    }
+    
+    @Test
+    void testProcessPddaHearingProgressEvents() throws IOException {
+        // Make sure to set the param to true, to generate the output file
+        PublicDisplayEventGenerator.processPddaHearingProgressEvents(false);
+        assertTrue(true, "Method should execute without exceptions");
     }
 }

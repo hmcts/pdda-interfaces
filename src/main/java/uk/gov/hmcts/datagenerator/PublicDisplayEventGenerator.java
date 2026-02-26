@@ -10,6 +10,7 @@ import uk.gov.courtservice.xhibit.common.publicdisplay.events.MoveCaseEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicDisplayEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.PublicNoticeEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.UpdateCaseEvent;
+import uk.gov.courtservice.xhibit.common.publicdisplay.events.pdda.PddaHearingProgressEvent;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseChangeInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CaseCourtLogInformation;
 import uk.gov.courtservice.xhibit.common.publicdisplay.events.types.CourtRoomIdentifier;
@@ -22,9 +23,16 @@ import uk.gov.hmcts.pdda.business.services.pdda.PddaSerializationUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Generates random public display events and serializes them to files.
@@ -153,5 +161,83 @@ public class PublicDisplayEventGenerator {
 
         return new CaseCourtLogInformation(log, RANDOM.nextBoolean());
     }
+    
+    public static void processPddaHearingProgressEvents(boolean createOutput) throws IOException {
+        // This will take in PddaHearingProgressEvent files, decode, deserialize them and output the case numbers
+        // and hearing status to a file for analysis.
+        // This is useful for checking a batch of events to see what cases were attempted to be updated 
+        // and what the hearing status was in the event for that case.
+        
+        ClassLoader classLoader = PublicDisplayEventGenerator.class.getClassLoader();
+        
+        // Create an output file in the project root directory to store the results
+        Path outputPath = Paths.get("output.txt");
+        
+        // Get all files in the pdda hearing progress event input directory
+        List<File> eventFiles = 
+            getPddaHearingProgressEventFiles(classLoader, "database/test-data/pdda_hearing_progress_events_test_data");
+        
+        // Loop through and decode and deserialize
+        for (File event : eventFiles) {
+            // Read the file contents
+            String content = Files.readString(event.toPath());
+            
+            // Decode and deserialize the event
+            byte[] decodedEvent = PddaSerializationUtils.decodePublicEvent(content.trim());
+            PublicDisplayEvent newEvent = PddaSerializationUtils.deserializePublicEvent(decodedEvent);
+            
+            if (newEvent instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
+                // Get the case number and hearing status from the event
+                String courtName = pddaHearingProgressEvent.getCourtName();
+                String courtRoomName = pddaHearingProgressEvent.getCourtRoomName();
+                String caseType = pddaHearingProgressEvent.getCaseType();
+                Integer caseNumber = pddaHearingProgressEvent.getCaseNumber();
+                Integer hearingStatus = pddaHearingProgressEvent.getHearingProgressIndicator();
+                String hearingStatusStr = "";
+                
+                // Convert the hearing status code to a string for easier analysis
+                switch (hearingStatus) {
+                    case 0:
+                        hearingStatusStr = "TO BE HEARD";
+                        break;
+                    case 5:
+                        hearingStatusStr = "IN PROGRESS";
+                        break;
+                    case 8:
+                        hearingStatusStr = "ADJOURNED";
+                        break;
+                    case 9:
+                        hearingStatusStr = "FINISHED";
+                        break;
+                    default:
+                        hearingStatusStr = "UNKNOWN STATUS";
+                }
+                
+                // Append the case number and hearing status to the output file
+                String outputLine = String.format("%s, %s - Case Number: %s%s, Set Hearing Status to: %s - %s%n",
+                    courtName, courtRoomName, caseType, caseNumber, hearingStatus, hearingStatusStr);
+                
+                // Only create the output file if debugging
+                if (createOutput) {
+                    Files.writeString(outputPath, outputLine, java.nio.file.StandardOpenOption.CREATE,
+                        java.nio.file.StandardOpenOption.APPEND);
+                }
+            }
+        }
+    }
+    
+    private static List<File> getPddaHearingProgressEventFiles(ClassLoader classLoader, String inputDirectory) {
+        List<File> files = new ArrayList<>();
+        URL resource = classLoader.getResource(inputDirectory);
+        if (resource != null) {
+            File folder = new File(resource.getFile());
 
+            for (File file : Objects.requireNonNull(folder.listFiles())) {
+                if (file.getName().contains("PDDA_XPD")) {
+                    files.add(file);
+                }
+            }
+        }
+        return files;
+    }
 }
