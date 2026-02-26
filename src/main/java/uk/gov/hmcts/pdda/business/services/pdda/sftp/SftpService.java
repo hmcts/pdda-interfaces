@@ -77,9 +77,9 @@ public class SftpService extends XhibitPddaHelper {
     protected static final String WEB_PAGE_DOCUMENT_TYPE = "WebPage";
     protected static final String HEARING_PROGRESS_DELAY_MINUTES = "HEARING_PROGRESS_DELAY_MINUTES";
     protected static final String XHIBIT_LIST_PREFIX = "PDDA_XDL";
-    
+
     public static final String NEWLINE = "\n";
-    
+
     /**
      * JUnit constructor.
 
@@ -368,6 +368,10 @@ public class SftpService extends XhibitPddaHelper {
     }
 
     private void checkProcessAndSendEvent(PublicDisplayEvent event) {
+        if (event == null) {
+            LOG.warn("checkProcessAndSendEvent called with null event");
+            return;
+        }
         if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
             LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
             processHearingProgressEvent(pddaHearingProgressEvent);
@@ -423,6 +427,25 @@ public class SftpService extends XhibitPddaHelper {
         String caseType = event.getCaseType();
         Integer caseNumber = event.getCaseNumber();
         String courtRoomName = event.getCourtRoomName();
+        
+        // Resolve site early for better breadcrumbs (non-fatal)
+        try {
+            List<XhbCourtSiteDao> sites = getCourtSiteRepository().findByCourtIdSafe(courtId);
+            if (sites != null && !sites.isEmpty()) {
+                LOG.debug("HP_EVENT site resolved early: {}", siteCtx(sites.get(0)));
+            } else {
+                LOG.debug("HP_EVENT site not resolved early: courtId={}", courtId);
+            }
+        } catch (Exception e) {
+            LOG.debug("HP_EVENT site resolution failed early: courtId={} err={}", courtId, e.getMessage());
+        }
+
+        // Grep-friendly breadcrumb for correlation (single line)
+        LOG.debug(
+            "HP_EVENT breadcrumb: courtId={} courtName='{}' caseType={} caseNumber={} courtRoomName='{}'"
+                + " hpi={} isCaseActive={}",
+            courtId, courtName, caseType, caseNumber, courtRoomName,
+            event.getHearingProgressIndicator(), event.getIsCaseActive());
 
         if (courtId != null && courtName != null && caseType != null && caseNumber != null
             && courtRoomName != null) {
@@ -434,11 +457,22 @@ public class SftpService extends XhibitPddaHelper {
             XhbScheduledHearingDao scheduledHearingDao =
                 hearingProgressDrillDown(courtId, caseType, caseNumber, courtRoomName);
 
+            if (scheduledHearingDao == null) {
+                LOG.warn(
+                    "HP_EVENT drilldown FAILED: courtId={} courtName='{}' caseType={} caseNumber={} courtRoomName='{}'",
+                    courtId, courtName, caseType, caseNumber, courtRoomName);
+                return;
+            }
+
             // Get the delay period from xhb_config_prop
             List<XhbConfigPropDao> xhbConfigPropDao =
                 getXhbConfigPropRepository().findByPropertyNameSafe(HEARING_PROGRESS_DELAY_MINUTES);
 
-            if (!xhbConfigPropDao.isEmpty()) {
+            if (xhbConfigPropDao == null || xhbConfigPropDao.isEmpty()) {
+                LOG.warn("HP_EVENT config missing: propertyName={}",
+                    HEARING_PROGRESS_DELAY_MINUTES);
+                return;
+            } else {
                 Integer delay = Integer.parseInt(xhbConfigPropDao.get(0).getPropertyValue());
                 // Ensure last update date is outside of the delay period to prevent processing a
                 // duplicate
@@ -454,6 +488,10 @@ public class SftpService extends XhibitPddaHelper {
                     if (hearingProgressIndicator != null && hearingProgressIndicator != 0
                         && !hearingProgressIndicator
                             .equals(scheduledHearingDao.getHearingProgress())) {
+                        LOG.debug(
+                            "HP_EVENT updating scheduledHearingId={} oldProgress={} newProgress={}",
+                            scheduledHearingDao.getScheduledHearingId(),
+                            scheduledHearingDao.getHearingProgress(), hearingProgressIndicator);
                         scheduledHearingDao.setHearingProgress(hearingProgressIndicator);
                         LOG.debug("ScheduledHearing hearingProgress set to: {}",
                             hearingProgressIndicator);
@@ -475,45 +513,77 @@ public class SftpService extends XhibitPddaHelper {
     private XhbScheduledHearingDao hearingProgressDrillDown(Integer courtId, String caseType,
         Integer caseNumber, String courtRoomName) {
 
-        // Get the courtSiteId from the courtId
-        XhbCourtSiteDao xhbCourtSiteDao =
-            getCourtSiteRepository().findByCourtIdSafe(courtId).get(0);
-
-        if (xhbCourtSiteDao != null) {
-            LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
-            LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
-
-            // Get caseId using the case number from the event
-            Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
-                .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
-
-            if (xhbCaseDao.isPresent()) {
-                LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
-
-                // Get the hearingId using the caseId and todays date
-                Optional<XhbHearingDao> xhbHearingDao =
-                    getHearingRepository().findByCaseIdWithTodaysStartDateSafe(
-                        xhbCaseDao.get().getCaseId(), LocalDate.now().atStartOfDay());
-                if (!xhbHearingDao.isEmpty()) {
-                    LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
-
-                    // Get the courtRoomId from the courtSiteId and courtRoomName
-                    LOG.debug("Finding court room using court room name: {} and court site id: {}",
-                        courtRoomName, xhbCourtSiteDao.getCourtSiteId());
-                    XhbCourtRoomDao xhbCourtRoomDao =
-                        getCourtRoomRepository().findByCourtSiteIdAndCourtRoomNameSafe(
-                            xhbCourtSiteDao.getCourtSiteId(), courtRoomName).get(0);
-                    if (xhbCourtRoomDao != null) {
-                        LOG.debug("Court room found with ID: {}", xhbCourtRoomDao.getCourtRoomId());
-
-                        // Find scheduled hearing record
-                        return findScheduledHearing(xhbCourtRoomDao.getCourtRoomId(),
-                            xhbCourtSiteDao, xhbHearingDao.get());
-                    }
-                }
-            }
+        List<XhbCourtSiteDao> sites = getCourtSiteRepository().findByCourtIdSafe(courtId);
+        if (sites == null || sites.isEmpty()) {
+            LOG.warn("HP_EVENT courtSite NOT FOUND: courtId={}", courtId);
+            return null;
         }
-        return null;
+        XhbCourtSiteDao site = sites.get(0);
+        LOG.debug("HP_EVENT using site: {}", siteCtx(site));
+        
+        Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
+            .findByNumberTypeAndCourtSafe(site.getCourtId(), caseType, caseNumber);
+
+        if (xhbCaseDao.isEmpty()) {
+            LOG.warn("HP_EVENT case NOT FOUND: {} caseType={} caseNumber={}",
+                siteCtx(site), caseType, caseNumber);
+            return null;
+        }
+
+        Optional<XhbHearingDao> xhbHearingDao =
+            getHearingRepository().findByCaseIdWithTodaysStartDateSafe(
+                xhbCaseDao.get().getCaseId(), LocalDate.now().atStartOfDay());
+
+        if (xhbHearingDao.isEmpty()) {
+            LOG.warn("HP_EVENT hearing NOT FOUND: {} caseId={} hearingStartDate={}",
+                siteCtx(site), xhbCaseDao.get().getCaseId(), LocalDate.now().atStartOfDay());
+            return null;
+        }
+
+        LOG.debug("HP_EVENT finding court room: {} courtRoomName='{}'",
+            siteCtx(site), courtRoomName);
+        
+        List<XhbCourtRoomDao> rooms =
+            getCourtRoomRepository().findByCourtSiteIdAndCourtRoomNameSafe(site.getCourtSiteId(), courtRoomName);
+
+        if (rooms == null || rooms.isEmpty()) {
+            LOG.warn("HP_EVENT courtRoom NOT FOUND (exact match): {} courtRoomName='{}'",
+                siteCtx(site), courtRoomName);
+            LOG.warn("HP_EVENT roomName normalised: incoming='{}' normalised='{}'",
+                courtRoomName, courtRoomName == null ? null : courtRoomName.trim());
+
+            // Diagnostic: list known room names for that site (first 30)
+            try {
+                List<XhbCourtRoomDao> allRoomsForSite =
+                    getCourtRoomRepository().findByCourtSiteIdSafe(site.getCourtSiteId());
+                if (allRoomsForSite != null && !allRoomsForSite.isEmpty()) {
+                    String sample = allRoomsForSite.stream()
+                        .map(r -> String.format("'%s' (trim='%s', upper='%s')",
+                            r.getCourtRoomName(),
+                            r.getCourtRoomName() == null ? null : r.getCourtRoomName().trim(),
+                            r.getCourtRoomName() == null ? null : r.getCourtRoomName().trim().toUpperCase()
+                        ))
+                        .filter(n -> n != null && !n.isBlank())
+                        .distinct()
+                        .limit(30)
+                        .collect(java.util.stream.Collectors.joining(", "));
+                    LOG.warn("HP_EVENT courtRoom available names (first 30): {} names=[{}]",
+                        siteCtx(site), sample);
+                } else {
+                    LOG.warn("HP_EVENT no court rooms exist at all for site: {}", siteCtx(site));
+                }
+            } catch (Exception e) {
+                LOG.warn("HP_EVENT failed listing rooms for site {} due to {}",
+                    siteCtx(site), e.getMessage());
+            }
+            return null;
+        }
+
+        XhbCourtRoomDao xhbCourtRoomDao = rooms.get(0);
+        LOG.debug("Court room found with ID: {}", xhbCourtRoomDao.getCourtRoomId());
+
+        return findScheduledHearing(xhbCourtRoomDao.getCourtRoomId(), site,
+            xhbHearingDao.get());
     }
 
     private CourtLogViewValue processCaseStatusEvent(CaseStatusEvent event) {
@@ -564,16 +634,28 @@ public class SftpService extends XhibitPddaHelper {
     private XhbScheduledHearingDao caseStatusDrillDown(CourtRoomIdentifier courtRoomIdentifier,
         String caseType, Integer caseNumber) {
         // Get XhbCourtSiteDao using courtId
-        XhbCourtSiteDao xhbCourtSiteDao =
-            getCourtSiteRepository().findByCourtIdSafe(courtRoomIdentifier.getCourtId()).get(0);
+        List<XhbCourtSiteDao> sites =
+            getCourtSiteRepository().findByCourtIdSafe(courtRoomIdentifier.getCourtId());
+        if (sites == null || sites.isEmpty()) {
+            LOG.warn("CS_EVENT courtSite NOT FOUND: courtId={}", courtRoomIdentifier.getCourtId());
+            return null;
+        }
+        XhbCourtSiteDao site = sites.get(0);
+        LOG.debug("CS_EVENT using site: {}", siteCtx(site));
 
-        if (xhbCourtSiteDao != null) {
-            LOG.debug("Court site found with ID: {}", xhbCourtSiteDao.getCourtId());
+        if (site != null) {
+            LOG.debug("Court site found with ID: {}", site.getCourtId());
             LOG.debug("Finding case using case number: {}{}", caseType, caseNumber);
 
             // Get caseId using the case number from the event
             Optional<XhbCaseDao> xhbCaseDao = getCaseRepository()
-                .findByNumberTypeAndCourtSafe(xhbCourtSiteDao.getCourtId(), caseType, caseNumber);
+                .findByNumberTypeAndCourtSafe(site.getCourtId(), caseType, caseNumber);
+            
+            if (xhbCaseDao.isEmpty()) {
+                LOG.warn("CS_EVENT case NOT FOUND: {} caseType={} caseNumber={}",
+                    siteCtx(site), caseType, caseNumber);
+                return null;
+            }
 
             if (xhbCaseDao.isPresent()) {
                 LOG.debug("Case found with ID: {}", xhbCaseDao.get().getCaseId());
@@ -582,12 +664,17 @@ public class SftpService extends XhibitPddaHelper {
                 Optional<XhbHearingDao> xhbHearingDao =
                     getHearingRepository().findByCaseIdWithTodaysStartDateSafe(
                         xhbCaseDao.get().getCaseId(), LocalDate.now().atStartOfDay());
-                if (!xhbHearingDao.isEmpty()) {
+                if (xhbHearingDao.isEmpty()) {
+                    LOG.warn("CS_EVENT hearing NOT FOUND: {} caseId={} hearingStartDate={}",
+                        siteCtx(site), xhbCaseDao.get().getCaseId(), LocalDate.now().atStartOfDay());
+                    return null;
+                }
+                if (xhbHearingDao.isPresent()) {
                     LOG.debug("Hearing found with ID: {}", xhbHearingDao.get().getHearingId());
 
                     // Find scheduled hearing record
                     return findScheduledHearing(courtRoomIdentifier.getCourtRoomId(),
-                        xhbCourtSiteDao, xhbHearingDao.get());
+                        site, xhbHearingDao.get());
                 }
             }
         }
@@ -597,11 +684,22 @@ public class SftpService extends XhibitPddaHelper {
     private XhbScheduledHearingDao findScheduledHearing(Integer courtRoomId,
         XhbCourtSiteDao xhbCourtSiteDao, XhbHearingDao xhbHearingDao) {
 
+        if (courtRoomId == null || xhbCourtSiteDao == null || xhbHearingDao == null) {
+            LOG.warn(
+                "findScheduledHearing called with nulls: courtRoomId={} courtSiteId={} hearingId={}",
+                courtRoomId, xhbCourtSiteDao == null ? null : xhbCourtSiteDao.getCourtSiteId(),
+                xhbHearingDao == null ? null : xhbHearingDao.getHearingId());
+            return null;
+        }
+
         // Get the SittingId using the courtRoomId and courtSiteId
         List<XhbSittingDao> xhbSittingDaos =
             getSittingRepository().findByCourtRoomIdAndCourtSiteIdWithTodaysSittingDateSafe(
                 courtRoomId, xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
-        if (!xhbSittingDaos.isEmpty()) {
+        if (xhbSittingDaos == null || xhbSittingDaos.isEmpty()) {
+            LOG.warn("No sittings found: courtRoomId={} courtSiteId={} sittingDate={}", courtRoomId,
+                xhbCourtSiteDao.getCourtSiteId(), LocalDate.now().atStartOfDay());
+        } else {
             LOG.debug("No. of Sittings found using courtRoomId: {} and courtSiteId: {} is: {}",
                 courtRoomId, xhbCourtSiteDao.getCourtSiteId(), xhbSittingDaos.size());
 
@@ -616,40 +714,49 @@ public class SftpService extends XhibitPddaHelper {
                         sittingDao.getSittingId(), xhbHearingDao.getHearingId());
 
                 // Return the xhb_scheduled_hearing record
-                if (!scheduledHearingDao.isEmpty()) {
+                if (scheduledHearingDao.isPresent()) {
                     return scheduledHearingDao.get();
                 }
             }
+            String sittingIds = xhbSittingDaos.stream()
+                .map(s -> String.valueOf(s.getSittingId()))
+                .distinct()
+                .collect(java.util.stream.Collectors.joining(","));
+
+            LOG.warn("No scheduled hearing found: courtRoomId={} hearingId={} site={} checkedSittingIds=[{}]",
+                courtRoomId, xhbHearingDao.getHearingId(), siteCtx(xhbCourtSiteDao), sittingIds);
         }
         return null;
     }
 
     /**
-     * Handle a {@code PublicNoticeEvent} for a single court room.
-     * Behaviour summary:
+     * Handle a {@code PublicNoticeEvent} for a single court room. Behaviour summary:
      * <ul>
-     *   <li>Extracts the {@code CourtRoomIdentifier} from the {@code event} and logs diagnostic
-     *       information about its runtime class and classloader.</li>
-     *   <li>Uses reflection (defensive, read-only) to inspect a declared private field named
-     *       {@code publicNotices} if present: logs whether the field is present, its array length,
-     *       component type and up to the first 10 elements (or that the array is null). Any
-     *       {@link NoSuchFieldException} is logged at DEBUG; other reflection errors are caught and
-     *       logged as errors so processing can continue.</li>
-     *   <li>If a {@code CourtRoomIdentifier} is available, reads all configured public notices for
-     *       that court room via {@code getConfiguredPublicNoticeRepository().findByCourtRoomIdSafe(...)}
-     *       and sets each configured notice to inactive (writes are performed via the repository's
-     *       {@code update(...)} method).</li>
-     *   <li>Finally obtains the {@code DisplayablePublicNoticeValue[]} from the court room
-     *       identifier and delegates to {@link #setActivePublicNotices(DisplayablePublicNoticeValue[],
-     *       CourtRoomIdentifier)} to activate any notices that should be active.</li>
+     * <li>Extracts the {@code CourtRoomIdentifier} from the {@code event} and logs diagnostic
+     * information about its runtime class and classloader.</li>
+     * <li>Uses reflection (defensive, read-only) to inspect a declared private field named
+     * {@code publicNotices} if present: logs whether the field is present, its array length,
+     * component type and up to the first 10 elements (or that the array is null). Any
+     * {@link NoSuchFieldException} is logged at DEBUG; other reflection errors are caught and
+     * logged as errors so processing can continue.</li>
+     * <li>If a {@code CourtRoomIdentifier} is available, reads all configured public notices for
+     * that court room via {@code getConfiguredPublicNoticeRepository().findByCourtRoomIdSafe(...)}
+     * and sets each configured notice to inactive (writes are performed via the repository's
+     * {@code update(...)} method).</li>
+     * <li>Finally obtains the {@code DisplayablePublicNoticeValue[]} from the court room identifier
+     * and delegates to
+     * {@link #setActivePublicNotices(DisplayablePublicNoticeValue[], CourtRoomIdentifier)} to
+     * activate any notices that should be active.</li>
      * </ul>
      * Side effects: performs repository reads and updates (mutating configured public notice
-     * {@code isActive} flags). The method logs extensively for diagnostics. Exceptions raised during
-     * reflection are handled locally and logged; exceptions thrown by repository operations are not
-     * explicitly propagated by this method (calling code should assume repository I/O may throw
-     * runtime exceptions).
-     * @param event the {@code PublicNoticeEvent} to process; its {@code CourtRoomIdentifier} may be null,
-     *              in which case only limited diagnostic logging occurs and no repository updates are performed
+     * {@code isActive} flags). The method logs extensively for diagnostics. Exceptions raised
+     * during reflection are handled locally and logged; exceptions thrown by repository operations
+     * are not explicitly propagated by this method (calling code should assume repository I/O may
+     * throw runtime exceptions).
+
+     * @param event the {@code PublicNoticeEvent} to process; its {@code CourtRoomIdentifier} may be
+     *        null, in which case only limited diagnostic logging occurs and no repository updates
+     *        are performed
      */
     private void processPublicNoticeEvent(PublicNoticeEvent event) {
         // Get Court Room Identifier from the event
@@ -729,28 +836,30 @@ public class SftpService extends XhibitPddaHelper {
     }
 
     /**
-     * Process an array of {@code DisplayablePublicNoticeValue} and set the corresponding
-     * configured public notices to active where appropriate.
-     * This method is defensive: it returns immediately if {@code publicNotices} is null/empty
-     * or if {@code courtRoomIdentifier} (or its id) is null. For each non-null {@code publicNotice}
-     * it validates that both the court id and the definitive public notice id are present; missing
-     * ids are logged and skipped. For each valid notice it:
+     * Process an array of {@code DisplayablePublicNoticeValue} and set the corresponding configured
+     * public notices to active where appropriate. This method is defensive: it returns immediately
+     * if {@code publicNotices} is null/empty or if {@code courtRoomIdentifier} (or its id) is null.
+     * For each non-null {@code publicNotice} it validates that both the court id and the definitive
+     * public notice id are present; missing ids are logged and skipped. For each valid notice it:
      * <ol>
-     *   <li>looks up the corresponding {@code XhbPublicNoticeDao} via {@code getPublicNoticeRepository()},</li>
-     *   <li>uses {@link #findConfiguredPublicNotice} to resolve the configured notice for the given
-     *       court room and public notice,</li>
-     *   <li>and if the incoming notice indicates it should be active, sets the configured object's
-     *       {@code isActive} flag and updates it via {@code getConfiguredPublicNoticeRepository().update(...)}.</li>
+     * <li>looks up the corresponding {@code XhbPublicNoticeDao} via
+     * {@code getPublicNoticeRepository()},</li>
+     * <li>uses {@link #findConfiguredPublicNotice} to resolve the configured notice for the given
+     * court room and public notice,</li>
+     * <li>and if the incoming notice indicates it should be active, sets the configured object's
+     * {@code isActive} flag and updates it via
+     * {@code getConfiguredPublicNoticeRepository().update(...)}.</li>
      * </ol>
      * All repository lookups and update attempts are logged. Exceptions thrown while updating a
      * single configured public notice are caught and logged; processing then continues for the
      * remaining notices. This method performs side effects (repository updates) and does not throw
      * checked exceptions.
+
      * @param publicNotices array of displayable public notice values to process; may be null/empty
-     * @param courtRoomIdentifier identifies the target court room; if null (or its id is null) no processing occurs
+     * @param courtRoomIdentifier identifies the target court room; if null (or its id is null) no
+     *        processing occurs
      */
-    private void setActivePublicNotices(
-        DisplayablePublicNoticeValue[] publicNotices,
+    private void setActivePublicNotices(DisplayablePublicNoticeValue[] publicNotices,
         CourtRoomIdentifier courtRoomIdentifier) {
 
         if (publicNotices == null || publicNotices.length == 0) {
@@ -760,7 +869,8 @@ public class SftpService extends XhibitPddaHelper {
         }
 
         if (courtRoomIdentifier == null || courtRoomIdentifier.getCourtRoomId() == null) {
-            LOG.warn("Cannot set active public notices: courtRoomIdentifier or courtRoomId is null");
+            LOG.warn(
+                "Cannot set active public notices: courtRoomIdentifier or courtRoomId is null");
             return;
         }
 
@@ -775,28 +885,26 @@ public class SftpService extends XhibitPddaHelper {
             Integer definitivePublicNotice = publicNotice.getDefinitivePublicNotice();
 
             if (courtId == null || definitivePublicNotice == null) {
-                LOG.warn("Skipping publicNotice due to missing ids (courtId={}, definitivePublicNotice={})",
+                LOG.warn(
+                    "Skipping publicNotice due to missing ids (courtId={}, definitivePublicNotice={})",
                     courtId, definitivePublicNotice);
                 continue;
             }
 
             // Find the XhbPublicNoticeDao; repository returns Optional already
-            Optional<XhbPublicNoticeDao> xhbPublicNoticeDaoOpt =
-                getPublicNoticeRepository().findByCourtIdAndDefPublicNoticeIdSafe(courtId, definitivePublicNotice);
+            Optional<XhbPublicNoticeDao> xhbPublicNoticeDaoOpt = getPublicNoticeRepository()
+                .findByCourtIdAndDefPublicNoticeIdSafe(courtId, definitivePublicNotice);
 
             xhbPublicNoticeDaoOpt.ifPresentOrElse(xhbPublicNoticeDao -> {
                 Integer publicNoticeId = xhbPublicNoticeDao.getPublicNoticeId();
-                LOG.debug("XhbPublicNoticeDao found with publicNoticeId={} (courtId={}, definitivePublicNotice={})",
+                LOG.debug(
+                    "XhbPublicNoticeDao found with publicNoticeId={} (courtId={}, definitivePublicNotice={})",
                     publicNoticeId, courtId, definitivePublicNotice);
 
                 // Find configured public notice defensively (uses the helper you had)
                 Optional<XhbConfiguredPublicNoticeDao> configuredOpt =
-                    findConfiguredPublicNotice(
-                        getConfiguredPublicNoticeRepository(),
-                        courtRoomIdentifier,
-                        xhbPublicNoticeDaoOpt,
-                        LOG
-                    );
+                    findConfiguredPublicNotice(getConfiguredPublicNoticeRepository(),
+                        courtRoomIdentifier, xhbPublicNoticeDaoOpt, LOG);
 
                 configuredOpt.ifPresentOrElse(configured -> {
                     try {
@@ -810,16 +918,19 @@ public class SftpService extends XhibitPddaHelper {
                             LOG.debug("Set configuredPublicNoticeId={} to active",
                                 configured.getConfiguredPublicNoticeId());
                         } else {
-                            LOG.debug("Public notice indicates not active; no update performed for"
-                                + "configuredPublicNoticeId={}",
+                            LOG.debug(
+                                "Public notice indicates not active; no update performed for"
+                                    + "configuredPublicNoticeId={}",
                                 configured.getConfiguredPublicNoticeId());
                         }
                     } catch (Exception e) {
                         LOG.error("Failed to update configured public notice (configuredId={}): {}",
                             configured.getConfiguredPublicNoticeId(), e.getMessage(), e);
-                        // swallow or rethrow depending on desired behaviour; here we continue processing others
+                        // swallow or rethrow depending on desired behaviour; here we continue
+                        // processing others
                     }
-                }, () -> LOG.info("ConfiguredPublicNotice not found for publicNoticeId={} courtRoomId={}",
+                }, () -> LOG.info(
+                    "ConfiguredPublicNotice not found for publicNoticeId={} courtRoomId={}",
                     publicNoticeId, courtRoomIdentifier.getCourtRoomId()));
 
             }, () -> {
@@ -831,25 +942,29 @@ public class SftpService extends XhibitPddaHelper {
 
 
     /**
-     * Find the configured public notice DAO for a given court room and public notice.
-     * This helper validates inputs and performs a repository lookup:
+     * Find the configured public notice DAO for a given court room and public notice. This helper
+     * validates inputs and performs a repository lookup:
      * <ul>
-     *   <li>If {@code courtRoomIdentifier} or its courtRoomId is null the method returns
-     *       {@code Optional.empty()} and logs a warning.</li>
-     *   <li>If {@code xhbPublicNoticeDaoOpt} is empty or its contained {@code publicNoticeId}
-     *       is null the method returns {@code Optional.empty()} and logs a warning.</li>
-     *   <li>Otherwise it queries {@code repo.findByDefinitivePnCourtRoomValueSafe(courtRoomId, publicNoticeId)}.
-     *       If the query returns no results it returns {@code Optional.empty()}; if multiple results are
-     *       returned it logs a warning and returns the first element wrapped in {@code Optional}.</li>
+     * <li>If {@code courtRoomIdentifier} or its courtRoomId is null the method returns
+     * {@code Optional.empty()} and logs a warning.</li>
+     * <li>If {@code xhbPublicNoticeDaoOpt} is empty or its contained {@code publicNoticeId} is null
+     * the method returns {@code Optional.empty()} and logs a warning.</li>
+     * <li>Otherwise it queries
+     * {@code repo.findByDefinitivePnCourtRoomValueSafe(courtRoomId, publicNoticeId)}. If the query
+     * returns no results it returns {@code Optional.empty()}; if multiple results are returned it
+     * logs a warning and returns the first element wrapped in {@code Optional}.</li>
      * </ul>
      * This method does not mutate data; it only performs a read and returns the found DAO wrapped
      * in an {@code Optional}. All important decision points are logged via the supplied logger.
+
      * @param repo repository used to look up configured public notices; must not be null
-     * @param courtRoomIdentifier identifies the court room to search for; its courtRoomId must not be null
-     * @param xhbPublicNoticeDaoOpt optional containing the matched XhbPublicNoticeDao (expected non-empty)
+     * @param courtRoomIdentifier identifies the court room to search for; its courtRoomId must not
+     *        be null
+     * @param xhbPublicNoticeDaoOpt optional containing the matched XhbPublicNoticeDao (expected
+     *        non-empty)
      * @param log logger used for warnings and debug information
-     * @return an {@code Optional<XhbConfiguredPublicNoticeDao>} containing the first matching configured
-     *         public notice, or {@code Optional.empty()} if none could be resolved
+     * @return an {@code Optional<XhbConfiguredPublicNoticeDao>} containing the first matching
+     *         configured public notice, or {@code Optional.empty()} if none could be resolved
      */
 
     Optional<XhbConfiguredPublicNoticeDao> findConfiguredPublicNotice(
@@ -893,10 +1008,8 @@ public class SftpService extends XhibitPddaHelper {
 
         // Defensive: if multiple results appear, log it but return the first safely
         if (results.size() > 1) {
-            log.warn(
-                "Multiple XhbConfiguredPublicNoticeDao results found for courtRoomId={},"
-                + "publicNoticeId={}. Returning first.",
-                courtRoomId, publicNoticeId);
+            log.warn("Multiple XhbConfiguredPublicNoticeDao results found for courtRoomId={},"
+                + "publicNoticeId={}. Returning first.", courtRoomId, publicNoticeId);
         }
 
         return Optional.ofNullable(results.get(0));
@@ -905,6 +1018,7 @@ public class SftpService extends XhibitPddaHelper {
 
     /**
      * Add a message retrieved from BAIS into the PDDA database.
+
      * @param courtId The court ID
      * @param messageType The message type
      * @param filename The filename
@@ -956,16 +1070,18 @@ public class SftpService extends XhibitPddaHelper {
         // Create the clob data for the message
         Optional<XhbClobDao> clob = PddaMessageUtil.createClob(getClobRepository(), clobData);
         Long pddaMessageDataId = clob.isPresent() ? clob.get().getClobId() : null;
-        
+
         // Set the default valid not processed status
         String status = CpDocumentStatus.VALID_NOT_PROCESSED.status;
-        
+
         // Check if we need to set this document to On Hold if its an XHIBIT list
         if (filename.contains(XHIBIT_LIST_PREFIX)) {
-            LOG.debug("Setting document status to On Hold for: {} as it is a list recieved from XHIBIT", filename);
+            LOG.debug(
+                "Setting document status to On Hold for: {} as it is a list recieved from XHIBIT",
+                filename);
             status = CpDocumentStatus.ON_HOLD.status;
         }
-        
+
         // Call createMessage
         PddaMessageUtil.createMessage(getPddaMessageHelper(), courtId, null,
             messageTypeDao.get().getPddaMessageTypeId(), pddaMessageDataId, null, updatedFilename,
@@ -1013,6 +1129,23 @@ public class SftpService extends XhibitPddaHelper {
             LOG.debug("Unknown list type");
             return "Unknown";
         }
+    }
+    
+    private String siteCtx(XhbCourtSiteDao site) {
+        if (site == null) {
+            return "courtSite=null";
+        }
+        return String.format(
+            "courtSiteId=%s courtId=%s crestCourtId=%s siteName='%s' displayName='%s' shortName='%s' code=%s obsInd=%s",
+            site.getCourtSiteId(),
+            site.getCourtId(),
+            site.getCrestCourtId(),
+            site.getCourtSiteName(),
+            site.getDisplayName(),
+            site.getShortName(),
+            site.getCourtSiteCode(),
+            site.getObsInd()
+        );
     }
 
 
@@ -1177,8 +1310,9 @@ public class SftpService extends XhibitPddaHelper {
      */
     public static class BaisCpValidation extends BaisValidation {
 
-        private static final String[] POSSIBLETITLES = {DAILY_LIST_DOCUMENT_TYPE, FIRM_LIST_DOCUMENT_TYPE,
-            WARNED_LIST_DOCUMENT_TYPE, WEB_PAGE_DOCUMENT_TYPE, PUBLIC_DISPLAY_DOCUMENT_TYPE};
+        private static final String[] POSSIBLETITLES =
+            {DAILY_LIST_DOCUMENT_TYPE, FIRM_LIST_DOCUMENT_TYPE, WARNED_LIST_DOCUMENT_TYPE,
+                WEB_PAGE_DOCUMENT_TYPE, PUBLIC_DISPLAY_DOCUMENT_TYPE};
 
         public BaisCpValidation(XhbCourtRepository courtRespository) {
             super(courtRespository, false, 3);
