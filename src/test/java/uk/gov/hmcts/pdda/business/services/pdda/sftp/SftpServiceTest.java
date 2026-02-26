@@ -2703,4 +2703,146 @@ class SftpServiceTest {
 
         EasyMock.verify(mockXhbScheduledHearingRepository);
     }
+    
+    @Test
+    void testHearingProgressDrillDown_hearingEmpty_returnsNull() throws Exception {
+        PddaHearingProgressEvent evt = new PddaHearingProgressEvent();
+        evt.setCourtId(1);
+        evt.setCourtName(COURT1);
+        evt.setCourtRoomName(COURTROOM1);
+        evt.setCaseType("T");
+        evt.setCaseNumber(123);
+
+        XhbCourtSiteDao site = DummyCourtUtil.getXhbCourtSiteDao();
+
+        EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        // called twice (early resolution + drilldown)
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+            .andReturn(List.of(site)).times(2);
+
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyInt()))
+            .andReturn(Optional.of(DummyCaseUtil.getXhbCaseDao())).once();
+
+        // hearing missing -> hit red branch and return null
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.anyInt(), EasyMock.anyObject(LocalDateTime.class)))
+            .andReturn(Optional.empty()).once();
+
+        // Ensure we *don’t* try to look up rooms
+        EasyMock.replay(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        var m = SftpService.class.getDeclaredMethod("processHearingProgressEvent",
+            PddaHearingProgressEvent.class);
+        m.setAccessible(true);
+
+        SftpService svc = isolatedService();
+        m.invoke(svc, evt);
+
+        EasyMock.verify(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+    }
+    
+    @Test
+    void testHearingProgressDrillDown_roomsEmpty_diagnosticListsFirst30() throws Exception {
+        PddaHearingProgressEvent evt = new PddaHearingProgressEvent();
+        evt.setCourtId(1);
+        evt.setCourtName(COURT1);
+        evt.setCourtRoomName(COURTROOM1);
+        evt.setCaseType("T");
+        evt.setCaseNumber(123);
+
+        XhbCourtSiteDao site = DummyCourtUtil.getXhbCourtSiteDao();
+
+        EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+            .andReturn(List.of(site)).times(2);
+
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyInt()))
+            .andReturn(Optional.of(DummyCaseUtil.getXhbCaseDao())).once();
+
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.anyInt(), EasyMock.anyObject(LocalDateTime.class)))
+            .andReturn(Optional.of(DummyHearingUtil.getXhbHearingDao())).once();
+
+        // exact room lookup returns empty -> red branch
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdAndCourtRoomNameSafe(
+            EasyMock.anyInt(), EasyMock.anyString()))
+            .andReturn(Collections.emptyList()).once();
+
+        // diagnostic listing returns non-empty -> covers stream/map/distinct/limit/join
+        XhbCourtRoomDao r1 = DummyCourtUtil.getXhbCourtRoomDao();
+        r1.setCourtRoomName(" Room A "); // includes trim path
+        XhbCourtRoomDao r2 = DummyCourtUtil.getXhbCourtRoomDao();
+        r2.setCourtRoomName("Room B");
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdSafe(EasyMock.anyInt()))
+            .andReturn(List.of(r1, r2)).once();
+
+        EasyMock.replay(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        var m = SftpService.class.getDeclaredMethod("processHearingProgressEvent",
+            PddaHearingProgressEvent.class);
+        m.setAccessible(true);
+
+        SftpService svc = isolatedService();
+        m.invoke(svc, evt);
+
+        EasyMock.verify(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+    }
+    
+    @Test
+    void testHearingProgressDrillDown_roomsEmpty_diagnosticNoRoomsExist() throws Exception {
+        PddaHearingProgressEvent evt = new PddaHearingProgressEvent();
+        evt.setCourtId(1);
+        evt.setCourtName(COURT1);
+        evt.setCourtRoomName(COURTROOM1);
+        evt.setCaseType("T");
+        evt.setCaseNumber(123);
+
+        XhbCourtSiteDao site = DummyCourtUtil.getXhbCourtSiteDao();
+
+        EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+            .andReturn(List.of(site)).times(2);
+
+        EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
+            EasyMock.anyInt(), EasyMock.anyString(), EasyMock.anyInt()))
+            .andReturn(Optional.of(DummyCaseUtil.getXhbCaseDao())).once();
+
+        EasyMock.expect(mockXhbHearingRepository.findByCaseIdWithTodaysStartDateSafe(
+            EasyMock.anyInt(), EasyMock.anyObject(LocalDateTime.class)))
+            .andReturn(Optional.of(DummyHearingUtil.getXhbHearingDao())).once();
+
+        // exact room lookup returns empty -> red branch
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdAndCourtRoomNameSafe(
+            EasyMock.anyInt(), EasyMock.anyString()))
+            .andReturn(Collections.emptyList()).once();
+
+        // diagnostic listing returns empty -> covers the "else { no rooms exist }" log path
+        EasyMock.expect(mockXhbCourtRoomRepository.findByCourtSiteIdSafe(EasyMock.anyInt()))
+            .andReturn(Collections.emptyList()).once();
+
+        EasyMock.replay(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+
+        var m = SftpService.class.getDeclaredMethod("processHearingProgressEvent",
+            PddaHearingProgressEvent.class);
+        m.setAccessible(true);
+
+        SftpService svc = isolatedService();
+        m.invoke(svc, evt);
+
+        EasyMock.verify(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
+            mockXhbCourtRoomRepository);
+    }
 }
