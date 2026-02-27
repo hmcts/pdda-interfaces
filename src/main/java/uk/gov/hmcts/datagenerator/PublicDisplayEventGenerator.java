@@ -172,10 +172,11 @@ public class PublicDisplayEventGenerator {
         
         // Create an output file in the project root directory to store the results
         Path outputPath = Paths.get("output.txt");
+        String outputLine = "";
         
         // Get all files in the pdda hearing progress event input directory
         List<File> eventFiles = 
-            getPddaHearingProgressEventFiles(classLoader, "database/test-data/pdda_hearing_progress_events_test_data");
+            getPddaHearingProgressEventFiles(classLoader, "database/test-data/pdda_events_test_data");
         
         // Loop through and decode and deserialize
         for (File event : eventFiles) {
@@ -195,14 +196,28 @@ public class PublicDisplayEventGenerator {
                 Integer hearingStatus = pddaHearingProgressEvent.getHearingProgressIndicator();
                 
                 // Append the case number and hearing status to the output file
-                String outputLine = String.format("%s, %s - Case Number: %s%s, Set Hearing Status to: %s%n",
+                outputLine = String.format("%s, %s - Case Number: %s%s, Set Hearing Status to: %s%n",
                     courtName, courtRoomName, caseType, caseNumber, hearingStatus);
+            }
+            
+            if (newEvent instanceof CaseStatusEvent caseStatusEvent) {
+                String defendantName = caseStatusEvent.getCaseCourtLogInformation()
+                    .getCourtLogSubscriptionValue().getCourtLogViewValue().getDefendantName();
+                Integer caseNumber = caseStatusEvent.getCaseCourtLogInformation()
+                    .getCourtLogSubscriptionValue().getCourtLogViewValue().getCaseNumber();
+                String logEntry =
+                    caseStatusEvent.getCaseCourtLogInformation()
+                    .getCourtLogSubscriptionValue().getCourtLogViewValue().getLogEntry();
                 
-                // Only create the output file if debugging
-                if (createOutput) {
-                    Files.writeString(outputPath, outputLine, java.nio.file.StandardOpenOption.CREATE,
-                        java.nio.file.StandardOpenOption.APPEND);
-                }
+                // Append the courtRoomIdentifier information to the output file
+                outputLine = String.format("Case Status for: %s - %s. %nWith log entry:%n%s%n%n",
+                    defendantName, caseNumber, logEntry);
+            }
+            
+            // Only create the output file if debugging
+            if (createOutput) {
+                Files.writeString(outputPath, outputLine, java.nio.file.StandardOpenOption.CREATE,
+                    java.nio.file.StandardOpenOption.APPEND);
             }
         }
     }
