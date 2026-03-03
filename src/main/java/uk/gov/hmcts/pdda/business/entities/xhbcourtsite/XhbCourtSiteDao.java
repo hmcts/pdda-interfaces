@@ -26,6 +26,9 @@ import java.util.List;
 @NamedQuery(name = "XHB_COURT_SITE.findByCourtSiteName",
     query = "SELECT o from XHB_COURT_SITE o WHERE o.crestCourtId = :crestCourtId AND "
         + "o.courtSiteName = :courtSiteName AND (o.obsInd IS NULL or o.obsInd='N')")
+@NamedQuery(name = "XHB_COURT_SITE.findByCourtIdAndCourtSiteName",
+    query = "SELECT o from XHB_COURT_SITE o WHERE o.courtId = :courtId AND "
+        + "o.courtSiteName = :courtSiteName AND (o.obsInd IS NULL or o.obsInd='N')")
 public class XhbCourtSiteDao extends AbstractVersionedDao implements Serializable {
 
     private static final long serialVersionUID = -1623864177985336883L;

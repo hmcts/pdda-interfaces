@@ -430,7 +430,8 @@ public class SftpService extends XhibitPddaHelper {
         
         // Resolve site early for better breadcrumbs (non-fatal)
         try {
-            List<XhbCourtSiteDao> sites = getCourtSiteRepository().findByCourtIdSafe(courtId);
+            List<XhbCourtSiteDao> sites = 
+                getCourtSiteRepository().findByCourtIdAndCourtSiteNameSafe(courtId, courtName);
             if (sites != null && !sites.isEmpty()) {
                 LOG.debug("HP_EVENT site resolved early: {}", siteCtx(sites.get(0)));
             } else {
@@ -455,7 +456,7 @@ public class SftpService extends XhibitPddaHelper {
 
             // Drill down to the scheduledHearingDao record
             XhbScheduledHearingDao scheduledHearingDao =
-                hearingProgressDrillDown(courtId, caseType, caseNumber, courtRoomName);
+                hearingProgressDrillDown(courtId, courtName, caseType, caseNumber, courtRoomName);
 
             if (scheduledHearingDao == null) {
                 LOG.warn(
@@ -510,10 +511,10 @@ public class SftpService extends XhibitPddaHelper {
         }
     }
 
-    private XhbScheduledHearingDao hearingProgressDrillDown(Integer courtId, String caseType,
+    private XhbScheduledHearingDao hearingProgressDrillDown(Integer courtId, String courtName, String caseType,
         Integer caseNumber, String courtRoomName) {
 
-        List<XhbCourtSiteDao> sites = getCourtSiteRepository().findByCourtIdSafe(courtId);
+        List<XhbCourtSiteDao> sites = getCourtSiteRepository().findByCourtIdAndCourtSiteNameSafe(courtId, courtName);
         if (sites == null || sites.isEmpty()) {
             LOG.warn("HP_EVENT courtSite NOT FOUND: courtId={}", courtId);
             return null;
@@ -635,7 +636,8 @@ public class SftpService extends XhibitPddaHelper {
         String caseType, Integer caseNumber) {
         // Get XhbCourtSiteDao using courtId
         List<XhbCourtSiteDao> sites =
-            getCourtSiteRepository().findByCourtIdSafe(courtRoomIdentifier.getCourtId());
+            getCourtSiteRepository().findByCourtIdAndCourtSiteNameSafe(
+                courtRoomIdentifier.getCourtId(), courtRoomIdentifier.getCourtName());
         if (sites == null || sites.isEmpty()) {
             LOG.warn("CS_EVENT courtSite NOT FOUND: courtId={}", courtRoomIdentifier.getCourtId());
             return null;
