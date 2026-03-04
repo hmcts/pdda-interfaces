@@ -143,5 +143,20 @@ public class XhbCourtSiteRepository extends AbstractRepository<XhbCourtSiteDao>
             return List.of(); // Return empty list on failure to avoid nulls and leaks
         }
     }
-
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbCourtSiteDao> findByCourtIdAndCourtSiteNameSafe(final Integer courtId,
+        final String courtSiteName) {
+        LOG.debug("findByCourtIdAndCourtSiteNameSafe({},{})", courtId, courtSiteName);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_COURT_SITE.findByCourtIdAndCourtSiteName");
+            query.setParameter("courtId", courtId);
+            query.setParameter("courtSiteName", courtSiteName);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByCourtIdAndCourtSiteNameSafe({}, {}): {}",
+                courtId, courtSiteName, e.getMessage(), e);
+            return List.of(); // Return empty list on failure to avoid nulls and leaks
+        }
+    }
 }

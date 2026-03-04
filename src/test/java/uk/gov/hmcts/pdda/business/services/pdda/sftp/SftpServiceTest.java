@@ -367,7 +367,8 @@ class SftpServiceTest {
             .andStubReturn(xhbCourtDao);
 
         List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andStubReturn(xhbCourtSiteDao);
 
         Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
@@ -465,7 +466,8 @@ class SftpServiceTest {
             .andStubReturn(xhbCourtDao);
 
         List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andStubReturn(xhbCourtSiteDao);
 
         Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
@@ -614,7 +616,8 @@ class SftpServiceTest {
             .andStubReturn(xhbCourtDao);
 
         List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andStubReturn(xhbCourtSiteDao);
 
         Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
@@ -761,7 +764,8 @@ class SftpServiceTest {
 
         // Entered processCaseStatusEvent(...)
         List<XhbCourtSiteDao> xhbCourtSiteDao = List.of(DummyCourtUtil.getXhbCourtSiteDao());
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andStubReturn(xhbCourtSiteDao);
 
         Optional<XhbCaseDao> xhbCaseDao = Optional.of(DummyCaseUtil.getXhbCaseDao());
@@ -2184,7 +2188,8 @@ class SftpServiceTest {
 
         // early site resolution throws
         EasyMock.reset(mockXhbCourtSiteRepository);
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.eq(1)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andThrow(new RuntimeException("boom"));
         EasyMock.replay(mockXhbCourtSiteRepository);
 
@@ -2280,11 +2285,13 @@ class SftpServiceTest {
 
         EasyMock.reset(mockXhbCourtSiteRepository);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andThrow(new RuntimeException("boom")).once();
 
         // second call happens inside hearingProgressDrillDown(...)
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(Collections.emptyList()).once();
 
         EasyMock.replay(mockXhbCourtSiteRepository);
@@ -2309,7 +2316,8 @@ class SftpServiceTest {
         EasyMock.expect(mockXhbCourtRepository.findByCourtNameValueSafe(EasyMock.isA(String.class)))
             .andStubReturn(List.of(DummyCourtUtil.getXhbCourtDao(1, COURT1)));
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(EasyMock.isA(Integer.class)))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andStubReturn(List.of(DummyCourtUtil.getXhbCourtSiteDao()));
 
         EasyMock
@@ -2393,7 +2401,8 @@ class SftpServiceTest {
         evt.setCaseNumber(1);
 
         EasyMock.reset(mockXhbCourtSiteRepository);
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(Collections.emptyList()).times(2);
         EasyMock.replay(mockXhbCourtSiteRepository);
 
@@ -2421,7 +2430,8 @@ class SftpServiceTest {
 
         // IMPORTANT: this gets called twice (see issue #2)
         EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository);
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(List.of(DummyCourtUtil.getXhbCourtSiteDao())).times(2);
 
         EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(EasyMock.anyInt(),
@@ -2453,7 +2463,8 @@ class SftpServiceTest {
         EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
             mockXhbCourtRoomRepository);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(List.of(site))
             .anyTimes();
 
@@ -2516,7 +2527,8 @@ class SftpServiceTest {
         // *** Fix: SftpService path calls EntityManager.isOpen() ***
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(cri.getCourtId()))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            cri.getCourtId(), cri.getCourtName()))
             .andReturn(Collections.emptyList()).once();
 
         EasyMock.replay(mockEntityManager, mockXhbCourtSiteRepository);
@@ -2535,7 +2547,8 @@ class SftpServiceTest {
         // *** Fix: SftpService path calls EntityManager.isOpen() ***
         EasyMock.expect(mockEntityManager.isOpen()).andReturn(true).anyTimes();
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(cri.getCourtId()))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            cri.getCourtId(), cri.getCourtName()))
             .andReturn(List.of(DummyCourtUtil.getXhbCourtSiteDao())).once();
 
         EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(EasyMock.anyInt(),
@@ -2554,7 +2567,8 @@ class SftpServiceTest {
     void testCaseStatusDrillDown_hearingEmpty_returnsNull() throws Exception {
         CourtRoomIdentifier cri = new CourtRoomIdentifier(81, 8112, "Court Name", 1234);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(cri.getCourtId()))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            cri.getCourtId(), cri.getCourtName()))
             .andReturn(List.of(DummyCourtUtil.getXhbCourtSiteDao())).once();
 
         EasyMock
@@ -2638,7 +2652,8 @@ class SftpServiceTest {
             mockXhbCourtRoomRepository, mockXhbSittingRepository, mockXhbScheduledHearingRepository,
             mockXhbConfigPropRepository);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1)).andReturn(List.of(site))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class))).andReturn(List.of(site))
             .times(2);
 
         XhbCaseDao caseDao = DummyCaseUtil.getXhbCaseDao();
@@ -2719,7 +2734,8 @@ class SftpServiceTest {
             mockXhbCourtRoomRepository);
 
         // called twice (early resolution + drilldown)
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(List.of(site)).times(2);
 
         EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
@@ -2760,7 +2776,8 @@ class SftpServiceTest {
         EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
             mockXhbCourtRoomRepository);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.anyString()))
             .andReturn(List.of(site)).times(2);
 
         EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
@@ -2812,7 +2829,8 @@ class SftpServiceTest {
         EasyMock.reset(mockXhbCourtSiteRepository, mockXhbCaseRepository, mockXhbHearingRepository,
             mockXhbCourtRoomRepository);
 
-        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdSafe(1))
+        EasyMock.expect(mockXhbCourtSiteRepository.findByCourtIdAndCourtSiteNameSafe(
+            EasyMock.isA(Integer.class), EasyMock.isA(String.class)))
             .andReturn(List.of(site)).times(2);
 
         EasyMock.expect(mockXhbCaseRepository.findByNumberTypeAndCourtSafe(
