@@ -171,6 +171,7 @@ public final class CathUtils {
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbCathDocumentLinkRepository xhbCathDocumentLinkRepository, String xsltSchemaPath)
             throws TransformerException, IOException {
+        LOG.debug("transformXmlUsingSchema for clobId: {}", clobId);
         String xsltNamespaceSchemaPath = "config/xsl/listTransformation/Namespace_Schema.xslt";
         
         // Check if there is an entry in the courtel_list table with the documentClobId
@@ -223,6 +224,9 @@ public final class CathUtils {
                         .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
                 xhbCathDocumentLinkRepository.savePersist(xhbCathDocumentLinkDao);
 
+                LOG.debug("transformXmlUsingSchema returning XHB_CATH_DOCUMENT_LINK record"
+                    + " with transformed xml id: {}", xhbCathDocumentLinkDao.getCathXmlId());
+                
                 // Return the cath_document_link record
                 return xhbCathDocumentLinkDao;
             }
@@ -255,6 +259,9 @@ public final class CathUtils {
         XhbCourtelListRepository xhbCourtelListRepository,
         XhbCppStagingInboundRepository xhbCppStagingInboundRepository)
         throws ParserConfigurationException, SAXException, IOException {
+        
+        LOG.debug("fetchXmlAndGenerateJson entered to generate json for transformed xml with id: {}",
+            xhbCathDocumentLinkDao.getCathXmlId());
 
         // Fetch the xml_document record
         Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoTransformedXml =
@@ -291,9 +298,15 @@ public final class CathUtils {
                         .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
                 xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoJson);
 
+                LOG.debug("fetchXmlAndGenerateJson generated json with id: {}",
+                    xhbXmlDocumentDaoJson.getXmlDocumentId());
+                
                 // Update the cath_document_link record with the cathJsonId
                 updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
                         xhbCathDocumentLinkDao, xhbXmlDocumentDaoJson);
+                
+                LOG.debug("fetchXmlAndGenerateJson updated XHB_CATH_DOCUMENT_LINK"
+                    + " record with json id: {}", xhbXmlDocumentDaoJson.getXmlDocumentId());
             }
         }
     }
