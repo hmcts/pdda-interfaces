@@ -340,6 +340,11 @@ public class CathHelper {
                 getListDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(), listType, "EndDate");
             jsonObject.setEndDate(endDateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
             
+            // Set the Daily Lists to public
+            if (listType.equals("DL")) {
+                listJson.setSensitivity("PUBLIC");
+            }
+            
         } else {
             // Get end date from html clob for web pages
             LocalDate dateTime = getHtmlWebPageDateFromClob(xhbXmlDocumentDao.getXmlDocumentClobId(),
