@@ -73,6 +73,8 @@ public class FormattingServices extends FormattingServicesProcessing {
      * @throws FormattingException Exception
      */
     public void processDocument(FormattingValue formattingValue, final EntityManager entityManager) {
+        LOG.debug("processDocument() - FormattingId={}, DocumentType={}, CourtId={}", formattingValue.getFormattingId(),
+            formattingValue.getDocumentType(), formattingValue.getCourtId());
         setEntityManager(entityManager);
         if (FormattingServiceUtils
             .isPddaOnly(getXhbConfigPropRepository().findByPropertyNameSafe(PDDA_SWITCHER))) {
@@ -101,17 +103,26 @@ public class FormattingServices extends FormattingServicesProcessing {
         }
         
         if (courtelHelper.isCourtelSendableDocument(formattingValue.getDocumentType())) {
+            LOG.debug("Document can be sent to Courtel: FormattingId={}, DocumentType={}, CourtId={}",
+                formattingValue.getFormattingId(), formattingValue.getDocumentType(), formattingValue.getCourtId());
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
                 formattingValue.getFormattedDocumentBlobId());
+            LOG.debug("Courtel record created for document: FormattingId={}, DocumentType={}, CourtId={}",
+                formattingValue.getFormattingId(), formattingValue.getDocumentType(), formattingValue.getCourtId());
             transformXmlAndGenerateJson(formattingValue);
         }
     }
     
-    private void transformXmlAndGenerateJson(FormattingValue formattingValue) {
+    private void transformXmlAndGenerateJson(FormattingValue formattingValue) { 
         // Get the Path for the xslt schema to use
         StringBuilder xsltSchemaPath = new StringBuilder(100);
         xsltSchemaPath.append("config/xsl/listTransformation/");
 
+        LOG.debug("Attempting to transform xml and generate json for document: FormattingId={},"
+            + " DocumentType={}, CourtId={}",
+            formattingValue.getFormattingId(), formattingValue.getDocumentType(),
+            formattingValue.getCourtId());
+        
         for (Map.Entry<String, String> entry : DOC_TYPES.entrySet()) {
             if (formattingValue.getDocumentType().equals(entry.getKey())) {
                 xsltSchemaPath.append(entry.getValue());
@@ -121,12 +132,20 @@ public class FormattingServices extends FormattingServicesProcessing {
                         formattingValue.getXmlDocumentClobId(), getXhbCourtelListRepository(),
                         getXhbClobRepository(), getXhbXmlDocumentRepository(),
                         getXhbCathDocumentLinkRepository(), xsltSchemaPath.toString());
+                    
+                    LOG.debug("Xml transformed for document: FormattingId={}, DocumentType={}, CourtId={}",
+                        formattingValue.getFormattingId(), formattingValue.getDocumentType(),
+                        formattingValue.getCourtId());
 
                     // Generate the json from the transformed xml
                     CathUtils.fetchXmlAndGenerateJson(xhbCathDocumentLinkDao,
                         getXhbCathDocumentLinkRepository(), getXhbXmlDocumentRepository(),
                         getXhbClobRepository(), getXhbCourtelListRepository(),
                         getXhbCppStagingInboundRepository());
+                    
+                    LOG.debug("Json generated for document: FormattingId={}, DocumentType={}, CourtId={}",
+                        formattingValue.getFormattingId(), formattingValue.getDocumentType(),
+                        formattingValue.getCourtId());
 
                 } catch (ParserConfigurationException | SAXException | IOException
                     | TransformerException e) {
