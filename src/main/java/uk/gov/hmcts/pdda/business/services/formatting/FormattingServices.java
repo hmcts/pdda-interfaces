@@ -113,7 +113,7 @@ public class FormattingServices extends FormattingServicesProcessing {
         }
     }
     
-    private void transformXmlAndGenerateJson(FormattingValue formattingValue) { 
+    private void transformXmlAndGenerateJson(FormattingValue formattingValue) {
         // Get the Path for the xslt schema to use
         StringBuilder xsltSchemaPath = new StringBuilder(100);
         xsltSchemaPath.append("config/xsl/listTransformation/");
