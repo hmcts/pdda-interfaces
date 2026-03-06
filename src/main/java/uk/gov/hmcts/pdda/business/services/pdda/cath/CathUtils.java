@@ -47,7 +47,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 @SuppressWarnings({"PMD.LawOfDemeter", "PMD.CouplingBetweenObjects",
-    "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass", "PMD.TooManyMethods"})
+    "PMD.ExcessiveImports", "PMD.CognitiveComplexity", "PMD.GodClass",
+    "PMD.TooManyMethods", "PMD.CyclomaticComplexity"})
 public final class CathUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(CathUtils.class);
@@ -73,17 +74,20 @@ public final class CathUtils {
     );
     // Keys that should always be represented as JSON arrays
     private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
-            "Counsel", "Solicitor", "CitizenNameForename", "ReserveList", "Hearing", "Fixture", "Location",
+            "Counsel", "Solicitor", "CitizenNameForename",
+            "ReserveList", "Hearing", "Fixture", "Location",
             "WithoutFixedDate", "WithFixedDate", "Justice"
     );
+    
+    // Keys that should always only contain string elements
+    private static final Set<String> FORCE_STRING_ARRAY_ELEMENTS_KEYS = Set.of(
+            "CitizenNameForename", "Line"
+    );
+    
     // Keys that should always be represented as JSON strings
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
-            "SittingSequenceNumber",
-            "ListNote",
-            "PrisonerID",
-            "URN",
-            "CaseNumberCaTH",
-            "CitizenNameSuffix"
+            "SittingSequenceNumber", "ListNote", "PrisonerID",
+            "URN", "CaseNumberCaTH", "CitizenNameSuffix"
     );
 
     private CathUtils() {
@@ -337,6 +341,7 @@ public final class CathUtils {
         enforceArrayValues(json);
         coerceValuesToStrings(json);
         removeEmptyStringFields(json);
+        forceElementsInArraysToStrings(json);
         return json;
     }
 
@@ -458,6 +463,37 @@ public final class CathUtils {
                 Object element = array.get(i);
                 // Recursively process each element in the array
                 coerceValuesToStrings(element);
+            }
+        }
+    }
+    
+    private static void forceElementsInArraysToStrings(Object node) {
+        if (node instanceof JSONObject json) {
+            for (String key : new HashSet<>(json.keySet())) {
+                Object value = json.get(key);
+                if (FORCE_STRING_ARRAY_ELEMENTS_KEYS.contains(key) 
+                    && value instanceof JSONArray arr) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        Object elem = arr.opt(i);
+                        if (elem instanceof JSONObject || elem instanceof JSONArray) {
+                            // Loop through nested structures
+                            forceElementsInArraysToStrings(elem);
+                        } else {
+                            // Force array element to string
+                            arr.put(i, String.valueOf(elem));
+                        }
+                    }
+                    // Loop into the array itself, for nested objects
+                    forceElementsInArraysToStrings(arr);
+
+                } else {
+                    // Not the target key or not an array so just loop through the value
+                    forceElementsInArraysToStrings(value);
+                }
+            }
+        } else if (node instanceof JSONArray jsonArray) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                forceElementsInArraysToStrings(jsonArray.opt(i));
             }
         }
     }
