@@ -15,6 +15,14 @@
         <CourtHouseType>Crown Court</CourtHouseType>
         <CourtHouseCode CourtHouseShortName="SNARE">453</CourtHouseCode>
         <CourtHouseName>SNARESBROOK</CourtHouseName>
+	<CourtHouseAddress>
+            <Line>RANDOM ROAD</Line>
+            <Line>1000</Line>
+            <Line>2000</Line>
+            <Line>ANOTHER LINE</Line>
+            <Line>CITY</Line>
+            <PostCode>P05T C0D3</PostCode>
+        </CourtHouseAddress>
     </CrownCourt>
     <CourtLists>
         <CourtList>
@@ -30,6 +38,8 @@
                     <SittingPriority>T</SittingPriority>
                     <Judiciary>
                         <Judge>
+			    <CitizenNameForename>Forename</CitizenNameForename>
+			    <CitizenNameForename>1234</CitizenNameForename>
                             <CitizenNameSurname>Van-JUDGE</CitizenNameSurname>
                             <CitizenNameRequestedName>Freddy</CitizenNameRequestedName>
                         </Judge>
