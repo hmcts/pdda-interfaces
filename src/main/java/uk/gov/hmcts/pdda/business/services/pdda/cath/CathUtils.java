@@ -81,7 +81,9 @@ public final class CathUtils {
             "SittingSequenceNumber",
             "ListNote",
             "PrisonerID",
-            "URN"
+            "URN",
+            "CaseNumberCaTH",
+            "CitizenNameSuffix"
     );
 
     private CathUtils() {
