@@ -80,7 +80,8 @@ public final class CathUtils {
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
             "SittingSequenceNumber",
             "ListNote",
-            "PrisonerID"
+            "PrisonerID",
+            "URN"
     );
 
     private CathUtils() {
