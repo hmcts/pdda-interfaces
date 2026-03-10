@@ -87,7 +87,8 @@ public final class CathUtils {
     // Keys that should always be represented as JSON strings
     private static final Set<String> FORCE_STRING_KEYS = Set.of(
             "SittingSequenceNumber", "ListNote", "PrisonerID",
-            "URN", "CaseNumberCaTH", "CitizenNameSuffix"
+            "URN", "CaseNumberCaTH", "CitizenNameSuffix",
+            "SittingNote"
     );
 
     private CathUtils() {
