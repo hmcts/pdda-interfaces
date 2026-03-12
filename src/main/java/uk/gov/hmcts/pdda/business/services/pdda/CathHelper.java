@@ -164,12 +164,12 @@ public class CathHelper {
         return EMPTY_STRING;
     }
 
-    public void send(CourtelJson courtelJson) {
+    public void send(CourtelJson courtelJson, XhbXmlDocumentDao document) {
         LOG.info("send()");
         // Get the authentication token
         courtelJson.setToken(getToken());
         // Post the json to CaTH
-        String errorMessage = postJsonToCath(courtelJson);
+        String errorMessage = postJsonToCath(courtelJson, document);
         if (!EMPTY_STRING.equals(errorMessage)) {
             LOG.error("Error sending Json: {}", courtelJson.getJson());
             LOG.error("Error from CaTH: {}", errorMessage);
@@ -186,7 +186,7 @@ public class CathHelper {
     }
 
     @SuppressWarnings("squid:S2142")
-    protected String postJsonToCath(CourtelJson courtelJson) {
+    protected String postJsonToCath(CourtelJson courtelJson, XhbXmlDocumentDao document) {
         LOG.debug("postJsonToCath()");
         String cathUri = CathUtils.getApimUri();
         LOG.debug("cathUri - {}", cathUri);
@@ -206,6 +206,8 @@ public class CathHelper {
             LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
             LOG.debug("Response: {}", response);
+            // Update field with response
+            updateDocumentHttpResponse(document, statusCode + " - " + response);
         } catch (IOException | InterruptedException | RuntimeException exception) {
             LOG.error("Error in postJsonToCath(): {}", exception.getMessage());
             return exception.getMessage();
@@ -258,6 +260,11 @@ public class CathHelper {
         getXhbXmlDocumentRepository().update(document);
     }
     
+    private void updateDocumentHttpResponse(XhbXmlDocumentDao document, String response) {
+        document.setHttpRequestResponse(response);
+        getXhbXmlDocumentRepository().update(document);
+    }
+    
     private XhbXmlDocumentDao refreshDocument(XhbXmlDocumentDao document) {
         Optional<XhbXmlDocumentDao> xhbXmlDocument =
             getXhbXmlDocumentRepository().findByIdSafe(document.getXmlDocumentId());
@@ -281,7 +288,7 @@ public class CathHelper {
             // If the courtelJson has been made, set the clob data and send it to CaTH
             if (courtelJson != null) {
                 courtelJson.setJson(clobData);
-                send(courtelJson);
+                send(courtelJson, document);
                 return SUCCESS;
             }
         }
