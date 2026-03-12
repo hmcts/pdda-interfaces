@@ -146,7 +146,7 @@ class CathHelperTest {
             Mockito.when(mockHttpResponse.body()).thenReturn("Body");
 
             // Run
-            classUnderTest.send(json);
+            classUnderTest.send(json, new XhbXmlDocumentDao());
             result = true;
         } catch (Exception exception) {
             fail(exception.getMessage());

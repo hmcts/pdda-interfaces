@@ -77,6 +77,9 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
     @Column(name = "VERSION")
     private Integer version;
+    
+    @Column(name = "HTTP_REQUEST_RESPONSE")
+    private String httpRequestResponse;
 
     public XhbXmlDocumentDao() {
         super();
@@ -97,6 +100,7 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         setLastUpdatedBy(otherData.getLastUpdatedBy());
         setCreatedBy(otherData.getCreatedBy());
         setVersion(otherData.getVersion());
+        setHttpRequestResponse(otherData.getHttpRequestResponse());
     }
 
     @Override
@@ -210,4 +214,12 @@ public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
         this.version = version;
     }
 
+    public String getHttpRequestResponse() {
+        return httpRequestResponse;
+    }
+
+    public void setHttpRequestResponse(String httpRequestResponse) {
+        this.httpRequestResponse = httpRequestResponse;
+    }
+    
 }
