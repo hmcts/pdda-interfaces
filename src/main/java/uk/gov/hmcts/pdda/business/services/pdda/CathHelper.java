@@ -247,9 +247,11 @@ public class CathHelper {
             }
             if (Boolean.TRUE.equals(sendToCath(document))) {
                 LOG.debug("Sent successfully");
+                document = refreshDocument(document);
                 updateDocumentStatus(document, SUCCESSFUL_STATUS);
             } else {
                 LOG.debug("Sent failed");
+                document = refreshDocument(document);
                 updateDocumentStatus(document, failedStatus);
             }
         }
