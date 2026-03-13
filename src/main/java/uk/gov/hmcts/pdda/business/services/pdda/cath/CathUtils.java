@@ -62,20 +62,22 @@ public final class CathUtils {
     private static final String FALSE = "false";
     private static final String POST_URL = "%s/publication";
     private static final String PROVENANCE = "PDDA";
+    private static final String HEARING = "Hearing";
 
     // Mapping of container names to their singular child element
     private static final Map<String, String> ARRAY_KEYS = Map.of(
             "CourtLists", "CourtList",
             "Sittings", "Sitting",
-            "Hearings", "Hearing",
+            "Hearings", HEARING,
             "Charges", "Charge",
             "Defendants", "Defendant",
-            "Cases", "Case"
+            "Cases", "Case",
+            "ReserveList", HEARING
     );
     // Keys that should always be represented as JSON arrays
     private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
             "Counsel", "Solicitor", "CitizenNameForename",
-            "ReserveList", "Hearing", "Fixture", "Location",
+            "ReserveList", HEARING, "Fixture", "Location",
             "WithoutFixedDate", "WithFixedDate", "Justice"
     );
     
