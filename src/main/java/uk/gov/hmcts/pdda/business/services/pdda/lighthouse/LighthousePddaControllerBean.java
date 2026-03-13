@@ -68,7 +68,9 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     private static final String RECENT_LISTS_LOOKUP_TIMEFRAME = "RECENT_LISTS_LOOKUP_TIMEFRAME";
     private static final String MAX_ON_HOLD_TIMEFRAME = "MAX_ON_HOLD_TIMEFRAME";
     private static final String DUPLICATE_DOCUMENT_ERROR_MESSAGE = "Duplicate document";
-
+    private static final String STOP_UNMERGED_LISTS = "STOP_UNMERGED_LISTS";
+    private static final String UNMERGED_LIST = "Duplicate document - Stopping unmerged document";
+    
     @Autowired
     public LighthousePddaControllerBean(XhbPddaMessageRepository xhbPddaMessageRepository,
             XhbCppStagingInboundRepository xhbCppStagingInboundRepository, 
@@ -291,10 +293,19 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 // List without CPP Case
                 // ---------------------
                 
-                // Check to see if there is a duplicate list which has CPP cases on it, if so
-                // this list will be set to PU otherwise if a duplicate list is found without CPP cases
-                // then that list will be set to PU
-                checkRecentCourtListsAgainstXhibitList(recentLists, getListData(xhbClobDao.get()), dao);
+                // Check if we want to stop processing unmerged lists
+                // 1 = Yes, 0 = No
+                Integer stopUnmergedLists = Integer.parseInt(getXhbConfigPropRepository()
+                    .findByPropertyNameSafe(STOP_UNMERGED_LISTS).get(0).getPropertyValue());
+                
+                if (stopUnmergedLists == 1) {
+                    updatePddaMessageStatus(dao, MESSAGE_STATUS_PROCESSING_UNNECESSARY, UNMERGED_LIST);
+                } else {
+                    // Check to see if there is a duplicate list which has CPP cases on it, if so
+                    // this list will be set to PU otherwise if a duplicate list is found without CPP cases
+                    // then that list will be set to PU
+                    checkRecentCourtListsAgainstXhibitList(recentLists, getListData(xhbClobDao.get()), dao);
+                }
             }
         }
     }
@@ -359,7 +370,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             // Get the clob data for the recent list
             Optional<XhbClobDao> recentListClob =
                 getXhbClobRepository().findByIdSafe(recentList.getPddaMessageDataId());
-           
+            
             if (recentListClob.isPresent()) {
                 ListData recentListData = getListData(recentListClob.get());
                 
