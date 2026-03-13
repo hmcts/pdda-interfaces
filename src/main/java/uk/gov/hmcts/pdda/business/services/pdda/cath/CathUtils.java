@@ -70,7 +70,8 @@ public final class CathUtils {
             "Hearings", "Hearing",
             "Charges", "Charge",
             "Defendants", "Defendant",
-            "Cases", "Case"
+            "Cases", "Case",
+            "ReserveList", "Hearing"
     );
     // Keys that should always be represented as JSON arrays
     private static final Set<String> FORCE_ARRAY_KEYS = Set.of(
