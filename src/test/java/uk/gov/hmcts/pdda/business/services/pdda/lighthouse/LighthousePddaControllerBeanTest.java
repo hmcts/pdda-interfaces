@@ -388,6 +388,61 @@ class LighthousePddaControllerBeanTest {
     }
     
     @Test
+    void testProcessOnHoldStopUnmergedListFile() 
+        throws ParserConfigurationException, SAXException, IOException {
+        // Setup
+        XhbPddaMessageDao currentDao = getDummyOnHoldXhbPddaMessageDao(1);
+        
+        List<XhbPddaMessageDao> xhbPddaMessageDaoList = new ArrayList<>();
+        xhbPddaMessageDaoList.add(currentDao);
+        xhbPddaMessageDaoList.add(getDummyOnHoldXhbPddaMessageDao(2));
+        
+        List<XhbConfigPropDao> xhbConfigPropDaoList = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDao = new XhbConfigPropDao();
+        xhbConfigPropDao.setPropertyValue("5");
+        xhbConfigPropDaoList.add(xhbConfigPropDao);
+        
+        List<XhbConfigPropDao> xhbConfigPropDaoListUnemrged = new ArrayList<>();
+        XhbConfigPropDao xhbConfigPropDaoStopProcessingUnmerged = new XhbConfigPropDao();
+        xhbConfigPropDaoStopProcessingUnmerged.setPropertyValue("1");
+        xhbConfigPropDaoListUnemrged.add(xhbConfigPropDaoStopProcessingUnmerged);
+        
+        mockTheEntityManager();
+        
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(currentDao.getPrimaryKey()))
+            .thenReturn(Optional.of(currentDao));
+        
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoList);
+        
+        Mockito.when(mockXhbPddaMessageRepository.findLatestListsByCourtIdAndTimeframeSafe(Mockito.anyInt(),
+            Mockito.any(LocalDateTime.class))).thenReturn(xhbPddaMessageDaoList);
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(currentDao.getPddaMessageDataId()))
+            .thenReturn(Optional.of(getDummyClobDataNonCppList()));
+        
+        // Check stop processing unmerged lists
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(xhbConfigPropDaoListUnemrged);
+        
+        // Update
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(xhbPddaMessageDaoList.get(1).getPrimaryKey()))
+            .thenReturn(Optional.of(xhbPddaMessageDaoList.get(1)));
+        
+        XhbPddaMessageDao updatedDao = xhbPddaMessageDaoList.get(1);
+        updatedDao.setCpDocumentStatus("PU");
+        updatedDao.setErrorMessage("Duplicate document - Stopping unmerged document");
+        Mockito.when(mockXhbPddaMessageRepository.update(Mockito.isA(XhbPddaMessageDao.class)))
+            .thenReturn(Optional.of(updatedDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.processOnHoldFile(currentDao);
+        // Assert
+        assertTrue(result, FALSE);
+    }
+    
+    @Test
     void testIsDocumentNameValid() {
         assertTrue(classUnderTest.isDocumentNameValid(DAILY_LIST_EXAMPLE), TRUE);
         assertFalse(classUnderTest.isDocumentNameValid("Invalid_File.csv"), FALSE);
