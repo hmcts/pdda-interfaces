@@ -31,6 +31,9 @@ import java.time.LocalDateTime;
 @NamedQuery(name = "XHB_XML_DOCUMENT.findJsonDocuments",
     query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType IN ('JSN', 'IWP') "
         + "AND o.status = :status")
+@NamedQuery(name = "XHB_XML_DOCUMENT.findByDocTypeCourtIdAndClobId",
+    query = "SELECT o from XHB_XML_DOCUMENT o WHERE o.documentType = :documentType AND "
+        + "o.courtId = :courtId AND o.xmlDocumentClobId = :xmlDocumentClobId")
 public class XhbXmlDocumentDao extends AbstractDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;

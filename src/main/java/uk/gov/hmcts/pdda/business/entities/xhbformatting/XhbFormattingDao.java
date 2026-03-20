@@ -25,6 +25,10 @@ import java.time.LocalDateTime;
     query = "SELECT o from XHB_FORMATTING o, XHB_CLOB c WHERE o.xmlDocumentClobId = c.clobId AND o.documentType "
         + "= :docType AND o.courtId = :courtId AND o.formatStatus!='ND' AND o.language =:language AND c.clobData "
         + "like concat('%<courtsitename>',concat(:courtSiteName,'</courtsitename>%')) ORDER BY o.dateIn DESC")
+@NamedQuery(name = "XHB_FORMATTING.findByDocTypeCourtIdAndClobId",
+    query = "SELECT o from XHB_FORMATTING o WHERE o.documentType = :documentType AND "
+        + "o.courtId = :courtId AND o.xmlDocumentClobId = :xmlDocumentClobId")
+
 public class XhbFormattingDao extends AbstractDao implements Serializable {
 
     private static final long serialVersionUID = -2723700446890851397L;
