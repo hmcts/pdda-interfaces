@@ -19,6 +19,7 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
 
     private static final Logger LOG = LoggerFactory.getLogger(XhbXmlDocumentRepository.class);
     private static final String UNCHECKED = "unchecked";
+    private static final String XML_DOCUMENT_CLOB_ID = "xmlDocumentClobId";
 
     public XhbXmlDocumentRepository(EntityManager em) {
         super(em);
@@ -39,7 +40,7 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
         LocalDateTime timeDelay) {
         LOG.debug("In XhbXmlDocumentRepository.findDocumentByClobId");
         Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findDocumentByClobId");
-        query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+        query.setParameter(XML_DOCUMENT_CLOB_ID, xmlDocumentClobId);
         query.setParameter("timeDelay", timeDelay);
         return query.getResultList();
     }
@@ -52,7 +53,7 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
     public Optional<XhbXmlDocumentDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
         LOG.debug("In XhbXmlDocumentRepository.findByXmlDocumentClobId");
         Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
-        query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+        query.setParameter(XML_DOCUMENT_CLOB_ID, xmlDocumentClobId);
         @SuppressWarnings("unchecked")
         List<XhbXmlDocumentDao> resultList = query.getResultList();
         return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
@@ -71,19 +72,36 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
         return query.getResultList();
     }
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public List<XhbXmlDocumentDao> findListByClobIdSafe(Long xmlDocumentClobId,
         LocalDateTime timeDelay) {
         // LOG.debug("findListByClobIdSafe({}, {})", xmlDocumentClobId, timeDelay);
         try (EntityManager em = EntityManagerUtil.getEntityManager()) {
             Query query = em.createNamedQuery("XHB_XML_DOCUMENT.findListByClobId");
-            query.setParameter("xmlDocumentClobId", xmlDocumentClobId);
+            query.setParameter(XML_DOCUMENT_CLOB_ID, xmlDocumentClobId);
             query.setParameter("timeDelay", timeDelay);
             return query.getResultList();
         } catch (Exception e) {
             LOG.error("Error in findListByClobIdSafe({}, {}): {}", xmlDocumentClobId, timeDelay,
                 e.getMessage(), e);
             return List.of(); // Defensive fallback
+        }
+    }
+    
+    @SuppressWarnings(UNCHECKED)
+    public List<XhbXmlDocumentDao> findByDocTypeCourtIdAndClobIdSafe(
+        String documentType, Integer courtId, Long clobId) {
+        LOG.debug("findByDocTypeCourtIdAndClobIdSafe({}, {}, {})", documentType, courtId, clobId);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_XML_DOCUMENT.findByDocTypeCourtIdAndClobId");
+            query.setParameter("documentType", documentType);
+            query.setParameter("courtId", courtId);
+            query.setParameter(XML_DOCUMENT_CLOB_ID, clobId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDocTypeCourtIdAndClobIdSafe({}, {}, {}): {}",
+                documentType, courtId, clobId, e.getMessage());
+            return List.of(); // Return empty list to avoid nulls and maintain stability
         }
     }
 

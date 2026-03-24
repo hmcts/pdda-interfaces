@@ -933,15 +933,28 @@ public class CppInitialProcessingControllerBean extends AbstractCppInitialProces
         List<XhbCourtDao> xhbCourtDaoList =
             getXhbCourtRepository().findByCrestCourtIdValueSafe(cppStagingInboundDao.getCourtCode());
         Integer courtId = xhbCourtDaoList.get(0).getCourtId();
-        // Create the xhbFormatting record
-        XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
-            cppStagingInboundDao, documentType, "en");
-        getXhbFormattingRepository().save(xfbv);
-
-        // Create the xhbXmlDocument record
-        XhbXmlDocumentDao xhbXmlDocumentDao =
-            CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, cppListDao, cppStagingInboundDao);
-        getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+        
+        // Check there's not already formatting record(s) for this documentType, courtId and clobId
+        List<XhbFormattingDao> existingFormattingRecords = getXhbFormattingRepository()
+            .findByDocTypeCourtIdAndClobIdSafe(documentType, courtId, cppStagingInboundDao.getClobId());
+        
+        if (existingFormattingRecords.isEmpty()) {
+            // Create the xhbFormatting record
+            XhbFormattingDao xfbv = CppFormattingHelper.createXhbFormattingRecord(courtId,
+                cppStagingInboundDao, documentType, "en");
+            getXhbFormattingRepository().save(xfbv);
+            
+            // Check there's not already xml_document record(s) for this documentType, courtId and clobId
+            List<XhbXmlDocumentDao> existingXmlDocumentRecords = getXhbXmlDocumentRepository()
+                .findByDocTypeCourtIdAndClobIdSafe(documentType, courtId, cppStagingInboundDao.getClobId());
+            
+            if (existingXmlDocumentRecords.isEmpty()) {
+                // Create the xhbXmlDocument record
+                XhbXmlDocumentDao xhbXmlDocumentDao =
+                    CppFormattingHelper.createXhbXmlDDocumentRecord(xfbv, cppListDao, cppStagingInboundDao);
+                getXhbXmlDocumentRepository().save(xhbXmlDocumentDao);
+            }
+        }
     }
     
     private ListNodesHelper getListNodesHelper() {

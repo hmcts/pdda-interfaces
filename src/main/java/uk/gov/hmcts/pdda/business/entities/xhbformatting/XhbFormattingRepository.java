@@ -93,5 +93,22 @@ public class XhbFormattingRepository extends AbstractRepository<XhbFormattingDao
             return List.of(); // Safe fallback
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<XhbFormattingDao> findByDocTypeCourtIdAndClobIdSafe(
+        String documentType, Integer courtId, Long clobId) {
+        LOG.debug("findByDocTypeCourtIdAndClobIdSafe({}, {}, {})", documentType, courtId, clobId);
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_FORMATTING.findByDocTypeCourtIdAndClobId");
+            query.setParameter("documentType", documentType);
+            query.setParameter("courtId", courtId);
+            query.setParameter("xmlDocumentClobId", clobId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findByDocTypeCourtIdAndClobIdSafe({}, {}, {}): {}",
+                documentType, courtId, clobId, e.getMessage());
+            return List.of(); // Return empty list to avoid nulls and maintain stability
+        }
+    }
 
 }

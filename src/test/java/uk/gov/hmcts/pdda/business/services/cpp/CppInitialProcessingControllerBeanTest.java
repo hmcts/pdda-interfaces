@@ -114,8 +114,14 @@ class CppInitialProcessingControllerBeanTest
                     mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
                 .andReturn(xhbCourtDaoList);
             EasyMock.expectLastCall().anyTimes();
+            EasyMock.expect(mockXhbFormattingRepository.findByDocTypeCourtIdAndClobIdSafe(
+                EasyMock.isA(String.class), EasyMock.isA(Integer.class), EasyMock.isA(Long.class)))
+                .andReturn(new ArrayList<>()).anyTimes();
             mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
             EasyMock.expectLastCall().anyTimes();
+            EasyMock.expect(mockXhbXmlDocumentRepository.findByDocTypeCourtIdAndClobIdSafe(
+                EasyMock.isA(String.class), EasyMock.isA(Integer.class), EasyMock.isA(Long.class)))
+                .andReturn(new ArrayList<>()).anyTimes();
             mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
             EasyMock.expectLastCall().anyTimes();
 
@@ -495,7 +501,13 @@ class CppInitialProcessingControllerBeanTest
         EasyMock
             .expect(mockXhbCourtRepository.findByCrestCourtIdValueSafe(EasyMock.isA(String.class)))
             .andReturn(xhbCourtDaoList);
+        EasyMock.expect(mockXhbFormattingRepository.findByDocTypeCourtIdAndClobIdSafe(
+            EasyMock.isA(String.class), EasyMock.isA(Integer.class), EasyMock.isA(Long.class)))
+            .andReturn(new ArrayList<>());
         mockXhbFormattingRepository.save(EasyMock.isA(XhbFormattingDao.class));
+        EasyMock.expect(mockXhbXmlDocumentRepository.findByDocTypeCourtIdAndClobIdSafe(
+            EasyMock.isA(String.class), EasyMock.isA(Integer.class), EasyMock.isA(Long.class)))
+            .andReturn(new ArrayList<>());
         mockXhbXmlDocumentRepository.save(EasyMock.isA(XhbXmlDocumentDao.class));
         mockCppStagingInboundControllerBean.updateStatusProcessingSuccess(xcsi, BATCH_USERNAME);
         mockListNodesHelper.processClobData(EasyMock.isA(String.class));
