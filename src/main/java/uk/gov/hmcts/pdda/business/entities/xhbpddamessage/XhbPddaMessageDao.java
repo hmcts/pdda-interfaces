@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
         + " WHERE o.cpDocumentName is not null AND o.cpDocumentStatus = 'OH'"
         + " AND (o.obsInd is null OR o.obsInd = 'N' OR o.obsInd = ' ')"
         + " AND FUNCTION('date', o.creationDate) = CURRENT_DATE"
-        + " ORDER BY o.creationDate ASC LIMIT 5")
+        + " ORDER BY o.creationDate ASC")
 @NamedQuery(name = "XHB_PDDA_MESSAGE.findLatestListsByCourtIdAndTimeframe",
     query = "SELECT o from XHB_PDDA_MESSAGE o"
         + " WHERE o.cpDocumentStatus = 'OH' AND o.courtId = :courtId"
