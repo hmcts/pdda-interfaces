@@ -218,6 +218,7 @@ class CathHelperTest {
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType("IWP");
+        xhbXmlDocumentDao.setDocumentTitle("PDDA_XWP_171911_1_453_20251211101501");
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
         
         String htmlString = 
@@ -230,7 +231,6 @@ class CathHelperTest {
             """;
         
         XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, htmlString);
-        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
         
         // Ensure the entity managers are set
         Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
@@ -245,6 +245,9 @@ class CathHelperTest {
         
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(Optional.of(xhbClobDao));
+        
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        xhbCourtDao.setCourtName("MANCHESTER");
         Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
             .thenReturn(Optional.of(xhbCourtDao));
         

@@ -122,6 +122,10 @@ public class CathHelper {
         Map.entry("Rhagfyr", "December")
     );
     
+    private static final Map<String, String> WEBPAGE_DOCUMENT_COURT_NAMES = Map.ofEntries(
+        Map.entry("manchester", "manchestercrownsquare")
+    );
+    
     private final EntityManager entityManager;
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
     private XhbClobRepository xhbClobRepository;
@@ -287,6 +291,7 @@ public class CathHelper {
             LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
             // Generate the CourtelJson object from the document type
             CourtelJson courtelJson = getJsonObjectByDocType(document);
+            document = refreshDocument(document);
             // If the courtelJson has been made, set the clob data and send it to CaTH
             if (courtelJson != null) {
                 courtelJson.setJson(clobData);
@@ -362,10 +367,6 @@ public class CathHelper {
             jsonObject.setEndDate(dateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
         }
         
-        // Populate shared fields
-        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
-        jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
-        
         // Populate the language based on web page contents, therefore cp and xhibit web pages are handled the same
         if (xhbXmlDocumentDao.getDocumentType().equals("IWP")) {
             jsonObject.setLanguage(getLanguageFromWebPageContent(xhbXmlDocumentDao.getXmlDocumentClobId()));
@@ -373,6 +374,13 @@ public class CathHelper {
             // Lists are always in English
             jsonObject.setLanguage(Language.ENGLISH);
         }
+        
+        // Populate document name
+        jsonObject.setDocumentName(checkAndSetDocumentName(xhbXmlDocumentDao, listType,
+            xhbCourtDao, jsonObject.getLanguage()));
+        
+        // Populate shared fields
+        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         
         return jsonObject;
     }
@@ -468,6 +476,47 @@ public class CathHelper {
         }
         // Return English by default if the conditions are not met
         return Language.ENGLISH;
+    }
+    
+    private String checkAndSetDocumentName(XhbXmlDocumentDao xhbXmlDocumentDao, String listType,
+        XhbCourtDao xhbCourtDao, Language language) {
+        // Get the original document name from the database
+        String originalDocumentName = xhbXmlDocumentDao.getDocumentTitle();
+        if (!listType.isEmpty()) {
+            // This is a list, return the document name as already formatted
+            return originalDocumentName;
+        } else {
+            // WebPage document, first check court name mapping
+            String courtName = checkCourtNameMappingForWebpageDocuments(xhbCourtDao);
+            // Generate the request document name
+            String requestDocumentName = "";
+            if (language == Language.WELSH) {
+                requestDocumentName = courtName + "_cy.htm";
+            } else {
+                requestDocumentName = courtName + ".htm";
+            }
+            
+            // Append this to the document title in the database if its not been done already
+            if (!originalDocumentName.contains("(")) {
+                xhbXmlDocumentDao.setDocumentTitle(
+                    xhbXmlDocumentDao.getDocumentTitle() + " (" + requestDocumentName + ")");
+                getXhbXmlDocumentRepository().update(xhbXmlDocumentDao);
+            }
+            return requestDocumentName;
+        }
+    }
+    
+    private String checkCourtNameMappingForWebpageDocuments(XhbCourtDao xhbCourtDao) {
+        // Get the court name from the database
+        String courtName = xhbCourtDao.getCourtName().toLowerCase();
+        // Check if the court name matches any of the names in the mapping, if so return the mapped name
+        for (Map.Entry<String, String> courtNameEntry : WEBPAGE_DOCUMENT_COURT_NAMES.entrySet()) {
+            if (courtName.equals(courtNameEntry.getKey())) {
+                return courtNameEntry.getValue();
+            }
+        }
+        // If there's no mapping then return the original court name in lower case
+        return courtName;
     }
     
     private void transformCpXmlWebPageIntoHtml(XhbXmlDocumentDao xhbXmlDocumentDao) 
