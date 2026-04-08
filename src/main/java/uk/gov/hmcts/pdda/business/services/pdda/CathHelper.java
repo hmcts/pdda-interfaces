@@ -123,7 +123,17 @@ public class CathHelper {
     );
     
     private static final Map<String, String> WEBPAGE_DOCUMENT_COURT_NAMES = Map.ofEntries(
-        Map.entry("manchester", "manchestercrownsquare")
+        Map.entry("central criminal court", "centralcriminalcourt"),
+        Map.entry("hull", "kingston-upon-hull"),
+        Map.entry("kingston -u- thames", "kingston-upon-thames"),
+        Map.entry("manchester", "manchestercrownsquare"),
+        Map.entry("manchester minshull street", "manchesterminshullst"),
+        Map.entry("merthyr tydfil", "merthyrtydfil"),
+        Map.entry("newcastle", "newcastle-upon-tyne"),
+        Map.entry("newport", "newport-crown-court"),
+        Map.entry("st albans", "stalbans"),
+        Map.entry("stoke on trent", "stoke-on-trent"),
+        Map.entry("wood green", "woodgreen")
     );
     
     private final EntityManager entityManager;
