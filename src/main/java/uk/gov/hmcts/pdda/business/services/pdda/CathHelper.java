@@ -124,15 +124,20 @@ public class CathHelper {
     
     private static final Map<String, String> WEBPAGE_DOCUMENT_COURT_NAMES = Map.ofEntries(
         Map.entry("central criminal court", "centralcriminalcourt"),
+        Map.entry("chichester (closed court)", "chichester"),
+        Map.entry("dorchester (closed court)", "dorchester"),
+        Map.entry("great grimsby", "greatgrimsby"),
         Map.entry("hull", "kingston-upon-hull"),
+        Map.entry("inner london", "innerlondon"),
         Map.entry("kingston -u- thames", "kingston-upon-thames"),
         Map.entry("manchester", "manchestercrownsquare"),
         Map.entry("manchester minshull street", "manchesterminshullst"),
         Map.entry("merthyr tydfil", "merthyrtydfil"),
         Map.entry("newcastle", "newcastle-upon-tyne"),
-        Map.entry("newport", "newport-crown-court"),
+        Map.entry("newport", "newportiow"),
         Map.entry("st albans", "stalbans"),
         Map.entry("stoke on trent", "stoke-on-trent"),
+        Map.entry("warrington (closed court)", "warrington"),
         Map.entry("wood green", "woodgreen")
     );
     
