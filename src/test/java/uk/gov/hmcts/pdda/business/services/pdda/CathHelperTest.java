@@ -218,7 +218,7 @@ class CathHelperTest {
         List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
         XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
         xhbXmlDocumentDao.setDocumentType("IWP");
-        xhbXmlDocumentDao.setDocumentTitle("PDDA_XWP_171911_1_453_20251211101501");
+        xhbXmlDocumentDao.setDocumentTitle("PDDA_XWP_171911_1_453_20251211101501 (manchestercrownsquare)");
         xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
         
         String htmlString = 
@@ -253,6 +253,41 @@ class CathHelperTest {
         
         Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testUpdateAndSendWebPageTitleAndSatelliteCreation() throws TransformerException, IOException {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("IWP");
+        xhbXmlDocumentDao.setDocumentTitle("PDDA_XWP_171911_1_453_20251211101501");
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbCourtRepository.getEntityManager()).thenReturn(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Refresh document
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        // Update status and document title
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        xhbCourtDao.setCourtName("EXETER");
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
+            .thenReturn(Optional.of(xhbCourtDao));
         
         boolean result = true;
         // Run
