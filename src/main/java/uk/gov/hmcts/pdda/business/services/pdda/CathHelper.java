@@ -43,10 +43,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.SignStyle;
 import java.time.temporal.ChronoField;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -120,6 +123,37 @@ public class CathHelper {
         Map.entry("Hydref", "October"),
         Map.entry("Tachwedd", "November"),
         Map.entry("Rhagfyr", "December")
+    );
+    
+    private static final Map<String, String> WEBPAGE_DOCUMENT_COURT_NAMES = Map.ofEntries(
+        Map.entry("central criminal court", "centralcriminalcourt"),
+        Map.entry("chichester (closed court)", "chichester"),
+        Map.entry("dorchester (closed court)", "dorchester"),
+        Map.entry("great grimsby", "greatgrimsby"),
+        Map.entry("hull", "kingston-upon-hull"),
+        Map.entry("inner london", "innerlondon"),
+        Map.entry("kingston -u- thames", "kingston-upon-thames"),
+        Map.entry("manchester", "manchestercrownsquare"),
+        Map.entry("manchester minshull street", "manchesterminshullst"),
+        Map.entry("merthyr tydfil", "merthyrtydfil"),
+        Map.entry("newcastle", "newcastle-upon-tyne"),
+        Map.entry("newport", "newportiow"),
+        Map.entry("st albans", "stalbans"),
+        Map.entry("stoke on trent", "stoke-on-trent"),
+        Map.entry("warrington (closed court)", "warrington"),
+        Map.entry("wood green", "woodgreen")
+    );
+    
+    // Main court format is the same as the mapping value if it has one above in WEBPAGE_DOCUMENT_COURT_NAMES
+    private static final Map<String, List<String>> SATELLITE_COURTS = Map.ofEntries(
+        Map.entry("exeter", Arrays.asList("barnstaple")),
+        Map.entry("preston", Arrays.asList("barrow-in-furness", "lancaster")),
+        Map.entry("ipswich", Arrays.asList("bury_st_edmunds")),
+        Map.entry("mold", Arrays.asList("caernarfon")),
+        Map.entry("swansea", Arrays.asList("carmarthen", "haverfordwest")),
+        Map.entry("worcester", Arrays.asList("hereford")),
+        Map.entry("norwich", Arrays.asList("kings_lynn")),
+        Map.entry("cardiff", Arrays.asList("newport_crown_court"))
     );
     
     private final EntityManager entityManager;
@@ -241,9 +275,19 @@ public class CathHelper {
         for (XhbXmlDocumentDao document : documents) {
             updateDocumentStatus(document, IN_PROGRESS_STATUS);
             document = refreshDocument(document);
-            if (document.getDocumentType().equals("IWP") && document.getDocumentTitle().contains("WebPage_")) {
-                transformCpXmlWebPageIntoHtml(document);
-                document = refreshDocument(document);
+            if (document.getDocumentType().equals("IWP")) {
+                // First check if this webpage has a title generated and possible satellite entries made
+                if (checkWebpageAndCreateSatelliteCourtEntries(document)) {
+                    // This document has been updated with a Webpage document name
+                    // Along with possible satellite court entries
+                    // Continue to the next document so this one is picked up in the next task
+                    continue;
+                }
+                // CP Webpage
+                if (document.getDocumentTitle().contains("WebPage_")) {
+                    transformCpXmlWebPageIntoHtml(document);
+                    document = refreshDocument(document);
+                }
             }
             if (Boolean.TRUE.equals(sendToCath(document))) {
                 LOG.debug("Sent successfully");
@@ -287,6 +331,7 @@ public class CathHelper {
             LOG.debug("Sending {} {} to CaTH", document.getDocumentTitle(), clobData);
             // Generate the CourtelJson object from the document type
             CourtelJson courtelJson = getJsonObjectByDocType(document);
+            document = refreshDocument(document);
             // If the courtelJson has been made, set the clob data and send it to CaTH
             if (courtelJson != null) {
                 courtelJson.setJson(clobData);
@@ -362,19 +407,134 @@ public class CathHelper {
             jsonObject.setEndDate(dateTime.atTime(23, 59).atZone(ZoneOffset.UTC));
         }
         
-        // Populate shared fields
-        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
-        jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
-        
         // Populate the language based on web page contents, therefore cp and xhibit web pages are handled the same
         if (xhbXmlDocumentDao.getDocumentType().equals("IWP")) {
             jsonObject.setLanguage(getLanguageFromWebPageContent(xhbXmlDocumentDao.getXmlDocumentClobId()));
+            // First append the rest of the Webpage name now that we know the language
+            updateWebPageDocumentTitle(xhbXmlDocumentDao, jsonObject.getLanguage());
+            xhbXmlDocumentDao = refreshDocument(xhbXmlDocumentDao);
+            // Populate the Webpage name
+            jsonObject.setDocumentName(getWebPageDocumentTitle(xhbXmlDocumentDao.getDocumentTitle()));
         } else {
             // Lists are always in English
             jsonObject.setLanguage(Language.ENGLISH);
+            // Set the List name
+            jsonObject.setDocumentName(xhbXmlDocumentDao.getDocumentTitle());
         }
         
+        // Populate shared fields
+        jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
+        
         return jsonObject;
+    }
+    
+    private boolean checkWebpageAndCreateSatelliteCourtEntries(XhbXmlDocumentDao xhbXmlDocumentDao) {
+        // Check if this Webpage record has already been through this process
+        if (xhbXmlDocumentDao.getDocumentTitle().contains("(")) {
+            // Existing Webpage document - already has a webpage name appended
+            return false;
+        }
+        
+        // New Webpage document - Check if there are satellite courts for this court
+        Optional<XhbCourtDao> mainCourt = getXhbCourtRepository().findByIdSafe(
+            xhbXmlDocumentDao.getCourtId());
+        
+        if (mainCourt.isPresent()) {
+            String mainCourtName = checkCourtNameMappingForWebpages(mainCourt.get());
+            for (Map.Entry<String, List<String>> mainCourtWithSatellites : SATELLITE_COURTS.entrySet()) {
+                if (mainCourtName.equals(mainCourtWithSatellites.getKey())) {
+                    // Create new records for the satellite courts
+                    for (String satelliteCourtName : mainCourtWithSatellites.getValue()) {
+                        // Create the satellite court Webpage records
+                        createSatelliteDocument(xhbXmlDocumentDao, mainCourtName, satelliteCourtName);
+                    }
+                }
+            }
+            // Create the main court Webpage document name
+            String webpageDocumentTitle = createWebPageDocumentTitle(mainCourtName, "");
+            xhbXmlDocumentDao.setDocumentTitle(xhbXmlDocumentDao.getDocumentTitle() 
+                + " " + webpageDocumentTitle);
+            // Reset status of the main court so it can be re-processed with the document name appended
+            xhbXmlDocumentDao.setStatus(NOT_PROCESSED_STATUS);
+            updateDocumentStatus(xhbXmlDocumentDao, NOT_PROCESSED_STATUS);
+            return true;
+        }
+        return false;
+    }
+    
+    private String checkCourtNameMappingForWebpages(XhbCourtDao xhbCourtDao) {
+        // Get the court name from the database
+        String courtName = xhbCourtDao.getCourtName().toLowerCase();
+        // Check if the court name matches any of the names in the mapping, if so return the mapped name
+        for (Map.Entry<String, String> courtNameEntry : WEBPAGE_DOCUMENT_COURT_NAMES.entrySet()) {
+            if (courtName.equals(courtNameEntry.getKey())) {
+                return courtNameEntry.getValue();
+            }
+        }
+        // If there's no mapping then return the original court name in lower case
+        return courtName;
+    }
+    
+    private void createSatelliteDocument(XhbXmlDocumentDao mainCourtDocument,
+        String mainCourtName, String satelliteCourtName) {
+        // First create the satellite court Webpage document name
+        String webpageDocumentTitle = createWebPageDocumentTitle(
+            satelliteCourtName, mainCourtName);
+        
+        // Initialise the satellite document, set its values and save
+        XhbXmlDocumentDao satelliteDocument = new XhbXmlDocumentDao();
+        
+        satelliteDocument.setDateCreated(mainCourtDocument.getDateCreated());
+        satelliteDocument.setDocumentTitle(mainCourtDocument.getDocumentTitle() 
+            + " " + webpageDocumentTitle);
+        satelliteDocument.setXmlDocumentClobId(mainCourtDocument.getXmlDocumentClobId());
+        satelliteDocument.setStatus(NOT_PROCESSED_STATUS);
+        satelliteDocument.setDocumentType(mainCourtDocument.getDocumentType());
+        satelliteDocument.setExpiryDate(null);
+        satelliteDocument.setCourtId(mainCourtDocument.getCourtId());
+        
+        getXhbXmlDocumentRepository().save(satelliteDocument);
+    }
+    
+    private String createWebPageDocumentTitle(String courtName,
+        String mainCourtNameIfProcessingSatellite) {
+        // Set the initial court name
+        String webpageDocumentTitle = "(" + courtName + ")";
+        
+        // If Satellite court - append the satellite flag for our visibility
+        if (!mainCourtNameIfProcessingSatellite.equals("")) {
+            webpageDocumentTitle = webpageDocumentTitle 
+                + " - Satellite for: " + mainCourtNameIfProcessingSatellite;
+        }
+        return webpageDocumentTitle;
+    }
+    
+    private void updateWebPageDocumentTitle(XhbXmlDocumentDao xhbXmlDocumentDao,
+        Language language) {
+        xhbXmlDocumentDao = refreshDocument(xhbXmlDocumentDao);
+        String webpageDocumentTitle = getWebPageDocumentTitle(xhbXmlDocumentDao.getDocumentTitle());
+        // Check and append the end suffix
+        if (language.equals(Language.WELSH)) {
+            webpageDocumentTitle = webpageDocumentTitle + "_cy.htm";
+        } else {
+            webpageDocumentTitle = webpageDocumentTitle + ".htm";
+        }
+        // Update the document title with the new webpage document title
+        xhbXmlDocumentDao.setDocumentTitle(xhbXmlDocumentDao.getDocumentTitle()
+            .replaceAll("\\(.*?\\)", "(" + webpageDocumentTitle + ")"));
+        // Update the document in the database with the new document title
+        getXhbXmlDocumentRepository().update(xhbXmlDocumentDao);
+    }
+    
+    private String getWebPageDocumentTitle(String documentTitle) {
+        // Find the webpage document title within the brackets using a regex pattern and return it
+        Pattern pattern = Pattern.compile("\\((.*?)\\)");
+        Matcher matcher = pattern.matcher(documentTitle);
+        
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
     
     private LocalDate getHtmlWebPageDateFromClob(Long clobId, String documentTitle) {
