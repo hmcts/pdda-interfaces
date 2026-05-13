@@ -438,6 +438,10 @@
             <T>Rhif yr Achos</T>
         </V>
         <V>
+            <K>Case_No**</K>
+            <T>Rhif yr Achos</T>
+        </V>
+        <V>
             <K>Case Opened</K>
             <T>wedi'i Agor</T>
         </V>
