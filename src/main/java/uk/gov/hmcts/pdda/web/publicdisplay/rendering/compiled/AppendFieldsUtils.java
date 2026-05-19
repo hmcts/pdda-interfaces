@@ -153,7 +153,8 @@ public final class AppendFieldsUtils {
         Date date) {
         // Example format Thu Nov 17 12:33:51 GMT 2005
         if (date != null) {
-            GregorianCalendar calendar = new GregorianCalendar();
+            TimeZone timeZone = TimeZone.getTimeZone("Europe/London");
+            GregorianCalendar calendar = new GregorianCalendar(timeZone);
             calendar.setTime(date);
 
             // Append Day
@@ -170,7 +171,8 @@ public final class AppendFieldsUtils {
             AppendUtils.append(buffer, DateUtils.get2digits(calendar.get(Calendar.SECOND)));
             AppendUtils.append(buffer, SPACE);
             AppendUtils.append(buffer, TranslationUtils.translateData(documentI18n,
-                calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT)));
+                calendar.getTimeZone().getDisplayName(calendar.getTimeZone().inDaylightTime(date),
+                    TimeZone.SHORT)));
             AppendUtils.append(buffer, SPACE);
             AppendUtils.append(buffer, calendar.get(Calendar.YEAR));
         }
