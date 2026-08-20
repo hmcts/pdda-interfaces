@@ -74,11 +74,3 @@ management:
       base-path: /
       exposure:
         include: health, info, prometheus
-
-logging:
-  level:
-    org.springframework.boot.context.config: DEBUG
-    org.springframework.boot.autoconfigure.jdbc: DEBUG
-    org.springframework.boot.autoconfigure.orm.jpa: DEBUG
-    org.springframework.orm.jpa: DEBUG
-    org.hibernate: INFO
