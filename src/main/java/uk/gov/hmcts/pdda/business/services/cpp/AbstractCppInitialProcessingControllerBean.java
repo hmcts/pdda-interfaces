@@ -49,9 +49,9 @@ public abstract class AbstractCppInitialProcessingControllerBean extends Abstrac
                 // insert
                 // into downstream database tables
                 if (processValidatedDocument(doc)) {
-                    LOG.debug("The validated document has been successfully processed");
+                    LOG.info("The validated document has been successfully processed");
                 } else {
-                    LOG.debug("The validated document has failed to be processed. Check database "
+                    LOG.warn("The validated document has failed to be processed. Check database "
                         + "error column for this record for further details.");
                 }
             }

@@ -278,7 +278,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Display initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);
-        LOG.debug("Display initialisation message sent.");
+        LOG.info("Display initialisation message sent for courtId={}, displayId={}", courtId, displayId);
     }
 
     /**
@@ -297,7 +297,7 @@ public class PdConfigurationControllerBean extends PublicDisplayControllerBean
         ConfigurationChangeEvent ccEvent = new ConfigurationChangeEvent(ccc);
         LOG.debug("Sending Court initialisation message.");
         getPublicDisplayNotifier().sendMessage(ccEvent);
-        LOG.debug("Court initialisation message sent.");
+        LOG.info("Court initialisation message sent for courtId={}", courtId);
     }
 
     /**
