@@ -199,7 +199,7 @@ public class CathHelper {
     }
 
     public void send(CourtelJson courtelJson, XhbXmlDocumentDao document) {
-        LOG.info("send()");
+        LOG.debug("send()");
         // Get the authentication token
         courtelJson.setToken(getToken());
         // Post the json to CaTH
@@ -211,7 +211,7 @@ public class CathHelper {
     }
 
     protected String getToken() {
-        LOG.info("getToken()");
+        LOG.debug("getToken()");
         if (CathUtils.isApimEnabled()) {
             // Calling the CathOAuth2Helper to use the CaTH specific key vault values
             return getCathOAuth2Helper().getAccessToken();
@@ -253,6 +253,7 @@ public class CathHelper {
         List<XhbXmlDocumentDao> documents = getDocuments(NOT_PROCESSED_STATUS);
         // Check if documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
+            LOG.info("Processing: {} new documents to send to CaTH", documents.size());
             updateAndSend(documents, FAILED_STATUS_ONE);
         }
     }
@@ -261,11 +262,13 @@ public class CathHelper {
         List<XhbXmlDocumentDao> documents = getDocuments(FAILED_STATUS_ONE);
         // Check if F1 documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
+            LOG.info("Processing: {} F1 documents to send to CaTH", documents.size());
             updateAndSend(documents, FAILED_STATUS_TWO);
         }
         documents = getDocuments(FAILED_STATUS_TWO);
         // Check if F2 documents are null to prevent process from kicking off further
         if (!documents.isEmpty()) {
+            LOG.info("Processing: {} F2 documents to send to CaTH", documents.size());
             updateAndSend(documents, FAILED_STATUS_THREE);
         }
     }
@@ -290,11 +293,11 @@ public class CathHelper {
                 }
             }
             if (Boolean.TRUE.equals(sendToCath(document))) {
-                LOG.debug("Sent successfully");
+                LOG.info("Sent successfully");
                 document = refreshDocument(document);
                 updateDocumentStatus(document, SUCCESSFUL_STATUS);
             } else {
-                LOG.debug("Sent failed");
+                LOG.warn("Send failed");
                 document = refreshDocument(document);
                 updateDocumentStatus(document, failedStatus);
             }
@@ -383,6 +386,7 @@ public class CathHelper {
     private CourtelJson populateJsonObject(CourtelJson jsonObject,
         XhbXmlDocumentDao xhbXmlDocumentDao, XhbCourtDao xhbCourtDao, String listType) {
         
+        LOG.info("Populating Json object for: {}", xhbXmlDocumentDao.getDocumentTitle());
         // Populate type specific fields
         if (jsonObject instanceof ListJson listJson) {
             listJson.setListType(ListType.fromString(listType));
@@ -425,6 +429,8 @@ public class CathHelper {
         // Populate shared fields
         jsonObject.setCrestCourtId(xhbCourtDao.getCrestCourtId());
         
+        LOG.info("Json object populated for: {}", jsonObject.getDocumentName());
+        
         return jsonObject;
     }
     
@@ -432,8 +438,12 @@ public class CathHelper {
         // Check if this Webpage record has already been through this process
         if (xhbXmlDocumentDao.getDocumentTitle().contains("(")) {
             // Existing Webpage document - already has a webpage name appended
+            LOG.info("Processing Webpage document: {}", xhbXmlDocumentDao.getDocumentTitle());
             return false;
         }
+        
+        LOG.info("Processing Webpage document title and any satellites for: {}",
+            xhbXmlDocumentDao.getDocumentTitle());
         
         // New Webpage document - Check if there are satellite courts for this court
         Optional<XhbCourtDao> mainCourt = getXhbCourtRepository().findByIdSafe(
@@ -443,6 +453,7 @@ public class CathHelper {
             String mainCourtName = checkCourtNameMappingForWebpages(mainCourt.get());
             for (Map.Entry<String, List<String>> mainCourtWithSatellites : SATELLITE_COURTS.entrySet()) {
                 if (mainCourtName.equals(mainCourtWithSatellites.getKey())) {
+                    LOG.info("Generating satellite court entries for: {}", xhbXmlDocumentDao.getDocumentTitle());
                     // Create new records for the satellite courts
                     for (String satelliteCourtName : mainCourtWithSatellites.getValue()) {
                         // Create the satellite court Webpage records
@@ -457,6 +468,8 @@ public class CathHelper {
             // Reset status of the main court so it can be re-processed with the document name appended
             xhbXmlDocumentDao.setStatus(NOT_PROCESSED_STATUS);
             updateDocumentStatus(xhbXmlDocumentDao, NOT_PROCESSED_STATUS);
+            LOG.info("Webpage document title updated and ready to be processed to be sent: {}",
+                xhbXmlDocumentDao.getDocumentTitle());
             return true;
         }
         return false;
@@ -477,6 +490,8 @@ public class CathHelper {
     
     private void createSatelliteDocument(XhbXmlDocumentDao mainCourtDocument,
         String mainCourtName, String satelliteCourtName) {
+        LOG.info("Creating Satellite Court Document for: {} - Satellite for: {}", 
+            satelliteCourtName, mainCourtName);
         // First create the satellite court Webpage document name
         String webpageDocumentTitle = createWebPageDocumentTitle(
             satelliteCourtName, mainCourtName);
