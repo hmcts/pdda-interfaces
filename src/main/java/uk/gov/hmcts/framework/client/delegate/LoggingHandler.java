@@ -17,15 +17,15 @@ public class LoggingHandler extends DecoratingHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        LOG.info("Home class: {}", getDelegateInfo().getHomeClass());
-        LOG.info("Delegate class: {}", getDelegateInfo().getDelegateClass());
-        LOG.info("Method: {}", method);
-        LOG.info("Arguments\\");
+        LOG.debug("Home class: {}", getDelegateInfo().getHomeClass());
+        LOG.debug("Delegate class: {}", getDelegateInfo().getDelegateClass());
+        LOG.debug("Method: {}", method);
+        LOG.debug("Arguments\\");
         for (int i = 0; args != null && i < args.length; i++) {
-            LOG.info("\t{}", args[i]);
+            LOG.debug("\t{}", args[i]);
         }
         Object result = super.invoke(proxy, method, args);
-        LOG.info("Return value: {}", result);
+        LOG.debug("Return value: {}", result);
         return result;
     }
 }

@@ -144,12 +144,12 @@ public final class ServerRepository {
      */
     public static String getInitialContextFactory(String serverName) {
 
-        LOG.info("In getInitialContextFactory:server={}", serverName);
+        LOG.debug("In getInitialContextFactory:server={}", serverName);
         Server server = repository.get(serverName);
         if (server == null) {
             throw new IllegalArgumentException(serverName + SERVER_NOT_FOUND);
         }
-        LOG.info("In getInitialContextFactory:initialcontextfactory={}",
+        LOG.debug("In getInitialContextFactory:initialcontextfactory={}",
              server.getInitialContextFactory());
         return server.getInitialContextFactory();
 

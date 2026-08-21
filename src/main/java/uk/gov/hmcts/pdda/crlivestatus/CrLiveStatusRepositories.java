@@ -43,7 +43,7 @@ public class CrLiveStatusRepositories {
     }
     
     private void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbScheduledHearingRepository = null;
         xhbCourtRoomRepository = null;
         xhbSittingRepository = null;

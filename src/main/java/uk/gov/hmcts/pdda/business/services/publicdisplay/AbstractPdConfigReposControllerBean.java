@@ -73,7 +73,7 @@ public abstract class AbstractPdConfigReposControllerBean extends AbstractContro
 
     @Override
     protected void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbRotationSetsRepository = null;
         xhbRotationSetDdRepository = null;
         xhbDisplayTypeRepository = null;

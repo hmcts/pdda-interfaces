@@ -141,7 +141,7 @@ public class PddaMessageHelper {
     }
     
     protected void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         refPddaMessageTypeRepository = null;
         pddaMessageRepository = null;
     }

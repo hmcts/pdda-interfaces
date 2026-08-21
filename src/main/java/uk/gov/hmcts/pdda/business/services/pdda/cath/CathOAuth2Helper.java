@@ -103,7 +103,7 @@ public class CathOAuth2Helper extends OAuth2Helper {
     
     @Override
     protected HttpRequest getAuthenticationRequest(String url) {
-        LOG.info("getAuthenticationRequest({})", url);
+        LOG.debug("getAuthenticationRequest({})", url);
         // Build the authentication post request
         try {
             return HttpRequest.newBuilder().uri(URI.create(url))

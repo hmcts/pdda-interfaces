@@ -52,7 +52,7 @@ public class ActiveCasesInRoomQuery extends AbstractControllerBean {
 
     @Override
     protected void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbScheduledHearingRepository = null;
     }
 

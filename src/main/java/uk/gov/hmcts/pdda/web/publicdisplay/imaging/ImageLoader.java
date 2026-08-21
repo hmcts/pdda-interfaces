@@ -130,7 +130,7 @@ public class ImageLoader implements ImageObserver {
         synchronized (this) {
             LOG.debug("Image update infoFlags= {}", infoflags);
             if ((infoflags & ALLBITS) != 0) {
-                LOG.info("Image update received and all bits are loaded.");
+                LOG.debug("Image update received and all bits are loaded.");
                 notifyAll();
                 setImageLoaded(true);
             }

@@ -216,7 +216,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
     protected void drawImageWithWait(Graphics graphics, final Image image) {
         for (boolean done = false; !done; done = graphics.drawImage(image, 0, 0, this)) {
             try {
-                LOG.info("Waiting on an image to be drawn.");
+                LOG.debug("Waiting on an image to be drawn.");
                 synchronized (this) {
                     wait(IMAGE_DRAW_TIMEOUT);
                 }
@@ -235,7 +235,7 @@ public abstract class AbstractGraphicsServlet extends HttpServlet implements Ima
         int height) {
         synchronized (this) {
             if ((infoflags & ALLBITS) != 0) {
-                LOG.info("Image update received and all bits are loaded.");
+                LOG.debug("Image update received and all bits are loaded.");
                 notifyAll();
             }
             return true;

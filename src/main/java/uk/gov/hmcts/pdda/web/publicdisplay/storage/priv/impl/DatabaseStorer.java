@@ -38,7 +38,7 @@ public class DatabaseStorer implements Storer {
      */
     @Override
     public void remove(DisplayStoreControllerBean displayStoreControllerBean, AbstractUri uri) {
-        LOG.info("remove({})", uri);
+        LOG.debug("remove({})", uri);
 
         String retrievalCode = toRetrievalCode(uri);
 
@@ -52,7 +52,7 @@ public class DatabaseStorer implements Storer {
             throw new RemovalException("File removal error.", e);
         }
 
-        LOG.info("End remove()");
+        LOG.debug("End remove()");
     }
 
     /**
@@ -68,7 +68,7 @@ public class DatabaseStorer implements Storer {
      */
     @Override
     public StoredObject retrieve(DisplayStoreControllerBean displayStoreControllerBean, AbstractUri uri) {
-        LOG.info("retrieve()");
+        LOG.debug("retrieve()");
 
         String retrievalCode = toRetrievalCode(uri);
 
@@ -84,7 +84,7 @@ public class DatabaseStorer implements Storer {
         StoredObject result = new StoredObject(content);
         result.debug(LOG);
 
-        LOG.info("End retrieve()");
+        LOG.debug("End retrieve()");
 
         return result;
     }
@@ -94,7 +94,7 @@ public class DatabaseStorer implements Storer {
      */
     @Override
     public void store(DisplayStoreControllerBean displayStoreControllerBean, Storeable storeable) {
-        LOG.info("store()");
+        LOG.debug("store()");
 
         if (storeable.getRenderedString() == null) {
             throw new DocumentNotYetRenderedException(storeable);
@@ -106,7 +106,7 @@ public class DatabaseStorer implements Storer {
         LOG.debug("Writing to database, retrievalCode: '{}'", retrievalCode);
         displayStoreControllerBean.writeToDatabase(retrievalCode, storeable.getRenderedString());
 
-        LOG.info("End store()");
+        LOG.debug("End store()");
     }
 
     /**
@@ -114,7 +114,7 @@ public class DatabaseStorer implements Storer {
      */
     @Override
     public long lastModified(DisplayStoreControllerBean displayStoreControllerBean, AbstractUri uri) {
-        LOG.info("lastModified()");
+        LOG.debug("lastModified()");
 
         String retrievalCode = toRetrievalCode(uri);
 
@@ -124,7 +124,7 @@ public class DatabaseStorer implements Storer {
 
         long lastModified = displayStoreControllerBean.getLastModified(retrievalCode);
 
-        LOG.info("End lastModified()");
+        LOG.debug("End lastModified()");
 
         return lastModified;
     }
