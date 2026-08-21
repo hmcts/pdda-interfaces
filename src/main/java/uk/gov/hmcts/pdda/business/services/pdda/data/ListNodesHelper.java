@@ -80,7 +80,7 @@ public class ListNodesHelper implements Serializable {
      * @param topNodes Nodes
      */
     protected void processNodes(List<Node> topNodes) {
-        LOG.debug("processNodes()");
+        LOG.info("processNodes()");
         Map<String, String> courtListNodesMap = new ConcurrentHashMap<>();
         Map<String, String> sittingNodesMap = new ConcurrentHashMap<>();
         Map<String, String> judgeNodesMap = new ConcurrentHashMap<>();
@@ -143,7 +143,7 @@ public class ListNodesHelper implements Serializable {
                 }
             }
         }
-        LOG.debug("processNodes() - Finished");
+        LOG.info("processNodes() - Finished");
     }
 
     protected Map<String, String> getReferenceNodeMap(Node parentNode, String rootNode) {

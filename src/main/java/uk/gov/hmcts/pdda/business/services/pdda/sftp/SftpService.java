@@ -373,11 +373,11 @@ public class SftpService extends XhibitPddaHelper {
             return;
         }
         if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
-            LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
+            LOG.info("PDDA Hearing Progress Event received from XHIBIT");
             processHearingProgressEvent(pddaHearingProgressEvent);
         } else {
             if (event instanceof CaseStatusEvent caseStatusEvent) {
-                LOG.debug("Case Status Event received from XHIBIT");
+                LOG.info("Case Status Event received from XHIBIT");
                 // Process the CaseStatusEvent
                 CourtLogViewValue updatedCourtLogViewValue =
                     processCaseStatusEvent(caseStatusEvent);
@@ -386,7 +386,7 @@ public class SftpService extends XhibitPddaHelper {
                     getCrLiveStatusHelper().updatePublicDisplayStatus(updatedCourtLogViewValue);
                 }
             } else if (event instanceof PublicNoticeEvent publicNoticeEvent) {
-                LOG.debug("Public Notice Event received from XHIBIT");
+                LOG.info("Public Notice Event received from XHIBIT");
                 processPublicNoticeEvent(publicNoticeEvent);
             }
             sendMessage(event);
