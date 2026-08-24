@@ -71,7 +71,7 @@ public class RepositoryHelper implements Serializable {
     }
 
     private void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbCourtSiteRepository = null;
         xhbCourtRoomRepository = null;
         xhbHearingListRepository = null;

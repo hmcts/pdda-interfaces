@@ -124,8 +124,9 @@ public class PublicNoticeWorkFlow {
         // Fire a Notification to the Public Display systems to update
         // If something has been updated. Only want to send ONE notification.
         if (isNotificationReqd) {
-            LOG.debug("Send the Notication to Public displays");
             sendNotification(xhbCourtRoomId, reportingRestrictionsChanged);
+            LOG.info("Public Display notification sent for courtRoomId={}, reportingRestrictionsChanged={}",
+                xhbCourtRoomId, reportingRestrictionsChanged);
         }
     }
 
@@ -145,8 +146,9 @@ public class PublicNoticeWorkFlow {
 
         // updates are carried out need to send a notification
         if (updateConfiguredPublicNoticeActivationState(courtLogSubscriptionValue)) {
-            LOG.debug("{}{}", " 0 updated sending Event", courtLogSubscriptionValue.getCourtRoomId());
             sendNotification(courtLogSubscriptionValue);
+            LOG.info("Public Display notification sent for courtRoomId={}",
+                courtLogSubscriptionValue.getCourtRoomId());
         }
     }
 

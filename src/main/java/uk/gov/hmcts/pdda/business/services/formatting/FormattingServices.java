@@ -107,7 +107,7 @@ public class FormattingServices extends FormattingServicesProcessing {
                 formattingValue.getFormattingId(), formattingValue.getDocumentType(), formattingValue.getCourtId());
             courtelHelper.writeToCourtel(formattingValue.getXmlDocumentClobId(),
                 formattingValue.getFormattedDocumentBlobId());
-            LOG.debug("Courtel record created for document: FormattingId={}, DocumentType={}, CourtId={}",
+            LOG.info("Courtel record created for document: FormattingId={}, DocumentType={}, CourtId={}",
                 formattingValue.getFormattingId(), formattingValue.getDocumentType(), formattingValue.getCourtId());
             transformXmlAndGenerateJson(formattingValue);
         }
@@ -133,7 +133,7 @@ public class FormattingServices extends FormattingServicesProcessing {
                         getXhbClobRepository(), getXhbXmlDocumentRepository(),
                         getXhbCathDocumentLinkRepository(), xsltSchemaPath.toString());
                     
-                    LOG.debug("Xml transformed for document: FormattingId={}, DocumentType={}, CourtId={}",
+                    LOG.info("Xml transformed for document: FormattingId={}, DocumentType={}, CourtId={}",
                         formattingValue.getFormattingId(), formattingValue.getDocumentType(),
                         formattingValue.getCourtId());
 
@@ -143,13 +143,13 @@ public class FormattingServices extends FormattingServicesProcessing {
                         getXhbClobRepository(), getXhbCourtelListRepository(),
                         getXhbCppStagingInboundRepository());
                     
-                    LOG.debug("Json generated for document: FormattingId={}, DocumentType={}, CourtId={}",
+                    LOG.info("Json generated for document: FormattingId={}, DocumentType={}, CourtId={}",
                         formattingValue.getFormattingId(), formattingValue.getDocumentType(),
                         formattingValue.getCourtId());
 
                 } catch (ParserConfigurationException | SAXException | IOException
                     | TransformerException e) {
-                    LOG.debug("Error Transforming and generating Json for document: ", e);
+                    LOG.error("Error transforming and generating JSON for document", e);
                 }
                 break;
             }

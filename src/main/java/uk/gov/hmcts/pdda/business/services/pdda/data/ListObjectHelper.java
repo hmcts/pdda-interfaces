@@ -478,7 +478,7 @@ public class ListObjectHelper implements Serializable {
     private Optional<XhbScheduledHearingDao> validateScheduledHearing(
         Map<String, String> nodesMap) {
         LOG.info("validateScheduledHearing()");
-        LOG.debug("xhbCaseDao is present: {}, xhbSittingDao is present: {}, xhbHearingDao is present: {}",
+        LOG.info("xhbCaseDao is present: {}, xhbSittingDao is present: {}, xhbHearingDao is present: {}",
             xhbCaseDao.isPresent(), xhbSittingDao.isPresent(), xhbHearingDao.isPresent());
         // Validate scheduled hearing only if case, sitting and hearing are present
         if (xhbCaseDao.isPresent() && xhbSittingDao.isPresent() && xhbHearingDao.isPresent()) {

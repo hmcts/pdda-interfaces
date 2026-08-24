@@ -140,7 +140,7 @@ public class SftpService extends XhibitPddaHelper {
             sftpConfig.setActiveRemoteFolder(sftpConfig.getCpRemoteFolder());
 
             setupSftpClientAndProcessBaisData(sftpConfig, ssh, true);
-            LOG.debug("Processed CP files");
+            LOG.info("Processed CP files");
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS CP: {}", ExceptionUtils.getStackTrace(e));
             error = true;
@@ -162,14 +162,14 @@ public class SftpService extends XhibitPddaHelper {
             sftpConfig.setActiveRemoteFolder(sftpConfig.getXhibitRemoteFolder());
 
             setupSftpClientAndProcessBaisData(sftpConfig, ssh, false);
-            LOG.debug("Processed XHIBIT files");
+            LOG.info("Processed XHIBIT files");
         } catch (IOException e) {
             LOG.error("Error processing files from BAIS XHIBIT: {}",
                 ExceptionUtils.getStackTrace(e));
             error = true;
         }
 
-        LOG.debug("{} - Finished processing files from BAIS", methodName);
+        LOG.info("{} - Finished processing files from BAIS", methodName);
 
         return error;
     }
@@ -233,7 +233,7 @@ public class SftpService extends XhibitPddaHelper {
         try {
             LOG.debug("retrieveFromBais({},{})", config, baisValidation);
             Map<String, String> files = getBaisFileList(config, baisValidation);
-            LOG.debug("Total of {}{}", files.size(),
+            LOG.info("Total of {}{}", files.size(),
                 " files, before processing, in this transaction.");
             if (!files.isEmpty()) {
                 // Process the files we have retrieved.
@@ -316,7 +316,7 @@ public class SftpService extends XhibitPddaHelper {
             Optional<XhbPddaMessageDao> pddaMessageDao =
                 validation.getPddaMessageDao(getPddaMessageHelper(), filename);
             if (pddaMessageDao.isPresent()) {
-                LOG.debug("Filename {}{}", filename, " already processed");
+                LOG.warn("Filename {}{}", filename, " already processed");
 
                 // Now delete this file
                 getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
@@ -354,7 +354,7 @@ public class SftpService extends XhibitPddaHelper {
 
             // Validate filename and process the message
             validateAndProcessMessage(validation, filename, event, isList, clobData, listType);
-            LOG.debug("Processed file {}", filename);
+            LOG.info("Processed file {}", filename);
 
         } catch (IOException | NotFoundException ex) {
             LOG.error("Error processing BAIS file {} ", ExceptionUtils.getStackTrace(ex));
@@ -363,7 +363,7 @@ public class SftpService extends XhibitPddaHelper {
             // Try and remove the file from BAIS
             getPddaSftpHelperSshj().sftpDeleteFile(config.getSshjSftpClient(),
                 config.getActiveRemoteFolder(), filename, validation);
-            LOG.debug("Removed file from bais after processing: {}", filename);
+            LOG.info("Removed file from bais after processing: {}", filename);
         }
     }
 
@@ -373,11 +373,11 @@ public class SftpService extends XhibitPddaHelper {
             return;
         }
         if (event instanceof PddaHearingProgressEvent pddaHearingProgressEvent) {
-            LOG.debug("PDDA Hearing Progress Event received from XHIBIT");
+            LOG.info("PDDA Hearing Progress Event received from XHIBIT");
             processHearingProgressEvent(pddaHearingProgressEvent);
         } else {
             if (event instanceof CaseStatusEvent caseStatusEvent) {
-                LOG.debug("Case Status Event received from XHIBIT");
+                LOG.info("Case Status Event received from XHIBIT");
                 // Process the CaseStatusEvent
                 CourtLogViewValue updatedCourtLogViewValue =
                     processCaseStatusEvent(caseStatusEvent);
@@ -386,7 +386,7 @@ public class SftpService extends XhibitPddaHelper {
                     getCrLiveStatusHelper().updatePublicDisplayStatus(updatedCourtLogViewValue);
                 }
             } else if (event instanceof PublicNoticeEvent publicNoticeEvent) {
-                LOG.debug("Public Notice Event received from XHIBIT");
+                LOG.info("Public Notice Event received from XHIBIT");
                 processPublicNoticeEvent(publicNoticeEvent);
             }
             sendMessage(event);
@@ -406,14 +406,14 @@ public class SftpService extends XhibitPddaHelper {
         }
 
         if (errorMessage != null) {
-            LOG.debug("Filename {}{}", filename, " is invalid");
+            LOG.warn("Filename {}{}", filename, " is invalid");
             // Continue to process though as we need a record of the file in the database
         }
 
         // Get the crestCourtId (should have already been validated by this point)
         Integer courtId = validation.getCourtId(filename, event);
         LOG.debug("CourtId is {}", courtId);
-        LOG.debug("Validation of filename {} is now complete, attempting to process the file.",
+        LOG.info("Validation of filename {} is now complete, attempting to process the file.",
             filename);
 
         // Write the pddaMessage
@@ -1078,7 +1078,7 @@ public class SftpService extends XhibitPddaHelper {
 
         // Check if we need to set this document to On Hold if its an XHIBIT list
         if (filename.contains(XHIBIT_LIST_PREFIX)) {
-            LOG.debug(
+            LOG.info(
                 "Setting document status to On Hold for: {} as it is a list recieved from XHIBIT",
                 filename);
             status = CpDocumentStatus.ON_HOLD.status;

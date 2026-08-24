@@ -102,7 +102,7 @@ public final class CathUtils {
     }
 
     public static HttpRequest getWebPageHttpPostRequest(String url, CourtelJson courtelJson) {
-        LOG.debug("Building WebPage HTTP Request - getWebPageHttpPostRequest()");
+        LOG.info("Building WebPage HTTP Request - getWebPageHttpPostRequest()");
         // Build the multipart/form-data boundary
         String boundary = "----JavaFormBoundary" + System.currentTimeMillis();
         String fileName = courtelJson.getDocumentName();
@@ -133,12 +133,12 @@ public final class CathUtils {
                 .POST(BodyPublishers.ofString(body))
                 .build();
 
-        LOG.debug("getWebPageHttpPostRequest() - built POST");
+        LOG.info("getWebPageHttpPostRequest() - built POST");
         return result;
     }
 
     public static HttpRequest getListHttpPostRequest(String url, CourtelJson courtelJson) {
-        LOG.debug("Building List HTTP Request - getListHttpPostRequest()");
+        LOG.info("Building List HTTP Request - getListHttpPostRequest()");
         // Get the times
         String currentDateTime = getDateTimeAsString(LocalDateTime.now().atZone(ZoneOffset.UTC));
         String startDate = getDateTimeAsString(courtelJson.getContentDate());
@@ -162,7 +162,7 @@ public final class CathUtils {
                 .POST(BodyPublishers.ofString(courtelJson.getJson()))
                 .build();
 
-        LOG.debug("getListHttpPostRequest() - built POST");
+        LOG.info("getListHttpPostRequest() - built POST");
         return result;
     }
 
@@ -234,7 +234,7 @@ public final class CathUtils {
                         .setCathXmlId(xhbXmlDocumentDaoTransformedXml.getXmlDocumentId());
                 xhbCathDocumentLinkRepository.savePersist(xhbCathDocumentLinkDao);
 
-                LOG.debug("transformXmlUsingSchema returning XHB_CATH_DOCUMENT_LINK record"
+                LOG.info("transformXmlUsingSchema returning XHB_CATH_DOCUMENT_LINK record"
                     + " with transformed xml id: {}", xhbCathDocumentLinkDao.getCathXmlId());
                 
                 // Return the cath_document_link record
@@ -308,14 +308,14 @@ public final class CathUtils {
                         .setCourtId(xhbXmlDocumentDaoTransformedXml.get().getCourtId());
                 xhbXmlDocumentRepository.savePersist(xhbXmlDocumentDaoJson);
 
-                LOG.debug("fetchXmlAndGenerateJson generated json with id: {}",
+                LOG.info("fetchXmlAndGenerateJson generated json with id: {}",
                     xhbXmlDocumentDaoJson.getXmlDocumentId());
                 
                 // Update the cath_document_link record with the cathJsonId
                 updateCathDocumentlinkWithJsonId(xhbCathDcoumentLlinkRepository,
                         xhbCathDocumentLinkDao, xhbXmlDocumentDaoJson);
                 
-                LOG.debug("fetchXmlAndGenerateJson updated XHB_CATH_DOCUMENT_LINK"
+                LOG.info("fetchXmlAndGenerateJson updated XHB_CATH_DOCUMENT_LINK"
                     + " record with json id: {}", xhbXmlDocumentDaoJson.getXmlDocumentId());
             }
         }

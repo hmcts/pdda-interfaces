@@ -151,14 +151,14 @@ public class CrLiveStatusHelper extends CrLiveStatusRepositories {
                             displayDao.setTimeStatusSet(entryDateTime);
                             displayDao.setStatus(getPublicDisplayStatus(courtLogViewValue));
                             getXhbCrLiveDisplayRepository().update(displayDao);
-                            LOG.debug("Updated CrLiveDisplay status - returning true");
+                            LOG.info("Updated CrLiveDisplay status for ID: {}", displayDao.getCrLiveDisplayId());
                             return true;
                         }
                     }
                 }
             }
         }
-        LOG.debug("updatePublicDisplayStatus() - returning false");
+        LOG.warn("updatePublicDisplayStatus() - returning false");
         return false;
     }
     

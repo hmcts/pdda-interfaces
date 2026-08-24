@@ -99,11 +99,11 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
      */
     @Override
     public void remove() {
-        LOG.info("remove()");
+        LOG.debug("remove()");
         debug(LOG);
         getStorer().remove(getDisplayStoreControllerBean(), this);
         debug(LOG);
-        LOG.info("remove() finished.");
+        LOG.debug("remove() finished.");
     }
 
     /**
@@ -113,11 +113,11 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
      */
     @Override
     public void render() {
-        LOG.info("render().");
+        LOG.debug("render().");
         debug(LOG);
         renderer.render(this);
         debug(LOG);
-        LOG.info("render() finished.");
+        LOG.debug("render() finished.");
     }
 
     /**
@@ -127,11 +127,11 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
      * @pre storer != null
      */
     public StoredObject retrieve() {
-        LOG.info("retrieve()");
+        LOG.debug("retrieve()");
         debug(LOG);
         StoredObject storedObject = getStorer().retrieve(getDisplayStoreControllerBean(), getUri());
         debug(LOG);
-        LOG.info("retrieve() finished.");
+        LOG.debug("retrieve() finished.");
 
         return storedObject;
     }
@@ -143,12 +143,12 @@ public abstract class AbstractRenderAndStoreableType implements Renderable, Stor
      */
     @Override
     public void store() {
-        LOG.info("store()");
+        LOG.debug("store()");
         debug(LOG);
         getStorer().store(getDisplayStoreControllerBean(), this);
         beenStored = true;
         debug(LOG);
-        LOG.info("store() finished.");
+        LOG.debug("store() finished.");
     }
 
     /**

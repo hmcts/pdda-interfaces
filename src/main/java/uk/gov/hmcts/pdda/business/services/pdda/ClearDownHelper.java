@@ -58,7 +58,7 @@ public class ClearDownHelper extends AbstractControllerBean {
     @Override
     protected void clearRepositories() {
         super.clearRepositories();
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbCrLiveDisplayRepository = null;
     }
 

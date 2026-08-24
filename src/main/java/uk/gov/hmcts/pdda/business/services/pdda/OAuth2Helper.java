@@ -63,7 +63,7 @@ public class OAuth2Helper implements Serializable {
     }
 
     protected OAuth2Helper(Environment env) {
-        LOG.info("Environment = {}", env);
+        LOG.debug("Environment = {}", env);
         this.env = env;
     }
 
@@ -126,7 +126,7 @@ public class OAuth2Helper implements Serializable {
     }
 
     protected HttpRequest getAuthenticationRequest(String url) {
-        LOG.info("getAuthenticationRequest({})", url);
+        LOG.debug("getAuthenticationRequest({})", url);
         // Build the encoded clientId / clientSecret key
         String key = getClientId() + ":" + getClientSecret();
         String encodedKey = Base64.getEncoder().encodeToString(key.getBytes());
@@ -154,7 +154,7 @@ public class OAuth2Helper implements Serializable {
 
     @SuppressWarnings("squid:S2142")
     public String sendRequest(HttpRequest request) {
-        LOG.info("sendRequest()");
+        LOG.debug("sendRequest()");
         try {
             // Send the authentication request and get the response
             HttpResponse<?> httpResponse =
@@ -163,7 +163,7 @@ public class OAuth2Helper implements Serializable {
             Integer statusCode = httpResponse.statusCode();
             LOG.info("Response status code: {}", statusCode);
             String response = httpResponse.body().toString();
-            LOG.info("Response: {}", response);
+            LOG.debug("Response: {}", response);
             return response;
         } catch (IOException | InterruptedException | RuntimeException exception) {
             LOG.error("Error in sendAuthenticationRequest(): {}", exception.getMessage());
@@ -172,12 +172,12 @@ public class OAuth2Helper implements Serializable {
     }
 
     private String getAccessTokenFromResponse(String response) {
-        LOG.info("getAccessTokenFromResponse()");
+        LOG.debug("getAccessTokenFromResponse()");
         if (!EMPTY_STRING.equalsIgnoreCase(response)) {
             try {
                 TokenResponse tokenResponse =
                     new ObjectMapper().readValue(response, TokenResponse.class);
-                LOG.info("Fetched token response {}", tokenResponse.toString());
+                LOG.debug("Fetched token response successfully");
                 return tokenResponse.accessToken();
             } catch (JsonProcessingException exception) {
                 LOG.error("Error in getAccessTokenFromResponse(): {}", exception.getMessage());

@@ -192,7 +192,7 @@ public class DefaultStatementCreator implements StatementCreator {
      * @throws IOException Exception
      */
     private Clob getClob(String xmlData) throws SQLException {
-        LOG.info("Start getCLOB");
+        LOG.debug("Start getCLOB");
 
         Clob tempClob = null;
 
@@ -211,7 +211,7 @@ public class DefaultStatementCreator implements StatementCreator {
             }
         }
 
-        LOG.info("End getClob");
+        LOG.debug("End getClob");
 
         return tempClob;
     }
@@ -225,7 +225,7 @@ public class DefaultStatementCreator implements StatementCreator {
      * @throws IOException Exception
      */
     private Blob getBlob(String xmlData) throws SQLException, IOException {
-        LOG.info("Start getBlob");
+        LOG.debug("Start getBlob");
 
         Blob tempBlob = null;
 
@@ -244,7 +244,7 @@ public class DefaultStatementCreator implements StatementCreator {
             }
         }
 
-        LOG.info("End getBlob");
+        LOG.debug("End getBlob");
 
         return tempBlob;
     }

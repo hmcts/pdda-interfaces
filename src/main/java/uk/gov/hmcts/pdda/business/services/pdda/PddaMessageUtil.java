@@ -114,6 +114,7 @@ public final class PddaMessageUtil {
                 dao.setCpResponseGenerated(YES);
                 pddaMessageHelper.updatePddaMessage(dao, userDisplayName);
             }
+            LOG.info("Updated CP_RESPONSE_GENERATED status for {} PDDA message(s)", messages.size());
         }
     }
 
@@ -128,6 +129,7 @@ public final class PddaMessageUtil {
                 dao.setAcknowledgmentStatus(ACKNOWLEDGE_SUCCESS);
                 cppStagingInboundHelper.updateCppStagingInbound(dao, userDisplayName);
             }
+            LOG.info("Updated ACKNOWLEDGMENT_STATUS for {} CPP staging message(s)", cppMessages.size());
         }
     }
 

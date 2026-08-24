@@ -197,7 +197,7 @@ public class PddaSftpHelper {
     private String getFileContents(String filename, InputStream inputStream) {
         String fileContents = null;
         String methodName = "getFileContents(" + filename + ")";
-        LOG.info(TWO_PARAMS, methodName, LOG_CALLED);
+        LOG.debug(TWO_PARAMS, methodName, LOG_CALLED);
         try (InputStreamReader fileReader = new InputStreamReader(inputStream)) {
             try (BufferedReader reader = new BufferedReader(fileReader)) {
                 StringBuilder stringBuilder = new StringBuilder();

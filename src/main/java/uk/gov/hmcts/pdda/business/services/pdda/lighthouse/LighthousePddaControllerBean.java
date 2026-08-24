@@ -97,7 +97,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("Lighthouse -- doTask() - entered");
         List<XhbPddaMessageDao> standardXhbPddaMessageDaos =
             getXhbPddaMessageRepository().findByLighthouseSafe();
-        LOG.debug("Standard Messages to process: {}", standardXhbPddaMessageDaos.size());
+        LOG.info("Standard Messages to process: {}", standardXhbPddaMessageDaos.size());
         
         // Process standard documents
         AtomicInteger standardDocNumber = new AtomicInteger(1);
@@ -110,7 +110,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         
         List<XhbPddaMessageDao> onHoldXhbPddaMessageDaos =
             getXhbPddaMessageRepository().findByLighthouseOnHoldSafe();
-        LOG.debug("On Hold Messages to process: {}", onHoldXhbPddaMessageDaos.size());
+        LOG.info("On Hold Messages to process: {}", onHoldXhbPddaMessageDaos.size());
         
         // Process On Hold documents
         AtomicInteger onHoldDocNumber = new AtomicInteger(1);
@@ -172,7 +172,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 return;
             }
 
-            LOG.debug("Processing Filename : {}", dao.getCpDocumentName());
+            LOG.info("Processing Filename : {}", dao.getCpDocumentName());
             
             // First we need to do a further filter on XHIBIT data to:
             // 1. not process public display events from XHIBIT
@@ -208,7 +208,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                         insertWebPage(IWP_STATUS_CREATED, dao.getCourtId(), dao.getPddaMessageDataId());
                     }
                     
-                    writeToLog("Processing of " + dao.getCpDocumentName() + " completed");
+                    LOG.info("Processing of {} completed", dao.getCpDocumentName());
                 } else {
                     LOG.error("Filename is not valid : {}", dao.getCpDocumentName());
                     // Change the status of the XHB_PDDA_MESSAGE record to invalid
@@ -230,7 +230,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
                 insertXmlDocument(dao);
             } else {
                 // This is an unknown document type so just log it and set the status to invalid
-                LOG.debug("This is an unknown document type - no staging record created for file: {}",
+                LOG.warn("This is an unknown document type - no staging record created for file: {}",
                     dao.getCpDocumentName());
                 updatePddaMessageStatus(dao, MESSAGE_STATUS_INVALID,
                     "Unknown document!!! - no staging record created");
@@ -248,7 +248,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     public void processOnHoldFile(XhbPddaMessageDao dao) 
         throws ParserConfigurationException, SAXException, IOException {
         
-        writeToLog("About to process on hold file " + dao.getCpDocumentName());
+        LOG.info("About to process on hold file {}", dao.getCpDocumentName());
         
         // Check this is a file thats not previously been set to PU (Processing Unnecessary)
         Optional<XhbPddaMessageDao> latestPddaMessageDao = getXhbPddaMessageRepository()
@@ -256,7 +256,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         
         if (latestPddaMessageDao.isPresent() 
             && !latestPddaMessageDao.get().getCpDocumentStatus().equals(CpDocumentStatus.ON_HOLD.status)) {
-            LOG.debug("This file: {} has previously been set to Processing Unnecessary, skipping processing",
+            LOG.warn("This file: {} has previously been set to Processing Unnecessary, skipping processing",
                 dao.getCpDocumentName());
             return;
             
@@ -598,7 +598,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
             latest.setErrorMessage(optionalError);
         }
         getXhbPddaMessageRepository().update(latest).ifPresentOrElse(
-            updated -> LOG.debug("Successfully updated status to {} for DAO ID: {}", messageStatus,
+            updated -> LOG.info("Successfully updated status to {} for DAO ID: {}", messageStatus,
                 updated.getPrimaryKey()),
             () -> {
                 LOG.error("Failed to update status for DAO ID: {}", latest.getPrimaryKey());

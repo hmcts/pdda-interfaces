@@ -19,7 +19,7 @@ public class LighthousePddaControllerBeanHelper extends AbstractControllerBean {
 
     @Override
     protected void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbPddaMessageRepository = null;
         xhbCppStagingInboundRepository = null;
         xhbInternetHtmlRepository = null;

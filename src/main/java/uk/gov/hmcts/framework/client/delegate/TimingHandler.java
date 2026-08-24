@@ -22,7 +22,7 @@ public class TimingHandler extends DecoratingHandler {
         Object result = super.invoke(proxy, method, args);
         long duration = System.currentTimeMillis() - now;
 
-        LOG.info("Time taken to execute {} on {}: {}",
+        LOG.debug("Time taken to execute {} on {}: {}",
             method, getDelegateInfo().getDelegateClass(), duration);
         return result;
     }

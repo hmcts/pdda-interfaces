@@ -78,7 +78,7 @@ public class FileServlet extends HttpServlet {
      */
     @Override
     protected final long getLastModified(HttpServletRequest request) {
-        LOG.info("getLastModified()");
+        LOG.debug("getLastModified()");
         try {
             AbstractUri uri = extractUriFromRequest(request);
             long lastModifiedTimeRoundedDown =

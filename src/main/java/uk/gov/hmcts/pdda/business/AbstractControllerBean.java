@@ -49,7 +49,7 @@ public class AbstractControllerBean {
     }
 
     protected void clearRepositories() {
-        LOG.info("clearRepositories()");
+        LOG.debug("clearRepositories()");
         xhbClobRepository = null;
         xhbBlobRepository = null;
         xhbCourtRepository = null;
