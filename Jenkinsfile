@@ -42,3 +42,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+properties([
+  // Run weekly build at 18:00 every Friday which will trigger a restart of the application
+  pipelineTriggers([cron('0 18 * * 5')])
+])
+
