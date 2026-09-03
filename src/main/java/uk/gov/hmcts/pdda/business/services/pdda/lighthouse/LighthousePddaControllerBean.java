@@ -556,7 +556,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
     }
     
     /**
-     * Update the XHB_PDA_MESSAGE record.
+     * Update the XHB_PDDA_MESSAGE record.
 
      * @param stagingInboundId - cpp staging inbound id
      * @throws SQLException Exception
@@ -569,6 +569,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
             latest.getVersion());
 
+        if (latest.getCpDocumentStatus().equals(MESSAGE_STATUS_PROCESSED)) {
+            LOG.warn("The file: {} has already been set to {}, skipping update",
+                latest.getCpDocumentName(), MESSAGE_STATUS_PROCESSED);
+            return;
+        }
+        
         latest.setCpDocumentStatus(MESSAGE_STATUS_PROCESSED);
         latest.setCppStagingInboundId(stagingInboundId);
 
