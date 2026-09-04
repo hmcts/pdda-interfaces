@@ -561,7 +561,7 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
      * @param stagingInboundId - cpp staging inbound id
      * @throws SQLException Exception
      */
-    private void updatePddaMessage(final Integer stagingInboundId, XhbPddaMessageDao dao) {
+    public void updatePddaMessage(final Integer stagingInboundId, XhbPddaMessageDao dao) {
         writeToLog("Updating doc " + dao.getCpDocumentName() + " with status: "
             + MESSAGE_STATUS_PROCESSED + " and messageId: " + dao.getPddaMessageId());
 

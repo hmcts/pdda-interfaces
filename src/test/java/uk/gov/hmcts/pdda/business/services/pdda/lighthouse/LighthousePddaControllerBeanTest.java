@@ -105,7 +105,7 @@ class LighthousePddaControllerBeanTest {
     public static void tearDown() {
         Mockito.clearAllCaches();
     }
-    
+
     @Test
     void testProcessFilesSuccess() {
         boolean result = testProcessFiles(MESSAGE_STATUS_PROCESSED);
@@ -668,6 +668,24 @@ class LighthousePddaControllerBeanTest {
         );
         assertTrue(ex.getMessage().contains("DAO not found in DB for ID:"),
             "Exception message includes helpful detail");
+    }
+
+    @Test
+    void testUpdatePddaMessageAlreadyUpdated() {
+
+        LighthousePddaControllerBean controller = Mockito.spy(new LighthousePddaControllerBean());
+        Mockito.doReturn(mockXhbPddaMessageRepository).when(controller).getXhbPddaMessageRepository();
+
+        XhbPddaMessageDao dao = DummyPdNotifierUtil.getXhbPddaMessageDao();
+        dao.setCpDocumentStatus("VP");
+
+        // updatePddaMessage checks the latest persisted status, not the supplied DAO directly.
+        Mockito.when(mockXhbPddaMessageRepository.findByIdSafe(dao.getPrimaryKey()))
+            .thenReturn(Optional.of(dao));
+
+        controller.updatePddaMessage(1, dao);
+
+        Mockito.verify(mockXhbPddaMessageRepository, Mockito.never()).update(Mockito.any());
     }
 
     private List<XhbPddaMessageDao> getDummyXhbPddaMessageDaoList() {
