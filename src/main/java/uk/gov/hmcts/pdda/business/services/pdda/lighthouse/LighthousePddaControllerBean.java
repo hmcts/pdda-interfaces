@@ -599,6 +599,12 @@ public class LighthousePddaControllerBean extends LighthousePddaControllerBeanHe
         LOG.debug("Original DAO version: {}, Latest DB version: {}", dao.getVersion(),
             latest.getVersion());
 
+        if (latest.getCpDocumentStatus().equals(MESSAGE_STATUS_PROCESSED)) {
+            LOG.warn("The file: {} has already been set to {}, skipping update",
+                latest.getCpDocumentName(), MESSAGE_STATUS_PROCESSED);
+            return;
+        }
+        
         latest.setCpDocumentStatus(messageStatus);
         if (optionalError != null && !optionalError.isBlank()) {
             latest.setErrorMessage(optionalError);
