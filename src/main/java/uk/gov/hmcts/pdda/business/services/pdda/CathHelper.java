@@ -170,24 +170,28 @@ public class CathHelper {
     public CathHelper(EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbClobRepository xhbClobRepository,
-        XhbCourtRepository xhbCourtRepository) {
+        XhbCourtRepository xhbCourtRepository,
+        XhbConfigPropRepository xhbConfigPropRepository) {
         super();
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
+        this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
     // JUnit
     public CathHelper(CathOAuth2Helper cathOAuth2Helper, EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbClobRepository xhbClobRepository,
-        XhbCourtRepository xhbCourtRepository) {
+        XhbCourtRepository xhbCourtRepository,
+        XhbConfigPropRepository xhbConfigPropRepository) {
         this.cathOAuth2Helper = cathOAuth2Helper;
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
+        this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
     public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
