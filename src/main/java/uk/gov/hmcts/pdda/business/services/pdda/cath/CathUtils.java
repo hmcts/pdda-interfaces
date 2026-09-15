@@ -162,7 +162,8 @@ public final class CathUtils {
                 .POST(BodyPublishers.ofString(courtelJson.getJson()))
                 .build();
 
-        LOG.info("getListHttpPostRequest() - built POST");
+        LOG.info("getListHttpPostRequest() - built POST for list type: {}",
+            courtelJson.getListType());
         return result;
     }
 
