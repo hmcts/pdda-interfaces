@@ -76,7 +76,8 @@ public class CathControllerBean extends AbstractControllerBean implements Remote
     private CathHelper getCathHelper() {
         if (cathHelper == null) {
             cathHelper = new CathHelper(EntityManagerUtil.getEntityManager(),
-                getXhbXmlDocumentRepository(), getXhbClobRepository(), getXhbCourtRepository());
+                getXhbXmlDocumentRepository(), getXhbClobRepository(),
+                getXhbCourtRepository(), getXhbConfigPropRepository());
         }
         return cathHelper;
     }

@@ -14,8 +14,11 @@ import org.mockito.quality.Strictness;
 import uk.gov.hmcts.DummyCourtUtil;
 import uk.gov.hmcts.DummyCourtelUtil;
 import uk.gov.hmcts.DummyFormattingUtil;
+import uk.gov.hmcts.DummyServicesUtil;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropDao;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
@@ -82,6 +85,9 @@ class CathHelperTest {
     
     @Mock
     private XhbCourtRepository mockXhbCourtRepository;
+    
+    @Mock
+    private XhbConfigPropRepository mockXhbConfigPropRepository;
 
     @Mock
     private HttpRequest mockHttpRequest;
@@ -101,7 +107,8 @@ class CathHelperTest {
         Mockito.mockStatic(HttpClient.class);
 
         classUnderTest = new CathHelper(mockCathOAuth2Helper, mockEntityManager,
-            mockXhbXmlDocumentRepository, mockXhbClobRepository, mockXhbCourtRepository);
+            mockXhbXmlDocumentRepository, mockXhbClobRepository, mockXhbCourtRepository,
+            mockXhbConfigPropRepository);
     }
 
     @AfterEach
@@ -109,7 +116,7 @@ class CathHelperTest {
         // Test default constructor
         classUnderTest =
             new CathHelper(mockEntityManager, mockXhbXmlDocumentRepository, 
-                mockXhbClobRepository, mockXhbCourtRepository);
+                mockXhbClobRepository, mockXhbCourtRepository, mockXhbConfigPropRepository);
         // Clear down statics
         Mockito.clearAllCaches();
     }
@@ -336,6 +343,60 @@ class CathHelperTest {
         
         Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        boolean result = true;
+        // Run
+        classUnderTest.updateAndSend(xhbXmlDocumentDaoList, "F1");
+        
+        assertTrue(result, TRUE);
+    }
+    
+    @Test
+    void testUpdateAndSendAdvanceListWording() throws TransformerException, IOException {
+        // Setup
+        List<XhbXmlDocumentDao> xhbXmlDocumentDaoList = new ArrayList<>();
+        XhbXmlDocumentDao xhbXmlDocumentDao = DummyFormattingUtil.getXhbXmlDocumentDao();
+        xhbXmlDocumentDao.setDocumentType("JSN");
+        xhbXmlDocumentDao.setDocumentTitle("Warned List DRAFT v1");
+        xhbXmlDocumentDaoList.add(xhbXmlDocumentDao);
+        String jsonString = 
+            """
+            {
+                "WarnedList": {
+                    "ListHeader": {
+                        "EndDate": "2025-12-06",
+                        "StartDate": "2025-12-05"
+                    }
+                }
+            }
+            """;
+        XhbClobDao xhbClobDao = DummyFormattingUtil.getXhbClobDao(1L, jsonString);
+        XhbCourtDao xhbCourtDao = DummyCourtUtil.getXhbCourtDao(81, "Court");
+        XhbConfigPropDao xhbConfigPropDao = 
+            DummyServicesUtil.getXhbConfigPropDao("USING_ADVANCE_LIST_WORDING", "1");
+        
+        // Ensure the entity managers are set
+        Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbClobRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbCourtRepository.getEntityManager()).thenReturn(mockEntityManager);
+        Mockito.when(mockXhbConfigPropRepository.getEntityManager()).thenReturn(mockEntityManager);
+        
+        Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
+        
+        // Update status
+        Mockito.when(mockXhbXmlDocumentRepository.update(xhbXmlDocumentDao))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
+            .thenReturn(Optional.of(xhbClobDao));
+        Mockito.when(mockXhbCourtRepository.findByIdSafe(xhbXmlDocumentDao.getCourtId()))
+            .thenReturn(Optional.of(xhbCourtDao));
+        
+        Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
+            .thenReturn(Optional.of(xhbXmlDocumentDao));
+        
+        Mockito.when(mockXhbConfigPropRepository.findByPropertyNameSafe(Mockito.isA(String.class)))
+            .thenReturn(List.of(xhbConfigPropDao));
         
         boolean result = true;
         // Run

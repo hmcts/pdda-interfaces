@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobDao;
 import uk.gov.hmcts.pdda.business.entities.xhbclob.XhbClobRepository;
+import uk.gov.hmcts.pdda.business.entities.xhbconfigprop.XhbConfigPropRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtDao;
 import uk.gov.hmcts.pdda.business.entities.xhbcourt.XhbCourtRepository;
 import uk.gov.hmcts.pdda.business.entities.xhbcourtellist.CourtelJson;
@@ -87,6 +88,8 @@ public class CathHelper {
     private static final String FAILED_STATUS_TWO = "F2";
     private static final String FAILED_STATUS_THREE = "F3";
     private static final String EMPTY = "";
+    private static final String USE_ADVANCE_LIST_WORDING = "USE_ADVANCE_LIST_WORDING";
+    
     private static final Map<String, String> VALID_LISTS = Map.of(
         "Daily List", "DL",
         "Firm List", "FL",
@@ -160,30 +163,35 @@ public class CathHelper {
     private XhbXmlDocumentRepository xhbXmlDocumentRepository;
     private XhbClobRepository xhbClobRepository;
     private XhbCourtRepository xhbCourtRepository;
+    private XhbConfigPropRepository xhbConfigPropRepository;
 
     private CathOAuth2Helper cathOAuth2Helper;
 
     public CathHelper(EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbClobRepository xhbClobRepository,
-        XhbCourtRepository xhbCourtRepository) {
+        XhbCourtRepository xhbCourtRepository,
+        XhbConfigPropRepository xhbConfigPropRepository) {
         super();
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
+        this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
     // JUnit
     public CathHelper(CathOAuth2Helper cathOAuth2Helper, EntityManager entityManager,
         XhbXmlDocumentRepository xhbXmlDocumentRepository,
         XhbClobRepository xhbClobRepository,
-        XhbCourtRepository xhbCourtRepository) {
+        XhbCourtRepository xhbCourtRepository,
+        XhbConfigPropRepository xhbConfigPropRepository) {
         this.cathOAuth2Helper = cathOAuth2Helper;
         this.entityManager = entityManager;
         this.xhbXmlDocumentRepository = xhbXmlDocumentRepository;
         this.xhbClobRepository = xhbClobRepository;
         this.xhbCourtRepository = xhbCourtRepository;
+        this.xhbConfigPropRepository = xhbConfigPropRepository;
     }
 
     public String generateJsonString(XhbCourtelListDao xhbCourtelListDao, CourtelJson courtelJson) {
@@ -377,6 +385,15 @@ public class CathHelper {
     private String checkForListDocument(XhbXmlDocumentDao xhbXmlDocumentDao) {
         for (Map.Entry<String, String> listName : VALID_LISTS.entrySet()) {
             if (xhbXmlDocumentDao.getDocumentTitle().contains(listName.getKey())) {
+                // Check for Warned List and if header needs to be set as an Advanced List
+                if (listName.getKey().equals("Warned List")) {
+                    Integer useAdvanceListWording = Integer.parseInt(getXhbConfigPropRepository()
+                        .findByPropertyNameSafe(USE_ADVANCE_LIST_WORDING).get(0).getPropertyValue());
+                    if (useAdvanceListWording == 1) {
+                        return "AL";
+                    }
+                }
+                // Returned mapped list type
                 return listName.getValue();
             }
         }
@@ -612,6 +629,7 @@ public class CathHelper {
             case "DL" -> jsonListRootNode = "DailyList";
             case "FL" -> jsonListRootNode = "FirmList";
             case "WL" -> jsonListRootNode = "WarnedList";
+            case "AL" -> jsonListRootNode = "WarnedList";
             default -> LOG.debug("Unknown List Type detected");
         }
         
@@ -749,5 +767,12 @@ public class CathHelper {
             xhbClobRepository = new XhbClobRepository(entityManager);
         }
         return xhbClobRepository;
+    }
+    
+    private XhbConfigPropRepository getXhbConfigPropRepository() {
+        if (!RepositoryUtil.isRepositoryActive(xhbConfigPropRepository)) {
+            xhbConfigPropRepository = new XhbConfigPropRepository(entityManager);
+        }
+        return xhbConfigPropRepository;
     }
 }
