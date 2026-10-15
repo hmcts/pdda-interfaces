@@ -1,0 +1,4 @@
+SET client_encoding TO 'UTF8';
+
+ALTER TABLE XHB_DISP_MGR_COURT_SITE
+ALTER COLUMN xhibit_court_site_id SET NOT NULL;
