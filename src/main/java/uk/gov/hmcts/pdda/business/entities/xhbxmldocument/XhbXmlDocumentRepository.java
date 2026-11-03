@@ -46,17 +46,23 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
     }
 
     /**
-     * findByXmlDocumentClobId.
+     * findByXmlDocumentClobIdSafe.
 
      * @return XhbXmlDocumentDao
      */
-    public Optional<XhbXmlDocumentDao> findByXmlDocumentClobId(final Long xmlDocumentClobId) {
-        LOG.debug("In XhbXmlDocumentRepository.findByXmlDocumentClobId");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
-        query.setParameter(XML_DOCUMENT_CLOB_ID, xmlDocumentClobId);
-        @SuppressWarnings("unchecked")
-        List<XhbXmlDocumentDao> resultList = query.getResultList();
-        return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+    public Optional<XhbXmlDocumentDao> findByXmlDocumentClobIdSafe(final Long xmlDocumentClobId) {
+        LOG.debug("In XhbXmlDocumentRepository.findByXmlDocumentClobIdSafe");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_XML_DOCUMENT.findByXmlDocumentClobId");
+            query.setParameter(XML_DOCUMENT_CLOB_ID, xmlDocumentClobId);
+            @SuppressWarnings("unchecked")
+            List<XhbXmlDocumentDao> resultList = query.getResultList();
+            return resultList.isEmpty() ? Optional.empty() : Optional.of(resultList.get(0));
+        } catch (Exception e) {
+            LOG.error("Error in findByXmlDocumentClobIdSafe({}): {}", xmlDocumentClobId,
+                e.getMessage(), e);
+            return Optional.empty(); // Defensive fallback
+        }
     }
     
     /**
@@ -65,11 +71,16 @@ public class XhbXmlDocumentRepository extends AbstractRepository<XhbXmlDocumentD
      * @return XhbXmlDocumentDao
      */
     @SuppressWarnings(UNCHECKED)
-    public List<XhbXmlDocumentDao> findJsonDocuments(String status) {
-        LOG.debug("In XhbXmlDocumentRepository.findJsonDocuments");
-        Query query = getEntityManager().createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
-        query.setParameter("status", status);
-        return query.getResultList();
+    public List<XhbXmlDocumentDao> findJsonDocumentsSafe(String status) {
+        LOG.debug("In XhbXmlDocumentRepository.findJsonDocumentsSafe");
+        try (EntityManager em = EntityManagerUtil.getEntityManager()) {
+            Query query = em.createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments");
+            query.setParameter("status", status);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOG.error("Error in findJsonDocumentsSafe({}): {}", status, e.getMessage(), e);
+            return List.of(); // Defensive fallback
+        }
     }
     
     @SuppressWarnings(UNCHECKED)

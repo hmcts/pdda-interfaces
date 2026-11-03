@@ -224,7 +224,7 @@ class CathUtilsTest {
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbClobRepository.findByIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbClobDao);
-        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbXmlDocumentDao);
 
         // Run the Schema Transform
@@ -267,7 +267,7 @@ class CathUtilsTest {
             .thenReturn(xhbCourtelListDao);
         Mockito.when(mockXhbCppStagingInboundRepository.findByClobId(Mockito.isA(Long.class)))
             .thenReturn(xhbCppStagingInboundDao);
-        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(Mockito.isA(Long.class)))
+        Mockito.when(mockXhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(Mockito.isA(Long.class)))
             .thenReturn(xhbXmlDocumentDao);
         Mockito.when(mockXhbCathDocumentLinkRepository.findByIdSafe(Mockito.isA(Integer.class)))
             .thenReturn(Optional.of(xhbCathDocumentLinkDao));

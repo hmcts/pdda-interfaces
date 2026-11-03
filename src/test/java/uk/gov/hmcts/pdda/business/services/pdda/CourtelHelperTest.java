@@ -117,13 +117,13 @@ class CourtelHelperTest {
         EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
-            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(EasyMock.isA(Long.class)))
             .andReturn(Optional.empty());
         // Expect - 3rd run (With CourtelList)
         EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
-            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbXmlDocument);
         EasyMock
             .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))
@@ -132,7 +132,7 @@ class CourtelHelperTest {
         EasyMock.expect(mockXhbClobRepository.findByIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbClobDao);
         EasyMock
-            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobId(EasyMock.isA(Long.class)))
+            .expect(mockXhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(EasyMock.isA(Long.class)))
             .andReturn(xhbXmlDocument);
         EasyMock
             .expect(mockXhbCourtelListRepository.findByXmlDocumentId(EasyMock.isA(Integer.class)))

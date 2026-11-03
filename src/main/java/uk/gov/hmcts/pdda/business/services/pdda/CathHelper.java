@@ -332,7 +332,7 @@ public class CathHelper {
     }
     
     private List<XhbXmlDocumentDao> getDocuments(String status) {
-        return getXhbXmlDocumentRepository().findJsonDocuments(status);
+        return getXhbXmlDocumentRepository().findJsonDocumentsSafe(status);
     }
 
     public Boolean sendToCath(XhbXmlDocumentDao document) {

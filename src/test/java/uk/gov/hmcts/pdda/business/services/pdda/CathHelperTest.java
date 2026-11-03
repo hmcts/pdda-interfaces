@@ -181,7 +181,7 @@ class CathHelperTest {
         Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         
-        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("ND"))
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocumentsSafe("ND"))
             .thenReturn(xhbXmlDocumentDaoList);
         
         Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))
@@ -204,9 +204,9 @@ class CathHelperTest {
         Mockito.when(mockXhbXmlDocumentRepository.getEntityManager()).thenReturn(mockEntityManager);
         Mockito.when(mockEntityManager.isOpen()).thenReturn(true);
         
-        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("F1"))
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocumentsSafe("F1"))
             .thenReturn(xhbXmlDocumentDaoList);
-        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocuments("F2"))
+        Mockito.when(mockXhbXmlDocumentRepository.findJsonDocumentsSafe("F2"))
             .thenReturn(xhbXmlDocumentDaoList);
         
         Mockito.when(mockXhbXmlDocumentRepository.findByIdSafe(Mockito.isA(Integer.class)))

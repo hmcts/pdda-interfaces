@@ -193,7 +193,7 @@ public final class CathUtils {
             // Fetch the original xml clob and xml document records
             Optional<XhbClobDao> xhbClobDaoOriginalXml = xhbClobRepository.findByIdSafe(clobId);
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDaoOriginalXml =
-                    xhbXmlDocumentRepository.findByXmlDocumentClobId(clobId);
+                    xhbXmlDocumentRepository.findByXmlDocumentClobIdSafe(clobId);
             if (xhbClobDaoOriginalXml.isPresent() && xhbXmlDocumentDaoOriginalXml.isPresent()) {
                 
                 // Transform the xml, removing the unneeded elements and attributes

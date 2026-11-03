@@ -17,6 +17,7 @@ import uk.gov.hmcts.pdda.business.entities.AbstractRepositoryTest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -27,6 +28,8 @@ import static org.mockito.ArgumentMatchers.isA;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocumentDao> {
 
+    private static final String RESULT_NOT_SAME = "Result is not Same";
+    
     @Mock
     private EntityManager mockEntityManager;
 
@@ -75,6 +78,69 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
         assertTrue(result, NOT_TRUE);
     }
 
+    @Test
+    void testFindJsonDocumentsUsesLocalEntityManager() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            List<XhbXmlDocumentDao> documents = List.of(getDummyDao());
+            Mockito.when(mockEntityManager.createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments"))
+                .thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(documents);
+
+            List<XhbXmlDocumentDao> result = classUnderTest.findJsonDocumentsSafe("ND");
+
+            assertSame(documents, result, RESULT_NOT_SAME);
+        }
+    }
+
+    @Test
+    void testFindJsonDocumentsReturnsEmptyListOnFailure() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            Mockito.when(mockEntityManager.createNamedQuery("XHB_XML_DOCUMENT.findJsonDocuments"))
+                .thenThrow(new IllegalStateException("Connection is closed"));
+
+            List<XhbXmlDocumentDao> result = classUnderTest.findJsonDocumentsSafe("ND");
+
+            assertTrue(result.isEmpty(), "Result is not empty");
+        }
+    }
+
+    @Test
+    void testFindByXmlDocumentClobIdSafeUsesLocalEntityManager() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            XhbXmlDocumentDao document = getDummyDao();
+            Mockito.when(mockEntityManager.createNamedQuery(
+                "XHB_XML_DOCUMENT.findByXmlDocumentClobId")).thenReturn(mockQuery);
+            Mockito.when(mockQuery.getResultList()).thenReturn(List.of(document));
+
+            Optional<XhbXmlDocumentDao> result =
+                classUnderTest.findByXmlDocumentClobIdSafe(document.getXmlDocumentClobId());
+
+            assertSame(document, result.orElseThrow(), RESULT_NOT_SAME);
+        }
+    }
+
+    @Test
+    void testFindByXmlDocumentClobIdSafeReturnsEmptyOnFailure() {
+        try (MockedStatic<EntityManagerUtil> mockedStatic =
+            Mockito.mockStatic(EntityManagerUtil.class)) {
+            mockedStatic.when(EntityManagerUtil::getEntityManager).thenReturn(mockEntityManager);
+            Mockito.when(mockEntityManager.createNamedQuery(
+                "XHB_XML_DOCUMENT.findByXmlDocumentClobId"))
+                .thenThrow(new IllegalStateException("Connection is closed"));
+
+            Optional<XhbXmlDocumentDao> result =
+                classUnderTest.findByXmlDocumentClobIdSafe(getDummyLongId());
+
+            assertTrue(result.isEmpty(), "Result is not empty");
+        }
+    }
+
     private boolean testFindListByClobId(XhbXmlDocumentDao dao) {
         List<XhbXmlDocumentDao> list = new ArrayList<>();
         if (dao != null) {
@@ -86,9 +152,9 @@ class XhbXmlDocumentRepositoryTest extends AbstractRepositoryTest<XhbXmlDocument
             .findDocumentByClobId(getDummyDao().getXmlDocumentClobId(), LocalDateTime.now());
         assertNotNull(result, "Result is Null");
         if (dao != null) {
-            assertSame(dao, result.get(0), "Result is not Same");
+            assertSame(dao, result.get(0), RESULT_NOT_SAME);
         } else {
-            assertSame(0, result.size(), "Result is not Same");
+            assertSame(0, result.size(), RESULT_NOT_SAME);
         }
         return true;
     }
