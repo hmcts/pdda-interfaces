@@ -117,7 +117,7 @@ public class CourtelHelper {
     private Integer getXmlDocumentIdForClobId(final Long xmlDocumentClobId) {
         // Get the latest xmlDocumentId
         Optional<XhbXmlDocumentDao> xmlDocumentList =
-            getXhbXmlDocumentRepository().findByXmlDocumentClobId(xmlDocumentClobId);
+            getXhbXmlDocumentRepository().findByXmlDocumentClobIdSafe(xmlDocumentClobId);
         if (xmlDocumentList.isPresent()) {
             Integer xmlDocumentId = xmlDocumentList.get().getXmlDocumentId();
             LOG.debug("Fetched XmlDocumentId {}", xmlDocumentId);

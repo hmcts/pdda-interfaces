@@ -51,7 +51,7 @@ public final class CathDocumentTitleUtils {
                     .findByClobId(xhbCourtelListDao.get().getXmlDocumentClobId());
             // Fetch the xmlDocumentDao from the courtel_list xmlDocumentClobId
             Optional<XhbXmlDocumentDao> xhbXmlDocumentDao = xhbXmlDocumentRepository
-                .findByXmlDocumentClobId(xhbCourtelListDao.get().getXmlDocumentClobId());
+                .findByXmlDocumentClobIdSafe(xhbCourtelListDao.get().getXmlDocumentClobId());
             
             if (xhbCppStagingInboundDao.isPresent() && xhbXmlDocumentDao.isPresent()) {
                 return appendDocumentTitleElements(xhbClobDaoTransformedXml, xhbXmlDocumentDao.get(),
