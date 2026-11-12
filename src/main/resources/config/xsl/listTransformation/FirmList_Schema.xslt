@@ -142,6 +142,7 @@
     <xsl:template match="cs:ReserveList/cs:Prosecution/cs:ProsecutingOrganisation/cs:OrganisationDX"/>
     <xsl:template match="cs:ReserveList/cs:Prosecution/cs:ProsecutingOrganisation/cs:ContactDetails"/>
 
+    <xsl:template match="cs:ReserveList/cs:CommittingCourt/cs:CourtHouseCode/@CourtHouseShortName"/>
     <xsl:template match="cs:ReserveList/cs:CommittingCourt/cs:CourtHouseCodeType"/>
     <xsl:template match="cs:ReserveList/cs:CommittingCourt/cs:CourtHouseAddress"/>
     <xsl:template match="cs:ReserveList/cs:CommittingCourt/cs:CourtHouseDX"/>
